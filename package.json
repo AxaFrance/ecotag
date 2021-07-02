@@ -1,0 +1,10 @@
+{
+  "name": "ml-cli",
+  "version": "1.0.0",
+  "scripts": {
+    "changelog": "auto-changelog --unreleased --commit-limit false --template changelog-template.hbs -p --output ./CHANGELOG.md"
+  },
+  "devDependencies": {
+    "auto-changelog": "^2.2.1"
+  }
+}

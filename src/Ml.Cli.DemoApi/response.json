@@ -1,0 +1,220 @@
+﻿{
+  "analysis": [
+    {
+      "status": "OK",
+      "elements": [
+        {
+          "document_type": "nouveau_permis_verso",
+          "confidence_rate": 93.52,
+          "status": "OK",
+          "status_reason": null,
+          "url_file_new_verso_zone": "${api-url}files/url_file_new_recto_zone.png",
+          "url_file_new_verso_orientation": "${api-url}files/url_file_new_verso_orientation.png",
+          "url_file_new_verso_rotation": "${api-url}files/url_file_new_verso_rotation.png",
+          "license_delivery_country": "France",
+          "url_file_new_category_table_rotation": "${api-url}files/url_file_new_category_table_rotation.png",
+          "url_file_new_category_table": "${api-url}files/url_file_new_category_table.png",
+          "category_table": [
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.74",
+                "value": "1974-01-01",
+                "confidence_rate": 90.0
+              },
+              "category": "A1"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.95",
+                "value": "1995-01-01",
+                "confidence_rate": 90.0
+              },
+              "license_expiration_date": {
+                "raw_value": "01.01.14",
+                "value": "2014-01-01",
+                "confidence_rate": 90.0
+              },
+              "category": "DE"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "24.05.13",
+                "value": "2013-05-24",
+                "confidence_rate": 90.0
+              },
+              "category": "AM"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.95",
+                "value": "1995-01-01",
+                "confidence_rate": 90.0
+              },
+              "license_expiration_date": {
+                "raw_value": "01.01.14",
+                "value": "2014-01-01",
+                "confidence_rate": 90.0
+              },
+              "category": "BE"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.81",
+                "value": "1981-01-01",
+                "confidence_rate": 90.0
+              },
+              "category": "A"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.78",
+                "value": "1978-01-01",
+                "confidence_rate": 90.0
+              },
+              "restriction_code": {
+                "raw_value": "70.ESSALD",
+                "value": "70.ESSALD",
+                "confidence_rate": 90.0
+              },
+              "category": "B"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.95",
+                "value": "1995-01-01",
+                "confidence_rate": 90.0
+              },
+              "license_expiration_date": {
+                "raw_value": "01.01.14",
+                "value": "2014-01-01",
+                "confidence_rate": 90.0
+              },
+              "category": "D"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "01.01.74",
+                "value": "1974-01-01",
+                "confidence_rate": 75.0
+              },
+              "category": "B1"
+            }
+          ],
+          "folder_number_line1": {
+            "raw_value": "750104 100001",
+            "value": "750104",
+            "confidence_rate": 90.0,
+            "url_file_new_folder_number_line1": "${api-url}files/url_file_new_folder_number_line1.png"
+          },
+          "folder_number_line2": {
+            "raw_value": "750104 100001",
+            "value": "100001",
+            "confidence_rate": 90.0,
+            "url_file_new_folder_number_line2": "${api-url}files/url_file_new_folder_number_line2.png"
+          },
+          "id_verso": {
+            "raw_value": "1217860068",
+            "value": "1217860068",
+            "confidence_rate": 30.0,
+            "url_file_new_id_verso": "${api-url}files/url_file_new_id_verso.png"
+          },
+          "restriction_code": {
+            "raw_value": null,
+            "value": null,
+            "confidence_rate": 0.0
+          },
+          "document_id": "0"
+        }
+      ],
+      "page": 0,
+      "urls": [
+        {
+          "url_file_page_0": "${api-url}files/url_file_page_0.png"
+        }
+      ]
+    },
+    {
+      "status": "OK",
+      "elements": [
+        {
+          "document_type": "nouveau_permis_recto",
+          "confidence_rate": 97.21,
+          "status": "OK",
+          "status_reason": null,
+          "url_file_new_recto_zone": "${api-url}files/url_file_new_recto_zone.png",
+          "url_file_new_recto_orientation": "${api-url}files/url_file_new_recto_orientation.png",
+          "url_file_new_recto_rotation": "${api-url}files/url_file_new_recto_rotation.png",
+          "license_delivery_country": "France",
+          "mrz": {
+            "raw_value": "D1FRA13AA000026181231MARTIN<<9",
+            "value": "D1FRA13AA000026181231MARTIN<<9",
+            "confidence_rate": 100.0,
+            "url_file_new_mrz": "${api-url}files/url_file_new_mrz.png"
+          },
+          "license_category_list": {
+            "raw_value": "9. AM/A/A1/B1/B/BE/DE/D",
+            "value": "AM/A/A1/B1/B/BE/DE/D",
+            "confidence_rate": 90.0,
+            "url_file_new_license_category_list": "${api-url}files/url_file_new_license_category_list.png"
+          },
+          "birthdate": {
+            "raw_value": "3. 14.07.1981 (Utopia city)",
+            "value": "1981-07-14",
+            "confidence_rate": 65.0,
+            "url_file_new_birthdate": "${api-url}files/url_file_new_birthdate.png"
+          },
+          "birthplace": {
+            "raw_value": "3. 14.07.1981 (Utopia city)",
+            "value": "Utopia city",
+            "confidence_rate": 65.0,
+            "url_file_new_birthplace": "${api-url}files/url_file_new_birthplace.png"
+          },
+          "license_delivery_place": {
+            "raw_value": "4c.99999 Utopia Cty",
+            "value": "4c.99999 Utopia Cty",
+            "confidence_rate": 55.0,
+            "url_file_new_license_delivery_place": "${api-url}files/url_file_new_license_delivery_place.png"
+          },
+          "license_delivery_date": {
+            "raw_value": "4a 01.01.2013",
+            "value": "2013-01-01",
+            "confidence_rate": 85.0,
+            "url_file_new_license_delivery_date": "${api-url}files/url_file_new_license_delivery_date.png"
+          },
+          "license_validity_date": {
+            "raw_value": "4b 31.12.2018",
+            "value": "2018-12-31",
+            "confidence_rate": 100.0,
+            "url_file_new_license_validity_date": "${api-url}files/url_file_new_license_validity_date.png"
+          },
+          "lastname": {
+            "raw_value": "1. ^MARTIN^",
+            "value": "MARTIN",
+            "confidence_rate": 100.0,
+            "url_file_new_lastname": "${api-url}files/url_file_new_lastname.png"
+          },
+          "license_number": {
+            "raw_value": "5. 13AA00002",
+            "value": "13AA00002",
+            "confidence_rate": 100.0,
+            "url_file_new_license_number": "${api-url}files/url_file_new_license_number.png"
+          },
+          "firstname": {
+            "raw_value": "2. ^Paul^",
+            "value": "Paul",
+            "confidence_rate": 85.0,
+            "url_file_new_firstname": "${api-url}files/url_file_new_firstname.png"
+          },
+          "document_id": "0"
+        }
+      ],
+      "page": 1,
+      "urls": [
+        {
+          "url_file_page_1": "${api-url}files/url_file_page_1.png"
+        }
+      ]
+    }
+  ],
+  "version": "1.0.36"
+}

@@ -1,0 +1,40 @@
+[
+	{
+		"type": "wait_version_change",
+		"id": "version_task",
+		"enabled": true,
+		"url": "https://localhost:6001/licenses/version",
+		"timeout": 5000,
+		"urlLogDirectory": "licenses\\output\\logs",
+		"logFileName": "license.json"
+	},
+	{
+		"type": "callapi",
+		"enabled": true,
+		"enabledSaveImages":true,
+		"outputDirectoryImages": "licenses\\groundtruth\\images",
+		"fileDirectory": "licenses\\documents",
+		"outputDirectoryJsons": "licenses\\groundtruth\\jsons",
+		"numberParallel": 1,
+		"url" :"https://localhost:6001/licenses/upload"
+	},
+	{
+		"type": "callapi",
+		"enabled": true,
+		"enabledSaveImages":true,
+		"outputDirectoryImages": "licenses\\output\\{start-date}\\images",
+		"fileDirectory": "licenses\\documents",
+		"outputDirectoryJsons": "licenses\\output\\{start-date}\\jsons",
+		"numberParallel": 1,
+		"url" :"https://localhost:6001/licenses/upload"
+	},
+	{
+		"type": "compare",
+		"enabled": true,
+		"onFileNotFound": "warning",
+		"leftDirectory": "licenses\\groundtruth\\jsons",
+		"rightDirectory": "licenses\\output\\{start-date}\\jsons",
+		"outputDirectory": "licenses\\output",
+		"fileName": "compare-licenses-{start-date}.json"
+	  }
+]

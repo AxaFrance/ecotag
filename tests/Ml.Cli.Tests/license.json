@@ -1,0 +1,166 @@
+﻿{
+  "analysis": [
+    {
+      "elements": [
+        {
+          "document_type": "nouveau_permis_recto",
+          "confidence_rate": 95.58,
+          "status": "OK",
+          "status_reason": null,
+          "license_delivery_country": "France",
+          "url_file_new_recto": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/1",
+          "url_file_new_recto_rotation": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/2",
+          "url_file_new_rect_orientation": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/3",
+          "mrz": {
+            "raw_value": "D1FRA16AC391057310204LECOLLEYS",
+            "value": "D1FRA16AC391057310204LECOLLEYS",
+            "confidence_rate": 83.0,
+            "url_file_new_mrz": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/4"
+          },
+          "license_delivery_place": {
+            "raw_value": "4c.préfet 14",
+            "value": "4c.préfet 14",
+            "confidence_rate": 88.0,
+            "url_file_new_license_delivery_place": ""
+          },
+          "lastname": {
+            "raw_value": "1. ^LECOLLEY^",
+            "value": "LECOLLEY",
+            "confidence_rate": 91.5,
+            "url_file": ""
+          },
+          "license_category_list": {
+            "raw_value": "9. AM/B1/B",
+            "value": "AM/B1/B",
+            "confidence_rate": 92.0,
+            "url_file": ""
+          },
+          "license_validity_date": {
+            "raw_value": "4b 04.02.203",
+            "value": null,
+            "confidence_rate": 0.0,
+            "url_file": ""
+          },
+          "birthdate": {
+            "raw_value": "3. 25.11.1990 (CAEN)",
+            "value": "1990-11-25",
+            "confidence_rate": 86.66666666666667,
+            "url_file": ""
+          },
+          "birthplace": {
+            "raw_value": "3. 25.11.1990 (CAEN)",
+            "value": "CAEN",
+            "confidence_rate": 86.66666666666667,
+            "url_file": ""
+          },
+          "license_number": {
+            "raw_value": " 16AC39105",
+            "value": "16AC39105",
+            "confidence_rate": 100.0,
+            "url_file": ""
+          },
+          "firstname": {
+            "raw_value": null,
+            "value": null,
+            "confidence_rate": 0.0,
+            "url_file": ""
+          },
+          "license_delivery_date": {
+            "raw_value": null,
+            "value": null,
+            "confidence_rate": 0.0,
+            "url_file": ""
+          },
+          "document_id": "0"
+        }
+      ],
+      "url_file_page": "",
+      "page": 1,
+      "status": "OK"
+    },
+    {
+      "elements": [
+        {
+          "document_type": "nouveau_permis_verso",
+          "confidence_rate": 97.8,
+          "status": "OK",
+          "status_reason": null,
+          "license_delivery_country": "France",
+          "url_file_new_verso": "",
+          "url_file_new_verso_rotation": "",
+          "url_file_new_verso_orientation": "",
+          "url_file_new_verso_category": "",
+          "category_table": [
+            {
+              "license_procurement_date": {
+                "raw_value": "16.11.15",
+                "value": "2015-11-16",
+                "confidence_rate": 90.0,
+                "url_file": ""
+              },
+              "license_expiration_date": {
+                "raw_value": "02.02.18",
+                "value": "2018-02-02",
+                "confidence_rate": 79.0,
+                "url_file": ""
+              },
+              "category": "B1"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "16.11.15",
+                "value": "2015-11-16",
+                "confidence_rate": 91.0,
+                "url_file": ""
+              },
+              "license_expiration_date": {
+                "raw_value": "02.02.18",
+                "value": "2018-02-02",
+                "confidence_rate": 71.0,
+                "url_file": ""
+              },
+              "category": "B"
+            },
+            {
+              "license_procurement_date": {
+                "raw_value": "16.11.15",
+                "value": "2015-11-16",
+                "confidence_rate": 91.0,
+                "url_file": ""
+              },
+              "category": "AM"
+            }
+          ],
+          "folder_number_line1": {
+            "raw_value": "090714 200352",
+            "value": "090714",
+            "confidence_rate": 91.5,
+            "url_file": ""
+          },
+          "folder_number_line2": {
+            "raw_value": "090714 200352",
+            "value": "200352",
+            "confidence_rate": 91.5,
+            "url_file": ""
+          },
+          "id_verso": {
+            "raw_value": "1604120053880",
+            "value": "1604120053880",
+            "confidence_rate": 36.0,
+            "url_file": ""
+          },
+          "restriction_code": {
+            "raw_value": null,
+            "value": null,
+            "confidence_rate": 0.0,
+            "url_file": ""
+          },
+          "document_id": "0"
+        }
+      ],
+      "page": 2,
+      "status": "OK",
+      "url_file_page": ""
+    }
+  ]
+}

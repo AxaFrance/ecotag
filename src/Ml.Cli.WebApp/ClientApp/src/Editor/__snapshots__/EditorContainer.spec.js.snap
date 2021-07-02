@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check Editor usage Change Editor content 1`] = `
+<DocumentFragment>
+  <div
+    class="images-editor-container"
+  >
+    <div
+      class="images-editor-container__images_column"
+    >
+      <div
+        class="images-error"
+      >
+        <p>
+          Aucun fichier correspondant n'a été trouvé sur votre disque.
+          <br />
+           Plusieurs raisons sont possibles:
+          <br />
+           - Il n'existe pas d'image correspondant à ce fichier sur votre disque;
+          <br />
+           - L'attribut regex spécifié ne correspond à aucun fichier;
+          <br />
+           - Le répertoire des images de ce fichier n'existe pas.
+        </p>
+      </div>
+      <div
+        class="images-list"
+      />
+    </div>
+    <div
+      class="editor-container"
+    >
+      <textarea
+        class="af-form__input-textarea"
+        id="Editor-container-test"
+        name="Textarea"
+        placeholder=""
+      >
+        {
+  "analysis": "This is a test"
+}
+      </textarea>
+      <div
+        class="editor-container__errors-container"
+      />
+      <div
+        class="editor-container__button"
+      >
+        <button
+          class="btn af-btn"
+        >
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

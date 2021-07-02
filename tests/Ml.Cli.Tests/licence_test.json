@@ -1,0 +1,96 @@
+﻿{
+  "analysis": [
+    {
+      "elements": [
+        {
+          "document_type": "ancien_permis_recto",
+          "confidence_rate": 98.28,
+          "status": "OK",
+          "status_reason": null,
+          "url_file_old_recto_page": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/fc841971-1aac-4bf8-a007-2043778329ef",
+          "url_file_old_recto_orientation": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/e920d662-9f40-40e1-b747-c01ae405e18a",
+          "license_delivery_country": "France",
+          "url_file_category_table": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/18d2d2b4-c75b-4d84-aab6-451214e985f1",
+          "url_file_category_table_rotation": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/e8157b31-d01e-43ca-ae74-9f9b7c86999a",
+          "category_table": [
+            {
+              "license_procurement_date": {
+                "raw_value": "03/12/2002",
+                "value": "2002-12-03",
+                "confidence_rate": 77.0
+              },
+              "category": "B1"
+            }
+          ],
+          "home_address": {
+            "raw_value": "",
+            "value": "",
+            "confidence_rate": 0.0,
+            "url_file_home_address": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/158857dc-009d-435a-8fd1-583a344689a5"
+          },
+          "birthdate": {
+            "raw_value": "|  omimice E L E",
+            "value": "",
+            "confidence_rate": 0.0,
+            "url_file_birthdate": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/773b2c2f-060c-484a-ae79-bf9d2f2d2d62"
+          },
+          "birthplace": {
+            "raw_value": "|  omimice E L E",
+            "value": "",
+            "confidence_rate": 0.0,
+            "url_file_birthplace": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/773b2c2f-060c-484a-ae79-bf9d2f2d2d62"
+          },
+          "license_delivery_date": {
+            "raw_value": "le 11/0//2011",
+            "value": "",
+            "confidence_rate": 64.0,
+            "url_file_license_delivery_date": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/a2009ede-da54-4c68-aeda-a309c477c138"
+          },
+          "license_number": {
+            "raw_value": "5. N°  020227300201",
+            "value": "020227300201",
+            "confidence_rate": 61.0,
+            "url_file_license_number": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/b9e02bf9-1dae-4c61-b03d-d358219b0926"
+          },
+          "license_delivered_by": {
+            "raw_value": "4. Délivré par : LE PREFET (76",
+            "value": "LE PREFET (76",
+            "confidence_rate": 77.85714285714286,
+            "url_file_license_delivered_by": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/0bcf881c-d243-428b-9536-2360f834be8c"
+          },
+          "firstname": {
+            "raw_value": "2. Prénom : MICHAEL RERE PIEPRE",
+            "value": "MICHAEL RERE PIEPRE",
+            "confidence_rate": 71.16666666666667,
+            "url_file_firstname": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/934ac9b7-a203-4716-b597-408b54459725"
+          },
+          "lastname": {
+            "raw_value": "1. Nom : MAIOT",
+            "value": "MAIOT",
+            "confidence_rate": 50.75,
+            "url_file_lastname": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/d276138d-6ade-4de9-be7b-484bfb366da5"
+          },
+          "license_delivery_place": {
+            "raw_value": "ROLE",
+            "value": "ROLE",
+            "confidence_rate": 45.0,
+            "url_file_license_delivery_place": "https://permis-openfaas.axa-fr-dev-int.teal.westeurope.azure.openpaas.axa-cloud.com/function/license-file/178b1912-d495-41e8-aef8-a9e9026df97a"
+          },
+          "additional_name": {
+            "raw_value": null,
+            "value": null,
+            "confidence_rate": 0.0
+          },
+          "document_id": "0"
+        }
+      ],
+      "page": 1,
+      "status": "OK"
+    },
+    {
+      "elements": [],
+      "page": 2,
+      "status": "OK"
+    }
+  ]
+}

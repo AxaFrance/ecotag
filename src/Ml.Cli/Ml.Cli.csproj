@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>Ml.Cli</RootNamespace>
+        <AssemblyName>Ml.Cli</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ConsoleAppFramework" Version="2.4.0" />
+      <PackageReference Include="ConsoleAppFramework.WebHosting" Version="2.4.0" />
+      <PackageReference Include="JsonDiffPatch.Net" Version="2.2.0" />
+      <PackageReference Include="Microsoft.ClearScript" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="obj\Debug\netcoreapp3.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.Production.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ml.Cli.Extensions.Http.OAuth2ClientCredentials\Ml.Cli.Extensions.Http.OAuth2ClientCredentials.csproj" />
+      <ProjectReference Include="..\Ml.Cli.Extensions.OAuth2ClientCredentials\Ml.Cli.Extensions.OAuth2ClientCredentials.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check dataset handling Should render AnnotationImagesLoader and get image 1`] = `
+<DocumentFragment>
+  <div
+    class="images-editor-container"
+  >
+    <div
+      class="images-editor-container__images_column"
+    >
+      <div
+        class="images-list"
+      >
+        <div
+          class="images-list__item"
+        >
+          <div
+            class="images-list__image-container"
+          >
+            <img
+              alt="file_image"
+              class="images-list__file_image"
+              src="api/files/value=C%3A%5C%5CimageLocation"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="editor-container"
+    >
+      <textarea
+        class="af-form__input-textarea"
+        id="annotation_image_loader_editor_id"
+        name="Textarea"
+        placeholder=""
+      />
+      <div
+        class="editor-container__errors-container"
+      >
+        <div
+          class="editor-container__error-message"
+        >
+          <span>
+            Impossible de parser l'item fileName.json. Veuillez vous assurer que le contenu de ce fichier est au format JSON.
+          </span>
+        </div>
+      </div>
+      <div
+        class="editor-container__button"
+      >
+        <button
+          class="btn af-btn"
+        >
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
