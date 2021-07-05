@@ -68,7 +68,7 @@ export const sortTime = (items, sortTimeType, timeCategory) => {
     return copiedArray;
 }
 
-const TableResult = ({state, setState, MonacoEditor}) => {
+const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
     const filterPaging = (items, numberItems, currentPage) => {
         let pageIndex = 0;
         if (currentPage > 1) {
@@ -114,11 +114,12 @@ const TableResult = ({state, setState, MonacoEditor}) => {
             filteredSearchBar={filteredSearchBar}
             setState={setState}
             MonacoEditor={MonacoEditor}
+            fetchFunction={fetchFunction}
         />
     </>;
 }
 
-const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor}) => {
+const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor, fetchFunction}) => {
     const setParentState = (newData) => setState({...state, ...newData});
     if (pageItems.items.length === 0) {
         return <h2 className="error-message">Il n'y a aucun fichier correspondant à cette configuration de filtres
@@ -135,7 +136,7 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
                 setCompareState={setParentState}
                 compareLocation={state.compareLocation}
                 MonacoEditor={MonacoEditor}
-                fetchFunction={fetch}
+                fetchFunction={fetchFunction}
             />
         ))}
 

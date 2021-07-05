@@ -8,27 +8,23 @@ const getHttpResultItem = async (item, fetchFunction) => {
     const params = {
         filePath: `${item.fileDirectory}\\${item.fileName}`
     };
-    const fetchResult = await fetchGetData(params, "api/annotations", fetchFunction);
-    if (fetchResult.ok) {
-        const dataText = await fetchResult.text();
-        const dataObject = JSON.parse(dataText);
+    const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
+    if (fetchResult.status === 200) {
+        const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};
     }
     const errorMessage = `Requête invalide: ${fetchResult.statusText}`;
     return {errorMessage, httpResult: {}};
 };
 
-const fetchFunction = fetch;
-
-const TableAnnotateItem = ({item, MonacoEditor}) => {
-
+const TableAnnotateItem = ({item, MonacoEditor, fetchFunction}) => {
     const [state, setState] = useState({
         httpResultItem: {},
         errorMessage: "",
         isFetched: false
     });
 
-    const mutationJson = useMutation(newData => fetchPostJson(newData, fetchFunction)("/api/datasets/save"));
+    const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
 
     useEffect(() => {
         getEditorContent();
@@ -61,7 +57,7 @@ const TableAnnotateItem = ({item, MonacoEditor}) => {
             <AnnotationImagesLoader
                 item={item}
                 expectedOutput={{id: item.id, fileName: item.fileName, value: state.httpResultItem.body}}
-                onSubmit={e => saveJson(e)}
+                onSubmit={saveJson}
                 MonacoEditor={MonacoEditor}
                 fetchFunction={fetchFunction}
             />
