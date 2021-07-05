@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useRef, useState} from "react";
+﻿import React, {useEffect, useState} from "react";
 import diff_match_patch from "diff-match-patch";
 import EditorTab from "./EditorTab";
 
@@ -53,8 +53,8 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                 </div>
                 <div className="table-result__collapse-button"
                      onClick={() => {
-                         setState({...state, collapsed: !state.isCollapsed});
-                     }}>{state.isCollapsed ? "-" : "+"}</div>
+                         setState({...state, isNotCollapsed: !state.isNotCollapsed});
+                     }}>{state.isNotCollapsed ? "-" : "+"}</div>
             </div>
         </div>
         {state.isNotCollapsed && (
@@ -66,7 +66,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                     </button>
                 </div>
                 {state.isAnnotating &&
-                <>
                     <EditorTab
                         items={items}
                         item={item}
@@ -76,7 +75,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                         MonacoEditor={MonacoEditor}
                         fetchFunction={fetchFunction}
                     />
-                </>
                 }
                 <div className="table-result__column-container">
                     <div className="table-result__column">
@@ -116,6 +114,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
             </>
         )}
     </div>;
-}
+};
 
 export default TableItem;
