@@ -1,0 +1,85 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    clean: true
+    persistCredentials: true
+
+  - task: Npm@0
+    displayName: "npm ci:front"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: i
+
+  - task: Npm@0
+    displayName: "npm test api:front"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: test
+      arguments: "--  --runInBand --coverage --watchAll=false"
+
+  - task: Npm@0
+    displayName: "npm run build storybook"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: run
+      arguments: build-storybook
+
+  - task: Npm@0
+    displayName: "npm run build"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: run
+      arguments: build
+
+  - task: DotNetCoreInstaller@0
+    displayName: "Use .NET Core sdk 3.1.402"
+    inputs:
+      version: 3.1.402
+    enabled: true
+
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet test"
+    inputs:
+      command: test
+      projects: "**/*tests.csproj"
+      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish MacOS
+    inputs:
+      command: publish
+      publishWebProjects: false
+      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/macos -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      zipAfterPublish: True
+      workingDirectory: "src/Ml.Cli"
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish Win10
+    inputs:
+      command: publish
+      publishWebProjects: false
+      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/win10 -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      zipAfterPublish: True
+      workingDirectory: "src/Ml.Cli"
+
+  - task: CopyFiles@2
+    displayName: "Copy Scripts Files to: $(build.artifactstagingdirectory)/src/Ml.Cli.WebApp/ClientApp"
+    inputs:
+      SourceFolder: src/Ml.Cli.WebApp/ClientApp/build
+      TargetFolder: "$(build.artifactstagingdirectory)/src/Ml.Cli.WebApp/ClientApp"
+      OverWrite: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: drop"
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
