@@ -76,6 +76,12 @@ steps:
       projects: "**/*tests.csproj"
       arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
 
+  - task: DotNetCoreInstaller@0
+    displayName: 'Use .NET Core sdk 2.2.207'
+    inputs:
+      version: 2.2.207
+    enabled: true
+    
   - task: SonarCloudAnalyze@1
     displayName: "Run Code Analysis"
     condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
