@@ -15,7 +15,7 @@ const fetchImages = async data => {
     }
 };
 
-const getImages = async (item, fetchFunction) => {
+const getImages = (fetchFunction) => async (item) => {
     const params = {
         fileName: item.fileName,
         stringsMatcher: "",
@@ -32,7 +32,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, f
     });
 
     const getUrls = async () => {
-        const newUrls = await getImages(item, fetchFunction);
+        const newUrls = await getImages(fetchFunction)(item);
         setState({fileUrls: newUrls});
     };
 
