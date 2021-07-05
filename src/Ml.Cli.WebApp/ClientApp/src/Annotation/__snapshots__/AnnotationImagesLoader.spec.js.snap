@@ -9,22 +9,23 @@ exports[`Check dataset handling Should render AnnotationImagesLoader and get ima
       class="images-editor-container__images_column"
     >
       <div
-        class="images-list"
+        class="images-error"
       >
-        <div
-          class="images-list__item"
-        >
-          <div
-            class="images-list__image-container"
-          >
-            <img
-              alt="file_image"
-              class="images-list__file_image"
-              src="api/files/value=C%3A%5C%5CimageLocation"
-            />
-          </div>
-        </div>
+        <p>
+          Aucun fichier correspondant n'a été trouvé sur votre disque.
+          <br />
+           Plusieurs raisons sont possibles:
+          <br />
+           - Il n'existe pas d'image correspondant à ce fichier sur votre disque;
+          <br />
+           - L'attribut regex spécifié ne correspond à aucun fichier;
+          <br />
+           - Le répertoire des images de ce fichier n'existe pas.
+        </p>
       </div>
+      <div
+        class="images-list"
+      />
     </div>
     <div
       class="editor-container"
