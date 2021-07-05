@@ -19,6 +19,24 @@ steps:
       versionSpec: "14.x"
     displayName: "Install Node.js"
 
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'axaguildev'
+      scannerMode: 'MSBuild'
+      projectKey: 'AxaGuilDEv_ml-cli'
+      projectName: 'ml-cli'
+      extraProperties: |
+        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
+        sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
+        sonar.cs.opencover.reportsPaths=**/opencover.xml
+        extraProperties: |
+        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
+        sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
+        sonar.cs.opencover.reportsPaths=**/opencover.xml
+        condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'), eq(variables['Build.Reason'], 'PullRequest'))
+
   - task: Npm@0
     displayName: "npm ci:front"
     inputs:
@@ -59,6 +77,13 @@ steps:
       projects: "**/*tests.csproj"
       arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
 
+  - task: SonarCloudAnalyze@1
+    displayName: "Run Code Analysis"
+    condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
+
+  - task: SonarCloudPublish@1
+    displayName: "Publish Quality Gate Result"
+    condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS
     inputs:
