@@ -89,6 +89,13 @@ steps:
   - task: SonarCloudPublish@1
     displayName: "Publish Quality Gate Result"
     condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
+
+  - task: DotNetCoreInstaller@0
+    displayName: 'Use .NET Core sdk 3.1.402'
+    inputs:
+      version: 3.1.402
+    enabled: true
+  
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS
     inputs:
