@@ -19,7 +19,6 @@ steps:
       versionSpec: "14.x"
     displayName: "Install Node.js"
 
-
   - task: SonarCloudPrepare@1
     inputs:
       SonarCloud: 'SonarCloud'
@@ -41,7 +40,7 @@ steps:
     displayName: "npm ci:front"
     inputs:
       cwd: src/Ml.Cli.WebApp/ClientApp
-      command: i
+      command: ci
 
   - task: Npm@0
     displayName: "npm test api:front"
