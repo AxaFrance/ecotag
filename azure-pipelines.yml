@@ -73,7 +73,7 @@ steps:
     displayName: "dotnet test"
     inputs:
       command: test
-      projects: "**/*tests.csproj"
+      projects: "**/*Tests.csproj"
       arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
 
   - task: DotNetCoreInstaller@0
