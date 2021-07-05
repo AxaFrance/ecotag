@@ -2,3 +2,12 @@
   text-align: center;
   color: red;
 }
+
+.tabs {
+  margin-bottom: 2em;
+  display: flex;
+  justify-content: space-evenly;
+  &__header {
+    width: 100%;
+  }
+}

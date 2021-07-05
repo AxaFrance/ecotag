@@ -17,7 +17,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     return {errorMessage, httpResult: {}};
 };
 
-const TableAnnotateItem = ({item, MonacoEditor, fetchFunction}) => {
+const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => {
     const [state, setState] = useState({
         httpResultItem: {},
         errorMessage: "",
@@ -59,6 +59,7 @@ const TableAnnotateItem = ({item, MonacoEditor, fetchFunction}) => {
                 expectedOutput={{id: item.id, fileName: item.fileName, value: state.httpResultItem.body}}
                 onSubmit={saveJson}
                 MonacoEditor={MonacoEditor}
+                parentState={parentState}
                 fetchFunction={fetchFunction}
             />
             }

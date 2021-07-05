@@ -11,7 +11,8 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
         fileName: "Annoter un dataset",
-        items: []
+        items: [],
+        annotationType: "Transcription"
     });
 
     return (

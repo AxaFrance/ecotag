@@ -27,7 +27,7 @@ const getImages = (fetchFunction) => async (item) => {
     return fetchImages(fetchResult);
 };
 
-const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, fetchFunction}) => {
+const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, parentState, fetchFunction}) => {
 
     const [state, setState] = useState({
         fileUrls: []
@@ -55,12 +55,14 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, f
                 onSubmit={onSubmit}
                 MonacoEditor={MonacoEditor}
             />
-            <OcrContainer
-                labels={labels}
-                expectedLabels={[]}
-                url={url}
-                onSubmit={onOcrSubmit}
-            />
+            {parentState.annotationType === "Transcription" &&
+                <OcrContainer
+                    labels={labels}
+                    expectedLabels={[]}
+                    url={url}
+                    onSubmit={onOcrSubmit}
+                />
+            }
         </>
     );
 };
