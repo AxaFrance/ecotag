@@ -28,7 +28,7 @@ namespace Ml.Cli.JobDataset
                 var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, new Dictionary<string, Annotation>());
                 datasetResults.Add(datasetResult);
             }
-            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), datasetResults);
+            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), inputTask.AnnotationType, inputTask.Configuration, datasetResults);
             _fileLoader.CreateDirectory(inputTask.OutputDirectory);
             await _fileLoader.WriteAllTextInFileAsync(
                 datasetContent.DatasetLocation,
