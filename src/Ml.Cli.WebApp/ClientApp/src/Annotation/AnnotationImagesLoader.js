@@ -23,7 +23,7 @@ const getImages = (fetchFunction) => async (item) => {
         stringsMatcher: "",
         directory: item.imageDirectory
     };
-    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
+    const fetchResult = await fetchGetData(fetchFunction)(params, "api/datasets");
     return fetchImages(fetchResult);
 };
 
@@ -34,7 +34,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
         filePrimaryUrl: ""
     });
     
-    const mutationDataset = useMutation(newData => fetchPostJson(newData, fetchFunction)("/api/annotations/save"));
+    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations/save", newData));
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);

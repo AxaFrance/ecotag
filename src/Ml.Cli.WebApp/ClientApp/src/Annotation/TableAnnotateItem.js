@@ -8,7 +8,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     const params = {
         filePath: `${item.fileDirectory}\\${item.fileName}`
     };
-    const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
+    const fetchResult = await fetchGetData(fetchFunction)(params, "api/annotations");
     if (fetchResult.status === 200) {
         const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};
