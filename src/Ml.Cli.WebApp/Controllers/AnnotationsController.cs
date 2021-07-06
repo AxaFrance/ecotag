@@ -57,7 +57,7 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveAnnotation([FromBody] DatasetInfo datasetData)
         {
-            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null || datasetData.Annotation == null))
+            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null || datasetData.Annotation.Equals(null)))
             {
                 return BadRequest();
             }

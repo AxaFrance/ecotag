@@ -7,7 +7,7 @@ import cuid from "cuid";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
 const annotationTypesSelect = [
-    {value: 'Transcription', label: 'Transcription'},
+    {value: 'Ocr', label: 'Ocr'},
     {value: 'Cropping', label: 'Cropping'},
     {value: 'Rotation', label: 'Rotation'},
     {value: 'TagOverText', label: 'TagOverText'},
@@ -37,7 +37,8 @@ const DatasetHandler = ({state, setState}) => {
             onLoadFailure(e);
         } else {
             const mappedItems = mapDatasetItems(result.Content);
-            setState({...state, fileName: e.values[0].file.name, items: mappedItems});
+            const location = result.DatasetLocation;
+            setState({...state, fileName: e.values[0].file.name, datasetLocation: location, items: mappedItems});
             setHandlerState({...state, loadFileError: false});
         }
     };

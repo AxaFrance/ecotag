@@ -55,18 +55,20 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     const labels =   [{name: "Recto", color: "#212121", id: 0}, {name: "Verso", color: "#ffbb00", id: 1}];
     const onOcrSubmit = (e) => {
         console.log("Submit Method", e);
-        mutationDataset.mutate(
-            {datasetLocation: "someFolder",
-                annotationType: "Ocr",
-                Annotation: {
-                    "type": ".pdf",
-                    "width": 100,
-                    "height": 100,
-                    "labels": {
-                        "recto": "recto_value",
-                        "verso": "verso_value"
-                    }
-            }});
+        const annotationObject = {
+            datasetLocation: parentState.datasetLocation,
+            annotationType: parentState.annotationType,
+            annotation: {
+                "type": e.type,
+                "width": e.width,
+                "height": e.height,
+                "labels": {
+                    "recto": e.labels.Recto,
+                    "verso": e.labels.Verso
+                }
+            }
+        };
+        mutationDataset.mutate(annotationObject);
     };
     
     return (
@@ -77,7 +79,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                 onSubmit={onSubmit}
                 MonacoEditor={MonacoEditor}
             />
-            {parentState.annotationType === "Transcription" &&
+            {parentState.annotationType === "Ocr" &&
                 <OcrContainer
                     labels={labels}
                     expectedLabels={[]}
