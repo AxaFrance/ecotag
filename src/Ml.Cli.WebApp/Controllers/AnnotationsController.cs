@@ -34,6 +34,7 @@ namespace Ml.Cli.WebApp.Controllers
         public class DatasetFileContent
         {
             public string DatasetLocation { get; set; }
+
             [JsonProperty(PropertyName = "Content")]
             public DatasetToken[] JsonTokens { get; set; }
 
@@ -43,13 +44,13 @@ namespace Ml.Cli.WebApp.Controllers
                 JsonTokens = array;
             }
         }
-        
+
         public class DatasetInfo
         {
             public string DatasetLocation { get; set; }
             public string AnnotationType { get; set; }
             public string FileName { get; set; }
-            public dynamic Annotation  { get; set; }
+            public dynamic Annotation { get; set; }
 
             public DatasetInfo(string datasetLocation, string annotationType, string fileName, dynamic annotation)
             {
@@ -75,13 +76,14 @@ namespace Ml.Cli.WebApp.Controllers
             var httpResult = JsonConvert.DeserializeObject<Cli.Program.HttpResult>(result);
             return Ok(httpResult);
         }
-        
+
         [HttpPost("save")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveAnnotation([FromBody] DatasetInfo datasetData)
         {
-            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null || datasetData.Annotation.Equals(null)))
+            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null ||
+                                        datasetData.Annotation.Equals(null)))
             {
                 return BadRequest();
             }
@@ -96,11 +98,13 @@ namespace Ml.Cli.WebApp.Controllers
             var foundToken = Array.Find(fileContent.JsonTokens, token => token.FileName == datasetData.FileName);
             if (foundToken != null)
             {
-                foundToken.Annotations.Add($"annotation{((JObject) foundToken.Annotations).Count}", datasetData.Annotation.ToString());
+                var nbAnnotations = ((JObject) foundToken.Annotations).Count;
+                foundToken.Annotations.Add($"annotation{nbAnnotations}", datasetData.Annotation.ToString());
                 var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
                 await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
                 return Ok();
             }
+
             return BadRequest();
         }
     }
