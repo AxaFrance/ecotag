@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Ocr from './Ocr';
 import Toolbar from './Toolbar.container';
 import './Ocr.scss';
+import './OcrContainer.scss';
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 
 const OcrContainer = ({ labels, expectedLabels, url, onSubmit }) => {
@@ -28,10 +29,10 @@ const OcrContainer = ({ labels, expectedLabels, url, onSubmit }) => {
   }, [url]);
 
   return (
-    <>
+    <div className="ocr-container-adapter">
       <Ocr state={state} setState={setState} url={url} />
       <Toolbar onSubmit={onSubmit} state={state} setState={setState} />
-    </>
+    </div>
   );
 };
 
