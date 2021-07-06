@@ -2,7 +2,6 @@
 import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData} from "../FetchHelper";
 import OcrContainer from "./Toolkit/Ocr";
-import url from "./Toolkit/Ocr/sample_rib.png";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -30,12 +29,20 @@ const getImages = (fetchFunction) => async (item) => {
 const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, parentState, fetchFunction}) => {
 
     const [state, setState] = useState({
-        fileUrls: []
+        fileUrls: [],
+        filePrimaryUrl: ""
     });
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
-        setState({fileUrls: newUrls});
+        let newFileUrl;
+        if(newUrls != null){
+            newFileUrl = newUrls[0];
+        }
+        else{
+            newFileUrl = "";
+        }
+        setState({fileUrls: newUrls, filePrimaryUrl: newFileUrl});
     };
 
     useEffect(() => {
@@ -59,7 +66,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                 <OcrContainer
                     labels={labels}
                     expectedLabels={[]}
-                    url={url}
+                    url={state.filePrimaryUrl}
                     onSubmit={onOcrSubmit}
                 />
             }
