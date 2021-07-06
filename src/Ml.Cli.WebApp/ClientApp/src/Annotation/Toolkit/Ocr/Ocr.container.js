@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Ocr from './Ocr';
-import Toolbar from './Toolbar';
+import Toolbar from './Toolbar.container';
 import './Ocr.scss';
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 
