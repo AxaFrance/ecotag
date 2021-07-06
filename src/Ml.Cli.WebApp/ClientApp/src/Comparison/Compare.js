@@ -8,7 +8,7 @@ import FileTreatment from "../FileTreatment/FileTreatment";
 
 const queryClient = new QueryClient();
 
-const Compare = ({MonacoEditor}) => {
+const Compare = ({MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
         fileName: "Comparer un fichier JSON",

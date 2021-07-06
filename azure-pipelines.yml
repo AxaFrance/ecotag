@@ -1,0 +1,127 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+  - checkout: self
+    clean: true
+    persistCredentials: true
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.x"
+    displayName: "Install Node.js"
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'axaguildev'
+      scannerMode: 'MSBuild'
+      projectKey: 'AxaGuilDEv_ml-cli'
+      projectName: 'ml-cli'
+      extraProperties: |
+        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
+        sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
+        sonar.cs.opencover.reportsPaths=**/opencover.xml
+        extraProperties: |
+        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
+        sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
+        sonar.cs.opencover.reportsPaths=**/opencover.xml
+        condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'), eq(variables['Build.Reason'], 'PullRequest'))
+
+  - task: Npm@0
+    displayName: "npm ci:front"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: ci
+
+  - task: Npm@0
+    displayName: "npm test api:front"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: test
+      arguments: "--  --runInBand --coverage --watchAll=false"
+
+  - task: Npm@0
+    displayName: "npm run build storybook"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: run
+      arguments: build-storybook
+
+  - task: Npm@0
+    displayName: "npm run build"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: run
+      arguments: build
+
+  - task: DotNetCoreInstaller@0
+    displayName: "Use .NET Core sdk 3.1.402"
+    inputs:
+      version: 3.1.402
+    enabled: true
+
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet test"
+    inputs:
+      command: test
+      projects: "**/*Tests.csproj"
+      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
+
+  - task: DotNetCoreInstaller@0
+    displayName: 'Use .NET Core sdk 2.2.207'
+    inputs:
+      version: 2.2.207
+    enabled: true
+    
+  - task: SonarCloudAnalyze@1
+    displayName: "Run Code Analysis"
+    condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
+
+  - task: SonarCloudPublish@1
+    displayName: "Publish Quality Gate Result"
+    condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
+
+  - task: DotNetCoreInstaller@0
+    displayName: 'Use .NET Core sdk 3.1.402'
+    inputs:
+      version: 3.1.402
+    enabled: true
+  
+  - task: DotNetCoreCLI@2
+    displayName: Publish MacOS
+    inputs:
+      command: publish
+      publishWebProjects: false
+      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/macos -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      zipAfterPublish: True
+      workingDirectory: "src/Ml.Cli"
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish Win10
+    inputs:
+      command: publish
+      publishWebProjects: false
+      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/win10 -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      zipAfterPublish: True
+      workingDirectory: "src/Ml.Cli"
+
+  - task: CopyFiles@2
+    displayName: "Copy Scripts Files to: $(build.artifactstagingdirectory)/src/Ml.Cli.WebApp/ClientApp"
+    inputs:
+      SourceFolder: src/Ml.Cli.WebApp/ClientApp/build
+      TargetFolder: "$(build.artifactstagingdirectory)/src/Ml.Cli.WebApp/ClientApp"
+      OverWrite: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: drop"
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"

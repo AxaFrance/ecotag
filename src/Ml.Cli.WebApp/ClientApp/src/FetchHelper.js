@@ -5,7 +5,7 @@
     return `${controllerPath}/${testUrlParams}`;
 };
 
-export const fetchGetData = async (params, controllerPath, fetchFunction) => {
+export const fetchGetData = (fetchFunction) => (params, controllerPath) => {
     return fetchFunction(
         setQueryUrl(params, controllerPath),
         {
@@ -17,7 +17,7 @@ export const fetchGetData = async (params, controllerPath, fetchFunction) => {
     );
 };
 
-export const fetchPostJson = (newData, fetchFunction) => url => {
+export const fetchPostJson = fetchFunction => (url, newData) => {
     return fetchFunction(
         url,
         {

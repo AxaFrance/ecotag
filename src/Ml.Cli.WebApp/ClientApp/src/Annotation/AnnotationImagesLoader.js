@@ -3,7 +3,7 @@ import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData} from "../FetchHelper";
 
 const fetchImages = async data => {
-    if (data.ok) {
+    if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
             return `api/files/${new URLSearchParams({
@@ -15,13 +15,13 @@ const fetchImages = async data => {
     }
 };
 
-const getImages = async (item, fetchFunction) => {
+const getImages = (fetchFunction) => async (item) => {
     const params = {
         fileName: item.fileName,
         stringsMatcher: "",
         directory: item.imageDirectory
     };
-    const fetchResult = await fetchGetData(params, "api/datasets", fetchFunction);
+    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
     return fetchImages(fetchResult);
 };
 
@@ -32,7 +32,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, f
     });
 
     const getUrls = async () => {
-        const newUrls = await getImages(item, fetchFunction);
+        const newUrls = await getImages(fetchFunction)(item);
         setState({fileUrls: newUrls});
     };
 

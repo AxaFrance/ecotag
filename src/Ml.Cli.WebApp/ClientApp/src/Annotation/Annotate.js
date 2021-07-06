@@ -7,7 +7,7 @@ import {QueryClient, QueryClientProvider} from "react-query";
 
 const queryClient = new QueryClient();
 
-const Annotate = ({MonacoEditor}) => {
+const Annotate = ({MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
         fileName: "Annoter un dataset",
@@ -28,7 +28,7 @@ const Annotate = ({MonacoEditor}) => {
                 title={state.fileName === "Annoter un dataset" ? state.fileName : `Fichier en cours de visualisation : ${state.fileName}`}/>
             <DatasetHandler state={state} setState={setState}/>
             {state.items.length > 0 &&
-            <TableAnnotate state={state} MonacoEditor={MonacoEditor}/>
+            <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
             }
         </QueryClientProvider>
     );

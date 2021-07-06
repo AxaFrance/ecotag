@@ -3,7 +3,7 @@ import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData} from "../FetchHelper";
 
 const fetchImages = async data => {
-    if (data.ok) {
+    if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
             return `/api/files/${new URLSearchParams({
@@ -21,7 +21,7 @@ export const getImages = async (item, stringsMatcher, direction, fetchFunction) 
         stringsMatcher: (!stringsMatcher ? item.right.FrontDefaultStringsMatcher : stringsMatcher),
         directory: (direction === "left" ? item.left.ImageDirectory : item.right.ImageDirectory)
     };
-    const fetchResult = await fetchGetData(params, "api/datasets", fetchFunction);
+    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
     return fetchImages(fetchResult);
 };
 

@@ -3,7 +3,7 @@ import {Paging} from "@axa-fr/react-toolkit-table";
 import TableAnnotateItem from "./TableAnnotateItem";
 import {computeNumberPages} from "../Tables/Paging";
 
-const TableAnnotate = ({state, MonacoEditor}) => {
+const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
 
     const [tableState, setTableState] = useState({
         currentPage: 1,
@@ -12,7 +12,8 @@ const TableAnnotate = ({state, MonacoEditor}) => {
 
     return <>
         {state.items.map(item => (
-            <TableAnnotateItem
+            <TableAnnotateItem 
+                fetchFunction={fetchFunction}
                 key={item.id}
                 item={item}
                 MonacoEditor={MonacoEditor}
