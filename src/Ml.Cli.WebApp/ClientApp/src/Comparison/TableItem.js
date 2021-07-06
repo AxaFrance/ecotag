@@ -1,4 +1,4 @@
-﻿import React, {useState} from "react";
+﻿import React, {useEffect, useState} from "react";
 import diff_match_patch from "diff-match-patch";
 import EditorTab from "./EditorTab";
 
@@ -29,10 +29,13 @@ const onCopy = (item, name) => {
 const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, setCompareState, MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
-        isAnnotating,
-        isCollapsed: true,
-        tempStringsMatcher: (!stringsMatcher ? item.right.FrontDefaultStringsMatcher : stringsMatcher)
+        isAnnotating: isAnnotating,
+        isNotCollapsed: true
     });
+    
+    useEffect(() => {
+        setState({...state, isAnnotating});
+    }, [isAnnotating]);
 
     return <div className="table-result">
         <div className="table-result__header">
@@ -50,11 +53,11 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                 </div>
                 <div className="table-result__collapse-button"
                      onClick={() => {
-                         setState({...state, collapsed: !state.isCollapsed});
-                     }}>{state.isCollapsed ? "-" : "+"}</div>
+                         setState({...state, isNotCollapsed: !state.isNotCollapsed});
+                     }}>{state.isNotCollapsed ? "-" : "+"}</div>
             </div>
         </div>
-        {state.isCollapsed && (
+        {state.isNotCollapsed && (
             <>
                 <div className="table-result__elements-container">
                     <button className="table-result__parse-button" type="button"
@@ -63,7 +66,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                     </button>
                 </div>
                 {state.isAnnotating &&
-                <>
                     <EditorTab
                         items={items}
                         item={item}
@@ -73,7 +75,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                         MonacoEditor={MonacoEditor}
                         fetchFunction={fetchFunction}
                     />
-                </>
                 }
                 <div className="table-result__column-container">
                     <div className="table-result__column">
@@ -113,6 +114,6 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
             </>
         )}
     </div>;
-}
+};
 
 export default TableItem;
