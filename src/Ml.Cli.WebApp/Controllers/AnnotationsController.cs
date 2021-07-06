@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.BasePath;
-using Ml.Cli.WebApp.Controllers.AnnotationTypes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Ml.Cli.WebApp.Controllers
 {
@@ -21,17 +22,40 @@ namespace Ml.Cli.WebApp.Controllers
             _fileLoader = fileLoader;
             _basePath = basePath;
         }
+
+        public class DatasetToken
+        {
+            public string FileName { get; set; }
+            public string FileDirectory { get; set; }
+            public string ImageDirectory { get; set; }
+            public dynamic Annotations { get; set; }
+        }
+
+        public class DatasetFileContent
+        {
+            public string DatasetLocation { get; set; }
+            [JsonProperty(PropertyName = "Content")]
+            public DatasetToken[] JsonTokens { get; set; }
+
+            public DatasetFileContent(string datasetLocation, DatasetToken[] array)
+            {
+                DatasetLocation = datasetLocation;
+                JsonTokens = array;
+            }
+        }
         
         public class DatasetInfo
         {
             public string DatasetLocation { get; set; }
             public string AnnotationType { get; set; }
+            public string FileName { get; set; }
             public dynamic Annotation  { get; set; }
 
-            public DatasetInfo(string datasetLocation, string annotationType, dynamic annotation)
+            public DatasetInfo(string datasetLocation, string annotationType, string fileName, dynamic annotation)
             {
                 DatasetLocation = datasetLocation;
                 AnnotationType = annotationType;
+                FileName = fileName;
                 Annotation = annotation;
             }
         }
@@ -66,24 +90,18 @@ namespace Ml.Cli.WebApp.Controllers
             {
                 return BadRequest();
             }
-            
-            switch (datasetData.AnnotationType)
-            {
-                case "Ocr":
-                    var annotationObject = JsonConvert.DeserializeObject<Ocr>(datasetData.Annotation.ToString());
-                    //TODO: récupérer le contenu et le stocker dans la partie Annotations de l'objet ayant le bon FileName
-                    break;
-                case "Cropping":
-                    break;
-                case "Rotation":
-                    break;
-                case "TagOverText":
-                    break;
-                case "TagOverTextLabel":
-                    break;
-            }
 
-            return Ok();
+            var file = await _fileLoader.ReadAllTextInFileAsync(datasetData.DatasetLocation);
+            var fileContent = JsonConvert.DeserializeObject<DatasetFileContent>(file);
+            var foundToken = Array.Find(fileContent.JsonTokens, token => token.FileName == datasetData.FileName);
+            if (foundToken != null)
+            {
+                foundToken.Annotations.Add($"annotation{((JObject) foundToken.Annotations).Count}", datasetData.Annotation.ToString());
+                var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+                await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

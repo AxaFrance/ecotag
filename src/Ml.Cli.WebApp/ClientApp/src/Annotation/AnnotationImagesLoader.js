@@ -54,10 +54,10 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
 
     const labels =   [{name: "Recto", color: "#212121", id: 0}, {name: "Verso", color: "#ffbb00", id: 1}];
     const onOcrSubmit = (e) => {
-        console.log("Submit Method", e);
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
             annotationType: parentState.annotationType,
+            fileName: item.fileName,
             annotation: {
                 "type": e.type,
                 "width": e.width,
