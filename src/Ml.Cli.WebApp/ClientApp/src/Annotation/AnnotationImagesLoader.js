@@ -1,7 +1,8 @@
 ﻿import React, {useEffect, useState} from "react";
 import EditorContainer from "../Editor/EditorContainer";
-import {fetchGetData} from "../FetchHelper";
+import {fetchGetData, fetchPostJson} from "../FetchHelper";
 import OcrContainer from "./Toolkit/Ocr";
+import {useMutation} from "react-query";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -32,6 +33,8 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
         fileUrls: [],
         filePrimaryUrl: ""
     });
+    
+    const mutationDataset = useMutation(newData => fetchPostJson(newData, fetchFunction)("/api/annotations/save"));
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
@@ -52,6 +55,18 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     const labels =   [{name: "Recto", color: "#212121", id: 0}, {name: "Verso", color: "#ffbb00", id: 1}];
     const onOcrSubmit = (e) => {
         console.log("Submit Method", e);
+        mutationDataset.mutate(
+            {datasetLocation: "someFolder",
+                annotationType: "Ocr",
+                Annotation: {
+                    "type": ".pdf",
+                    "width": 100,
+                    "height": 100,
+                    "labels": {
+                        "recto": "recto_value",
+                        "verso": "verso_value"
+                    }
+            }});
     };
     
     return (

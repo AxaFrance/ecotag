@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Controllers.AnnotationTypes;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Controllers
@@ -20,6 +21,20 @@ namespace Ml.Cli.WebApp.Controllers
             _fileLoader = fileLoader;
             _basePath = basePath;
         }
+        
+        public class DatasetInfo
+        {
+            public string DatasetLocation { get; set; }
+            public string AnnotationType { get; set; }
+            public dynamic Annotation  { get; set; }
+
+            public DatasetInfo(string datasetLocation, string annotationType, dynamic annotation)
+            {
+                DatasetLocation = datasetLocation;
+                AnnotationType = annotationType;
+                Annotation = annotation;
+            }
+        }
 
         [HttpGet("{filePath}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
@@ -35,6 +50,40 @@ namespace Ml.Cli.WebApp.Controllers
             var result = await _fileLoader.ReadAllTextInFileAsync(elementPath);
             var httpResult = JsonConvert.DeserializeObject<Cli.Program.HttpResult>(result);
             return Ok(httpResult);
+        }
+        
+        [HttpPost("save")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SaveAnnotation([FromBody] DatasetInfo datasetData)
+        {
+            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null || datasetData.Annotation == null))
+            {
+                return BadRequest();
+            }
+
+            if (!_basePath.IsPathSecure(datasetData.DatasetLocation))
+            {
+                return BadRequest();
+            }
+            
+            switch (datasetData.AnnotationType)
+            {
+                case "Ocr":
+                    var annotationObject = JsonConvert.DeserializeObject<Ocr>(datasetData.Annotation.ToString());
+                    //TODO: récupérer le contenu et le stocker dans la partie Annotations de l'objet ayant le bon FileName
+                    break;
+                case "Cropping":
+                    break;
+                case "Rotation":
+                    break;
+                case "TagOverText":
+                    break;
+                case "TagOverTextLabel":
+                    break;
+            }
+
+            return Ok();
         }
     }
 }
