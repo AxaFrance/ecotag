@@ -38,13 +38,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
-        let newFileUrl;
-        if(newUrls != null){
-            newFileUrl = newUrls[0];
-        }
-        else{
-            newFileUrl = "";
-        }
+        const newFileUrl = newUrls != null ? newUrls[0] : "";
         setState({fileUrls: newUrls, filePrimaryUrl: newFileUrl});
     };
 
