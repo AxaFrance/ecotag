@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import OcrContainer from "./index";
-import url from "./sample_rib.png";
+import url from "./sample_image.png";
 
 const labels =   [{name: "Eyes color", id: 0}, {name: "Description", id: 1}];
 
