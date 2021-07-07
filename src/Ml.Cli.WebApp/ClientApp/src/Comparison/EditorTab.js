@@ -5,8 +5,8 @@ import './EditorTab.scss';
 import ImagesLoader from "./ImagesLoader";
 import {fetchPostJson} from "../FetchHelper";
 
-const left = "left";
-const right = "right";
+const left_var = "left";
+const right_var = "right";
 
 const setNewItem = (contentLeft, contentRight, items, item) => {
     return items.map(currentItem => {
@@ -28,8 +28,8 @@ const EditorTab = ({items, item, stringsMatcher, compareLocation, setCompareStat
 
     const saveItem = (direction, editorContent) => {
         const {left, right} = item;
-        const contentLeft = direction === left ? editorContent : left.Body;
-        const contentRight = direction === right ? editorContent : right.Body;
+        const contentLeft = direction === left_var ? editorContent : left.Body;
+        const contentRight = direction === right_var ? editorContent : right.Body;
         const newItems = setNewItem(
             contentLeft,
             contentRight,
@@ -57,10 +57,10 @@ const EditorTab = ({items, item, stringsMatcher, compareLocation, setCompareStat
             <Tabs.Tab title="Gauche">
                 <ImagesLoader
                     expectedOutput={{id: `${item.fileName}_left`, value: item.left.Body, fileName: item.fileName}}
-                    onSubmit={e => saveItem(left, e)}
+                    onSubmit={e => saveItem(left_var, e)}
                     item={item}
                     stringsMatcher={stringsMatcher}
-                    direction={left}
+                    direction={left_var}
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetchFunction}
                 />
@@ -68,10 +68,10 @@ const EditorTab = ({items, item, stringsMatcher, compareLocation, setCompareStat
             <Tabs.Tab title="Droite">
                 <ImagesLoader
                     expectedOutput={{id: `${item.fileName}_right`, value: item.right.Body, fileName: item.fileName}}
-                    onSubmit={e => saveItem(right, e)}
+                    onSubmit={e => saveItem(right_var, e)}
                     item={item}
                     stringsMatcher={stringsMatcher}
-                    direction={right}
+                    direction={right_var}
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetchFunction}
                 />
