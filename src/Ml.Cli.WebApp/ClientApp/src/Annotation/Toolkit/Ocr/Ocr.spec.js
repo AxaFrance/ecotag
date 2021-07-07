@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import {render, fireEvent, screen, wait} from '@testing-library/react';
+import {render, fireEvent, screen, waitFor} from '@testing-library/react';
 import React from "react";
 import url from "./sample_rib.png";
 import OcrContainer from "./Ocr.container";
@@ -20,19 +20,19 @@ describe(`Annotation.Irot`, () => {
     test(`should return correct values`, async () => {
         const { container } = render(<OcrContainer labels={labels} expectedLabels={expectedLabels} url={url} onSubmit={onSubmit} />);
 
-        await wait(() => {
+        await waitFor(() => {
             const input = container.querySelector('[name="Recto"]');
             fireEvent.change(input, {
                 target: { value: "youhou" },
             });
         });
 
-        await wait(() => {
+        await waitFor(() => {
             const item = screen.queryByText("Submit");
             fireEvent.click(item);
         });
 
-        await wait(() => {
+        await waitFor(() => {
             const output = onSubmit.mock.calls[0][0];
             expect(output).toEqual({
                 labels: {
@@ -53,12 +53,12 @@ describe(`Annotation.Irot`, () => {
             {name: "2", color: "#f20713", id: 2}];
         const { container } = render(<OcrContainer labels={labels} expectedLabels={expectedLabels} url={url} onSubmit={onSubmit} />);
 
-        await wait(() => {
+        await waitFor(() => {
             const item = screen.queryByText("Submit");
             fireEvent.click(item);
         });
 
-        await wait(() => {
+        await waitFor(() => {
             const output = onSubmit.mock.calls[0][0];
             expect(output).toEqual({
                 labels: {
