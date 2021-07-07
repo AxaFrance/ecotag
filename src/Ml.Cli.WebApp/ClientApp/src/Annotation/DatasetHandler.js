@@ -38,7 +38,9 @@ const DatasetHandler = ({state, setState}) => {
         } else {
             const mappedItems = mapDatasetItems(result.Content);
             const location = result.DatasetLocation;
-            setState({...state, fileName: e.values[0].file.name, datasetLocation: location, items: mappedItems});
+            const fileAnnotationType = result.AnnotationType;
+            const fileConfiguration = JSON.parse(result.Configuration);
+            setState({...state, fileName: e.values[0].file.name, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems});
             setHandlerState({...state, loadFileError: false});
         }
     };
@@ -61,7 +63,7 @@ const DatasetHandler = ({state, setState}) => {
                 <Tabs className="tabs__header">
                     <Tabs.Tab title="Configuration">
                         <div>
-                            <p className="tabs__title">Extensions de fichiers:</p>
+                            <p className="tabs__title">Type d'annotation:</p>
                             <SelectBase
                                 id="extension_type"
                                 name="ExtensionType"
