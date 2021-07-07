@@ -57,7 +57,7 @@ const DatasetHandler = ({state, setState}) => {
                 onLoad={(reader, e) => loadFile(reader, e)}
                 onFailure={e => onLoadFailure(e)}
             />
-            <div className="tabs">
+            <span className="tabs">
                 <Tabs className="tabs__header">
                     <Tabs.Tab title="Configuration">
                         <div>
@@ -74,7 +74,7 @@ const DatasetHandler = ({state, setState}) => {
                         </div>
                     </Tabs.Tab>
                 </Tabs>
-            </div>
+            </span>
             {handlerState.loadFileError &&
             <h2 className="error-message">
                 Une erreur est survenue lors du chargement du fichier.

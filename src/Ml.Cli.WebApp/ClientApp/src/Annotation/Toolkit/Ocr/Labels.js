@@ -17,11 +17,11 @@ const Labels = ({ labels, state, setState }) => {
   return (
     <div className="orc-labels__container" style={{ width: `${size(state.widthImage)}%` }}>
       <form className="ocr-labels__form">
-        {labels.map((label, index) => {
+        {labels.map(label => {
           const userInputValue = state.userInput[label.name];
           const value = userInputValue ? userInputValue : '';
           return (
-            <div key={index}>
+            <div key={label.name}>
               <p className="ocr-labels__label">{label.name}</p>
               <textarea
                 name={label.name}
