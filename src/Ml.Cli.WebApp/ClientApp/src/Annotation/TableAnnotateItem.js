@@ -8,7 +8,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     const params = {
         filePath: `${item.fileDirectory}\\${item.fileName}`
     };
-    const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
+    const fetchResult = await fetchGetData(fetchFunction)(params, "api/annotations");
     if (fetchResult.status === 200) {
         const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};
@@ -17,7 +17,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     return {errorMessage, httpResult: {}};
 };
 
-const TableAnnotateItem = ({item, MonacoEditor, fetchFunction}) => {
+const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => {
     const [state, setState] = useState({
         httpResultItem: {},
         errorMessage: "",
@@ -59,6 +59,7 @@ const TableAnnotateItem = ({item, MonacoEditor, fetchFunction}) => {
                 expectedOutput={{id: item.id, fileName: item.fileName, value: state.httpResultItem.body}}
                 onSubmit={saveJson}
                 MonacoEditor={MonacoEditor}
+                parentState={parentState}
                 fetchFunction={fetchFunction}
             />
             }

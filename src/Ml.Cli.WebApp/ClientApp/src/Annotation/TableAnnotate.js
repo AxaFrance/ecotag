@@ -12,7 +12,8 @@ const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
 
     return <>
         {state.items.map(item => (
-            <TableAnnotateItem 
+            <TableAnnotateItem
+                parentState={state}
                 fetchFunction={fetchFunction}
                 key={item.id}
                 item={item}

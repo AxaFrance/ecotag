@@ -21,7 +21,7 @@ export const getImages = async (item, stringsMatcher, direction, fetchFunction) 
         stringsMatcher: (!stringsMatcher ? item.right.FrontDefaultStringsMatcher : stringsMatcher),
         directory: (direction === "left" ? item.left.ImageDirectory : item.right.ImageDirectory)
     };
-    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
+    const fetchResult = await fetchGetData(fetchFunction)(params, "api/datasets");
     return fetchImages(fetchResult);
 };
 
