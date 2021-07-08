@@ -28,12 +28,14 @@ namespace Ml.Cli.WebApp.Controllers
             public string FileName { get; set; }
             public string FileDirectory { get; set; }
             public string ImageDirectory { get; set; }
-            public dynamic Annotations { get; set; }
+            public string Annotations { get; set; }
         }
 
         public class DatasetFileContent
         {
             public string DatasetLocation { get; set; }
+            public string AnnotationType { get; set; }
+            public string Configuration { get; set; }
 
             [JsonProperty(PropertyName = "Content")]
             public DatasetToken[] JsonTokens { get; set; }
@@ -98,8 +100,22 @@ namespace Ml.Cli.WebApp.Controllers
             var foundToken = Array.Find(fileContent.JsonTokens, token => token.FileName == datasetData.FileName);
             if (foundToken != null)
             {
-                var nbAnnotations = ((JObject) foundToken.Annotations).Count;
-                foundToken.Annotations.Add($"annotation{nbAnnotations}", datasetData.Annotation.ToString());
+                var annotation = foundToken.Annotations;
+                if (annotation != "")
+                {
+                    var annotationJArray = JArray.Parse(annotation);
+                    var nbAnnotations = annotationJArray.Count;
+                    var newAnnotation = ", {\"annotation" + nbAnnotations + "\": " + datasetData.Annotation.ToString() +
+                                        "}";
+                    foundToken.Annotations = annotation.Insert(annotation.Length - 1, newAnnotation);
+                }
+                else
+                {
+                    foundToken.Annotations = "[{\"annotation0\": " + datasetData.Annotation.ToString() + "}]";
+                }
+                
+                //foundToken.Annotations.Add($"annotation{nbAnnotations}", datasetData.Annotation.ToString());
+                
                 var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
                 await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
                 return Ok();
