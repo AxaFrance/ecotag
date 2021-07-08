@@ -16,7 +16,7 @@ namespace Ml.Cli.Tests.JobsTests
         public async Task ShouldGenerateDataset()
         {
             var resultList = new List<DatasetResult>();
-            var datasetResult = new DatasetResult("{FileName}.pdf.json", @"C:\ml\raw_ap\input", @"C:\ml\raw_ap\images",new Dictionary<string, Annotation>());
+            var datasetResult = new DatasetResult("{FileName}.pdf.json", @"C:\ml\raw_ap\input", @"C:\ml\raw_ap\images","");
             resultList.Add(datasetResult);
             var expectedContent = new DatasetFileResult(@"C:\ml\raw_ap\output\dataset-result.json", "Ocr", "", resultList);
             var expectedResult = JsonConvert.SerializeObject(expectedContent, Formatting.Indented);
