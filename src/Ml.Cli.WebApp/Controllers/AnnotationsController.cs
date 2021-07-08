@@ -50,14 +50,12 @@ namespace Ml.Cli.WebApp.Controllers
         public class DatasetInfo
         {
             public string DatasetLocation { get; set; }
-            public string AnnotationType { get; set; }
             public string FileName { get; set; }
             public dynamic Annotation { get; set; }
 
-            public DatasetInfo(string datasetLocation, string annotationType, string fileName, dynamic annotation)
+            public DatasetInfo(string datasetLocation, string fileName, dynamic annotation)
             {
                 DatasetLocation = datasetLocation;
-                AnnotationType = annotationType;
                 FileName = fileName;
                 Annotation = annotation;
             }
@@ -84,8 +82,7 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveAnnotation([FromBody] DatasetInfo datasetData)
         {
-            if (datasetData == null || (datasetData.AnnotationType == null || datasetData.DatasetLocation == null ||
-                                        datasetData.Annotation.Equals(null)))
+            if (datasetData?.DatasetLocation == null || datasetData.Annotation.Equals(null))
             {
                 return BadRequest();
             }
@@ -113,9 +110,7 @@ namespace Ml.Cli.WebApp.Controllers
                 {
                     foundToken.Annotations = "[{\"annotation0\": " + datasetData.Annotation.ToString() + "}]";
                 }
-                
-                //foundToken.Annotations.Add($"annotation{nbAnnotations}", datasetData.Annotation.ToString());
-                
+
                 var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
                 await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
                 return Ok();

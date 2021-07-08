@@ -49,7 +49,6 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     const onOcrSubmit = (e) => {
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
-            annotationType: parentState.annotationType,
             fileName: item.fileName,
             annotation: {
                 "type": e.type,
