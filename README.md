@@ -54,7 +54,7 @@ You can also execute several tasks in command line interface (CLI):
 - loop is used to execute the task indefinitely.
 - script will execute a user-defined script on files stored in a repository.
 - compare is used to compare two sets of json files; the resulting json file can be used to see the results with the help of the server.
-- dataset is used to generate a dataset file which will contain all annotations made on json files with the help of Ml-Cli front.
+- dataset is used to generate a dataset file which will contain all annotations (of a same, user-specified type and configuration) made on json files with the help of Ml-Cli front.
 
 # Getting started
 
@@ -173,6 +173,8 @@ tasks.json
     "type": "dataset",
     "id": "tenth_task",
     "enabled": true,
+    "annotationType": "Ocr",
+    "configuration": "[{\"name\": \"Recto\", \"id\": 0}, {\"name\": \"Verso\", \"id\": 1}]",
     "fileDirectory": "ri\\right-{start-date}",
     "imageDirectory": "ri\\right-{start-date}-images,
     "outputDirectory": "ri\\dataset-output",
