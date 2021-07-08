@@ -2,6 +2,7 @@
 import React from "react";
 import AnnotationImagesLoader from "./AnnotationImagesLoader";
 import {Textarea} from "@axa-fr/react-toolkit-form-input-textarea";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 const mockedMonacoEditor = ({id, value, onChange}) => {
     return (
@@ -21,28 +22,34 @@ const mockedOnSubmit = () => {
 const mockedFetchFunction = () => {
     return {
         ok: true,
+        status: 200,
         json: async () => ["C:\\\\imageLocation"]
     };
 };
 
 describe("Check dataset handling", () => {
     test("Should render AnnotationImagesLoader and get image", async () => {
+        const queryClient = new QueryClient();
         const {container, asFragment} = render(
-            <AnnotationImagesLoader
-                expectedOutput={{
-                    id: "annotation_image_loader_editor_id",
-                    fileName: "fileName.json",
-                    value: "This is the editor content"
-                }}
-                item={{fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
-                onSubmit={mockedOnSubmit}
-                MonacoEditor={mockedMonacoEditor}
-                fetchFunction={mockedFetchFunction}
-            />);
+            <QueryClientProvider client={queryClient}>
+                <AnnotationImagesLoader
+                    expectedOutput={{
+                        id: "annotation_image_loader_editor_id",
+                        fileName: "fileName.json",
+                        value: "This is the editor content"
+                    }}
+                    item={{fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
+                    onSubmit={mockedOnSubmit}
+                    MonacoEditor={mockedMonacoEditor}
+                    parentState={{annotationType: "Ocr"}}
+                    fetchFunction={mockedFetchFunction}
+                />
+            </QueryClientProvider>
+        );
 
-        await waitFor(() => expect(container.querySelector("img")).toBeNull());
-        //const image = container.querySelector("img");
-        //expect(image.getAttribute("src")).toEqual("api/files/value=C%3A%5C%5CimageLocation");
+        //await waitFor(() => expect(container.querySelector("img")).toBeNull());
+        const image = container.querySelector("img");
+        await waitFor(() => expect(image.getAttribute("src")).toEqual("api/files/value=C%3A%5C%5CimageLocation"));
         expect(asFragment()).toMatchSnapshot();
     });
 });

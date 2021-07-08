@@ -87,6 +87,82 @@ exports[`Check dataset handling Should insert dataset 1`] = `
       </button>
     </div>
   </div>
+  <span
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div>
+            <p
+              class="tabs__title"
+            >
+              Extensions de fichiers:
+            </p>
+            <div
+              class="af-form__select-container"
+            >
+              <select
+                class="af-form__input-select"
+                id="extension_type"
+                name="ExtensionType"
+              >
+                <option
+                  value="Ocr"
+                >
+                  Ocr
+                </option>
+                <option
+                  value="Cropping"
+                >
+                  Cropping
+                </option>
+                <option
+                  value="Rotation"
+                >
+                  Rotation
+                </option>
+                <option
+                  value="TagOverText"
+                >
+                  TagOverText
+                </option>
+                <option
+                  value="TagOverTextLabel"
+                >
+                  TagOverTextLabel
+                </option>
+              </select>
+              <span
+                aria-controls="extension_type"
+                class="glyphicon glyphicon-menu-down"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </span>
   <div
     class="table-result"
   >
@@ -148,6 +224,137 @@ exports[`Check dataset handling Should insert dataset 1`] = `
             class="btn af-btn"
           >
             Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ocr-container-adapter"
+    >
+      <div
+        class="ocr-container"
+      >
+        <div
+          class="ocr-container"
+          id="imageContainer"
+        >
+          <img
+            alt="Image to Annotate"
+            class="ocr-container__image"
+            id="currentImage"
+            src=""
+            style="width: 80%; height: 80%; transform: rotate(0deg);"
+          />
+          <div
+            class="orc-labels__container"
+            style="width: 100%;"
+          >
+            <form
+              class="ocr-labels__form"
+            >
+              <div>
+                <p
+                  class="ocr-labels__label"
+                >
+                  Recto
+                </p>
+                <textarea
+                  class="ocr-labels__textarea"
+                  name="Recto"
+                />
+              </div>
+              <div>
+                <p
+                  class="ocr-labels__label"
+                >
+                  Verso
+                </p>
+                <textarea
+                  class="ocr-labels__textarea"
+                  name="Verso"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        class="toolbar toolbar--multi-toolbar"
+      >
+        <div
+          class="toolbar__button-container toolbar__button-container--progress-bar"
+        >
+          <div
+            class="toolbar__button-progress-item"
+          >
+            <input
+              class="toolbar__button-progress-item-input"
+              max="80"
+              min="1"
+              name="width"
+              type="range"
+              value="80"
+            />
+            <label
+              class="toolbar__button-progress-item-label"
+            >
+              Image Size
+            </label>
+          </div>
+          <div
+            class="toolbar__button-switch-item"
+          >
+            <input
+              class="toolbar__button-switch-item-input"
+              id="inlineMode"
+              type="checkbox"
+            />
+            <label
+              class="toolbar__button-switch-item-label"
+              for="inlineMode"
+            >
+              Inline mode
+            </label>
+          </div>
+        </div>
+        <div
+          class="toolbar__button-container"
+        >
+          <button
+            class="toolbar__button-item"
+            title="Raccourci : L"
+          >
+            <span
+              class="glyphicon glyphicon-reset"
+            />
+            <div
+              class="toolbar__button-item-label"
+            >
+              Rotate Left
+            </div>
+          </button>
+          <button
+            class="toolbar__button-item"
+            title="Raccourci : R"
+          >
+            <span
+              class="glyphicon glyphicon-repeat"
+            />
+            <div
+              class="toolbar__button-item-label"
+            >
+              Rotate Right
+            </div>
+          </button>
+        </div>
+        <div
+          class="toolbar__button-container toolbar__button-container--submit"
+        >
+          <button
+            class="toolbar__button-submit"
+            title="Raccourci : Ctrl + Barre espace"
+          >
+            Submit
           </button>
         </div>
       </div>

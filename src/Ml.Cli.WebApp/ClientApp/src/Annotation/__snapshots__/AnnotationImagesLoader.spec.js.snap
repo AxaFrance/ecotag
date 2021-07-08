@@ -9,23 +9,22 @@ exports[`Check dataset handling Should render AnnotationImagesLoader and get ima
       class="images-editor-container__images_column"
     >
       <div
-        class="images-error"
-      >
-        <p>
-          Aucun fichier correspondant n'a été trouvé sur votre disque.
-          <br />
-           Plusieurs raisons sont possibles:
-          <br />
-           - Il n'existe pas d'image correspondant à ce fichier sur votre disque;
-          <br />
-           - L'attribut regex spécifié ne correspond à aucun fichier;
-          <br />
-           - Le répertoire des images de ce fichier n'existe pas.
-        </p>
-      </div>
-      <div
         class="images-list"
-      />
+      >
+        <div
+          class="images-list__item"
+        >
+          <div
+            class="images-list__image-container"
+          >
+            <img
+              alt="file_image"
+              class="images-list__file_image"
+              src="api/files/value=C%3A%5C%5CimageLocation"
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <div
       class="editor-container"
@@ -54,6 +53,137 @@ exports[`Check dataset handling Should render AnnotationImagesLoader and get ima
           class="btn af-btn"
         >
           Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ocr-container-adapter"
+  >
+    <div
+      class="ocr-container"
+    >
+      <div
+        class="ocr-container"
+        id="imageContainer"
+      >
+        <img
+          alt="Image to Annotate"
+          class="ocr-container__image"
+          id="currentImage"
+          src="api/files/value=C%3A%5C%5CimageLocation"
+          style="width: 80%; height: 80%; transform: rotate(0deg);"
+        />
+        <div
+          class="orc-labels__container"
+          style="width: 100%;"
+        >
+          <form
+            class="ocr-labels__form"
+          >
+            <div>
+              <p
+                class="ocr-labels__label"
+              >
+                Recto
+              </p>
+              <textarea
+                class="ocr-labels__textarea"
+                name="Recto"
+              />
+            </div>
+            <div>
+              <p
+                class="ocr-labels__label"
+              >
+                Verso
+              </p>
+              <textarea
+                class="ocr-labels__textarea"
+                name="Verso"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      class="toolbar toolbar--multi-toolbar"
+    >
+      <div
+        class="toolbar__button-container toolbar__button-container--progress-bar"
+      >
+        <div
+          class="toolbar__button-progress-item"
+        >
+          <input
+            class="toolbar__button-progress-item-input"
+            max="80"
+            min="1"
+            name="width"
+            type="range"
+            value="80"
+          />
+          <label
+            class="toolbar__button-progress-item-label"
+          >
+            Image Size
+          </label>
+        </div>
+        <div
+          class="toolbar__button-switch-item"
+        >
+          <input
+            class="toolbar__button-switch-item-input"
+            id="inlineMode"
+            type="checkbox"
+          />
+          <label
+            class="toolbar__button-switch-item-label"
+            for="inlineMode"
+          >
+            Inline mode
+          </label>
+        </div>
+      </div>
+      <div
+        class="toolbar__button-container"
+      >
+        <button
+          class="toolbar__button-item"
+          title="Raccourci : L"
+        >
+          <span
+            class="glyphicon glyphicon-reset"
+          />
+          <div
+            class="toolbar__button-item-label"
+          >
+            Rotate Left
+          </div>
+        </button>
+        <button
+          class="toolbar__button-item"
+          title="Raccourci : R"
+        >
+          <span
+            class="glyphicon glyphicon-repeat"
+          />
+          <div
+            class="toolbar__button-item-label"
+          >
+            Rotate Right
+          </div>
+        </button>
+      </div>
+      <div
+        class="toolbar__button-container toolbar__button-container--submit"
+      >
+        <button
+          class="toolbar__button-submit"
+          title="Raccourci : Ctrl + Barre espace"
+        >
+          Submit
         </button>
       </div>
     </div>

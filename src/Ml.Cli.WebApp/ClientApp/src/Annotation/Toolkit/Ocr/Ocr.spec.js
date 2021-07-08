@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import {render, fireEvent, screen, waitFor} from '@testing-library/react';
 import React from "react";
-import url from "./sample_rib.png";
+import url from "./sample_image.png";
 import OcrContainer from "./Ocr.container";
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
