@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Toolbar from './Toolbar';
+import Toolbar from './Toolbar.container';
 import Cropping from './Cropping';
 import Labels from './Labels';
 import stringToRGB from './color';
