@@ -3,6 +3,7 @@ import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData, fetchPostJson} from "../FetchHelper";
 import OcrContainer from "./Toolkit/Ocr";
 import {useMutation} from "react-query";
+import CroppingContainer from "./Toolkit/BoundingBox/CroppingContainer";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -55,6 +56,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                 "width": e.width,
                 "height": e.height,
                 "labels": {
+                    
                     "recto": e.labels.Recto,
                     "verso": e.labels.Verso
                 }
@@ -77,6 +79,13 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
                     onSubmit={onOcrSubmit}
+                />
+            }
+            {parentState.annotationType === "Cropping" &&
+                <CroppingContainer
+                    labels={[{ "id": "1", "name": "recto_lib" },{ "id": "2", "name": "verso_lib" }]}
+                    url={state.filePrimaryUrl}
+                    onSubmit={e => console.log(e)}
                 />
             }
         </>
