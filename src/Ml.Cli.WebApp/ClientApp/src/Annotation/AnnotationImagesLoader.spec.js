@@ -47,8 +47,6 @@ describe("Check dataset handling", () => {
                 />
             </QueryClientProvider>
         );
-
-        //await waitFor(() => expect(container.querySelector("img")).toBeNull());
         const image = container.querySelector("img");
         await waitFor(() => expect(image.getAttribute("src")).toEqual("api/files/value=C%3A%5C%5CimageLocation"));
         expect(asFragment()).toMatchSnapshot();
