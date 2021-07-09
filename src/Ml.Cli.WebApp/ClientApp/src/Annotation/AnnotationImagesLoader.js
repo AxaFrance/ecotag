@@ -55,7 +55,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                     "type": e.type,
                     "width": e.width,
                     "height": e.height,
-                    "labels": JSON.stringify(e.labels)
+                    "labels": e.labels
                 };
                 break;
             case "Cropping":
@@ -63,7 +63,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                     "type": e.type,
                     "width": e.width,
                     "height": e.height,
-                    "labels": JSON.stringify(e.labels)
+                    "labels": e.labels
                 };
                 break;
         }
