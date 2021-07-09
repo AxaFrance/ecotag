@@ -30,6 +30,7 @@ const mockedFetchFunction = () => {
 describe("Check dataset handling", () => {
     test("Should render AnnotationImagesLoader and get image", async () => {
         const queryClient = new QueryClient();
+        const configuration = JSON.parse("[{\"name\": \"Recto\", \"id\": 0}, {\"name\": \"Verso\", \"id\": 1}]");
         const {container, asFragment} = render(
             <QueryClientProvider client={queryClient}>
                 <AnnotationImagesLoader
@@ -41,7 +42,7 @@ describe("Check dataset handling", () => {
                     item={{fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
                     onSubmit={mockedOnSubmit}
                     MonacoEditor={mockedMonacoEditor}
-                    parentState={{annotationType: "Ocr"}}
+                    parentState={{configuration, annotationType: "Ocr"}}
                     fetchFunction={mockedFetchFunction}
                 />
             </QueryClientProvider>

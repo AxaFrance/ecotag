@@ -4,7 +4,7 @@ namespace Ml.Cli.JobDataset
 {
     public class DatasetResult
     {
-        public DatasetResult(string fileName, string fileDirectory, string imageDirectory, IDictionary<string, Annotation> annotations)
+        public DatasetResult(string fileName, string fileDirectory, string imageDirectory, string annotations)
         {
             FileName = fileName;
             FileDirectory = fileDirectory;
@@ -15,6 +15,6 @@ namespace Ml.Cli.JobDataset
         public string FileName;
         public string FileDirectory;
         public string ImageDirectory;
-        public IDictionary<string, Annotation> Annotations;
+        public string Annotations;
     }
 }

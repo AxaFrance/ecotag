@@ -25,10 +25,10 @@ namespace Ml.Cli.JobDataset
             {
                 var fileName = Path.GetFileName(filePath);
                 _logger.LogInformation($"Task Id: {inputTask.Id} - Generating dataset info for {fileName}");
-                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, new Dictionary<string, Annotation>());
+                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, "");
                 datasetResults.Add(datasetResult);
             }
-            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), datasetResults);
+            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), inputTask.AnnotationType, inputTask.Configuration, datasetResults);
             _fileLoader.CreateDirectory(inputTask.OutputDirectory);
             await _fileLoader.WriteAllTextInFileAsync(
                 datasetContent.DatasetLocation,

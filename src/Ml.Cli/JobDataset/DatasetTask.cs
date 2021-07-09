@@ -4,12 +4,13 @@ namespace Ml.Cli.JobDataset
 {
     public class DatasetTask : IInputTask
     {
-        public DatasetTask(string id, string type, bool enabled, string annotationType, string fileDirectory, string imageDirectory, string outputDirectory, string fileName)
+        public DatasetTask(string id, string type, bool enabled, string annotationType, string configuration, string fileDirectory, string imageDirectory, string outputDirectory, string fileName)
         {
             Id = id;
             Type = type;
             Enabled = enabled;
             AnnotationType = annotationType;
+            Configuration = configuration;
             FileDirectory = fileDirectory;
             ImageDirectory = imageDirectory;
             OutputDirectory = outputDirectory;
@@ -19,6 +20,7 @@ namespace Ml.Cli.JobDataset
         public string Id { get; }
         public string Type { get; }
         public string AnnotationType { get; }
+        public string Configuration { get; }
         public string FileDirectory { get; }
         public string ImageDirectory { get; }
         public string OutputDirectory { get; }

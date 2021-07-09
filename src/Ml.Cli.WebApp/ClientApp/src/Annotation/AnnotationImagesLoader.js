@@ -46,11 +46,9 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
         getUrls();
     }, []);
 
-    const labels =   [{name: "Recto", id: 0}, {name: "Verso", id: 1}];
     const onOcrSubmit = (e) => {
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
-            annotationType: parentState.annotationType,
             fileName: item.fileName,
             annotation: {
                 "type": e.type,
@@ -75,7 +73,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
             />
             {parentState.annotationType === "Ocr" &&
                 <OcrContainer
-                    labels={labels}
+                    labels={parentState.configuration}
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
                     onSubmit={onOcrSubmit}

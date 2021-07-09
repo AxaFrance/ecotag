@@ -13,7 +13,8 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
         fileName: "Annoter un dataset",
         datasetLocation: "",
         items: [],
-        annotationType: "Ocr"
+        annotationType: "Ocr",
+        configuration: [{name: "Default", id: 0}]
     });
 
     return (

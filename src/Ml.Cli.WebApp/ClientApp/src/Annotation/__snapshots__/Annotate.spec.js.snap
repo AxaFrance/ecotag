@@ -117,7 +117,7 @@ exports[`Check dataset handling Should insert dataset 1`] = `
             <p
               class="tabs__title"
             >
-              Extensions de fichiers:
+              Type d'annotation:
             </p>
             <div
               class="af-form__select-container"

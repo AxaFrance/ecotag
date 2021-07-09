@@ -12,6 +12,7 @@ namespace Ml.Cli.JobDataset
                 type,
                 enabled,
                 (string) jObject.Property("annotationType"),
+                (string) jObject.Property("configuration"),
                 PropertyHelper.SetProperty(jObject, "fileDirectory", isBaseDirectoryValid, baseDirectory, taskId, pathValidatorHelper),
                 PropertyHelper.SetProperty(jObject, "imageDirectory", isBaseDirectoryValid, baseDirectory, taskId, pathValidatorHelper),
                 PropertyHelper.SetProperty(jObject, "outputDirectory", isBaseDirectoryValid, baseDirectory, taskId, pathValidatorHelper),
