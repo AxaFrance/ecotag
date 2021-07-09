@@ -67,12 +67,14 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     
     return (
         <>
-            <EditorContainer
-                expectedOutput={expectedOutput}
-                urls={state.fileUrls}
-                onSubmit={onSubmit}
-                MonacoEditor={MonacoEditor}
-            />
+            {parentState.annotationType === "Annotation" &&
+                <EditorContainer
+                    expectedOutput={expectedOutput}
+                    urls={state.fileUrls}
+                    onSubmit={onSubmit}
+                    MonacoEditor={MonacoEditor}
+                />
+            }
             {parentState.annotationType === "Ocr" &&
                 <OcrContainer
                     labels={parentState.configuration}
