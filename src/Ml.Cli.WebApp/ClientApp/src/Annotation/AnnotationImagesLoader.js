@@ -46,24 +46,39 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     useEffect(() => {
         getUrls();
     }, []);
-
-    const onOcrSubmit = (e) => {
+    
+    const setAnnotationObject = e => {
+        let returnedObject;
+        switch (parentState.annotationType){
+            case "Ocr":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": JSON.stringify(e.labels)
+                };
+                break;
+            case "Cropping":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": JSON.stringify(e.labels)
+                };
+                break;
+        }
+        return returnedObject;
+    }
+    
+    const onDatasetSubmit = e => {
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
+            annotationType: parentState.annotationType,
             fileName: item.fileName,
-            annotation: {
-                "type": e.type,
-                "width": e.width,
-                "height": e.height,
-                "labels": {
-                    
-                    "recto": e.labels.Recto,
-                    "verso": e.labels.Verso
-                }
-            }
+            annotation: setAnnotationObject(e)
         };
         mutationDataset.mutate(annotationObject);
-    };
+    }
     
     return (
         <>
@@ -80,14 +95,14 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                     labels={parentState.configuration}
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
-                    onSubmit={onOcrSubmit}
+                    onSubmit={onDatasetSubmit}
                 />
             }
             {parentState.annotationType === "Cropping" &&
                 <CroppingContainer
-                    labels={[{ "id": "1", "name": "recto_lib" },{ "id": "2", "name": "verso_lib" }]}
+                    labels={parentState.configuration}
                     url={state.filePrimaryUrl}
-                    onSubmit={e => console.log(e)}
+                    onSubmit={onDatasetSubmit}
                 />
             }
         </>
