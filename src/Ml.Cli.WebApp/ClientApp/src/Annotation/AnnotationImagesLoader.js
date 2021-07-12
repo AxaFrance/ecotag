@@ -1,9 +1,9 @@
 ﻿import React, {useEffect, useState} from "react";
 import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData, fetchPostJson} from "../FetchHelper";
-import OcrContainer from "./Toolkit/Ocr";
 import {useMutation} from "react-query";
-import CroppingContainer from "./Toolkit/BoundingBox/CroppingContainer";
+import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
+import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -91,7 +91,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                 />
             }
             {parentState.annotationType === "Ocr" &&
-                <OcrContainer
+                <OcrLazy
                     labels={parentState.configuration}
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
@@ -99,7 +99,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
                 />
             }
             {parentState.annotationType === "Cropping" &&
-                <CroppingContainer
+                <CroppingLazy
                     labels={parentState.configuration}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}

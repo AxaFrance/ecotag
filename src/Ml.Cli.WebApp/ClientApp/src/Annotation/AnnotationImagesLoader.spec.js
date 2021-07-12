@@ -31,7 +31,7 @@ describe("Check dataset handling", () => {
     test("Should render AnnotationImagesLoader and get image", async () => {
         const queryClient = new QueryClient();
         const configuration = JSON.parse("[{\"name\": \"Recto\", \"id\": 0}, {\"name\": \"Verso\", \"id\": 1}]");
-        const {container, asFragment} = render(
+        const {container, asFragment, getByAltText} = render(
             <QueryClientProvider client={queryClient}>
                 <AnnotationImagesLoader
                     expectedOutput={{
@@ -42,13 +42,14 @@ describe("Check dataset handling", () => {
                     item={{fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
                     onSubmit={mockedOnSubmit}
                     MonacoEditor={mockedMonacoEditor}
-                    parentState={{configuration, annotationType: "Ocr"}}
+                    parentState={{configuration, annotationType: "Annotation"}}
                     fetchFunction={mockedFetchFunction}
                 />
             </QueryClientProvider>
         );
+        await waitFor(() => expect(getByAltText(/file_image/i)).not.toBeNull());
         const image = container.querySelector("img");
-        await waitFor(() => expect(image.getAttribute("src")).toEqual("api/files/value=C%3A%5C%5CimageLocation"));
+        expect(image.getAttribute("src")).toEqual("api/files/value=C%3A%5C%5CimageLocation");
         expect(asFragment()).toMatchSnapshot();
     });
 });
