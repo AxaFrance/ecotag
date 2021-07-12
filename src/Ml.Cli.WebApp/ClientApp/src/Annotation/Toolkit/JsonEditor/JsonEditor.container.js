@@ -1,8 +1,8 @@
 ﻿import React, {useEffect, useState} from "react";
-import Editor from "./Editor";
-import EditorSave from "./EditorSave";
-import './EditorContainer.scss';
+import './JsonEditor.container.scss'
 import ImagesList from "./ImagesList";
+import JsonEditor from "./JsonEditor";
+import JsonEditorSave from "./JsonEditorSave";
 
 const checkJSONValidity = content => {
     try {
@@ -25,7 +25,7 @@ const initContent = expectedOutput => {
     }
 };
 
-const EditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => {
+const JsonEditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => {
 
     const [state, setState] = useState({
         isJsonInvalid: false,
@@ -54,7 +54,7 @@ const EditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => {
             />
         </div>
         <div className="editor-container">
-            <Editor
+            <JsonEditor
                 id={expectedOutput.id}
                 language="json"
                 value={state.editorContent}
@@ -71,7 +71,7 @@ const EditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => {
                 }
             </div>
             <div className="editor-container__button">
-                <EditorSave
+                <JsonEditorSave
                     onSubmit={onSave}
                 />
             </div>
@@ -79,4 +79,4 @@ const EditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => {
     </div>;
 };
 
-export default EditorContainer;
+export default JsonEditorContainer;

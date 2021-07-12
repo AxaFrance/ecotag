@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import Button from "@axa-fr/react-toolkit-button";
-import Editor from "../Annotation/Toolkit/JsonEditor/Editor";
+import JsonEditor from "../Annotation/Toolkit/JsonEditor/JsonEditor";
 
 const ScriptEditorContainer = ({fileTreatmentState, setFileTreatmentState, MonacoEditor}) => {
 
@@ -30,7 +30,7 @@ try {
         <div className="tabs__container">
             <div className="tabs__function-filter">
                 <label>filtre gauche</label>
-                <Editor
+                <JsonEditor
                     id="fileTreatment_script_left_editor"
                     language="javascript"
                     value={fileTreatmentState.scriptEditorLeft}
@@ -40,7 +40,7 @@ try {
             </div>
             <div className="tabs__function-filter">
                 <label>filtre droite</label>
-                <Editor
+                <JsonEditor
                     id="fileTreatment_script_right_editor"
                     language="javascript"
                     value={fileTreatmentState.scriptEditorRight}

@@ -3,7 +3,7 @@ import {fetchGetData, fetchPostJson} from "../FetchHelper";
 import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
-import EditorContainer from "./Toolkit/JsonEditor/EditorContainer";
+import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -91,7 +91,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     return (
         <>
             {parentState.annotationType === "Annotation" &&
-                <EditorContainer
+                <JsonEditorContainer
                     expectedOutput={expectedOutput}
                     urls={state.fileUrls}
                     onSubmit={onSubmit}

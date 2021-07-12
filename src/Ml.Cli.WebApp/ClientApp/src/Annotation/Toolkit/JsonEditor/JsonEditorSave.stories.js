@@ -1,15 +1,15 @@
 ﻿import React from "react";
-import EditorSave from './EditorSave';
+import JsonEditorSave from "./JsonEditorSave";
 
 const mockedFunction = () => {
 }
 
 export default {
     title: 'Design System/Editor/EditorSave',
-    component: EditorSave
+    component: JsonEditorSave
 }
 
-const Template = (args) => <EditorSave {...args} />;
+const Template = (args) => <JsonEditorSave {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
