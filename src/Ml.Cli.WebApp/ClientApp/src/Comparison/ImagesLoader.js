@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
-import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData} from "../FetchHelper";
+import EditorContainer from "../Annotation/Toolkit/JsonEditor/EditorContainer";
 
 const fetchImages = async data => {
     if (data.status === 200) {

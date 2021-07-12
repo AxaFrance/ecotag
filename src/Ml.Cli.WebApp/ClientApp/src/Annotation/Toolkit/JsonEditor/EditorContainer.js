@@ -2,7 +2,7 @@
 import Editor from "./Editor";
 import EditorSave from "./EditorSave";
 import './EditorContainer.scss';
-import ImagesList from "../ImagesList/ImagesList";
+import ImagesList from "./ImagesList";
 
 const checkJSONValidity = content => {
     try {

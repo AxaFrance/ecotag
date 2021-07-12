@@ -1,9 +1,9 @@
 ﻿import React, {useEffect, useState} from "react";
-import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData, fetchPostJson} from "../FetchHelper";
 import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
+import EditorContainer from "./Toolkit/JsonEditor/EditorContainer";
 
 const fetchImages = async data => {
     if (data.status === 200) {

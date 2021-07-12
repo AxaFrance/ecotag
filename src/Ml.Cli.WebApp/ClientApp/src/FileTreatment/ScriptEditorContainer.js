@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import Editor from "../Editor/Editor";
 import Button from "@axa-fr/react-toolkit-button";
+import Editor from "../Annotation/Toolkit/JsonEditor/Editor";
 
 const ScriptEditorContainer = ({fileTreatmentState, setFileTreatmentState, MonacoEditor}) => {
 
