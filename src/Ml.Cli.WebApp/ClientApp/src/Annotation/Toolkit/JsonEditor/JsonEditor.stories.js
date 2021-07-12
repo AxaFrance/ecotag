@@ -10,7 +10,7 @@ const mockedFunction = () => {
 const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 
 export default {
-    title: 'Design System/Editor/Editor',
+    title: 'Design System/JsonEditor/JsonEditor',
     component: JsonEditor,
     argTypes: {
         MonacoEditor: {

@@ -34,7 +34,7 @@ const mockedFunction = () => {};
 const mockedFetchFunction = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
 
 export default {
-    title: 'Design System/Editor/EditorTab',
+    title: 'Design System/JsonEditor/JsonEditorTab',
     component: EditorTab,
     argTypes: {
         MonacoEditor: {

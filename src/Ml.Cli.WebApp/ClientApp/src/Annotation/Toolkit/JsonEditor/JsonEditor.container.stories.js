@@ -5,7 +5,7 @@ const mockedFunction = () => {
 }
 
 export default {
-    title: 'Design System/Editor/EditorContainer',
+    title: 'Design System/JsonEditor/JsonEditorContainer',
     component: JsonEditorContainer
 };
 
