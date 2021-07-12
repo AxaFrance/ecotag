@@ -90,7 +90,7 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     
     return (
         <>
-            {parentState.annotationType === "Annotation" &&
+            {parentState.annotationType === "JsonEditor" &&
                 <JsonEditorContainer
                     expectedOutput={expectedOutput}
                     urls={state.fileUrls}
