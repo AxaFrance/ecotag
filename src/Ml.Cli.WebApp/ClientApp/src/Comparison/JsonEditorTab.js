@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import {useMutation} from "react-query";
 import {Tabs} from "@axa-fr/react-toolkit-all";
-import './EditorTab.scss';
+import './JsonEditorTab.scss';
 import ImagesLoader from "./ImagesLoader";
 import {fetchPostJson} from "../FetchHelper";
 
@@ -21,7 +21,7 @@ const setNewItem = (contentLeft, contentRight, items, item) => {
     });
 };
 
-const EditorTab = ({items, item, stringsMatcher, compareLocation, setCompareState, MonacoEditor, fetchFunction}) => {
+const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompareState, MonacoEditor, fetchFunction}) => {
 
     const mutationCompare = useMutation(newData => fetchPostJson(fetchFunction)("/api/compare/save", newData));
     const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
@@ -80,4 +80,4 @@ const EditorTab = ({items, item, stringsMatcher, compareLocation, setCompareStat
     </div>;
 };
 
-export default EditorTab;
+export default JsonEditorTab;

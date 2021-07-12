@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 import diff_match_patch from "diff-match-patch";
-import EditorTab from "./EditorTab";
+import JsonEditorTab from "./JsonEditorTab";
 
 const dmp = new diff_match_patch();
 
@@ -66,7 +66,7 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                     </button>
                 </div>
                 {state.isAnnotating &&
-                    <EditorTab
+                    <JsonEditorTab
                         items={items}
                         item={item}
                         stringsMatcher={stringsMatcher}
