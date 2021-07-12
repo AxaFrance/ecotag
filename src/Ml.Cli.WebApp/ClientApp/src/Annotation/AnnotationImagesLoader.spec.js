@@ -15,10 +15,6 @@ const mockedMonacoEditor = ({id, value, onChange}) => {
     );
 };
 
-const mockedOnSubmit = () => {
-    //This is intentional
-};
-
 const mockedFetchFunction = () => {
     return {
         ok: true,
@@ -34,15 +30,9 @@ describe("Check dataset handling", () => {
         const {container, asFragment, getByAltText} = render(
             <QueryClientProvider client={queryClient}>
                 <AnnotationImagesLoader
-                    expectedOutput={{
-                        id: "annotation_image_loader_editor_id",
-                        fileName: "fileName.json",
-                        value: "This is the editor content"
-                    }}
-                    item={{fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
-                    onSubmit={mockedOnSubmit}
+                    item={{id: "annotation_image_loader_editor_id", fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
                     MonacoEditor={mockedMonacoEditor}
-                    parentState={{configuration, annotationType: "Annotation"}}
+                    parentState={{configuration, annotationType: "JsonEditor"}}
                     fetchFunction={mockedFetchFunction}
                 />
             </QueryClientProvider>
