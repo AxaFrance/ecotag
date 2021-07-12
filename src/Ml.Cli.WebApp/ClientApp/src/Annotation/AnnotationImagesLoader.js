@@ -40,11 +40,19 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
         const newFileUrl = newUrls != null ? newUrls[0] : "";
-        setState({fileUrls: newUrls, filePrimaryUrl: newFileUrl});
+        return {fileUrls: newUrls, filePrimaryUrl: newFileUrl};
     };
 
     useEffect(() => {
-        getUrls();
+        let isMounted = true;
+        getUrls().then(obj => {
+            if(isMounted){
+                setState({fileUrls: obj.fileUrls, filePrimaryUrl: obj.filePrimaryUrl});
+            }
+        });
+        return () => {
+            isMounted = false;
+        }
     }, []);
     
     const setAnnotationObject = e => {

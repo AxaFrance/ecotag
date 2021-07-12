@@ -27,12 +27,20 @@ const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => 
     const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
 
     useEffect(() => {
-        getEditorContent();
+        let isMounted = true;
+        getEditorContent().then(obj => {
+            if(isMounted){
+                setState({...state, errorMessage: obj.errorMessage, httpResultItem: obj.httpResultItem, isFetched: obj.isFetched});
+            }
+        });
+        return () => {
+            isMounted = false;
+        }
     }, []);
 
     const getEditorContent = async () => {
         const {httpResult, errorMessage} = await getHttpResultItem(item, fetchFunction);
-        setState({...state, errorMessage, httpResultItem: httpResult, isFetched: true});
+        return {errorMessage, httpResultItem: httpResult, isFetched: true};
     };
 
     const saveJson = editorContent => {
