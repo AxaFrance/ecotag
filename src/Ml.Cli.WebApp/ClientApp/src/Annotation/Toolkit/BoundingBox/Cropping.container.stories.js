@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import CroppingContainer from './CroppingContainer';
 import url from "./sample_image.png";
+import CroppingContainer from "./Cropping.container";
 
 const labels = require("./labels.json");
 
