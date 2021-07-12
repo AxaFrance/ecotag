@@ -31,13 +31,17 @@ const ImagesLoader = ({item, stringsMatcher, direction, fetchFunction, expectedO
         fileUrls: []
     });
 
-    const getUrls = async () => {
-        const newUrls = await getImages(item, stringsMatcher, direction, fetchFunction);
-        setState({fileUrls: newUrls});
-    };
-
     useEffect(() => {
-        getUrls();
+        let isMounted = true;
+        getImages(item, stringsMatcher, direction, fetchFunction)
+            .then(urls => {
+                if(isMounted){
+                    setState({fileUrls: urls});
+                }
+        });
+        return () => {
+            isMounted = false;
+        }
     }, [stringsMatcher]);
 
     return <EditorContainer

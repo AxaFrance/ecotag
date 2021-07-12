@@ -3,7 +3,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import Annotate from "./Annotate";
 import sleep from "../sleep";
 
-const dataset = (`{"DatasetLocation": "C:\\\\location", "AnnotationType": "Ocr", "Configuration": \"[{\\\"name\\\": \\\"Recto\\\", \\\"id\\\": 0}, {\\\"name\\\": \\\"Verso\\\", \\\"id\\\": 1}]\", "Content": [{\"FileName\": \"{FileName}_pdf.json\",\"FileDirectory\": \"fileDirectoryValue\",\"ImageDirectory\": \"imageDirectoryValue\",\"Annotations\":{}}]}`);
+const dataset = (`{"DatasetLocation": "C:\\\\location", "AnnotationType": "Annotation", "Configuration": \"[{\\\"name\\\": \\\"Recto\\\", \\\"id\\\": 0}, {\\\"name\\\": \\\"Verso\\\", \\\"id\\\": 1}]\", "Content": [{\"FileName\": \"{FileName}_pdf.json\",\"FileDirectory\": \"fileDirectoryValue\",\"ImageDirectory\": \"imageDirectoryValue\",\"Annotations\":{}}]}`);
 
 const fetch = (status =200) => async (url, config) => {
     await sleep(1);

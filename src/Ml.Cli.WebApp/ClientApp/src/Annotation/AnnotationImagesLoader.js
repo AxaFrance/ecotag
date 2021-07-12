@@ -1,8 +1,9 @@
 ﻿import React, {useEffect, useState} from "react";
 import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData, fetchPostJson} from "../FetchHelper";
-import OcrContainer from "./Toolkit/Ocr";
 import {useMutation} from "react-query";
+import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
+import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -39,44 +40,77 @@ const AnnotationImagesLoader = ({item, expectedOutput, onSubmit, MonacoEditor, p
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
         const newFileUrl = newUrls != null ? newUrls[0] : "";
-        setState({fileUrls: newUrls, filePrimaryUrl: newFileUrl});
+        return {fileUrls: newUrls, filePrimaryUrl: newFileUrl};
     };
 
     useEffect(() => {
-        getUrls();
+        let isMounted = true;
+        getUrls().then(obj => {
+            if(isMounted){
+                setState({fileUrls: obj.fileUrls, filePrimaryUrl: obj.filePrimaryUrl});
+            }
+        });
+        return () => {
+            isMounted = false;
+        }
     }, []);
-
-    const onOcrSubmit = (e) => {
+    
+    const setAnnotationObject = e => {
+        let returnedObject;
+        switch (parentState.annotationType){
+            case "Ocr":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels
+                };
+                break;
+            case "Cropping":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels
+                };
+                break;
+        }
+        return returnedObject;
+    }
+    
+    const onDatasetSubmit = e => {
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
+            annotationType: parentState.annotationType,
             fileName: item.fileName,
-            annotation: {
-                "type": e.type,
-                "width": e.width,
-                "height": e.height,
-                "labels": {
-                    "recto": e.labels.Recto,
-                    "verso": e.labels.Verso
-                }
-            }
+            annotation: setAnnotationObject(e)
         };
         mutationDataset.mutate(annotationObject);
-    };
+    }
     
     return (
         <>
-            <EditorContainer
-                expectedOutput={expectedOutput}
-                urls={state.fileUrls}
-                onSubmit={onSubmit}
-                MonacoEditor={MonacoEditor}
-            />
+            {parentState.annotationType === "Annotation" &&
+                <EditorContainer
+                    expectedOutput={expectedOutput}
+                    urls={state.fileUrls}
+                    onSubmit={onSubmit}
+                    MonacoEditor={MonacoEditor}
+                />
+            }
             {parentState.annotationType === "Ocr" &&
-                <OcrContainer
+                <OcrLazy
                     labels={parentState.configuration}
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
-                    onSubmit={onOcrSubmit}
+                    onSubmit={onDatasetSubmit}
+                />
+            }
+            {parentState.annotationType === "Cropping" &&
+                <CroppingLazy
+                    labels={parentState.configuration}
+                    url={state.filePrimaryUrl}
+                    onSubmit={onDatasetSubmit}
                 />
             }
         </>
