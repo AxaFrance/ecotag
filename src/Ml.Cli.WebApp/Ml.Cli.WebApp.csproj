@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\Annotation\__snapshots__" />
-    <Folder Include="ClientApp\src\Editor\__snapshots__" />
     <Folder Include="ClientApp\src\scss" />
   </ItemGroup>
 

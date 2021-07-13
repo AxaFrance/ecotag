@@ -7,7 +7,7 @@ import cuid from "cuid";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
 const annotationTypesSelect = [
-    {value: 'Annotation', label: 'Annotation'},
+    {value: 'JsonEditor', label: 'JsonEditor'},
     {value: 'Ocr', label: 'Ocr'},
     {value: 'Cropping', label: 'Cropping'},
     {value: 'Rotation', label: 'Rotation'},

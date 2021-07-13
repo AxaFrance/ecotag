@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
-import EditorContainer from "../Editor/EditorContainer";
 import {fetchGetData} from "../FetchHelper";
+import JsonEditorContainer from "../Annotation/Toolkit/JsonEditor/JsonEditor.container";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -44,7 +44,7 @@ const ImagesLoader = ({item, stringsMatcher, direction, fetchFunction, expectedO
         }
     }, [stringsMatcher]);
 
-    return <EditorContainer
+    return <JsonEditorContainer
         expectedOutput={expectedOutput}
         urls={state.fileUrls}
         onSubmit={onSubmit}

@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import EditorTab from "./EditorTab";
 import {QueryClient, QueryClientProvider} from "react-query";
+import JsonEditorTab from "./JsonEditorTab";
 
 const queryClient = new QueryClient();
 
@@ -34,8 +34,8 @@ const mockedFunction = () => {};
 const mockedFetchFunction = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
 
 export default {
-    title: 'Design System/Editor/EditorTab',
-    component: EditorTab,
+    title: 'Design System/JsonEditor/JsonEditorTab',
+    component: JsonEditorTab,
     argTypes: {
         MonacoEditor: {
             table: {
@@ -46,7 +46,7 @@ export default {
 };
 
 const Template = (args) => <QueryClientProvider client={queryClient}>
-    <EditorTab {...args} />
+    <JsonEditorTab {...args} />
 </QueryClientProvider>;
 
 export const Default = Template.bind({});

@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import {render, waitFor, fireEvent} from '@testing-library/react';
-import EditorContainer from "./EditorContainer";
 import {Textarea} from "@axa-fr/react-toolkit-form-input-textarea";
+import JsonEditorContainer from "./JsonEditor.container";
 
 const expectedResult = {};
 
@@ -22,7 +22,7 @@ describe('Check Editor usage', () => {
         let hasBeenClicked = false;
 
         const {container, asFragment, getAllByText} = render(
-            <EditorContainer
+            <JsonEditorContainer
                 expectedOutput={{
                     id: "Editor-container-test",
                     fileName: "fileName_value",

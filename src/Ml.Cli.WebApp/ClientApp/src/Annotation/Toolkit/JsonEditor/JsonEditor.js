@@ -1,6 +1,6 @@
 ﻿import React, {Suspense} from "react";
 
-const Editor = ({id, language, value, onChange, MonacoEditor}) => {
+const JsonEditor = ({id, language, value, onChange, MonacoEditor}) => {
 
     return <Suspense fallback={<div>Chargement de l'éditeur...</div>}>
         <MonacoEditor
@@ -14,4 +14,4 @@ const Editor = ({id, language, value, onChange, MonacoEditor}) => {
     </Suspense>;
 };
 
-export default Editor;
+export default JsonEditor;
