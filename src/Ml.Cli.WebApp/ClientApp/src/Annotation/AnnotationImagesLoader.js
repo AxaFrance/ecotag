@@ -128,6 +128,14 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "labels": e.labels
                 }
                 break;
+            case "TagOverTextLabel":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels
+                };
+                break;
         }
         return returnedObject;
     }
@@ -195,7 +203,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                 <TagOverTextLabelLazy
                     expectedOutput={parentState.configuration.boundingBoxes}
                     url={state.filePrimaryUrl}
-                    onSubmit={e => console.log(e)}
+                    onSubmit={onDatasetSubmit}
                     labels={parentState.configuration.labels}
                 />
             }
