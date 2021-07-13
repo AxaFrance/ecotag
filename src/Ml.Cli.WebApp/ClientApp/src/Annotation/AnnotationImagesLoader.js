@@ -5,6 +5,7 @@ import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
 import IrotContainer from "./Toolkit/Rotation";
+import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -172,6 +173,13 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
+                />
+            }
+            {parentState.annotationType === "TagOverText" &&
+                <TagOverTextLazy
+                    expectedOutput={parentState.configuration.boundingBoxes}
+                    url={state.filePrimaryUrl}
+                    onSubmit={e => console.log(e)}
                 />
             }
         </>

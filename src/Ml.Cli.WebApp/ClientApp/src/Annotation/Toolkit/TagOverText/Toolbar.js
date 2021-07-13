@@ -2,6 +2,7 @@ import React from 'react';
 import { scaleBy } from '../BoundingBox/Cropping';
 import { GlobalHotKeys } from 'react-hotkeys';
 import Toolbar, { ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton } from '../Toolbar';
+import './ComponentModifier.scss';
 
 const getFileExtension = filename => {
   if (!filename) return '';
@@ -143,7 +144,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
   //<ToolbarButton title="Raccourci : M" onClick={() => {}} icon="move" label="Move"/>
   return (
     <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit}>
+      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit} classModifier="multi-toolbar">
         <ToolbarButtonContainer>
           <ToolbarSwitchButton
             id="enable-creation"

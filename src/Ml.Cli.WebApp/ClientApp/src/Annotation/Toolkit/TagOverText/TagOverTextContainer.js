@@ -6,6 +6,7 @@ import useImage from 'use-image';
 import './TagOverTextContainer.scss';
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 import cuid from 'cuid';
+import './ComponentModifier.scss';
 
 const fitImage = (image, croppingWidth, croppingHeight) => {
   let scaleHeight = 1;
@@ -187,7 +188,7 @@ let memoizeData = {
   result: null,
 };
 const orderBlockForManualLabelsMemoize = (shapes, labels) => {
-  // Je choisi de faire un "memoize" custom car je n'arrive pas a rendre la fonction idempotente
+  // Je choisis de faire un "memoize" custom car je n'arrive pas a rendre la fonction idempotente
   const shapeOrdered = shapes
     .map(s => ({ begin: s.begin, end: s.end, labelId: s.labelId, id: s.id }))
     .sort((a, b) => a.id > b.id);
@@ -242,12 +243,12 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
   const [image] = useImage(url);
 
   useEffect(() => {
-    if (containerRef.current.scrollIntoView) {
+    /*if (containerRef.current.scrollIntoView) {
       containerRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    }
+    }*/
 
     if (image) {
       const labels = expectedOutput.map((label, index) => {
@@ -325,8 +326,7 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
   };
 
   return (
-    <div className="tag-over-text">
-      <p className="tag-over-text__file-name">{splitUrl}</p>
+    <div className="tag-over-text tag-over-text--container-adapter">
       <div className="tag-over-text__container" ref={containerRef}>
         <div
           className="tag-over-text__annotation-zone"
