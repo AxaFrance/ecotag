@@ -4,7 +4,7 @@ import Cropping from './Cropping';
 import Labels from './Labels';
 import stringToRGB from './color';
 import useImage from 'use-image';
-import './CroppingContainer.scss';
+import './Cropping.container.scss';
 
 const fitImage = (image, croppingWidth, croppingHeight) => {
   let scaleHeight = 1;
@@ -82,12 +82,12 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
   const [image] = useImage(url);
 
   useEffect(() => {
-    if (containerRef.current.scrollIntoView) {
+    /*if (containerRef.current.scrollIntoView) {
       containerRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    }
+    }*/
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
       if (state.keepAnnotation) {

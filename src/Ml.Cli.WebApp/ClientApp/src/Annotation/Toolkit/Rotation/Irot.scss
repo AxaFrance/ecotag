@@ -1,0 +1,33 @@
+
+.irot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    height: 90vh;
+
+  &--light {
+    background-color: white;
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-image: linear-gradient(black 2px, transparent 2px),
+    linear-gradient(90deg, black 2px, transparent 2px),
+    linear-gradient(grey 1px, transparent 1px),
+    linear-gradient(90deg, grey 1px, transparent 1px);
+  }
+
+  &--dark {
+    background-color: black;
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-image: linear-gradient(white 2px, transparent 2px),
+    linear-gradient(90deg, white 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+  }
+
+  &__container {
+    text-align: center;
+  }
+
+}
+

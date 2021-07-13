@@ -2,7 +2,7 @@
 
 const CroppingLazy = ({labels, url, onSubmit}) => {
     
-    const CroppingContainer = React.lazy(() => import('./CroppingContainer'));
+    const CroppingContainer = React.lazy(() => import('./Cropping.container'));
     
     return <Suspense fallback={<div>Chargement du cropping...</div>}>
         <CroppingContainer

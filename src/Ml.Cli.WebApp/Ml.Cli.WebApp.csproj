@@ -18,13 +18,15 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\src\Annotation\Toolkit\TagOverTextLabel\expectedOutput.json" />
+    <Content Include="ClientApp\src\Annotation\Toolkit\TagOverTextLabel\Labels.json" />
+    <Content Include="ClientApp\src\Annotation\Toolkit\TagOverText\expectedOutput.json" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ClientApp\src\Annotation\__snapshots__" />
-    <Folder Include="ClientApp\src\Editor\__snapshots__" />
     <Folder Include="ClientApp\src\scss" />
   </ItemGroup>
 
