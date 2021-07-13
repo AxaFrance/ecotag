@@ -118,6 +118,15 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "labels": e.labels
                 };
                 break;
+            case "Rotation":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels,
+                    "image_anomaly": e.image_anomaly
+                }
+                break;
         }
         return returnedObject;
     }
@@ -171,7 +180,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                 <IrotContainer
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
-                    onSubmit={e => console.log(e)}
+                    onSubmit={onDatasetSubmit}
                 />
             }
         </>
