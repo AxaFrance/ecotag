@@ -30,7 +30,7 @@ steps:
         sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
         sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
         sonar.cs.opencover.reportsPaths=**/opencover.xml
-      condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'), eq(variables['Build.Reason'], 'PullRequest'))
+      condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
 
   - task: Npm@0
     displayName: "npm ci:front"
