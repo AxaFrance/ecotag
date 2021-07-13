@@ -76,7 +76,7 @@ steps:
     inputs:
       command: test
       projects: "**/*Tests.csproj"
-      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
+      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml'
 
   - task: DotNetCoreInstaller@0
     displayName: 'Use .NET Core sdk 2.2.207'
