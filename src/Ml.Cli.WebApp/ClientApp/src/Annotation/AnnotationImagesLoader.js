@@ -4,6 +4,7 @@ import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
+import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLazy";
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
 
@@ -127,6 +128,14 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "labels": e.labels
                 }
                 break;
+            case "TagOverTextLabel":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels
+                };
+                break;
         }
         return returnedObject;
     }
@@ -188,6 +197,14 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     expectedOutput={parentState.configuration.boundingBoxes}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
+                />
+            }
+            {parentState.annotationType === "TagOverTextLabel" &&
+                <TagOverTextLabelLazy
+                    expectedOutput={parentState.configuration.boundingBoxes}
+                    url={state.filePrimaryUrl}
+                    onSubmit={onDatasetSubmit}
+                    labels={parentState.configuration.labels}
                 />
             }
         </>
