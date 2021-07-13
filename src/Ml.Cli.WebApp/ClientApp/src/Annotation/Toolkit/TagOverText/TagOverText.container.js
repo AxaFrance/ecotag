@@ -3,7 +3,7 @@ import Toolbar from './Toolbar.js';
 import Cropping from '../BoundingBox/Cropping';
 import Labels from './Labels';
 import useImage from 'use-image';
-import './TagOverTextContainer.scss';
+import './TagOverText.container.scss';
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 import cuid from 'cuid';
 import './ComponentModifier.scss';

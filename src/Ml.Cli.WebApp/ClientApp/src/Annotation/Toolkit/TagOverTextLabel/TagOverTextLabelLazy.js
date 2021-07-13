@@ -2,7 +2,7 @@
 
 const TagOverTextLabelLazy = ({expectedOutput, url, onSubmit, labels}) => {
     
-    const TagOverTextLabelContainer = React.lazy(() => import('./TagOverTextLabelContainer'));
+    const TagOverTextLabelContainer = React.lazy(() => import('./TagOverTextLabel.container'));
     
     return <Suspense fallback={<div>Chargement de TagOverTextLabel...</div>}>
         <TagOverTextLabelContainer

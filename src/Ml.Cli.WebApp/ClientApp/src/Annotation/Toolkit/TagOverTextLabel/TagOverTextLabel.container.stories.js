@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import TagOverTextLabelContainer from './TagOverTextLabelContainer';
+import TagOverTextLabelContainer from './TagOverTextLabel.container';
 import labels from "./Labels.json";
 
 import url from "./sample_image.png";
