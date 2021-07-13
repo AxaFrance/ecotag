@@ -3,7 +3,7 @@ import { GlobalHotKeys, configure } from 'react-hotkeys';
 import Toolbar, { ToolbarButtonContainer, ToolbarSwitchButton, ToolbarProgressButton } from '../Toolbar';
 
 import './Toolbar.scss';
-import './ToolbarModifier.scss';
+import './ComponentsModifier.scss';
 
 configure({ ignoreRepeatedEventsWhenKeyHeldDown: false });
 

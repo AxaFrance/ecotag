@@ -4,8 +4,8 @@ import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
-import IrotContainer from "./Toolkit/Rotation";
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
+import IrotLazy from "./Toolkit/Rotation/IrotLazy";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -119,6 +119,14 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "image_anomaly": e.image_anomaly
                 }
                 break;
+            case "TagOverText":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels
+                }
+                break;
         }
         return returnedObject;
     }
@@ -169,7 +177,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             />
             }
             {parentState.annotationType === "Rotation" &&
-                <IrotContainer
+                <IrotLazy
                     expectedLabels={[]}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
@@ -179,7 +187,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                 <TagOverTextLazy
                     expectedOutput={parentState.configuration.boundingBoxes}
                     url={state.filePrimaryUrl}
-                    onSubmit={e => console.log(e)}
+                    onSubmit={onDatasetSubmit}
                 />
             }
         </>
