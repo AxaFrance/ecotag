@@ -4,6 +4,7 @@ import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
 import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
+import IrotContainer from "./Toolkit/Rotation";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -51,7 +52,6 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         isFetched: false
     });
 
-    const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
     const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations/save", newData));
 
     const getUrls = async () => {
@@ -85,18 +85,10 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         }
     }, []);
 
-    const saveJsonEditor = editorContent => {
-        const newHttpResultItem = state.httpResultItem;
-        newHttpResultItem.body = editorContent;
-        mutationJson.mutate(newHttpResultItem);
-        setState({...state, httpResultItem: newHttpResultItem});
-    };
-
     const setAnnotationObject = e => {
         let returnedObject;
         switch (parentState.annotationType) {
             case "JsonEditor":
-                saveJsonEditor(e);
                 returnedObject = {
                     "content": e
                 };
@@ -116,6 +108,15 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "height": e.height,
                     "labels": e.labels
                 };
+                break;
+            case "Rotation":
+                returnedObject = {
+                    "type": e.type,
+                    "width": e.width,
+                    "height": e.height,
+                    "labels": e.labels,
+                    "image_anomaly": e.image_anomaly
+                }
                 break;
         }
         return returnedObject;
@@ -165,6 +166,13 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                 url={state.filePrimaryUrl}
                 onSubmit={onDatasetSubmit}
             />
+            }
+            {parentState.annotationType === "Rotation" &&
+                <IrotContainer
+                    expectedLabels={[]}
+                    url={state.filePrimaryUrl}
+                    onSubmit={onDatasetSubmit}
+                />
             }
         </>
     );

@@ -82,12 +82,12 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
   const [image] = useImage(url);
 
   useEffect(() => {
-    if (containerRef.current.scrollIntoView) {
+    /*if (containerRef.current.scrollIntoView) {
       containerRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    }
+    }*/
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
       if (state.keepAnnotation) {
