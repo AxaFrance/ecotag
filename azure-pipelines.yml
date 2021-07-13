@@ -29,7 +29,7 @@ steps:
       extraProperties: |
         sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
         sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
-        sonar.cs.opencover.reportsPaths=coverage/opencover.xml
+        sonar.cs.opencover.reportsPaths=**/opencover.xml
       condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'), eq(variables['Build.Reason'], 'PullRequest'))
 
   - task: Npm@0
@@ -64,12 +64,6 @@ steps:
     inputs:
       version: 3.1.402
     enabled: true
-
-  - task: DotNetCoreCLI@2
-    displayName: "dotnet build"
-    inputs:
-      projects: "**/*.csproj"
-      arguments: '--configuration $(BuildConfiguration)'
 
   - task: DotNetCoreCLI@2
     displayName: "dotnet test"
