@@ -27,10 +27,10 @@ steps:
       projectKey: 'AxaGuilDEv_ml-cli'
       projectName: 'ml-cli'
       extraProperties: |
-        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
+        sonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.stories.tsx,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
         sonar.typescript.lcov.reportPaths=ClientApp/coverage/lcov.info
         sonar.cs.opencover.reportsPaths=**/opencover.xml
-      condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'), eq(variables['Build.Reason'], 'PullRequest'))
+      condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
 
   - task: Npm@0
     displayName: "npm ci:front"
@@ -66,17 +66,11 @@ steps:
     enabled: true
 
   - task: DotNetCoreCLI@2
-    displayName: "dotnet build"
-    inputs:
-      projects: "**/*.csproj"
-      arguments: '--configuration $(BuildConfiguration)'
-
-  - task: DotNetCoreCLI@2
     displayName: "dotnet test"
     inputs:
       command: test
       projects: "**/*Tests.csproj"
-      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml"'
+      arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml'
 
   - task: DotNetCoreInstaller@0
     displayName: 'Use .NET Core sdk 2.2.207'
