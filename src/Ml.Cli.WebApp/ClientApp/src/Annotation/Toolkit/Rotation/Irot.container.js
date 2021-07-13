@@ -28,10 +28,10 @@ const IrotContainer = ({ url, expectedLabels, onSubmit, defaultImageDimensions =
   }, [url, expectedLabels]);
 
   return (
-    <>
+    <div className="rotation-container-adapter">
       <Irot state={state} setState={setState} url={url} />
       <Toolbar url={url} state={state} setState={setState} onSubmit={onSubmit} expectedAngle={expectedAngle} />
-    </>
+    </div>
   );
 };
 

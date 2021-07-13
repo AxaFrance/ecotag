@@ -3,6 +3,7 @@ import { GlobalHotKeys, configure } from 'react-hotkeys';
 import Toolbar, { ToolbarButtonContainer, ToolbarSwitchButton, ToolbarProgressButton } from '../Toolbar';
 
 import './Toolbar.scss';
+import './ToolbarModifier.scss';
 
 configure({ ignoreRepeatedEventsWhenKeyHeldDown: false });
 
@@ -71,7 +72,9 @@ const ToolbarContainer = ({ url, state, setState, onSubmit, expectedAngle }) => 
       <Toolbar
         isSubmitDisabled={isSubmitDisabled}
         onSubmit={onSubmitOverride}
-        onReset={() => setState({ ...state, rotate: expectedAngle })}>
+        onReset={() => setState({ ...state, rotate: expectedAngle })}
+        classModifier="multi-toolbar"
+      >
         <ToolbarButtonContainer classModifier="filters">
           <ToolbarProgressButton
             classModifier="width-image"
