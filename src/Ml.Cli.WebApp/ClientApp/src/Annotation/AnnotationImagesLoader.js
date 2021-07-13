@@ -52,7 +52,6 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         isFetched: false
     });
 
-    const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
     const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations/save", newData));
 
     const getUrls = async () => {
@@ -86,18 +85,10 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         }
     }, []);
 
-    const saveJsonEditor = editorContent => {
-        const newHttpResultItem = state.httpResultItem;
-        newHttpResultItem.body = editorContent;
-        mutationJson.mutate(newHttpResultItem);
-        setState({...state, httpResultItem: newHttpResultItem});
-    };
-
     const setAnnotationObject = e => {
         let returnedObject;
         switch (parentState.annotationType) {
             case "JsonEditor":
-                saveJsonEditor(e);
                 returnedObject = {
                     "content": e
                 };
