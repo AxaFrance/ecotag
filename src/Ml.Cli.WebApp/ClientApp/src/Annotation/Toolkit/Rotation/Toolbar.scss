@@ -1,0 +1,46 @@
+
+.toolbar__ {
+  &button-progress-item {
+    &--angle {
+      width: 100%;
+      .toolbar__button-progress-item-input {
+        width: 100%;
+      }
+    }
+  }
+
+  &button-progress-item {
+    &--width-image {
+      flex-direction: row;
+      .toolbar__button-progress-item-label {
+        white-space: nowrap;
+        width: 120px;
+        margin-left: 12px;
+      }
+    }
+
+    &--opacity {
+      flex-direction: row;
+      padding-top: 4px;
+      .toolbar__button-progress-item-label {
+        white-space: nowrap;
+        width: 120px;
+        margin-left: 12px;
+      }
+    }
+  }
+
+   &button-container {
+     &--light-grid {
+       width: 18%;
+     }
+     &--filters {
+       flex-direction: column;
+     }
+   }
+   &button-switch-item {
+     &--anomaly {
+      margin-left: 10px;
+     }
+   }
+}
