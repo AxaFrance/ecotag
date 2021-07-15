@@ -18,7 +18,7 @@ const fetch = (status =200) => async (url, config) => {
 };
 
 describe("Check dataset handling", () => {
-    test("Should insert dataset", async () => {
+    test("Should insert dataset and select ocr annotation type", async () => {
         const mockedMonacoEditor = () => (<div>This is a mocked Monaco Editor</div>);
         const {container, asFragment, getAllByText, getByAltText} = render(<Annotate MonacoEditor={mockedMonacoEditor} fetchFunction={fetch(200)}/>);
 
@@ -30,6 +30,11 @@ describe("Check dataset handling", () => {
         await waitFor(() => expect(container.querySelector('.table-result')).not.toBeNull());
         await waitFor(() => expect(getAllByText(/Fichier en cours de visualisation : dataSourceFile.json/i)).not.toBeNull());
         await waitFor(() => expect(getByAltText(/file_image/i)).not.toBeNull());
+        expect(asFragment()).toMatchSnapshot();
+
+        const selectState = container.querySelector("select[id='annotation_type']");
+        fireEvent.change(selectState, {target: {value: 'Ocr'}});
+        await waitFor(() => expect(getAllByText(/Recto/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
     });
 });
