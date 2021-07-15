@@ -166,7 +166,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     />
                 }
                 {state.errorMessage &&
-                <div className="error-message">{state.errorMessage}</div>
+                    <div className="error-message">{state.errorMessage}</div>
                 }
             </>
             }

@@ -33,9 +33,11 @@ describe("Check dataset handling", () => {
         expect(asFragment()).toMatchSnapshot();
 
         const selectState = container.querySelector("select[id='annotation_type']");
+        
         fireEvent.change(selectState, {target: {value: 'Ocr'}});
         await waitFor(() => expect(getAllByText(/Recto/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
+        
         fireEvent.change(selectState, {target: {value: 'Rotation'}});
         await waitFor(() => expect(getAllByText(/Angle/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
