@@ -10,6 +10,8 @@ import "@axa-fr/react-toolkit-all/dist/style/bootstrap/reboot.css"
 
 import FileTreatment from "./FileTreatment";
 
+const MonacoEditor = React.lazy(() => import('@monaco-editor/react'));
+
 export default {
     title: 'File Treatment',
     component: FileTreatment,
@@ -37,7 +39,8 @@ Default.args = {
             pagingCurrent: 1
         },
         statusCodes: [{value: "Tout", label:"Tout"}]
-    }
+    },
+    MonacoEditor: MonacoEditor
 }
 
 Default.parameters = {
