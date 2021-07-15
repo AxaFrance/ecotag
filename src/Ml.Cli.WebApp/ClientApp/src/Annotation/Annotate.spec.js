@@ -18,7 +18,7 @@ const fetch = (status =200) => async (url, config) => {
 };
 
 describe("Check dataset handling", () => {
-    test("Should insert dataset and select ocr annotation type", async () => {
+    test("Should insert dataset and select ocr and rotation annotation types", async () => {
         const mockedMonacoEditor = () => (<div>This is a mocked Monaco Editor</div>);
         const {container, asFragment, getAllByText, getByAltText} = render(<Annotate MonacoEditor={mockedMonacoEditor} fetchFunction={fetch(200)}/>);
 
@@ -35,6 +35,9 @@ describe("Check dataset handling", () => {
         const selectState = container.querySelector("select[id='annotation_type']");
         fireEvent.change(selectState, {target: {value: 'Ocr'}});
         await waitFor(() => expect(getAllByText(/Recto/i)).not.toBeNull());
+        expect(asFragment()).toMatchSnapshot();
+        fireEvent.change(selectState, {target: {value: 'Rotation'}});
+        await waitFor(() => expect(getAllByText(/Angle/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
     });
 });
