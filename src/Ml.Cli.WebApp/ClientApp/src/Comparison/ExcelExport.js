@@ -6,16 +6,16 @@ const ExcelExport = ({fileInfo, statusCodes, levenshteinResults, timeMS, totalCo
     
     const addStatusCodesArray = () => {
         const statusCodesArray = [];
-        Object.keys(statusCodes).map(function(key){
+        Object.keys(statusCodes).forEach(function(key){
             const row = [key, statusCodes[key].left, statusCodes[key].right];
-            return statusCodesArray.push(row);
+            statusCodesArray.push(row);
         });
         return statusCodesArray;
     };
     
     const addLevenshteinResultsArray = () => {
         const levenshteinResultsArray = [];
-        Object.keys(levenshteinResults).map(function(key){
+        Object.keys(levenshteinResults).forEach(function(key){
             const value = levenshteinResults[key];
             const row = [
                 key,
@@ -31,7 +31,7 @@ const ExcelExport = ({fileInfo, statusCodes, levenshteinResults, timeMS, totalCo
                 value.percentages.completeness_ok_left,
                 value.percentages.completeness_ok_right
             ];
-            return levenshteinResultsArray.push(row);
+            levenshteinResultsArray.push(row);
         });
         return levenshteinResultsArray;
     };

@@ -5,7 +5,7 @@ export const flattenObject = (origin, destinationDictionnary = {}, prefix = "", 
         return null;
     }
     if (Array.isArray(origin)) {
-        origin.map((e, index) => flattenObject(e, destinationDictionnary, index.toString()+ "_", excludes));
+        origin.forEach((e, index) => flattenObject(e, destinationDictionnary, index.toString()+ "_", excludes));
     }
     for (let propertyName in origin) {
         if(excludes.includes(propertyName)){
