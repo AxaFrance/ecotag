@@ -70,7 +70,7 @@ const StatusCode = ({statusCodes}) => {
 
 const Scores = ({levenshteinResults}) => {
     const keys = Object.keys(levenshteinResults);
-    const ScoreItems =  keys.map(function(key, index) {
+    const ScoreItems =  keys.map(function(key) {
         const keyValue = levenshteinResults[key];
         return <div className="stats__results" key={key}>
             <div className="stats__results-info stats__results-info--separator">
@@ -135,7 +135,7 @@ const StatsTable = ({state, setState, items}) => {
             <div className="stats" key="StatsTableKey">
                 <div className="stats__title">
                     <span>Statistiques :</span>
-                    <div className="table-result__collapse-button" onClick={(e) => {setState({...state, isStatsTableShowed: !state.isStatsTableShowed})}}>{state.isStatsTableShowed ? "-" : "+"}</div>
+                    <div className="table-result__collapse-button" onClick={() => {setState({...state, isStatsTableShowed: !state.isStatsTableShowed})}}>{state.isStatsTableShowed ? "-" : "+"}</div>
                 </div>
                 {state.isStatsTableShowed && (
                     <>

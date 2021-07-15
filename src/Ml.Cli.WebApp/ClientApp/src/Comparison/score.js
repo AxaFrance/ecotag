@@ -104,7 +104,7 @@ const completenessValue = (side, isOK) => {
 
 const setLevenshteinParameters = levenshteinResult => {
     const result = {};
-    Object.keys(levenshteinResult).map(function(key){
+    Object.keys(levenshteinResult).forEach(function(key){
         const value = levenshteinResult[key];
         const completenessOKLeft = totalCompletenessByKey(levenshteinResult[key].completeness_left);
         const completenessOKRight = totalCompletenessByKey(levenshteinResult[key].completeness_right);
