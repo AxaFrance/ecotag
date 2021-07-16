@@ -66,6 +66,22 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         const {httpResult, errorMessage} = await getHttpResultItem(item, fetchFunction);
         return {errorMessage, httpResultItem: httpResult, isFetched: true};
     };
+    
+    const getBoundingBoxes = () => {
+        let boundingBoxes;
+        try{
+            const annotationsArray = JSON.parse(item.annotations);
+            const lastAnnotation = annotationsArray[annotationsArray.length - 1];
+            //the sub parameter of lastAnnotation is annotationN, where N is a number. Given that this parameter is dynamic, we use a dictionary to recover it
+            const annotation = lastAnnotation[Object.keys(lastAnnotation)[0]];
+            const labels = annotation.labels;
+            boundingBoxes = labels.boundingBoxes;
+        }
+        catch (ex){
+            boundingBoxes = [];
+        }
+        return boundingBoxes;
+    }
 
     useEffect(() => {
         let isMounted = true;
@@ -194,17 +210,17 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             }
             {parentState.annotationType === "TagOverText" &&
                 <TagOverTextLazy
-                    expectedOutput={parentState.configuration.boundingBoxes}
+                    expectedOutput={getBoundingBoxes()}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
                 />
             }
             {parentState.annotationType === "TagOverTextLabel" &&
                 <TagOverTextLabelLazy
-                    expectedOutput={parentState.configuration.boundingBoxes}
+                    expectedOutput={getBoundingBoxes()}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
-                    labels={parentState.configuration.labels}
+                    labels={parentState.configuration}
                 />
             }
         </>
