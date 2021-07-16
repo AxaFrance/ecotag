@@ -86,6 +86,7 @@ namespace Ml.Cli.InputTask
                 {"leftDirectory", (string) jObject.Property("leftDirectory", StringComparison.Ordinal)},
                 {"rightDirectory", (string) jObject.Property("rightDirectory", StringComparison.Ordinal)},
                 {"urlLogDirectory", (string) jObject.Property("urlLogDirectory", StringComparison.Ordinal)},
+                {"imageDirectory", (string) jObject.Property("imageDirectory", StringComparison.Ordinal)},
                 {"fileName", (string) jObject.Property("fileName", StringComparison.Ordinal)},
                 {"outputDirectoryJsons", (string) jObject.Property("outputDirectoryJsons", StringComparison.Ordinal)},
                 {"outputDirectoryImages", (string) jObject.Property("outputDirectoryImages", StringComparison.Ordinal)},
