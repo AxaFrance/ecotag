@@ -67,7 +67,7 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ml-cli/src/Ml.Cli.WebApp
-dotnet run -- ..\..\demo\tasks-licenses.json  ..\..\demo
+dotnet run -- ..\..\demo\  ..\..\demo\tasks-licenses.json  ..\..\demo
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 

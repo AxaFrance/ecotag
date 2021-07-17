@@ -36,5 +36,15 @@
 		"rightDirectory": "licenses\\output\\{start-date}\\jsons",
 		"outputDirectory": "licenses\\output",
 		"fileName": "compare-licenses-{start-date}.json"
-	  }
+	},
+	{
+		"type": "dataset",
+		"enabled": true,
+		"annotationType": "Ocr",
+		"configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
+		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+		"imageDirectory": "licenses\\output\\{start-date}\\images",
+		"outputDirectory": "licenses\\output",
+		"fileName": "dataset-{start-date}.json"
+	}
 ]
