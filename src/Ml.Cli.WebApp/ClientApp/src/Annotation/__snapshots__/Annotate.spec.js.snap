@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check dataset handling Should insert dataset 1`] = `
+exports[`Check dataset handling Should insert dataset and select ocr and rotation annotation types 1`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -124,8 +124,8 @@ exports[`Check dataset handling Should insert dataset 1`] = `
             >
               <select
                 class="af-form__input-select"
-                id="extension_type"
-                name="ExtensionType"
+                id="annotation_type"
+                name="AnnotationType"
               >
                 <option
                   value="JsonEditor"
@@ -159,7 +159,7 @@ exports[`Check dataset handling Should insert dataset 1`] = `
                 </option>
               </select>
               <span
-                aria-controls="extension_type"
+                aria-controls="annotation_type"
                 class="glyphicon glyphicon-menu-down"
               />
             </div>
@@ -228,6 +228,888 @@ exports[`Check dataset handling Should insert dataset 1`] = `
             class="btn af-btn"
           >
             Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="af-paging"
+  >
+    <div
+      class="af-paging__limit"
+    >
+      <div
+        class="af-paging__limit"
+      >
+        <form
+          class="af-paging__form"
+        >
+          <div
+            class="af-form__group"
+          >
+            <div
+              class="col col-sm-2 col-md-2 col-lg-2 col-xl-2"
+            >
+              <label
+                class="af-form__group-label"
+                for="paging"
+              >
+                Afficher
+              </label>
+            </div>
+            <div
+              class="col col-sm-10 col-md-10 col-lg-10 col-xl-10"
+            >
+              <div
+                class="af-form__select"
+              >
+                <div
+                  class="af-form__select-container"
+                >
+                  <select
+                    class="af-form__input-select"
+                    id="paging"
+                  >
+                    <option
+                      value="5"
+                    >
+                      5
+                    </option>
+                    <option
+                      value="10"
+                    >
+                      10
+                    </option>
+                    <option
+                      value="25"
+                    >
+                      25
+                    </option>
+                    <option
+                      value="50"
+                    >
+                      50
+                    </option>
+                    <option
+                      value="100"
+                    >
+                      100
+                    </option>
+                  </select>
+                  <span
+                    class="glyphicon glyphicon-menu-down"
+                  />
+                </div>
+                <span
+                  class="af-form__input-cmplt"
+                >
+                  éléments
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="af-paging__pager"
+    >
+      <nav
+        class="af-pager"
+      >
+        <ul
+          class="af-pager__pagination"
+        >
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              « Précédent
+            </span>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--active"
+          >
+            <a
+              class="af-pager__item-link"
+              href="#"
+            >
+              <span>
+                1
+              </span>
+            </a>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Suivant »
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Check dataset handling Should insert dataset and select ocr and rotation annotation types 2`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="Logo AXA"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            ML-CLI
+            <span
+              class="af-header__subtitle"
+            >
+              Made by AXA
+            </span>
+          </h2>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div
+    class="af-title-bar"
+  >
+    <div
+      class="container af-title-bar__wrapper"
+    >
+      <h1
+        class="af-title-bar__title"
+      >
+        Fichier en cours de visualisation : dataSourceFile.json
+      </h1>
+    </div>
+  </div>
+  <div
+    class="file-input"
+  >
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="dataset_loader"
+        tabindex="0"
+      >
+        <input
+          accept="application/json"
+          autocomplete="off"
+          multiple=""
+          name="placeDatasetFile"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Glissez/déposez vos fichiers
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasiconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Parcourir
+      </button>
+    </div>
+  </div>
+  <span
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div>
+            <p
+              class="tabs__title"
+            >
+              Type d'annotation:
+            </p>
+            <div
+              class="af-form__select-container"
+            >
+              <select
+                class="af-form__input-select"
+                id="annotation_type"
+                name="AnnotationType"
+              >
+                <option
+                  value="JsonEditor"
+                >
+                  JsonEditor
+                </option>
+                <option
+                  value="Ocr"
+                >
+                  Ocr
+                </option>
+                <option
+                  value="Cropping"
+                >
+                  Cropping
+                </option>
+                <option
+                  value="Rotation"
+                >
+                  Rotation
+                </option>
+                <option
+                  value="TagOverText"
+                >
+                  TagOverText
+                </option>
+                <option
+                  value="TagOverTextLabel"
+                >
+                  TagOverTextLabel
+                </option>
+              </select>
+              <span
+                aria-controls="annotation_type"
+                class="glyphicon glyphicon-menu-down"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </span>
+  <div
+    class="table-result"
+  >
+    <div
+      class="table-result__header"
+    >
+      <div>
+        <p>
+          Résultat fichier : {FileName}_pdf.json
+        </p>
+      </div>
+    </div>
+    <div
+      class="ocr-container-adapter"
+    >
+      <div
+        class="ocr-container"
+      >
+        <div
+          class="ocr-container"
+          id="imageContainer"
+        >
+          <img
+            alt="Image to Annotate"
+            class="ocr-container__image"
+            id="currentImage"
+            src="api/files/value=C%3A%5C%5CimageLocation"
+            style="width: 80%; height: 80%; transform: rotate(0deg);"
+          />
+          <div
+            class="orc-labels__container"
+            style="width: 100%;"
+          >
+            <form
+              class="ocr-labels__form"
+            >
+              <div>
+                <p
+                  class="ocr-labels__label"
+                >
+                  Recto
+                </p>
+                <textarea
+                  class="ocr-labels__textarea"
+                  name="Recto"
+                />
+              </div>
+              <div>
+                <p
+                  class="ocr-labels__label"
+                >
+                  Verso
+                </p>
+                <textarea
+                  class="ocr-labels__textarea"
+                  name="Verso"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        class="toolbar toolbar--multi-toolbar"
+      >
+        <div
+          class="toolbar__button-container toolbar__button-container--progress-bar"
+        >
+          <div
+            class="toolbar__button-progress-item"
+          >
+            <input
+              class="toolbar__button-progress-item-input"
+              max="80"
+              min="1"
+              name="width"
+              type="range"
+              value="80"
+            />
+            <label
+              class="toolbar__button-progress-item-label"
+            >
+              Image Size
+            </label>
+          </div>
+          <div
+            class="toolbar__button-switch-item"
+          >
+            <input
+              class="toolbar__button-switch-item-input"
+              id="inlineMode"
+              type="checkbox"
+            />
+            <label
+              class="toolbar__button-switch-item-label"
+              for="inlineMode"
+            >
+              Inline mode
+            </label>
+          </div>
+        </div>
+        <div
+          class="toolbar__button-container"
+        >
+          <button
+            class="toolbar__button-item"
+            title="Raccourci : L"
+          >
+            <span
+              class="glyphicon glyphicon-reset"
+            />
+            <div
+              class="toolbar__button-item-label"
+            >
+              Rotate Left
+            </div>
+          </button>
+          <button
+            class="toolbar__button-item"
+            title="Raccourci : R"
+          >
+            <span
+              class="glyphicon glyphicon-repeat"
+            />
+            <div
+              class="toolbar__button-item-label"
+            >
+              Rotate Right
+            </div>
+          </button>
+        </div>
+        <div
+          class="toolbar__button-container toolbar__button-container--submit"
+        >
+          <button
+            class="toolbar__button-submit"
+            title="Raccourci : Ctrl + Barre espace"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="af-paging"
+  >
+    <div
+      class="af-paging__limit"
+    >
+      <div
+        class="af-paging__limit"
+      >
+        <form
+          class="af-paging__form"
+        >
+          <div
+            class="af-form__group"
+          >
+            <div
+              class="col col-sm-2 col-md-2 col-lg-2 col-xl-2"
+            >
+              <label
+                class="af-form__group-label"
+                for="paging"
+              >
+                Afficher
+              </label>
+            </div>
+            <div
+              class="col col-sm-10 col-md-10 col-lg-10 col-xl-10"
+            >
+              <div
+                class="af-form__select"
+              >
+                <div
+                  class="af-form__select-container"
+                >
+                  <select
+                    class="af-form__input-select"
+                    id="paging"
+                  >
+                    <option
+                      value="5"
+                    >
+                      5
+                    </option>
+                    <option
+                      value="10"
+                    >
+                      10
+                    </option>
+                    <option
+                      value="25"
+                    >
+                      25
+                    </option>
+                    <option
+                      value="50"
+                    >
+                      50
+                    </option>
+                    <option
+                      value="100"
+                    >
+                      100
+                    </option>
+                  </select>
+                  <span
+                    class="glyphicon glyphicon-menu-down"
+                  />
+                </div>
+                <span
+                  class="af-form__input-cmplt"
+                >
+                  éléments
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="af-paging__pager"
+    >
+      <nav
+        class="af-pager"
+      >
+        <ul
+          class="af-pager__pagination"
+        >
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              « Précédent
+            </span>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--active"
+          >
+            <a
+              class="af-pager__item-link"
+              href="#"
+            >
+              <span>
+                1
+              </span>
+            </a>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Suivant »
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Check dataset handling Should insert dataset and select ocr and rotation annotation types 3`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="Logo AXA"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            ML-CLI
+            <span
+              class="af-header__subtitle"
+            >
+              Made by AXA
+            </span>
+          </h2>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div
+    class="af-title-bar"
+  >
+    <div
+      class="container af-title-bar__wrapper"
+    >
+      <h1
+        class="af-title-bar__title"
+      >
+        Fichier en cours de visualisation : dataSourceFile.json
+      </h1>
+    </div>
+  </div>
+  <div
+    class="file-input"
+  >
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="dataset_loader"
+        tabindex="0"
+      >
+        <input
+          accept="application/json"
+          autocomplete="off"
+          multiple=""
+          name="placeDatasetFile"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Glissez/déposez vos fichiers
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasiconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Parcourir
+      </button>
+    </div>
+  </div>
+  <span
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div>
+            <p
+              class="tabs__title"
+            >
+              Type d'annotation:
+            </p>
+            <div
+              class="af-form__select-container"
+            >
+              <select
+                class="af-form__input-select"
+                id="annotation_type"
+                name="AnnotationType"
+              >
+                <option
+                  value="JsonEditor"
+                >
+                  JsonEditor
+                </option>
+                <option
+                  value="Ocr"
+                >
+                  Ocr
+                </option>
+                <option
+                  value="Cropping"
+                >
+                  Cropping
+                </option>
+                <option
+                  value="Rotation"
+                >
+                  Rotation
+                </option>
+                <option
+                  value="TagOverText"
+                >
+                  TagOverText
+                </option>
+                <option
+                  value="TagOverTextLabel"
+                >
+                  TagOverTextLabel
+                </option>
+              </select>
+              <span
+                aria-controls="annotation_type"
+                class="glyphicon glyphicon-menu-down"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </span>
+  <div
+    class="table-result"
+  >
+    <div
+      class="table-result__header"
+    >
+      <div>
+        <p>
+          Résultat fichier : {FileName}_pdf.json
+        </p>
+      </div>
+    </div>
+    <div
+      class="rotation-container-adapter"
+    >
+      <div
+        class="irot irot--light"
+      >
+        <div
+          class="irot__container"
+        >
+          <img
+            class="irot__item"
+            id="currentImage"
+            src="api/files/value=C%3A%5C%5CimageLocation"
+            style="width: 100%; transform: rotate(0deg); opacity: 1; margin: 0px;"
+          />
+        </div>
+      </div>
+      <div
+        class="toolbar toolbar--multi-toolbar"
+      >
+        <div
+          class="toolbar__button-container toolbar__button-container--filters"
+        >
+          <div
+            class="toolbar__button-progress-item toolbar__button-progress-item--width-image"
+          >
+            <input
+              class="toolbar__button-progress-item-input"
+              id="width-image"
+              max="100"
+              min="20"
+              name="width"
+              type="range"
+              value="100"
+            />
+            <label
+              class="toolbar__button-progress-item-label"
+              for="width-image"
+            >
+              Image size
+            </label>
+          </div>
+          <div
+            class="toolbar__button-progress-item toolbar__button-progress-item--opacity"
+          >
+            <input
+              class="toolbar__button-progress-item-input"
+              id="opacity"
+              max="1"
+              min="0"
+              name="rotate"
+              step="0.1"
+              type="range"
+              value="1"
+            />
+            <label
+              class="toolbar__button-progress-item-label"
+              for="opacity"
+            >
+              Opacité
+            </label>
+          </div>
+        </div>
+        <div
+          class="toolbar__button-container toolbar__button-container--light-grid"
+        >
+          <div
+            class="toolbar__button-switch-item"
+          >
+            <input
+              class="toolbar__button-switch-item-input"
+              id="light-grid"
+              type="checkbox"
+            />
+            <label
+              class="toolbar__button-switch-item-label"
+              for="light-grid"
+            >
+              Dark mode
+            </label>
+          </div>
+          <div
+            class="toolbar__button-switch-item toolbar__button-switch-item--anomaly"
+          >
+            <input
+              class="toolbar__button-switch-item-input"
+              id="anomaly"
+              type="checkbox"
+            />
+            <label
+              class="toolbar__button-switch-item-label"
+              for="anomaly"
+            >
+              Anomalie
+            </label>
+          </div>
+        </div>
+        <div
+          class="toolbar__button-container"
+        >
+          <div
+            class="toolbar__button-progress-item toolbar__button-progress-item--angle"
+          >
+            <input
+              class="toolbar__button-progress-item-input"
+              id="angle"
+              max="180"
+              min="-179"
+              name="rotate"
+              step="1"
+              type="range"
+              value="0"
+            />
+            <label
+              class="toolbar__button-progress-item-label"
+              for="angle"
+            >
+              Angle: 0°
+            </label>
+          </div>
+        </div>
+        <div
+          class="toolbar__button-container toolbar__button-container--submit"
+        >
+          <button
+            class="toolbar__button-reset"
+          >
+            Reset
+          </button>
+          <button
+            class="toolbar__button-submit"
+            disabled=""
+            title="Raccourci : Ctrl + Barre espace"
+          >
+            Submit
           </button>
         </div>
       </div>

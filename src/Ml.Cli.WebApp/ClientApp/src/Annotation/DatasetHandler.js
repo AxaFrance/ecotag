@@ -66,8 +66,8 @@ const DatasetHandler = ({state, setState}) => {
                         <div>
                             <p className="tabs__title">Type d'annotation:</p>
                             <SelectBase
-                                id="extension_type"
-                                name="ExtensionType"
+                                id="annotation_type"
+                                name="AnnotationType"
                                 value={state.annotationType}
                                 options={annotationTypesSelect}
                                 onChange={e => {

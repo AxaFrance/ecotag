@@ -5,7 +5,7 @@ export const flattenObject = (origin, destinationDictionnary = {}, prefix = "", 
         return null;
     }
     if (Array.isArray(origin)) {
-        origin.map((e, index) => flattenObject(e, destinationDictionnary, index.toString()+ "_", excludes));
+        origin.forEach((e, index) => flattenObject(e, destinationDictionnary, index.toString()+ "_", excludes));
     }
     for (let propertyName in origin) {
         if(excludes.includes(propertyName)){
@@ -104,7 +104,7 @@ const completenessValue = (side, isOK) => {
 
 const setLevenshteinParameters = levenshteinResult => {
     const result = {};
-    Object.keys(levenshteinResult).map(function(key){
+    Object.keys(levenshteinResult).forEach(function(key){
         const value = levenshteinResult[key];
         const completenessOKLeft = totalCompletenessByKey(levenshteinResult[key].completeness_left);
         const completenessOKRight = totalCompletenessByKey(levenshteinResult[key].completeness_right);
