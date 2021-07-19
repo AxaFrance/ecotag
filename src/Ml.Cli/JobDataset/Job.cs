@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Ml.Cli.JobDataset
 {
@@ -22,12 +23,48 @@ namespace Ml.Cli.JobDataset
 
         private class BoundingBox
         {
-            public string Content { get; }
+            public string Id { get; }
+            public int Level { get; }
+            public int Page_num { get; }
+            public int Block_num { get; }
+            public int Par_num { get; }
+            public int Line_num { get; }
+            public int Word_num { get; }
+            public int Left { get; }
+            public int Top { get; }
+            public int Width { get; }
+            public int Height { get; }
+            public int Conf { get; }
+            public string Text { get; }
 
-            public BoundingBox(string content)
+            public BoundingBox(string id, int level, int pageNum, int blockNum, int parNum, int lineNum, int wordNum,
+                int left, int top, int width, int height, int conf, string text)
             {
-                Content = content;
+                Id = id;
+                Level = level;
+                Page_num = pageNum;
+                Block_num = blockNum;
+                Par_num = parNum;
+                Line_num = lineNum;
+                Word_num = wordNum;
+                Left = left;
+                Top = top;
+                Width = width;
+                Height = height;
+                Conf = conf;
+                Text = text;
             }
+        }
+        
+        private string GenerateJson(List<BoundingBox> boundingBoxes)
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var serializedBoxes = JsonConvert.SerializeObject(boundingBoxes, serializerSettings);
+            var json = "[{\"annotation0\":{\"labels\":{\"boundingBoxes\":" + serializedBoxes + "}}}]";
+            return json;
         }
 
         private void FindBoundingBoxes(JToken containerToken, List<BoundingBox> boundingBoxes)
@@ -38,7 +75,7 @@ namespace Ml.Cli.JobDataset
                 {
                     if (property.Name.Contains("output_", StringComparison.Ordinal))
                     {
-                        boundingBoxes.Add(new BoundingBox(property.Value.ToString()));
+                        boundingBoxes.Add(JsonConvert.DeserializeObject<BoundingBox>(property.Value.ToString()));
                     }
                     FindBoundingBoxes(property.Value, boundingBoxes);
                 }
@@ -64,7 +101,7 @@ namespace Ml.Cli.JobDataset
                 var node = JToken.Parse(httpResult.Body);
                 var boundingBoxesList = new List<BoundingBox>();
                 FindBoundingBoxes(node, boundingBoxesList);
-                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, JsonConvert.SerializeObject(boundingBoxesList));
+                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, GenerateJson(boundingBoxesList));
                 datasetResults.Add(datasetResult);
             }
             var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), inputTask.AnnotationType, inputTask.Configuration, datasetResults);
