@@ -6,6 +6,7 @@
 .pnp.js
 
 #storybook
+/src/Ml.Cli.WebApp/ClientApp/.storybook
 /src/stories
 
 # testing
