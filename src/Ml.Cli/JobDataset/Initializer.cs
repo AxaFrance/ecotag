@@ -10,13 +10,15 @@ namespace Ml.Cli.JobDataset
             string baseDirectory, string taskId, IPathValidatorHelper pathValidatorHelper)
         {
             var isScriptDefined = jObject.Property("script", StringComparison.Ordinal) != null;
+            var isConfigurationDefined = jObject.Property("configuration", StringComparison.Ordinal) != null;
             var script = isScriptDefined ? (string) jObject.Property("script") : "";
+            var configuration = isConfigurationDefined ? (string) jObject.Property("configuration") : "";
             return new DatasetTask(
                 taskId,
                 type,
                 enabled,
                 (string) jObject.Property("annotationType"),
-                (string) jObject.Property("configuration"),
+                configuration,
                 PropertyHelper.SetProperty(jObject, "fileDirectory", isBaseDirectoryValid, baseDirectory, taskId,
                     pathValidatorHelper),
                 PropertyHelper.SetProperty(jObject, "imageDirectory", isBaseDirectoryValid, baseDirectory, taskId,

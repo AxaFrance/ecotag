@@ -28,7 +28,10 @@ const DatasetHandler = ({state, setState}) => {
             const mappedItems = mapDatasetItems(result.Content);
             const location = result.DatasetLocation;
             const fileAnnotationType = result.AnnotationType;
-            const fileConfiguration = JSON.parse(result.Configuration);
+            let fileConfiguration = "";
+            if(result.Configuration !== ""){
+                fileConfiguration = JSON.parse(result.Configuration);
+            }
             setState({...state, fileName: e.values[0].file.name, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems});
             setHandlerState({...state, loadFileError: false});
         }
