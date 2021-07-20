@@ -6,8 +6,8 @@
 .pnp.js
 
 #storybook
-/src/Ml.Cli.WebApp/ClientApp/.storybook
 /src/stories
+/src/Ml.Cli.WebApp/ClientApp/storybook-static
 
 # testing
 /coverage
