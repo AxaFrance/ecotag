@@ -173,12 +173,13 @@ tasks.json
     "type": "dataset",
     "id": "tenth_task",
     "enabled": true,
-    "annotationType": "Ocr",
+    "annotationType": "TagOverText",
     "configuration": "[{\"name\": \"Recto\", \"id\": 0}, {\"name\": \"Verso\", \"id\": 1}]",
     "fileDirectory": "ri\\right-{start-date}",
     "imageDirectory": "ri\\right-{start-date}-images,
     "outputDirectory": "ri\\dataset-output",
-    "fileName": "dataset-{start-date}.json"
+    "fileName": "dataset-{start-date}.json",
+    "script": "try{const new_data=[{"annotation0":{"labels":{"boundingBoxes":[{"id":"7ed8df70-9408-4b5a-b660-a36ef3447d02","level":5,"page_num":1,"block_num":1,"par_num":1,"line_num":1,"word_num":1,"left":25,"top":5,"width":110,"height":25,"conf":73,"text":"14.07.1981"},{"id": "7ed8df70-9408-4b5a-b660-a36ef3447d03","level":3,"page_num":1,"block_num":2,"par_num":1,"line_num":1,"word_num":1,"left":145,"top":5,"width":109,"height":28,"conf": 53,"text": "Utopia city"}]}}}];rawBodyOutput = JSON.stringify(new_data);}catch (e) {    rawBodyOutput = ""}"
   }
 ] 
 ```
@@ -196,6 +197,9 @@ Please note that the "id" field and the "enabled" field are not mandatory. An id
  
  
  The Loop task contains a field "iterations" which is not necessary. If you don't specify it, it will run undefinitely; if you do, it will execute the subtask as much times as defined in the "iterations" field.
+ 
+ 
+ The Dataset task contains two non-mandatory parameters: "configuration" and "script". "configuration" is used to provide configuration to the targeted annotation component, such as labels. The "script" parameter is used to provide bounding boxes to the targeted annotation component, or to recover useful data from jsons.
  
  
  All tasks at the root of tasks.json file, such as "version_task", "parallel_task", "serial_task" or "loop_task" are executed in sequential order.

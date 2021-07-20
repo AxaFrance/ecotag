@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
+using Ml.Cli.JobScript;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.JobDataset
@@ -25,10 +26,16 @@ namespace Ml.Cli.JobDataset
             {
                 var fileName = Path.GetFileName(filePath);
                 _logger.LogInformation($"Task Id: {inputTask.Id} - Generating dataset info for {fileName}");
-                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory, "");
+                var annotations = inputTask.Script != string.Empty
+                    ? await ScriptManager.ExecScript(filePath, inputTask.Script, _fileLoader)
+                    : string.Empty;
+                var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory,
+                    annotations);
                 datasetResults.Add(datasetResult);
             }
-            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName), inputTask.AnnotationType, inputTask.Configuration, datasetResults);
+
+            var datasetContent = new DatasetFileResult(Path.Combine(inputTask.OutputDirectory, inputTask.FileName),
+                inputTask.AnnotationType, inputTask.Configuration, datasetResults);
             _fileLoader.CreateDirectory(inputTask.OutputDirectory);
             await _fileLoader.WriteAllTextInFileAsync(
                 datasetContent.DatasetLocation,
