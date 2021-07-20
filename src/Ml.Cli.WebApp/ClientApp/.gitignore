@@ -7,7 +7,7 @@
 
 #storybook
 /src/stories
-/src/Ml.Cli.WebApp/ClientApp/storybook-static
+/storybook-static
 
 # testing
 /coverage
