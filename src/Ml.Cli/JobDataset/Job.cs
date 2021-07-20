@@ -26,9 +26,9 @@ namespace Ml.Cli.JobDataset
             {
                 var fileName = Path.GetFileName(filePath);
                 _logger.LogInformation($"Task Id: {inputTask.Id} - Generating dataset info for {fileName}");
-                var annotations = inputTask.Script != ""
+                var annotations = inputTask.Script != string.Empty
                     ? await ScriptManager.ExecScript(filePath, inputTask.Script, _fileLoader)
-                    : "";
+                    : string.Empty;
                 var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory,
                     annotations);
                 datasetResults.Add(datasetResult);
