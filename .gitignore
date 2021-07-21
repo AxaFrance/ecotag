@@ -185,7 +185,6 @@ orleans.codegen.cs
 /node_modules
 /ClientApp/node_modules
 /src/Ml.Cli/tasks.json
-/src/Ml.Cli.WebApp/ClientApp/storybook-static
 
 # RIA/Silverlight projects
 Generated_Code/
