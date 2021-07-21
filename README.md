@@ -45,7 +45,22 @@ You can annotate the downloaded images (obtained with the task callapi described
 
 ![Compare annotation](./docs/ml-cli-annotate.PNG "Annotation example")
 
-*Example of annotation. The annotation button also display the images selected via a regex, whether via the front part of Ml-Cli or with the frontDefaultRegex attribute of the callapi task*
+*Example of annotation. The annotation button also displays the images selected via a regex, whether via the front part of Ml-Cli or with the frontDefaultRegex attribute of the callapi task*
+
+![Script usage](./docs/ml-cli-scripts.PNG "Script example")
+
+*Example of script
+
+You can provide scripts to apply to the recovered data that is displayed in the file comparison part of the interface. Applying these scripts will format the data and update the statistics table accordingly.
+That script can also be applied with the script task described below.
+Please note that 3 parameters are given to your script:
+- isSkipped is an attribute that, if set to true, will remove the item from the file comparison table. It will also not be taken into account to generate the statistics table.
+- rawBodyInput is the input of the script. That input is the data you can see in the file comparison table, which is also the content of the "Body" parameter of a callapi json.
+- rawBodyOutput is the output of the script. The script defined by the user has to provide a value for this parameter, as it is the one that will appear in the file comparison table after script application. Please note that a "return" keyword is not required, as the API will collect rawBodyOutput after script application.
+
+![Script application](./docs/ml-cli-script-application.gif "Script application")
+
+*Example of script application
 
 You can also execute several tasks in command line interface (CLI):
 - wait_version_change is a task that will wait for the version obtained via the url to change for a user-defined amount of time.

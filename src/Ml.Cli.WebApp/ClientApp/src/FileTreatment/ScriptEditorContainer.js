@@ -6,20 +6,26 @@ const ScriptEditorContainer = ({fileTreatmentState, setFileTreatmentState, Monac
 
     function reinitJSFilters() {
         const reinitValueL = `
-try { 
+try {
     let body = JSON.parse(rawBodyInput);
+    // rawBodyOutput can be updated to format data as you need
     rawBodyOutput = JSON.stringify(body);
+    // writing "isSkipped=true" will remove the item from the results
+    isSkipped=false;
 } catch(ex) {
     console.log("Plantage parsing left");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`;
         const reinitValueR = `
-try { 
+try {
     let body = JSON.parse(rawBodyInput);
+    // rawBodyOutput can be updated to format data as you need
     rawBodyOutput = JSON.stringify(body);
+    // writing "isSkipped=true" will remove the item from the results
+    isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing right");
+    console.log("Plantage parsing left");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`;
