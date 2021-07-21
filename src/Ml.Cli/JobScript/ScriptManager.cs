@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.ClearScript.V8;
 using Ml.Cli.FileLoader;
@@ -20,6 +21,10 @@ namespace Ml.Cli.JobScript
         {
             var engine = new V8ScriptEngine();
             engine.AddHostType("console", typeof(EngineConsole));
+            if (!Path.IsPathRooted(path))
+            {
+                path = Path.GetFullPath(path);
+            }
             var json = JToken.Parse(await fileLoader.LoadAsync(path));
             var jsonResult = (JObject) json;
             var body = (string) jsonResult.Property("Body");
