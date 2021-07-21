@@ -58,7 +58,7 @@ Please note that 3 parameters are given to your script:
 - rawBodyInput is the input of the script. That input is the data you can see in the file comparison table, which is also the content of the "Body" parameter of a callapi json.
 - rawBodyOutput is the output of the script. The script defined by the user has to provide a value for this parameter, as it is the one that will appear in the file comparison table after script application. Please note that a "return" keyword is not required, as the API will collect rawBodyOutput after script application.
 
-![Script application](https://github.com/AxaGuilDEv/ml-cli/tree/fix/script/docs/ml-cli-script-application.gif "Script application")
+![Script application](https://raw.githubusercontent.com/AxaGuilDEv/ml-cli/master/docs/ml-cli-script-application.gif "Script application")
 
 *Example of script application
 
