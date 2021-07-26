@@ -51,10 +51,13 @@ dotnet run -- ..\..\demo ..\..\demo\tasks-licenses.json  ..\..\demo
 
 ```
 
+https://dev.azure.com/axaguildev/_apis/resources/Containers/10276224/drop?itemPath=drop%2Fml-cli%2Fwin10%2Fwin10.zip
+
 Run the application on Windows:
 ```sh
 Ml.Cli.exe "path to webapp base directory" "path to tasks.json" "path to webserver base directory"
 ```
+https://dev.azure.com/axaguildev/_apis/resources/Containers/10276224/drop?itemPath=drop%2Fml-cli%2Fmacos%2Fmacos.zip
 
 Run on Mac:
 ```sh
