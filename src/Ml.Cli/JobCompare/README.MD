@@ -2,7 +2,7 @@
 
 Compare is used to compare two sets of json files that are the output of a callapi or a script task.
 
-The resulting json file can be used to see the results of the comparison with the help of the webapp. 
+The resulting json file can be used as an input on the webapp. 
 
 # Samples
 
