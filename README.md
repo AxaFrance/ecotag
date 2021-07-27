@@ -67,7 +67,7 @@ dotnet run -- C:\github\ml-cli\demo\ ..\..\demo\tasks-licenses.json  ..\..\demo
 
 ```
 
- - **First parameter** : Security path. The base path where ml-cli "only" can access to your file. Should be a full path.
+ - **First parameter** : Security directory path. ml-cli has only access to files inside this directory. Should be a full path.
  - **Second parameter** : The path of the tasks.json, that file that describe tasks to execute.
  - **Third parameter** : Default base directory used by the path inside your task.json.
 
