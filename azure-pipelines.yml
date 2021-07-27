@@ -94,7 +94,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Unbuntu ml-cli
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -104,7 +104,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Unbuntu ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -114,7 +114,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Red Hat Enterprise Linux ml-cli
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -124,7 +124,7 @@ steps:
   
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -134,7 +134,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -144,7 +144,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
@@ -154,7 +154,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build. Reason'], 'PullRequest'))
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false

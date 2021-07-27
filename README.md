@@ -34,7 +34,7 @@ Ml-Cli is a command line batch and a local web interface&api that automates :
     - TagOverTextLabel
     - Json
 
-We use ml-cli mainly in the ML Flow production phase. We use it to test and **visually** debug  complexe pipeline.
+We use ml-cli mainly in the ML Flow production phase. We use it to test and **visually** debug  complex pipelines.
 
 ## ML workflow: Experimentation phase 
 
@@ -46,7 +46,7 @@ We use ml-cli mainly in the ML Flow production phase. We use it to test and **vi
 
 ## Production workflow (sample)
 
-In production we use complexe sequence of algorithm ML in a micro-service architecture. 
+In production we use complex sequences of algorithm ML in a micro-service architecture. 
 
 ![Production workflow](./docs/workflow-license.PNG "Workflow license production")
 
@@ -68,7 +68,7 @@ dotnet run -- C:\github\ml-cli\demo\ ..\..\demo\tasks-licenses.json  ..\..\demo
 ```
 
  - **First parameter** : Security directory path. ml-cli has only access to files inside this directory. Should be a full path.
- - **Second parameter** : The path of the tasks.json, that file that describe tasks to execute.
+ - **Second parameter** : The path of the tasks.json, the file that describes the tasks to execute.
  - **Third parameter** : Default base directory used by the path inside your task.json.
 
 ```sh
@@ -98,7 +98,7 @@ Ml.Cli.WebApp /github/ml-cli/demo/ ../../demo/tasks-licenses.json  ../../demo
 
 ## Production architecture
 
-We use microservice architecture when needed and mainly use "functions". Each algorithm can be hosted by a function. We mainly use redis to share data bewteen functions.
+We use microservice architecture when needed and mainly use "functions". Each algorithm can be hosted by a function. We mainly use redis to share data between functions.
 
 ![Production architecture](./docs/function-architecture.PNG "Production architecture")
 
@@ -254,25 +254,25 @@ You can execute several tasks in command line interface (CLI):
 
 ## ML-Cli local web interface and local API
 
-Ml-cli web interface internally run the Ml-cli batch. 
-It display a user interface and allow the user to annotate data via a Web API.
+Ml-cli web interface internally runs the Ml-cli batch. 
+It displays a user interface and allows the user to annotate data via a Web API.
 
-### Compare statistiques
-![Compare statistiques](./docs/ml-cli-compare-statistiques.PNG "Document stats")
+### Compare statistics
+![Compare statistics](./docs/ml-cli-compare-statistiques.PNG "Compare statistics")
 
 ### Compare diff
 
-![Compare diff](./docs/ml-cli-compare-diff.PNG "File diff example")
+![Compare diff](./docs/ml-cli-compare-diff.PNG "Compare diff")
 
 ### Compare annotation
 
 You can annotate the downloaded images (obtained with the task callapi described below) via an editor by clicking on the annotation button.
 
-![Compare annotation](./docs/ml-cli-annotate.PNG "Annotation example")
+![Compare annotation](./docs/ml-cli-annotate.PNG "Compare annotation")
 
 ### Compare script
 
-![Script usage](./docs/ml-cli-scripts.PNG "Script example")
+![Compare script](./docs/ml-cli-scripts.PNG "compare script")
 
 You can provide **javascript** scripts to apply to the recovered data that is displayed in the file comparison part of the interface. Applying these scripts will format the data and update the statistics table accordingly.
 That script can also be applied with the script task described below.
