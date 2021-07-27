@@ -18,7 +18,7 @@ const fetch = (status =200) => async (url, config) => {
 };
 
 describe("Check dataset handling", () => {
-    test("Should insert dataset", async () => {
+    test("Should insert dataset and select ocr and rotation annotation types", async () => {
         const mockedMonacoEditor = () => (<div>This is a mocked Monaco Editor</div>);
         const {container, asFragment, getAllByText, getByAltText} = render(<Annotate MonacoEditor={mockedMonacoEditor} fetchFunction={fetch(200)}/>);
 

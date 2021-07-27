@@ -37,7 +37,8 @@ namespace Ml.Cli.Tests.JobsTests
                 @"C:\ml\raw_ap\input",
                 @"C:\ml\raw_ap\images",
                 @"C:\ml\raw_ap\output",
-                "dataset-result.json"
+                "dataset-result.json",
+                ""
             );
 
             await datasetTask.GenerateDatasetAsync(inputTask);

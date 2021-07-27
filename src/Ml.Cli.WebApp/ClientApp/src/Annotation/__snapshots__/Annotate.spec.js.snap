@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check dataset handling Should insert dataset 1`] = `
+exports[`Check dataset handling Should insert dataset and select ocr and rotation annotation types 1`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -87,87 +87,6 @@ exports[`Check dataset handling Should insert dataset 1`] = `
       </button>
     </div>
   </div>
-  <span
-    class="tabs"
-  >
-    <div
-      class="tabs__header"
-    >
-      <ul
-        class="af-tabs__control"
-      >
-        <li
-          class="af-tabs__item af-tabs__item--active"
-        >
-          <button
-            class="af-tabs__link"
-            id="0"
-          >
-            Configuration
-          </button>
-        </li>
-      </ul>
-      <div
-        class="af-tabs__content"
-      >
-        <div
-          class="af-tabs__pane"
-        >
-          <div>
-            <p
-              class="tabs__title"
-            >
-              Type d'annotation:
-            </p>
-            <div
-              class="af-form__select-container"
-            >
-              <select
-                class="af-form__input-select"
-                id="extension_type"
-                name="ExtensionType"
-              >
-                <option
-                  value="JsonEditor"
-                >
-                  JsonEditor
-                </option>
-                <option
-                  value="Ocr"
-                >
-                  Ocr
-                </option>
-                <option
-                  value="Cropping"
-                >
-                  Cropping
-                </option>
-                <option
-                  value="Rotation"
-                >
-                  Rotation
-                </option>
-                <option
-                  value="TagOverText"
-                >
-                  TagOverText
-                </option>
-                <option
-                  value="TagOverTextLabel"
-                >
-                  TagOverTextLabel
-                </option>
-              </select>
-              <span
-                aria-controls="extension_type"
-                class="glyphicon glyphicon-menu-down"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </span>
   <div
     class="table-result"
   >

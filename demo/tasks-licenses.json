@@ -36,5 +36,25 @@
 		"rightDirectory": "licenses\\output\\{start-date}\\jsons",
 		"outputDirectory": "licenses\\output",
 		"fileName": "compare-licenses-{start-date}.json"
-	  }
+	},
+	{
+		"type": "dataset",
+		"enabled": true,
+		"annotationType": "Ocr",
+		"configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
+		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+		"imageDirectory": "licenses\\output\\{start-date}\\images",
+		"outputDirectory": "licenses\\output",
+		"fileName": "dataset-{start-date}-ocr.json"
+	},
+	{
+		"type": "dataset",
+		"enabled": true,
+		"annotationType": "TagOverText",
+		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+		"imageDirectory": "licenses\\output\\{start-date}\\images",
+		"outputDirectory": "licenses\\output",
+		"fileName": "dataset-{start-date}-tagovertext.json",
+		"script": "try{\n    const new_data = [\n        {\n            \"annotation0\": {\n                \"labels\": {\n                    \"boundingBoxes\": [\n                        {\n                            \"id\": \"7ed8df70-9408-4b5a-b660-a36ef3447d02\",\n                            \"level\": 5,\n                            \"page_num\": 1,\n                            \"block_num\": 1,\n                            \"par_num\": 1,\n                            \"line_num\": 1,\n                            \"word_num\": 1,\n                            \"left\": 25,\n                            \"top\": 5,\n                            \"width\": 110,\n                            \"height\": 25,\n                            \"conf\": 73,\n                            \"text\": \"14.07.1981\"\n                        },\n                        {\n                            \"id\": \"7ed8df70-9408-4b5a-b660-a36ef3447d03\",\n                            \"level\": 3,\n                            \"page_num\": 1,\n                            \"block_num\": 2,\n                            \"par_num\": 1,\n                            \"line_num\": 1,\n                            \"word_num\": 1,\n                            \"left\": 145,\n                            \"top\": 5,\n                            \"width\": 109,\n                            \"height\": 28,\n                            \"conf\": 53,\n                            \"text\": \"Utopia city\"\n                        }\n                    ]\n                }\n            }\n        }\n    ];\n    rawBodyOutput = JSON.stringify(new_data);\n}\ncatch (e) {\n    rawBodyOutput = \"\"\n}"
+	}
 ]
