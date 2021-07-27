@@ -44,9 +44,9 @@ tasks.json
 - **fileName**: string that defines the name of the file and its extension  
     
 ## Unrequired attributes
-- **id**: string that represent the id
-    - default: generate a GUID
-- **enabled**: a boolean to enabled or disable
+- **id**: string that represents the id
+    - default: generates a GUID
+- **enabled**: a boolean to enable or disable the task
     - default: true
 - **configuration**: string that defines the configuration of the annotation system
 - **script**: string that defines a script used to provide a default annotation that will be used by the TagOverText and TagOverTextLabel annotation types to generate the default bounding boxes used to annotate
