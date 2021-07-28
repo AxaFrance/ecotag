@@ -61,13 +61,13 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run -- C:\github\ml-cli\demo\ ..\..\demo\tasks-licenses.json  ..\..\demo
+dotnet run -- ..\..\demo ..\..\demo\tasks-licenses.json  ..\..\demo
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 
 ```
 
- - **First parameter** : Security directory path. ml-cli has only access to files inside this directory. Should be a full path.
+ - **First parameter** : Security directory path. ml-cli has only access to files inside this directory.
  - **Second parameter** : The path of the tasks.json, the file that describes the tasks to execute.
  - **Third parameter** : Default base directory used by the path inside your task.json.
 
@@ -88,10 +88,10 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe C:\github\ml-cli\demo\ ..\..\demo\tasks-licenses.json  ..\..\demo
+Ml.Cli.WebApp.exe ..\..\demo ..\..\demo\tasks-licenses.json  ..\..\demo
 
 # Run on Mac 
-Ml.Cli.WebApp /github/ml-cli/demo/ ../../demo/tasks-licenses.json  ../../demo
+Ml.Cli.WebApp ../../demo ../../demo/tasks-licenses.json  ../../demo
 ```
 
 # How it works

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +12,12 @@ namespace Ml.Cli.WebApp
     {
         public static async Task Main(string[] args)
         {
-            if (args[0].EndsWith(Path.DirectorySeparatorChar))
+            if (!args[0].EndsWith(Path.DirectorySeparatorChar))
             {
-                var builder = CreateHostBuilder(args).Build();
-                await builder.RunAsync();
+                args[0] += Path.DirectorySeparatorChar;
             }
-            else
-            {
-                throw new ArgumentException("Provided front base directory doesn't end with directory separator character");
-            }
+            var builder = CreateHostBuilder(args).Build();
+            await builder.RunAsync();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
