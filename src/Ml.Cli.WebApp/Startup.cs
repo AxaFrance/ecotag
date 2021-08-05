@@ -27,7 +27,6 @@ namespace Ml.Cli.WebApp
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                            .AllowCredentials()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
