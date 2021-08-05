@@ -98,7 +98,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ubuntu/ml-cli -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/ubuntu/ml-cli -f netcoreapp3.1 -v d -c Release -r linux-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -108,11 +108,11 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ubuntu/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/ubuntu/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r linux-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.ArtifactStagingDirectory)/ubuntu
+  - publish: $(System.DefaultWorkingDirectory)/ubuntu
     artifact: ubuntu
 
   - task: DotNetCoreCLI@2
@@ -121,11 +121,11 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/rhel/ml-cli -f netcoreapp3.1 -v d -c Release -r rhel-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/rhel/ml-cli -f netcoreapp3.1 -v d -c Release -r rhel-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
-  - publish: $(System.ArtifactStagingDirectory)/rhel
+  - publish: $(System.DefaultWorkingDirectory)/rhel
     artifact: rhel
   
   - task: DotNetCoreCLI@2
@@ -134,7 +134,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/macosx/ml-cli -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/macosx/ml-cli -f netcoreapp3.1 -v d -c Release -r osx-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -144,11 +144,11 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/macosx/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/macosx/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r osx-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.ArtifactStagingDirectory)/macosx
+  - publish: $(System.DefaultWorkingDirectory)/macosx
     artifact: macosx
 
   - task: DotNetCoreCLI@2
@@ -157,7 +157,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/win10/ml-cli -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/win10/ml-cli -f netcoreapp3.1 -v d -c Release -r win10-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -167,9 +167,9 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/win10/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "--self-contained true --output $(Build.DefaultWorkingDirectory)/win10/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r win10-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.ArtifactStagingDirectory)/win10
+  - publish: $(System.DefaultWorkingDirectory)/win10
     artifact: win10
