@@ -114,7 +114,7 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: ubuntu"
-    artifactName: ubuntu
+    artifactName: "ubuntu"
     inputs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/ubuntu"
 
@@ -130,7 +130,7 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: rhel"
-    artifactName: rhel
+    artifactName: "rhel"
     inputs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/rhel"
   
@@ -156,7 +156,7 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: macosx"
-    artifactName: macosx
+    artifactName: "macosx"
     inputs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/macosx"
 
@@ -182,6 +182,6 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: win10"
-    artifactName: win10
+    artifactName: "win10"
     inputs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/win10"
