@@ -112,11 +112,8 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: ubuntu"
-    artifactName: "ubuntu"
-    inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/ubuntu"
+  - publish: $(System.ArtifactStagingDirectory)/ubuntu
+    artifact: ubuntu
 
   - task: DotNetCoreCLI@2
     displayName: Publish Red Hat Enterprise Linux ml-cli
@@ -128,11 +125,8 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: rhel"
-    artifactName: "rhel"
-    inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/rhel"
+  - publish: $(System.ArtifactStagingDirectory)/rhel
+    artifact: rhel
   
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli
@@ -154,11 +148,8 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: macosx"
-    artifactName: "macosx"
-    inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/macosx"
+  - publish: $(System.ArtifactStagingDirectory)/macosx
+    artifact: macosx
 
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli
@@ -180,8 +171,5 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: win10"
-    artifactName: "win10"
-    inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/win10"
+  - publish: $(System.ArtifactStagingDirectory)/win10
+    artifact: win10
