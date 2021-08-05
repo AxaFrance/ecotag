@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: "Ubuntu 16.04"
 
 steps:
   - checkout: self
