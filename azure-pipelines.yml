@@ -112,8 +112,10 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.DefaultWorkingDirectory)/ubuntu
-    artifact: ubuntu
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/ubuntu
+      artifactName: ubuntu
 
   - task: DotNetCoreCLI@2
     displayName: Publish Red Hat Enterprise Linux ml-cli
@@ -125,8 +127,10 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
-  - publish: $(System.DefaultWorkingDirectory)/rhel
-    artifact: rhel
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/rhel
+      artifactName: rhel
   
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli
@@ -148,8 +152,10 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.DefaultWorkingDirectory)/macosx
-    artifact: macosx
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/macosx
+      artifactName: macosx
 
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli
@@ -171,5 +177,7 @@ steps:
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - publish: $(System.DefaultWorkingDirectory)/win10
-    artifact: win10
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/win10
+      artifactName: win10
