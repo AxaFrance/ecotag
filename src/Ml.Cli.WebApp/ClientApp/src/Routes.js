@@ -4,8 +4,9 @@ import Compare from "./Comparison/Compare";
 import Annotate from "./Annotation/Annotate";
 import React from "react";
 import NotFound from "./PageNotFound/NotFound";
+import withCustomFetch from "./withCustomFetch";
 
-const Routes = () => {
+const Routes = ({fetch}) => {
     const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 
     return (
@@ -32,4 +33,4 @@ const Routes = () => {
     );
 };
 
-export default Routes;
+export default withCustomFetch(fetch)(Routes);
