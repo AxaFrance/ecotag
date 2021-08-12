@@ -23,13 +23,13 @@ namespace Ml.Cli.WebApp
             };
             app.HelpOption("-?|-h|--help");
 
-            var tasksPath = app.Option("-t|--tasks-path",
-                "[Required] - The path of the tasks.json, the file that describes the tasks to execute.",
+            var tasksPath = app.Option("-t|--tasks-path <VALUE>",
+                "[Required] - Defines the path of the tasks.json file, which describes the tasks to execute.",
                 CommandOptionType.SingleValue);
-            var basePath = app.Option("-b|--base-path",
-                "[Required] - Default base directory used by the path inside your task.json.", CommandOptionType.SingleValue);
-            var securityPath = app.Option("-s|--security-path",
-                "[Optional] - Security directory path. ml-cli has only access to files inside this directory. If not provided, the security path will be the same as the base path.",
+            var basePath = app.Option("-b|--base-path <VALUE>",
+                "[Required] - Defines the default base directory used by the paths inside your task.json file.", CommandOptionType.SingleValue);
+            var securityPath = app.Option("-s|--security-path <VALUE>",
+                "[Optional] - Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.",
                 CommandOptionType.SingleValue);
 
             app.OnExecute(async() =>
@@ -38,6 +38,15 @@ namespace Ml.Cli.WebApp
                 var baseValue = basePath.Value();
                 if (tasksValue == null || baseValue == null)
                 {
+                    if (tasksValue == null)
+                    {
+                        Console.WriteLine("Tasks path argument is unspecified.");
+                    }
+
+                    if (baseValue == null)
+                    {
+                        Console.WriteLine("Base path argument is unspecified.");
+                    }
                     app.ShowHelp();
                     return -1;
                 }
