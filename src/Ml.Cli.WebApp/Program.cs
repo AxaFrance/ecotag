@@ -16,7 +16,7 @@ namespace Ml.Cli.WebApp
         {
             var app = new CommandLineApplication()
             {
-                Name = "Ml-Cli.exe",
+                Name = "Ml.Cli",
                 FullName = "Ml-Cli",
                 Description =
                     "Ml-Cli is an open-source, local tool that automates Machine Learning actions such as quality tests on services, dataset creation and annotation."
