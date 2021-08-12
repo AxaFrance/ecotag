@@ -23,7 +23,7 @@ const setNewItem = (contentLeft, contentRight, items, item) => {
 
 const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompareState, MonacoEditor, fetchFunction}) => {
 
-    const mutationCompare = useMutation(newData => fetchPostJson(fetchFunction)("/api/compare/save", newData));
+    const mutationCompare = useMutation(newData => fetchPostJson(fetchFunction)("/api/compares/save", newData));
     const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/datasets/save", newData));
 
     const saveItem = (direction, editorContent) => {

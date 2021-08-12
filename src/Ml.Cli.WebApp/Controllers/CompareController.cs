@@ -66,7 +66,7 @@ namespace Ml.Cli.WebApp.Controllers
     }
 
     [ApiController]
-    [Route("api/compare")]
+    [Route("api/compares")]
     public class CompareController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
