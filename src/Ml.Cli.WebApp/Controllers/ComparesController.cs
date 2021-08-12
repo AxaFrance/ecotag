@@ -67,12 +67,12 @@ namespace Ml.Cli.WebApp.Controllers
 
     [ApiController]
     [Route("api/compares")]
-    public class CompareController : ControllerBase
+    public class ComparesController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
         private readonly IBasePath _basePath;
 
-        public CompareController(IFileLoader fileLoader, IBasePath basePath)
+        public ComparesController(IFileLoader fileLoader, IBasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
