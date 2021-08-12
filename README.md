@@ -70,9 +70,9 @@ dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.
 As you can see, ML-Cli can use several parameters:
 
  - Required
-    - **Tasks file path** : called with "-t <VALUE>" or "--tasks-path <VALUE>". Defines the path of the tasks.json file, which describes the tasks to execute.
     - **Base directory path** : called with "-b <VALUE>" or "--base-path <VALUE>". Defines the default base directory used by the paths inside your task.json file.
  - Optional
+     - **Tasks file path** : called with "-t <VALUE>" or "--tasks-path <VALUE>". Defines the path of the tasks.json file, which describes the tasks to execute. If not provided, the webapp will start, but not the batch.
      - **Security path** : called with "-s <VALUE>" or "--security-path <VALUE>". Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.  
  - Other
      - **Help**: called with "-?", "-h" or "--help", it provides a description of all parameters directly in the terminal.

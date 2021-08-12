@@ -23,33 +23,27 @@ namespace Ml.Cli.WebApp
             };
             app.HelpOption("-?|-h|--help");
 
-            var tasksPath = app.Option("-t|--tasks-path <VALUE>",
-                "[Required] - Defines the path of the tasks.json file, which describes the tasks to execute.",
-                CommandOptionType.SingleValue);
             var basePath = app.Option("-b|--base-path <VALUE>",
-                "[Required] - Defines the default base directory used by the paths inside your task.json file.", CommandOptionType.SingleValue);
+                "[Required] - Defines the default base directory used by the paths inside your task.json file.",
+                CommandOptionType.SingleValue);
+            var tasksPath = app.Option("-t|--tasks-path <VALUE>",
+                "[Optional] - Defines the path of the tasks.json file, which describes the tasks to execute.",
+                CommandOptionType.SingleValue);
             var securityPath = app.Option("-s|--security-path <VALUE>",
                 "[Optional] - Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.",
                 CommandOptionType.SingleValue);
 
-            app.OnExecute(async() =>
+            app.OnExecute(async () =>
             {
                 var tasksValue = tasksPath.Value();
                 var baseValue = basePath.Value();
-                if (tasksValue == null || baseValue == null)
+                if (baseValue == null)
                 {
-                    if (tasksValue == null)
-                    {
-                        Console.WriteLine("Tasks path argument is unspecified.");
-                    }
-
-                    if (baseValue == null)
-                    {
-                        Console.WriteLine("Base path argument is unspecified.");
-                    }
+                    Console.WriteLine("The base path argument is unspecified.");
                     app.ShowHelp();
                     return -1;
                 }
+
                 var securityValue = securityPath.Value() == null ? baseValue : securityPath.Value();
                 if (!securityValue.EndsWith(Path.DirectorySeparatorChar))
                 {
@@ -59,7 +53,7 @@ namespace Ml.Cli.WebApp
                 var providedArgs = new[]
                 {
                     securityValue,
-                    tasksValue,
+                    tasksValue ?? "",
                     baseValue
                 };
                 var builder = CreateHostBuilder(providedArgs).Build();
