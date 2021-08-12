@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import '@testing-library/jest-dom';
 import {fireEvent, render, waitFor} from '@testing-library/react';
-import Routes from "./Routes";
+import { Routes } from "./Routes";
 import {BrowserRouter as Router} from "react-router-dom";
 
 

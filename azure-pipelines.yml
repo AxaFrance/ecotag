@@ -94,75 +94,90 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: Publish Unbuntu ml-cli
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/ubuntu -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli -f netcoreapp3.1 -v d -c Release -r linux-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
   - task: DotNetCoreCLI@2
     displayName: Publish Unbuntu ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
-      publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli-webapp/ubuntu -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      publishWebProjects: true
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r linux-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/ubuntu
+      artifactName: ubuntu
+
   - task: DotNetCoreCLI@2
     displayName: Publish Red Hat Enterprise Linux ml-cli
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/rhel -f netcoreapp3.1 -v d -c Release -r rhel-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/rhel/ml-cli -f netcoreapp3.1 -v d -c Release -r rhel-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/rhel
+      artifactName: rhel
   
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/macos -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli -f netcoreapp3.1 -v d -c Release -r osx-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
   - task: DotNetCoreCLI@2
     displayName: Publish MacOS ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli-webapp/macos -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r osx-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/macosx
+      artifactName: macosx
+
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli/win10 -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/win10/ml-cli -f netcoreapp3.1 -v d -c Release -r win10-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
   - task: DotNetCoreCLI@2
     displayName: Publish Win10 ml-cli-webapp
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(Build.ArtifactStagingDirectory)/ml-cli-webapp/macos -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/win10/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r win10-x64"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: drop"
+  - task: PublishPipelineArtifact@1
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      targetPath: $(System.DefaultWorkingDirectory)/win10
+      artifactName: win10
