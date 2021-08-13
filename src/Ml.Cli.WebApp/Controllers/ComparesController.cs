@@ -123,13 +123,17 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFiles()
         {
+            if (_comparesPaths.Paths == "")
+            {
+                return BadRequest("Compare repositories paths unspecified.");
+            }
             var paths = _comparesPaths.Paths.Split(",");
             var filesList = new List<string>();
             foreach (var path in paths)
             {
                 foreach (var filePath in _fileLoader.EnumerateFiles(path))
                 {
-                    if (Path.GetExtension(filePath) == "json")
+                    if (Path.GetExtension(filePath) == ".json")
                     {
                         filesList.Add(filePath);
                     }
