@@ -16,7 +16,7 @@ namespace Ml.Cli.WebApp
             var app = new CommandLineApplication()
             {
                 Name = "Ml.Cli",
-                FullName = "Ml-Cli",
+                FullName = "Ml-Cli-WebApp",
                 Description =
                     "Ml-Cli is an open-source, local tool that automates Machine Learning actions such as quality tests on services, dataset creation and annotation."
             };
@@ -51,10 +51,14 @@ namespace Ml.Cli.WebApp
 
                 var providedArgs = new[]
                 {
+                    "-s",
                     securityValue,
-                    tasksValue ?? "",
+                    "-t",
+                    tasksValue,
+                    "-b",
                     baseValue
                 };
+                
                 var builder = CreateHostBuilder(providedArgs).Build();
                 await builder.RunAsync();
                 return 0;
@@ -76,8 +80,8 @@ namespace Ml.Cli.WebApp
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IHostedService>(provider =>
-                        new Worker(args.Skip(1).ToArray()));
-                    services.AddSingleton<IBasePath, BasePath.BasePath>(provider => new BasePath.BasePath(args[0]));
+                        new Worker(args.Skip(2).ToArray()));
+                    services.AddSingleton<IBasePath, BasePath.BasePath>(provider => new BasePath.BasePath(args[1]));
                 });
     }
 }

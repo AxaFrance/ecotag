@@ -17,7 +17,7 @@ namespace Ml.Cli.WebApp
         {
             if (_args[0] != "")
             {
-                await Ml.Cli.Program.Main(_args);
+                Ml.Cli.Program.Main(_args);
             }
         }
     }

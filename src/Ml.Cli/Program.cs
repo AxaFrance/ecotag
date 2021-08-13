@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,33 +28,69 @@ namespace Ml.Cli
 {
     public partial class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var app = new CommandLineApplication()
+            {
+                Name = "Ml.Cli",
+                FullName = "Ml-Cli-Batch",
+                Description = "Ml-Cli is an open-source, local tool that automates Machine Learning actions such as quality tests on services, dataset creation and annotation."
+            };
+            app.HelpOption("-?|-h|--help");
+            var basePath = app.Option("-b|--base-path <VALUE>",
+                "[Required] - Defines the default base directory used by the paths inside your task.json file.",
+                CommandOptionType.SingleValue);
+            var tasksPath = app.Option("-t|--tasks-path <VALUE>",
+                "[Optional] - Defines the path of the tasks.json file, which describes the tasks to execute.",
+                CommandOptionType.SingleValue);
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddEnvironmentVariables()
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
-                .Build();
+            app.OnExecute(async () =>
+            {
+                var tasksValue = tasksPath.Value();
+                var baseValue = basePath.Value();
 
-            var applicationName = configuration.GetValue<string>("Application:Name");
-            var applicationMessage = configuration.GetValue<string>("Application:Message");
+                var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                IConfiguration configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddEnvironmentVariables()
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                    .Build();
+
+                var applicationName = configuration.GetValue<string>("Application:Name");
+                var applicationMessage = configuration.GetValue<string>("Application:Message");
         
-            var services = new ServiceCollection();
-            ConfigureServices(services);
+                var services = new ServiceCollection();
+                ConfigureServices(services);
 
-            await using var tempServiceProvider = services.BuildServiceProvider();
-            var logger = tempServiceProvider.GetService<ILogger<Program>>();
-            services.AddSingleton(typeof(ILogger), logger);
-            await using var serviceProvider = services.BuildServiceProvider();
+                await using var tempServiceProvider = services.BuildServiceProvider();
+                var logger = tempServiceProvider.GetService<ILogger<Program>>();
+                services.AddSingleton(typeof(ILogger), logger);
+                await using var serviceProvider = services.BuildServiceProvider();
 
-            logger.LogInformation($"Application Name: {applicationName}");
-            logger.LogInformation($"Application Message: {applicationMessage}");
+                logger.LogInformation($"Application Name: {applicationName}");
+                logger.LogInformation($"Application Message: {applicationMessage}");
+                
+                var providedArgs = new[]
+                {
+                    tasksValue,
+                    baseValue
+                };
+                var program = new Program();
+                await program.Run(providedArgs[0], providedArgs[1], serviceProvider, services);
+                return 0;
+            });
 
-            var program = new Program();
-            await program.Run(args[0], args[1], serviceProvider, services);
+            try
+            {
+                app.Execute(args);
+            }
+            catch (CommandParsingException ex)
+            {
+                Console.WriteLine(ex.Message);
+                app.ShowHelp();
+            }
         }
 
         private static void ConfigureServices(ServiceCollection services)
