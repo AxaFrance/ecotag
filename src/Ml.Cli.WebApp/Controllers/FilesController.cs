@@ -40,7 +40,7 @@ namespace Ml.Cli.WebApp.Controllers
             return File(stream, contentType); // returns a FileStreamResult
         }
 
-        private string GetContentType(string path)
+        public static string GetContentType(string path)
         {
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(path, out var contentType))

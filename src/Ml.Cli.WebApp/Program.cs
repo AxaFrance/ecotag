@@ -31,11 +31,15 @@ namespace Ml.Cli.WebApp
             var securityPath = app.Option("-s|--security-path <VALUE>",
                 "[Optional] - Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.",
                 CommandOptionType.SingleValue);
+            var comparesPaths = app.Option("-c|--compares-paths <VALUE>",
+                "[Optional] - Defines the repositories that contain comparison files that you can download from the webapp.",
+                CommandOptionType.SingleValue);
 
             app.OnExecute(async () =>
             {
                 var tasksValue = tasksPath.Value();
                 var baseValue = basePath.Value();
+                var comparesValue = comparesPaths.Value();
                 if (baseValue == null)
                 {
                     Console.WriteLine("The base path argument is unspecified.");
@@ -53,12 +57,14 @@ namespace Ml.Cli.WebApp
                 {
                     "-s",
                     securityValue,
+                    "-c",
+                    comparesValue,
                     "-t",
                     tasksValue,
                     "-b",
                     baseValue
                 };
-                
+
                 var builder = CreateHostBuilder(providedArgs).Build();
                 await builder.RunAsync();
                 return 0;
@@ -80,7 +86,7 @@ namespace Ml.Cli.WebApp
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IHostedService>(provider =>
-                        new Worker(args.Skip(2).ToArray()));
+                        new Worker(args.Skip(4).ToArray()));
                     services.AddSingleton<IBasePath, BasePath.BasePath>(provider => new BasePath.BasePath(args[1]));
                 });
     }

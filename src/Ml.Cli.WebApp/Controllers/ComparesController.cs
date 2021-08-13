@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.BasePath;
 using Newtonsoft.Json;
@@ -113,6 +115,30 @@ namespace Ml.Cli.WebApp.Controllers
             var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
             await _fileLoader.WriteAllTextInFileAsync(data.CompareLocation, result);
+        }
+
+        [HttpGet("{repositoriesPaths}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<FileStreamResult>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFiles(string repositoriesPaths)
+        {
+            var paths = repositoriesPaths.Split(",");
+            var filesList = new List<FileStreamResult>();
+            foreach (var path in paths)
+            {
+                foreach (var filePath in _fileLoader.EnumerateFiles(path))
+                {
+                    var stream = _fileLoader.OpenRead(filePath);
+                    if (stream != null)
+                    {
+                        var contentType = FilesController.GetContentType(filePath);
+                        var file = File(stream, contentType);
+                        filesList.Add(file);
+                    }
+                }
+            }
+
+            return Ok(filesList);
         }
 
         [HttpPost("save")]
