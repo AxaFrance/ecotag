@@ -48,7 +48,7 @@ namespace Ml.Cli.WebApp
                     return -1;
                 }
 
-                var securityValue = securityPath.Value() == null ? baseValue : securityPath.Value();
+                var securityValue = securityPath.Value() == null ? baseValue : "";
                 if (!securityValue.EndsWith(Path.DirectorySeparatorChar))
                 {
                     securityValue += Path.DirectorySeparatorChar;
@@ -59,9 +59,9 @@ namespace Ml.Cli.WebApp
                     "-s",
                     securityValue,
                     "-c",
-                    comparesValue,
+                    comparesValue ?? "",
                     "-t",
-                    tasksValue,
+                    tasksValue ?? "",
                     "-b",
                     baseValue
                 };

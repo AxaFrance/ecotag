@@ -1,6 +1,7 @@
 ﻿import {File} from "@axa-fr/react-toolkit-form-input-file";
 import React from "react";
 import './FileLoader.scss';
+import Library from "../Library/Library";
 
 const FileLoader = ({id, name, accept, onLoad, onFailure}) => {
     
@@ -25,6 +26,7 @@ const FileLoader = ({id, name, accept, onLoad, onFailure}) => {
                 onChange={onLocalLoad}
                 maxSize={2000000000}
             />
+            <Library/>
         </div>
     );
 };
