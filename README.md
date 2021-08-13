@@ -61,20 +61,26 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run -- ..\..\demo ..\..\demo\tasks-licenses.json  ..\..\demo
+dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 
 ```
 
- - **First parameter** : Security directory path. ml-cli has only access to files inside this directory.
- - **Second parameter** : The path of the tasks.json, the file that describes the tasks to execute.
- - **Third parameter** : Default base directory used by the path inside your task.json.
+As you can see, ML-Cli can use several parameters:
+
+ - Required
+    - **Base directory path** : called with "-b <VALUE>" or "--base-path <VALUE>". Defines the default base directory used by the paths inside your task.json file.
+ - Optional
+     - **Tasks file path** : called with "-t <VALUE>" or "--tasks-path <VALUE>". Defines the path of the tasks.json file, which describes the tasks to execute. If not provided, the webapp will start, but not the batch.
+     - **Security path** : called with "-s <VALUE>" or "--security-path <VALUE>". Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.  
+ - Other
+     - **Help**: called with "-?", "-h" or "--help", it provides a description of all parameters directly in the terminal.
 
 ```sh
 # you can also run ml-cli batch only
  cd ./ml-cli/src/Ml.Cli
-dotnet run -- ..\..\demo\tasks-licenses.json  ..\..\demo
+dotnet run -- -t ..\..\demo\tasks-licenses.json  -b ..\..\demo
 ```
 
 ML-Cli autonomous x64 distribution is available on :
@@ -88,10 +94,10 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe ..\..\demo ..\..\demo\tasks-licenses.json  ..\..\demo
+Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
 
 # Run on Mac 
-Ml.Cli.WebApp ../../demo ../../demo/tasks-licenses.json  ../../demo
+Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo
 ```
 
 # How it works

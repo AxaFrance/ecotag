@@ -15,7 +15,10 @@ namespace Ml.Cli.WebApp
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await Ml.Cli.Program.Main(_args);
+            if (_args[0] != "")
+            {
+                Ml.Cli.Program.Main(_args);
+            }
         }
     }
 }
