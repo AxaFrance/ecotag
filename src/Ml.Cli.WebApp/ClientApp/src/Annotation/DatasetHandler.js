@@ -15,7 +15,7 @@ const mapDatasetItems = data => data.map(item => {
     };
 });
 
-const DatasetHandler = ({state, setState}) => {
+const DatasetHandler = ({state, setState, fetchFunction}) => {
 
     const [handlerState, setHandlerState] = useState({
         loadFileError: false
@@ -51,6 +51,7 @@ const DatasetHandler = ({state, setState}) => {
                 accept="application/json"
                 onLoad={(reader, e) => loadFile(reader, e)}
                 onFailure={e => onLoadFailure(e)}
+                fetchFunction={fetchFunction}
             />
             {handlerState.loadFileError &&
             <h2 className="error-message">

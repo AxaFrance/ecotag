@@ -3,7 +3,7 @@ import React from "react";
 import './FileLoader.scss';
 import Library from "../Library/Library";
 
-const FileLoader = ({id, name, accept, onLoad, onFailure}) => {
+const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
     
     const onLocalLoad = e => {
         const input = e.values[0].file;
@@ -26,7 +26,9 @@ const FileLoader = ({id, name, accept, onLoad, onFailure}) => {
                 onChange={onLocalLoad}
                 maxSize={2000000000}
             />
-            <Library/>
+            <Library
+                fetchFunction={fetchFunction}
+            />
         </div>
     );
 };

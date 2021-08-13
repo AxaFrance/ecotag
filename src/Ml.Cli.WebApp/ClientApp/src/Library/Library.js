@@ -1,10 +1,16 @@
 ﻿import React, {useEffect, useState} from "react";
 import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
+import {fetchGetData} from "../FetchHelper";
+import {fetchImages} from "../Comparison/ImagesLoader";
 
-const Library = () => {
+const getFiles = async fetchFunction => {
+    const fetchResult = await fetchGetData(fetchFunction)({}, "api/compares");
+    return await fetchImages(fetchResult);
+}
+
+const Library = ({fetchFunction}) => {
     
     const [state, setState] = useState({
-        time: new Date().toLocaleString(),
         files: []
     })
     
@@ -20,10 +26,12 @@ const Library = () => {
     });
     
     const tick = () => {
-        setState({
-            ...state,
-            date: new Date().toLocaleString()
-        });
+        //utiliser isMounted comme dans ImagesLoader ?
+        getFiles(fetchFunction)
+            .then(files => {
+                setState({files: files});
+            }
+        );
     }
     
     return (

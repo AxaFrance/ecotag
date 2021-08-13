@@ -33,7 +33,7 @@ const timeSideVariables = [
     {value: 'Droite', label: 'Droite'}
 ];
 
-const FileTreatment = ({state, setState, MonacoEditor}) => {
+const FileTreatment = ({state, setState, MonacoEditor, fetchFunction}) => {
 
     const [filterState, setFilterState] = useState({
         filterName: "KO",
@@ -191,6 +191,7 @@ try {
                 accept="application/json"
                 onLoad={(reader, e) => onLoad(reader, e)}
                 onFailure={e => onLoadFailure(e)}
+                fetchFunction={fetchFunction}
             />
 
             <div className="tabs">

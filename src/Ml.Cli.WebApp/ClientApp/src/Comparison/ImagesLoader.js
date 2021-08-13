@@ -2,7 +2,7 @@
 import {fetchGetData} from "../FetchHelper";
 import JsonEditorContainer from "../Annotation/Toolkit/JsonEditor/JsonEditor.container";
 
-const fetchImages = async data => {
+export const fetchImages = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
