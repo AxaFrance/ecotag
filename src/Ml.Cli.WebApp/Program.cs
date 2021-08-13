@@ -6,6 +6,7 @@ using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.ComparesPaths;
 
 namespace Ml.Cli.WebApp
 {
@@ -88,6 +89,7 @@ namespace Ml.Cli.WebApp
                     services.AddSingleton<IHostedService>(provider =>
                         new Worker(args.Skip(4).ToArray()));
                     services.AddSingleton<IBasePath, BasePath.BasePath>(provider => new BasePath.BasePath(args[1]));
+                    services.AddSingleton(provider => new ComparesPaths.ComparesPaths(args[3]));
                 });
     }
 }

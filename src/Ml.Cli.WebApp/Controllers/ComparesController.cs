@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.BasePath;
 using Newtonsoft.Json;
@@ -73,11 +72,13 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly IBasePath _basePath;
+        private readonly ComparesPaths.ComparesPaths _comparesPaths;
 
-        public ComparesController(IFileLoader fileLoader, IBasePath basePath)
+        public ComparesController(IFileLoader fileLoader, IBasePath basePath, ComparesPaths.ComparesPaths comparesPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
+            _comparesPaths = comparesPaths;
         }
 
         private static EditorContent ReformatEditorContent(EditorContent data)
@@ -117,26 +118,20 @@ namespace Ml.Cli.WebApp.Controllers
             await _fileLoader.WriteAllTextInFileAsync(data.CompareLocation, result);
         }
 
-        [HttpGet("{repositoriesPaths}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<FileStreamResult>))]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFiles(string repositoriesPaths)
+        public async Task<IActionResult> GetFiles()
         {
-            var paths = repositoriesPaths.Split(",");
-            var filesList = new List<FileStreamResult>();
+            var paths = _comparesPaths.Paths.Split(",");
+            var filesList = new List<string>();
             foreach (var path in paths)
             {
                 foreach (var filePath in _fileLoader.EnumerateFiles(path))
                 {
                     if (Path.GetExtension(filePath) == "json")
                     {
-                        var stream = _fileLoader.OpenRead(filePath);
-                        if (stream != null)
-                        {
-                            var contentType = FilesController.GetContentType(filePath);
-                            var file = File(stream, contentType);
-                            filesList.Add(file);
-                        }
+                        filesList.Add(filePath);
                     }
                 }
             }
