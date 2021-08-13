@@ -128,12 +128,15 @@ namespace Ml.Cli.WebApp.Controllers
             {
                 foreach (var filePath in _fileLoader.EnumerateFiles(path))
                 {
-                    var stream = _fileLoader.OpenRead(filePath);
-                    if (stream != null)
+                    if (Path.GetExtension(filePath) == "json")
                     {
-                        var contentType = FilesController.GetContentType(filePath);
-                        var file = File(stream, contentType);
-                        filesList.Add(file);
+                        var stream = _fileLoader.OpenRead(filePath);
+                        if (stream != null)
+                        {
+                            var contentType = FilesController.GetContentType(filePath);
+                            var file = File(stream, contentType);
+                            filesList.Add(file);
+                        }
                     }
                 }
             }
