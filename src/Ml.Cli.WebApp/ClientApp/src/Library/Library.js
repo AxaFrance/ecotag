@@ -27,11 +27,17 @@ const Library = ({fetchFunction}) => {
     
     const tick = () => {
         //utiliser isMounted comme dans ImagesLoader ?
+        //Ne pas afficher le chemin complet du fichier, mais juste son nom
         getFiles(fetchFunction)
             .then(files => {
                 setState({files: files});
             }
         );
+    }
+    
+    const getFileName = filePath => {
+        const decodedUri = decodeURI(filePath);
+        return decodedUri.replace(/^.*[\\\/]/, '');
     }
     
     return (
@@ -41,7 +47,7 @@ const Library = ({fetchFunction}) => {
                 return (
                     <div key={index} className="library__file">
                         <a href={``} download={file}>
-                            {file}
+                            {getFileName(file)}
                         </a>
                         <span
                             onClick={e => console.log(e)}
