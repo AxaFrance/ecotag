@@ -14,11 +14,13 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly IBasePath _basePath;
+        private readonly ComparesPaths.ComparesPaths _comparesPaths;
 
-        public FilesController(IFileLoader fileLoader, IBasePath basePath)
+        public FilesController(IFileLoader fileLoader, IBasePath basePath, ComparesPaths.ComparesPaths comparesPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
+            _comparesPaths = comparesPaths;
         }
 
         [HttpGet("{id}")]
@@ -27,7 +29,7 @@ namespace Ml.Cli.WebApp.Controllers
         public async Task<IActionResult> ShowFile(string id)
         {
             var elementPath = HttpUtility.ParseQueryString(id).Get("value");
-            if (!_basePath.IsPathSecure(elementPath))
+            if (!_basePath.IsPathSecure(elementPath) && !_comparesPaths.IsPathContained(elementPath))
             {
                 return BadRequest();
             }

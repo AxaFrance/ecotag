@@ -7,5 +7,19 @@
         {
             Paths = comparesPaths;
         }
+
+        public bool IsPathContained(string filePath)
+        {
+            var paths = Paths.Split(',');
+            foreach (var path in paths)
+            {
+                if (filePath.Contains(path))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

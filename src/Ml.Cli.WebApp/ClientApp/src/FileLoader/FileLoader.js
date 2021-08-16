@@ -29,6 +29,7 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
             </div>
             <Library
                 fetchFunction={fetchFunction}
+                onPlayClick={onLocalLoad}
             />
         </div>
     );

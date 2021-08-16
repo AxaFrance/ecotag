@@ -9,7 +9,7 @@ const getFiles = async fetchFunction => {
     return await getDataPaths(fetchResult);
 }
 
-const Library = ({fetchFunction}) => {
+const Library = ({fetchFunction, onPlayClick}) => {
 
     const [state, setState] = useState({
         files: []
@@ -36,9 +36,22 @@ const Library = ({fetchFunction}) => {
     };
 
     const getFileName = filePath => {
-        const decodedUri = decodeURI(filePath);
+        const decodedUri = decodeURIComponent(filePath.replace(/\+/g, ' '));
         return decodedUri.replace(/^.*[\\\/]/, '');
     };
+    
+    const loadSelectedFile = async e => {
+        const decodedUri = decodeURIComponent(e.replace(/\+/g, ' '));
+        const value = decodedUri.slice(17);
+        const params = {
+            value: value
+        }
+        const data = await fetchGetData(fetchFunction)(params, "api/files");
+        if(data.status === 200){
+            const dataContent = await data.json();
+            onPlayClick(dataContent);
+        }
+    }
 
     return (
         <div className="library__container">
@@ -54,7 +67,7 @@ const Library = ({fetchFunction}) => {
                                 {getFileName(file)}
                             </a>
                             <span
-                                onClick={e => console.log(e)}
+                                onClick={() => loadSelectedFile(file)}
                                 className="glyphicon glyphicon-play library__custom-glyphicon-play"
                             />
                         </div>
