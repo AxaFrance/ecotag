@@ -134,3 +134,23 @@ exports[`Check Library component behavior and display Should have correct displa
   </div>
 </DocumentFragment>
 `;
+
+exports[`Check Library component behavior and display Should have correct display when no files found 1`] = `
+<DocumentFragment>
+  <div
+    class="library__container"
+  >
+    <p
+      class="library__title"
+    >
+      Fichiers de test
+    </p>
+    <span>
+      No file found.
+    </span>
+    <div
+      class="library__files-list"
+    />
+  </div>
+</DocumentFragment>
+`;
