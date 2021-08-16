@@ -48,7 +48,7 @@ namespace Ml.Cli.WebApp
                     return -1;
                 }
 
-                var securityValue = securityPath.Value() == null ? baseValue : "";
+                var securityValue = securityPath.Value()?? baseValue;
                 if (!securityValue.EndsWith(Path.DirectorySeparatorChar))
                 {
                     securityValue += Path.DirectorySeparatorChar;

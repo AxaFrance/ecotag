@@ -1,12 +1,12 @@
 ﻿import React, {useEffect, useState} from "react";
 import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
 import {fetchGetData} from "../FetchHelper";
-import {fetchImages} from "../Comparison/ImagesLoader";
+import {getDataPaths} from "../Comparison/ImagesLoader";
 import './Library.scss';
 
 const getFiles = async fetchFunction => {
     const fetchResult = await fetchGetData(fetchFunction)({}, "api/compares");
-    return await fetchImages(fetchResult);
+    return await getDataPaths(fetchResult);
 }
 
 const Library = ({fetchFunction}) => {
