@@ -1,7 +1,14 @@
 ﻿import React from "react";
 import Library from "./Library";
 
-const mockedFunction = () => {};
+const returnedFiles = ["C:\\someFolder\\compare-licenses-file-1.json",
+    "C:\\someFolder\\compare-licenses-file-2.json"];
+
+const mockedFunction = async (queryUrl, data) => Promise.resolve({
+    ok: true,
+    status: 200,
+    json: () => Promise.resolve(returnedFiles)
+});
 
 export default {
     title: 'Library',
@@ -12,7 +19,5 @@ const Template = (args) => <Library {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-    type: "",
-    files: {},
-    analyseLibraryFile: mockedFunction
+    fetchFunction: mockedFunction
 };

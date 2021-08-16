@@ -1,0 +1,48 @@
+﻿.library {
+  &__container {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 20px;
+    margin-right: 1em;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 15px 15px;
+    border-bottom: 2px solid #00008f;
+    border-left: 2px solid #00008f;
+    border-right: 2px solid #00008f;
+    border-radius: 10px;
+    min-width: 250px;
+    -webkit-box-shadow: 2px 4px 11px -2px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 4px 11px -2px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 4px 11px -2px rgba(0, 0, 0, 0.75);
+  }
+
+  &__title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 1.1px;
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  &__custom-glyphicon-play {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    animation: ease;
+    color: #08d608;
+    transition-duration: 300ms;
+
+    &:hover {
+      transition-duration: 300ms;
+      transform: scale(1.2);
+    }
+  }
+}
