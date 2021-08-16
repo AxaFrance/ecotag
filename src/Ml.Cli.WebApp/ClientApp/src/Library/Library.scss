@@ -1,7 +1,5 @@
 ﻿.library {
   &__container {
-    max-height: 200px;
-    overflow-y: auto;
     margin-top: 20px;
     margin-right: 1em;
     display: flex;
@@ -19,11 +17,17 @@
 
   &__title {
     text-align: center;
+    margin-top: -15px;
     font-weight: 700;
     font-size: 20px;
     letter-spacing: 1.1px;
   }
 
+  &__files-list{
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
   &__file {
     display: flex;
     align-items: center;

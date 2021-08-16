@@ -16,6 +16,7 @@ const Library = ({fetchFunction}) => {
     });
 
     useEffect(() => {
+        tick();
         const timerID = setInterval(
             () => tick(),
             5000
@@ -24,11 +25,9 @@ const Library = ({fetchFunction}) => {
         return function cleanup() {
             clearInterval(timerID);
         };
-    });
+    }, []);
 
     const tick = () => {
-        //utiliser isMounted comme dans ImagesLoader ?
-        //Ne pas afficher le chemin complet du fichier, mais juste son nom
         getFiles(fetchFunction)
             .then(files => {
                     setState({files: files});
@@ -44,19 +43,24 @@ const Library = ({fetchFunction}) => {
     return (
         <div className="library__container">
             <p className="library__title">Fichiers de test</p>
-            {state.files.map((file, index) => {
-                return (
-                    <div key={index} className="library__file">
-                        <a href={``} download={file}>
-                            {getFileName(file)}
-                        </a>
-                        <span
-                            onClick={e => console.log(e)}
-                            className="glyphicon glyphicon-play library__custom-glyphicon-play"
-                        />
-                    </div>
-                );
-            })}
+            {state.files.length === 0 &&
+                <span>No file found.</span>
+            }
+            <div className="library__files-list">
+                {state.files.map((file, index) => {
+                    return (
+                        <div key={index} className="library__file">
+                            <a href={``} download={file}>
+                                {getFileName(file)}
+                            </a>
+                            <span
+                                onClick={e => console.log(e)}
+                                className="glyphicon glyphicon-play library__custom-glyphicon-play"
+                            />
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };
