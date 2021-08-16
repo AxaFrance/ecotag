@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check Library component behavior and display Should have correct display when files found 1`] = `
+<DocumentFragment>
+  <div
+    class="library__container"
+  >
+    <p
+      class="library__title"
+    >
+      Fichiers de test
+    </p>
+    <div
+      class="library__files-list"
+    >
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-1.json"
+          href=""
+        >
+          compare-licenses-file-1.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-2.json"
+          href=""
+        >
+          compare-licenses-file-2.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-3.json"
+          href=""
+        >
+          compare-licenses-file-3.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-4.json"
+          href=""
+        >
+          compare-licenses-file-4.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-5.json"
+          href=""
+        >
+          compare-licenses-file-5.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-6.json"
+          href=""
+        >
+          compare-licenses-file-6.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-7.json"
+          href=""
+        >
+          compare-licenses-file-7.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-8.json"
+          href=""
+        >
+          compare-licenses-file-8.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+      <div
+        class="library__file"
+      >
+        <a
+          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-9.json"
+          href=""
+        >
+          compare-licenses-file-9.json
+        </a>
+        <span
+          class="glyphicon glyphicon-play library__custom-glyphicon-play"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
