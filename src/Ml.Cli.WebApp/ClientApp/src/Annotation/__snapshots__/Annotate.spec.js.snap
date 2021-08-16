@@ -62,38 +62,68 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
     </div>
   </div>
   <div
-    class="file-input"
+    class="file-loader__container"
   >
     <div
-      class="af-form__file-input"
+      class="file-loader__input"
     >
       <div
-        class="drop-box hidden-mobile"
-        id="dataset_loader"
-        tabindex="0"
+        class="af-form__file-input"
       >
-        <input
-          accept="application/json"
-          autocomplete="off"
-          multiple=""
-          name="placeDatasetFile"
-          style="display: none;"
-          tabindex="-1"
-          type="file"
-        />
-        <div>
-          Glissez/déposez vos fichiers
+        <div
+          class="drop-box hidden-mobile"
+          id="dataset_loader"
+          tabindex="0"
+        >
+          <input
+            accept="application/json"
+            autocomplete="off"
+            multiple=""
+            name="placeDatasetFile"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Glissez/déposez vos fichiers
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasiconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Parcourir
+        </button>
+      </div>
+    </div>
+    <div
+      class="library__container"
+    >
+      <p
+        class="library__title"
+      >
+        Fichiers de test
+      </p>
+      <div
+        class="library__files-list"
+      >
+        <div
+          class="library__file"
+        >
+          <a
+            download="/api/files/value=C%3A%5C%5CimageLocation"
+            href=""
+          >
+            imageLocation
+          </a>
+          <span
+            class="glyphicon glyphicon-play library__custom-glyphicon-play"
+          />
         </div>
       </div>
-      <button
-        class="af-btn af-btn--file af-btn--hasiconLeft"
-        type="button"
-      >
-        <i
-          class="glyphicon glyphicon-open"
-        />
-         Parcourir
-      </button>
     </div>
   </div>
   <div

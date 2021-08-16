@@ -4,10 +4,14 @@ import {fireEvent, render, waitFor} from '@testing-library/react';
 import { Routes } from "./Routes";
 import {BrowserRouter as Router} from "react-router-dom";
 
+const mockedFetch = async (queryUrl, data) => Promise.resolve({
+    ok: false,
+    status: 400
+});
 
 describe('Check page shifting', () => {
     test('Render home page and go to compare page', async () => {
-        const { container, asFragment  } = render(<Router basename="/"><Routes /></Router>);
+        const { container, asFragment  } = render(<Router basename="/"><Routes fetch={mockedFetch}/></Router>);
 
         expect(asFragment()).toMatchSnapshot();
         

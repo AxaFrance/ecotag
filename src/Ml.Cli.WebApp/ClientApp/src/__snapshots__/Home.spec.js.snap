@@ -145,38 +145,57 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
     </div>
   </div>
   <div
-    class="file-input"
+    class="file-loader__container"
   >
     <div
-      class="af-form__file-input"
+      class="file-loader__input"
     >
       <div
-        class="drop-box hidden-mobile"
-        id="file_loader"
-        tabindex="0"
+        class="af-form__file-input"
       >
-        <input
-          accept="application/json"
-          autocomplete="off"
-          multiple=""
-          name="placeJsonFile"
-          style="display: none;"
-          tabindex="-1"
-          type="file"
-        />
-        <div>
-          Glissez/déposez vos fichiers
+        <div
+          class="drop-box hidden-mobile"
+          id="file_loader"
+          tabindex="0"
+        >
+          <input
+            accept="application/json"
+            autocomplete="off"
+            multiple=""
+            name="placeJsonFile"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Glissez/déposez vos fichiers
+          </div>
         </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasiconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Parcourir
+        </button>
       </div>
-      <button
-        class="af-btn af-btn--file af-btn--hasiconLeft"
-        type="button"
+    </div>
+    <div
+      class="library__container"
+    >
+      <p
+        class="library__title"
       >
-        <i
-          class="glyphicon glyphicon-open"
-        />
-         Parcourir
-      </button>
+        Fichiers de test
+      </p>
+      <span>
+        No file found.
+      </span>
+      <div
+        class="library__files-list"
+      />
     </div>
   </div>
   <div
