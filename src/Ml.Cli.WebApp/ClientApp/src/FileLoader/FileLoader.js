@@ -5,16 +5,22 @@ import Library from "../Library/Library";
 
 const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
 
-    const onLocalLoad = e => {
+    const onFileLoad = e => {
         const input = e.values[0].file;
         if (input.size > 0) {
             const reader = new FileReader();
-            reader.onloadend = async () => onLoad(reader, e);
+            reader.onloadend = async () => onLoad(JSON.parse(reader.result), e.values[0].file.name);
             reader.readAsText(input);
         } else {
             onFailure(e);
         }
     };
+    
+    const onLibraryLoad = e => {
+        const compareLocation = e.CompareLocation;
+        const fileName = compareLocation.replace(/^.*[\\\/]/, '');
+        onLoad(e, fileName);
+    }
 
     return (
         <div className="file-loader__container">
@@ -23,13 +29,13 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
                     id={id}
                     name={name}
                     accept={accept}
-                    onChange={onLocalLoad}
+                    onChange={onFileLoad}
                     maxSize={2000000000}
                 />
             </div>
             <Library
                 fetchFunction={fetchFunction}
-                onPlayClick={onLocalLoad}
+                onPlayClick={onLibraryLoad}
             />
         </div>
     );
