@@ -33,7 +33,7 @@ namespace Ml.Cli.WebApp
                 "[Optional] - Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.",
                 CommandOptionType.SingleValue);
             var comparesPaths = app.Option("-c|--compares-paths <VALUE>",
-                "[Optional] - Defines the repositories that contain comparison files that you can download from the webapp.",
+                "[Optional] - Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'",
                 CommandOptionType.SingleValue);
 
             app.OnExecute(async () =>

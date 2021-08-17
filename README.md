@@ -74,6 +74,7 @@ As you can see, ML-Cli can use several parameters:
  - Optional
      - **Tasks file path** : called with "-t <VALUE>" or "--tasks-path <VALUE>". Defines the path of the tasks.json file, which describes the tasks to execute. If not provided, the webapp will start, but not the batch.
      - **Security path** : called with "-s <VALUE>" or "--security-path <VALUE>". Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.  
+     - **Compares paths**: called with "-c <VALUE>" or "--compares-paths <VALUE>". Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'
  - Other
      - **Help**: called with "-?", "-h" or "--help", it provides a description of all parameters directly in the terminal.
 
