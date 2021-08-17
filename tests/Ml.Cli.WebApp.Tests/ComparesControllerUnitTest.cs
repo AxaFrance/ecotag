@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.BasePath;
 using Ml.Cli.WebApp.Controllers;
@@ -42,6 +44,26 @@ namespace Ml.Cli.WebApp.Tests
                 JsonConvert.SerializeObject(JsonConvert.DeserializeObject(compareResultContent), Formatting.Indented);
             
             fileLoader.Verify(mock => mock.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", expectedResultCompareContent));
+        }
+
+        [Fact]
+        public async Task ShouldGetJsonFiles()
+        {
+            var basePath = new Mock<IBasePath>();
+            basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
+            var fileLoader = new Mock<IFileLoader>();
+            fileLoader.Setup(foo => foo.EnumerateFiles("someFolder\\\\comparesFolder1"))
+                .Returns(new[] {"file1.json", "file2.png", "file3.json"});
+            fileLoader.Setup(foo => foo.EnumerateFiles("someFolder\\\\comparesFolder2"))
+                .Returns(new[] {"file4.png", "file5.pdf"});
+            var comparesPath = new ComparesPaths.ComparesPaths("someFolder\\\\comparesFolder1,someFolder\\\\comparesFolder2");
+            
+            var compareController = new ComparesController(fileLoader.Object, basePath.Object, comparesPath);
+
+            var result = await compareController.GetFiles() as ObjectResult;
+            
+            Assert.NotNull(result);
+            Assert.Equal(new List<string>(){"file1.json","file3.json"}, result.Value);
         }
     }
 }
