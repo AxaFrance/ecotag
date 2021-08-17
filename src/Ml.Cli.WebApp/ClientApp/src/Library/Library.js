@@ -50,7 +50,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
         const data = await fetchGetData(fetchFunction)(params, "api/files");
         if(data.status === 200){
             const dataContent = await data.json();
-            onPlayClick(dataContent);
+            onPlayClick(dataContent, getFileName(e));
         }
     }
 

@@ -15,12 +15,6 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
             onFailure(e);
         }
     };
-    
-    const onLibraryLoad = e => {
-        const compareLocation = e.CompareLocation;
-        const fileName = compareLocation.replace(/^.*[\\\/]/, '');
-        onLoad(e, fileName);
-    }
 
     return (
         <div className="file-loader__container">
@@ -35,7 +29,7 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
             </div>
             <Library
                 fetchFunction={fetchFunction}
-                onPlayClick={onLibraryLoad}
+                onPlayClick={onLoad}
             />
         </div>
     );
