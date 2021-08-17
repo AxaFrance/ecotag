@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.BasePath;
 using Ml.Cli.WebApp.Controllers;
+using Ml.Cli.WebApp.Paths;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -27,7 +27,7 @@ namespace Ml.Cli.WebApp.Tests
             fileLoader.Setup(foo => foo.EnumerateFiles("lastnameFolder"))
                 .Returns(new[]{"lastnameFolder\\{someFileName}.pdf.png", "lastnameFolder\\{otherFilename.pdf.png}"});
             
-            var basePath = new Mock<IBasePath>();
+            var basePath = new Mock<BasePath>();
             basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
             
             var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object);
@@ -51,7 +51,7 @@ namespace Ml.Cli.WebApp.Tests
             var fileLoader = new Mock<IFileLoader>();
             fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(@"someFolder\{fileName}_pdf.json", It.IsAny<string>()));
 
-            var basePath = new Mock<IBasePath>();
+            var basePath = new Mock<BasePath>();
             basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
             
             var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object);

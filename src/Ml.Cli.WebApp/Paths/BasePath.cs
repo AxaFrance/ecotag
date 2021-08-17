@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace Ml.Cli.WebApp.BasePath
+namespace Ml.Cli.WebApp.Paths
 {
-    public class BasePath: IBasePath
+    public class BasePath
     {
         public string Path { get; }
 

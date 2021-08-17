@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.ComparesPaths
+﻿namespace Ml.Cli.WebApp.Paths
 {
     public class ComparesPaths
     {

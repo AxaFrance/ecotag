@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Paths;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Controllers
@@ -71,10 +71,10 @@ namespace Ml.Cli.WebApp.Controllers
     public class ComparesController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
-        private readonly IBasePath _basePath;
-        private readonly ComparesPaths.ComparesPaths _comparesPaths;
+        private readonly BasePath _basePath;
+        private readonly ComparesPaths _comparesPaths;
 
-        public ComparesController(IFileLoader fileLoader, IBasePath basePath, ComparesPaths.ComparesPaths comparesPaths)
+        public ComparesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
@@ -131,7 +131,12 @@ namespace Ml.Cli.WebApp.Controllers
             var filesList = new List<string>();
             foreach (var path in paths)
             {
-                foreach (var filePath in _fileLoader.EnumerateFiles(path))
+                var tempPath = path;
+                if (!Path.IsPathFullyQualified(path))
+                {
+                    tempPath = Path.Combine(_basePath.Path, path);
+                }
+                foreach (var filePath in _fileLoader.EnumerateFiles(tempPath))
                 {
                     if (Path.GetExtension(filePath) == ".json")
                     {

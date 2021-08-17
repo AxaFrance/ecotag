@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Paths;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Controllers
@@ -15,9 +15,9 @@ namespace Ml.Cli.WebApp.Controllers
     public class DatasetsController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
-        private readonly IBasePath _basePath;
+        private readonly BasePath _basePath;
 
-        public DatasetsController(IFileLoader fileLoader, IBasePath basePath)
+        public DatasetsController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
