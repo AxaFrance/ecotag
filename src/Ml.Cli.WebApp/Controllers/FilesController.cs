@@ -29,6 +29,7 @@ namespace Ml.Cli.WebApp.Controllers
         public async Task<IActionResult> ShowFile(string id)
         {
             var elementPath = HttpUtility.ParseQueryString(id).Get("value");
+            elementPath = elementPath.Replace("%2B", "+");    //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
             if (!_basePath.IsPathSecure(elementPath) && !_comparesPaths.IsPathContained(elementPath))
             {
                 return BadRequest();
