@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.Paths
             Path = path;
         }
 
-        public bool IsPathSecure(string path)
+        public virtual bool IsPathSecure(string path)
         {
             if (path == null)
             {

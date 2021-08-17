@@ -30,7 +30,7 @@ namespace Ml.Cli.WebApp.Tests
             fileLoader.Setup(foo => foo.ReadAllTextInFileAsync("someFolder\\\\compareFile.json")).ReturnsAsync(jsonCompareContent);
             fileLoader.Setup(foo => foo.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", It.IsAny<string>()));
 
-            var basePath = new Mock<BasePath>();
+            var basePath = new Mock<BasePath>("");
             basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
             
             var comparesPath = new ComparesPaths("");
@@ -49,7 +49,7 @@ namespace Ml.Cli.WebApp.Tests
         [Fact]
         public async Task ShouldGetJsonFiles()
         {
-            var basePath = new Mock<BasePath>();
+            var basePath = new Mock<BasePath>("");
             basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
             var fileLoader = new Mock<IFileLoader>();
             fileLoader.Setup(foo => foo.EnumerateFiles("someFolder\\\\comparesFolder1"))
