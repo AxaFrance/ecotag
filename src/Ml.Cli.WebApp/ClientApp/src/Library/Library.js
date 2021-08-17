@@ -30,18 +30,19 @@ const Library = ({fetchFunction, onPlayClick}) => {
     const tick = () => {
         getFiles(fetchFunction)
             .then(files => {
-                    const newFiles = files.map(file => decodeURIComponent(file.replace(/\+/g, ' ')));
-                    setState({files: newFiles});
+                    setState({files: files});
                 }
             );
     };
 
     const getFileName = filePath => {
-        return filePath.replace(/^.*[\\\/]/, '');
+        const file = decodeURIComponent(filePath.replace(/\+/g, ' '));
+        return file.replace(/^.*[\\\/]/, '');
     };
     
     const loadSelectedFile = async e => {
-        const value = e
+        const fileName = decodeURIComponent(e.replace(/\+/g, ' '));
+        const value = fileName
             .slice(17)
             .replace(/\+/g,'%2B');  //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
         const params = {
