@@ -30,7 +30,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
     const tick = () => {
         getFiles(fetchFunction)
             .then(files => {
-                    setState({files: files});
+                    setState({files});
                 }
             );
     };
@@ -40,8 +40,8 @@ const Library = ({fetchFunction, onPlayClick}) => {
         return file.replace(/^.*[\\\/]/, '');
     };
     
-    const loadSelectedFile = async e => {
-        const fileName = decodeURIComponent(e.replace(/\+/g, ' '));
+    const loadSelectedFile = async file => {
+        const fileName = decodeURIComponent(file.replace(/\+/g, ' '));
         const value = fileName
             .slice(17)
             .replace(/\+/g,'%2B');  //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
@@ -51,7 +51,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
         const data = await fetchGetData(fetchFunction)(params, "api/files");
         if(data.status === 200){
             const dataContent = await data.json();
-            onPlayClick(dataContent, getFileName(e));
+            onPlayClick(dataContent, getFileName(file));
         }
     }
 
