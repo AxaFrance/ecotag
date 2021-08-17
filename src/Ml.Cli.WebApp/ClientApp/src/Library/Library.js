@@ -30,24 +30,29 @@ const Library = ({fetchFunction, onPlayClick}) => {
     const tick = () => {
         getFiles(fetchFunction)
             .then(files => {
-                    const newFiles = files.map(file => decodeURIComponent(file.replace(/\+/g, ' ')));
-                    setState({files: newFiles});
+                    setState({files});
                 }
             );
     };
 
     const getFileName = filePath => {
-        return filePath.replace(/^.*[\\\/]/, '');
+        const fileName = decodeURIComponent(filePath.replace(/\+/g, ' '));
+        return fileName.replace(/^.*[\\\/]/, '');
     };
     
-    const loadSelectedFile = async file => {
-        const value = file
+    const fetchFileContent = async file => {
+        const fileName = decodeURIComponent(file.replace(/\+/g, ' '));
+        const value = fileName
             .slice(17)
             .replace(/\+/g,'%2B');  //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
         const params = {
             value: encodeURI(value)
-        }
-        const data = await fetchGetData(fetchFunction)(params, "api/files");
+        };
+        return await fetchGetData(fetchFunction)(params, "api/files");
+    }
+    
+    const loadSelectedFile = async file => {
+        const data = fetchFileContent(file);
         if(data.status === 200){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));
@@ -64,7 +69,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
                 {state.files.map((file, index) => {
                     return (
                         <div key={index} className="library__file">
-                            <a href={``} download={file}>
+                            <a href={`${file}`} download={getFileName(file)}>
                                 {getFileName(file)}
                             </a>
                             <span
