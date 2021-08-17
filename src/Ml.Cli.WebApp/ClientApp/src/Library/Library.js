@@ -40,7 +40,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
         return fileName.replace(/^.*[\\\/]/, '');
     };
     
-    const fetchFileContent = async file => {
+    const loadSelectedFile = async file => {
         const fileName = decodeURIComponent(file.replace(/\+/g, ' '));
         const value = fileName
             .slice(17)
@@ -48,11 +48,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
         const params = {
             value: encodeURI(value)
         };
-        return await fetchGetData(fetchFunction)(params, "api/files");
-    }
-    
-    const loadSelectedFile = async file => {
-        const data = fetchFileContent(file);
+        const data = await fetchGetData(fetchFunction)(params, "api/files");
         if(data.status === 200){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));
