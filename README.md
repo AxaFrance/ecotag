@@ -61,7 +61,7 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
+dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths ..\..\demo\licenses\output
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 
@@ -95,10 +95,10 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
+Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths ..\..\demo\licenses\output
 
 # Run on Mac 
-Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo
+Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths ../../demo/licenses/output
 ```
 
 # How it works
