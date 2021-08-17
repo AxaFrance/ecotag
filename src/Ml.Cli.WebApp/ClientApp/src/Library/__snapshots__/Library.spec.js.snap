@@ -17,8 +17,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-1.json"
-          href=""
+          download="compare-licenses-file-1.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-1.json"
         >
           compare-licenses-file-1.json
         </a>
@@ -30,8 +30,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-2.json"
-          href=""
+          download="compare-licenses-file-2.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-2.json"
         >
           compare-licenses-file-2.json
         </a>
@@ -43,8 +43,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-3.json"
-          href=""
+          download="compare-licenses-file-3.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-3.json"
         >
           compare-licenses-file-3.json
         </a>
@@ -56,8 +56,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-4.json"
-          href=""
+          download="compare-licenses-file-4.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-4.json"
         >
           compare-licenses-file-4.json
         </a>
@@ -69,8 +69,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-5.json"
-          href=""
+          download="compare-licenses-file-5.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-5.json"
         >
           compare-licenses-file-5.json
         </a>
@@ -82,8 +82,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-6.json"
-          href=""
+          download="compare-licenses-file-6.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-6.json"
         >
           compare-licenses-file-6.json
         </a>
@@ -95,8 +95,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-7.json"
-          href=""
+          download="compare-licenses-file-7.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-7.json"
         >
           compare-licenses-file-7.json
         </a>
@@ -108,8 +108,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-8.json"
-          href=""
+          download="compare-licenses-file-8.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-8.json"
         >
           compare-licenses-file-8.json
         </a>
@@ -121,8 +121,8 @@ exports[`Check Library component behavior and display Should have correct displa
         class="library__file"
       >
         <a
-          download="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-9.json"
-          href=""
+          download="compare-licenses-file-9.json"
+          href="/api/files/value=C%3A%5CsomeFolder%5Ccompare-licenses-file-9.json"
         >
           compare-licenses-file-9.json
         </a>
