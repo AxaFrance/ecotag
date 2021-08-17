@@ -114,8 +114,8 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
           class="library__file"
         >
           <a
-            download="/api/files/value=C%3A%5C%5CimageLocation"
-            href=""
+            download="imageLocation"
+            href="/api/files/value=C%3A%5C%5CimageLocation"
           >
             imageLocation
           </a>

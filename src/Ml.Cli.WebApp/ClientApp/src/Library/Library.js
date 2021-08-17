@@ -44,7 +44,8 @@ const Library = ({fetchFunction, onPlayClick}) => {
         const fileName = decodeURIComponent(file.replace(/\+/g, ' '));
         const value = fileName
             .slice(17)
-            .replace(/\+/g,'%2B');  //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
+            //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
+            .replace(/\+/g,'%2B');
         const params = {
             value: encodeURI(value)
         };
