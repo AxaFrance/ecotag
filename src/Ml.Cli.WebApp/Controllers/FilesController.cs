@@ -25,7 +25,7 @@ namespace Ml.Cli.WebApp.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ShowFile(string id)
         {
             var elementPath = HttpUtility.ParseQueryString(id).Get("value");

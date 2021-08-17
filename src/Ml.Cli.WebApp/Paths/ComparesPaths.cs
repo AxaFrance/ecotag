@@ -1,4 +1,6 @@
-﻿namespace Ml.Cli.WebApp.Paths
+﻿using System.Linq;
+
+namespace Ml.Cli.WebApp.Paths
 {
     public class ComparesPaths
     {
@@ -8,18 +10,8 @@
             Paths = comparesPaths;
         }
 
-        public bool IsPathContained(string filePath)
-        {
-            var paths = Paths.Split(',');
-            foreach (var path in paths)
-            {
-                if (filePath.Contains(path))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public bool IsPathContained(string filePath) => Paths
+                .Split(',')
+                .Any(filePath.Contains);
     }
 }

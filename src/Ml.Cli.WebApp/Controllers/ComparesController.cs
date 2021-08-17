@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -120,7 +121,7 @@ namespace Ml.Cli.WebApp.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFiles()
         {
             if (_comparesPaths.Paths == "")
@@ -128,24 +129,10 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest("Compare repositories paths unspecified.");
             }
             var paths = _comparesPaths.Paths.Split(",");
-            var filesList = new List<string>();
-            foreach (var path in paths)
-            {
-                var tempPath = path;
-                if (!Path.IsPathFullyQualified(path))
-                {
-                    tempPath = Path.Combine(_basePath.Path, path);
-                }
-                foreach (var filePath in _fileLoader.EnumerateFiles(tempPath))
-                {
-                    if (Path.GetExtension(filePath) == ".json")
-                    {
-                        filesList.Add(filePath);
-                    }
-                }
-            }
-
-            return Ok(filesList);
+            var fullyQualifiedPaths = paths.Select(path => Path.IsPathFullyQualified(path) ? path : Path.Combine(_basePath.Path, path));
+            var filesList = fullyQualifiedPaths.SelectMany(path => _fileLoader.EnumerateFiles(path));
+            var jsonList = filesList.Where(file => Path.GetExtension(file) == ".json");
+            return Ok(jsonList);
         }
 
         [HttpPost("save")]
