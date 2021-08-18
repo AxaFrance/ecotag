@@ -27,11 +27,11 @@ namespace Ml.Cli.WebApp.Tests
             );
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.ReadAllTextInFileAsync("someFolder\\\\compareFile.json")).ReturnsAsync(jsonCompareContent);
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync("someFolder\\\\compareFile.json")).ReturnsAsync(jsonCompareContent);
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", It.IsAny<string>()));
 
             var basePath = new Mock<BasePath>("");
-            basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
+            basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             
             var comparesPath = new ComparesPaths("");
 
@@ -50,11 +50,11 @@ namespace Ml.Cli.WebApp.Tests
         public async Task ShouldGetJsonFiles()
         {
             var basePath = new Mock<BasePath>("");
-            basePath.Setup(foo => foo.IsPathSecure(It.IsAny<string>())).Returns(true);
+            basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.EnumerateFiles("someFolder\\\\comparesFolder1"))
+            fileLoader.Setup(mock => mock.EnumerateFiles("someFolder\\\\comparesFolder1"))
                 .Returns(new[] {"file1.json", "file2.png", "file3.json"});
-            fileLoader.Setup(foo => foo.EnumerateFiles("someFolder\\\\comparesFolder2"))
+            fileLoader.Setup(mock => mock.EnumerateFiles("someFolder\\\\comparesFolder2"))
                 .Returns(new[] {"file4.png", "file5.pdf"});
             var comparesPath = new ComparesPaths("someFolder\\\\comparesFolder1,someFolder\\\\comparesFolder2");
             
