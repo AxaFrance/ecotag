@@ -124,16 +124,17 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFiles()
         {
+            var jsonExtension = ".json";
             if (_comparesPaths.Paths == string.Empty)
             {
-                return BadRequest(Constants.ErrorMessages.ComparesPathsArgumentError);
+                return BadRequest("Compare repositories paths is unspecified.");
             }
-            var paths = _comparesPaths.Paths.Split(Constants.Separators.CommaSeparator);
+            var paths = _comparesPaths.Paths.Split(Separators.CommaSeparator);
             var fullyQualifiedPaths = paths.Select(path => Path.IsPathFullyQualified(path) ? path : Path.Combine(_basePath.Path, path));
             
             var jsonsList = fullyQualifiedPaths
                 .SelectMany(path => _fileLoader.EnumerateFiles(path))
-                .Where(file => Path.GetExtension(file) == Constants.Extensions.JsonExtension);
+                .Where(file => Path.GetExtension(file) == jsonExtension);
             return Ok(jsonsList);
         }
 

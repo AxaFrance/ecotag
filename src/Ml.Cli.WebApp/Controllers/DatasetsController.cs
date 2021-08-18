@@ -28,11 +28,13 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFilesFromFileName(string urlContent)
         {
+            var nullString = "null";
+            
             var tempUrlContent = Uri.UnescapeDataString(urlContent);
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
 
-            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty || urlContentArray[2] == Constants.StringContent.NullString)
+            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty || urlContentArray[2] == nullString)
             {
                 return BadRequest();
             }
@@ -44,7 +46,7 @@ namespace Ml.Cli.WebApp.Controllers
 
             var fileName = urlContentArray[0].Replace("fileName=", string.Empty);
 
-            var tempStringsMatcherArray = urlContentArray[1].Split(Constants.Separators.CommaSeparator);
+            var tempStringsMatcherArray = urlContentArray[1].Split(Separators.CommaSeparator);
             var stringsArray = new List<string>();
             foreach (var regex in tempStringsMatcherArray)
             {
@@ -67,8 +69,8 @@ namespace Ml.Cli.WebApp.Controllers
                 {
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var currentFile = Path.GetFileNameWithoutExtension(file);
-                    var currentFileIndex = currentFile.LastIndexOf(Constants.Separators.DotSeparator, StringComparison.Ordinal);
-                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, Constants.Separators.UnderscoreSeparator);
+                    var currentFileIndex = currentFile.LastIndexOf(Separators.DotSeparator, StringComparison.Ordinal);
+                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, Separators.UnderscoreSeparator);
 
                     if (currentFileFormatted.Equals(fileNameWithoutExtension) &&
                         JobApiCall.ApiCallFiles.IsStringsArrayMatch(file, stringsArray.ToArray()))

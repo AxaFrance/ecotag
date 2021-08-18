@@ -42,7 +42,7 @@ namespace Ml.Cli.WebApp
                 var comparesValue = comparesPaths.Value();
                 if (baseValue == null)
                 {
-                    Console.WriteLine(Constants.ErrorMessages.BasePathArgumentError);
+                    Console.WriteLine("The base path argument is unspecified.");
                     app.ShowHelp();
                     return -1;
                 }
