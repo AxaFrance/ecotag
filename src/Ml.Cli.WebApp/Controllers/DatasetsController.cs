@@ -32,7 +32,7 @@ namespace Ml.Cli.WebApp.Controllers
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
 
-            if (urlContentArray[0] == "" || urlContentArray[2] == "" || urlContentArray[2] == "null")
+            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty || urlContentArray[2] == Constants.StringContent.NullString)
             {
                 return BadRequest();
             }
@@ -42,9 +42,9 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest();
             }
 
-            var fileName = urlContentArray[0].Replace("fileName=", "");
+            var fileName = urlContentArray[0].Replace("fileName=", string.Empty);
 
-            var tempStringsMatcherArray = urlContentArray[1].Split(",");
+            var tempStringsMatcherArray = urlContentArray[1].Split(Constants.Separators.CommaSeparator);
             var stringsArray = new List<string>();
             foreach (var regex in tempStringsMatcherArray)
             {
@@ -67,8 +67,8 @@ namespace Ml.Cli.WebApp.Controllers
                 {
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var currentFile = Path.GetFileNameWithoutExtension(file);
-                    var currentFileIndex = currentFile.LastIndexOf(".", StringComparison.Ordinal);
-                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, "_");
+                    var currentFileIndex = currentFile.LastIndexOf(Constants.Separators.DotSeparator, StringComparison.Ordinal);
+                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, Constants.Separators.UnderscoreSeparator);
 
                     if (currentFileFormatted.Equals(fileNameWithoutExtension) &&
                         JobApiCall.ApiCallFiles.IsStringsArrayMatch(file, stringsArray.ToArray()))
