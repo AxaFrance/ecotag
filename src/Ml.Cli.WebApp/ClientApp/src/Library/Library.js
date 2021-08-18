@@ -3,6 +3,7 @@ import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
 import {fetchGetData} from "../FetchHelper";
 import {getDataPaths} from "../Comparison/ImagesLoader";
 import './Library.scss';
+import {Integers, Regex, StatusCodes, StringContent, StringEncoding} from "../Constants";
 
 const getFiles = async fetchFunction => {
     const fetchResult = await fetchGetData(fetchFunction)({}, "api/compares");
@@ -36,21 +37,21 @@ const Library = ({fetchFunction, onPlayClick}) => {
     };
 
     const getFileName = filePath => {
-        const fileName = decodeURIComponent(filePath.replace(/\+/g, ' '));
-        return fileName.replace(/^.*[\\\/]/, '');
+        const fileName = decodeURIComponent(filePath.replace(Regex.PLUS, StringContent.SPACE));
+        return fileName.replace(Regex.SLASHES, StringContent.EMPTY);
     };
     
     const loadSelectedFile = async file => {
-        const fileName = decodeURIComponent(file.replace(/\+/g, ' '));
+        const fileName = decodeURIComponent(file.replace(Regex.PLUS, StringContent.SPACE));
         const value = fileName
-            .slice(17)
+            .slice(Integers.API_ROUTE_LENGTH)
             //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
-            .replace(/\+/g,'%2B');
+            .replace(Regex.PLUS,StringEncoding.PLUS);
         const params = {
             value: encodeURI(value)
         };
         const data = await fetchGetData(fetchFunction)(params, "api/files");
-        if(data.status === 200){
+        if(data.status === StatusCodes.OK){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));
         }
