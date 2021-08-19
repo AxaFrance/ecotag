@@ -130,7 +130,7 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest("Compare repositories paths is unspecified.");
             }
             var paths = _comparesPaths.Paths.Split(Separators.CommaSeparator);
-            var fullyQualifiedPaths = paths.Select(path => Path.IsPathFullyQualified(path) ? path : Path.Combine(_basePath.Path, path));
+            var fullyQualifiedPaths = paths.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(_basePath.Path, path));
             
             var jsonsList = fullyQualifiedPaths
                 .SelectMany(path => _fileLoader.EnumerateFiles(path))
