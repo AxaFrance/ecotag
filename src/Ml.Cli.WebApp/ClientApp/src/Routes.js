@@ -14,13 +14,13 @@ export const Routes = ({fetch}) => {
             <Route exact path="/">
                 <Home/>
             </Route>
-            <Route exact path="/compare">
+            <Route exact path="/ml-cli/compare">
                 <Compare
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetch}
                 />
             </Route>
-            <Route exact path="/annotate">
+            <Route exact path="/ml-cli/annotate">
                 <Annotate
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetch}
