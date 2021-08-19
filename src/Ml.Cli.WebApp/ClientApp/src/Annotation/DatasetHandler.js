@@ -10,6 +10,7 @@ const mapDatasetItems = data => data.map(item => {
         fileName: item.FileName,
         fileDirectory: item.FileDirectory,
         imageDirectory: item.ImageDirectory,
+        frontDefaultStringsMatcher: item.FrontDefaultStringsMatcher,
         annotations: item.Annotations
     };
 });

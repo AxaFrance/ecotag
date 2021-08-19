@@ -24,7 +24,7 @@ const fetchImages = async data => {
 const getImages = (fetchFunction) => async (item) => {
     const params = {
         fileName: item.fileName,
-        stringsMatcher: "",
+        stringsMatcher: item.frontDefaultStringsMatcher,
         directory: item.imageDirectory
     };
     const fetchResult = await fetchGetData(fetchFunction)(params, "api/datasets");
