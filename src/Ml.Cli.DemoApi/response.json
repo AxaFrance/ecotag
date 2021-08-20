@@ -9,6 +9,18 @@
           "status": "OK",
           "status_reason": null,
           "url_file_new_verso_zone": "${api-url}files/url_file_new_recto_zone.png",
+          "output_new_verso_zone": [
+            {
+              "label": "Date",
+              "confidence":  93.52,
+              "coordinates": {
+                "xmax": 135,
+                "xmin": 25,
+                "ymax": 30,
+                "ymin": 5
+              }
+            }
+          ],
           "url_file_new_verso_orientation": "${api-url}files/url_file_new_verso_orientation.png",
           "url_file_new_verso_rotation": "${api-url}files/url_file_new_verso_rotation.png",
           "license_delivery_country": "France",
