@@ -34,7 +34,7 @@ namespace Ml.Cli.WebApp.Controllers
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
 
-            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty || urlContentArray[2] == nullString)
+            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty)
             {
                 return BadRequest();
             }
