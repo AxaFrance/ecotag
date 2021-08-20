@@ -1,9 +1,8 @@
 ﻿import React from "react";
-import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
+import {Header, Name, Title} from "@axa-fr/react-toolkit-layout-header";
 import {Link} from 'react-router-dom';
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import './Home.scss';
-import Title from "@axa-fr/react-toolkit-layout-header/dist/Title/Title";
 
 const Home = () => (
     <div className="home">
