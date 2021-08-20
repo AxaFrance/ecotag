@@ -30,6 +30,7 @@ namespace Ml.Cli.JobDataset
                     ? await ScriptManager.ExecScript(filePath, inputTask.Script, _fileLoader)
                     : string.Empty;
                 var datasetResult = new DatasetResult(fileName, inputTask.FileDirectory, inputTask.ImageDirectory,
+                    inputTask.FrontDefaultStringsMatcher,
                     annotations);
                 datasetResults.Add(datasetResult);
             }

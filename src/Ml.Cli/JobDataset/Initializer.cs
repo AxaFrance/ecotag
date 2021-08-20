@@ -11,8 +11,13 @@ namespace Ml.Cli.JobDataset
         {
             var isScriptDefined = jObject.Property("script", StringComparison.Ordinal) != null;
             var isConfigurationDefined = jObject.Property("configuration", StringComparison.Ordinal) != null;
-            var script = isScriptDefined ? (string) jObject.Property("script") : "";
-            var configuration = isConfigurationDefined ? (string) jObject.Property("configuration") : "";
+            var script = isScriptDefined ? (string) jObject.Property("script") : string.Empty;
+            var configuration = isConfigurationDefined ? (string) jObject.Property("configuration") : string.Empty;
+            var frontDefaultStringMatcher =
+                jObject.Property("frontDefaultStringsMatcher", StringComparison.Ordinal) != null;
+            var frontDefaultStringsMatcherResult = frontDefaultStringMatcher
+                ? (string) jObject.Property("frontDefaultStringsMatcher")
+                : string.Empty;
             return new DatasetTask(
                 taskId,
                 type,
@@ -25,6 +30,7 @@ namespace Ml.Cli.JobDataset
                     pathValidatorHelper),
                 PropertyHelper.SetProperty(jObject, "outputDirectory", isBaseDirectoryValid, baseDirectory, taskId,
                     pathValidatorHelper),
+                frontDefaultStringsMatcherResult,
                 (string) jObject.Property("fileName"),
                 script
             );

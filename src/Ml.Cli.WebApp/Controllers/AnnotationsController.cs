@@ -28,6 +28,7 @@ namespace Ml.Cli.WebApp.Controllers
             public string FileName { get; set; }
             public string FileDirectory { get; set; }
             public string ImageDirectory { get; set; }
+            public string FrontDefaultStringsMatcher { get; set; }
             public string Annotations { get; set; }
         }
 
