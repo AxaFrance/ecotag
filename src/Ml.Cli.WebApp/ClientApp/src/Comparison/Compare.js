@@ -1,10 +1,11 @@
 ﻿import React, {useState} from "react";
-import {Header, Name, Title} from "@axa-fr/react-toolkit-layout-header";
+import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
 import TableResult from "./TableResult";
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import './Compare.scss';
 import {QueryClient, QueryClientProvider} from "react-query";
 import FileTreatment from "../FileTreatment/FileTreatment";
+import TitleBar from "../TitleBar/TitleBar";
 
 const queryClient = new QueryClient();
 
@@ -64,7 +65,7 @@ try {
                     alt="Logo AXA"
                 />
             </Header>
-            <Title
+            <TitleBar
                 title={state.fileName === "Comparer un fichier JSON" ? state.fileName : "Fichier en cours de visualisation : " + state.fileName}/>
             <FileTreatment state={state} setState={setState} MonacoEditor={MonacoEditor}/>
             {state.items.length > 0 &&
