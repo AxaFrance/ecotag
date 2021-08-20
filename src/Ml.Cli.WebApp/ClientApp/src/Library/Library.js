@@ -16,8 +16,8 @@ export const StringContent = {
 
 const API_ROUTE_LENGTH = 17;
 
-const getFiles = async fetchFunction => {
-    const fetchResult = await fetchGetData(fetchFunction)({}, "api/compares");
+const getFiles = async (fetchFunction) => {
+    const fetchResult = await fetchGetData(fetchFunction)({}, "api/files");
     return await getDataPaths(fetchResult);
 }
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -73,13 +71,11 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly ComparesPaths _comparesPaths;
 
-        public ComparesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths)
+        public ComparesController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _comparesPaths = comparesPaths;
         }
 
         private static EditorContent ReformatEditorContent(EditorContent data)
@@ -117,25 +113,6 @@ namespace Ml.Cli.WebApp.Controllers
             var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
             await _fileLoader.WriteAllTextInFileAsync(data.CompareLocation, result);
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFiles()
-        {
-            var jsonExtension = ".json";
-            if (_comparesPaths.Paths == string.Empty)
-            {
-                return BadRequest("Compare repositories paths is unspecified.");
-            }
-            var paths = _comparesPaths.Paths.Split(Separators.CommaSeparator);
-            var fullyQualifiedPaths = paths.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(_basePath.Path, path));
-            
-            var jsonsList = fullyQualifiedPaths
-                .SelectMany(path => _fileLoader.EnumerateFiles(path))
-                .Where(file => Path.GetExtension(file) == jsonExtension);
-            return Ok(jsonsList);
         }
 
         [HttpPost("save")]
