@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace Ml.Cli.WebApp.BasePath
+namespace Ml.Cli.WebApp.Paths
 {
-    public class BasePath: IBasePath
+    public class BasePath
     {
         public string Path { get; }
 
@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.BasePath
             Path = path;
         }
 
-        public bool IsPathSecure(string path)
+        public virtual bool IsPathSecure(string path)
         {
             if (path == null)
             {

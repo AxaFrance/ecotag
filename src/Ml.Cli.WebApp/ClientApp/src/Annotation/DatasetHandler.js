@@ -15,16 +15,15 @@ const mapDatasetItems = data => data.map(item => {
     };
 });
 
-const DatasetHandler = ({state, setState}) => {
+const DatasetHandler = ({state, setState, fetchFunction}) => {
 
     const [handlerState, setHandlerState] = useState({
         loadFileError: false
     });
 
-    const loadFile = (reader, e) => {
-        const result = JSON.parse(reader.result);
+    const loadFile = (result, fileName) => {
         if (!result.hasOwnProperty('DatasetLocation')) {
-            onLoadFailure(e);
+            onLoadFailure(fileName);
         } else {
             const mappedItems = mapDatasetItems(result.Content);
             const location = result.DatasetLocation;
@@ -33,13 +32,13 @@ const DatasetHandler = ({state, setState}) => {
             if(result.Configuration !== ""){
                 fileConfiguration = JSON.parse(result.Configuration);
             }
-            setState({...state, fileName: e.values[0].file.name, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems});
+            setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems});
             setHandlerState({...state, loadFileError: false});
         }
     };
 
-    const onLoadFailure = e => {
-        setState({...state, fileName: e.values[0].file.name, items: []});
+    const onLoadFailure = fileName => {
+        setState({...state, fileName: fileName, items: []});
         setHandlerState({...state, loadFileError: true});
     };
 
@@ -51,6 +50,7 @@ const DatasetHandler = ({state, setState}) => {
                 accept="application/json"
                 onLoad={(reader, e) => loadFile(reader, e)}
                 onFailure={e => onLoadFailure(e)}
+                fetchFunction={fetchFunction}
             />
             {handlerState.loadFileError &&
             <h2 className="error-message">

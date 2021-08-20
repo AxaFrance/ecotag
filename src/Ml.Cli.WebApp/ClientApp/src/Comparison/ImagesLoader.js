@@ -2,7 +2,7 @@
 import {fetchGetData} from "../FetchHelper";
 import JsonEditorContainer from "../Annotation/Toolkit/JsonEditor/JsonEditor.container";
 
-const fetchImages = async data => {
+export const getDataPaths = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
@@ -22,7 +22,7 @@ export const getImages = async (item, stringsMatcher, direction, fetchFunction) 
         directory: (direction === "left" ? item.left.ImageDirectory : item.right.ImageDirectory)
     };
     const fetchResult = await fetchGetData(fetchFunction)(params, "api/datasets");
-    return fetchImages(fetchResult);
+    return getDataPaths(fetchResult);
 };
 
 const ImagesLoader = ({item, stringsMatcher, direction, fetchFunction, expectedOutput, onSubmit, MonacoEditor}) => {

@@ -30,7 +30,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
             </Header>
             <TitleBar
                 title={state.fileName === "Annoter un dataset" ? state.fileName : `Fichier en cours de visualisation : ${state.fileName}`}/>
-            <DatasetHandler state={state} setState={setState}/>
+            <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
             {state.items.length > 0 &&
             <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
             }

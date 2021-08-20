@@ -4,7 +4,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Paths;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,9 +15,9 @@ namespace Ml.Cli.WebApp.Controllers
     public class AnnotationsController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
-        private readonly IBasePath _basePath;
+        private readonly BasePath _basePath;
 
-        public AnnotationsController(IFileLoader fileLoader, IBasePath basePath)
+        public AnnotationsController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;

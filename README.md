@@ -61,7 +61,7 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
+dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\output
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 
@@ -74,6 +74,8 @@ As you can see, ML-Cli can use several parameters:
  - Optional
      - **Tasks file path** : called with "-t <VALUE>" or "--tasks-path <VALUE>". Defines the path of the tasks.json file, which describes the tasks to execute. If not provided, the webapp will start, but not the batch.
      - **Security path** : called with "-s <VALUE>" or "--security-path <VALUE>". Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.  
+     - **Compares paths**: called with "-c <VALUE>" or "--compares-paths <VALUE>". Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'.
+         - The compares paths can be relative, and will be completed by using the base directory path. Please note that if "No file found" appears on the webapp page but you provided compare paths, it probably means that the "base directory path"/"compare path" combination provided an incorrect path.
  - Other
      - **Help**: called with "-?", "-h" or "--help", it provides a description of all parameters directly in the terminal.
 
@@ -94,10 +96,10 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo
+Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
-Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo
+Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
 # How it works

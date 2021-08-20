@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Paths;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Controllers
@@ -15,9 +15,9 @@ namespace Ml.Cli.WebApp.Controllers
     public class DatasetsController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;
-        private readonly IBasePath _basePath;
+        private readonly BasePath _basePath;
 
-        public DatasetsController(IFileLoader fileLoader, IBasePath basePath)
+        public DatasetsController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
@@ -32,7 +32,7 @@ namespace Ml.Cli.WebApp.Controllers
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
 
-            if (urlContentArray[0] == "" || urlContentArray[2] == "" || urlContentArray[2] == "null")
+            if (urlContentArray[0] == string.Empty || urlContentArray[2] == string.Empty)
             {
                 return BadRequest();
             }
@@ -42,9 +42,9 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest();
             }
 
-            var fileName = urlContentArray[0].Replace("fileName=", "");
+            var fileName = urlContentArray[0].Replace("fileName=", string.Empty);
 
-            var tempStringsMatcherArray = urlContentArray[1].Split(",");
+            var tempStringsMatcherArray = urlContentArray[1].Split(Separators.CommaSeparator);
             var stringsArray = new List<string>();
             foreach (var regex in tempStringsMatcherArray)
             {
@@ -67,8 +67,8 @@ namespace Ml.Cli.WebApp.Controllers
                 {
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var currentFile = Path.GetFileNameWithoutExtension(file);
-                    var currentFileIndex = currentFile.LastIndexOf(".", StringComparison.Ordinal);
-                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, "_");
+                    var currentFileIndex = currentFile.LastIndexOf(Separators.DotSeparator, StringComparison.Ordinal);
+                    var currentFileFormatted = currentFile.Remove(currentFileIndex, 1).Insert(currentFileIndex, Separators.UnderscoreSeparator);
 
                     if (currentFileFormatted.Equals(fileNameWithoutExtension) &&
                         JobApiCall.ApiCallFiles.IsStringsArrayMatch(file, stringsArray.ToArray()))

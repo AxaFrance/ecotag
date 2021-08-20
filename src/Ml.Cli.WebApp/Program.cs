@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ml.Cli.WebApp.BasePath;
+using Ml.Cli.WebApp.Paths;
 
 namespace Ml.Cli.WebApp
 {
@@ -31,11 +31,15 @@ namespace Ml.Cli.WebApp
             var securityPath = app.Option("-s|--security-path <VALUE>",
                 "[Optional] - Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.",
                 CommandOptionType.SingleValue);
+            var comparesPaths = app.Option("-c|--compares-paths <VALUE>",
+                "[Optional] - Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'. The compares paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided compare paths, it probably means that the 'base directory path'/'compare path' combination provided an incorrect path.",
+                CommandOptionType.SingleValue);
 
             app.OnExecute(async () =>
             {
                 var tasksValue = tasksPath.Value();
                 var baseValue = basePath.Value();
+                var comparesValue = comparesPaths.Value();
                 if (baseValue == null)
                 {
                     Console.WriteLine("The base path argument is unspecified.");
@@ -43,7 +47,7 @@ namespace Ml.Cli.WebApp
                     return -1;
                 }
 
-                var securityValue = securityPath.Value() == null ? baseValue : securityPath.Value();
+                var securityValue = securityPath.Value()?? baseValue;
                 if (!securityValue.EndsWith(Path.DirectorySeparatorChar))
                 {
                     securityValue += Path.DirectorySeparatorChar;
@@ -53,12 +57,14 @@ namespace Ml.Cli.WebApp
                 {
                     "-s",
                     securityValue,
+                    "-c",
+                    comparesValue ?? string.Empty,
                     "-t",
-                    tasksValue,
+                    tasksValue ?? string.Empty,
                     "-b",
                     baseValue
                 };
-                
+
                 var builder = CreateHostBuilder(providedArgs).Build();
                 await builder.RunAsync();
                 return 0;
@@ -80,8 +86,9 @@ namespace Ml.Cli.WebApp
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IHostedService>(provider =>
-                        new Worker(args.Skip(2).ToArray()));
-                    services.AddSingleton<IBasePath, BasePath.BasePath>(provider => new BasePath.BasePath(args[1]));
+                        new Worker(args.Skip(4).ToArray()));
+                    services.AddSingleton(provider => new BasePath(args[1]));
+                    services.AddSingleton(provider => new ComparesPaths(args[3]));
                 });
     }
 }

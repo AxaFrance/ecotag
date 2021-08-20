@@ -33,7 +33,7 @@ const timeSideVariables = [
     {value: 'Droite', label: 'Droite'}
 ];
 
-const FileTreatment = ({state, setState, MonacoEditor}) => {
+const FileTreatment = ({state, setState, MonacoEditor, fetchFunction}) => {
 
     const [filterState, setFilterState] = useState({
         filterName: "KO",
@@ -137,11 +137,10 @@ try {
         return result;
     };
 
-    const onLoad = (reader, e) => {
-        const result = JSON.parse(reader.result);
+    const onLoad = (result, fileName) => {
         const isVersion0 = Array.isArray(result);
         if (!result.hasOwnProperty('CompareLocation')) {
-            onLoadFailure(e);
+            onLoadFailure(fileName);
         } else {
             const location = isVersion0 ? "" : result.CompareLocation;
             const mappedItems = mapItems(isVersion0 ? result : result.Content);
@@ -149,7 +148,7 @@ try {
             setState
             ({
                 ...state,
-                fileName: e.values[0].file.name,
+                fileName: fileName,
                 compareLocation: location,
                 items: mappedItems,
                 statusCodes: statusCodeItems
@@ -158,8 +157,8 @@ try {
         }
     };
 
-    const onLoadFailure = e => {
-        setState({...state, fileName: e.values[0].file.name, items: []});
+    const onLoadFailure = fileName => {
+        setState({...state, fileName: fileName, items: []});
         setFilterState({...filterState, loadFileError: true});
     };
 
@@ -191,6 +190,7 @@ try {
                 accept="application/json"
                 onLoad={(reader, e) => onLoad(reader, e)}
                 onFailure={e => onLoadFailure(e)}
+                fetchFunction={fetchFunction}
             />
 
             <div className="tabs">
