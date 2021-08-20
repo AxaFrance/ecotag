@@ -2,13 +2,14 @@
 import '@testing-library/jest-dom';
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import Compare from "./Compare";
+import {BrowserRouter} from "react-router-dom";
 
 const dataSource = (`{"CompareLocation": "C:\\\\location", "Content": [{\"FileName\": \"{FileName}_pdf.json\",\"Left\": {\"Url\": \"https://url\",\"FileName\": \"{FileName}.pdf\",\"FileDirectory\": \"fileDirectoryValue\",\"StatusCode\": 200,\"Body\": \"[{\\\"firstname\\\": \\\"JOHN\\\", \\\"lastname\\\": \\\"DOE\\\", \\\"birthdate\\\": \\\"2021-02-02\\\", \\\"categoryB\\\": \\\"categoryB_value\\\"}]\",\"Headers\": [],\"TimeMs\": 0,\"TicksAt\": 0},\"Right\": {\"Url\": \"https://url\",\"FileName\": \"{FileName}.pdf\",\"FileDirectory\": \"fileDirectoryValue\",\"StatusCode\": 200,\"Body\": \"[{\\\"firstname\\\":\\\"JOHN\\\",\\\"lastname\\\":\\\"DOE\\\",\\\"birthdate\\\":\\\"\\\",\\\"categoryB\\\":null}]\",\"Headers\": [],\"TimeMs\": 28292,\"TicksAt\": 637466461265041729}}]}`);
 
 describe('Check a compare file insertion', () => {
     test('Find table result of KOs after file input and change select state to All', async () => {
         const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
-        const {container, asFragment, getAllByText} = render(<Compare MonacoEditor={MonacoEditor}/>);
+        const {container, asFragment, getAllByText} = render(<BrowserRouter><Compare MonacoEditor={MonacoEditor}/></BrowserRouter>);
 
         const blob = new Blob([dataSource], {type: "text/plain;charset=utf-8"});
         const fileSource = new File([blob], "dataSourceFile.json", {type: "application/json"});
