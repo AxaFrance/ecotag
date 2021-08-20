@@ -28,8 +28,6 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFilesFromFileName(string urlContent)
         {
-            var nullString = "null";
-            
             var tempUrlContent = Uri.UnescapeDataString(urlContent);
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
