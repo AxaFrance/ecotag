@@ -40,11 +40,20 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
     </div>
   </div>
   <div
-    class="af-title-bar"
+    class="af-title-bar af-title-bar--backhome"
   >
     <div
-      class="container af-title-bar__wrapper"
+      class="container-fluid container af-title-bar__wrapper"
     >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Retour à l'accueil"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
       <h1
         class="af-title-bar__title"
       >

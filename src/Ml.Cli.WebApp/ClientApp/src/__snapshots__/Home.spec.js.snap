@@ -123,11 +123,20 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
     </div>
   </div>
   <div
-    class="af-title-bar"
+    class="af-title-bar af-title-bar--backhome"
   >
     <div
-      class="container af-title-bar__wrapper"
+      class="container-fluid container af-title-bar__wrapper"
     >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Retour à l'accueil"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
       <h1
         class="af-title-bar__title"
       >
