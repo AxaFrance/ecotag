@@ -34,12 +34,16 @@ namespace Ml.Cli.WebApp
             var comparesPaths = app.Option("-c|--compares-paths <VALUE>",
                 "[Optional] - Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'. The compares paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided compare paths, it probably means that the 'base directory path'/'compare path' combination provided an incorrect path.",
                 CommandOptionType.SingleValue);
+            var datasetsPaths = app.Option("-d|--datasets-paths <VALUE>",
+                "[Optional] - Defines the repositories that contain datasets files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'. The datasets paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided datasets paths, it probably means that the 'base directory path'/'dataset path' combination provided an incorrect path.",
+                CommandOptionType.SingleValue);
 
             app.OnExecute(async () =>
             {
                 var tasksValue = tasksPath.Value();
                 var baseValue = basePath.Value();
                 var comparesValue = comparesPaths.Value();
+                var datasetsValue = datasetsPaths.Value();
                 if (baseValue == null)
                 {
                     Console.WriteLine("The base path argument is unspecified.");
@@ -59,6 +63,8 @@ namespace Ml.Cli.WebApp
                     securityValue,
                     "-c",
                     comparesValue ?? string.Empty,
+                    "-d",
+                    datasetsValue ?? string.Empty,
                     "-t",
                     tasksValue ?? string.Empty,
                     "-b",
@@ -88,7 +94,7 @@ namespace Ml.Cli.WebApp
                     services.AddSingleton<IHostedService>(provider =>
                         new Worker(args.Skip(4).ToArray()));
                     services.AddSingleton(provider => new BasePath(args[1]));
-                    services.AddSingleton(provider => new ComparesPaths(args[3]));
+                    services.AddSingleton(provider => new FilesPaths(args[3], args[5]));
                 });
     }
 }
