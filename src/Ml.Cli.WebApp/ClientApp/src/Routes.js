@@ -1,4 +1,4 @@
-﻿import {Switch, Route} from 'react-router';
+﻿import {Switch, Route, Redirect} from 'react-router';
 import Home from "./Home";
 import Compare from "./Comparison/Compare";
 import Annotate from "./Annotation/Annotate";
@@ -14,13 +14,13 @@ export const Routes = ({fetch}) => {
             <Route exact path="/">
                 <Home/>
             </Route>
-            <Route exact path="/ml-cli/compare">
+            <Route exact path="/compare">
                 <Compare
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetch}
                 />
             </Route>
-            <Route exact path="/ml-cli/annotate">
+            <Route exact path="/annotate">
                 <Annotate
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetch}

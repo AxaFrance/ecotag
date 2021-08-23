@@ -20,7 +20,7 @@ const EnvironmentProvider = ({ children }) => {
     useEffect(() => {
         const environment = {
             "apiUrl": addEndSlash(window.location.href) + "{path}",
-            "basePath" : window.location.pathname + "ml-cli"
+            "basePath" : window.location.pathname
         };
         setEnvironment({ environment });
         setLoading(false);
