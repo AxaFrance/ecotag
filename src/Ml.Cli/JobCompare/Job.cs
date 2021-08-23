@@ -39,7 +39,7 @@ namespace Ml.Cli.JobCompare
                 }
                 catch (JsonException)
                 {
-                    left = CreateHttpResult(jsonLeft, inputTask.FileName, inputTask.LeftDirectory);
+                    left = CreateHttpResult(jsonLeft, fileName, filePath);
                 }
 
                 var fileRightPath = Path.Combine(inputTask.RightDirectory, fileName);
@@ -62,7 +62,7 @@ namespace Ml.Cli.JobCompare
                 }
                 catch (JsonException)
                 {
-                    right = CreateHttpResult(jsonRight, inputTask.FileName, inputTask.RightDirectory);
+                    right = CreateHttpResult(jsonRight, fileName, fileRightPath);
                 }
 
                 compareResults.Add(new CompareResult
@@ -95,7 +95,7 @@ namespace Ml.Cli.JobCompare
                 Body = body,
                 Headers = new List<KeyValuePair<string, IEnumerable<string>>>(),
                 TimeMs = 0,
-                Url = new Uri(""),
+                Url = null,
                 TicksAt = 0
             };
         }
