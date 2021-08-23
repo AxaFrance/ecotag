@@ -1,4 +1,4 @@
-﻿import {Switch, Route, Redirect} from 'react-router';
+﻿import {Switch, Route} from 'react-router';
 import Home from "./Home";
 import Compare from "./Comparison/Compare";
 import Annotate from "./Annotation/Annotate";
