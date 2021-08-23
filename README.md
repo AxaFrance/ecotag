@@ -76,6 +76,8 @@ As you can see, ML-Cli can use several parameters:
      - **Security path** : called with "-s <VALUE>" or "--security-path <VALUE>". Defines the security directory path. ML-Cli has only access to files inside this directory. If not provided, the security path will be the same as the base directory path.  
      - **Compares paths**: called with "-c <VALUE>" or "--compares-paths <VALUE>". Defines the repositories that contain comparison files that you can download and read from the webapp. To provide several repositories, please read the following example: '-c repository1,repository2'.
          - The compares paths can be relative, and will be completed by using the base directory path. Please note that if "No file found" appears on the webapp page but you provided compare paths, it probably means that the "base directory path"/"compare path" combination provided an incorrect path.
+     - **Datasets paths**: called with "-d <VALUE>" or "--datasets-paths <VALUE>". Defines the repositories that contain dataset files that you can download and read from the webapp. To provide several repositories, please read the following example: '-d repository1,repository2'.
+         - The datasets paths can be relative, and will be completed by using the base directory path. Please note that if "No file found" appears on the webapp page but you provided datasets paths, it probably means that the "base directory path"/"datasets path" combination provided an incorrect path.
  - Other
      - **Help**: called with "-?", "-h" or "--help", it provides a description of all parameters directly in the terminal.
 
