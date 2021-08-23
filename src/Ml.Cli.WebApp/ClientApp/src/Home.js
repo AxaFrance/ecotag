@@ -16,10 +16,10 @@ const Home = () => (
         </Header>
         <Title title="Liste des services"/>
         <div className="home__links-container">
-            <Link className="home__link" to="/ml-cli/compare">
+            <Link className="home__link" to="/compare">
                 <div className="home__link-container home__link-container--compare">Comparaison de services</div>
             </Link>
-            <Link className="home__link" to="/ml-cli/annotate">
+            <Link className="home__link" to="/annotate">
                 <div className="home__link-container home__link-container--annotate">Annotation</div>
             </Link>
         </div>

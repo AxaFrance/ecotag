@@ -15,12 +15,12 @@ export const App = ({environment}) => (
     </BrowserRouter>
 );
 
-const AppWithEnvironement = withEnvironment(App);
+const AppWithEnvironment = withEnvironment(App);
 
 ReactDOM.render(
     <React.StrictMode>
         <EnvironmentProvider>
-            <AppWithEnvironement/>
+            <AppWithEnvironment/>
         </EnvironmentProvider>
     </React.StrictMode>,
     document.getElementById('root')
