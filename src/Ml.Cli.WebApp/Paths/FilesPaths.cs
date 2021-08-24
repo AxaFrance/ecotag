@@ -11,13 +11,9 @@ namespace Ml.Cli.WebApp.Paths
             ComparePaths = comparesComparePaths;
             DatasetPaths = datasetPaths;
         }
-
-        public bool IsPathContained(string filePath, bool isComparePaths) => isComparePaths
-            ? ComparePaths
-                .Split(',')
-                .Any(filePath.Contains)
-            : DatasetPaths
-                .Split(',')
-                .Any(filePath.Contains);
+        
+        public bool ArePathsContained(string filePaths, string pathsList) => pathsList
+            .Split(',')
+            .Any(filePaths.Contains);
     }
 }

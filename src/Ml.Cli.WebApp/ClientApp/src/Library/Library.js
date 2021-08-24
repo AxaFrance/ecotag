@@ -17,7 +17,10 @@ export const StringContent = {
 const API_ROUTE_LENGTH = 17;
 
 const getFiles = async (fetchFunction) => {
-    const fetchResult = await fetchGetData(fetchFunction)({}, "api/files");
+    const url = window.location.href;
+    const fileType = url.split(/[\s/]+/).pop();
+    const controllerPath = "api/" + (fileType === "compare" ? "compares" : "datasets");
+    const fetchResult = await fetchGetData(fetchFunction)({}, controllerPath);
     return await getDataPaths(fetchResult);
 }
 

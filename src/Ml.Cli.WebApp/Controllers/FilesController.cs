@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -25,31 +26,6 @@ namespace Ml.Cli.WebApp.Controllers
             _filesPaths = filesPaths;
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFiles()
-        {
-            var callingUrl = Request.GetTypedHeaders().Referer.ToString();
-            var fileType = callingUrl.Split('/').Last();
-            var paths = fileType == "compare" ? _filesPaths.ComparePaths : _filesPaths.DatasetPaths;
-            if (paths == string.Empty)
-            {
-                return BadRequest($"{fileType} repositories paths is unspecified.");
-            }
-
-            var jsonExtension = ".json";
-            var pathsArray = paths.Split(Separators.CommaSeparator);
-            var fullyQualifiedPaths =
-                pathsArray.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(_basePath.Path, path));
-
-            var jsonsList = fullyQualifiedPaths
-                .SelectMany(_fileLoader.EnumerateFiles)
-                .Where(file => Path.GetExtension(file) == jsonExtension);
-
-            return Ok(jsonsList);
-        }
-
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,10 +36,11 @@ namespace Ml.Cli.WebApp.Controllers
             //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
             elementPath =
                 elementPath.Replace(encodedPlusSign, "+");
-            if (!_basePath.IsPathSecure(elementPath) && !_filesPaths.IsPathContained(elementPath, true) &&
-                !_filesPaths.IsPathContained(elementPath, false))
+            if (!_basePath.IsPathSecure(elementPath) &&
+                !_filesPaths.ArePathsContained(elementPath, _filesPaths.ComparePaths) &&
+                !_filesPaths.ArePathsContained(elementPath, _filesPaths.DatasetPaths))
             {
-                return BadRequest();
+                return BadRequest("Unreachable file.");
             }
 
             var stream = _fileLoader.OpenRead(elementPath);
@@ -83,6 +60,18 @@ namespace Ml.Cli.WebApp.Controllers
             }
 
             return contentType;
+        }
+        
+        public static IEnumerable<string> GetFilesFromPaths(string paths, BasePath basePath, IFileLoader fileLoader)
+        {
+            var jsonExtension = ".json";
+            var pathsArray = paths.Split(Separators.CommaSeparator);
+            var fullyQualifiedPaths =
+                pathsArray.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(basePath.Path, path));
+            
+            return fullyQualifiedPaths
+                .SelectMany(fileLoader.EnumerateFiles)
+                .Where(file => Path.GetExtension(file) == jsonExtension);
         }
     }
 }
