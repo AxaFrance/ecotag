@@ -37,8 +37,8 @@ namespace Ml.Cli.WebApp.Controllers
             elementPath =
                 elementPath.Replace(encodedPlusSign, "+");
             if (!_basePath.IsPathSecure(elementPath) &&
-                !_filesPaths.ArePathsContained(elementPath, _filesPaths.ComparePaths) &&
-                !_filesPaths.ArePathsContained(elementPath, _filesPaths.DatasetPaths))
+                !_filesPaths.IsPathContained(elementPath, _filesPaths.ComparePaths) &&
+                !_filesPaths.IsPathContained(elementPath, _filesPaths.DatasetPaths))
             {
                 return BadRequest("Unreachable file.");
             }

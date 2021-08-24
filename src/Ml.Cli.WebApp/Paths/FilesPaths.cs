@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.Paths
             DatasetPaths = datasetPaths;
         }
         
-        public bool ArePathsContained(string filePaths, string pathsList) => pathsList
+        public bool IsPathContained(string filePaths, string pathsList) => pathsList
             .Split(',')
             .Any(filePaths.Contains);
     }
