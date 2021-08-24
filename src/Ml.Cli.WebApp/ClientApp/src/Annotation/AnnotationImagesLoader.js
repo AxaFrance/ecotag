@@ -27,7 +27,7 @@ const getImages = (fetchFunction) => async (item) => {
         stringsMatcher: item.frontDefaultStringsMatcher,
         directory: item.imageDirectory
     };
-    const fetchResult = await fetchGetData(fetchFunction)(params, "api/datasets");
+    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
     return fetchImages(fetchResult);
 };
 
@@ -35,7 +35,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     const params = {
         filePath: `${item.fileDirectory}\\${item.fileName}`
     };
-    const fetchResult = await fetchGetData(fetchFunction)(params, "api/annotations");
+    const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
     if (fetchResult.status === 200) {
         const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};
