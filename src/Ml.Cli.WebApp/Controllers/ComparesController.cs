@@ -130,7 +130,7 @@ namespace Ml.Cli.WebApp.Controllers
             return Ok(FilesHandler.GetFilesFromPaths(_comparesPaths.Paths, _basePath, _fileLoader));
         }
 
-        [HttpPost("save")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveCompare([FromBody] EditorContent data)

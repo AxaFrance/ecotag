@@ -78,7 +78,7 @@ namespace Ml.Cli.WebApp.Controllers
             return Ok(httpResult);
         }
 
-        [HttpPost("save")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveAnnotation([FromBody] DatasetInfo datasetData)
