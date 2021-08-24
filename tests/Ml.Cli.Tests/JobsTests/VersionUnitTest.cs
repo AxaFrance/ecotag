@@ -33,10 +33,10 @@ namespace Ml.Cli.Tests.JobsTests
             var logger = new Mock<ILogger<Version>>();
     
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.CreateDirectory(It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.Load(It.IsAny<string>())).Returns(contentJSON);
-            fileLoader.Setup(foo => foo.FileExists(It.IsAny<string>())).Returns(false)
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.Load(It.IsAny<string>())).Returns(contentJSON);
+            fileLoader.Setup(mock => mock.FileExists(It.IsAny<string>())).Returns(false)
                 .Callback(() => fileLoader.Setup(foo => foo.FileExists(It.IsAny<string>())).Returns(true));
 
             var version = new Version(factory, fileLoader.Object, logger.Object);

@@ -16,11 +16,11 @@ namespace Ml.Cli.Tests.JobsTests
             var json = "{\"Url\":\"Url Path\",\"FileName\":\"{FileName}.pdf\",\"FileDirectory\":\"File Directory Path\",\"StatusCode\":200,\"Body\":\"{\\\"analysis\\\":[{\\\"elements\\\":[{\\\"document_type\\\":\\\"nouveau_permis_recto\\\",\\\"confidence_rate\\\":99.9,\\\"status\\\":\\\"OK\\\",\\\"status_reason\\\":null,\\\"url_file_new_recto_zone\\\":\\\"https://url1\\\",\\\"url_file_new_recto_orientation\\\":\\\"https://url2\\\",\\\"license_delivery_country\\\":\\\"France\\\",\\\"birthdate\\\":{\\\"raw_value\\\":\\\"raw_birthdate\\\",\\\"value\\\":\\\"value_birthdate\\\",\\\"confidence_rate\\\":87.66666666666667},\\\"birthplace\\\":{\\\"raw_value\\\":\\\"raw_birthplace\\\",\\\"value\\\":\\\"value_birthplace\\\",\\\"confidence_rate\\\":87.66666666666667},\\\"license_number\\\":{\\\"raw_value\\\":\\\"raw_license_number\\\",\\\"value\\\":\\\"value_license_number\\\",\\\"confidence_rate\\\":100},\\\"mrz\\\":{\\\"raw_value\\\":\\\"raw_mrz\\\",\\\"value\\\":\\\"value_mrz\\\",\\\"confidence_rate\\\":100},\\\"license_validity_date\\\":{\\\"raw_value\\\":\\\"raw_license_validity_date\\\",\\\"value\\\":\\\"value_license_validity_date\\\",\\\"confidence_rate\\\":100},\\\"firstname\\\":{\\\"raw_value\\\":\\\"raw_firstname\\\",\\\"value\\\":\\\"value_firstname\\\",\\\"confidence_rate\\\":92.25},\\\"license_category_list\\\":{\\\"raw_value\\\":\\\"raw_license_category_list\\\",\\\"value\\\":\\\"value_license_category_list\\\",\\\"confidence_rate\\\":92},\\\"lastname\\\":{\\\"raw_value\\\":\\\"raw_lastname\\\",\\\"value\\\":\\\"value_lastname\\\",\\\"confidence_rate\\\":100},\\\"license_delivery_date\\\":{\\\"raw_value\\\":\\\"raw_license_delivery_date\\\",\\\"value\\\":\\\"value_license_delivery_date\\\",\\\"confidence_rate\\\":87},\\\"license_delivery_place\\\":{\\\"raw_value\\\":\\\"raw_pr\u00E9fet\\\",\\\"value\\\":\\\"value_pr\u00E9fet\\\",\\\"confidence_rate\\\":90},\\\"document_id\\\":\\\"0\\\"}],\\\"page\\\":1,\\\"status\\\":\\\"OK\\\"}],\\\"version\\\":1}\",\"Headers\":[],\"TimeMs\":9069,\"TicksAt\":637453731518053200}";
 
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.CreateDirectory(It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"toto_pdf.json"});
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.ReadAllTextInFileAsync(It.IsAny<string>())).ReturnsAsync(json);
-            fileLoader.Setup(foo => foo.LoadAsync(It.IsAny<string>())).Returns(Task.FromResult(json));
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"toto_pdf.json"});
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(It.IsAny<string>())).ReturnsAsync(json);
+            fileLoader.Setup(mock => mock.LoadAsync(It.IsAny<string>())).Returns(Task.FromResult(json));
 
             var logger = Mock.Of<ILogger<TaskScript>>();
             
