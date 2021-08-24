@@ -3,7 +3,7 @@ import React from "react";
 import './FileLoader.scss';
 import Library from "../Library/Library";
 
-const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
+const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction, controllerPath}) => {
 
     const onFileLoad = e => {
         const input = e.values[0].file;
@@ -30,6 +30,7 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction}) => {
             <Library
                 fetchFunction={fetchFunction}
                 onPlayClick={onLoad}
+                controllerPath={controllerPath}
             />
         </div>
     );
