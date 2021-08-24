@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +14,11 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly ComparesPaths _comparesPaths;
-        private readonly DatasetsPaths _datasetsPaths;
 
-        public FilesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths, DatasetsPaths datasetsPaths)
+        public FilesController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _comparesPaths = comparesPaths;
-            _datasetsPaths = datasetsPaths;
         }
 
         [HttpGet("{id}")]
@@ -38,9 +31,7 @@ namespace Ml.Cli.WebApp.Controllers
             //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
             elementPath =
                 elementPath.Replace(encodedPlusSign, "+");
-            if (!_basePath.IsPathSecure(elementPath) &&
-                !_comparesPaths.IsPathContained(elementPath) &&
-                !_datasetsPaths.IsPathContained(elementPath))
+            if (!_basePath.IsPathSecure(elementPath))
             {
                 return BadRequest("Unreachable file.");
             }

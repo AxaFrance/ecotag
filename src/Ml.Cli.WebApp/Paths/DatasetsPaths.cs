@@ -10,9 +10,5 @@ namespace Ml.Cli.WebApp.Paths
         {
             Paths = paths;
         }
-        
-        public bool IsPathContained(string filePath) => Paths
-            .Split(',')
-            .Any(filePath.Contains);
     }
 }
