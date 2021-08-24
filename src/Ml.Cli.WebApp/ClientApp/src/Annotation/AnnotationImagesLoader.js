@@ -73,8 +73,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             const annotationsArray = JSON.parse(item.annotations);
             const lastAnnotation = annotationsArray[annotationsArray.length - 1];
             //the sub parameter of lastAnnotation is annotationN, where N is a number. Given that this parameter is dynamic, we use a dictionary to recover it
-            const annotation = lastAnnotation[Object.keys(lastAnnotation)[0]];
-            const labels = annotation.labels;
+            const labels = lastAnnotation.labels;
             boundingBoxes = labels.boundingBoxes;
         }
         catch (ex){
