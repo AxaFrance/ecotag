@@ -127,7 +127,7 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest("Compare files repositories paths are unspecified.");
             }
 
-            return Ok(FilesController.GetFilesFromPaths(_filesPaths.ComparePaths, _basePath, _fileLoader));
+            return Ok(FilesHandler.GetFilesFromPaths(_filesPaths.ComparePaths, _basePath, _fileLoader));
         }
 
         [HttpPost("save")]

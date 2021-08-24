@@ -35,7 +35,7 @@ namespace Ml.Cli.WebApp.Controllers
                 return BadRequest("Dataset files repositories paths are unspecified.");
             }
 
-            return Ok(FilesController.GetFilesFromPaths(_filesPaths.DatasetPaths, _basePath, _fileLoader));
+            return Ok(FilesHandler.GetFilesFromPaths(_filesPaths.DatasetPaths, _basePath, _fileLoader));
         }
 
         [HttpGet("{urlContent}")]

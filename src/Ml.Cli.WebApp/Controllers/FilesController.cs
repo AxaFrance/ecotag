@@ -61,17 +61,5 @@ namespace Ml.Cli.WebApp.Controllers
 
             return contentType;
         }
-        
-        public static IEnumerable<string> GetFilesFromPaths(string paths, BasePath basePath, IFileLoader fileLoader)
-        {
-            var jsonExtension = ".json";
-            var pathsArray = paths.Split(Separators.CommaSeparator);
-            var fullyQualifiedPaths =
-                pathsArray.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(basePath.Path, path));
-            
-            return fullyQualifiedPaths
-                .SelectMany(fileLoader.EnumerateFiles)
-                .Where(file => Path.GetExtension(file) == jsonExtension);
-        }
     }
 }
