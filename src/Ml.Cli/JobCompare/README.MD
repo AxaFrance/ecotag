@@ -1,6 +1,6 @@
 # Compare
 
-Compare is used to compare two sets of json files that are the output of a callapi or a script task.
+Compare is used to compare two sets of json files.
 
 The resulting json file can be used as an input on the webapp. 
 
