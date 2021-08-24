@@ -21,7 +21,7 @@ const EnvironmentProvider = ({ children }) => {
         const environment = {
             "apiUrl": addEndSlash(window.location.href) + "{path}",
             "basePath" : window.location.pathname
-        }
+        };
         setEnvironment({ environment });
         setLoading(false);
     }, []);

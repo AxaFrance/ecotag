@@ -5,22 +5,22 @@ import './scss/reboot.css';
 import '@axa-fr/react-toolkit-all/dist/style/af-components.css';
 import '@axa-fr/react-toolkit-table/dist/af-table.css';
 import '@axa-fr/react-toolkit-form-input-select/dist/select.scss';
-import {BrowserRouter} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 import Routes from "./Routes";
 import EnvironmentProvider, {withEnvironment} from "./EnvironmentProvider";
 
 export const App = ({environment}) => (
-    <BrowserRouter basename={environment.basePath}>
+    <HashRouter basename={environment.basePath}>
         <Routes/>
-    </BrowserRouter>
+    </HashRouter>
 );
 
-const AppWithEnvironement = withEnvironment(App);
+const AppWithEnvironment = withEnvironment(App);
 
 ReactDOM.render(
     <React.StrictMode>
         <EnvironmentProvider>
-            <AppWithEnvironement/>
+            <AppWithEnvironment/>
         </EnvironmentProvider>
     </React.StrictMode>,
     document.getElementById('root')
