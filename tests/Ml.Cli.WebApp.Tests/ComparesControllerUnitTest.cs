@@ -31,7 +31,9 @@ namespace Ml.Cli.WebApp.Tests
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             
-            var compareController = new ComparesController(fileLoader.Object, basePath.Object);
+            var comparesPaths = new ComparesPaths("");
+            
+            var compareController = new ComparesController(fileLoader.Object, basePath.Object, comparesPaths);
             await compareController.SaveCompare(editorContent);
             
             var compareResultContent = "{\"CompareLocation\":\"someFolder\\\\compareFile.json\",\"Content\":[{\"FileName\":\"{other_file}_pdf.json\",\"Left\":{\"Url\":\"https://url\",\"FileName\":\"{other_file}.pdf\",\"FileDirectory\":\"someFolder1\\\\{other_file}_pdf.json\",\"ImageDirectory\":null,\"FrontDefaultStringsMatcher\":null,\"StatusCode\":200,\"Body\":\"{\\\"analysis\\\":\\\"content_body_left_other_file\\\"}\",\"Headers\":[],\"TimeMs\":0,\"TicksAt\":0},\"Right\":{\"Url\":\"https://url\",\"FileName\":\"{other_file}.pdf\",\"FileDirectory\":\"someFolder2\\\\{other_file}_pdf.json\",\"ImageDirectory\":\"someFolderImages\",\"FrontDefaultStringsMatcher\":\"rotation\",\"StatusCode\":200,\"Body\":\"{\\\"analysis\\\":\\\"content_body_right_other_file\\\"}\",\"Headers\":[],\"TimeMs\":1,\"TicksAt\":1}},{\"FileName\":\"{fileName}_pdf.json\",\"Left\":{\"Url\":\"https://url\",\"FileName\":\"{fileName}.pdf\",\"FileDirectory\":\"someFolder1\\\\{fileName}_pdf.json\",\"ImageDirectory\":null,\"FrontDefaultStringsMatcher\":null,\"StatusCode\":200,\"Body\":\"{\\\"analysis\\\":\\\"content_body_left_fileName\\\"}\",\"Headers\":[],\"TimeMs\":0,\"TicksAt\":0},\"Right\":{\"Url\":\"https://url\",\"FileName\":\"{fileName}.pdf\",\"FileDirectory\":\"someFolder2\\\\{fileName}_pdf.json\",\"ImageDirectory\":\"someFolderImages\",\"FrontDefaultStringsMatcher\":\"rotation\",\"StatusCode\":200,\"Body\":\"{\\\"analysis\\\":\\\"content_body_httpResult\\\"}\",\"Headers\":[],\"TimeMs\":1,\"TicksAt\":1}}]}";

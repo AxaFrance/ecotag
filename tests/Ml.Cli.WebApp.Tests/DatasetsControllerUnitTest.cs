@@ -30,7 +30,9 @@ namespace Ml.Cli.WebApp.Tests
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             
-            var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object);
+            var datasetsPaths = new DatasetsPaths("");
+            
+            var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object, datasetsPaths);
             
             var result = await datasetsController.GetFilesFromFileName(urlContent);
             var okResult = result as OkObjectResult;
@@ -54,7 +56,9 @@ namespace Ml.Cli.WebApp.Tests
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             
-            var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object);
+            var datasetsPaths = new DatasetsPaths("");
+            
+            var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object, datasetsPaths);
             await datasetsController.SaveJson(JsonConvert.DeserializeObject<Cli.Program.HttpResult>(httpResult));
             
             var expectedResultHttpResult =
