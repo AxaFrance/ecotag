@@ -17,13 +17,15 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly FilesPaths _filesPaths;
+        private readonly ComparesPaths _comparesPaths;
+        private readonly DatasetsPaths _datasetsPaths;
 
-        public FilesController(IFileLoader fileLoader, BasePath basePath, FilesPaths filesPaths)
+        public FilesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths, DatasetsPaths datasetsPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _filesPaths = filesPaths;
+            _comparesPaths = comparesPaths;
+            _datasetsPaths = datasetsPaths;
         }
 
         [HttpGet("{id}")]
@@ -37,8 +39,8 @@ namespace Ml.Cli.WebApp.Controllers
             elementPath =
                 elementPath.Replace(encodedPlusSign, "+");
             if (!_basePath.IsPathSecure(elementPath) &&
-                !_filesPaths.IsPathContained(elementPath, _filesPaths.ComparePaths) &&
-                !_filesPaths.IsPathContained(elementPath, _filesPaths.DatasetPaths))
+                !_comparesPaths.IsPathContained(elementPath) &&
+                !_datasetsPaths.IsPathContained(elementPath))
             {
                 return BadRequest("Unreachable file.");
             }

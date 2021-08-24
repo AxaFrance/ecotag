@@ -71,13 +71,13 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly FilesPaths _filesPaths;
+        private readonly ComparesPaths _comparesPaths;
 
-        public ComparesController(IFileLoader fileLoader, BasePath basePath, FilesPaths filesPaths)
+        public ComparesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _filesPaths = filesPaths;
+            _comparesPaths = comparesPaths;
         }
 
         private static EditorContent ReformatEditorContent(EditorContent data)
@@ -122,12 +122,12 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFiles()
         {
-            if (_filesPaths.ComparePaths == string.Empty)
+            if (_comparesPaths.Paths == string.Empty)
             {
                 return BadRequest("Compare files repositories paths are unspecified.");
             }
 
-            return Ok(FilesHandler.GetFilesFromPaths(_filesPaths.ComparePaths, _basePath, _fileLoader));
+            return Ok(FilesHandler.GetFilesFromPaths(_comparesPaths.Paths, _basePath, _fileLoader));
         }
 
         [HttpPost("save")]

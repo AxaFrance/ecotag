@@ -16,13 +16,13 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly FilesPaths _filesPaths;
+        private readonly DatasetsPaths _datasetsPaths;
 
-        public DatasetsController(IFileLoader fileLoader, BasePath basePath, FilesPaths filesPaths)
+        public DatasetsController(IFileLoader fileLoader, BasePath basePath, DatasetsPaths datasetsPaths)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _filesPaths = filesPaths;
+            _datasetsPaths = datasetsPaths;
         }
 
         [HttpGet]
@@ -30,12 +30,12 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFiles()
         {
-            if (_filesPaths.DatasetPaths == string.Empty)
+            if (_datasetsPaths.Paths == string.Empty)
             {
                 return BadRequest("Dataset files repositories paths are unspecified.");
             }
 
-            return Ok(FilesHandler.GetFilesFromPaths(_filesPaths.DatasetPaths, _basePath, _fileLoader));
+            return Ok(FilesHandler.GetFilesFromPaths(_datasetsPaths.Paths, _basePath, _fileLoader));
         }
 
         [HttpGet("{urlContent}")]

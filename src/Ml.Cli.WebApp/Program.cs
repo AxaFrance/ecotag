@@ -94,7 +94,8 @@ namespace Ml.Cli.WebApp
                     services.AddSingleton<IHostedService>(provider =>
                         new Worker(args.Skip(4).ToArray()));
                     services.AddSingleton(provider => new BasePath(args[1]));
-                    services.AddSingleton(provider => new FilesPaths(args[3], args[5]));
+                    services.AddSingleton(provider => new ComparesPaths(args[3]));
+                    services.AddSingleton(provider => new DatasetsPaths(args[5]));
                 });
     }
 }
