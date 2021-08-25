@@ -4,6 +4,7 @@ import TableItem from './TableItem';
 import StatsTable from './StatsTable';
 import {formatJson} from "./FormatFilter";
 import {computeNumberPages} from "../Tables/Paging";
+import './TableResult.scss';
 
 export const filterItems = (items, filterName) => {
     return items.filter(item => {
@@ -124,7 +125,31 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
     if (pageItems.items.length === 0) {
         return <h2 className="error-message">There is no file related to that filter configuration !</h2>;
     }
+    const currentPage = pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage;
+    const numberPages = computeNumberPages(filteredSearchBar, state.filters.pagingSelect);
+    const onPagingChange = e => {
+        const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
+        setState({
+            ...state,
+            filters: {
+                ...state.filters,
+                pagingSelect: e.numberItems,
+                pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
+            }
+        });
+    }
+    
     return <>
+        <div className="paging__top">
+            <Paging
+                currentPage={currentPage}
+                numberPages={numberPages}
+                numberItems={state.filters.pagingSelect}
+                id="paging-top"
+                onChange={onPagingChange}
+            />
+        </div>
+        
         {pageItems.items.map(item => (
             <TableItem
                 key={item.id}
@@ -140,25 +165,15 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
         ))}
 
         <Paging
-            currentPage={pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage}
-            numberPages={computeNumberPages(filteredSearchBar, state.filters.pagingSelect)}
+            currentPage={currentPage}
+            numberPages={numberPages}
             numberItems={state.filters.pagingSelect}
-            id="paging"
+            id="paging-bottom"
             previousLabel="Previous"
             nextLabel="Next"
             displayLabel="Show"
             elementsLabel="elements"
-            onChange={(e) => {
-                const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
-                setState({
-                    ...state,
-                    filters: {
-                        ...state.filters,
-                        pagingSelect: e.numberItems,
-                        pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
-                    }
-                });
-            }}
+            onChange={onPagingChange}
         />
     </>
 }
