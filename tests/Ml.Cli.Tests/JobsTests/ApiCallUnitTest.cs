@@ -34,11 +34,11 @@ namespace Ml.Cli.Tests.JobsTests
             var logger = Mock.Of<ILogger<TaskApiCall>>();
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.CreateDirectory(It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.FileExists(It.IsAny<string>())).Returns(false);
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"toto.pdf"});
-            fileLoader.Setup(foo => foo.OpenRead(It.IsAny<string>())).Returns(Mock.Of<Stream>());
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.FileExists(It.IsAny<string>())).Returns(false);
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"toto.pdf"});
+            fileLoader.Setup(mock => mock.OpenRead(It.IsAny<string>())).Returns(Mock.Of<Stream>());
             var fileHandler = new Mock<IFileHandler>();
             
             var apiCallFiles = new ApiCallFiles(factory, fileLoader.Object, fileHandler.Object, logger);
@@ -92,10 +92,10 @@ namespace Ml.Cli.Tests.JobsTests
             var apiCallFilesLogger = Mock.Of<ILogger<ApiCallFiles>>();
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.CreateDirectory(It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.FileExists(It.IsAny<string>())).Returns(false);
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.WriteAllBytesOfFileAsync(It.IsAny<string>(), It.IsAny<byte[]>()));
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.FileExists(It.IsAny<string>())).Returns(false);
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.WriteAllBytesOfFileAsync(It.IsAny<string>(), It.IsAny<byte[]>()));
             var fileHandler = new Mock<IFileHandler>();
             fileHandler.Setup(foo => foo.SetFileName(It.IsAny<string>(), fileLoader.Object)).Returns((string val, IFileLoader loader) => val);    //In this test, there is no duplicates; therefore, the function would return the passed parameter
             
@@ -139,7 +139,7 @@ namespace Ml.Cli.Tests.JobsTests
             var fileHandler = new FileHandler();
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.FileExists(@"C:\ml\test.png")).Returns(true);
+            fileLoader.Setup(mock => mock.FileExists(@"C:\ml\test.png")).Returns(true);
             
             var result = fileHandler.SetFileName(path, fileLoader.Object);
             Assert.Equal(@"C:\ml\test_1.png", result);

@@ -31,7 +31,15 @@ namespace Ml.Cli.JobCompare
                     : Path.Combine(inputTask.LeftDirectory, fileLeftPath);
                 _logger.LogInformation($"Task Id: {inputTask.Id} - Compare {fileName}");
                 var jsonLeft = await _fileLoader.ReadAllTextInFileAsync(filePath);
-                var left = JsonConvert.DeserializeObject<Program.HttpResult>(jsonLeft);
+                Program.HttpResult left;
+                try
+                {
+                    left = JsonConvert.DeserializeObject<Program.HttpResult>(jsonLeft);
+                }
+                catch (JsonException)
+                {
+                    left = CreateHttpResult(jsonLeft, fileName, filePath);
+                }
 
                 var fileRightPath = Path.Combine(inputTask.RightDirectory, fileName);
                 if (!_fileLoader.FileExists(fileRightPath))
@@ -46,7 +54,15 @@ namespace Ml.Cli.JobCompare
                 }
 
                 var jsonRight = await _fileLoader.ReadAllTextInFileAsync(fileRightPath);
-                var right = JsonConvert.DeserializeObject<Program.HttpResult>(jsonRight);
+                Program.HttpResult right;
+                try
+                {
+                    right = JsonConvert.DeserializeObject<Program.HttpResult>(jsonRight);
+                }
+                catch (JsonException)
+                {
+                    right = CreateHttpResult(jsonRight, fileName, fileRightPath);
+                }
 
                 compareResults.Add(new CompareResult
                 {
@@ -64,6 +80,23 @@ namespace Ml.Cli.JobCompare
                 fileContent.CompareLocation,
                 JsonConvert.SerializeObject(fileContent,
                     Formatting.Indented));
+        }
+
+        private Program.HttpResult CreateHttpResult(string body, string fileName, string fileDirectory)
+        {
+            return new Program.HttpResult()
+            {
+                FileName = fileName,
+                FileDirectory = fileDirectory,
+                ImageDirectory = "",
+                FrontDefaultStringsMatcher = "",
+                StatusCode = 200,
+                Body = body,
+                Headers = new List<KeyValuePair<string, IEnumerable<string>>>(),
+                TimeMs = 0,
+                Url = null,
+                TicksAt = 0
+            };
         }
     }
 }

@@ -23,9 +23,9 @@ namespace Ml.Cli.Tests.JobsTests
 
             var logger = Mock.Of<ILogger<TaskCompare>>();
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(foo => foo.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"{FileName}.pdf.json"});
-            fileLoader.Setup(foo => foo.CreateDirectory(It.IsAny<string>()));
-            fileLoader.Setup(foo => foo.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"{FileName}.pdf.json"});
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
             
             var datasetTask = new TaskDataset(fileLoader.Object, logger);
             var inputTask = new DatasetTask(
