@@ -1,9 +1,8 @@
 ﻿import React, {useState} from "react";
 import {Paging} from "@axa-fr/react-toolkit-table";
 import TableAnnotateItem from "./TableAnnotateItem";
-import {computeNumberPages} from "../Tables/Paging";
+import {computeNumberPages, filterPaging} from "../Tables/Paging";
 import './TableAnnotate.scss';
-import {filterPaging} from "../Comparison/TableResult";
 
 const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
 
