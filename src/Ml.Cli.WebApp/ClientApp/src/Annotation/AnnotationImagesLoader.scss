@@ -1,0 +1,11 @@
+﻿.message{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1em;
+  &--success{
+    color: green;
+  }
+  &--error{
+    color: red;
+  }
+}

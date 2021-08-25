@@ -7,6 +7,7 @@ import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
 import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLazy";
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
+import './AnnotationImagesLoader.scss';
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -51,10 +52,30 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         filePrimaryUrl: "",
         httpResultItem: {},
         errorMessage: "",
+        postMessage: "",
         isFetched: false
     });
+    
+    const setPostMessage = async response => {
+        if(!response.ok){
+            const responseMessage = await response.text();
+            const responseMessageString = responseMessage.split('"').join('');
+            if(responseMessageString){
+                setState({...state, postMessage: responseMessageString});
+            }
+            else{
+                setState({...state, postMessage: "An error occured during save."});
+            }
+        }
+        else{
+            setState({...state, postMessage: "File saved."})
+        }
+    }
 
-    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
+    const mutationDataset = useMutation(
+        newData => (fetchPostJson(fetchFunction)("/api/annotations", newData))
+            .then(setPostMessage)
+    );
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);
@@ -221,6 +242,9 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     onSubmit={onDatasetSubmit}
                     labels={parentState.configuration}
                 />
+            }
+            {state.postMessage &&
+                <h2 className={state.postMessage === "File saved." ? "message message--success" : "message message--error"}>{state.postMessage}</h2>
             }
         </>
     );
