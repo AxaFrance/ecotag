@@ -92,7 +92,7 @@ namespace Ml.Cli.WebApp
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IHostedService>(provider =>
-                        new Worker(args.Skip(4).ToArray()));
+                        new Worker(args.Skip(6).ToArray()));
                     services.AddSingleton(provider => new BasePath(args[1]));
                     services.AddSingleton(provider => new ComparesPaths(args[3]));
                     services.AddSingleton(provider => new DatasetsPaths(args[5]));
