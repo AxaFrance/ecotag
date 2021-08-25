@@ -99,17 +99,14 @@ namespace Ml.Cli.WebApp.Controllers
             if (foundToken != null)
             {
                 var annotation = foundToken.Annotations;
-                if (annotation != "")
+                if (annotation != string.Empty)
                 {
-                    var annotationJArray = JArray.Parse(annotation);
-                    var nbAnnotations = annotationJArray.Count;
-                    var newAnnotation = ", {\"annotation" + nbAnnotations + "\": " + datasetData.Annotation.ToString() +
-                                        "}";
+                    var newAnnotation = ", " + datasetData.Annotation.ToString();
                     foundToken.Annotations = annotation.Insert(annotation.Length - 1, newAnnotation);
                 }
                 else
                 {
-                    foundToken.Annotations = "[{\"annotation0\": " + datasetData.Annotation.ToString() + "}]";
+                    foundToken.Annotations = "[{" + datasetData.Annotation.ToString() + "}]";
                 }
 
                 var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
