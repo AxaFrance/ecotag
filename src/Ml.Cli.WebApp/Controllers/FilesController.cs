@@ -14,13 +14,11 @@ namespace Ml.Cli.WebApp.Controllers
     {
         private readonly IFileLoader _fileLoader;
         private readonly BasePath _basePath;
-        private readonly ComparesPaths _comparesPaths;
 
-        public FilesController(IFileLoader fileLoader, BasePath basePath, ComparesPaths comparesPaths)
+        public FilesController(IFileLoader fileLoader, BasePath basePath)
         {
             _fileLoader = fileLoader;
             _basePath = basePath;
-            _comparesPaths = comparesPaths;
         }
 
         [HttpGet("{id}")]
@@ -30,21 +28,23 @@ namespace Ml.Cli.WebApp.Controllers
         {
             var encodedPlusSign = "%2B";
             var elementPath = HttpUtility.ParseQueryString(id).Get("value");
-            elementPath = elementPath.Replace(encodedPlusSign, "+");    //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
-            if (!_basePath.IsPathSecure(elementPath) && !_comparesPaths.IsPathContained(elementPath))
+            //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
+            elementPath =
+                elementPath.Replace(encodedPlusSign, "+");
+            if (!_basePath.IsPathSecure(elementPath))
             {
-                return BadRequest();
+                return BadRequest("Unreachable file.");
             }
 
             var stream = _fileLoader.OpenRead(elementPath);
             if (stream == null)
-                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
+                return NotFound();
 
             var contentType = GetContentType(elementPath);
-            return File(stream, contentType); // returns a FileStreamResult
+            return File(stream, contentType);
         }
 
-        public static string GetContentType(string path)
+        private static string GetContentType(string path)
         {
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(path, out var contentType))

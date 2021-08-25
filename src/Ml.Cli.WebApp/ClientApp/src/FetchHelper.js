@@ -13,7 +13,7 @@ const setQueryUrl = (params, controllerPath) => {
     return `${controllerPath}/${testUrlParams}`;
 };
 
-export const fetchGetData = (fetchFunction) => (params, controllerPath) => {
+export const fetchGetData = fetchFunction => (controllerPath, params = {}) => {
     return fetchFunction(
         setQueryUrl(params, controllerPath),
         {

@@ -16,12 +16,12 @@ export const StringContent = {
 
 const API_ROUTE_LENGTH = 17;
 
-const getFiles = async fetchFunction => {
-    const fetchResult = await fetchGetData(fetchFunction)({}, "api/compares");
+const getFiles = async (fetchFunction, controllerPath) => {
+    const fetchResult = await fetchGetData(fetchFunction)(controllerPath);
     return await getDataPaths(fetchResult);
 }
 
-const Library = ({fetchFunction, onPlayClick}) => {
+const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
 
     const [state, setState] = useState({
         files: []
@@ -40,7 +40,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
     }, []);
 
     const tick = () => {
-        getFiles(fetchFunction)
+        getFiles(fetchFunction, controllerPath)
             .then(files => {
                     setState({files});
                 }
@@ -61,7 +61,7 @@ const Library = ({fetchFunction, onPlayClick}) => {
         const params = {
             value: encodeURI(value)
         };
-        const data = await fetchGetData(fetchFunction)(params, "api/files");
+        const data = await fetchGetData(fetchFunction)("api/files", params);
         if(data.status === StatusCodes.OK){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));

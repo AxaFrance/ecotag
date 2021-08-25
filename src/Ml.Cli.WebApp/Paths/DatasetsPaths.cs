@@ -2,11 +2,11 @@
 
 namespace Ml.Cli.WebApp.Paths
 {
-    public class ComparesPaths
+    public class DatasetsPaths
     {
         public string Paths { get; }
 
-        public ComparesPaths(string paths)
+        public DatasetsPaths(string paths)
         {
             Paths = paths;
         }
