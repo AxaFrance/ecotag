@@ -54,7 +54,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         isFetched: false
     });
 
-    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations/save", newData));
+    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);

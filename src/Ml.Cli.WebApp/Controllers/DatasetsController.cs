@@ -96,7 +96,7 @@ namespace Ml.Cli.WebApp.Controllers
             return Ok(filesList);
         }
 
-        [HttpPost("save")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SaveJson([FromBody] Cli.Program.HttpResult data)
