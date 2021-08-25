@@ -6,6 +6,34 @@ import {formatJson} from "./FormatFilter";
 import {computeNumberPages} from "../Tables/Paging";
 import './TableResult.scss';
 
+export const filterPaging = (items, numberItems, currentPage) => {
+    let pageIndex = 0;
+    if (currentPage > 1) {
+        pageIndex = currentPage - 1;
+    }
+
+    let controlledNumberItems = 0;
+    if (numberItems > 0) {
+        controlledNumberItems = numberItems;
+    }
+
+    const {length} = items;
+    let beginIndex = pageIndex * controlledNumberItems;
+    const lastIndex = length < beginIndex + controlledNumberItems ? length : beginIndex + controlledNumberItems;
+
+    let returnedCurrentPage = currentPage;
+
+    if (lastIndex < beginIndex) {
+        if (lastIndex - length >= 0) {
+            beginIndex = lastIndex - length;
+        } else {
+            beginIndex = 0;
+        }
+        returnedCurrentPage = -1;
+    }
+    return {items: items.slice(beginIndex, lastIndex), currentPage: returnedCurrentPage};
+};
+
 export const filterItems = (items, filterName) => {
     return items.filter(item => {
         if (filterName === "KO") {
@@ -70,34 +98,6 @@ export const sortTime = (items, sortTimeType, timeCategory) => {
 }
 
 const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
-    const filterPaging = (items, numberItems, currentPage) => {
-        let pageIndex = 0;
-        if (currentPage > 1) {
-            pageIndex = currentPage - 1;
-        }
-
-        let controlledNumberItems = 0;
-        if (numberItems > 0) {
-            controlledNumberItems = numberItems;
-        }
-
-        const {length} = items;
-        let beginIndex = pageIndex * controlledNumberItems;
-        const lastIndex = length < beginIndex + controlledNumberItems ? length : beginIndex + controlledNumberItems;
-
-        let returnedCurrentPage = currentPage;
-
-        if (lastIndex < beginIndex) {
-            if (lastIndex - length >= 0) {
-                beginIndex = lastIndex - length;
-            } else {
-                beginIndex = 0;
-            }
-            returnedCurrentPage = -1;
-        }
-        return {items: items.slice(beginIndex, lastIndex), currentPage: returnedCurrentPage};
-    };
-
     const filterScripts = formatJson(state);
     const filteredFiles = filterItems(filterScripts, state.filters.filterName);
     const filteredStatusCodes = filterStatusCode(filteredFiles, state.filters.currentStatusCode);
