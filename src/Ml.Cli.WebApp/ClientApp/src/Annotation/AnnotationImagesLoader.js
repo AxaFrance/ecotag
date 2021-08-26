@@ -244,7 +244,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                 />
             }
             {state.postMessage &&
-                <h2 className={state.postMessage === "File saved." ? "message message--success" : "message message--error"}>{state.postMessage}</h2>
+                <h4 className={state.postMessage === "File saved." ? "message message--success" : "message message--error"}>{state.postMessage}</h4>
             }
         </>
     );
