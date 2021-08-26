@@ -25,6 +25,10 @@ const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
             currentPage={tableState.currentPage}
             numberPages={computeNumberPages(state.items, tableState.pagingSelect)}
             numberItems={tableState.pagingSelect}
+            previousLabel="Previous"
+            nextLabel="Next"
+            displayLabel="Show"
+            elementsLabel="elements"
             onChange={e => {
                 const newNumberPages = computeNumberPages(state.items, e.numberItems);
                 setTableState({

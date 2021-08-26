@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 const Annotate = ({MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
-        fileName: "Annoter un dataset",
+        fileName: "Annotate a dataset",
         datasetLocation: "",
         items: [],
         annotationType: "JsonEditor",
@@ -25,11 +25,11 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
                     title="ML-CLI"
                     subtitle="Made by AXA"
                     img={logo}
-                    alt="Logo AXA"
+                    alt="AXA Logo"
                 />
             </Header>
             <TitleBar
-                title={state.fileName === "Annoter un dataset" ? state.fileName : `Fichier en cours de visualisation : ${state.fileName}`}/>
+                title={state.fileName === "Annotate a dataset" ? state.fileName : `Visualising file: ${state.fileName}`}/>
             <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
             {state.items.length > 0 &&
             <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
