@@ -40,16 +40,16 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
     return <div className="table-result">
         <div className="table-result__header">
             <div>
-                <p>Résultat fichier : {item.fileName}</p>
+                <p>File result : {item.fileName}</p>
                 <h2>{item.left.Body !== item.right.Body ?
                     <span className="table-result__row--red">KO</span> :
-                    <span className="table-result__row--green">OK</span>} Ratio temps à gauche - temps à droite
-                    : {(item.right.TimeMs - item.left.TimeMs) / 1000} secondes</h2>
+                    <span className="table-result__row--green">OK</span>} Time left - Time right ratio
+                    : {(item.right.TimeMs - item.left.TimeMs) / 1000} seconds</h2>
             </div>
             <div className="table-result__buttons-group">
                 <div className="table-result__copy-button" onClick={() => {
                     onCopy(item, "name");
-                }}>Copier
+                }}>Copy
                 </div>
                 <div className="table-result__collapse-button"
                      onClick={() => {
@@ -62,7 +62,7 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                 <div className="table-result__elements-container">
                     <button className="table-result__parse-button" type="button"
                             onClick={() => setState({...state, isAnnotating: !state.isAnnotating})}>
-                        <span>{state.isAnnotating ? "Fermer Annotation" : "Annoter"}</span>
+                        <span>{state.isAnnotating ? "Fermer Annotation" : "Annotate"}</span>
                     </button>
                 </div>
                 {state.isAnnotating &&
@@ -79,11 +79,11 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                 <div className="table-result__column-container">
                     <div className="table-result__column">
                         <div className="table-margin">
-                            <div>Copier le lien vers le fichier local dans votre presse-papiers:</div>
+                            <div>Copy the local file link:</div>
                             <button className="table-result__copy-clipboard-button" onClick={() => {
                                 onCopy(item, "left");
                             }}>
-                                Cliquez ici
+                                Click here
                             </button>
                             <h3>{item.left.Url}</h3>
                             <div
@@ -94,11 +94,11 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                     </div>
                     <div className="table-result__column table-result__column--separator">
                         <div className="table-margin">
-                            <div>Copier le lien vers le fichier local dans votre presse-papiers:</div>
+                            <div>Copy the local file link:</div>
                             <button className="table-result__copy-clipboard-button" onClick={() => {
                                 onCopy(item, "right");
                             }}>
-                                Cliquez ici
+                                Click here
                             </button>
                             <h3>{item.right.Url}</h3>
                             <div className="table-result__column table-result__column--time-span">

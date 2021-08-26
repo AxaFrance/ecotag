@@ -11,11 +11,11 @@ import ScriptEditorContainer from "./ScriptEditorContainer";
 const optionsSelect = [
     {value: 'KO', label: "KO"},
     {value: 'OK', label: "OK"},
-    {value: 'Tout', label: 'Tout'}
+    {value: 'All', label: 'All'}
 ];
 
 const extensionsSelect = [
-    {value: 'Tout', label: 'Tout'},
+    {value: 'All', label: 'All'},
     {value: 'PNG', label: 'PNG'},
     {value: 'JPG/JPEG', label: 'JPG/JPEG'},
     {value: 'PDF', label: 'PDF'},
@@ -23,25 +23,25 @@ const extensionsSelect = [
 ];
 
 const timeSelect = [
-    {value: 'Neutre', label: 'Neutre'},
-    {value: 'Croissant', label: 'Croissant'},
-    {value: 'Décroissant', label: 'Décroissant'}
+    {value: 'Neutral', label: 'Neutral'},
+    {value: 'Ascending', label: 'Ascending'},
+    {value: 'Descending', label: 'Descending'}
 ];
 
 const timeSideVariables = [
-    {value: 'Gauche', label: 'Gauche'},
-    {value: 'Droite', label: 'Droite'}
+    {value: 'Left', label: 'Left'},
+    {value: 'Right', label: 'Right'}
 ];
 
 const FileTreatment = ({state, setState, MonacoEditor, fetchFunction}) => {
 
     const [filterState, setFilterState] = useState({
         filterName: "KO",
-        extensionName: "Tout",
-        currentStatusCode: "Tout",
+        extensionName: "All",
+        currentStatusCode: "All",
         searchedString: "",
-        timeSide: "Gauche",
-        sortTimeType: "Neutre",
+        timeSide: "Left",
+        sortTimeType: "Neutral",
         stringsModifier: "",
         isAnnotationOpen: false,
         loadFileError: false,
@@ -53,7 +53,7 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing left");
+    console.log("Left parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`,
@@ -65,7 +65,7 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing right");
+    console.log("Right parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`
@@ -128,7 +128,7 @@ try {
     };
 
     const setStatusFilterItems = newItems => {
-        const allCodes = {value: "Tout", label: "Tout"};
+        const allCodes = {value: "All", label: "All"};
         const result = [allCodes];
         newItems.forEach(item => {
             compareStatusCode(item.left.StatusCode, result);
@@ -196,10 +196,10 @@ try {
 
             <div className="tabs">
                 <Tabs className="tabs__header">
-                    <Tabs.Tab title="Filtres">
+                    <Tabs.Tab title="Filters">
                         <div className="tabs__container tabs__container--justify">
                             <div className="tabs__filter-container">
-                                <p className="tabs__title">État de fichier :</p>
+                                <p className="tabs__title">File state:</p>
                                 <SelectBase
                                     id="select_type"
                                     name="SelectType"
@@ -209,7 +209,7 @@ try {
                                         setFilterState({...filterState, filterName: e.value});
                                     }}
                                 />
-                                <p className="tabs__title">Extensions de fichiers:</p>
+                                <p className="tabs__title">Files extensions:</p>
                                 <SelectBase
                                     id="extension_type"
                                     name="ExtensionType"
@@ -219,7 +219,7 @@ try {
                                         setFilterState({...filterState, extensionName: e.value});
                                     }}
                                 />
-                                <p className="tabs__title">Statuts serveur:</p>
+                                <p className="tabs__title">Server status:</p>
                                 <SelectBase
                                     id="status_code_type"
                                     name="StatusCodeType"
@@ -231,7 +231,7 @@ try {
                                 />
                             </div>
                             <div className="tabs__filter-container">
-                                <p className="tabs__title">Barre de recherche:</p>
+                                <p className="tabs__title">Search Bar:</p>
                                 <Textarea
                                     id="text_area_searchbar"
                                     name="TextAreaSearchBar"
@@ -243,10 +243,10 @@ try {
                             </div>
                         </div>
                     </Tabs.Tab>
-                    <Tabs.Tab title="Temps">
+                    <Tabs.Tab title="Time">
                         <div className="tabs__container tabs__container--justify">
                             <div className="tabs__filter-container">
-                                <p className="tabs__title">Côté du filtre:</p>
+                                <p className="tabs__title">Filter side:</p>
                                 <SelectBase
                                     id="time_side"
                                     name="TimeSide"
@@ -258,7 +258,7 @@ try {
                                         });
                                     }}
                                 />
-                                <p className="tabs__title">Temps:</p>
+                                <p className="tabs__title">Time:</p>
                                 <SelectBase
                                     id="time_filter"
                                     name="TimeFilter"
@@ -283,7 +283,7 @@ try {
                     <Tabs.Tab title="Configuration">
                         <div className="tabs__container tabs__container--justify">
                             <div className="tabs__filter-container">
-                                <p className="tabs__title">Modifier les critères de sélection des images</p>
+                                <p className="tabs__title">Change images selection criterias:</p>
                                 <Textarea
                                     id="text_area_stringsMatcherModifier"
                                     name="TextAreaStringsMatcherModifier"
@@ -300,7 +300,7 @@ try {
                                         id="is_annotation_open_checkbox"
                                         name="isAnnotationOpenCheckbox"
                                         mode={CheckboxModes.toggle}
-                                        label="Ouvrir les annotations:"
+                                        label="Open annotations:"
                                         isChecked={filterState.isAnnotationOpen}
                                         onChange={() => setFilterState({
                                             ...filterState,
@@ -315,12 +315,12 @@ try {
             </div>
 
             <div className="file-input">
-                <Button onClick={() => applyFilters()}>Appliquer les filtres</Button>
+                <Button onClick={() => applyFilters()}>Apply filters</Button>
             </div>
 
             {filterState.loadFileError &&
             <h2 className="error-message">
-                Une erreur est survenue lors du chargement du fichier.
+                An error occured while loading file.
             </h2>
             }
         </>

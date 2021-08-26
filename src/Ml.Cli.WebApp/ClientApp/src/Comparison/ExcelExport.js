@@ -5,13 +5,13 @@ import './ExcelExport.scss';
 export const createCsvContent = (fileInfo, statusCodes, levenshteinResults, timeMS, totalCompleteness) => {
 
     const rows = [
-        ["Fichiers OK", "Fichiers KO", "Total", "", "Left completeness", "Right completeness"],
+        ["OK Files", "KO Files", "Total", "", "Left completeness", "Right completeness"],
         [fileInfo.ok,fileInfo.ko,fileInfo.total,"",totalCompleteness.left, totalCompleteness.right],
         [],
         ["Left total time", "Right total time", "Difference"],
-        [`${timeMS.leftTimeMs / 1000} secondes`, `${timeMS.rightTimeMs / 1000} secondes`, `${(timeMS.rightTimeMs - timeMS.leftTimeMs) / 1000} secondes soit ${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) *100)} % de gain`],
+        [`${timeMS.leftTimeMs / 1000} seconds`, `${timeMS.rightTimeMs / 1000} seconds`, `${(timeMS.rightTimeMs - timeMS.leftTimeMs) / 1000} seconds (${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) *100)} % gain)`],
         ["Average left time", "Average right time", "Difference"],
-        [`${(timeMS.leftTimeMs / fileInfo.total) / 1000} secondes`, `${(timeMS.rightTimeMs / fileInfo.total) / 1000} secondes`, `${((timeMS.rightTimeMs - timeMS.leftTimeMs) / fileInfo.total) / 1000} soit ${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) * 100)} % de gain`],
+        [`${(timeMS.leftTimeMs / fileInfo.total) / 1000} secondes`, `${(timeMS.rightTimeMs / fileInfo.total) / 1000} secondes`, `${((timeMS.rightTimeMs - timeMS.leftTimeMs) / fileInfo.total) / 1000} seconds (${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) * 100)} % gain)`],
         [],
         ["Status code", "Left status code number", "Right status code number"],
         [],
@@ -78,7 +78,7 @@ const ExcelExport = ({fileInfo, statusCodes, levenshteinResults, timeMS, totalCo
     
     return <div className="excel-export-btn">
         <div className="excel-export-btn__container">
-            <Button onClick={saveData}>Exporter</Button>
+            <Button onClick={saveData}>Export</Button>
         </div>
     </div>;
 };

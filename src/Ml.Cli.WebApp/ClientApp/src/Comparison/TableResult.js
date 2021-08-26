@@ -33,7 +33,7 @@ const getExtensionName = (fileName) => {
 
 const filterExtensions = (items, extensionName) => {
     return items.filter(item => {
-        if (extensionName === "Tout") {
+        if (extensionName === "All") {
             return items;
         }
         if (extensionName === "JPG/JPEG") {
@@ -44,7 +44,7 @@ const filterExtensions = (items, extensionName) => {
 }
 
 const filterStatusCode = (items, statusCode) => {
-    if (statusCode === "Tout")
+    if (statusCode === "All")
         return items;
     else {
         const intStatusCode = parseInt(statusCode);
@@ -60,10 +60,10 @@ const filterSearchBar = (items, searchedString) => items.filter(item => item.fil
 
 export const sortTime = (items, sortTimeType, timeCategory) => {
     const copiedArray = JSON.parse(JSON.stringify(items));
-    if (sortTimeType === "Croissant") {
-        copiedArray.sort((a, b) => timeCategory === "Gauche" ? a.left.TimeMs - b.left.TimeMs : a.right.TimeMs - b.right.TimeMs);
-    } else if (sortTimeType === "Décroissant") {
-        copiedArray.sort((a, b) => timeCategory === "Gauche" ? b.left.TimeMs - a.left.TimeMs : b.right.TimeMs - a.right.TimeMs);
+    if (sortTimeType === "Ascending") {
+        copiedArray.sort((a, b) => timeCategory === "Left" ? a.left.TimeMs - b.left.TimeMs : a.right.TimeMs - b.right.TimeMs);
+    } else if (sortTimeType === "Descending") {
+        copiedArray.sort((a, b) => timeCategory === "Left" ? b.left.TimeMs - a.left.TimeMs : b.right.TimeMs - a.right.TimeMs);
     }
     return copiedArray;
 }
@@ -122,8 +122,7 @@ const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
 const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor, fetchFunction}) => {
     const setParentState = (newData) => setState({...state, ...newData});
     if (pageItems.items.length === 0) {
-        return <h2 className="error-message">Il n'y a aucun fichier correspondant à cette configuration de filtres
-            !</h2>;
+        return <h2 className="error-message">There is no file related to that filter configuration !</h2>;
     }
     return <>
         {pageItems.items.map(item => (
@@ -145,6 +144,10 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
             numberPages={computeNumberPages(filteredSearchBar, state.filters.pagingSelect)}
             numberItems={state.filters.pagingSelect}
             id="paging"
+            previousLabel="Previous"
+            nextLabel="Next"
+            displayLabel="Show"
+            elementsLabel="elements"
             onChange={(e) => {
                 const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
                 setState({
