@@ -28,15 +28,14 @@ const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
     }
 
     return <>
-        <div className="paging__top">
-            <Paging
-                id="paging-top"
-                currentPage={currentPage}
-                numberPages={numberPages}
-                numberItems={tableState.pagingSelect}
-                onChange={onPagingChange}
-            />
-        </div>
+        <Paging
+            id="paging-top"
+            className="af-paging paging__top"
+            currentPage={currentPage}
+            numberPages={numberPages}
+            numberItems={tableState.pagingSelect}
+            onChange={onPagingChange}
+        />
         
         {pageItems.items.map(item => (
             <TableAnnotateItem
