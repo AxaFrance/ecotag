@@ -14,7 +14,7 @@ Please copy the url of an Ubuntu artifact.
 Open a console in your JupyterLab environment, and use the following commands:
 - mkdir ml-cli
 - cd ml-cli
-- curl <ARTIFACT URL> --output ml-cli.zip
+- curl *ARTIFACT URL* --output ml-cli.zip
 - unzip ml-cli.zip
 - unzip ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip
 - echo '[]' > tasks.json
@@ -27,6 +27,14 @@ Please refer to the [Readme](./README.md) to change the parameters as you wish a
 
 Create a folder in your JupyterLab environment, which will contain the [ml-cli-jupyter.sh](./Jupyterlab/ml-cli-jupyter.sh) file and the [ml-cli-launcher](./Jupyterlab/ml-cli-launcher.sh) file.
 
-Open a console to launch the first file with the following command: "./ml-cli-jupyter.sh <ARTIFACT URL>".
+Open a console to launch the first file with the following command: "./ml-cli-jupyter.sh *ARTIFACT URL*".
 
 You can now use the second file to launch Ml-Cli in your JupyterLab environment, and use the automatically created tasks.json file to define your tasks. Please note that the launcher provides default parameters to Ml-Cli and might need to be updated by the user accordingly to its usage.
+
+## WebApp access
+
+Please navigate to:
+
+https://*Your JupyterLab url*/proxy/5000/
+
+To see the webapp of Ml-Cli.
