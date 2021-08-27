@@ -23,7 +23,7 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
               href="/"
             >
               <img
-                alt="Logo AXA"
+                alt="AXA Logo"
                 class="af-logo__brand"
                 src="logo-axa.svg"
               />
@@ -51,7 +51,7 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
         <h1
           class="af-title-bar__title"
         >
-          Liste des services
+          Services list
         </h1>
       </div>
     </div>
@@ -65,7 +65,7 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
         <div
           class="home__link-container home__link-container--compare"
         >
-          Comparaison de services
+          Services comparison
         </div>
       </a>
       <a
@@ -103,7 +103,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
             href="/"
           >
             <img
-              alt="Logo AXA"
+              alt="AXA Logo"
               class="af-logo__brand"
               src="logo-axa.svg"
             />
@@ -140,7 +140,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
       <h1
         class="af-title-bar__title"
       >
-        Comparer un fichier JSON
+        Compare JSON file
       </h1>
     </div>
   </div>
@@ -168,7 +168,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
             type="file"
           />
           <div>
-            Glissez/déposez vos fichiers
+            Slide/Deposit files
           </div>
         </div>
         <button
@@ -178,7 +178,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
           <i
             class="glyphicon glyphicon-open"
           />
-           Parcourir
+           Browse
         </button>
       </div>
     </div>
@@ -214,7 +214,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
             class="af-tabs__link"
             id="0"
           >
-            Filtres
+            Filters
           </button>
         </li>
         <li
@@ -224,7 +224,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
             class="af-tabs__link"
             id="1"
           >
-            Temps
+            Time
           </button>
         </li>
         <li
@@ -263,7 +263,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
               <p
                 class="tabs__title"
               >
-                État de fichier :
+                File state:
               </p>
               <div
                 class="af-form__select-container"
@@ -284,9 +284,9 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
                     OK
                   </option>
                   <option
-                    value="Tout"
+                    value="All"
                   >
-                    Tout
+                    All
                   </option>
                 </select>
                 <span
@@ -297,7 +297,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
               <p
                 class="tabs__title"
               >
-                Extensions de fichiers:
+                Files extensions:
               </p>
               <div
                 class="af-form__select-container"
@@ -308,9 +308,9 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
                   name="ExtensionType"
                 >
                   <option
-                    value="Tout"
+                    value="All"
                   >
-                    Tout
+                    All
                   </option>
                   <option
                     value="PNG"
@@ -341,7 +341,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
               <p
                 class="tabs__title"
               >
-                Statuts serveur:
+                Server status:
               </p>
               <div
                 class="af-form__select-container"
@@ -352,9 +352,9 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
                   name="StatusCodeType"
                 >
                   <option
-                    value="Tout"
+                    value="All"
                   >
-                    Tout
+                    All
                   </option>
                 </select>
                 <span
@@ -369,7 +369,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
               <p
                 class="tabs__title"
               >
-                Barre de recherche:
+                Search Bar:
               </p>
               <textarea
                 class="af-form__input-textarea"
@@ -389,7 +389,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
     <button
       class="btn af-btn"
     >
-      Appliquer les filtres
+      Apply filters
     </button>
   </div>
 </DocumentFragment>

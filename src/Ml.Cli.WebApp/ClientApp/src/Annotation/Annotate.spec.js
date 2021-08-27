@@ -29,7 +29,7 @@ describe("Check dataset handling", () => {
         fireEvent.change(fileInput, {target: {files: [fileSource]}});
 
         await waitFor(() => expect(container.querySelector('.table-result')).not.toBeNull());
-        await waitFor(() => expect(getAllByText(/Fichier en cours de visualisation : dataSourceFile.json/i)).not.toBeNull());
+        await waitFor(() => expect(getAllByText(/Visualising file: dataSourceFile.json/i)).not.toBeNull());
         await waitFor(() => expect(getByAltText(/file_image/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
     });

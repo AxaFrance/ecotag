@@ -189,7 +189,7 @@ const StatsTable = ({state, setState, items}) => {
                                 <span>Average time left : {(totalTimeMs.leftTimeMs / filteredItems.length) / 1000} seconds</span></div>
                             <div className="stats__results-info stats__results-info--separator">
                                 <span>Average time right : {(totalTimeMs.rightTimeMs / filteredItems.length) / 1000} seconds</span></div>
-                            <div className="stats__results-info"><span>Difference : {((totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / filteredItems.length) / 1000} secondes (+{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) * 100)}% gain)</span></div>
+                            <div className="stats__results-info"><span>Difference : {((totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / filteredItems.length) / 1000} seconds (+{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) * 100)}% gain)</span></div>
                         </div>
                         <StatusCode statusCodes={statusCodes}  />
                         <Scores

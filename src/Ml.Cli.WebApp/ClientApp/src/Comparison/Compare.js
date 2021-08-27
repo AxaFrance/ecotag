@@ -66,7 +66,7 @@ try {
                 />
             </Header>
             <TitleBar
-                title={state.fileName === "Compare JSON file" ? state.fileName : "Visualizing file : " + state.fileName}/>
+                title={state.fileName === "Compare JSON file" ? state.fileName : "Visualising file : " + state.fileName}/>
             <FileTreatment state={state} setState={setState} MonacoEditor={MonacoEditor}  fetchFunction={fetchFunction}/>
             {state.items.length > 0 &&
             <TableResult state={state} setState={setState} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>

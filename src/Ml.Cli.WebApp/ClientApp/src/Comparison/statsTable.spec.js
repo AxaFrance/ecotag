@@ -56,7 +56,7 @@ describe("Check items score handling", () => {
         const items = [{"left": {"StatusCode": 200, "TimeMs": 5000, "Body": "[FileBody_Correct_Left]"}, "right": {"StatusCode": 200, "TimeMs": 0, "Body": "[FileBody_Correct_Right]"}},{"left": {"StatusCode": 504, "TimeMs": 5000, "Body": "[FileBody_Incorrect_Left]"}, "right": {"StatusCode": 200, "TimeMs": 0, "Body": "[FileBody_Incorrect_Right]"}}];
         
         const { getByLabelText, queryAllByText  } = render(<StatsTable state={mockedState} setState={setMockedState} items={items} />);
-        const checkbox = getByLabelText('Supprimer les erreurs des statistiques:');
+        const checkbox = getByLabelText('Remove errors from stats:');
         
         expect(queryAllByText(/10/i)).not.toBeNull();
         

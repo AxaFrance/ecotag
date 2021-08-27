@@ -46,13 +46,13 @@ const totalCompleteness = {
     right: "100.00"
 };
 
-const expectedResult = "data:text/csv;charset=UTF-8,Fichiers OK,Fichiers KO,Total,,Left completeness,Right completeness \r\n" +
+const expectedResult = "data:text/csv;charset=UTF-8,OK Files,KO Files,Total,,Left completeness,Right completeness \r\n" +
     "2,1,3,,100.00,100.00 \r\n" +
     " \r\n" +
     "Left total time,Right total time,Difference \r\n" +
-    "0 secondes,0.1 secondes,0.1 secondes soit 0 % de gain \r\n" +
+    "0 seconds,0.1 seconds,0.1 seconds (0 % gain) \r\n" +
     "Average left time,Average right time,Difference \r\n" +
-    "0 secondes,0.03333333333333333 secondes,0.03333333333333333 soit 0 % de gain \r\n" +
+    "0 seconds,0.03333333333333333 seconds,0.03333333333333333 seconds (0 % gain) \r\n" +
     " \r\n" +
     "Status code,Left status code number,Right status code number \r\n" +
     "200,3,3 \r\n" +

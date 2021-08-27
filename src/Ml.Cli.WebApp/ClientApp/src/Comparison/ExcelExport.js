@@ -11,7 +11,7 @@ export const createCsvContent = (fileInfo, statusCodes, levenshteinResults, time
         ["Left total time", "Right total time", "Difference"],
         [`${timeMS.leftTimeMs / 1000} seconds`, `${timeMS.rightTimeMs / 1000} seconds`, `${(timeMS.rightTimeMs - timeMS.leftTimeMs) / 1000} seconds (${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) *100)} % gain)`],
         ["Average left time", "Average right time", "Difference"],
-        [`${(timeMS.leftTimeMs / fileInfo.total) / 1000} secondes`, `${(timeMS.rightTimeMs / fileInfo.total) / 1000} secondes`, `${((timeMS.rightTimeMs - timeMS.leftTimeMs) / fileInfo.total) / 1000} seconds (${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) * 100)} % gain)`],
+        [`${(timeMS.leftTimeMs / fileInfo.total) / 1000} seconds`, `${(timeMS.rightTimeMs / fileInfo.total) / 1000} seconds`, `${((timeMS.rightTimeMs - timeMS.leftTimeMs) / fileInfo.total) / 1000} seconds (${Math.round((timeMS.leftTimeMs / timeMS.rightTimeMs) * 100)} % gain)`],
         [],
         ["Status code", "Left status code number", "Right status code number"],
         [],

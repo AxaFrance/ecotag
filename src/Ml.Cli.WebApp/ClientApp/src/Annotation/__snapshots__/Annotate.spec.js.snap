@@ -20,7 +20,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             href="/"
           >
             <img
-              alt="Logo AXA"
+              alt="AXA Logo"
               class="af-logo__brand"
               src="logo-axa.svg"
             />
@@ -57,7 +57,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
       <h1
         class="af-title-bar__title"
       >
-        Fichier en cours de visualisation : dataSourceFile.json
+        Visualising file: dataSourceFile.json
       </h1>
     </div>
   </div>
@@ -85,7 +85,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             type="file"
           />
           <div>
-            Glissez/déposez vos fichiers
+            Slide/Deposit files
           </div>
         </div>
         <button
@@ -95,7 +95,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
           <i
             class="glyphicon glyphicon-open"
           />
-           Parcourir
+           Browse
         </button>
       </div>
     </div>
@@ -134,7 +134,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
     >
       <div>
         <p>
-          Résultat fichier : {FileName}_pdf.json
+          File result: {FileName}_pdf.json
         </p>
       </div>
     </div>
@@ -175,7 +175,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             class="editor-container__error-message"
           >
             <span>
-              Impossible de parser l'item {FileName}_pdf.json. Veuillez vous assurer que le contenu de ce fichier est au format JSON.
+              Impossible to parse item {FileName}_pdf.json. Please ensure the content of the file is valid JSON.
             </span>
           </div>
         </div>
@@ -185,7 +185,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
           <button
             class="btn af-btn"
           >
-            Sauvegarder
+            Save
           </button>
         </div>
       </div>
@@ -213,7 +213,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
                 class="af-form__group-label"
                 for="paging"
               >
-                Afficher
+                Show
               </label>
             </div>
             <div
@@ -262,7 +262,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
                 <span
                   class="af-form__input-cmplt"
                 >
-                  éléments
+                  elements
                 </span>
               </div>
             </div>
@@ -285,7 +285,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             <span
               class="af-pager__item-nolink"
             >
-              « Précédent
+              Previous
             </span>
           </li>
           <li
@@ -306,7 +306,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             <span
               class="af-pager__item-nolink"
             >
-              Suivant »
+              Next
             </span>
           </li>
         </ul>
