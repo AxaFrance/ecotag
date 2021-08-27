@@ -105,7 +105,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <p
         class="library__title"
       >
-        Fichiers de test
+        Test files
       </p>
       <span>
         No file found.
@@ -321,7 +321,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       class="stats__title"
     >
       <span>
-        Statistiques :
+        Stats:
       </span>
       <div
         class="table-result__collapse-button"
@@ -1121,7 +1121,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <p
         class="library__title"
       >
-        Fichiers de test
+        Test files
       </p>
       <span>
         No file found.
@@ -1337,7 +1337,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       class="stats__title"
     >
       <span>
-        Statistiques :
+        Stats:
       </span>
       <div
         class="table-result__collapse-button"

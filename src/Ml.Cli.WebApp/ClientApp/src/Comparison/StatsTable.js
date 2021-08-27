@@ -134,7 +134,7 @@ const StatsTable = ({state, setState, items}) => {
         <>
             <div className="stats" key="StatsTableKey">
                 <div className="stats__title">
-                    <span>Statistiques :</span>
+                    <span>Stats:</span>
                     <div className="table-result__collapse-button" onClick={() => {setState({...state, isStatsTableShowed: !state.isStatsTableShowed})}}>{state.isStatsTableShowed ? "-" : "+"}</div>
                 </div>
                 {state.isStatsTableShowed && (

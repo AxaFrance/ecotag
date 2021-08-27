@@ -105,7 +105,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
       <p
         class="library__title"
       >
-        Fichiers de test
+        Test files
       </p>
       <div
         class="library__files-list"
