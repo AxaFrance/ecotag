@@ -188,7 +188,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
       <p
         class="library__title"
       >
-        Fichiers de test
+        Test files
       </p>
       <span>
         No file found.
