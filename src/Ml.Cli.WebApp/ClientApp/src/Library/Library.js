@@ -70,7 +70,7 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
 
     return (
         <div className="library__container">
-            <p className="library__title">Fichiers de test</p>
+            <p className="library__title">Test files</p>
             {state.files.length === 0 &&
                 <span>No file found.</span>
             }

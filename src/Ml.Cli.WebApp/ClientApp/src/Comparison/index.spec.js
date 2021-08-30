@@ -27,7 +27,7 @@ describe('Check a compare file insertion', () => {
 
         const selectState = container.querySelector("select[id='select_type']");
 
-        fireEvent.change(selectState, {target: {value: "Tout"}});
+        fireEvent.change(selectState, {target: {value: "All"}});
 
         await waitFor(() => expect(getAllByText(/JOHN/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();

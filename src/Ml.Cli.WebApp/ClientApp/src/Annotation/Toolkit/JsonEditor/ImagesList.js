@@ -5,11 +5,11 @@ const ImagesList = ({fileUrls}) => {
     return <>
         {fileUrls.length === 0 &&
         <div className="images-error">
-            <p>Aucun fichier correspondant n'a été trouvé sur votre disque.
-                <br/> Plusieurs raisons sont possibles:
-                <br/> - Il n'existe pas d'image correspondant à ce fichier sur votre disque;
-                <br/> - L'attribut regex spécifié ne correspond à aucun fichier;
-                <br/> - Le répertoire des images de ce fichier n'existe pas.
+            <p>No related file has been found on your local hard drive.
+                <br/> There is several possibilities:
+                <br/> - There is no existing image related to this file on your hard drive;
+                <br/> - The specified regex doesn't match any file;
+                <br/> - The images repository of this file doesn't exist.
             </p>
         </div>
         }

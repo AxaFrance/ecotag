@@ -21,12 +21,12 @@ const dataOutputDescending = [
 describe("Check sort by time functionality", () => {
     
     test('Sort by ascending order', async() => {
-        const result = sortTime(dataSource, "Croissant", "Droite");
+        const result = sortTime(dataSource, "Ascending", "Right");
         expect(result).toStrictEqual(dataOutputAscending);
     });
     
     test('Sort by descending order', async() => {
-        const result = sortTime(dataSource, "Décroissant", "Droite");
+        const result = sortTime(dataSource, "Descending", "Right");
         expect(result).toStrictEqual(dataOutputDescending);
     })
 })

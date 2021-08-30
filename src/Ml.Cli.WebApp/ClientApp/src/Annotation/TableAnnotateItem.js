@@ -8,7 +8,7 @@ const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => 
         <div className="table-result">
             <div className="table-result__header">
                 <div>
-                    <p>Résultat fichier : {item.fileName}</p>
+                    <p>File result: {item.fileName}</p>
                 </div>
             </div>
             <AnnotationImagesLoader

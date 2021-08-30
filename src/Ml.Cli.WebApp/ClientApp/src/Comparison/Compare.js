@@ -12,17 +12,17 @@ const queryClient = new QueryClient();
 const Compare = ({MonacoEditor, fetchFunction}) => {
 
     const [state, setState] = useState({
-        fileName: "Comparer un fichier JSON",
+        fileName: "Compare JSON file",
         compareLocation: "",
         items: [],
         filters: {
             filterName: "KO",
-            extensionName: "Tout",
-            currentStatusCode: "Tout",
+            extensionName: "All",
+            currentStatusCode: "All",
             searchedString: "",
             stringsModifier: "",
-            sortTimeType: "Neutre",
-            timeSide: "Gauche",
+            sortTimeType: "Neutral",
+            timeSide: "Left",
             pagingSelect: 50,
             pagingCurrent: 1,
             filterRight: `
@@ -33,7 +33,7 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing left");
+    console.log("Left parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`,
@@ -45,12 +45,12 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing left");
+    console.log("Right parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`
         },
-        statusCodes: [{value: "Tout", label: "Tout"}],
+        statusCodes: [{value: "All", label: "All"}],
         isStatsTableShowed: true,
         isAnnotationOpen: false
     });
@@ -62,11 +62,11 @@ try {
                     title="ML-CLI"
                     subtitle="Made by AXA"
                     img={logo}
-                    alt="Logo AXA"
+                    alt="AXA Logo"
                 />
             </Header>
             <TitleBar
-                title={state.fileName === "Comparer un fichier JSON" ? state.fileName : "Fichier en cours de visualisation : " + state.fileName}/>
+                title={state.fileName === "Compare JSON file" ? state.fileName : "Visualising file : " + state.fileName}/>
             <FileTreatment state={state} setState={setState} MonacoEditor={MonacoEditor}  fetchFunction={fetchFunction}/>
             {state.items.length > 0 &&
             <TableResult state={state} setState={setState} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>

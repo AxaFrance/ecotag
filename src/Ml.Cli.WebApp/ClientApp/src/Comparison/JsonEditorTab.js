@@ -54,7 +54,7 @@ const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompare
 
     return <div className="editor-tab">
         <Tabs className="editor-tab__header">
-            <Tabs.Tab title="Gauche">
+            <Tabs.Tab title="Left">
                 <ImagesLoader
                     expectedOutput={{id: `${item.fileName}_left`, value: item.left.Body, fileName: item.fileName}}
                     onSubmit={e => saveItem(left_var, e)}
@@ -65,7 +65,7 @@ const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompare
                     fetchFunction={fetchFunction}
                 />
             </Tabs.Tab>
-            <Tabs.Tab title="Droite">
+            <Tabs.Tab title="Right">
                 <ImagesLoader
                     expectedOutput={{id: `${item.fileName}_right`, value: item.right.Body, fileName: item.fileName}}
                     onSubmit={e => saveItem(right_var, e)}
