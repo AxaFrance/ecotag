@@ -33,7 +33,7 @@ describe('Check Editor usage', () => {
                 MonacoEditor={mockedMonacoEditor}
             />
         );
-        await waitFor(() => expect(getAllByText(/Aucun fichier correspondant n'a été trouvé sur votre disque./i)).not.toBeNull());
+        await waitFor(() => expect(getAllByText(/No related file has been found on your local hard drive./i)).not.toBeNull());
         const fileInput = container.querySelector("#Editor-container-test");
         expect(fileInput).toHaveTextContent("{ \"analysis\": \"This is a test\" }");
         const saveButton = container.querySelector(".btn.af-btn");

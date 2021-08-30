@@ -13,7 +13,7 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing left");
+    console.log("Left parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`;
@@ -25,7 +25,7 @@ try {
     // writing "isSkipped=true" will remove the item from the results
     isSkipped=false;
 } catch(ex) {
-    console.log("Plantage parsing left");
+    console.log("Right parsing crash");
     console.log(ex.toString());
     rawBodyOutput = rawBodyInput;
 }`;
@@ -35,7 +35,7 @@ try {
     return <>
         <div className="tabs__container">
             <div className="tabs__function-filter">
-                <label>filtre gauche</label>
+                <label>Left filter</label>
                 <JsonEditor
                     id="fileTreatment_script_left_editor"
                     language="javascript"
@@ -45,7 +45,7 @@ try {
                 />
             </div>
             <div className="tabs__function-filter">
-                <label>filtre droite</label>
+                <label>Right filter</label>
                 <JsonEditor
                     id="fileTreatment_script_right_editor"
                     language="javascript"
@@ -56,7 +56,7 @@ try {
             </div>
         </div>
         <div className="tabs__container">
-            <Button onClick={() => reinitJSFilters()}>Réinitialiser</Button>
+            <Button onClick={() => reinitJSFilters()}>Reset</Button>
         </div>
     </>;
 };

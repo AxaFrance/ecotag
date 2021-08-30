@@ -42,7 +42,7 @@ exports[`Check dataset handling Should render AnnotationImagesLoader and get ima
           class="editor-container__error-message"
         >
           <span>
-            Impossible de parser l'item fileName.json. Veuillez vous assurer que le contenu de ce fichier est au format JSON.
+            Impossible to parse item fileName.json. Please ensure the content of the file is valid JSON.
           </span>
         </div>
       </div>
@@ -52,7 +52,7 @@ exports[`Check dataset handling Should render AnnotationImagesLoader and get ima
         <button
           class="btn af-btn"
         >
-          Sauvegarder
+          Save
         </button>
       </div>
     </div>

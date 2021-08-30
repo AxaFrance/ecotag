@@ -21,6 +21,8 @@ const FileLoader = ({id, name, accept, onLoad, onFailure, fetchFunction, control
             <div className="file-loader__input">
                 <File
                     id={id}
+                    placeholder="Slide/Deposit files"
+                    label="Browse"
                     name={name}
                     accept={accept}
                     onChange={onFileLoad}

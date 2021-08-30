@@ -170,7 +170,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             {parentState.annotationType === "JsonEditor" &&
             <>
                 {!state.isFetched &&
-                    <div>Chargement de l'éditeur...</div>
+                    <div>Loading editor...</div>
                 }
                 {state.isFetched &&
                     <JsonEditorContainer

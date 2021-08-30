@@ -55,7 +55,7 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
             />
             {handlerState.loadFileError &&
             <h2 className="error-message">
-                Une erreur est survenue lors du chargement du fichier.
+                An error occured during file loading.
             </h2>
             }
         </>

@@ -20,7 +20,7 @@ const initContent = expectedOutput => {
     } catch (error) {
         return {
             editorValue: "",
-            errorMessage: `Impossible de parser l'item ${expectedOutput.fileName}. Veuillez vous assurer que le contenu de ce fichier est au format JSON.`
+            errorMessage: `Impossible to parse item ${expectedOutput.fileName}. Please ensure the content of the file is valid JSON.`
         };
     }
 };
@@ -63,7 +63,7 @@ const JsonEditorContainer = ({expectedOutput, urls, onSubmit, MonacoEditor}) => 
             />
             <div className="editor-container__errors-container">
                 {state.isJsonInvalid &&
-                <div className="editor-container__error-message"><span>Le JSON modifié est invalide ! La sauvegarde n'a pas été effectuée.</span>
+                <div className="editor-container__error-message"><span>The modified JSON is invalid ! Save procedure has been cancelled.</span>
                 </div>
                 }
                 {state.errorMessage &&

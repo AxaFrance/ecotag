@@ -60,8 +60,8 @@ const StatusCode = ({statusCodes}) => {
             <div className="stats__results-info stats__results-info--separator">
                 <span>Status Code : {key} </span></div>
             <div className="stats__results-info stats__results-info--separator">
-                <span>Nombre à gauche : {value.left} </span></div>
-            <div className="stats__results-info"> <span>Nombre à droite : {value.right} </span></div>
+                <span>Number on the left : {value.left} </span></div>
+            <div className="stats__results-info"> <span>Number on the right : {value.right} </span></div>
         </div>
     });
 
@@ -74,7 +74,7 @@ const Scores = ({levenshteinResults}) => {
         const keyValue = levenshteinResults[key];
         return <div className="stats__results" key={key}>
             <div className="stats__results-info stats__results-info--separator">
-                <span>Clé : {key} </span></div>
+                <span>Key : {key} </span></div>
             <div className="stats__results-info stats__results-info--separator">
                 <ul>
                     <li>Levenshtein score : {keyValue.score} </li>
@@ -134,7 +134,7 @@ const StatsTable = ({state, setState, items}) => {
         <>
             <div className="stats" key="StatsTableKey">
                 <div className="stats__title">
-                    <span>Statistiques :</span>
+                    <span>Stats:</span>
                     <div className="table-result__collapse-button" onClick={() => {setState({...state, isStatsTableShowed: !state.isStatsTableShowed})}}>{state.isStatsTableShowed ? "-" : "+"}</div>
                 </div>
                 {state.isStatsTableShowed && (
@@ -145,7 +145,7 @@ const StatsTable = ({state, setState, items}) => {
                                 name="areErrorsCountedCheckbox"
                                 mode={CheckboxModes.toggle}
                                 isChecked={statsState.areErrorsRemoved}
-                                label="Supprimer les erreurs des statistiques:"
+                                label="Remove errors from stats:"
                                 onChange={() => setStatsState({...statsState, areErrorsRemoved: !statsState.areErrorsRemoved})}
                                 options={statsErrorsOptions}
                             />
@@ -159,37 +159,37 @@ const StatsTable = ({state, setState, items}) => {
                         </div>
                         <div className="stats__results">
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Fichiers OK : {filterItems(filteredItems, "OK").length}</span></div>
+                                <span>OK Files: {filterItems(filteredItems, "OK").length}</span></div>
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Fichiers KO : {filterItems(filteredItems, "KO").length}</span></div>
+                                <span>KO Files: {filterItems(filteredItems, "KO").length}</span></div>
                             <div className="stats__results-info"><span>Total : {filteredItems.length}</span></div>
                         </div>
                         <div className="stats__results">
                             <div className="stats__results-info stats__results-info--double-columns stats__results-info--separator">
                                 <Help
                                     placement="right"
-                                    children="Nombre de fichiers contenant toutes les clés (non null et non vides)"
+                                    children="Number of files containing all the keys (non null and not empty)"
                                     mode="hover"
                                 />
-                                <span>Complétude gauche : {totalCompleteness.left}%</span>
+                                <span>Completeness left : {totalCompleteness.left}%</span>
                             </div>
                             <div className="stats__results-info stats__results-info--double-columns">
-                                <span>Complétude droite : {totalCompleteness.right}%</span>
+                                <span>Completeness right : {totalCompleteness.right}%</span>
                             </div>
                         </div>
                         <div className="stats__results">
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Temps total gauche : {totalTimeMs.leftTimeMs / 1000} secondes</span></div>
+                                <span>Total time left : {totalTimeMs.leftTimeMs / 1000} seconds</span></div>
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Temps total droite : {totalTimeMs.rightTimeMs / 1000} secondes</span></div>
-                            <div className="stats__results-info"><span>Différence : {(totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / 1000} secondes soit +{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) *100)}% de gain</span></div>
+                                <span>Total time right : {totalTimeMs.rightTimeMs / 1000} seconds</span></div>
+                            <div className="stats__results-info"><span>Difference : {(totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / 1000} seconds (+{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) *100)}% gain)</span></div>
                         </div>
                         <div className="stats__results">
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Temps moyen gauche : {(totalTimeMs.leftTimeMs / filteredItems.length) / 1000} secondes</span></div>
+                                <span>Average time left : {(totalTimeMs.leftTimeMs / filteredItems.length) / 1000} seconds</span></div>
                             <div className="stats__results-info stats__results-info--separator">
-                                <span>Temps moyen droite : {(totalTimeMs.rightTimeMs / filteredItems.length) / 1000} secondes</span></div>
-                            <div className="stats__results-info"><span>Différence : {((totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / filteredItems.length) / 1000} secondes soit +{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) * 100)}% </span></div>
+                                <span>Average time right : {(totalTimeMs.rightTimeMs / filteredItems.length) / 1000} seconds</span></div>
+                            <div className="stats__results-info"><span>Difference : {((totalTimeMs.rightTimeMs - totalTimeMs.leftTimeMs) / filteredItems.length) / 1000} seconds (+{Math.round((totalTimeMs.leftTimeMs / totalTimeMs.rightTimeMs) * 100)}% gain)</span></div>
                         </div>
                         <StatusCode statusCodes={statusCodes}  />
                         <Scores

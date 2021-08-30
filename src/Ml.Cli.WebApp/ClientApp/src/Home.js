@@ -11,13 +11,13 @@ const Home = () => (
                 title="ML-CLI"
                 subtitle="Made by AXA"
                 img={logo}
-                alt="Logo AXA"
+                alt="AXA Logo"
             />
         </Header>
-        <Title title="Liste des services"/>
+        <Title title="Services list"/>
         <div className="home__links-container">
             <Link className="home__link" to="/compare">
-                <div className="home__link-container home__link-container--compare">Comparaison de services</div>
+                <div className="home__link-container home__link-container--compare">Services comparison</div>
             </Link>
             <Link className="home__link" to="/annotate">
                 <div className="home__link-container home__link-container--annotate">Annotation</div>
