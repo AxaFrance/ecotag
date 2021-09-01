@@ -123,7 +123,8 @@ curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-a
 unzip ml-cli.zip -d install
 unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
 echo Installation done ! Launching Ml-Cli webapp...
-./ml-cli/Ml.Cli.WebApp --tasks-path ../sample/tasks.json --base-path ./sample --compares-paths ./sample/compares --datasets-paths ./sample/datasets
+cd ml-cli
+./Ml.Cli.WebApp --tasks-path ../sample/tasks.json --base-path ./sample --compares-paths ./sample/compares --datasets-paths ./sample/datasets
 #Then navigate to: https://your-jupyterlab/proxy/5000/ 
 ```
 
