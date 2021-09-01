@@ -111,7 +111,7 @@ pip install jupyter-server-proxy
 jupyter labextension install @jupyterlab/server-proxy
 ```
 
-Then, run the following commands :
+Run the following commands :
 ```sh
 mkdir ml-cli
 cd ml-cli
@@ -127,7 +127,6 @@ unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
 # Download demo directory
 curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4ODcvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
 unzip demo.zip
-
 ```
 
 Then, in another command line :
@@ -135,9 +134,10 @@ Then, in another command line :
 # run the demo-api
 cd demo-api
 ./Ml.Cli.DemoApi
-# start in background at https://localhost:6001
+# start demo api in background at https://localhost:6001
 ```
 
+Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
