@@ -103,6 +103,36 @@ Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licen
 # Run on Mac 
 Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
+# Getting started with JupyterLab on unbuntu
+
+You need to install the plugin @jupyterlab/server-proxy as a prerequist :
+```sh
+pip install jupyter-server-proxy
+jupyter labextension install @jupyterlab/server-proxy
+```
+
+Then, run the following commands :
+```sh
+mkdir ml-cli
+mkdir ./ml-cli/sample # your working directory
+mkdir ./ml-cli/sample/datasets
+mkdir ./ml-cli/sample/compares
+echo '[]' > ./ml-cli/sample/tasks.json
+cd ml-cli
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4ODEvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
+unzip ml-cli.zip -d install
+unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
+echo Installation done ! Launching Ml-Cli webapp...
+./ml-cli/Ml.Cli.WebApp --tasks-path ../sample/tasks.json --base-path ./sample --compares-paths ./sample/compares --datasets-paths ./sample/datasets
+#Then navigate to: https://your-jupyterlab/proxy/5000/ 
+```
+
+Then, run the comand lines :
+```sh
+unzip /install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo
+echo Installation done ! Launching Demo webapp...
+./ml-cli/Ml.Cli.DemoApi --urls=http://localhost:5001
+```
 
 # How it works
 

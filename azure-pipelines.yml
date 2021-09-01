@@ -181,3 +181,8 @@ steps:
     inputs:
       targetPath: $(System.DefaultWorkingDirectory)/win10
       artifactName: win10
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/demo
+      artifactName: demo
