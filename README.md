@@ -98,10 +98,10 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
+Ml.Cli.WebApp.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
-Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
+Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 # Getting started with JupyterLab on unbuntu
 
