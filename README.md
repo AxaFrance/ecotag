@@ -117,7 +117,7 @@ mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web and demo-api
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4ODcvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4OTAvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
 unzip ml-cli.zip -d install
 # unzip ml-cli
 unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli 
@@ -125,7 +125,7 @@ unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
 unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
 
 # Download demo directory
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4ODcvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4OTAvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
 unzip demo.zip
 ```
 
