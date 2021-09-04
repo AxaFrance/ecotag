@@ -61,7 +61,7 @@ dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
 cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run -- --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\output
+dotnet run -- --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
 
@@ -98,10 +98,51 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe --security-path ..\..\demo --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
+Ml.Cli.WebApp.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
-Ml.Cli.WebApp --security-path ../../demo --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
+Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
+```
+# Getting started with JupyterLab on unbuntu
+
+You need to install the plugin @jupyterlab/server-proxy as a prerequist :
+```sh
+pip install jupyter-server-proxy
+jupyter labextension install @jupyterlab/server-proxy
+```
+
+Run the following commands :
+```sh
+mkdir ml-cli
+cd ml-cli
+
+# Download ml-cli-web and demo-api
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4OTAvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
+unzip ml-cli.zip -d install
+# unzip ml-cli
+unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli 
+# unzip demo-api
+unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
+
+# Download demo directory
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzQ4OTAvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
+unzip demo.zip
+```
+
+Then, in another command line :
+```sh
+# run the demo-api
+cd demo-api
+./Ml.Cli.DemoApi
+# start demo api in background at https://localhost:6001
+```
+
+Then, in another command line :
+```sh
+# run ml-cli
+cd ml-cli
+./Ml.Cli.WebApp --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
+# then navigate to: https://your-jupyterlab/proxy/5000/ 
 ```
 
 # How it works
