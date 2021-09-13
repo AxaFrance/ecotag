@@ -28,4 +28,13 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x' # SDK Version to use; x will use the latest version of the 3.1 channel
-      - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
+      #- run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
+      
+      - run: dotnet publish /src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj --self-contained true --output /ubuntu/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r linux-x64
+      
+      - name: Upload WebApp1 Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Publish Unbuntu ml-cli-webapp
+          path: /ubuntu/ml-cli-webapp
+      
