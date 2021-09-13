@@ -24,7 +24,18 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          
+      - name: npm install
+        run: npm install
+        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+        
+      - name: npm test
+        run: npm test -- --runInBand --coverage --watchAll=false
+        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+      
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x' # SDK Version to use; x will use the latest version of the 3.1 channel
