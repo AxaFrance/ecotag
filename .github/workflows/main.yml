@@ -47,5 +47,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Publish Unbuntu ml-cli-webapp
-          path: /ubuntu/ml-cli-webapp
+          path: ./ubuntu/ml-cli-webapp
       
