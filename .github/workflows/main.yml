@@ -53,7 +53,7 @@ jobs:
         working-directory: ./ubuntu/
       
       - name: version
-        run: echo "::set-output name=version::1.0.0"
+        run: echo "::set-output name=version::1.0.1"
         id: version
         
       - name: Upload WebApp1 Build Artifact
