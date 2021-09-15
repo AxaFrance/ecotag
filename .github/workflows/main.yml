@@ -45,6 +45,13 @@ jobs:
       
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj --self-contained true --output ./ubuntu/ml-cli-webapp -f netcoreapp3.1 -c Release -r linux-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true
       
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Zip output
+        run: zip -qq -r ml-cli-webapp.zip ml-cli-webapp
+        working-directory: ./ubuntu/
+      
       - name: version
         run: echo "::set-output name=version::1.0.0"
         id: version
@@ -57,6 +64,7 @@ jobs:
       
       - name: release
         uses: actions/create-release@v1
+        #if: ${{ github.ref == 'refs/heads/main' }}
         id: create_release
         with:
           draft: false
@@ -67,12 +75,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
-     # - name: upload windows artifact
-     #   uses: actions/upload-release-asset@v1
-     #   env:
-     #     GITHUB_TOKEN: ${{ github.token }}
-     #   with:
-      #    upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #    asset_path: ./bin/azblogfilter.windows-amd64.zip
-      #    asset_name: azblogfilter.windows-amd64.zip
-      #    asset_content_type: application/zip
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ubuntu/ml-cli-webapp.zip
+          asset_name: ml-cli-webapp.zip
+          asset_content_type: application/zip
