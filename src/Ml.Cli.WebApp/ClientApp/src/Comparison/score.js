@@ -87,7 +87,7 @@ const updateResultDict = (result, dict) => {
     }
 }
 
-const totalCompletenessByKey = side => {
+export const totalCompletenessByKey = side => {
     let result = Number(0.00).toFixed(2);
     if(side.completeness_ok != null){
         result = (side.completeness_ok * 100 / (side.completeness_ok + side.completeness_ko)).toFixed(2);

@@ -1,5 +1,5 @@
 ﻿import React, {useState} from "react";
-import {totalScores} from "./score";
+import {totalCompletenessByKey, totalScores} from "./score";
 import {filterItems} from './TableResult';
 import ExcelExport from "./ExcelExport";
 import {CheckboxInput, CheckboxModes} from "@axa-fr/react-toolkit-form-input-checkbox";
@@ -53,6 +53,47 @@ export const calcTotalCompleteness = (levenshteinResults, numberItems) => {
     return {left: totalLeftCompleteness, right: totalRightCompleteness};
 };
 
+const updateKeysDict = (keysDict, newKey, value) => {
+    let objectValues = keysDict[newKey];
+    objectValues.score += value.score;
+    objectValues.score_ok += value.score_ok;
+    objectValues.score_ko += value.score_ko;
+    objectValues.total += value.total;
+    objectValues.completeness_left.ok += value.completeness_left.ok;
+    objectValues.completeness_left.ko += value.completeness_left.ko;
+    objectValues.completeness_right.ok += value.completeness_right.ok;
+    objectValues.completeness_right.ko += value.completeness_right.ko;
+    keysDict[newKey] = objectValues;
+    
+    const percentagesOK = ((objectValues.score_ok + objectValues.score_ko) === 0 ? "-" : `${Math.round((objectValues.score_ok / (objectValues.score_ok + objectValues.score_ko))*100*100)/100} %`);
+    const tempLeftSide = {completeness_ok: objectValues.completeness_left.ok, completeness_ko: objectValues.completeness_left.ko};
+    const tempRightSide = {completeness_ok: objectValues.completeness_right.ok, completeness_ko: objectValues.completeness_right.ko};
+    const completenessOKLeft = totalCompletenessByKey(tempLeftSide);
+    const completenessOKRight = totalCompletenessByKey(tempRightSide);
+    
+    objectValues.percentages.ok = percentagesOK;
+    objectValues.percentages.completeness_ok_left = `${completenessOKLeft} %`;
+    objectValues.percentages.completeness_ok_right = `${completenessOKRight} %`;
+    
+    return keysDict;
+};
+
+const normalizeKeys = (levenshteinResult, keys) => {
+    let newKeysDict = {};
+    const regex = /[0-9]+_/i;
+    //get the new names of the keys combined with the current key to recover its value
+    keys.forEach(key => {
+        const newKey = key.replace(regex, "");
+        if(newKeysDict.hasOwnProperty((newKey))){
+            newKeysDict = updateKeysDict(newKeysDict, newKey, levenshteinResult[key]);
+        }
+        else{
+            newKeysDict[newKey] = levenshteinResult[key];
+        }
+    });
+    return newKeysDict;
+};
+
 const StatusCode = ({statusCodes}) => {
     const statuses =  Object.keys(statusCodes).map(function(key) {
         const value = statusCodes[key];
@@ -68,8 +109,12 @@ const StatusCode = ({statusCodes}) => {
     return <>{statuses}</>
 }
 
-const Scores = ({levenshteinResults}) => {
-    const keys = Object.keys(levenshteinResults);
+const Scores = ({levenshteinResults, isMerging}) => {
+    let keys = Object.keys(levenshteinResults);
+    if(isMerging){
+        levenshteinResults = normalizeKeys(levenshteinResults, keys);
+        keys = Object.keys(levenshteinResults);
+    }
     const ScoreItems =  keys.map(function(key) {
         const keyValue = levenshteinResults[key];
         return <div className="stats__results" key={key}>
@@ -110,10 +155,21 @@ const statsErrorsOptions = [
     }
 ];
 
+const statsMergeOptions = [
+    {
+        key:"checkbox_isMerging",
+        id:"is_merging_checkbox",
+        value:"mergeValue",
+        label:"Is merge activated ?",
+        disabled: false
+    }
+];
+
 const StatsTable = ({state, setState, items}) => {
 
     const [statsState, setStatsState] = useState({
-        areErrorsRemoved: false
+        areErrorsRemoved: false,
+        isMerging: false
     });
     
     const filteredItems = statsState.areErrorsRemoved ?
@@ -148,6 +204,15 @@ const StatsTable = ({state, setState, items}) => {
                                 label="Remove errors from stats:"
                                 onChange={() => setStatsState({...statsState, areErrorsRemoved: !statsState.areErrorsRemoved})}
                                 options={statsErrorsOptions}
+                            />
+                            <CheckboxInput
+                                id="merge"
+                                name="merge"
+                                mode={CheckboxModes.toggle}
+                                isChecked={statsState.isMerging}
+                                label="Merge keys"
+                                onChange={() => setStatsState({...statsState, isMerging: !statsState.isMerging})}
+                                options={statsMergeOptions}
                             />
                             <ExcelExport
                                 fileInfo={fileInfo}
@@ -194,6 +259,7 @@ const StatsTable = ({state, setState, items}) => {
                         <StatusCode statusCodes={statusCodes}  />
                         <Scores
                             levenshteinResults={levenshteinResults}
+                            isMerging={statsState.isMerging}
                         />
                     </>
                 )}
