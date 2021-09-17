@@ -112,19 +112,18 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
     }
     
     return <>
-        <div className="paging__top">
-            <Paging
-                currentPage={currentPage}
-                numberPages={numberPages}
-                numberItems={state.filters.pagingSelect}
-                id="paging-top"
-                previousLabel="Previous"
-                nextLabel="Next"
-                displayLabel="Show"
-                elementsLabel="elements"
-                onChange={onPagingChange}
-            />
-        </div>
+        <Paging
+            className="af-paging paging__top"
+            currentPage={currentPage}
+            numberPages={numberPages}
+            numberItems={state.filters.pagingSelect}
+            id="paging-top"
+            previousLabel="Previous"
+            nextLabel="Next"
+            displayLabel="Show"
+            elementsLabel="elements"
+            onChange={onPagingChange}
+        />
         
         {pageItems.items.map(item => (
             <TableItem

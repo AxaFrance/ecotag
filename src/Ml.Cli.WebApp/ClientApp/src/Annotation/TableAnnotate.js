@@ -30,11 +30,11 @@ const TableAnnotate = ({state, MonacoEditor, fetchFunction}) => {
     return <>
         <Paging
             id="paging-top"
+            className="af-paging paging__top"
             previousLabel="Previous"
             nextLabel="Next"
             displayLabel="Show"
             elementsLabel="elements"
-            className="af-paging paging__top"
             currentPage={currentPage}
             numberPages={numberPages}
             numberItems={tableState.pagingSelect}
