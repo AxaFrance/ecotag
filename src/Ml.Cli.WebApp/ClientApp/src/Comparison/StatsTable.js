@@ -82,7 +82,7 @@ const normalizeKeys = (levenshteinResult, keys) => {
     let newKeysDict = {};
     const regex = /[0-9]+_/ig;
     keys.forEach(key => {
-        const newKey = key.replaceAll(regex, "");
+        const newKey = key.replace(regex, "");
         if(newKeysDict.hasOwnProperty((newKey))){
             newKeysDict = updateKeysDict(newKeysDict, newKey, levenshteinResult[key]);
         }
