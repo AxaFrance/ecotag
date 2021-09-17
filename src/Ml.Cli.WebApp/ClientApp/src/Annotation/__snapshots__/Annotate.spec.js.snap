@@ -148,7 +148,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
                 class="af-form__group-label"
                 for="paging-top"
               >
-                Afficher
+                Show
               </label>
             </div>
             <div
@@ -197,7 +197,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
                 <span
                   class="af-form__input-cmplt"
                 >
-                  éléments
+                  elements
                 </span>
               </div>
             </div>
@@ -220,7 +220,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             <span
               class="af-pager__item-nolink"
             >
-              « Précédent
+              Previous
             </span>
           </li>
           <li
@@ -241,7 +241,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
             <span
               class="af-pager__item-nolink"
             >
-              Suivant »
+              Next
             </span>
           </li>
         </ul>
