@@ -81,7 +81,6 @@ const updateKeysDict = (keysDict, newKey, value) => {
 const normalizeKeys = (levenshteinResult, keys) => {
     let newKeysDict = {};
     const regex = /[0-9]+_/ig;
-    //get the new names of the keys combined with the current key to recover its value
     keys.forEach(key => {
         const newKey = key.replaceAll(regex, "");
         if(newKeysDict.hasOwnProperty((newKey))){
@@ -169,7 +168,7 @@ const StatsTable = ({state, setState, items}) => {
 
     const [statsState, setStatsState] = useState({
         areErrorsRemoved: false,
-        isMerging: false
+        isMerging: true
     });
     
     const filteredItems = statsState.areErrorsRemoved ?
