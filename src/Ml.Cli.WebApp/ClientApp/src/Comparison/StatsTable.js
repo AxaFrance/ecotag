@@ -80,10 +80,10 @@ const updateKeysDict = (keysDict, newKey, value) => {
 
 const normalizeKeys = (levenshteinResult, keys) => {
     let newKeysDict = {};
-    const regex = /[0-9]+_/i;
+    const regex = /[0-9]+_/ig;
     //get the new names of the keys combined with the current key to recover its value
     keys.forEach(key => {
-        const newKey = key.replace(regex, "");
+        const newKey = key.replaceAll(regex, "");
         if(newKeysDict.hasOwnProperty((newKey))){
             newKeysDict = updateKeysDict(newKeysDict, newKey, levenshteinResult[key]);
         }
