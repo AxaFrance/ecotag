@@ -118,6 +118,10 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
                 numberPages={numberPages}
                 numberItems={state.filters.pagingSelect}
                 id="paging-top"
+                previousLabel="Previous"
+                nextLabel="Next"
+                displayLabel="Show"
+                elementsLabel="elements"
                 onChange={onPagingChange}
             />
         </div>
