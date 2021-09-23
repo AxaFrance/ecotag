@@ -378,6 +378,52 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         </div>
       </div>
       <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="is_merging_checkbox"
+          >
+            Merge keys
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              checked=""
+              class="af-form__input-checkbox"
+              id="is_merging_checkbox"
+              name="merge"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="is_merging_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Is merge activated ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
         class="excel-export-btn"
       >
         <div
@@ -540,7 +586,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_firstname 
+          Key : firstname 
         </span>
       </div>
       <div
@@ -596,7 +642,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_lastname 
+          Key : lastname 
         </span>
       </div>
       <div
@@ -652,7 +698,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_birthdate 
+          Key : birthdate 
         </span>
       </div>
       <div
@@ -708,7 +754,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_categoryB 
+          Key : categoryB 
         </span>
       </div>
       <div
@@ -1516,6 +1562,52 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         </div>
       </div>
       <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="is_merging_checkbox"
+          >
+            Merge keys
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              checked=""
+              class="af-form__input-checkbox"
+              id="is_merging_checkbox"
+              name="merge"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="is_merging_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Is merge activated ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
         class="excel-export-btn"
       >
         <div
@@ -1678,7 +1770,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_firstname 
+          Key : firstname 
         </span>
       </div>
       <div
@@ -1734,7 +1826,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_lastname 
+          Key : lastname 
         </span>
       </div>
       <div
@@ -1790,7 +1882,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_birthdate 
+          Key : birthdate 
         </span>
       </div>
       <div
@@ -1846,7 +1938,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info stats__results-info--separator"
       >
         <span>
-          Key : 0_categoryB 
+          Key : categoryB 
         </span>
       </div>
       <div

@@ -1,5 +1,5 @@
 ﻿import React, {useState} from "react";
-import {totalScores} from "./score";
+import {normalizeKeys, totalScores} from "./score";
 import {filterItems} from './TableResult';
 import ExcelExport from "./ExcelExport";
 import {CheckboxInput, CheckboxModes} from "@axa-fr/react-toolkit-form-input-checkbox";
@@ -69,7 +69,7 @@ const StatusCode = ({statusCodes}) => {
 }
 
 const Scores = ({levenshteinResults}) => {
-    const keys = Object.keys(levenshteinResults);
+    let keys = Object.keys(levenshteinResults);
     const ScoreItems =  keys.map(function(key) {
         const keyValue = levenshteinResults[key];
         return <div className="stats__results" key={key}>
@@ -110,16 +110,30 @@ const statsErrorsOptions = [
     }
 ];
 
+const statsMergeOptions = [
+    {
+        key:"checkbox_isMerging",
+        id:"is_merging_checkbox",
+        value:"mergeValue",
+        label:"Is merge activated ?",
+        disabled: false
+    }
+];
+
 const StatsTable = ({state, setState, items}) => {
 
     const [statsState, setStatsState] = useState({
-        areErrorsRemoved: false
+        areErrorsRemoved: false,
+        isMerging: true
     });
     
     const filteredItems = statsState.areErrorsRemoved ?
         items.filter(item => item.left.StatusCode === 200 && item.right.StatusCode === 200) :
         items;
-    const levenshteinResults = totalScores(filteredItems, ["document_id", "document_type"]);
+    let levenshteinResults = totalScores(filteredItems, ["document_id", "document_type"]);
+    if(statsState.isMerging){
+        levenshteinResults = normalizeKeys(levenshteinResults, Object.keys(levenshteinResults));
+    }
     const totalTimeMs = computeTotalTimeMs(filteredItems);
     const statusCodes = orderByStatusCode(filteredItems);
     const totalCompleteness = calcTotalCompleteness(levenshteinResults, filteredItems.length);
@@ -148,6 +162,15 @@ const StatsTable = ({state, setState, items}) => {
                                 label="Remove errors from stats:"
                                 onChange={() => setStatsState({...statsState, areErrorsRemoved: !statsState.areErrorsRemoved})}
                                 options={statsErrorsOptions}
+                            />
+                            <CheckboxInput
+                                id="merge"
+                                name="merge"
+                                mode={CheckboxModes.toggle}
+                                isChecked={statsState.isMerging}
+                                label="Merge keys"
+                                onChange={() => setStatsState({...statsState, isMerging: !statsState.isMerging})}
+                                options={statsMergeOptions}
                             />
                             <ExcelExport
                                 fileInfo={fileInfo}

@@ -1,5 +1,47 @@
 ﻿const levenshtein = require('js-levenshtein');
 
+const updateKeysDict = (keysDict, newKey, value) => {
+    let objectValues = keysDict[newKey];
+    if(value.score !== "-"){
+        objectValues.score += value.score;
+    }
+    objectValues.score_ok += value.score_ok;
+    objectValues.score_ko += value.score_ko;
+    objectValues.total += value.total;
+    objectValues.completeness_left.ok += value.completeness_left.ok;
+    objectValues.completeness_left.ko += value.completeness_left.ko;
+    objectValues.completeness_right.ok += value.completeness_right.ok;
+    objectValues.completeness_right.ko += value.completeness_right.ko;
+    keysDict[newKey] = objectValues;
+
+    const percentagesOK = ((objectValues.score_ok + objectValues.score_ko) === 0 ? "-" : `${Math.round((objectValues.score_ok / (objectValues.score_ok + objectValues.score_ko))*100*100)/100} %`);
+    const tempLeftSide = {completeness_ok: objectValues.completeness_left.ok, completeness_ko: objectValues.completeness_left.ko};
+    const tempRightSide = {completeness_ok: objectValues.completeness_right.ok, completeness_ko: objectValues.completeness_right.ko};
+    const completenessOKLeft = totalCompletenessByKey(tempLeftSide);
+    const completenessOKRight = totalCompletenessByKey(tempRightSide);
+
+    objectValues.percentages.ok = percentagesOK;
+    objectValues.percentages.completeness_ok_left = `${completenessOKLeft} %`;
+    objectValues.percentages.completeness_ok_right = `${completenessOKRight} %`;
+
+    return keysDict;
+};
+
+export const normalizeKeys = (levenshteinResult, keys) => {
+    let newKeysDict = {};
+    const regex = /[0-9]+_/ig;
+    keys.forEach(key => {
+        const newKey = key.replace(regex, "");
+        if(newKeysDict.hasOwnProperty((newKey))){
+            newKeysDict = updateKeysDict(newKeysDict, newKey, levenshteinResult[key]);
+        }
+        else{
+            newKeysDict[newKey] = levenshteinResult[key];
+        }
+    });
+    return newKeysDict;
+};
+
 export const flattenObject = (origin, destinationDictionnary = {}, prefix = "", excludes=[]) => {
     if (typeof origin === 'string') {
         return null;
@@ -87,7 +129,7 @@ const updateResultDict = (result, dict) => {
     }
 }
 
-const totalCompletenessByKey = side => {
+export const totalCompletenessByKey = side => {
     let result = Number(0.00).toFixed(2);
     if(side.completeness_ok != null){
         result = (side.completeness_ok * 100 / (side.completeness_ok + side.completeness_ko)).toFixed(2);

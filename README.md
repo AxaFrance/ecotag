@@ -332,6 +332,10 @@ Please note that 3 parameters are given to your script:
 - **rawBodyInput** is the input of the script. That input is the data you can see in the file comparison table, which is also the content of the "Body" parameter of a callapi json.
 - **rawBodyOutput** is the output of the script. The script defined by the user has to provide a value for this parameter, as it is the one that will appear in the file comparison table after script application. Please note that a "return" keyword is not required, as the API will collect rawBodyOutput after script application.
 
+### Indexes merge
+
+Your compare file can contain keys with indexes (for example if the related file has several pages), which can lead to difficulties to read the statistics. For that situation, you can choose (or not) to merge all elements of the same key but with different indexes. This behaviour is set to true by default, and can be updated in the displayed stats table.
+
 # Warning
 
 The current web API is available for local usage only. Security is not guaranteed otherwise.

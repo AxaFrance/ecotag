@@ -1,4 +1,4 @@
-﻿import {flattenObject, levenshteinBetweenTwoDictionnary, totalScores} from "./score";
+﻿import {flattenObject, levenshteinBetweenTwoDictionnary, normalizeKeys, totalScores} from "./score";
 import {calcTotalCompleteness} from "./StatsTable";
 
 
@@ -128,6 +128,22 @@ describe('Check score functions', () => {
         const expectedResultRight = Number(70.00).toFixed(2);
         expect(totalCompleteness.left).toStrictEqual(expectedResultLeft);
         expect(totalCompleteness.right).toStrictEqual(expectedResultRight);
+    });
+    
+    test('Check keys normalization', () => {
+        const itemOK = {
+            left: {Body: JSON.stringify(left)},
+            right: {Body: JSON.stringify(left)}
+        };
+        const itemKO = {
+            left: {Body: JSON.stringify(left)},
+            right: {Body: JSON.stringify(right)}
+        };
+        const items = [itemOK, itemKO];
+        const levenshteinResults = totalScores(items);
+        const result = normalizeKeys(levenshteinResults, Object.keys(levenshteinResults));
+        expect(result.birthdate).not.toBeNull();
+        expect(result.categoryB.score).toEqual(0);
     });
 
 });
