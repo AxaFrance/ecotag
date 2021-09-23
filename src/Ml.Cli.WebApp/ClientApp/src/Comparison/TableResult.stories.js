@@ -57,8 +57,8 @@ KOFiles.args = {
         items:[itemsKO],
         filters: {
             filterName:"KO",
-            extensionName: "Tout",
-            currentStatusCode: "Tout",
+            extensionName: "All",
+            currentStatusCode: "All",
             searchedString: "",
             pagingSelect: 50,
             pagingCurrent: 1
@@ -77,8 +77,8 @@ OKFiles.args = {
         items:[itemsOK],
         filters: {
             filterName:"OK",
-            extensionName: "Tout",
-            currentStatusCode: "Tout",
+            extensionName: "All",
+            currentStatusCode: "All",
             searchedString: "",
             pagingSelect: 50,
             pagingCurrent: 1
@@ -96,9 +96,9 @@ AllFiles.args = {
     state : {
         items:allItems,
         filters: {
-            filterName:"Tout",
-            extensionName: "Tout",
-            currentStatusCode: "Tout",
+            filterName:"All",
+            extensionName: "All",
+            currentStatusCode: "All",
             searchedString: "",
             pagingSelect: 50,
             pagingCurrent: 1
@@ -117,9 +117,9 @@ Empty.args = {
     state : {
         items:[],
         filters: {
-            filterName:"Tout",
-            extensionName: "Tout",
-            currentStatusCode: "Tout",
+            filterName:"All",
+            extensionName: "All",
+            currentStatusCode: "All",
             searchedString: "",
             pagingSelect: 50,
             pagingCurrent: 1
