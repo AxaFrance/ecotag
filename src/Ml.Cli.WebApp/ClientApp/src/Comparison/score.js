@@ -2,7 +2,7 @@
 
 const updateKeysDict = (keysDict, newKey, value) => {
     let objectValues = keysDict[newKey];
-    if(value.score !== "-"){
+    if(value.score !== "n/a"){
         objectValues.score += value.score;
     }
     objectValues.score_ok += value.score_ok;
@@ -14,7 +14,7 @@ const updateKeysDict = (keysDict, newKey, value) => {
     objectValues.completeness_right.ko += value.completeness_right.ko;
     keysDict[newKey] = objectValues;
 
-    const percentagesOK = ((objectValues.score_ok + objectValues.score_ko) === 0 ? "-" : `${Math.round((objectValues.score_ok / (objectValues.score_ok + objectValues.score_ko))*100*100)/100} %`);
+    const percentagesOK = ((objectValues.score_ok + objectValues.score_ko) === 0 ? "n/a" : `${Math.round((objectValues.score_ok / (objectValues.score_ok + objectValues.score_ko))*100*100)/100} %`);
     const tempLeftSide = {completeness_ok: objectValues.completeness_left.ok, completeness_ko: objectValues.completeness_left.ko};
     const tempRightSide = {completeness_ok: objectValues.completeness_right.ok, completeness_ko: objectValues.completeness_right.ko};
     const completenessOKLeft = totalCompletenessByKey(tempLeftSide);
@@ -131,8 +131,11 @@ const updateResultDict = (result, dict) => {
 
 export const totalCompletenessByKey = side => {
     let result = Number(0.00).toFixed(2);
-    if(side.completeness_ok != null){
+    if(side.completeness_ok != null && side.completeness_ko != null){
         result = (side.completeness_ok * 100 / (side.completeness_ok + side.completeness_ko)).toFixed(2);
+    }
+    else{
+        return "n/a";
     }
     return result;
 };
@@ -150,10 +153,10 @@ const setLevenshteinParameters = levenshteinResult => {
         const value = levenshteinResult[key];
         const completenessOKLeft = totalCompletenessByKey(levenshteinResult[key].completeness_left);
         const completenessOKRight = totalCompletenessByKey(levenshteinResult[key].completeness_right);
-        const score = value.score != null ? value.score : "-";
+        const score = value.score != null ? value.score : "n/a";
         const scoreOK = value.score_ok != null ? value.score_ok : 0;
         const scoreKO = value.score_ko != null ? value.score_ko : 0;
-        const percentagesOK = ((scoreOK + scoreKO) === 0 ? "-" : `${Math.round((scoreOK / (scoreOK + scoreKO))*100*100)/100} %`);
+        const percentagesOK = ((scoreOK + scoreKO) === 0 ? "n/a" : `${Math.round((scoreOK / (scoreOK + scoreKO))*100*100)/100} %`);
         result[key] = {
             score,
             score_ok: scoreOK,
@@ -169,8 +172,8 @@ const setLevenshteinParameters = levenshteinResult => {
             },
             percentages: {
                 ok: percentagesOK,
-                completeness_ok_left: `${completenessOKLeft} %`,
-                completeness_ok_right: `${completenessOKRight} %`
+                completeness_ok_left: completenessOKLeft === "n/a" ? "n/a" : `${completenessOKLeft} %`,
+                completeness_ok_right: completenessOKRight === "n/a" ? "n/a" : `${completenessOKRight} %`
             }
         };
     });

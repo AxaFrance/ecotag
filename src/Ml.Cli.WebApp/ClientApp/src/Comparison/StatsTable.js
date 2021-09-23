@@ -81,15 +81,18 @@ const Scores = ({levenshteinResults}) => {
                     <li>Number OK : {keyValue.score_ok} </li>
                     <li>Number KO : {keyValue.score_ko} </li>
                     <li>Number Total : {keyValue.total} </li>
-                    <li>Completeness OK Left : {keyValue.completeness_left.ok}</li>
-                    <li>Completeness KO Left : {keyValue.completeness_left.ko}</li>
-                    <li>Completeness OK Right : {keyValue.completeness_right.ok}</li>
-                    <li>Completeness KO Right : {keyValue.completeness_right.ko}</li>
+                    <li>Percentage OK : {keyValue.percentages.ok}</li>
                 </ul>
             </div>
             <div className="stats__results-info">
-                <span>Percentage OK : {keyValue.percentages.ok}</span>
-                <br/>
+                <span>Completeness OK Left : {keyValue.completeness_left.ok}</span>
+                <br />
+                <span>Completeness KO Left : {keyValue.completeness_left.ko}</span>
+                <br />
+                <span>Completeness OK Right : {keyValue.completeness_right.ok}</span>
+                <br />
+                <span>Completeness KO Right : {keyValue.completeness_right.ko}</span>
+                <br />
                 <span>Percentage completeness OK Left : {keyValue.percentages.completeness_ok_left}</span>
                 <br />
                 <span>Percentage completeness OK Right : {keyValue.percentages.completeness_ok_right}</span>
