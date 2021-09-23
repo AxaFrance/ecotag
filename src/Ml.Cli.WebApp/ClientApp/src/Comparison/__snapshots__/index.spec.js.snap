@@ -606,16 +606,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 1
-          </li>
-          <li>
-            Completeness KO Right : 0
+            Percentage OK : 100 %
           </li>
         </ul>
       </div>
@@ -623,7 +614,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 100 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
         </span>
         <br />
         <span>
@@ -662,16 +665,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 1
-          </li>
-          <li>
-            Completeness KO Right : 0
+            Percentage OK : 100 %
           </li>
         </ul>
       </div>
@@ -679,7 +673,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 100 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
         </span>
         <br />
         <span>
@@ -718,16 +724,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 0
-          </li>
-          <li>
-            Completeness KO Right : 1
+            Percentage OK : 0 %
           </li>
         </ul>
       </div>
@@ -735,7 +732,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 0 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
         </span>
         <br />
         <span>
@@ -774,16 +783,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 0
-          </li>
-          <li>
-            Completeness KO Right : 1
+            Percentage OK : 0 %
           </li>
         </ul>
       </div>
@@ -791,7 +791,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 0 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
         </span>
         <br />
         <span>
@@ -1790,16 +1802,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 1
-          </li>
-          <li>
-            Completeness KO Right : 0
+            Percentage OK : 100 %
           </li>
         </ul>
       </div>
@@ -1807,7 +1810,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 100 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
         </span>
         <br />
         <span>
@@ -1846,16 +1861,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 1
-          </li>
-          <li>
-            Completeness KO Right : 0
+            Percentage OK : 100 %
           </li>
         </ul>
       </div>
@@ -1863,7 +1869,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 100 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
         </span>
         <br />
         <span>
@@ -1902,16 +1920,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 0
-          </li>
-          <li>
-            Completeness KO Right : 1
+            Percentage OK : 0 %
           </li>
         </ul>
       </div>
@@ -1919,7 +1928,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 0 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
         </span>
         <br />
         <span>
@@ -1958,16 +1979,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
             Number Total : 1 
           </li>
           <li>
-            Completeness OK Left : 1
-          </li>
-          <li>
-            Completeness KO Left : 0
-          </li>
-          <li>
-            Completeness OK Right : 0
-          </li>
-          <li>
-            Completeness KO Right : 1
+            Percentage OK : 0 %
           </li>
         </ul>
       </div>
@@ -1975,7 +1987,19 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
         class="stats__results-info"
       >
         <span>
-          Percentage OK : 0 %
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
         </span>
         <br />
         <span>
