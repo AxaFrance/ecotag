@@ -3,7 +3,8 @@ import {Paging} from "@axa-fr/react-toolkit-table";
 import TableItem from './TableItem';
 import StatsTable from './StatsTable';
 import {formatJson} from "./FormatFilter";
-import {computeNumberPages} from "../Tables/Paging";
+import {computeNumberPages, filterPaging} from "../Tables/Paging";
+import './TableResult.scss';
 
 export const filterItems = (items, filterName) => {
     return items.filter(item => {
@@ -69,34 +70,6 @@ export const sortTime = (items, sortTimeType, timeCategory) => {
 }
 
 const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
-    const filterPaging = (items, numberItems, currentPage) => {
-        let pageIndex = 0;
-        if (currentPage > 1) {
-            pageIndex = currentPage - 1;
-        }
-
-        let controlledNumberItems = 0;
-        if (numberItems > 0) {
-            controlledNumberItems = numberItems;
-        }
-
-        const {length} = items;
-        let beginIndex = pageIndex * controlledNumberItems;
-        const lastIndex = length < beginIndex + controlledNumberItems ? length : beginIndex + controlledNumberItems;
-
-        let returnedCurrentPage = currentPage;
-
-        if (lastIndex < beginIndex) {
-            if (lastIndex - length >= 0) {
-                beginIndex = lastIndex - length;
-            } else {
-                beginIndex = 0;
-            }
-            returnedCurrentPage = -1;
-        }
-        return {items: items.slice(beginIndex, lastIndex), currentPage: returnedCurrentPage};
-    };
-
     const filterScripts = formatJson(state);
     const filteredFiles = filterItems(filterScripts, state.filters.filterName);
     const filteredStatusCodes = filterStatusCode(filteredFiles, state.filters.currentStatusCode);
@@ -124,7 +97,34 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
     if (pageItems.items.length === 0) {
         return <h2 className="error-message">There is no file related to that filter configuration !</h2>;
     }
+    const currentPage = pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage;
+    const numberPages = computeNumberPages(filteredSearchBar, state.filters.pagingSelect);
+    const onPagingChange = e => {
+        const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
+        setState({
+            ...state,
+            filters: {
+                ...state.filters,
+                pagingSelect: e.numberItems,
+                pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
+            }
+        });
+    }
+    
     return <>
+        <Paging
+            className="af-paging paging__top"
+            currentPage={currentPage}
+            numberPages={numberPages}
+            numberItems={state.filters.pagingSelect}
+            id="paging-top"
+            previousLabel="Previous"
+            nextLabel="Next"
+            displayLabel="Show"
+            elementsLabel="elements"
+            onChange={onPagingChange}
+        />
+        
         {pageItems.items.map(item => (
             <TableItem
                 key={item.id}
@@ -140,25 +140,15 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
         ))}
 
         <Paging
-            currentPage={pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage}
-            numberPages={computeNumberPages(filteredSearchBar, state.filters.pagingSelect)}
+            currentPage={currentPage}
+            numberPages={numberPages}
             numberItems={state.filters.pagingSelect}
-            id="paging"
+            id="paging-bottom"
             previousLabel="Previous"
             nextLabel="Next"
             displayLabel="Show"
             elementsLabel="elements"
-            onChange={(e) => {
-                const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
-                setState({
-                    ...state,
-                    filters: {
-                        ...state.filters,
-                        pagingSelect: e.numberItems,
-                        pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
-                    }
-                });
-            }}
+            onChange={onPagingChange}
         />
     </>
 }
