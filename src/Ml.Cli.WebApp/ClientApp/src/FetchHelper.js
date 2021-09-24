@@ -18,8 +18,9 @@ export const fetchGetData = fetchFunction => (controllerPath, params = {}) => {
         setQueryUrl(params, controllerPath),
         {
             method: 'GET',
-            header: {
-                'content-type': 'application/json'
+            headers: {
+                'content-type': 'application/json',
+                'cache-control': 'no-store'
             }
         }
     );
@@ -32,7 +33,8 @@ export const fetchPostJson = fetchFunction => (url, newData) => {
             method: 'POST',
             headers: {
                 'accept': 'application/json',
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'cache-control': 'no-store'
             },
             body: JSON.stringify(newData)
         }

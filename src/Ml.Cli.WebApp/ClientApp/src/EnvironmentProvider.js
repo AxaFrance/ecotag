@@ -13,13 +13,20 @@ export const withEnvironment = Component => props => (
 
 const addEndSlash = (url) => url.endsWith('/') ? url : url + "/";
 
+const findBasePath = (url) => url.split("#")[0];
+
+const configureUrl = (url) => {
+    let tempUrl = findBasePath(url);
+    return addEndSlash(tempUrl);
+}
+
 const EnvironmentProvider = ({ children }) => {
     const [environment, setEnvironment] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const environment = {
-            "apiUrl": addEndSlash(window.location.href) + "{path}",
+            "apiUrl": configureUrl(window.location.href) + "{path}",
             "basePath" : window.location.pathname
         };
         setEnvironment({ environment });
