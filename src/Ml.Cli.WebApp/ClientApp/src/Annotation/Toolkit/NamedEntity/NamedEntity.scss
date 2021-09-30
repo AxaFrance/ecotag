@@ -1,0 +1,44 @@
+.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #ffffff;
+}
+
+.annotationContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.buttonAnnotationAction {
+    width: 250px;
+    height: 60px;
+    margin: 2px;
+    border-radius: 4px;
+    background-color: #3032c1;
+    color: #fff;
+    font-size: large;
+}
+
+.annotationActionContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    justify-self: flex-end;
+}
+
+.tokenAnnotation-container {
+    margin: 6px;
+    padding: 15px;
+    max-width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.tokenAnnotator-component {
+    font-family: 'IBM Plex Sans';
+    max-width: 100%;
+    line-height: 1.5px;
+}
