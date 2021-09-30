@@ -36,5 +36,6 @@ export const Default = Template.bind({});
 Default.args = {
     text: text,
     labels: labels,
-    annotationAction: annotationAction
+    annotationAction: annotationAction,
+    placeholder: "Submit Annotation"
 };

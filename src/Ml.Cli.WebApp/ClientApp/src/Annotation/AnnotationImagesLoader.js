@@ -230,6 +230,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     text={"This is some sample text. The NER is currently in a 'Work In Progress' state."}
                     labels={parentState.configuration}
                     annotationAction={onDatasetSubmit}
+                    placeholder="Submit Annotation"
                 />
             }
         </>

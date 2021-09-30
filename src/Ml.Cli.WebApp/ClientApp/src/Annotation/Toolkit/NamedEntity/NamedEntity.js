@@ -4,7 +4,7 @@ import { setLabelColor } from './labelColor.js';
 import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
 
-const NamedEntity = ({ text, labels, annotationAction }) => {
+const NamedEntity = ({ text, labels, annotationAction, placeholder }) => {
   const [state, setState] = useState({
     label: setLabelColor(labels[0]),
     value: [],
@@ -44,7 +44,7 @@ const NamedEntity = ({ text, labels, annotationAction }) => {
         </div>
         <div className="annotationActionContainer">
           <button className="buttonAnnotationAction" onClick={() => submitAnnotation(state.value)}>
-            Soumettre l&apos;annotation
+            {placeholder}
           </button>
         </div>
         <pre>{JSON.stringify(state.value, null, 2)}</pre>
