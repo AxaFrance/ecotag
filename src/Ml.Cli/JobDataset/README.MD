@@ -40,9 +40,8 @@ tasks.json
 ## Mandatory attributes
 - **type**: name of the task
 - **annotationType**: string that defines the annotation type of the file
-    - values: "JsonEditor", "Ocr", "Cropping", "Rotation", "TagOverText", "TagOverTextLabel"
+    - values: "JsonEditor", "Ocr", "Cropping", "Rotation", "TagOverText", "TagOverTextLabel", "NamedEntityRecognition"
 - **fileDirectory**: string that defines the path to the jsons used to generate the dataset
-- **imageDirectory**: a string that defines the path to the directory where are stored the images that will be used to annotate. If the annotation type uses only one image, the first image of the repository will be used
 - **outputDirectory**: string that defines the path where the dataset file will be generated
 - **fileName**: string that defines the name of the file and its extension  
     
@@ -52,6 +51,8 @@ tasks.json
 - **enabled**: a boolean to enable or disable the task
     - default: true
 - **configuration**: string that defines the configuration of the annotation system
+    - default: ""
+- **imageDirectory**: a string that defines the path to the directory where are stored the images that will be used to annotate. If the annotation type uses only one image, the first image of the repository will be used
     - default: ""
 - **frontDefaultStringsMatcher**: a string used by the front part of Ml-Cli to get only the required images during annotation
     - default: ""

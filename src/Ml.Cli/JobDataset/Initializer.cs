@@ -13,6 +13,11 @@ namespace Ml.Cli.JobDataset
             var isConfigurationDefined = jObject.Property("configuration", StringComparison.Ordinal) != null;
             var script = isScriptDefined ? (string) jObject.Property("script") : string.Empty;
             var configuration = isConfigurationDefined ? (string) jObject.Property("configuration") : string.Empty;
+            var imageDirectory = jObject.Property("imageDirectory", StringComparison.Ordinal) != null;
+            var imageDirectoryResult = imageDirectory
+                ? PropertyHelper.SetProperty(jObject, "imageDirectory", isBaseDirectoryValid, baseDirectory, taskId,
+                    pathValidatorHelper)
+                : "";
             var frontDefaultStringMatcher =
                 jObject.Property("frontDefaultStringsMatcher", StringComparison.Ordinal) != null;
             var frontDefaultStringsMatcherResult = frontDefaultStringMatcher
@@ -26,8 +31,7 @@ namespace Ml.Cli.JobDataset
                 configuration,
                 PropertyHelper.SetProperty(jObject, "fileDirectory", isBaseDirectoryValid, baseDirectory, taskId,
                     pathValidatorHelper),
-                PropertyHelper.SetProperty(jObject, "imageDirectory", isBaseDirectoryValid, baseDirectory, taskId,
-                    pathValidatorHelper),
+                imageDirectoryResult,
                 PropertyHelper.SetProperty(jObject, "outputDirectory", isBaseDirectoryValid, baseDirectory, taskId,
                     pathValidatorHelper),
                 frontDefaultStringsMatcherResult,
