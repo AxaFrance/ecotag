@@ -58,5 +58,15 @@
 		"frontDefaultStringsMatcher": "url_file_new_birthdate",
 		"fileName": "dataset-{start-date}-tagovertext.json",
 		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
+	},
+	{
+		"type": "dataset",
+		"enabled": true,
+		"annotationType": "NamedEntityRecognition",
+		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+		"imageDirectory": "",
+		"outputDirectory": "licenses\\datasets",
+		"configuration": "[{\"id\": \"#008194\", \"name\": \"firstLabel\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"secondLabel\", \"color\": \"#00ffa2\"}]",
+		"fileName": "dataset-{start-date}-NER.json"
 	}
 ]
