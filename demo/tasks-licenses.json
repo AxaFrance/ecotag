@@ -64,7 +64,6 @@
 		"enabled": true,
 		"annotationType": "NamedEntityRecognition",
 		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
-		"imageDirectory": "",
 		"outputDirectory": "licenses\\datasets",
 		"configuration": "[{\"id\": \"#008194\", \"name\": \"firstLabel\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"secondLabel\", \"color\": \"#00ffa2\"}]",
 		"fileName": "dataset-{start-date}-NER.json"
