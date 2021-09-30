@@ -7,6 +7,7 @@ import JsonEditorContainer from "./Toolkit/JsonEditor/JsonEditor.container";
 import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLazy";
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
+import NamedEntityLazy from "./Toolkit/NamedEntity/NamedEntityLazy";
 
 const fetchImages = async data => {
     if (data.status === 200) {
@@ -72,7 +73,6 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
         try{
             const annotationsArray = JSON.parse(item.annotations);
             const lastAnnotation = annotationsArray[annotationsArray.length - 1];
-            //the sub parameter of lastAnnotation is annotationN, where N is a number. Given that this parameter is dynamic, we use a dictionary to recover it
             const labels = lastAnnotation.labels;
             boundingBoxes = labels.boundingBoxes;
         }
@@ -151,6 +151,9 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     "labels": e.labels
                 };
                 break;
+            case "NamedEntityRecognition":
+                returnedObject = e
+                break;
         }
         return returnedObject;
     }
@@ -220,6 +223,13 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     url={state.filePrimaryUrl}
                     onSubmit={onDatasetSubmit}
                     labels={parentState.configuration}
+                />
+            }
+            {parentState.annotationType === "NamedEntityRecognition" &&
+                <NamedEntityLazy
+                    text={item}
+                    labels={parentState.configuration}
+                    annotationAction={onDatasetSubmit}
                 />
             }
         </>
