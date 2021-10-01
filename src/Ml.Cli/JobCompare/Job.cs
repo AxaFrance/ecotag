@@ -26,7 +26,7 @@ namespace Ml.Cli.JobCompare
             foreach (var fileLeftPath in _fileLoader.EnumerateFiles(inputTask.LeftDirectory, "*.json"))
             {
                 var fileName = Path.GetFileName(fileLeftPath);
-                var filePath = fileLeftPath.Contains("..\\")
+                var filePath = fileLeftPath.Contains(".." + Path.PathSeparator)
                     ? fileLeftPath
                     : Path.Combine(inputTask.LeftDirectory, fileLeftPath);
                 _logger.LogInformation($"Task Id: {inputTask.Id} - Compare {fileName}");

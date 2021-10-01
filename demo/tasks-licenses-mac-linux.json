@@ -1,0 +1,71 @@
+﻿[
+  {
+    "type": "wait_version_change",
+    "id": "version_task",
+    "enabled": true,
+    "url": "http://localhost:6001/licenses/version",
+    "timeout": 5000,
+    "urlLogDirectory": "licenses/output/logs",
+    "logFileName": "license.json"
+  },
+  {
+    "type": "callapi",
+    "enabled": true,
+    "enabledSaveImages":true,
+    "outputDirectoryImages": "licenses/groundtruth/images",
+    "fileDirectory": "licenses/documents",
+    "outputDirectoryJsons": "licenses/groundtruth/jsons",
+    "numberParallel": 1,
+    "url" :"http://localhost:6001/licenses/upload"
+  },
+  {
+    "type": "callapi",
+    "enabled": true,
+    "enabledSaveImages":true,
+    "outputDirectoryImages": "licenses/output/{start-date}/images",
+    "fileDirectory": "licenses/documents",
+    "outputDirectoryJsons": "licenses/output/{start-date}/jsons",
+    "numberParallel": 1,
+    "url" :"http://localhost:6001/licenses/upload"
+  },
+  {
+    "type": "compare",
+    "enabled": true,
+    "onFileNotFound": "warning",
+    "leftDirectory": "licenses/groundtruth/jsons",
+    "rightDirectory": "licenses/output/{start-date}/jsons",
+    "outputDirectory": "licenses/compares",
+    "fileName": "compare-licenses-{start-date}.json"
+  },
+  {
+    "type": "dataset",
+    "enabled": true,
+    "annotationType": "Ocr",
+    "configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
+    "fileDirectory": "licenses/output/{start-date}/jsons",
+    "imageDirectory": "licenses/output/{start-date}/images",
+    "outputDirectory": "licenses/output",
+    "frontDefaultStringsMatcher": "rotation, orientation",
+    "fileName": "dataset-{start-date}-ocr.json"
+  },
+  {
+    "type": "dataset",
+    "enabled": true,
+    "annotationType": "TagOverText",
+    "fileDirectory": "licenses/output/{start-date}/jsons",
+    "imageDirectory": "licenses/output/{start-date}/images",
+    "outputDirectory": "licenses/datasets",
+    "frontDefaultStringsMatcher": "url_file_new_birthdate",
+    "fileName": "dataset-{start-date}-tagovertext.json",
+    "script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
+  },
+  {
+    "type": "dataset",
+    "enabled": true,
+    "annotationType": "NamedEntityRecognition",
+    "fileDirectory": "licenses/output/{start-date}/jsons",
+    "outputDirectory": "licenses/datasets",
+    "configuration": "[{\"id\": \"#008194\", \"name\": \"firstLabel\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"secondLabel\", \"color\": \"#00ffa2\"}]",
+    "fileName": "dataset-{start-date}-NER.json"
+  }
+]
