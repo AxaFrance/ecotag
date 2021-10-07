@@ -8,4 +8,4 @@ RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 WORKDIR /src/src/Ml.Cli.WebApp
 #ENTRYPOINT dotnet run -- --urls=http://localhost:5000/ --tasks-path ../../demo/tasks-licenses-mac-linux.json --base-path ../../demo --compares-paths licenses/output --datasets-paths licenses/datasets
-ENTRYPOINT ["dotnet", "run", "--", "--tasks-path", "../../demo/tasks-licenses-mac-linux.json", "--base-path", "../../demo", "--compares-paths", "licenses/output", "--datasets-paths", "licenses/datasets"]
+ENTRYPOINT ["dotnet", "run", "--", "--tasks-path", "../../demo/tasks-licenses-docker-compose.json", "--base-path", "../../demo", "--compares-paths", "licenses/output", "--datasets-paths", "licenses/datasets"]
