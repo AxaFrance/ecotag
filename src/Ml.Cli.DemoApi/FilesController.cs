@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ml.Cli.DemoApi
@@ -12,7 +13,7 @@ namespace Ml.Cli.DemoApi
             [FromServices] IFileLoader fileLoader)
         {
             var directory = id.Replace(".png", "");
-            var response = fileLoader.LoadStream($"images{Path.PathSeparator}{directory}{Path.PathSeparator}license-specimen.pdf.png");
+            var response = fileLoader.LoadStream($"images{Path.DirectorySeparatorChar}{directory}{Path.DirectorySeparatorChar}license-specimen.pdf.png");
 
             return Ok(response);
         }
