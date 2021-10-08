@@ -18,7 +18,7 @@ namespace Ml.Cli.WebApp.Paths
             {
                 return false;
             }
-            if (!path.StartsWith(Path, StringComparison.Ordinal))
+            if (!path.StartsWith(Path.Replace("\\", "/"), StringComparison.Ordinal) && !path.StartsWith(Path.Replace("/", "\\"), StringComparison.Ordinal))
             {
                 return false;
             }
