@@ -30,7 +30,7 @@ describe("Check dataset handling", () => {
         const {container, asFragment, getByAltText} = render(
             <QueryClientProvider client={queryClient}>
                 <AnnotationImagesLoader
-                    item={{id: "annotation_image_loader_editor_id", fileName: "fileName.json", imageDirectory: "imageDirectoryValue"}}
+                    item={{id: "annotation_image_loader_editor_id", fileName: "fileName.json", fileDirectory: "fileDirectoryValue", imageDirectory: "imageDirectoryValue"}}
                     MonacoEditor={mockedMonacoEditor}
                     parentState={{configuration, annotationType: "JsonEditor"}}
                     fetchFunction={mockedFetchFunction}
