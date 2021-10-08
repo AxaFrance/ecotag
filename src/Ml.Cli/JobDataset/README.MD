@@ -10,26 +10,66 @@ tasks.json
 ```sh
 [
   {
-      "type": "dataset",
-      "enabled": false,
-      "annotationType": "Ocr",
-      "configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
-      "fileDirectory": "licenses\\output\\{start-date}\\jsons",
-      "imageDirectory": "licenses\\output\\{start-date}\\images",
-      "outputDirectory": "licenses\\output",
-      "frontDefaultStringsMatcher": "rotation, orientation",
-      "fileName": "dataset-{start-date}-ocr.json"
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "JsonEditor",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"fileName": "dataset-{start-date}-jsoneditor.json"
   	},
   	{
-      "type": "dataset",
-      "enabled": false,
-      "annotationType": "TagOverText",
-      "fileDirectory": "licenses\\output\\{start-date}\\jsons",
-      "imageDirectory": "licenses\\output\\{start-date}\\images",
-      "outputDirectory": "licenses\\output",
-      "frontDefaultStringsMatcher": "rotation, orientation",
-      "fileName": "dataset-{start-date}-tagovertext.json",
-      "script": "try{\n    const new_data = [\n        {\n            \"annotation0\": {\n                \"labels\": {\n                    \"boundingBoxes\": [\n                        {\n                            \"id\": \"7ed8df70-9408-4b5a-b660-a36ef3447d02\",\n                            \"level\": 5,\n                            \"page_num\": 1,\n                            \"block_num\": 1,\n                            \"par_num\": 1,\n                            \"line_num\": 1,\n                            \"word_num\": 1,\n                            \"left\": 25,\n                            \"top\": 5,\n                            \"width\": 110,\n                            \"height\": 25,\n                            \"conf\": 73,\n                            \"text\": \"14.07.1981\"\n                        },\n                        {\n                            \"id\": \"7ed8df70-9408-4b5a-b660-a36ef3447d03\",\n                            \"level\": 3,\n                            \"page_num\": 1,\n                            \"block_num\": 2,\n                            \"par_num\": 1,\n                            \"line_num\": 1,\n                            \"word_num\": 1,\n                            \"left\": 145,\n                            \"top\": 5,\n                            \"width\": 109,\n                            \"height\": 28,\n                            \"conf\": 53,\n                            \"text\": \"Utopia city\"\n                        }\n                    ]\n                }\n            }\n        }\n    ];\n    rawBodyOutput = JSON.stringify(new_data);\n}\ncatch (e) {\n    rawBodyOutput = \"\"\n}"
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "Cropping",
+  		"configuration": "[{\"id\": 1, \"name\":\"recto_lib\"},{\"id\": 2, \"name\":\"verso_lib\"},{\"id\": 3, \"name\":\"verso_lib1\"}]",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"fileName": "dataset-{start-date}-cropping.json"
+  	},
+  	{
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "Rotation",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"fileName": "dataset-{start-date}-rotation.json"
+  	},
+  	{
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "Ocr",
+  		"configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"frontDefaultStringsMatcher": "rotation, orientation",
+  		"fileName": "dataset-{start-date}-ocr.json"
+  	},
+  	{
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "TagOverTextLabel",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"frontDefaultStringsMatcher": "url_file_new_birthdate",
+  		"fileName": "dataset-{start-date}-tagovertextlabel.json",
+  		"configuration": "[{\"id\": 1, \"name\":\"recto_lib\"},{\"id\": 2, \"name\":\"verso_lib\"},{\"id\": 3, \"name\":\"verso_lib1\"}]",
+  		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
+  	},
+  	{
+  		"type": "dataset",
+  		"enabled": true,
+  		"annotationType": "TagOverText",
+  		"fileDirectory": "licenses\\output\\{start-date}\\jsons",
+  		"imageDirectory": "licenses\\output\\{start-date}\\images",
+  		"outputDirectory": "licenses\\datasets",
+  		"frontDefaultStringsMatcher": "url_file_new_birthdate",
+  		"fileName": "dataset-{start-date}-tagovertext.json",
+  		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
   	}
 ] 
 ```
