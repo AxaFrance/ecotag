@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    #image: dvaew1afahubacr02.azurecr.io/project/mcma/mcma_big_data_et_innovation/receiver:local
     ports:
       - 5000:5000
     depends_on:
@@ -14,6 +13,5 @@ services:
     build:
       context: ./src/Ml.Cli.DemoApi
       dockerfile: ./Dockerfile
-    #image: dvaew1afahubacr02.azurecr.io/project/mcma/mcma_big_data_et_innovation/receiver:local
     ports:
       - 6001:6001
