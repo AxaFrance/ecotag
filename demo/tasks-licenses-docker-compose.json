@@ -39,7 +39,7 @@
   },
   {
     "type": "dataset",
-    "enabled": false,
+    "enabled": true,
     "annotationType": "Ocr",
     "configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
     "fileDirectory": "licenses/output/{start-date}/jsons",
@@ -50,7 +50,7 @@
   },
   {
     "type": "dataset",
-    "enabled": false,
+    "enabled": true,
     "annotationType": "TagOverText",
     "fileDirectory": "licenses/output/{start-date}/jsons",
     "imageDirectory": "licenses/output/{start-date}/images",
@@ -61,7 +61,7 @@
   },
   {
     "type": "dataset",
-    "enabled": false,
+    "enabled": true,
     "annotationType": "NamedEntityRecognition",
     "fileDirectory": "licenses/output/{start-date}/jsons",
     "outputDirectory": "licenses/datasets",
