@@ -1,14 +1,17 @@
 ﻿version: '3.7'
+
 services:
-  ml-cli-webapp:
-    image: "mcr.microsoft.com/dotnet/sdk:3.1"
+  ml-cli:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     ports:
-      - 5001:5001
       - 5000:5000
-    volumes:
-      - ".:/app"
-      - "./demo:/resources"
-    working_dir: "/app/src/Ml.Cli.WebApp"
-    command: dotnet run "/resources" "/app/src/Ml.Cli/tasks.json" "/resources"
-    environment:
-      - "ASPNETCORE_URLS=https://+:5001;http://+:5000"
+    depends_on:
+      - ml-cli-demo
+  ml-cli-demo:
+    build:
+      context: ./src/Ml.Cli.DemoApi
+      dockerfile: ./Dockerfile
+    ports:
+      - 6001:6001

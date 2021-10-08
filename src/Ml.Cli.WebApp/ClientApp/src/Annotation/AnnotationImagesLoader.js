@@ -33,8 +33,12 @@ const getImages = (fetchFunction) => async (item) => {
 };
 
 const getHttpResultItem = async (item, fetchFunction) => {
+    let pathSeparator = "\\";
+    if(item.fileDirectory.includes("/")){
+        pathSeparator = "/";
+    }
     const params = {
-        filePath: `${item.fileDirectory}\\${item.fileName}`
+        filePath: `${item.fileDirectory}${pathSeparator}${item.fileName}`
     };
     const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
     if (fetchResult.status === 200) {
