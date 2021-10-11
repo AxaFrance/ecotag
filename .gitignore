@@ -243,3 +243,7 @@ packages
 
 **/coverage/
 
+demo/licenses/compares
+demo/licenses/datasets
+demo/licenses/groundtruth
+demo/licenses/output
