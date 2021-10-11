@@ -104,7 +104,7 @@ Ml.Cli.WebApp.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\
 Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
-# Getting started on windows 10
+## Getting started on windows 10
 
 Run the following commands :
 ```cmd
@@ -140,7 +140,7 @@ Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo 
 # then navigate to: http://localhost/5000/ 
 ```
 
-# Getting started with JupyterLab on unbuntu
+## Getting started with JupyterLab on unbuntu
 
 You need to install the plugin @jupyterlab/server-proxy as a prerequist :
 ```sh
@@ -182,7 +182,7 @@ cd ml-cli
 # then navigate to: https://your-jupyterlab/proxy/5000/ 
 ```
 
-# Getting started on macosx
+## Getting started on macosx
 
 Run the following commands :
 ```sh
