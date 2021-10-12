@@ -16,6 +16,6 @@ namespace Ml.Cli.FileLoader
         IEnumerable<string> EnumerateDirectories(string path);
         IEnumerable<string> EnumerateFiles(string path);
         bool FileExists(string path);
-        Stream OpenRead(string file);
+        Stream OpenRead(string path);
     }
 }

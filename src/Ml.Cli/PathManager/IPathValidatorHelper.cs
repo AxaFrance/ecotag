@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.Helper
+﻿namespace Ml.Cli.PathManager
 {
     public interface IPathValidatorHelper
     {

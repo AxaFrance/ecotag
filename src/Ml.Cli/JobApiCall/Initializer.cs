@@ -2,7 +2,7 @@
 using Ml.Cli.Extensions.Http.OAuth2ClientCredentials;
 using Ml.Cli.Extensions.OAuth2ClientCredentials;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.Helper;
+using Ml.Cli.PathManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
-using Ml.Cli.Helper;
 using Ml.Cli.InputTask;
 using Ml.Cli.JobApiCall;
 using Ml.Cli.JobApiCall.FileHandler;
@@ -20,6 +19,7 @@ using Ml.Cli.JobParallel;
 using Ml.Cli.JobScript;
 using Ml.Cli.JobSerial;
 using Ml.Cli.JobVersion;
+using Ml.Cli.PathManager;
 using Newtonsoft.Json;
 using Version = Ml.Cli.JobVersion.Version;
 

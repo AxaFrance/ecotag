@@ -1,5 +1,5 @@
-﻿using Ml.Cli.Helper;
-using Ml.Cli.InputTask;
+﻿using Ml.Cli.InputTask;
+using Ml.Cli.PathManager;
 using Newtonsoft.Json.Linq;
 
 namespace Ml.Cli.JobScript

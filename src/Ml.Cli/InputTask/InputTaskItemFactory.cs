@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Ml.Cli.Helper;
 using Ml.Cli.JobCompare;
+using Ml.Cli.PathManager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -99,17 +99,16 @@ namespace Ml.Cli.InputTask
 
             foreach (var element in itemsDictionary)
             {
-                if (element.Value != null && element.Value.Contains("{start-date}", StringComparison.Ordinal))
-                {
-                    var timeStamp = GetTimeStamp();
-                    outputDictionary[element.Key] = element.Value.Replace("{start-date}", timeStamp, StringComparison.Ordinal);
-                }
+                if (element.Value == null ||
+                    !element.Value.Contains("{start-date}", StringComparison.Ordinal)) continue;
+                var timeStamp = GetTimeStamp();
+                outputDictionary[element.Key] = element.Value.Replace("{start-date}", timeStamp, StringComparison.Ordinal);
             }
 
-            foreach (var result in outputDictionary)
+            foreach (var (key, value) in outputDictionary)
             {
                 // ReSharper disable once PossibleNullReferenceException
-                jObject.Property(result.Key).Value = outputDictionary[result.Key];
+                jObject.Property(key).Value = outputDictionary[key];
             }
         }
 

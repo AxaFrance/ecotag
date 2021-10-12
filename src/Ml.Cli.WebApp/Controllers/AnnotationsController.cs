@@ -96,25 +96,22 @@ namespace Ml.Cli.WebApp.Controllers
             var file = await _fileLoader.ReadAllTextInFileAsync(datasetData.DatasetLocation);
             var fileContent = JsonConvert.DeserializeObject<DatasetFileContent>(file);
             var foundToken = Array.Find(fileContent.JsonTokens, token => token.FileName == datasetData.FileName);
-            if (foundToken != null)
+            if (foundToken == null) return BadRequest();
+            var annotation = foundToken.Annotations;
+            if (annotation != string.Empty)
             {
-                var annotation = foundToken.Annotations;
-                if (annotation != string.Empty)
-                {
-                    var newAnnotation = ", " + datasetData.Annotation.ToString();
-                    foundToken.Annotations = annotation.Insert(annotation.Length - 1, newAnnotation);
-                }
-                else
-                {
-                    foundToken.Annotations = "[{" + datasetData.Annotation.ToString() + "}]";
-                }
-
-                var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
-                await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
-                return Ok();
+                var newAnnotation = ", " + datasetData.Annotation.ToString();
+                foundToken.Annotations = annotation.Insert(annotation.Length - 1, newAnnotation);
+            }
+            else
+            {
+                foundToken.Annotations = "[{" + datasetData.Annotation.ToString() + "}]";
             }
 
-            return BadRequest();
+            var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+            await _fileLoader.WriteAllTextInFileAsync(datasetData.DatasetLocation, result);
+            return Ok();
+
         }
     }
 }

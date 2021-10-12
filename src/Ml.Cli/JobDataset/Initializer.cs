@@ -1,5 +1,5 @@
 ﻿using System;
-using Ml.Cli.Helper;
+using Ml.Cli.PathManager;
 using Newtonsoft.Json.Linq;
 
 namespace Ml.Cli.JobDataset
