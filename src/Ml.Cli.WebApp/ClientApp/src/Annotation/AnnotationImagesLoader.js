@@ -231,7 +231,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             }
             {parentState.annotationType === "NamedEntityRecognition" &&
                 <NamedEntityLazy
-                    text={"This is some sample text. The NER is currently in a 'Work In Progress' state."}
+                    text={"Hello Lilian Delouvy, This is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
                     labels={parentState.configuration}
                     annotationAction={onDatasetSubmit}
                     placeholder="Submit Annotation"

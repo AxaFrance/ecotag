@@ -17,7 +17,7 @@ const Home = () => (
         <Title title="Services list"/>
         <div className="home__links-container">
             <Link className="home__link" to="/compare">
-                <div className="home__link-container home__link-container--compare">Services comparison</div>
+                <div className="home__link-container home__link-container--compare">Comparison</div>
             </Link>
             <Link className="home__link" to="/annotate">
                 <div className="home__link-container home__link-container--annotate">Annotation</div>

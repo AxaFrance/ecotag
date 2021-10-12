@@ -1,8 +1,10 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace Ml.Cli.DemoApi
 {
@@ -22,6 +24,14 @@ namespace Ml.Cli.DemoApi
             services.AddTransient<IFileLoader, FileLoader>();
             services.AddTransient<LicensesController, LicensesController>();
             services.AddTransient<FilesController, FilesController>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "Demo API", 
+                    Version = "v1",
+                    Description ="Demo french driver license API"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +46,15 @@ namespace Ml.Cli.DemoApi
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API V1");
+
+                // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
+                c.RoutePrefix = "swagger";
+            });
         }
     }
 }

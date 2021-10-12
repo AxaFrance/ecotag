@@ -50,10 +50,11 @@
 		"type": "dataset",
 		"enabled": true,
 		"annotationType": "Cropping",
-		"configuration": "[{\"id\": 1, \"name\":\"recto_lib\"},{\"id\": 2, \"name\":\"verso_lib\"},{\"id\": 3, \"name\":\"verso_lib1\"}]",
+		"configuration": "[{\"id\": 1, \"name\":\"Lastname\"},{\"id\": 2, \"name\":\"Firstname\"}]",
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"imageDirectory": "licenses/output/{start-date}/images",
 		"outputDirectory": "licenses/datasets",
+		"frontDefaultStringsMatcher": "recto_rotation",
 		"fileName": "dataset-{start-date}-cropping.json"
 	},
 	{
@@ -63,17 +64,18 @@
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"imageDirectory": "licenses/output/{start-date}/images",
 		"outputDirectory": "licenses/datasets",
+		"frontDefaultStringsMatcher": "recto_orientation",
 		"fileName": "dataset-{start-date}-rotation.json"
 	},
 	{
 		"type": "dataset",
 		"enabled": true,
 		"annotationType": "Ocr",
-		"configuration": "[{\"name\": \"Date\", \"id\": 0}, {\"name\": \"City name\", \"id\": 1}]",
+		"configuration": "[{\"name\": \"Lastname\", \"id\": 0}, {\"name\": \"Firstname\", \"id\": 1}]",
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"imageDirectory": "licenses/output/{start-date}/images",
 		"outputDirectory": "licenses/datasets",
-		"frontDefaultStringsMatcher": "rotation, orientation",
+		"frontDefaultStringsMatcher": "recto_rotation",
 		"fileName": "dataset-{start-date}-ocr.json"
 	},
 	{
@@ -83,10 +85,10 @@
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"imageDirectory": "licenses/output/{start-date}/images",
 		"outputDirectory": "licenses/datasets",
-		"frontDefaultStringsMatcher": "url_file_new_birthdate",
+		"frontDefaultStringsMatcher": "recto_rotation",
 		"fileName": "dataset-{start-date}-tagovertextlabel.json",
-		"configuration": "[{\"id\": 1, \"name\":\"recto_lib\"},{\"id\": 2, \"name\":\"verso_lib\"},{\"id\": 3, \"name\":\"verso_lib1\"}]",
-		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
+		"configuration": "[{\"id\": 1, \"name\":\"Lastname\"},{\"id\": 2, \"name\":\"Fistname\"},{\"id\": 3, \"name\":\"Birthdate\"}]",
+		"script": "rawBodyOutput = JSON.stringify([{\"labels\":{\"boundingBoxes\":[{\"id\":0,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":42,\"left\":217,\"top\":74,\"width\":185,\"conf\":93.52,\"text\":\"Martin\"},{\"id\":1,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":33,\"left\":218,\"top\":119,\"width\":188,\"conf\":70,\"text\":\"Paule\"},{\"id\":2,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":38,\"left\":216,\"top\":157,\"width\":296,\"conf\":10,\"text\":\"14.07. (Uto\"}]}}]);"
 	},
 	{
 		"type": "dataset",
@@ -95,9 +97,9 @@
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"imageDirectory": "licenses/output/{start-date}/images",
 		"outputDirectory": "licenses/datasets",
-		"frontDefaultStringsMatcher": "url_file_new_birthdate",
+		"frontDefaultStringsMatcher": "recto_rotation",
 		"fileName": "dataset-{start-date}-tagovertext.json",
-		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
+		"script": "rawBodyOutput = JSON.stringify([{\"labels\":{\"boundingBoxes\":[{\"id\":0,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":42,\"left\":217,\"top\":74,\"width\":185,\"conf\":93.52,\"text\":\"Martin\"},{\"id\":1,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":33,\"left\":218,\"top\":119,\"width\":188,\"conf\":70,\"text\":\"Paule\"},{\"id\":2,\"level\":1,\"page_num\":1,\"block_num\":1,\"par_num\":1,\"line_num\":1,\"word_num\":1,\"height\":38,\"left\":216,\"top\":157,\"width\":296,\"conf\":10,\"text\":\"14.07. (Uto\"}]}}]);"
 	},
 	{
 		"type": "dataset",
@@ -105,7 +107,7 @@
 		"annotationType": "NamedEntityRecognition",
 		"fileDirectory": "licenses/output/{start-date}/jsons",
 		"outputDirectory": "licenses/datasets",
-		"configuration": "[{\"id\": \"#008194\", \"name\": \"firstLabel\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"secondLabel\", \"color\": \"#00ffa2\"}]",
+		"configuration": "[{\"id\": \"#008194\", \"name\": \"Firstname\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"Lastname\", \"color\": \"#00ffa2\"}]",
 		"fileName": "dataset-{start-date}-NER.json"
 	}
 ]

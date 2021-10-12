@@ -65,7 +65,7 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
         <div
           class="home__link-container home__link-container--compare"
         >
-          Services comparison
+          Comparison
         </div>
       </a>
       <a
