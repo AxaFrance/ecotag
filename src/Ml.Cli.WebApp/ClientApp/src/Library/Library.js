@@ -46,7 +46,8 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
 
 
     const getFileName = filePath => {
-        const fileName = b64_to_utf8(filePath.replace('/api/files/', ''));
+        const splits = filePath.split("/");
+        const fileName = b64_to_utf8(splits[splits.length-1]);
         return fileName.replace(Regex.SLASHES, StringContent.EMPTY);
     };
     
