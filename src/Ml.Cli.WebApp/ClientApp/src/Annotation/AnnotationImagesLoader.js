@@ -1,5 +1,5 @@
 ﻿import React, {useEffect, useState} from "react";
-import {fetchGetData, fetchPostJson} from "../FetchHelper";
+import {fetchGetData, fetchPostJson, utf8_to_b64} from "../FetchHelper";
 import {useMutation} from "react-query";
 import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
 import OcrLazy from "./Toolkit/Ocr/OcrLazy";
@@ -9,11 +9,12 @@ import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
 import NamedEntityLazy from "./Toolkit/NamedEntity/NamedEntityLazy";
 
+
 const fetchImages = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
-            return `api/files/${encodeURIComponent(element)}`;
+            return `api/files/${utf8_to_b64(element)}`;
         });
     } else {
         return [];
@@ -21,12 +22,8 @@ const fetchImages = async data => {
 };
 
 const getImages = (fetchFunction) => async (item) => {
-    const params = {
-        fileName: item.fileName,
-        stringsMatcher: item.frontDefaultStringsMatcher,
-        directory: item.imageDirectory
-    };
-    const fetchResult = await fetchGetData(fetchFunction)("api/datasets", params);
+    const params = "fileName=" + item.fileName + "&stringsMatcher="+ item.frontDefaultStringsMatcher + "&directory=" + item.imageDirectory
+    const fetchResult = await fetchGetData(fetchFunction)("api/datasets/"+utf8_to_b64(params));
     return fetchImages(fetchResult);
 };
 
@@ -35,10 +32,9 @@ const getHttpResultItem = async (item, fetchFunction) => {
     if(item.fileDirectory.includes("/")){
         pathSeparator = "/";
     }
-    const params = {
-        filePath: `${item.fileDirectory}${pathSeparator}${item.fileName}`
-    };
-    const fetchResult = await fetchGetData(fetchFunction)("api/annotations", params);
+   const filePath = `${item.fileDirectory}${pathSeparator}${item.fileName}`
+    
+    const fetchResult = await fetchGetData(fetchFunction)("api/annotations/"+utf8_to_b64(filePath));
     if (fetchResult.status === 200) {
         const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};

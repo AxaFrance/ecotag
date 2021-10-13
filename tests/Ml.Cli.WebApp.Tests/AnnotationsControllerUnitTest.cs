@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Controllers;
@@ -25,7 +27,7 @@ namespace Ml.Cli.WebApp.Tests
             
             var annotationsController = new AnnotationsController(fileLoader.Object, basePath.Object);
 
-            var result = await annotationsController.GetBody("filePath=C:\\{fileName}.pdf.json");
+            var result = await annotationsController.GetBody(Convert.ToBase64String(Encoding.UTF8.GetBytes("C:\\{fileName}.pdf.json")));
             var httpResult = (result as ObjectResult).Value as Cli.Program.HttpResult;
             Assert.Equal(expectedResult.Body, httpResult.Body);
         }

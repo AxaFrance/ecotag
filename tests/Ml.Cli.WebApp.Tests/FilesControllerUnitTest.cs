@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32.SafeHandles;
@@ -26,7 +28,7 @@ namespace Ml.Cli.WebApp.Tests
             
             var filesController = new FilesController(fileLoader.Object, basePath.Object);
 
-            var result = filesController.ShowFile(fileValue) as FileStreamResult;
+            var result = filesController.ShowFile(Convert.ToBase64String(Encoding.UTF8.GetBytes(fileValue))) as FileStreamResult;
             Assert.Equal("image/png", result.ContentType);
         }
     }

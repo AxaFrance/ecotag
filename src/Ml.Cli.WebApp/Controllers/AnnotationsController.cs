@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Http;
@@ -62,13 +63,13 @@ namespace Ml.Cli.WebApp.Controllers
             }
         }
 
-        [HttpGet("{filePath}")]
+        [HttpGet("{id}")]
         [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetBody(string filePath)
+        public async Task<IActionResult> GetBody(string id)
         {
-            var elementPath = HttpUtility.ParseQueryString(filePath).Get("filePath");
+            var elementPath = Encoding.UTF8.GetString(Convert.FromBase64String(id));
             if (!_basePath.IsPathSecure(elementPath))
             {
                 return BadRequest();

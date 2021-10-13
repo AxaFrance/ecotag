@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
@@ -34,7 +36,7 @@ namespace Ml.Cli.WebApp.Tests
             
             var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object, datasetsPaths);
             
-            var result = datasetsController.GetFilesFromFileName(urlContent);
+            var result = datasetsController.GetFilesFromFileName(Convert.ToBase64String(Encoding.UTF8.GetBytes(urlContent)));
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
             var value = okResult.Value;

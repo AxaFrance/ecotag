@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Ml.Cli.FileLoader;
@@ -25,11 +27,7 @@ namespace Ml.Cli.WebApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ShowFile(string id)
         {
-            //const string encodedPlusSign = "%2B";
-            var elementPath = id;
-            //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
-            //elementPath =
-              //  elementPath.Replace(encodedPlusSign, "+");
+            var elementPath = Encoding.UTF8.GetString(Convert.FromBase64String(id));
             if (!_basePath.IsPathSecure(elementPath))
             {
                 return BadRequest("Unreachable file.");

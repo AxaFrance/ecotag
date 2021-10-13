@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
-import {fetchGetData, StatusCodes} from "../FetchHelper";
+import {fetchGetData, StatusCodes, b64_to_utf8} from "../FetchHelper";
 import {getDataPaths} from "../Comparison/ImagesLoader";
 import './Library.scss';
 
@@ -44,8 +44,9 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
             );
     };
 
+
     const getFileName = filePath => {
-        const fileName = decodeURIComponent(filePath);
+        const fileName = b64_to_utf8(filePath.replace('/api/files/', ''));
         return fileName.replace(Regex.SLASHES, StringContent.EMPTY);
     };
     

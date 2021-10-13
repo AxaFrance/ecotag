@@ -2,19 +2,18 @@
     OK: 200
 };
 
-const setQueryUrl = (params, controllerPath) => {
-    const testUrlParams = Object.entries(params)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
-    if(!testUrlParams){
-        return controllerPath
-    }
-    return `${controllerPath}/${testUrlParams}`;
-};
+export const b64_to_utf8 = str => {
+    return decodeURIComponent(escape(window.atob( str )));
+}
 
-export const fetchGetData = fetchFunction => (controllerPath, params = {}) => {
+export const utf8_to_b64 = str => {
+    return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+
+export const fetchGetData = fetchFunction => (controllerPath) => {
     return fetchFunction(
-        setQueryUrl(params, controllerPath),
+        controllerPath,
         {
             method: 'GET',
             headers: {

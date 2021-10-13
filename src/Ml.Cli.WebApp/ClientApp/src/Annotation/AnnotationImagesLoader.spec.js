@@ -39,7 +39,7 @@ describe("Check dataset handling", () => {
         );
         await waitFor(() => expect(getByAltText(/file_image/i)).not.toBeNull());
         const image = container.querySelector("img");
-        expect(image.getAttribute("src")).toEqual("api/files/C%3A%5C%5CimageLocation");
+        expect(image.getAttribute("src")).toEqual("api/files/QzpcXGltYWdlTG9jYXRpb24=");
         expect(asFragment()).toMatchSnapshot();
     });
 });

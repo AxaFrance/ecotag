@@ -18,7 +18,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-1.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-1.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
         >
           compare-licenses-file-1.json
         </a>
@@ -31,7 +31,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-2.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-2.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
         >
           compare-licenses-file-2.json
         </a>
@@ -44,7 +44,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-3.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-3.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMy5qc29u"
         >
           compare-licenses-file-3.json
         </a>
@@ -57,7 +57,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-4.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-4.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtNC5qc29u"
         >
           compare-licenses-file-4.json
         </a>
@@ -70,7 +70,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-5.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-5.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtNS5qc29u"
         >
           compare-licenses-file-5.json
         </a>
@@ -83,7 +83,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-6.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-6.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtNi5qc29u"
         >
           compare-licenses-file-6.json
         </a>
@@ -96,7 +96,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-7.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-7.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtNy5qc29u"
         >
           compare-licenses-file-7.json
         </a>
@@ -109,7 +109,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-8.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-8.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtOC5qc29u"
         >
           compare-licenses-file-8.json
         </a>
@@ -122,7 +122,7 @@ exports[`Check Library component behavior and display Should have correct displa
       >
         <a
           download="compare-licenses-file-9.json"
-          href="/api/files/C%3A%5CsomeFolder%5Ccompare-licenses-file-9.json"
+          href="/api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtOS5qc29u"
         >
           compare-licenses-file-9.json
         </a>

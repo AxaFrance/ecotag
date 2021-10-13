@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,13 +39,13 @@ namespace Ml.Cli.WebApp.Controllers
             return Ok(FilesHandler.GetFilesFromPaths(_datasetsPaths.Paths, _basePath, _fileLoader));
         }
 
-        [HttpGet("{urlContent}")]
+        [HttpGet("{id}")]
         [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetFilesFromFileName(string urlContent)
+        public IActionResult GetFilesFromFileName(string id)
         {
-            var tempUrlContent = Uri.UnescapeDataString(urlContent);
+            var tempUrlContent = Encoding.UTF8.GetString(Convert.FromBase64String(id));
             var urlContentArray =
                 tempUrlContent.Split(new[] {"&stringsMatcher=", "&directory="}, StringSplitOptions.None);
 
