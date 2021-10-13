@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Ml.Cli.FileLoader;
+using Ml.Cli.PathManager;
 
 namespace Ml.Cli.WebApp.Paths
 {
@@ -12,7 +13,7 @@ namespace Ml.Cli.WebApp.Paths
             var jsonExtension = ".json";
             var pathsArray = paths.Split(Separators.CommaSeparator);
             var fullyQualifiedPaths =
-                pathsArray.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(basePath.Path, path));
+                pathsArray.Select(path => PathAdapter.AdaptPathForCurrentOs(Path.IsPathRooted(path) ? path : Path.Combine(basePath.Path, path)));
             //paths out of the security directory are ignored
             var correctPaths =
                 fullyQualifiedPaths.Where(basePath.IsPathSecure);

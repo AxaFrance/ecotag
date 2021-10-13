@@ -63,6 +63,7 @@ namespace Ml.Cli.WebApp.Controllers
         }
 
         [HttpGet("{filePath}")]
+        [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetBody(string filePath)

@@ -1,11 +1,10 @@
 ﻿import React, {useEffect, useState} from "react";
 import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
-import {fetchGetData, StatusCodes, StringEncoding} from "../FetchHelper";
+import {fetchGetData, StatusCodes} from "../FetchHelper";
 import {getDataPaths} from "../Comparison/ImagesLoader";
 import './Library.scss';
 
 const Regex = {
-    PLUS: /\+/g,
     SLASHES: /^.*[\\\/]/
 };
 
@@ -13,8 +12,6 @@ export const StringContent = {
     EMPTY: '',
     SPACE: ' '
 };
-
-const API_ROUTE_LENGTH = 17;
 
 const getFiles = async (fetchFunction, controllerPath) => {
     const fetchResult = await fetchGetData(fetchFunction)(controllerPath);
@@ -48,20 +45,12 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
     };
 
     const getFileName = filePath => {
-        const fileName = decodeURIComponent(filePath.replace(Regex.PLUS, StringContent.SPACE));
+        const fileName = decodeURIComponent(filePath);
         return fileName.replace(Regex.SLASHES, StringContent.EMPTY);
     };
     
     const loadSelectedFile = async file => {
-        const fileName = decodeURIComponent(file.replace(Regex.PLUS, StringContent.SPACE));
-        const value = fileName
-            .slice(API_ROUTE_LENGTH)
-            //specific case of path containing a plus sign, which needs to be replaced as %2B to prevent it from being decoded as a space
-            .replace(Regex.PLUS,StringEncoding.PLUS);
-        const params = {
-            value: encodeURI(value)
-        };
-        const data = await fetchGetData(fetchFunction)("api/files", params);
+        const data = await fetchGetData(fetchFunction)(file);
         if(data.status === StatusCodes.OK){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));
@@ -70,7 +59,7 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
 
     return (
         <div className="library__container">
-            <p className="library__title">Test files</p>
+            <p className="library__title">Files</p>
             {state.files.length === 0 &&
                 <span>No file found.</span>
             }

@@ -51,7 +51,7 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
         <h1
           class="af-title-bar__title"
         >
-          Services list
+          Services
         </h1>
       </div>
     </div>
@@ -188,7 +188,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
       <p
         class="library__title"
       >
-        Test files
+        Files
       </p>
       <span>
         No file found.

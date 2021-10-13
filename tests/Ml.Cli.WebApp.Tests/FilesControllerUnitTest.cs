@@ -13,7 +13,7 @@ namespace Ml.Cli.WebApp.Tests
     public class FilesControllerUnitTest
     {
         [Fact]
-        public async Task ShouldReturnFile()
+        public void ShouldReturnFile()
         {
             var fileValue = "value=C:\\someFolderWith%2BSign\\{fileName}.png";
             
@@ -26,7 +26,7 @@ namespace Ml.Cli.WebApp.Tests
             
             var filesController = new FilesController(fileLoader.Object, basePath.Object);
 
-            var result = await filesController.ShowFile(fileValue) as FileStreamResult;
+            var result = filesController.ShowFile(fileValue) as FileStreamResult;
             Assert.Equal("image/png", result.ContentType);
         }
     }

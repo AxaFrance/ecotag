@@ -6,9 +6,7 @@ export const getDataPaths = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
-            return `/api/files/${new URLSearchParams({
-                value: element
-            })}`;
+            return `/api/files/${encodeURIComponent(element)}`;
         });
     } else {
         return [];

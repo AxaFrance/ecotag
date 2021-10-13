@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Ml.Cli.FileLoader;
@@ -22,15 +20,16 @@ namespace Ml.Cli.WebApp.Controllers
         }
 
         [HttpGet("{id}")]
+        [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ShowFile(string id)
+        public IActionResult ShowFile(string id)
         {
-            var encodedPlusSign = "%2B";
-            var elementPath = HttpUtility.ParseQueryString(id).Get("value");
+            //const string encodedPlusSign = "%2B";
+            var elementPath = id;
             //normal plus signs have to be recovered (they were previously encoded to prevent being decoded as spaces)
-            elementPath =
-                elementPath.Replace(encodedPlusSign, "+");
+            //elementPath =
+              //  elementPath.Replace(encodedPlusSign, "+");
             if (!_basePath.IsPathSecure(elementPath))
             {
                 return BadRequest("Unreachable file.");

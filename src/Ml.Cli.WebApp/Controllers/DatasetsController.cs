@@ -28,7 +28,7 @@ namespace Ml.Cli.WebApp.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFiles()
+        public IActionResult GetFiles()
         {
             if (_datasetsPaths.Paths == string.Empty)
             {
@@ -39,9 +39,10 @@ namespace Ml.Cli.WebApp.Controllers
         }
 
         [HttpGet("{urlContent}")]
+        [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFilesFromFileName(string urlContent)
+        public IActionResult GetFilesFromFileName(string urlContent)
         {
             var tempUrlContent = Uri.UnescapeDataString(urlContent);
             var urlContentArray =

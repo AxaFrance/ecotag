@@ -105,7 +105,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
       <p
         class="library__title"
       >
-        Test files
+        Files
       </p>
       <div
         class="library__files-list"
@@ -115,7 +115,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
         >
           <a
             download="imageLocation"
-            href="/api/files/value=C%3A%5C%5CimageLocation"
+            href="/api/files/C%3A%5C%5CimageLocation"
           >
             imageLocation
           </a>
@@ -278,7 +278,7 @@ exports[`Check dataset handling Should insert dataset and select ocr and rotatio
               <img
                 alt="file_image"
                 class="images-list__file_image"
-                src="api/files/value=C%3A%5C%5CimageLocation"
+                src="api/files/C%3A%5C%5CimageLocation"
               />
             </div>
           </div>

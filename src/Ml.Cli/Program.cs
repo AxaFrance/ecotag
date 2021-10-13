@@ -46,8 +46,8 @@ namespace Ml.Cli
 
             app.OnExecute(async () =>
             {
-                var tasksValue = tasksPath.Value();
-                var baseValue = basePath.Value();
+                var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
+                var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());
 
                 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 

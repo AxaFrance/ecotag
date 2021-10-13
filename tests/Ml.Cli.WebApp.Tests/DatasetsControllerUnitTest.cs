@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.Tests
     public class DatasetsControllerUnitTest
     {
         [Fact]
-        public async Task ShouldGetMatchingFiles()
+        public void ShouldGetMatchingFiles()
         {
             var urlContent =
                 "fileName={someFileName}_pdf.json&stringsMatcher=firstname, lastname&directory=someDirectory";
@@ -34,7 +34,7 @@ namespace Ml.Cli.WebApp.Tests
             
             var datasetsController = new DatasetsController(fileLoader.Object, basePath.Object, datasetsPaths);
             
-            var result = await datasetsController.GetFilesFromFileName(urlContent);
+            var result = datasetsController.GetFilesFromFileName(urlContent);
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
             var value = okResult.Value;

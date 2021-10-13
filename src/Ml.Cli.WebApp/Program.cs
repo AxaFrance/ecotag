@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ml.Cli.PathManager;
 using Ml.Cli.WebApp.Paths;
 
 namespace Ml.Cli.WebApp
@@ -40,10 +41,10 @@ namespace Ml.Cli.WebApp
 
             app.OnExecute(async () =>
             {
-                var tasksValue = tasksPath.Value();
-                var baseValue = basePath.Value();
-                var comparesValue = comparesPaths.Value();
-                var datasetsValue = datasetsPaths.Value();
+                var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
+                var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());
+                var comparesValue = PathAdapter.AdaptPathForCurrentOs(comparesPaths.Value());
+                var datasetsValue = PathAdapter.AdaptPathForCurrentOs(datasetsPaths.Value());
                 if (baseValue == null)
                 {
                     Console.WriteLine("The base path argument is unspecified.");

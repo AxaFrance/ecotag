@@ -105,7 +105,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <p
         class="library__title"
       >
-        Test files
+        Files
       </p>
       <span>
         No file found.
@@ -1301,7 +1301,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <p
         class="library__title"
       >
-        Test files
+        Files
       </p>
       <span>
         No file found.

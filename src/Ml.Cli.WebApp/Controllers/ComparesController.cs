@@ -118,9 +118,10 @@ namespace Ml.Cli.WebApp.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFiles()
+        public IActionResult GetFiles()
         {
             if (_comparesPaths.Paths == string.Empty)
             {

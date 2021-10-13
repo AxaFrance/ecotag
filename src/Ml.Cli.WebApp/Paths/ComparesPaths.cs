@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Ml.Cli.PathManager;
 
 namespace Ml.Cli.WebApp.Paths
 {
@@ -8,7 +9,7 @@ namespace Ml.Cli.WebApp.Paths
 
         public ComparesPaths(string paths)
         {
-            Paths = paths;
+            Paths = PathAdapter.AdaptPathForCurrentOs(paths);
         }
     }
 }

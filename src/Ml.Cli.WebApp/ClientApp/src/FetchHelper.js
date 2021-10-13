@@ -2,14 +2,13 @@
     OK: 200
 };
 
-export const StringEncoding = {
-    PLUS: '%2B'
-};
-
 const setQueryUrl = (params, controllerPath) => {
     const testUrlParams = Object.entries(params)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');
+    if(!testUrlParams){
+        return controllerPath
+    }
     return `${controllerPath}/${testUrlParams}`;
 };
 
