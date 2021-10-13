@@ -15,7 +15,7 @@ namespace Ml.Cli.WebApp.Tests
         [Fact]
         public void ShouldReturnFile()
         {
-            var fileValue = "value=C:\\someFolderWith%2BSign\\{fileName}.png";
+            var fileValue = "C:\\someFolderWith+Sign\\{fileName}.png";
             
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
