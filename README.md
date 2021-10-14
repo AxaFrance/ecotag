@@ -115,7 +115,7 @@ cd ml-cli
 curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL3dpbjEw0/content?format=zip --output ml-cli.zip
 unzip ml-cli.zip -d install
 # unzip ml-cli
-unzip ./install/win10/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli 
+unzip ./install/win10/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
 # unzip demo-api
 unzip ./install/win10/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
 
@@ -137,7 +137,7 @@ Then, in another command line :
 # run ml-cli
 cd ml-cli
 Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
-# then navigate to: http://localhost/5000/ 
+# then navigate to: http://localhost:5000/ 
 ```
 
 ## Getting started with JupyterLab on unbuntu
@@ -154,10 +154,10 @@ mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web and demo-api
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMzAvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
+curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMzQvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
 unzip ml-cli.zip -d install
 # unzip ml-cli
-unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli 
+unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
 # unzip demo-api
 unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
 
@@ -217,7 +217,7 @@ Then, in another command line :
 cd ml-cli
 chmod +x Ml.Cli.WebApp
 ./Ml.Cli.WebApp --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
-# then navigate to: http://localhost/5000/ 
+# then navigate to: http://localhost:5000/ 
 ```
 
 # How it works

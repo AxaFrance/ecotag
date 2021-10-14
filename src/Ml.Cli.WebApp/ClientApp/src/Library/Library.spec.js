@@ -14,8 +14,7 @@ const returnedFiles = [
     "C:\\someFolder\\compare-licenses-file-9.json"
 ];
 
-const onPlayClick = () => {
-};
+const onPlayClick = () => {};
 
 const mockedFetch = async (queryUrl, data) => Promise.resolve({
     ok: false,
