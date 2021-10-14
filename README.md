@@ -101,6 +101,7 @@ ML-Cli autonomous x64 distribution is available on :
 Ml.Cli.WebApp.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
+chmod +x Ml.Cli.WebApp
 Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
@@ -170,6 +171,7 @@ Then, in another command line :
 ```sh
 # run the demo-api
 cd demo-api
+chmod +x Ml.Cli.DemoApi
 ./Ml.Cli.DemoApi
 # start demo api in background at https://localhost:6001
 ```
@@ -178,6 +180,7 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
+chmod +x Ml.Cli.WebApp
 ./Ml.Cli.WebApp --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: https://your-jupyterlab/proxy/5000/ (the last / is mandatory)
 ```
