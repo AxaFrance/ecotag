@@ -6,7 +6,7 @@ export const getDataPaths = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
-            return `/api/files/${utf8_to_b64(element)}`;
+            return `api/files/${utf8_to_b64(element)}`;
         });
     } else {
         return [];
