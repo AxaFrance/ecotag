@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check Image Classifier behaviour Should render correctly and click on button 1`] = `
+<DocumentFragment>
+  <div
+    class="image-classifier"
+  >
+    <div
+      class="image-classifier__buttons-container"
+    >
+      <div
+        class="image-classifier__button-container"
+      >
+        <button
+          class="btn af-btn"
+          style="background-color: rgb(1, 13, 28); box-shadow: none;"
+        >
+          Dog
+        </button>
+      </div>
+      <div
+        class="image-classifier__button-container"
+      >
+        <button
+          class="btn af-btn"
+          style="background-color: rgb(1, 7, 182); box-shadow: none;"
+        >
+          Cat
+        </button>
+      </div>
+      <div
+        class="image-classifier__button-container"
+      >
+        <button
+          class="btn af-btn"
+          style="background-color: rgb(32, 172, 217); box-shadow: none;"
+        >
+          Duck
+        </button>
+      </div>
+      <div
+        class="image-classifier__button-container"
+      >
+        <button
+          class="btn af-btn"
+          style="background-color: rgb(143, 142, 240); box-shadow: none;"
+        >
+          Other
+        </button>
+      </div>
+    </div>
+    <div
+      class="image-classifier__image-container"
+    >
+      <img
+        alt="Classifier image"
+        class="image-classifier__image"
+        src="sample_image.png"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

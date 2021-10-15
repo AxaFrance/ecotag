@@ -8,6 +8,7 @@ import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLaz
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
 import NamedEntityLazy from "./Toolkit/NamedEntity/NamedEntityLazy";
+import ImageClassifierLazy from "./Toolkit/ImageClassifier/ImageClassifierLazy";
 
 
 const fetchImages = async data => {
@@ -155,6 +156,11 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             case "NamedEntityRecognition":
                 returnedObject = e;
                 break;
+            case "ImageClassifier":
+                returnedObject = {
+                    "label": e
+                };
+                break;
         }
         return returnedObject;
     }
@@ -232,6 +238,13 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
                     labels={parentState.configuration}
                     annotationAction={onDatasetSubmit}
                     placeholder="Submit Annotation"
+                />
+            }
+            {parentState.annotationType === "ImageClassifier" &&
+                <ImageClassifierLazy
+                    url={state.filePrimaryUrl}
+                    labels={parentState.configuration}
+                    onSubmit={onDatasetSubmit}
                 />
             }
         </>

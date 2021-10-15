@@ -1,0 +1,23 @@
+﻿.image-classifier{
+  justify-content: center;
+  text-align: center;
+  width:100%;
+  &__image-container{
+    display: flex;
+    justify-content: center;
+    width:100%;
+  }
+  &__image{
+    width: 80%;
+  }
+  &__buttons-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-bottom: 1em;
+  }
+  &__button-container{
+    margin-top: 3em;
+    flex: 1 0 21%;
+  }
+}

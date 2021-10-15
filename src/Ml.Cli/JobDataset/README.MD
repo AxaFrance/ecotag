@@ -70,7 +70,18 @@ tasks.json
   		"frontDefaultStringsMatcher": "url_file_new_birthdate",
   		"fileName": "dataset-{start-date}-tagovertext.json",
   		"script": "try {\n    var dataBody = JSON.parse(rawBodyInput);\n\tconst boundingBoxInfo = dataBody.analysis[0].elements[0].output_new_verso_zone[0];\n\tconst new_data = [{\"labels\": {\"boundingBoxes\":[{\"id\": 0, \"level\": 1, \"page_num\": 1, \"block_num\": 1, \"par_num\": 1, \"line_num\": 1, \"word_num\": 1, \"left\": boundingBoxInfo.coordinates.xmin, \"top\": boundingBoxInfo.coordinates.ymin, \"width\": boundingBoxInfo.coordinates.xmax - boundingBoxInfo.coordinates.xmin, \"height\": boundingBoxInfo.coordinates.ymax - boundingBoxInfo.coordinates.ymin, \"conf\": boundingBoxInfo.confidence, \"text\": boundingBoxInfo.label}]}}];\n    rawBodyOutput = JSON.stringify(new_data);\n} catch(ex) {\n    console.log(\"Parsing failed\");\n    console.log(ex.toString());\n    rawBodyOutput = rawBodyInput;\n}"
-  	}
+  	},
+    {
+        "type": "dataset",
+        "enabled": true,
+        "annotationType": "ImageClassifier",
+        "fileDirectory": "licenses/output/{start-date}/jsons",
+        "imageDirectory": "licenses/output/{start-date}/images",
+        "outputDirectory": "licenses/datasets",
+        "frontDefaultStringsMatcher": "recto_rotation",
+        "configuration": "[{\"name\": \"Dog\"}, {\"name\": \"Cat\"}, {\"name\": \"Other\"}]",
+        "fileName": "dataset-{start-date}-imageclassifier.json"
+    }
 ] 
 ```
 
@@ -80,7 +91,7 @@ tasks.json
 ## Mandatory attributes
 - **type**: name of the task
 - **annotationType**: string that defines the annotation type of the file
-    - values: "JsonEditor", "Ocr", "Cropping", "Rotation", "TagOverText", "TagOverTextLabel", "NamedEntityRecognition"
+    - values: "JsonEditor", "Ocr", "Cropping", "Rotation", "TagOverText", "TagOverTextLabel", "NamedEntityRecognition", "ImageClassifier"
 - **fileDirectory**: string that defines the path to the jsons used to generate the dataset
 - **outputDirectory**: string that defines the path where the dataset file will be generated
 - **fileName**: string that defines the name of the file and its extension  

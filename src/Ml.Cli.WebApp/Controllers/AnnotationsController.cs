@@ -107,7 +107,7 @@ namespace Ml.Cli.WebApp.Controllers
             }
             else
             {
-                foundToken.Annotations = "[{" + datasetData.Annotation.ToString() + "}]";
+                foundToken.Annotations = "[" + datasetData.Annotation.ToString() + "]";
             }
 
             var result = JsonConvert.SerializeObject(fileContent, Formatting.Indented);

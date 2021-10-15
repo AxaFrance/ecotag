@@ -38,7 +38,7 @@ namespace Ml.Cli.WebApp.Tests
             var datasetFileContent = "{\"DatasetLocation\": \"C:\\\\someFolder\\\\datasetFile.json\",\"AnnotationType\": \"Ocr\",\"Configuration\": \"[{\\\"name\\\": \\\"Date\\\", \\\"id\\\": 0}, {\\\"name\\\": \\\"City name\\\", \\\"id\\\": 1}]\",\"Content\": [{\"FileName\": \"{fileName}.json\",\"FileDirectory\": \"\",\"ImageDirectory\": \"\",\"FrontDefaultStringsMatcher\": \"\",\"Annotations\": \"\"}]}";
             var datasetInfo = new AnnotationsController.DatasetInfo("C:\\\\someFolder\\\\datasetFile.json", "{fileName}.json", "{\"labels\": \"some_content\"}");
 
-            var expectedResult = "{\"DatasetLocation\": \"C:\\\\someFolder\\\\datasetFile.json\",\"AnnotationType\": \"Ocr\",\"Configuration\": \"[{\\\"name\\\": \\\"Date\\\", \\\"id\\\": 0}, {\\\"name\\\": \\\"City name\\\", \\\"id\\\": 1}]\",\"Content\": [{\"FileName\": \"{fileName}.json\",\"FileDirectory\": \"\",\"ImageDirectory\": \"\",\"FrontDefaultStringsMatcher\": \"\",\"Annotations\": \"[{{\\\"labels\\\": \\\"some_content\\\"}}]\"}]}";
+            var expectedResult = "{\"DatasetLocation\": \"C:\\\\someFolder\\\\datasetFile.json\",\"AnnotationType\": \"Ocr\",\"Configuration\": \"[{\\\"name\\\": \\\"Date\\\", \\\"id\\\": 0}, {\\\"name\\\": \\\"City name\\\", \\\"id\\\": 1}]\",\"Content\": [{\"FileName\": \"{fileName}.json\",\"FileDirectory\": \"\",\"ImageDirectory\": \"\",\"FrontDefaultStringsMatcher\": \"\",\"Annotations\": \"[{\\\"labels\\\": \\\"some_content\\\"}]\"}]}";
             var indentedResult = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(expectedResult), Formatting.Indented);
             
             var basePath = new Mock<BasePath>("");
