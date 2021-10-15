@@ -6,6 +6,8 @@ import './Compare.scss';
 import {QueryClient, QueryClientProvider} from "react-query";
 import FileTreatment from "../FileTreatment/FileTreatment";
 import TitleBar from "../TitleBar/TitleBar";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
@@ -71,6 +73,7 @@ try {
             {state.items.length > 0 &&
             <TableResult state={state} setState={setState} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
             }
+            <ToastContainer/>
         </QueryClientProvider>
     );
 }

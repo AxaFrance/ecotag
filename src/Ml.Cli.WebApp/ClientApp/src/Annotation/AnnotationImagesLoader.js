@@ -173,6 +173,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             fileName: item.fileName,
             annotation: setAnnotationObject(e)
         };
+        mutationDataset.mutate(annotationObject);
         toast("Annotation sauvegardée", {
             position: "top-right",
             autoClose: 3000,
@@ -183,7 +184,6 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             progress: undefined,
             type: "success"
         });
-        mutationDataset.mutate(annotationObject);
     }
 
     return (
