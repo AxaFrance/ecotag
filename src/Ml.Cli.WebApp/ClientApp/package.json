@@ -37,6 +37,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-toastify": "^8.0.3",
     "sass": "^1.26.10",
     "use-image": "^1.0.7"
   },

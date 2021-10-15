@@ -8,6 +8,7 @@ import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLaz
 import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
 import IrotLazy from "./Toolkit/Rotation/IrotLazy";
 import NamedEntityLazy from "./Toolkit/NamedEntity/NamedEntityLazy";
+import {toast} from "react-toastify";
 import ImageClassifierLazy from "./Toolkit/ImageClassifier/ImageClassifierLazy";
 
 
@@ -172,6 +173,16 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             fileName: item.fileName,
             annotation: setAnnotationObject(e)
         };
+        toast("Annotation sauvegardée", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            type: "success"
+        });
         mutationDataset.mutate(annotationObject);
     }
 
