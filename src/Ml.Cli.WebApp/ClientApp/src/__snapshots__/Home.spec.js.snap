@@ -392,5 +392,8 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
       Apply filters
     </button>
   </div>
+  <div
+    class="Toastify"
+  />
 </DocumentFragment>
 `;
