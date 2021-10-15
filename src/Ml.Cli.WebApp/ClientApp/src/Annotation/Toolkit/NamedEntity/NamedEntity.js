@@ -18,8 +18,8 @@ const NamedEntity = ({ text, labels, annotationAction, placeholder }) => {
     setState({ ...state, value });
   };
 
-  const submitAnnotation = label => {
-    annotationAction(label);
+  const submitAnnotation = () => {
+    annotationAction(state.value);
     setState({ ...state, value: [] });
   };
 
@@ -43,7 +43,7 @@ const NamedEntity = ({ text, labels, annotationAction, placeholder }) => {
           />
         </div>
         <div className="annotationActionContainer">
-          <button className="buttonAnnotationAction" onClick={() => submitAnnotation(state.value)}>
+          <button className="buttonAnnotationAction" onClick={submitAnnotation}>
             {placeholder}
           </button>
         </div>

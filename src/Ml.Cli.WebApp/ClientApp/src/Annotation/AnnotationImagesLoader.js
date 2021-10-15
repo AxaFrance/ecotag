@@ -82,6 +82,9 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
 
     useEffect(() => {
         let isMounted = true;
+        if(parentState.annotationType === "NamedEntityRecognition"){
+            return;
+        }
         getUrls().then(urls => {
             getEditorContent().then(content => {
                 if (isMounted) {
@@ -225,7 +228,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             }
             {parentState.annotationType === "NamedEntityRecognition" &&
                 <NamedEntityLazy
-                    text={"Hello Lilian Delouvy, This is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
+                    text={"Hello, my name is Lilian Delouvy, and this is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
                     labels={parentState.configuration}
                     annotationAction={onDatasetSubmit}
                     placeholder="Submit Annotation"
