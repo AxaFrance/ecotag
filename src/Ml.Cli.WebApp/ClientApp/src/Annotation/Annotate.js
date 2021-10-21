@@ -5,6 +5,8 @@ import DatasetHandler from "./DatasetHandler";
 import TableAnnotate from "./TableAnnotate";
 import {QueryClient, QueryClientProvider} from "react-query";
 import TitleBar from "../TitleBar/TitleBar";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
             {state.items.length > 0 &&
             <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
             }
+            <ToastContainer/>
         </QueryClientProvider>
     );
 };

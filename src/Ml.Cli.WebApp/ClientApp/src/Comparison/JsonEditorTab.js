@@ -4,6 +4,7 @@ import {Tabs} from "@axa-fr/react-toolkit-all";
 import './JsonEditorTab.scss';
 import ImagesLoader from "./ImagesLoader";
 import {fetchPostJson} from "../FetchHelper";
+import {toast} from "react-toastify";
 
 const left_var = "left";
 const right_var = "right";
@@ -49,6 +50,16 @@ const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompare
         const tempObject = {compareLocation, fileDirectory: fileName, content: JSON.stringify(item)};
         mutationCompare.mutate(tempObject);
         mutationJson.mutate(jsonContent);
+        toast("Annotation sauvegardée", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            type: "success"
+        });
         setCompareState({items: newItems});
     };
 
