@@ -73,7 +73,6 @@ const ToolbarContainer = ({ url, state, setState, onSubmit, expectedAngle }) => 
         isSubmitDisabled={isSubmitDisabled}
         onSubmit={onSubmitOverride}
         onReset={() => setState({ ...state, rotate: expectedAngle })}
-        classModifier="multi-toolbar"
       >
         <ToolbarButtonContainer classModifier="filters">
           <ToolbarProgressButton

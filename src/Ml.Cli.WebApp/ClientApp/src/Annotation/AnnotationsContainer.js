@@ -26,7 +26,7 @@ const AnnotationsContainer = ({state, MonacoEditor, fetchFunction}) => {
     
     const onPrevious = () => {
         if(tableState.itemNumber > 0){
-            setTableState({...tableState, itemNumber: tableState.itemNumber - 1});
+            setTableState({...tableState, itemNumber: tableState.itemNumber, isEndReached: false});
         }
     };
     
@@ -40,25 +40,23 @@ const AnnotationsContainer = ({state, MonacoEditor, fetchFunction}) => {
     };
 
     return <>
+        <AnnotationsToolbar
+            onPrevious={onPrevious}
+            onPreviousPlaceholder="Précédent"
+            onNext={onNext}
+            onNextPlaceholder="Suivant"
+        />
         {tableState.isEndReached ? (
             <h3 className="end-message">Thank you, all files from this dataset have been annotated.</h3>
         ) : (
-            <>
-                <AnnotationItem
-                    parentState={state}
-                    fetchFunction={fetchFunction}
-                    key={tableState.tableItems[tableState.itemNumber].id}
-                    item={tableState.tableItems[tableState.itemNumber]}
-                    onSubmit={onSubmit}
-                    MonacoEditor={MonacoEditor}
-                />
-                <AnnotationsToolbar
-                    onPrevious={onPrevious}
-                    onPreviousPlaceholder="Précédent"
-                    onNext={onNext}
-                    onNextPlaceholder="Suivant"
-                />
-            </>
+            <AnnotationItem
+                parentState={state}
+                fetchFunction={fetchFunction}
+                key={tableState.tableItems[tableState.itemNumber].id}
+                item={tableState.tableItems[tableState.itemNumber]}
+                onSubmit={onSubmit}
+                MonacoEditor={MonacoEditor}
+            />
         )}
     </>;
 };

@@ -2,14 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
-  bottom: 0;
-  left: 0;
   width: 100%;
   padding: 10px 50px;
-  background: linear-gradient(15deg, #c6d7e4 50%, #d2dbe3 50%, #d2dbe3);
-  -webkit-box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);
-  -moz-box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);
-  box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);
-  margin-top: 10px;
+  margin:10px 0 10px 0;
 }

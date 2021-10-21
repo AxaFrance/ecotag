@@ -1,7 +1,6 @@
 import React from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
 import Toolbar, { ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton, ToolbarProgressButton } from '../Toolbar';
-import './ToolbarModifier.scss';
 
 const getFileExtension = filename => {
   if (!filename) return '';
@@ -71,7 +70,7 @@ const ToolbarContainer = ({ state, setState, onSubmit }) => {
   return (
     <>
       <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-        <Toolbar onSubmit={submitAnnotation} classModifier="multi-toolbar">
+        <Toolbar onSubmit={submitAnnotation}>
           <ToolbarButtonContainer classModifier="progress-bar">
             <ToolbarProgressButton
               label="Image Size"

@@ -144,7 +144,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
   //<ToolbarButton title="Raccourci : M" onClick={() => {}} icon="move" label="Move"/>
   return (
     <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit} classModifier="multi-toolbar">
+      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit}>
         <ToolbarButtonContainer>
           <ToolbarSwitchButton
             id="enable-creation"
