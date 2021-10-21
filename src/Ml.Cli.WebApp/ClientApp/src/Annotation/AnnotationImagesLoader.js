@@ -45,6 +45,21 @@ const getHttpResultItem = async (item, fetchFunction) => {
     return {errorMessage, httpResult: {}};
 };
 
+const sendConfirmationMessage = (isSuccess) => {
+    const message = isSuccess ? "Annotation sauvegardée" : "Impossible de sauvegarder l'annotation";
+    const type = isSuccess ? "success" : "error";
+    toast(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        type: type
+    });
+}
+
 const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetchFunction}) => {
 
     const [state, setState] = useState({
@@ -166,23 +181,16 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
         return returnedObject;
     }
 
-    const onDatasetSubmit = e => {
+    const onDatasetSubmit = async e => {
         const annotationObject = {
             datasetLocation: parentState.datasetLocation,
             annotationType: parentState.annotationType,
             fileName: item.fileName,
             annotation: setAnnotationObject(e)
         };
-        mutationDataset.mutate(annotationObject);
-        toast("Annotation sauvegardée", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            type: "success"
+        await mutationDataset.mutateAsync(annotationObject, {
+            onSuccess: () => sendConfirmationMessage(true),
+            onError: () => sendConfirmationMessage(false)
         });
         onSubmit();
     }
