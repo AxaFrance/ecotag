@@ -7,6 +7,7 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import TitleBar from "../TitleBar/TitleBar";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import './Annotate.scss';
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,8 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
         datasetLocation: "",
         items: [],
         annotationType: "JsonEditor",
-        configuration: [{name: "Default", id: 0}]
+        configuration: [{name: "Default", id: 0}],
+        isFileInserted: false
     });
 
     return (
@@ -33,9 +35,11 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
             <TitleBar
                 title={state.fileName === "Annotate a dataset" ? state.fileName : `Visualising file: ${state.fileName}`}/>
             <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
-            {state.items.length > 0 &&
-            <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
-            }
+            {state.items.length > 0 ? (
+                <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
+            ) : (state.isFileInserted &&
+                <h2 className="error-message">Le fichier d'annotation est vide.</h2>
+            )}
             <ToastContainer/>
         </QueryClientProvider>
     );

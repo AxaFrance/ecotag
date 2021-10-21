@@ -32,7 +32,7 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
             if(result.Configuration !== ""){
                 fileConfiguration = JSON.parse(result.Configuration);
             }
-            setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems});
+            setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems, isFileInserted: true});
             setHandlerState({...state, loadFileError: false});
         }
     };

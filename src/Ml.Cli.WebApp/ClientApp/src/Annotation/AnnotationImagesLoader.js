@@ -45,7 +45,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
     return {errorMessage, httpResult: {}};
 };
 
-const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}) => {
+const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetchFunction}) => {
 
     const [state, setState] = useState({
         fileUrls: [],
@@ -184,6 +184,7 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, fetchFunction}
             progress: undefined,
             type: "success"
         });
+        onSubmit();
     }
 
     return (
