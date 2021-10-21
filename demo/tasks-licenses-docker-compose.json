@@ -79,5 +79,16 @@
     "outputDirectory": "licenses/datasets",
     "configuration": "[{\"id\": \"#008194\", \"name\": \"Firstname\", \"color\": \"#008194\"},{\"id\": \"#00ffa2\", \"name\": \"Lastname\", \"color\": \"#00ffa2\"}]",
     "fileName": "dataset-{start-date}-NER.json"
+  },
+  {
+    "type": "dataset",
+    "enabled": true,
+    "annotationType": "ImageClassifier",
+    "fileDirectory": "licenses/output/{start-date}/jsons",
+    "imageDirectory": "licenses/output/{start-date}/images",
+    "outputDirectory": "licenses/datasets",
+    "frontDefaultStringsMatcher": "recto_rotation",
+    "configuration": "[{\"name\": \"Dog\"}, {\"name\": \"Cat\"}, {\"name\": \"Other\"}]",
+    "fileName": "dataset-{start-date}-imageclassifier.json"
   }
 ]
