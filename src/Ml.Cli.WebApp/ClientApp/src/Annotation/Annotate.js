@@ -2,7 +2,7 @@
 import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import DatasetHandler from "./DatasetHandler";
-import TableAnnotate from "./TableAnnotate";
+import AnnotationsContainer from "./AnnotationsContainer";
 import {QueryClient, QueryClientProvider} from "react-query";
 import TitleBar from "../TitleBar/TitleBar";
 import {ToastContainer} from "react-toastify";
@@ -36,7 +36,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
                 title={state.fileName === "Annotate a dataset" ? state.fileName : `Visualising file: ${state.fileName}`}/>
             <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
             {state.items.length > 0 ? (
-                <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
+                <AnnotationsContainer state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
             ) : (state.isFileInserted &&
                 <h2 className="error-message">Le fichier d'annotation est vide.</h2>
             )}
