@@ -4,14 +4,18 @@ import './AnnotationsToolbar.scss';
 
 const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder, isPreviousDisabled, onNext, onNextPlaceholder, isNextDisabled}) => {
     
+    const setModifier = (side, isDisabled) => {
+        let returnedValue = (side === "left" ? "hasiconLeft" : "hasiconRight");
+        if(isDisabled){
+            returnedValue += " disabled";
+        }
+        return returnedValue;
+    }
+    
     return(
         <div className="annotations-toolbar">
-            <div className={isPreviousDisabled ? "annotations-toolbar__hidden-container" : ""}>
-                <Button onClick={onPrevious} classModifier="hasiconLeft" glyphicon="glyphicon glyphicon-arrowthin-left" disabled={isPreviousDisabled}>{onPreviousPlaceholder}</Button>
-            </div>
-            <div className={isNextDisabled ? "annotations-toolbar__hidden-container" : ""}>
-                <Button onClick={onNext} classModifier="hasiconRight" glyphicon="glyphicon glyphicon-arrowthin-right" disabled={isNextDisabled}>{onNextPlaceholder}</Button>
-            </div>
+            <Button onClick={onPrevious} classModifier={setModifier("left", isPreviousDisabled)} glyphicon="glyphicon glyphicon-arrowthin-left" disabled={isPreviousDisabled}>{onPreviousPlaceholder}</Button>
+            <Button onClick={onNext} classModifier={setModifier("right", isNextDisabled)} glyphicon="glyphicon glyphicon-arrowthin-right" disabled={isNextDisabled}>{onNextPlaceholder}</Button>
         </div>
     );
 };
