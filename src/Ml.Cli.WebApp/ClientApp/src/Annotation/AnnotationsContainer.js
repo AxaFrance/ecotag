@@ -3,22 +3,19 @@ import AnnotationItem from "./AnnotationItem";
 import AnnotationsToolbar from "./AnnotationsToolbar";
 import './AnnotationsContainer.scss';
 
-const sortByAnnotations = (items) => {
-    return items.sort((a, b) => (a.annotations.length > b.annotations.length) ? 1 : -1);
-}
-
-const AnnotationsContainer = ({state, MonacoEditor, fetchFunction}) => {
+const AnnotationsContainer = ({state, currentItem, MonacoEditor, fetchFunction}) => {
     
     const [tableState, setTableState] = useState({
-        tableItems: sortByAnnotations(state.items),
-        itemNumber: 0,
+        tableItems: state.items,
+        currentItem: currentItem,
+        itemNumber: state.items.indexOf(currentItem),
         isEndReached: false
     });
     
     //setting the component back to original state when new file is inserted
     useEffect(() => {
-        setTableState({tableItems: sortByAnnotations(state.items), itemNumber: 0, isEndReached: false});
-    }, [state]);
+        setTableState({tableItems: state.items, currentItem: currentItem, itemNumber: state.items.indexOf(currentItem), isEndReached: false});
+    }, [currentItem]);
     
     const onSubmit = () => {
         setTableState({...tableState, itemNumber: tableState.itemNumber + 1});
@@ -29,13 +26,13 @@ const AnnotationsContainer = ({state, MonacoEditor, fetchFunction}) => {
             setTableState({...tableState, itemNumber: tableState.itemNumber, isEndReached: false});
         }
         else if(tableState.itemNumber > 0){
-            setTableState({...tableState, itemNumber: tableState.itemNumber - 1});
+            setTableState({...tableState, itemNumber: tableState.itemNumber - 1, currentItem: tableState.tableItems[tableState.itemNumber - 1]});
         }
     };
     
     const onNext = () => {
         if(tableState.itemNumber < state.items.length - 1){
-            setTableState({...tableState, itemNumber: tableState.itemNumber + 1});
+            setTableState({...tableState, itemNumber: tableState.itemNumber + 1, currentItem: tableState.tableItems[tableState.itemNumber + 1]});
         }
         else{
             setTableState({...tableState, isEndReached: true});
@@ -57,8 +54,8 @@ const AnnotationsContainer = ({state, MonacoEditor, fetchFunction}) => {
             <AnnotationItem
                 parentState={state}
                 fetchFunction={fetchFunction}
-                key={tableState.tableItems[tableState.itemNumber].id}
-                item={tableState.tableItems[tableState.itemNumber]}
+                key={tableState.currentItem.id}
+                item={tableState.currentItem}
                 onSubmit={onSubmit}
                 MonacoEditor={MonacoEditor}
             />

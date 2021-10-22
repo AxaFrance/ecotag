@@ -15,7 +15,11 @@ const mapDatasetItems = data => data.map(item => {
     };
 });
 
-const DatasetHandler = ({state, setState, fetchFunction}) => {
+const sortByAnnotations = (items) => {
+    return items.sort((a, b) => (a.annotations.length > b.annotations.length) ? 1 : -1);
+}
+
+const DatasetHandler = ({state, setState, history, fetchFunction}) => {
 
     const [handlerState, setHandlerState] = useState({
         loadFileError: false
@@ -26,14 +30,18 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
             onLoadFailure(fileName);
         } else {
             const mappedItems = mapDatasetItems(result.Content);
+            const sortedItems = sortByAnnotations(mappedItems);
             const location = result.DatasetLocation;
             const fileAnnotationType = result.AnnotationType;
             let fileConfiguration = "";
             if(result.Configuration !== ""){
                 fileConfiguration = JSON.parse(result.Configuration);
             }
-            setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: mappedItems, isFileInserted: true});
+            setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: sortedItems, isFileInserted: true});
             setHandlerState({...state, loadFileError: false});
+            if(sortedItems.length !== 0){
+                history.push(`/annotate/${fileName}/${sortedItems[0].id}`);
+            }
         }
     };
 
