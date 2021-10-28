@@ -218,8 +218,6 @@ const setStateOverride = setState => state => {
 };
 
 const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
-  const splitUrl = url.split('.com')[1] ? url.split('?')[0].split('.com')[1] : url.split('?')[0];
-
   const containerRef = useRef(null);
   const croppingWidth = (window.innerWidth * 70) / 100 - 100; // -100 correspond au padding 50 50 sur l'annotation-zone
   const croppingHeight = (window.innerHeight * 85) / 100;
