@@ -1,17 +1,23 @@
-﻿import React from "react";
+﻿import React, {useEffect} from "react";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import AnnotationsContainer from "./AnnotationsContainer";
-import NotFound from "../PageNotFound/NotFound";
 
 const selectItemById = (annotationState, id) => {
     return annotationState.items.find(x => x.id === id);
 };
 
-const Routes = ({annotationState, MonacoEditor, fetchFunction}) => {
+const Routes = ({annotationState, MonacoEditor, fetchFunction, onStateReinit}) => {
     const {url} = useRouteMatch();
+    
+    useEffect(() => {
+        if(window.location.href.endsWith(url)){
+            onStateReinit();
+        }
+    }, [window.location.href]);
+    
     return(
         <Switch>
-            <Route path={`${url}/:dataset/:id`} render={(props) => (
+            <Route exact path={`${url}/:dataset/:id`} render={(props) => (
                 <AnnotationsContainer
                     state={annotationState}
                     entryItem={selectItemById(annotationState, props.match.params.id)}
@@ -19,14 +25,6 @@ const Routes = ({annotationState, MonacoEditor, fetchFunction}) => {
                     fetchFunction={fetchFunction}
                 />
             )}/>
-            <Route exact path={`${url}/annotate-end`}>
-                <h3 className="end-message">Thank you, all files from this dataset have been annotated.</h3>
-            </Route>
-            <Route exact path={url}>
-            </Route>
-            <Route>
-                <NotFound/>
-            </Route>
         </Switch>
     );
 };

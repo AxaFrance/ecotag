@@ -23,6 +23,17 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
         isFileInserted: false
     });
     
+    const reinitState = () => {
+        setState({
+            fileName: "Annotate a dataset",
+            datasetLocation: "",
+            items: [],
+            annotationType: "JsonEditor",
+            configuration: [{name: "Default", id: 0}],
+            isFileInserted: false
+        });
+    };
+    
     const history=useHistory();
 
     return (
@@ -44,7 +55,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
                     <h2 className="error-message">The annotation file is empty.</h2>}
                 </>
             ) : (
-                    <Routes annotationState={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
+                    <Routes annotationState={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction} onStateReinit={reinitState}/>
             )}
             <ToastContainer/>
         </QueryClientProvider>
