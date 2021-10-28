@@ -14,7 +14,7 @@ const Routes = ({annotationState, MonacoEditor, fetchFunction}) => {
             <Route path={`${url}/:dataset/:id`} render={(props) => (
                 <AnnotationsContainer
                     state={annotationState}
-                    currentItem={selectItemById(annotationState, props.match.params.id)}
+                    entryItem={selectItemById(annotationState, props.match.params.id)}
                     MonacoEditor={MonacoEditor}
                     fetchFunction={fetchFunction}
                 />
