@@ -13,7 +13,7 @@ const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder, isPreviousDisabl
     }
     
     return(
-        <div className="annotations-toolbar">
+        <div className="annotation__top-toolbar">
             <Button onClick={onPrevious} classModifier={setModifier("left", isPreviousDisabled)} glyphicon="glyphicon glyphicon-arrowthin-left" disabled={isPreviousDisabled}>{onPreviousPlaceholder}</Button>
             <Button onClick={onNext} classModifier={setModifier("right", isNextDisabled)} glyphicon="glyphicon glyphicon-arrowthin-right" disabled={isNextDisabled}>{onNextPlaceholder}</Button>
         </div>

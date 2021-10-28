@@ -46,7 +46,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
 };
 
 const sendConfirmationMessage = (isSuccess) => {
-    const message = isSuccess ? "Annotation sauvegardée" : "Impossible de sauvegarder l'annotation";
+    const message = isSuccess ? "Annotation saved" : "Impossible to save annotation";
     const type = isSuccess ? "success" : "error";
     toast(message, {
         position: "top-right",

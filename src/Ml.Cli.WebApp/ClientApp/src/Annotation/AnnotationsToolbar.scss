@@ -1,8 +1,10 @@
-﻿.annotations-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px 50px;
-  margin: 10px 0 10px 0;
+﻿.annotation{
+  &__top-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 50px;
+    margin: 10px 0 10px 0;
+  }
 }

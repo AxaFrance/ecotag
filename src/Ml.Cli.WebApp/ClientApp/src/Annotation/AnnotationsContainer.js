@@ -49,7 +49,7 @@ const AnnotationsContainer = ({state, currentItem, MonacoEditor, fetchFunction})
             isNextDisabled={tableState.isEndReached}
         />
         {tableState.isEndReached ? (
-            <h3 className="end-message">Thank you, all files from this dataset have been annotated.</h3>
+            <h3 className="annotation__end-message">Thank you, all files from this dataset have been annotated.</h3>
         ) : (
             <AnnotationItem
                 parentState={state}

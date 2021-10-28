@@ -41,7 +41,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
                 <>
                 <DatasetHandler state={state} setState={setState} history={history} fetchFunction={fetchFunction}/>
                 {state.isFileInserted &&
-                    <h2 className="error-message">Le fichier d'annotation est vide.</h2>}
+                    <h2 className="error-message">The annotation file is empty.</h2>}
                 </>
             ) : (
                     <Routes annotationState={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
