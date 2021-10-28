@@ -38,7 +38,6 @@ const DatasetHandler = ({state, setState, history, fetchFunction}) => {
                 fileConfiguration = JSON.parse(result.Configuration);
             }
             setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: sortedItems, isFileInserted: true});
-            setHandlerState({...state, loadFileError: false});
             if(sortedItems.length !== 0){
                 history.push(`/annotate/${fileName}/${sortedItems[0].id}`);
             }
