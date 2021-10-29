@@ -58,6 +58,7 @@ describe("Should check AnnotationsContainer behaviour", () => {
         const {container, asFragment, getByText} = render(<QueryClientProvider client={client}><AnnotationsContainer state={state} entryItem={items[0]} fetchFunction={mockedFetchFunction} MonacoEditor={MonacoEditor}/></QueryClientProvider>);
         
         await waitFor(() => expect(container.querySelector(".annotation__top-toolbar")).not.toBeNull());
+        await waitFor(() => expect(container.querySelector(".table-result__header")).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
         
         const nextButton = getByText("Suivant");
