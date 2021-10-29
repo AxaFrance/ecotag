@@ -90,7 +90,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
 
   return (
     <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-      <Toolbar isSubmitDisabled={false} onSubmit={handleSubmit} classModifier="multi-toolbar">
+      <Toolbar isSubmitDisabled={false} onSubmit={handleSubmit}>
         <ToolbarButtonContainer classModifier="totl">
           <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
           <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />

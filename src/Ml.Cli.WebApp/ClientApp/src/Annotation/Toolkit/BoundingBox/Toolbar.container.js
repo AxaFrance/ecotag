@@ -3,7 +3,6 @@ import { scaleBy } from './Cropping';
 import { GlobalHotKeys } from 'react-hotkeys';
 import cuid from 'cuid';
 import Toolbar, {ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton, ToolbarProgressButton} from '../Toolbar';
-import './ToolbarModifier.scss';
 
 const getFileExtension = filename => {
   if (!filename) return '';
@@ -139,7 +138,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, initShap
 
   return (
     <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit} classModifier="multi-toolbar">
+      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit}>
         <ToolbarButtonContainer>
           <ToolbarSwitchButton
             id="keepAnnotation"

@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import AnnotationImagesLoader from "./AnnotationImagesLoader";
-import './TableAnnotateItem.scss';
+import './AnnotationItem.scss';
 
-const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => {
+const AnnotationItem = ({parentState, item, MonacoEditor, onSubmit, fetchFunction}) => {
 
     return (
         <div className="table-result">
@@ -15,10 +15,11 @@ const TableAnnotateItem = ({parentState, item, MonacoEditor, fetchFunction}) => 
                 item={item}
                 MonacoEditor={MonacoEditor}
                 parentState={parentState}
+                onSubmit={onSubmit}
                 fetchFunction={fetchFunction}
             />
         </div>
     );
 };
 
-export default TableAnnotateItem;
+export default AnnotationItem;

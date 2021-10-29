@@ -2,11 +2,13 @@
 import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import DatasetHandler from "./DatasetHandler";
-import TableAnnotate from "./TableAnnotate";
 import {QueryClient, QueryClientProvider} from "react-query";
 import TitleBar from "../TitleBar/TitleBar";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import './Annotate.scss';
+import Routes from "./Routes";
+import {useHistory} from "react-router";
 
 const queryClient = new QueryClient();
 
@@ -17,8 +19,22 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
         datasetLocation: "",
         items: [],
         annotationType: "JsonEditor",
-        configuration: [{name: "Default", id: 0}]
+        configuration: [{name: "Default", id: 0}],
+        isFileInserted: false
     });
+    
+    const reinitState = () => {
+        setState({
+            fileName: "Annotate a dataset",
+            datasetLocation: "",
+            items: [],
+            annotationType: "JsonEditor",
+            configuration: [{name: "Default", id: 0}],
+            isFileInserted: false
+        });
+    };
+    
+    const history=useHistory();
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -32,10 +48,15 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
             </Header>
             <TitleBar
                 title={state.fileName === "Annotate a dataset" ? state.fileName : `Visualising file: ${state.fileName}`}/>
-            <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
-            {state.items.length > 0 &&
-            <TableAnnotate state={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
-            }
+            {state.items.length === 0 ? (
+                <>
+                <DatasetHandler state={state} setState={setState} history={history} fetchFunction={fetchFunction}/>
+                {state.isFileInserted &&
+                    <h2 className="error-message">The annotation file is empty.</h2>}
+                </>
+            ) : (
+                    <Routes annotationState={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction} onStateReinit={reinitState}/>
+            )}
             <ToastContainer/>
         </QueryClientProvider>
     );
