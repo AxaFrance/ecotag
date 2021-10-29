@@ -5,8 +5,16 @@ import useScript from '../Script/useScript.js';
 import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 
 import { playAlgoAsync } from "./cni";
+import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
 const cni = require("./cni.json");
+
+const optionsSelect = [
+    {value: 0, label: "Carte identité verso"},
+    {value: 1, label: "Passeport"},
+    {value: 2, label: "Nouveau permis recto"},
+    {value: 3, label: "Nouveau permis verso"}
+];
 
 function Demo( {templates =[]}){
 
@@ -20,7 +28,8 @@ function Demo( {templates =[]}){
     outputInfo: null,
     isGray:false,
     filename:null,
-    croppedContoursBase64:null
+    croppedContoursBase64:null,
+    templateIndex: 0
   });
  
   if(!loaded){
@@ -40,6 +49,14 @@ function Demo( {templates =[]}){
       }
     });
   }
+  
+  const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
+      playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+          if(result){
+              setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename});
+          }
+      })
+  }
     
   const onChange = value => {
     if(templates.length > 0) {
@@ -52,15 +69,25 @@ function Demo( {templates =[]}){
           files:[]
         });
         const file = value.values[0].file;
-        playAlgoRecursiveAsync(templates, 0, setState, state, file)
+        playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, state, file);
+        //playAlgoRecursiveAsync(templates, 0, setState, state, file)
     }
-  };  
+  };
   
   return (
       <Loader mode={state.loaderMode} text={"Your browser is working"}><form className="af-form ri__form-container" name="myform">
         <h1>French identity card</h1>
   <div className="ri__form-content">
     <div className="ri__form">
+      <SelectBase
+          id="select_type"
+          name="SelectType"
+          value={state.templateIndex}
+          options={optionsSelect}
+          onChange={e => {
+            setState({...state, templateIndex: e.value});
+          }}
+      />
       <File
         id="file"
         name="RI"
@@ -83,7 +110,7 @@ function Demo( {templates =[]}){
         <p>{state.outputInfo != null ? JSON.stringify(state.outputInfo) : null}</p>
         </> : null}
       
-      {state.files.length > 0 ? <><h2>Orignal image(s)</h2>
+      {state.files.length > 0 ? <><h2>Original image(s)</h2>
           {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"max-width": "100%"}} />)} </>: null}
     </div>
   </div>
