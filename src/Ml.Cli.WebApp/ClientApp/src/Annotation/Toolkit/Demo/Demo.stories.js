@@ -7,8 +7,11 @@ import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 import { playAlgoAsync } from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
-const cni_recto = require("./french_id_card_recto.json");
+const french_identity_card_recto = require("./french_id_card_recto.json");
+const french_identity_card_verso = require('./french_id_card_verso.json');
+const passport = require('./passport.json');
 const new_driver_license_recto = require("./french_license_recto.json");
+const new_driver_license_verso = require("./french_license_verso.json")
 
 const optionsSelect = [
     {value: 0, label: "French identity card recto"},
@@ -78,7 +81,7 @@ function Demo( {templates =[]}){
   
   return (
       <Loader mode={state.loaderMode} text={"Your browser is working"}><form className="af-form ri__form-container" name="myform">
-        <h1>French identity card</h1>
+        <h1>Find a document</h1>
   <div className="ri__form-content">
     <div className="ri__form">
       <SelectBase
@@ -121,5 +124,11 @@ function Demo( {templates =[]}){
 }
 
 storiesOf('Demo', module).add('Demo recto cni', () => (
-  <Demo templates={[{imgDescription:cni_recto, goodMatchSizeThreshold:5}, {}, {}, {imgDescription:new_driver_license_recto, goodMatchSizeThreshold: 5}]} />
+  <Demo templates={[
+      {imgDescription: french_identity_card_recto, goodMatchSizeThreshold:5},
+      {imgDescription: french_identity_card_verso, goodMatchSizeThreshold: 5},
+      {imgDescription: passport, goodMatchSizeThreshold: 5},
+      {imgDescription: new_driver_license_recto, goodMatchSizeThreshold: 5},
+      {imgDescription: new_driver_license_verso, goodMatchSizeThreshold: 5}
+  ]} />
 ));
