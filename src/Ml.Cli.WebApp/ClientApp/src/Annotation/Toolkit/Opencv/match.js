@@ -101,8 +101,9 @@ export const detectAndComputeSerializable= (cv) => (img) => {
         });
     }
     return {
-        serializableDescriptor,
-        serializableKeyPoints
+        descriptor: serializableDescriptor,
+        keyPoints: serializableKeyPoints,
+        img: {"rows": img.rows,"cols": img.cols}
     }
 }
 

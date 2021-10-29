@@ -4,16 +4,18 @@ import { File } from '@axa-fr/react-toolkit-form-input-file';
 import useScript from '../Script/useScript.js';
 import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 
-import { playAlgoAsync } from "./cni";
+import { playAlgoAsync } from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
-const cni = require("./cni.json");
+const cni_recto = require("./french_id_card_recto.json");
+const new_driver_license_recto = require("./french_license_recto.json");
 
 const optionsSelect = [
-    {value: 0, label: "Carte identité verso"},
-    {value: 1, label: "Passeport"},
-    {value: 2, label: "Nouveau permis recto"},
-    {value: 3, label: "Nouveau permis verso"}
+    {value: 0, label: "French identity card recto"},
+    {value: 1, label: "French identity card verso"},
+    {value: 2, label: "Passport"},
+    {value: 3, label: "New license recto"},
+    {value: 4, label: "New license verso"}
 ];
 
 function Demo( {templates =[]}){
@@ -33,7 +35,7 @@ function Demo( {templates =[]}){
   });
  
   if(!loaded){
-    return (<p>Chargement</p>);
+    return (<p>Loading</p>);
   } 
   
   const playAlgoRecursiveAsync = (templates, index, setState, state, file) => {
@@ -119,5 +121,5 @@ function Demo( {templates =[]}){
 }
 
 storiesOf('Demo', module).add('Demo recto cni', () => (
-  <Demo templates={[{imgDescription:cni, goodMatchSizeThreshold:4}]} />
+  <Demo templates={[{imgDescription:cni_recto, goodMatchSizeThreshold:5}, {}, {}, {imgDescription:new_driver_license_recto, goodMatchSizeThreshold: 5}]} />
 ));

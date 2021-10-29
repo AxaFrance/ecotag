@@ -13,7 +13,7 @@ import convertTiffToImagesAsync from "../Tiff/tiff";
 import {cropContours, findContours} from "../Opencv/contours";
 
 
-const toBase64Async = file => new Promise((resolve, reject) => {
+export const toBase64Async = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
