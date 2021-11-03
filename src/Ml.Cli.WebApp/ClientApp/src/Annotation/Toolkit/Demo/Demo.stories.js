@@ -39,7 +39,7 @@ function Demo( {templates =[]}){
  
   if(!loaded){
     return (<p>Loading</p>);
-  } 
+  }
   
   const playAlgoRecursiveAsync = (templates, index, setState, state, file) => {
     let {imgDescription, goodMatchSizeThreshold} = templates[index];
@@ -82,6 +82,20 @@ function Demo( {templates =[]}){
   return (
       <Loader mode={state.loaderMode} text={"Your browser is working"}><form className="af-form ri__form-container" name="myform">
         <h1>Find a document</h1>
+      <p>
+          This component runs only in the browser.
+          <br/>
+          No files are saved anywhere, it stays locally in your browser only.
+          <br/>
+          This component checks the quality of your document entering information systems. This brings several advantages :
+          <br/>
+          <ul>
+              <li>This makes it possible to “quickly” warn the user that his document is not of good quality and therefore not very readable.</li>
+              <li>This increases the quality of the data received in the systems.</li>
+              <li>The processing of the requested documents needs less calculation and production infrastructure costs are reduced (part of the calculation is carried out in the browser client).</li>
+          </ul>
+          This component is currently experimental.
+      </p>
   <div className="ri__form-content">
     <div className="ri__form">
       <SelectBase
