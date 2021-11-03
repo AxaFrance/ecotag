@@ -9,16 +9,16 @@ import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 
 const french_identity_card_recto = require("./french_id_card_recto.json");
 const french_identity_card_verso = require('./french_id_card_verso.json');
-const passport = require('./passport.json');
-const new_driver_license_recto = require("./french_license_recto.json");
-const new_driver_license_verso = require("./french_license_verso.json")
+const french_passport = require('./french_passport.json');
+const french_new_driver_license_recto = require("./french_license_recto.json");
+const french_new_driver_license_verso = require("./french_license_verso.json")
 
 const optionsSelect = [
     {value: 0, label: "French identity card recto"},
     {value: 1, label: "French identity card verso"},
-    {value: 2, label: "Passport"},
-    {value: 3, label: "New license recto"},
-    {value: 4, label: "New license verso"}
+    {value: 2, label: "French Passport"},
+    {value: 3, label: "French new license recto"},
+    {value: 4, label: "French new license verso"}
 ];
 
 function Demo( {templates =[]}){
@@ -141,8 +141,8 @@ storiesOf('Demo', module).add('Demo recto cni', () => (
   <Demo templates={[
       {imgDescription: french_identity_card_recto, goodMatchSizeThreshold:5},
       {imgDescription: french_identity_card_verso, goodMatchSizeThreshold: 5},
-      {imgDescription: passport, goodMatchSizeThreshold: 5},
-      {imgDescription: new_driver_license_recto, goodMatchSizeThreshold: 5},
-      {imgDescription: new_driver_license_verso, goodMatchSizeThreshold: 5}
+      {imgDescription: french_passport, goodMatchSizeThreshold: 5},
+      {imgDescription: french_new_driver_license_recto, goodMatchSizeThreshold: 5},
+      {imgDescription: french_new_driver_license_verso, goodMatchSizeThreshold: 5}
   ]} />
 ));
