@@ -1,11 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
-import Toolbar from './Toolbar';
-import Cropping from '../BoundingBox/Cropping';
 import useImage from 'use-image';
 import './TagOverTextContainer.scss';
 import TagOverText from "../TagOverText/TagOverText.container";
 import cuid from "cuid";
-import {cropImageAsync} from "./template";
 
 const fitImage = (image, croppingWidth, croppingHeight) => {
     let scaleHeight = 1;
@@ -46,13 +43,27 @@ const prevStateWithRatioImage = (previousShapes, newImage, previousImageWidth, p
     });
 };
 
+const getFileExtension = filename => {
+    if (!filename) return '';
+    if (filename.startsWith('data:')) {
+        return filename.split(',')[0].split('/')[1].split(';')[0];
+    }
+    return filename.split('.').pop().split('?')[0];
+};
+
+const setAnnotationResult = e => {
+    return JSON.stringify({
+        width: e.width,
+        height: e.height,
+        labels: e.labels
+    });
+}
 
 const CroppingContainer = ({ url, expectedOutput=[] }) => {
     const labelsWithColor = [ {
         id: "1",
         color: 'red'}];
-
-    //const containerRef = useRef(null);
+    
     const croppingWidth = (window.innerWidth * 70) / 100 - 100; // -100 correspond au padding 50 50 sur l'annotation-zone
     const croppingHeight = (window.innerHeight * 85) / 100;
     const currentLabelId = labelsWithColor[0].id;
@@ -74,7 +85,8 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
         onDrag: false,
         rotationDeg: 0,
         croppedUrl: "",
-        labels: []
+        labels: [],
+        annotationResult: ""
     };
 
     const [state, setState] = useState(initialState);
@@ -148,6 +160,42 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [image, expectedOutput]);
+    
+    useEffect(() => {
+        if(image){
+            const inputImageProperties = {
+                height: 0,
+                width: 0,
+            };
+            if (image) {
+                inputImageProperties.height = image.height;
+                inputImageProperties.width = image.width;
+            }
+            const boundingBoxes = state.shapes.map(shape => {
+                return {
+                    label: labelsWithColor.find(l => l.id === shape.labelId).label,
+                    height: Math.round(Math.abs(shape.begin.y - shape.end.y)),
+                    left: Math.round(Math.min(shape.begin.x, shape.end.x)-(authorizedCroppingZone.width-image.width)/2),
+                    top: Math.round(Math.min(shape.begin.y, shape.end.y)-(authorizedCroppingZone.height-image.height)/2),
+                    width: Math.round(Math.abs(shape.begin.x - shape.end.x)) ,
+                };
+            });
+            const result = {
+                width: inputImageProperties.width,
+                height: inputImageProperties.height,
+                angle: -state.rotationDeg,
+                type: getFileExtension(image.currentSrc),
+                labels: {
+                    boundingBoxes,
+                },
+            };
+            /*const flattenedBoxes = flattenBoundingBoxes(result.labels.boundingBoxes);
+            const firstBox = flattenedBoxes[0];
+            cropImageAsync(window.cv)(url, firstBox.left, firstBox.top, firstBox.width, firstBox.height, result.angle)
+                .then(croppedImageBase64 => setState({...state, croppedUrl: croppedImageBase64, labels: flattenedBoxes}));*/
+            setState({...state, labels: flattenBoundingBoxes(result.labels.boundingBoxes)});
+        }
+    }, [state.shapes]);
 
     const onMouseLeaveCropping = () => {
         setState({ ...state, isHoverCanvas: false, onMoveImage:false });
@@ -155,21 +203,6 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
 
     const onMouseEnterCropping = () => {
         setState({ ...state, isHoverCanvas: true });
-    };
-
-    const initShape = (state, shape) => {
-        return {
-            newTempState: state,
-            newShape: {
-                ...shape,
-                // color: 'gray',
-                labelId: currentLabelId,
-                stroke: "red",
-                strokeWidth: () => strokeWidth(state),
-                opacity:null,
-                deletable: false,
-            },
-        };
     };
     
     const flattenBoundingBoxes = (boundingBoxes) => {
@@ -194,55 +227,23 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
         return newArray;
     };
 
-    const onCroppingSubmit = (data) => {
-        const boundingBoxes = flattenBoundingBoxes(data.labels.boundingBoxes);
-        if(Object.keys(boundingBoxes).length > 0) {
-            const keyName = Object.keys(boundingBoxes)[0];
-            const boundingBox = boundingBoxes[keyName];
-            cropImageAsync(window.cv)(url, boundingBox.left, boundingBox.top, boundingBox.width, boundingBox.height, data.angle)
-                .then(croppedImageBase64 => setState({...state, croppedUrl: croppedImageBase64, labels: boundingBoxes}));
-        }
-    };
-
     return (
         <div className="demo-cropping">
             <div className="demo-cropping__container">
+                {state.annotationResult &&
+                    <p className="demo-cropping__result">{state.annotationResult}</p>
+                }
                 <div
                     className="demo-cropping__annotation-zone"
                     onMouseLeave={onMouseLeaveCropping}
                     onMouseEnter={onMouseEnterCropping}>
-                    {state.labels.length === 0 ? (
-                        <>
-                            <Cropping
-                                currentLabelId={state.shapes.length === 0 ? currentLabelId: null}
-                                state={state}
-                                setState={setState}
-                                croppingWidth={croppingWidth}
-                                croppingHeight={croppingHeight}
-                                image={image}
-                                authorizedCroppingZone={authorizedCroppingZone}
-                                initShape={initShape}
-                                classModifier="demo"
-                                moveImageActive={true}
-                            />
-                            <Toolbar
-                                labels={labelsWithColor}
-                                state={state}
-                                setState={setState}
-                                authorizedCroppingZone={authorizedCroppingZone}
-                                fitImage={() => fitImage(image, croppingWidth, croppingHeight)}
-                                onSubmit={onCroppingSubmit}
-                                image={image}
-                                initShape={initShape}
-                            />
-                        </>
-                    ) : (
+                    {state.labels.length !== 0 &&
                         <TagOverText
                             expectedOutput={state.labels}
-                            url={state.croppedUrl}
-                            onSubmit={() => console.log("WIP")}
+                            url={url}
+                            onSubmit={e => setState({...state, annotationResult: setAnnotationResult(e)})}
                         />
-                    )}
+                    }
                 </div>
             </div>
         </div>

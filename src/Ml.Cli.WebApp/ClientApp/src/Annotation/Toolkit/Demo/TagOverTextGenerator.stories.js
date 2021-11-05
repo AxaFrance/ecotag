@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import useScript from '../Script/useScript.js';
 import TagOverTextContainer from './TagOverTextContainer';
 
-import {cropImageAsync, playAlgoWithCurrentTemplateAsync} from "./template";
+import {playAlgoWithCurrentTemplateAsync} from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 
@@ -82,10 +82,8 @@ function TagOverTextGenerator( {templates =[]}){
                     label="Parcourir"
                     icon="open"
                 />
-                {state.croppedUrl != null ? <img src={state.croppedUrl} /> : null}
-                {state.croppedContoursBase64 != null ? <img src={state.croppedContoursBase64[0]} /> : null}
                 {state.url != null &&
-                    <TagOverTextContainer  url={state.url} expectedOutput={state.expectedOutput} />
+                    <TagOverTextContainer  url={state.url} expectedOutput={state.expectedOutput}/>
                 }
 
             </div>
