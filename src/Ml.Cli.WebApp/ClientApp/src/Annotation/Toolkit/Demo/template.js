@@ -11,6 +11,7 @@ import {computeAndComputeHomographyRectangle, detectAndComputeSerializable} from
 import convertPdfToImagesAsync from "../Pdf/pdf";
 import convertTiffToImagesAsync from "../Tiff/tiff";
 import {cropContours, findContours} from "../Opencv/contours";
+import {LoaderModes} from "@axa-fr/react-toolkit-loader";
 
 
 export const toBase64Async = file => new Promise((resolve, reject) => {
@@ -161,7 +162,6 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
     }
     
     const imgCropped = cropImage(cv)(rotatedImage ? rotatedImage: img, xmin, ymin,  witdh, height);
-    
     const base64url = toImageBase64(cv)(imgCropped);
     img.delete();
     if(rotatedImage){
@@ -169,4 +169,12 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
     }
     imgCropped.delete();
     return base64url;
+}
+
+export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
+    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+        if(result){
+            setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename});
+        }
+    })
 }

@@ -1,0 +1,21 @@
+﻿
+
+.demo-cropping {
+  &__container {
+    //  display: flex;
+    // justify-content: center;
+    border: 2px solid black;
+    border-radius: 3px;
+    //  margin-bottom: 50px;
+  }
+}
+
+.konvajs-content__container--demo > div > .konvajs-content {
+  background-color: grey !important;
+  &__container {
+    background-color: white!important;
+  }
+}
+  
+
+

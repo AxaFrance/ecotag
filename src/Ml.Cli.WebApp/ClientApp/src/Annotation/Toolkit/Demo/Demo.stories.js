@@ -4,14 +4,14 @@ import { File } from '@axa-fr/react-toolkit-form-input-file';
 import useScript from '../Script/useScript.js';
 import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 
-import { playAlgoAsync } from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
+import {playAlgoWithCurrentTemplateAsync} from "./template";
 
 const french_identity_card_recto = require("./french_id_card_recto.json");
 const french_identity_card_verso = require('./french_id_card_verso.json');
 const french_passport = require('./french_passport.json');
 const french_new_driver_license_recto = require("./french_license_recto.json");
-const french_new_driver_license_verso = require("./french_license_verso.json")
+const french_new_driver_license_verso = require("./french_license_verso.json");
 
 const optionsSelect = [
     {value: 0, label: "French identity card recto"},
@@ -40,28 +40,6 @@ function Demo( {templates =[]}){
   if(!loaded){
     return (<p>Loading</p>);
   }
-  
-  const playAlgoRecursiveAsync = (templates, index, setState, state, file) => {
-    let {imgDescription, goodMatchSizeThreshold} = templates[index];
-    playAlgoAsync(window.cv)(file, imgDescription, goodMatchSizeThreshold).then(result => {
-      if (result) {
-        index++;
-        if(result.data.expectedOutput.length <= 0 && templates.length > index){
-          playAlgoRecursiveAsync(templates, index, setState, state, file);
-        } else{
-          setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename });
-        }
-      }
-    });
-  }
-  
-  const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
-      playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
-          if(result){
-              setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename});
-          }
-      })
-  }
     
   const onChange = value => {
     if(templates.length > 0) {
@@ -75,7 +53,6 @@ function Demo( {templates =[]}){
         });
         const file = value.values[0].file;
         playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, state, file);
-        //playAlgoRecursiveAsync(templates, 0, setState, state, file)
     }
   };
   
@@ -111,7 +88,7 @@ function Demo( {templates =[]}){
         id="file"
         name="RI"
         accept={'image/jpeg, image/png, image/tiff, image/tif, application/pdf'}
-        onChange={onChange} 
+        onChange={onChange}
         multiple={false}
         isVisible={true}
         readOnly={false}
@@ -137,7 +114,7 @@ function Demo( {templates =[]}){
       </Loader>);
 }
 
-storiesOf('Demo', module).add('Demo recto cni', () => (
+storiesOf('Demo', module).add('Demo templates', () => (
   <Demo templates={[
       {imgDescription: french_identity_card_recto, goodMatchSizeThreshold:5},
       {imgDescription: french_identity_card_verso, goodMatchSizeThreshold: 5},

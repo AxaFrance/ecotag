@@ -249,6 +249,7 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
     }*/
 
     if (image) {
+      console.log("expectedOutput: " + JSON.stringify(expectedOutput));
       const labels = expectedOutput.map((label, index) => {
         return {
           id: label.id,
