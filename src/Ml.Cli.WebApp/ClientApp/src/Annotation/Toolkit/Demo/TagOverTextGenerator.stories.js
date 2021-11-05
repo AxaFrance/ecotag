@@ -84,11 +84,9 @@ function TagOverTextGenerator( {templates =[]}){
                 />
                 {state.croppedUrl != null ? <img src={state.croppedUrl} /> : null}
                 {state.croppedContoursBase64 != null ? <img src={state.croppedContoursBase64[0]} /> : null}
-                {state.url != null ? <><p>Document en couleur: {state.isGray ? "Non": "Oui"}</p>
-                    <p>Nom du fichier: {state.filename}</p>
-                    <p>Qualité document/détection: {state.confidenceRate}%</p>
-                    <p>{state.outputInfo != null ? JSON.stringify(state.outputInfo) : null}</p>
-                    <TagOverTextContainer  url={state.url} expectedOutput={state.expectedOutput} /></> : null}
+                {state.url != null &&
+                    <TagOverTextContainer  url={state.url} expectedOutput={state.expectedOutput} />
+                }
 
             </div>
         </div>
