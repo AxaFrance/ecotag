@@ -6,8 +6,9 @@ import React from "react";
 import NotFound from "./PageNotFound/NotFound";
 import withCustomFetch from "./withCustomFetch";
 
+const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
+
 export const Routes = ({fetch}) => {
-    const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 
     return (
         <Switch>

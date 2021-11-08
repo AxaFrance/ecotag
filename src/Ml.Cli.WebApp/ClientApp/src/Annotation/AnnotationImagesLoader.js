@@ -51,7 +51,7 @@ const sendConfirmationMessage = (isSuccess) => {
     toast(message, {
         position: "top-left",
         autoClose: 3000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: false,
         draggable: true,
@@ -98,13 +98,17 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
     }
 
     useEffect(() => {
-        let isMounted = true;
+        console.log("AnnotationImagesLoader")
+    }, []);
+
+    useEffect(() => {
+       // let isMounted = true;
         if(parentState.annotationType === "NamedEntityRecognition"){
             return;
         }
         getUrls().then(urls => {
             getEditorContent().then(content => {
-                if (isMounted) {
+         //       if (isMounted) {
                     setState({
                         fileUrls: urls.fileUrls,
                         filePrimaryUrl: urls.filePrimaryUrl,
@@ -112,12 +116,12 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
                         httpResultItem: content.httpResultItem,
                         isFetched: content.isFetched
                     });
-                }
+           //     }
             })
         });
-        return () => {
-            isMounted = false;
-        }
+       /* return () => {
+            //isMounted = false;
+        }*/
     }, []);
 
     const setAnnotationObject = e => {
@@ -274,4 +278,4 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
     );
 };
 
-export default AnnotationImagesLoader;
+export default React.memo(AnnotationImagesLoader);

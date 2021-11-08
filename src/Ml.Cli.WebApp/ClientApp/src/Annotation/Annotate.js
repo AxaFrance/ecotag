@@ -62,4 +62,4 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
     );
 };
 
-export default Annotate;
+export default React.memo(Annotate);

@@ -1,9 +1,12 @@
-﻿import React from "react";
+﻿import React, {useEffect} from "react";
 import AnnotationImagesLoader from "./AnnotationImagesLoader";
 import './AnnotationItem.scss';
 
 const AnnotationItem = ({parentState, item, MonacoEditor, onSubmit, fetchFunction}) => {
 
+    useEffect(() => {
+        console.log("youhouAnnotationItem")
+    }, []);
     return (
         <div className="table-result">
             <div className="table-result__header">
@@ -22,4 +25,4 @@ const AnnotationItem = ({parentState, item, MonacoEditor, onSubmit, fetchFunctio
     );
 };
 
-export default AnnotationItem;
+export default React.memo(AnnotationItem);

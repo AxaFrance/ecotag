@@ -1,9 +1,8 @@
 ﻿import React, {Suspense} from "react";
 
+const TagOverTextContainer = React.lazy(() => import('./TagOverText.container'));
+
 const TagOverTextLazy = ({expectedOutput, url, onSubmit}) => {
-    
-    const TagOverTextContainer = React.lazy(() => import('./TagOverText.container'));
-    
     return <Suspense fallback={<div>Chargement de TagOverText...</div>}>
         <TagOverTextContainer
             expectedOutput={expectedOutput}
