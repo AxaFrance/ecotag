@@ -41,7 +41,7 @@ const getHttpResultItem = async (item, fetchFunction) => {
         const dataObject = await fetchResult.json();
         return {httpResult: dataObject, errorMessage: ""};
     }
-    const errorMessage = `Requête invalide: ${fetchResult.statusText}`;
+    const errorMessage = `Invalide request: ${fetchResult.statusText}`;
     return {errorMessage, httpResult: {}};
 };
 
@@ -49,7 +49,7 @@ const sendConfirmationMessage = (isSuccess) => {
     const message = isSuccess ? "Annotation saved" : "Impossible to save annotation";
     const type = isSuccess ? "success" : "error";
     toast(message, {
-        position: "top-right",
+        position: "top-left",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -189,10 +189,13 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
             annotation: setAnnotationObject(e)
         };
         await mutationDataset.mutateAsync(annotationObject, {
-            onSuccess: () => sendConfirmationMessage(true),
+            onSuccess: () => { 
+                sendConfirmationMessage(true);
+                onSubmit();
+                },
             onError: () => sendConfirmationMessage(false)
         });
-        onSubmit();
+        
     }
 
     return (
@@ -216,12 +219,12 @@ const AnnotationImagesLoader = ({item, MonacoEditor, parentState, onSubmit, fetc
             </>
             }
             {parentState.annotationType === "Ocr" &&
-            <OcrLazy
-                labels={parentState.configuration}
-                expectedLabels={[]}
-                url={state.filePrimaryUrl}
-                onSubmit={onDatasetSubmit}
-            />
+                <OcrLazy
+                    labels={parentState.configuration}
+                    expectedLabels={[]}
+                    url={state.filePrimaryUrl}
+                    onSubmit={onDatasetSubmit}
+                />
             }
             {parentState.annotationType === "Cropping" &&
             <CroppingLazy

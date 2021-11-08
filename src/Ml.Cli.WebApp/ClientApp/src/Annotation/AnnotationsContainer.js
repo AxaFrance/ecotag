@@ -29,10 +29,8 @@ const AnnotationsContainer = ({state, entryItem, MonacoEditor, fetchFunction}) =
     return <>
         <AnnotationsToolbar
             onPrevious={onPrevious}
-            onPreviousPlaceholder="Précédent"
             isPreviousDisabled={tableState.itemNumber === 0}
             onNext={onNext}
-            onNextPlaceholder="Suivant"
             isNextDisabled={isEndReached}
         />
         {isEndReached ? (

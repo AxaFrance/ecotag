@@ -62,7 +62,7 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
     shapes: [],
     color: 'green',
     stageScale: 1,
-    rotationDeg:0,
+    //rotationDeg:0,
     stageX: 0,
     stageY: 0,
     isHoverCanvas: false,
@@ -82,12 +82,12 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
   const [image] = useImage(url);
 
   useEffect(() => {
-    /*if (containerRef.current.scrollIntoView) {
+    if (containerRef.current.scrollIntoView) {
       containerRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    }*/
+    }
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
       if (state.keepAnnotation) {
@@ -125,15 +125,6 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
       },
     };
   };
-
-  let authorizedCroppingZone = null;
-  if(image){
-    let max = image.width > image.height ? image.width : image.height;
-    authorizedCroppingZone = {
-      width: max,
-      height:max,
-    }
-  }
   
   return (
     <div className="cropping">
@@ -149,7 +140,6 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
             croppingWidth={croppingWidth}
             croppingHeight={croppingHeight}
             image={image}
-            authorizedCroppingZone={authorizedCroppingZone}
             initShape={initShape}
             moveImageActive={state.moveImageActive}
           />

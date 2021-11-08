@@ -1,21 +1,32 @@
 ﻿import React from "react";
 import Button from "@axa-fr/react-toolkit-button";
+import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 import './AnnotationsToolbar.scss';
 
-const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder, isPreviousDisabled, onNext, onNextPlaceholder, isNextDisabled}) => {
-    
-    const setModifier = (side, isDisabled) => {
-        let returnedValue = (side === "left" ? "hasiconLeft" : "hasiconRight");
-        if(isDisabled){
-            returnedValue += " disabled";
-        }
-        return returnedValue;
+const setModifier = (side, isDisabled) => {
+    let returnedValue = (side === "left" ? "hasiconLeft" : "hasiconRight");
+    if(isDisabled){
+        returnedValue += " disabled";
     }
+    return returnedValue;
+}
+
+const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder="Previous", isPreviousDisabled, onNext, onNextPlaceholder="Next", isNextDisabled}) => {
     
     return(
         <div className="annotation__top-toolbar">
-            <Button onClick={onPrevious} classModifier={setModifier("left", isPreviousDisabled)} glyphicon="glyphicon glyphicon-arrowthin-left" disabled={isPreviousDisabled}>{onPreviousPlaceholder}</Button>
-            <Button onClick={onNext} classModifier={setModifier("right", isNextDisabled)} glyphicon="glyphicon glyphicon-arrowthin-right" disabled={isNextDisabled}>{onNextPlaceholder}</Button>
+            <Button onClick={onPrevious} classModifier={setModifier("left", isPreviousDisabled)} disabled={isPreviousDisabled}>
+                <span className="af-btn__text">
+                  {onPreviousPlaceholder}
+                </span>
+                <i className="glyphicon glyphicon-arrowthin-left" />
+            </Button>
+            <Button onClick={onNext} classModifier={setModifier("right", isNextDisabled)}  disabled={isNextDisabled}>
+                 <span className="af-btn__text">
+                  {onNextPlaceholder}
+                </span>
+                <i className="glyphicon glyphicon-arrowthin-right" />
+            </Button>
         </div>
     );
 };

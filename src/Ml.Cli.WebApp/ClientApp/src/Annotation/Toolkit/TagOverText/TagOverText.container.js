@@ -241,12 +241,12 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
   const [image] = useImage(url);
 
   useEffect(() => {
-    /*if (containerRef.current.scrollIntoView) {
+    if (containerRef.current.scrollIntoView) {
       containerRef.current.scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    }*/
+    }
 
     if (image) {
       const labels = expectedOutput.map((label, index) => {
