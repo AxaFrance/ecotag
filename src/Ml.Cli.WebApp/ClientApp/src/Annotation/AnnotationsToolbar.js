@@ -11,8 +11,7 @@ const setModifier = (side, isDisabled) => {
     return returnedValue;
 }
 
-const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder="Previous", isPreviousDisabled, onNext, onNextPlaceholder="Next", isNextDisabled}) => {
-    
+const AnnotationsToolbar = ({onPrevious, text="", onPreviousPlaceholder="Previous", isPreviousDisabled, onNext, onNextPlaceholder="Next", isNextDisabled}) => {
     return(
         <div className="annotation__top-toolbar">
             <Button onClick={onPrevious} classModifier={setModifier("left", isPreviousDisabled)} disabled={isPreviousDisabled}>
@@ -21,6 +20,7 @@ const AnnotationsToolbar = ({onPrevious, onPreviousPlaceholder="Previous", isPre
                 </span>
                 <i className="glyphicon glyphicon-arrowthin-left" />
             </Button>
+            <span className="annotation__top-toolbar-text">{text}</span>
             <Button onClick={onNext} classModifier={setModifier("right", isNextDisabled)}  disabled={isNextDisabled}>
                  <span className="af-btn__text">
                   {onNextPlaceholder}

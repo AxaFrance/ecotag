@@ -12,7 +12,7 @@ import {useHistory} from "react-router";
 
 const queryClient = new QueryClient();
 
-const Annotate = ({MonacoEditor, fetchFunction}) => {
+const Annotate = ({fetchFunction}) => {
 
     const [state, setState] = useState({
         fileName: "Annotate a dataset",
@@ -22,17 +22,6 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
         configuration: [{name: "Default", id: 0}],
         isFileInserted: false
     });
-    
-    const reinitState = () => {
-        setState({
-            fileName: "Annotate a dataset",
-            datasetLocation: "",
-            items: [],
-            annotationType: "JsonEditor",
-            configuration: [{name: "Default", id: 0}],
-            isFileInserted: false
-        });
-    };
     
     const history=useHistory();
 
@@ -55,7 +44,7 @@ const Annotate = ({MonacoEditor, fetchFunction}) => {
                     <h2 className="error-message">The annotation file is empty.</h2>}
                 </>
             ) : (
-                    <Routes annotationState={state} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction} onStateReinit={reinitState}/>
+                    <Routes annotationState={state} fetchFunction={fetchFunction}/>
             )}
             <ToastContainer/>
         </QueryClientProvider>
