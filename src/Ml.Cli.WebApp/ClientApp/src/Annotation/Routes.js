@@ -1,7 +1,8 @@
-﻿import React, {useEffect} from "react";
+﻿import React from "react";
 import {Route, Switch, useRouteMatch, withRouter} from "react-router-dom";
 import AnnotationsContainer from "./AnnotationsContainer";
-
+import TitleBar from "../TitleBar/TitleBar";
+import DatasetHandler from "./DatasetHandler";
 
 const Annotation = props => {
     const {
@@ -12,24 +13,46 @@ const Annotation = props => {
         fetchFunction,
         url
     } = props;
-    return <AnnotationsContainer
+    return (
+    <>
+        <TitleBar
+            title={dataset}
+            goTo="/annotate"
+            goTitle="Annotate"
+        />
+    <AnnotationsContainer
         state={annotationState}
         id={id}
         url={url}
         dataset={dataset}
         fetchFunction={fetchFunction}
     />
+    </>);
+}
+
+const Annotate = ({fetchFunction, state, setState}) => {
+    return (
+        <>
+            <TitleBar
+                title={`Annotate`}
+            />
+            <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
+        </>
+    );
 }
 
 const AnnotationWithRouter= React.memo(withRouter(Annotation));
 
-const Routes = ({annotationState, fetchFunction}) => {
+const Routes = ({state, setState, fetchFunction}) => {
     const {url} = useRouteMatch();
     
     return(
         <Switch>
             <Route exact path={`${url}/:dataset/:id`} >
-                <AnnotationWithRouter annotationState={annotationState} url={url} fetchFunction={fetchFunction}  />
+                <AnnotationWithRouter annotationState={state} url={url} fetchFunction={fetchFunction}  />
+            </Route>
+            <Route>
+                <Annotate state={state} setState={setState}  fetchFunction={fetchFunction}/>
             </Route>
         </Switch>
     );

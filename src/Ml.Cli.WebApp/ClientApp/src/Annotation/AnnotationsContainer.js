@@ -1,5 +1,5 @@
 ﻿import React, {useEffect, useState} from "react";
-import AnnotationImagesLoader from "./AnnotationImagesLoader";
+import AnnotationSwitch from "./AnnotationSwitch";
 import AnnotationsToolbar from "./AnnotationsToolbar";
 import './AnnotationsContainer.scss';
 import {useHistory} from "react-router";
@@ -9,6 +9,8 @@ import {toast} from "react-toastify";
 
 const selectItemById = (annotationState, id) => {
     if(id === "end")
+        return null;
+    if(id === "empty")
         return null;
     return annotationState.items.find(x => x.id === id);
 };
@@ -36,7 +38,7 @@ const sendConfirmationMessage = (isSuccess) => {
     const type = isSuccess ? "success" : "error";
     toast(message, {
         position: "top-left",
-        autoClose: 1000,
+        autoClose: 800,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: false,
@@ -48,7 +50,7 @@ const sendConfirmationMessage = (isSuccess) => {
 
 const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     const history = useHistory();
-
+    
     const item = selectItemById(state, id);
     const itemNumber= state.items.indexOf(item);
     
@@ -88,11 +90,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     const isNextDisabled = item == null;
 
     const [localState, setState] = useState({
-        fileUrls: [],
         filePrimaryUrl: "",
-        httpResultItem: {},
-        errorMessage: "",
-        isFetched: false
     });
     console.log(item);
 
@@ -119,16 +117,22 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     }
 
     useEffect(() => {
+        setState({
+            filePrimaryUrl: "",
+        })
         if(!item || !item.imageDirectory){
             return;
         }
         getUrls().then(urls => {
                 setState({
-                    fileUrls: urls.fileUrls,
                     filePrimaryUrl: urls.filePrimaryUrl,
             })
         });
-    }, []);
+    }, [id]);
+
+    if(state.items.length <= 0){
+        return <h2 className="error-message">The annotation file is empty.</h2>
+    }
 
     return <>
         <AnnotationsToolbar
@@ -141,7 +145,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         {isNextDisabled ? (
             <h3 className="annotation__end-message">Thank you, all files from this dataset have been annotated.</h3>
         ) : (
-            <AnnotationImagesLoader
+            <AnnotationSwitch
                 url={localState.filePrimaryUrl}
                 annotationType={state.annotationType}
                 labels={state.configuration}

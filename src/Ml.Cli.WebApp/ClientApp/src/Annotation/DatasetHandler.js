@@ -3,6 +3,7 @@ import '../Comparison/Compare.scss';
 import FileLoader from "../FileLoader/FileLoader";
 import './DatasetHandler.scss';
 import cuid from "cuid";
+import {useHistory} from "react-router";
 
 const mapDatasetItems = data => data.map(item => {
     return {
@@ -19,8 +20,8 @@ const sortByAnnotations = (items) => {
     return items.sort((a, b) => (a.annotations.length > b.annotations.length) ? 1 : -1);
 }
 
-const DatasetHandler = ({state, setState, history, fetchFunction}) => {
-
+const DatasetHandler = ({state, setState, fetchFunction}) => {
+    const history=useHistory();
     const [handlerState, setHandlerState] = useState({
         loadFileError: false
     });
@@ -40,6 +41,8 @@ const DatasetHandler = ({state, setState, history, fetchFunction}) => {
             setState({...state, fileName: fileName, datasetLocation: location, annotationType: fileAnnotationType, configuration: fileConfiguration, items: sortedItems, isFileInserted: true});
             if(sortedItems.length !== 0){
                 history.push(`/annotate/${fileName}/${sortedItems[0].id}`);
+            } else{
+                history.push(`/annotate/${fileName}/empty}`);
             }
         }
     };

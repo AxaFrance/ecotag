@@ -11,6 +11,7 @@ const setModifier = (side, isDisabled) => {
     return returnedValue;
 }
 
+
 const AnnotationsToolbar = ({onPrevious, text="", onPreviousPlaceholder="Previous", isPreviousDisabled, onNext, onNextPlaceholder="Next", isNextDisabled}) => {
     return(
         <div className="annotation__top-toolbar">

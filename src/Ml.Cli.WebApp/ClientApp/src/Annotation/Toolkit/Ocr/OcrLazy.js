@@ -4,7 +4,7 @@ const OcrContainer = React.lazy(() => import('./Ocr.container'));
 
 const OcrLazy = ({labels, expectedLabels, url, onSubmit}) => {
     
-    return <Suspense fallback={<div>Chargement de l'Ocr...</div>}>
+    return <Suspense fallback={<div>Loading...</div>}>
         <OcrContainer
             labels={labels}
             expectedLabels={expectedLabels}

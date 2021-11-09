@@ -57,7 +57,7 @@ const setAnnotationObject = (annotationType, e) => {
     return null;
 }
 
-const AnnotationImagesLoader = ({url, annotationType, labels, expectedOutput, onSubmit}) => {
+const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit}) => {
     
     const onDatasetSubmit = async e => {
         onSubmit(setAnnotationObject(annotationType, e));
@@ -100,7 +100,7 @@ const AnnotationImagesLoader = ({url, annotationType, labels, expectedOutput, on
             return  <NamedEntityLazy
                 text={"Hello, my name is Lilian Delouvy, and this is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
                 labels={labels}
-                annotationAction={onDatasetSubmit}
+                onSubmit={onDatasetSubmit}
                 placeholder="Submit Annotation"
             />
         case "ImageClassifier":
@@ -113,4 +113,4 @@ const AnnotationImagesLoader = ({url, annotationType, labels, expectedOutput, on
     
 };
 
-export default React.memo(AnnotationImagesLoader);
+export default React.memo(AnnotationSwitch);

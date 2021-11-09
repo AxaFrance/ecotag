@@ -3,7 +3,7 @@
 const TagOverTextContainer = React.lazy(() => import('./TagOverText.container'));
 
 const TagOverTextLazy = ({expectedOutput, url, onSubmit}) => {
-    return <Suspense fallback={<div>Chargement de TagOverText...</div>}>
+    return <Suspense fallback={<div>Loading...</div>}>
         <TagOverTextContainer
             expectedOutput={expectedOutput}
             url={url}

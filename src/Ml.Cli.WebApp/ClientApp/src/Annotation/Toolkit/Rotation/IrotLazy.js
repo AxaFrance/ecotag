@@ -4,7 +4,7 @@ const IrotContainer = React.lazy(() => import('./Irot.container'));
 
 const IrotLazy = ({expectedLabels, url, onSubmit}) => {
     
-    return <Suspense fallback={<div>Chargement de la rotation...</div>}>
+    return <Suspense fallback={<div>Loading...</div>}>
         <IrotContainer
             expectedLabels={expectedLabels}
             url={url}
