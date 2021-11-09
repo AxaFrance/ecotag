@@ -92,7 +92,6 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     const [localState, setState] = useState({
         filePrimaryUrl: "",
     });
-    console.log(item);
 
     const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
 

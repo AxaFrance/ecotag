@@ -59,6 +59,5 @@ Default.args = {
         configuration: [{id:"#008194",name:"Firstname",color:"#008194"},{id:"#00ffa2",name:"Lastname",color:"#00ffa2"}]
     },
     entryItem: items[0],
-    MonacoEditor: {},
     fetchFunction: mockedFetchFunction
 };

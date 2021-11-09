@@ -131,7 +131,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
       <a
         class="btn af-btn--circle"
         href="/"
-        title="Retour à l'accueil"
+        title="Home page"
       >
         <i
           class="glyphicon glyphicon-home"

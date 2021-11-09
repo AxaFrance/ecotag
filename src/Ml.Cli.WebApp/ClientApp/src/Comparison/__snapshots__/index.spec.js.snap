@@ -48,7 +48,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <a
         class="btn af-btn--circle"
         href="/"
-        title="Retour à l'accueil"
+        title="Home page"
       >
         <i
           class="glyphicon glyphicon-home"
@@ -1247,7 +1247,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
       <a
         class="btn af-btn--circle"
         href="/"
-        title="Retour à l'accueil"
+        title="Home page"
       >
         <i
           class="glyphicon glyphicon-home"
