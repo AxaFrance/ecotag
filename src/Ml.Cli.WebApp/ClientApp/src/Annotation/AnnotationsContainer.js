@@ -105,8 +105,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         if(item.annotations){
             const annotationsArray = JSON.parse(item.annotations);
             const lastAnnotation = annotationsArray[annotationsArray.length - 1];
-            const labels = lastAnnotation.labels;
-            return labels.boundingBoxes;
+            return lastAnnotation.labels.boundingBoxes;
         }
         return null;
     }

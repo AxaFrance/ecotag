@@ -11,13 +11,9 @@ import ImageClassifierLazy from "../ImageClassifier/ImageClassifierLazy";
 
 const setAnnotationObject = (annotationType, e) => {
     switch (annotationType) {
+        case "TagOverTextLabel":
+        case "TagOverText":
         case "Ocr":
-            return {
-                "type": e.type,
-                "width": e.width,
-                "height": e.height,
-                "labels": e.labels
-            };
         case "Cropping":
             return {
                 "type": e.type,
@@ -33,20 +29,6 @@ const setAnnotationObject = (annotationType, e) => {
                 "labels": e.labels,
                 "image_anomaly": e.image_anomaly
             }
-        case "TagOverText":
-            return {
-                "type": e.type,
-                "width": e.width,
-                "height": e.height,
-                "labels": e.labels
-            }
-        case "TagOverTextLabel":
-            return {
-                "type": e.type,
-                "width": e.width,
-                "height": e.height,
-                "labels": e.labels
-            };
         case "NamedEntityRecognition":
             return e;
         case "ImageClassifier":
