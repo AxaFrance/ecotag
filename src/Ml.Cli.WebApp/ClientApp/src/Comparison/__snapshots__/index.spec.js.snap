@@ -89,7 +89,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
           </div>
         </div>
         <button
-          class="af-btn af-btn--file af-btn--hasiconLeft"
+          class="af-btn af-btn--file af-btn--hasIconLeft"
           type="button"
         >
           <i
@@ -1288,7 +1288,7 @@ exports[`Check a compare file insertion Find table result of KOs after file inpu
           </div>
         </div>
         <button
-          class="af-btn af-btn--file af-btn--hasiconLeft"
+          class="af-btn af-btn--file af-btn--hasIconLeft"
           type="button"
         >
           <i

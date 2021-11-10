@@ -1,12 +1,12 @@
 ﻿import React from "react";
-import CroppingLazy from "./Toolkit/BoundingBox/CroppingLazy";
-import OcrLazy from "./Toolkit/Ocr/OcrLazy";
-import TagOverTextLabelLazy from "./Toolkit/TagOverTextLabel/TagOverTextLabelLazy";
-import TagOverTextLazy from "./Toolkit/TagOverText/TagOverTextLazy";
-import IrotLazy from "./Toolkit/Rotation/IrotLazy";
-import NamedEntityLazy from "./Toolkit/NamedEntity/NamedEntityLazy";
+import CroppingLazy from "../BoundingBox/CroppingLazy";
+import OcrLazy from "../Ocr/OcrLazy";
+import TagOverTextLabelLazy from "../TagOverTextLabel/TagOverTextLabelLazy";
+import TagOverTextLazy from "../TagOverText/TagOverTextLazy";
+import IrotLazy from "../Rotation/IrotLazy";
+import NamedEntityLazy from "../NamedEntity/NamedEntityLazy";
 
-import ImageClassifierLazy from "./Toolkit/ImageClassifier/ImageClassifierLazy";
+import ImageClassifierLazy from "../ImageClassifier/ImageClassifierLazy";
 
 
 const setAnnotationObject = (annotationType, e) => {

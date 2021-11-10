@@ -20,22 +20,20 @@ const Annotation = props => {
             goTo="/annotate"
             goTitle="Annotate"
         />
-    <AnnotationsContainer
-        state={annotationState}
-        id={id}
-        url={url}
-        dataset={dataset}
-        fetchFunction={fetchFunction}
-    />
+        <AnnotationsContainer
+            state={annotationState}
+            id={id}
+            url={url}
+            dataset={dataset}
+            fetchFunction={fetchFunction}
+        />
     </>);
 }
 
 const Annotate = ({fetchFunction, state, setState}) => {
     return (
         <>
-            <TitleBar
-                title={`Annotate`}
-            />
+            <TitleBar title={`Annotate`} />
             <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
         </>
     );

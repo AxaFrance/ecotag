@@ -172,7 +172,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
           </div>
         </div>
         <button
-          class="af-btn af-btn--file af-btn--hasiconLeft"
+          class="af-btn af-btn--file af-btn--hasIconLeft"
           type="button"
         >
           <i

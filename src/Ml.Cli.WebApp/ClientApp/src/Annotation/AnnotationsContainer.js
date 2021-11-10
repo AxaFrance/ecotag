@@ -1,11 +1,10 @@
 ﻿import React, {useEffect, useState} from "react";
-import AnnotationSwitch from "./AnnotationSwitch";
-import AnnotationsToolbar from "./AnnotationsToolbar";
-import './AnnotationsContainer.scss';
+
 import {useHistory} from "react-router";
 import {useMutation} from "react-query";
 import {fetchGetData, fetchPostJson, utf8_to_b64} from "../FetchHelper";
 import {toast} from "react-toastify";
+import Annotations from "./Toolkit/Annotations/Annotations";
 
 const selectItemById = (annotationState, id) => {
     if(id === "end")
@@ -47,6 +46,7 @@ const sendConfirmationMessage = (isSuccess) => {
         type: type
     });
 }
+
 
 const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     const history = useHistory();
@@ -102,17 +102,13 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     };
 
     const getBoundingBoxes = () => {
-        let boundingBoxes;
-        try{
+        if(item.annotations){
             const annotationsArray = JSON.parse(item.annotations);
             const lastAnnotation = annotationsArray[annotationsArray.length - 1];
             const labels = lastAnnotation.labels;
-            boundingBoxes = labels.boundingBoxes;
+            return labels.boundingBoxes;
         }
-        catch (ex){
-            boundingBoxes = [];
-        }
-        return boundingBoxes;
+        return null;
     }
 
     useEffect(() => {
@@ -128,31 +124,26 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
             })
         });
     }, [id]);
+    
+    
+    const toolbarText = item ? item.fileName: "";
+    const annotationType = state.annotationType;
+    const labels = state.configuration;
+    const expectedOutput = getBoundingBoxes();
 
-    if(state.items.length <= 0){
-        return <h2 className="error-message">The annotation file is empty.</h2>
-    }
-
-    return <>
-        <AnnotationsToolbar
+    return <Annotations
             onPrevious={onPrevious}
             isPreviousDisabled={isPreviousDisabled}
             onNext={onNext}
-            text={item? item.fileName: ""}
+            toolbarText={toolbarText}
+            isEmpty={state.items.length <= 0}
             isNextDisabled={isNextDisabled}
-        />
-        {isNextDisabled ? (
-            <h3 className="annotation__end-message">Thank you, all files from this dataset have been annotated.</h3>
-        ) : (
-            <AnnotationSwitch
-                url={localState.filePrimaryUrl}
-                annotationType={state.annotationType}
-                labels={state.configuration}
-                expectedOutput={getBoundingBoxes()}
-                onSubmit={onSubmit}
-            />
-        )}
-    </>;
+            url={localState.filePrimaryUrl}
+            annotationType={annotationType}
+            labels={labels}
+            expectedOutput={expectedOutput}
+            onSubmit={onSubmit}
+        />;
 };
 
 export default React.memo(AnnotationsContainer);
