@@ -1,11 +1,10 @@
 ﻿import React, {Suspense} from "react";
-import IrotContainer from "./Irot.container";
+
+const IrotContainer = React.lazy(() => import('./Irot.container'));
 
 const IrotLazy = ({expectedLabels, url, onSubmit}) => {
     
-    const IrotContainer = React.lazy(() => import('./Irot.container'));
-    
-    return <Suspense fallback={<div>Chargement de la rotation...</div>}>
+    return <Suspense fallback={<div>Loading...</div>}>
         <IrotContainer
             expectedLabels={expectedLabels}
             url={url}

@@ -24,7 +24,7 @@ const Irot = ({ state, setState, url }) => {
             opacity: `${state.opacity}`,
             margin: `${state.initialRotate ? '' : state.marginRotate}`,
           }}
-        />
+         alt="Image to rotate"/>
       </div>
     </div>
   );

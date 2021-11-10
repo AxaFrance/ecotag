@@ -1,32 +1,59 @@
-﻿import React, {useEffect} from "react";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+﻿import React from "react";
+import {Route, Switch, useRouteMatch, withRouter} from "react-router-dom";
 import AnnotationsContainer from "./AnnotationsContainer";
+import TitleBar from "../TitleBar/TitleBar";
+import DatasetHandler from "./DatasetHandler";
 
-const selectItemById = (annotationState, id) => {
-    return annotationState.items.find(x => x.id === id);
-};
+const Annotation = props => {
+    const {
+        match: {
+            params: {id, dataset},
+        },
+        annotationState,
+        fetchFunction,
+        url
+    } = props;
+    return (
+    <>
+        <TitleBar
+            title={dataset}
+            goTo="/annotate"
+            goTitle="Annotate"
+        />
+        <AnnotationsContainer
+            state={annotationState}
+            id={id}
+            url={url}
+            dataset={dataset}
+            fetchFunction={fetchFunction}
+        />
+    </>);
+}
 
-const Routes = ({annotationState, MonacoEditor, fetchFunction, onStateReinit}) => {
+const Annotate = ({fetchFunction, state, setState}) => {
+    return (
+        <>
+            <TitleBar title={`Annotate`} />
+            <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
+        </>
+    );
+}
+
+const AnnotationWithRouter= React.memo(withRouter(Annotation));
+
+const Routes = ({state, setState, fetchFunction}) => {
     const {url} = useRouteMatch();
-    
-    useEffect(() => {
-        if(window.location.href.endsWith(url)){
-            onStateReinit();
-        }
-    }, [window.location.href]);
     
     return(
         <Switch>
-            <Route exact path={`${url}/:dataset/:id`} render={(props) => (
-                <AnnotationsContainer
-                    state={annotationState}
-                    entryItem={selectItemById(annotationState, props.match.params.id)}
-                    MonacoEditor={MonacoEditor}
-                    fetchFunction={fetchFunction}
-                />
-            )}/>
+            <Route exact path={`${url}/:dataset/:id`} >
+                <AnnotationWithRouter annotationState={state} url={url} fetchFunction={fetchFunction}  />
+            </Route>
+            <Route>
+                <Annotate state={state} setState={setState}  fetchFunction={fetchFunction}/>
+            </Route>
         </Switch>
     );
 };
 
-export default Routes;
+export default React.memo(Routes);

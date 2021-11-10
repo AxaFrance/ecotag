@@ -1,10 +1,10 @@
 ﻿import React, {Suspense} from "react";
 
+const CroppingContainer = React.lazy(() => import('./Cropping.container'));
+
 const CroppingLazy = ({labels, url, onSubmit}) => {
     
-    const CroppingContainer = React.lazy(() => import('./Cropping.container'));
-    
-    return <Suspense fallback={<div>Chargement du cropping...</div>}>
+    return <Suspense fallback={<div>Loading...</div>}>
         <CroppingContainer
             labels={labels}
             url={url}
@@ -13,4 +13,4 @@ const CroppingLazy = ({labels, url, onSubmit}) => {
     </Suspense>;
 };
 
-export default CroppingLazy;
+export default React.memo(CroppingLazy);

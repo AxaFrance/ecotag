@@ -4,7 +4,7 @@ import { setLabelColor } from './labelColor.js';
 import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
 
-const NamedEntity = ({ text, labels, annotationAction, placeholder }) => {
+const NamedEntity = ({ text, labels, onSubmit, placeholder }) => {
   const [state, setState] = useState({
     label: setLabelColor(labels[0]),
     value: [],
@@ -19,7 +19,7 @@ const NamedEntity = ({ text, labels, annotationAction, placeholder }) => {
   };
 
   const submitAnnotation = () => {
-    annotationAction(state.value);
+    onSubmit(state.value);
     setState({ ...state, value: [] });
   };
 

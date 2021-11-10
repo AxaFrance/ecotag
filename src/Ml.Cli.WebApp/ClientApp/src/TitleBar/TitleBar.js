@@ -2,12 +2,12 @@
 import {Link} from 'react-router-dom';
 import './TitleBar.scss';
 
-const TitleBar = ({title}) => {
+const TitleBar = ({title, goTo = "/", goTitle="Home page"}) => {
     return (
         <div className="af-title-bar af-title-bar--backhome">
             <div className="container-fluid container af-title-bar__wrapper">
-                    <Link title="Retour à l'accueil" className="btn af-btn--circle" to="/">
-                        <i className="glyphicon glyphicon-home"/>
+                    <Link title={goTitle} className="btn af-btn--circle" to={goTo}>
+                        <i className={goTo === "/" ? "glyphicon glyphicon-home" : "glyphicon glyphicon-arrowthin-left"}/>
                     </Link>
                 <h1 className="af-title-bar__title">{title}</h1>
             </div>

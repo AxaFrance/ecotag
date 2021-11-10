@@ -1,53 +1,148 @@
-﻿import React, {useState} from "react";
-import AnnotationItem from "./AnnotationItem";
-import AnnotationsToolbar from "./AnnotationsToolbar";
-import './AnnotationsContainer.scss';
+﻿import React, {useEffect, useState} from "react";
 
-const AnnotationsContainer = ({state, entryItem, MonacoEditor, fetchFunction}) => {
-    
-    const [tableState, setTableState] = useState({
-        itemNumber: state.items.indexOf(entryItem)
+import {useHistory} from "react-router";
+import {useMutation} from "react-query";
+import {fetchGetData, fetchPostJson, utf8_to_b64} from "../FetchHelper";
+import {toast} from "react-toastify";
+import Annotations from "./Toolkit/Annotations/Annotations";
+
+const selectItemById = (annotationState, id) => {
+    if(id === "end")
+        return null;
+    if(id === "empty")
+        return null;
+    return annotationState.items.find(x => x.id === id);
+};
+
+
+const fetchImages = async data => {
+    if (data.status === 200) {
+        const hardDriveLocations = await data.json();
+        return hardDriveLocations.map(element => {
+            return `api/files/${utf8_to_b64(element)}`;
+        });
+    } else {
+        return [];
+    }
+};
+
+const getImages = (fetchFunction) => async (item) => {
+    const params = "fileName=" + item.fileName + "&stringsMatcher="+ item.frontDefaultStringsMatcher + "&directory=" + item.imageDirectory
+    const fetchResult = await fetchGetData(fetchFunction)("api/datasets/"+utf8_to_b64(params));
+    return fetchImages(fetchResult);
+};
+
+const sendConfirmationMessage = (isSuccess) => {
+    const message = isSuccess ? "Annotation saved" : "Impossible to save annotation";
+    const type = isSuccess ? "success" : "error";
+    toast(message, {
+        position: "top-left",
+        autoClose: 800,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        type: type
     });
+}
+
+
+const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
+    const history = useHistory();
     
-    const onSubmit = () => {
-        setTableState({itemNumber: tableState.itemNumber + 1});
+    const item = selectItemById(state, id);
+    const itemNumber= state.items.indexOf(item);
+    
+    const onSubmit = async (annotation) => {
+        const annotationObject = {
+            datasetLocation: state.datasetLocation,
+            annotationType: state.annotationType,
+            fileName: item.fileName,
+            annotation: annotation
+        };
+        await mutationDataset.mutateAsync(annotationObject, {
+            onSuccess: () => {
+                sendConfirmationMessage(true);
+                onNext();
+            },
+            onError: () => sendConfirmationMessage(false)
+        });
     }
     
     const onPrevious = () => {
-        setTableState({itemNumber: tableState.itemNumber - 1});
-    };
-    
-    const onNext = () => {
-        if(tableState.itemNumber < state.items.length){
-            setTableState({itemNumber: tableState.itemNumber + 1});
+        if(id === "end"){
+            history.push(`${url}/${dataset}/${state.items[state.items.length - 1].id}`);
+        } else{
+            history.push(`${url}/${dataset}/${state.items[itemNumber - 1].id}`);
         }
     };
     
-    const currentItem = state.items[tableState.itemNumber];
-    const isEndReached = (tableState.itemNumber >= state.items.length);
+    const onNext = () => {
+        if((itemNumber + 1) < state.items.length){
+            history.push(`${url}/${dataset}/${state.items[itemNumber + 1].id}`);
+        } else {
+            history.push(`${url}/${dataset}/end`);
+        }
+    };
 
-    return <>
-        <AnnotationsToolbar
+    const isPreviousDisabled = itemNumber === 0;
+    const isNextDisabled = item == null;
+
+    const [localState, setState] = useState({
+        filePrimaryUrl: "",
+    });
+
+    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
+
+    const getUrls = async () => {
+        const newUrls = await getImages(fetchFunction)(item);
+        const newFileUrl = newUrls != null ? newUrls[0] : "";
+        return {fileUrls: newUrls, filePrimaryUrl: newFileUrl};
+    };
+
+    const getBoundingBoxes = () => {
+        if(item.annotations){
+            const annotationsArray = JSON.parse(item.annotations);
+            const lastAnnotation = annotationsArray[annotationsArray.length - 1];
+            return lastAnnotation.labels.boundingBoxes;
+        }
+        return null;
+    }
+
+    useEffect(() => {
+        setState({
+            filePrimaryUrl: "",
+        })
+        if(!item || !item.imageDirectory){
+            return;
+        }
+        getUrls().then(urls => {
+                setState({
+                    filePrimaryUrl: urls.filePrimaryUrl,
+            })
+        });
+    }, [id]);
+    
+    
+    const toolbarText = item ? item.fileName: "";
+    const annotationType = state.annotationType;
+    const labels = state.configuration;
+    const expectedOutput = getBoundingBoxes();
+
+    return <Annotations
             onPrevious={onPrevious}
-            onPreviousPlaceholder="Précédent"
-            isPreviousDisabled={tableState.itemNumber === 0}
+            isPreviousDisabled={isPreviousDisabled}
             onNext={onNext}
-            onNextPlaceholder="Suivant"
-            isNextDisabled={isEndReached}
-        />
-        {isEndReached ? (
-            <h3 className="annotation__end-message">Thank you, all files from this dataset have been annotated.</h3>
-        ) : (
-            <AnnotationItem
-                parentState={state}
-                fetchFunction={fetchFunction}
-                key={currentItem.id}
-                item={currentItem}
-                onSubmit={onSubmit}
-                MonacoEditor={MonacoEditor}
-            />
-        )}
-    </>;
+            toolbarText={toolbarText}
+            isEmpty={state.items.length <= 0}
+            isNextDisabled={isNextDisabled}
+            url={localState.filePrimaryUrl}
+            annotationType={annotationType}
+            labels={labels}
+            expectedOutput={expectedOutput}
+            onSubmit={onSubmit}
+        />;
 };
 
-export default AnnotationsContainer;
+export default React.memo(AnnotationsContainer);

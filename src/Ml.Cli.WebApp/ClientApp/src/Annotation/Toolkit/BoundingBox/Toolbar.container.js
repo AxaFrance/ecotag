@@ -2,7 +2,7 @@ import React from 'react';
 import { scaleBy } from './Cropping';
 import { GlobalHotKeys } from 'react-hotkeys';
 import cuid from 'cuid';
-import Toolbar, {ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton, ToolbarProgressButton} from '../Toolbar';
+import Toolbar, {ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton} from '../Toolbar';
 
 const getFileExtension = filename => {
   if (!filename) return '';
@@ -160,20 +160,6 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, initShap
           <ToolbarButton title="Raccourci : F" onClick={handleFitImage} icon="resize-full" label="Fit Image" />
           <ToolbarButton title="Raccourci : A" onClick={selectAll} icon="picture" label="Select All" />
           <ToolbarButton onClick={moveImage} icon="move" label="Move" toggle={state.moveImageActive} />
-          <ToolbarButtonContainer>
-            <ToolbarProgressButton
-                classModifier="angle"
-                label={`Angle: ${state.rotationDeg}°`}
-                id="angle"
-                onChange={e => setState({ ...state, rotationDeg: parseInt(e.target.value,10) })}
-                value={state.rotationDeg}
-                type="range"
-                step="1"
-                name="rotate"
-                min="-179"
-                max="180"
-            />
-          </ToolbarButtonContainer>
         </ToolbarButtonContainer>
       </Toolbar>
     </GlobalHotKeys>
