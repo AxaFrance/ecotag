@@ -42,7 +42,7 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
             if(sortedItems.length !== 0){
                 history.push(`/annotate/${fileName}/${sortedItems[0].id}`);
             } else{
-                history.push(`/annotate/${fileName}/empty}`);
+                history.push(`/annotate/${fileName}/empty`);
             }
         }
     };
