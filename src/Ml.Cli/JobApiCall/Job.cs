@@ -93,7 +93,7 @@ namespace Ml.Cli.JobApiCall
                         $"Task Id: {inputTask.Id} - Processing {fileName} on thread {Thread.CurrentThread.ManagedThreadId}");
                     var httpResult = await CallHttpAsync(httpClient, inputTask, currentFile, jsonFileName);
                     var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
-                    await _fileLoader.WriteAllTextInFileAsync(targetFileName.Replace("EXTRACT_OUT", "").Replace("Extract", ""),
+                    await _fileLoader.WriteAllTextInFileAsync(targetFileName,
                         json);
                     if (inputTask.EnabledSaveImages || inputTask.EnabledSaveInputs || inputTask.EnabledSaveOutputs)
                         await _callFiles.ApiCallFilesAsync(fileName, json, inputTask);
