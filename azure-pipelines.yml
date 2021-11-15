@@ -87,9 +87,9 @@ steps:
     condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
 
   - task: DotNetCoreInstaller@0
-    displayName: 'Use .NET Core sdk 3.1.402'
+    displayName: 'Use .NET Core sdk 6.0.100'
     inputs:
-      version: 3.1.402
+      version: 6.0.100
     enabled: true
 
   - task: DotNetCoreCLI@2
