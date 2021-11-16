@@ -60,9 +60,9 @@ steps:
       arguments: build
 
   - task: DotNetCoreInstaller@0
-    displayName: "Use .NET Core sdk 3.1.402"
+    displayName: "Use .NET Core sdk 6.0.100"
     inputs:
-      version: 3.1.402
+      version: 6.0.100
     enabled: true
 
   - task: DotNetCoreCLI@2
@@ -87,9 +87,9 @@ steps:
     condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'False'))
 
   - task: DotNetCoreInstaller@0
-    displayName: 'Use .NET Core sdk 3.1.402'
+    displayName: 'Use .NET Core sdk 6.0.100'
     inputs:
-      version: 3.1.402
+      version: 6.0.100
     enabled: true
 
   - task: DotNetCoreCLI@2
@@ -98,7 +98,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      arguments: "-c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -108,7 +108,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r linux-x64"
+      arguments: "-c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/ubuntu/ml-cli-webapp"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
@@ -123,7 +123,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/rhel/ml-cli -f netcoreapp3.1 -v d -c Release -r rhel-x64"
+      arguments: "-c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/rhel/ml-cli"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -138,7 +138,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "-c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -148,7 +148,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r osx-x64"
+      arguments: "-c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/macosx/ml-cli-webapp"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 
@@ -163,7 +163,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: false
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/win10/ml-cli -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "-c Release -r win10-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/win10/ml-cli"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli"
 
@@ -173,7 +173,7 @@ steps:
     inputs:
       command: publish
       publishWebProjects: true
-      arguments: "--self-contained true --output $(System.DefaultWorkingDirectory)/win10/ml-cli-webapp -f netcoreapp3.1 -v d -c Release -r win10-x64"
+      arguments: "-c Release -r win10-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output $(System.DefaultWorkingDirectory)/win10/ml-cli-webapp"
       zipAfterPublish: True
       workingDirectory: "src/Ml.Cli.WebApp"
 

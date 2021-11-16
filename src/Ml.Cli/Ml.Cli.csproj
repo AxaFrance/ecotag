@@ -2,24 +2,24 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RuntimeIdentifiers>linux-x64;rhel-x64;osx-x64;win10-x64</RuntimeIdentifiers>
         <RootNamespace>Ml.Cli</RootNamespace>
         <AssemblyName>Ml.Cli</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ConsoleAppFramework" Version="2.4.0" />
+      <PackageReference Include="ConsoleAppFramework" Version="3.3.0" />
       <PackageReference Include="ConsoleAppFramework.WebHosting" Version="2.4.0" />
       <PackageReference Include="Jint" Version="3.0.0-beta-2035" />
-      <PackageReference Include="JsonDiffPatch.Net" Version="2.2.0" />
+      <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
       <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,13 +27,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
+      <None Update="appsettings-cli.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="appsettings.Development.json">
+      <None Update="appsettings-cli.Development.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="appsettings.Production.json">
+      <None Update="appsettings-cli.Production.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
