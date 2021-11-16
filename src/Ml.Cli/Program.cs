@@ -54,8 +54,8 @@ namespace Ml.Cli
                 IConfiguration configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddEnvironmentVariables()
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                    .AddJsonFile("appsettings-cli.json", false, true)
+                    .AddJsonFile($"appsettings-cli.{environmentName}.json", true, true)
                     .Build();
 
                 var applicationName = configuration.GetValue<string>("Application:Name");
