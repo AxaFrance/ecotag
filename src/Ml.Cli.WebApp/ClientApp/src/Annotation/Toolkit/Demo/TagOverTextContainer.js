@@ -59,7 +59,7 @@ const setAnnotationResult = e => {
     });
 }
 
-const CroppingContainer = ({ url, expectedOutput=[] }) => {
+const CroppingContainer = ({ url, expectedOutput=[], confidence }) => {
     const labelsWithColor = [ {
         id: "1",
         color: 'red'}];
@@ -155,6 +155,7 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
                     ...fitImage(image, croppingWidth, croppingHeight),
                     currentLabelId,
                     shapes: initialShapes,
+                    annotationResult: ""
                 });
             }
         }
@@ -177,7 +178,7 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
                     height: Math.round(Math.abs(shape.begin.y - shape.end.y)),
                     left: Math.round(Math.min(shape.begin.x, shape.end.x)-(authorizedCroppingZone.width-image.width)/2),
                     top: Math.round(Math.min(shape.begin.y, shape.end.y)-(authorizedCroppingZone.height-image.height)/2),
-                    width: Math.round(Math.abs(shape.begin.x - shape.end.x)) ,
+                    width: Math.round(Math.abs(shape.begin.x - shape.end.x)),
                 };
             });
             const result = {
@@ -220,7 +221,7 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
                 par_num: 1,
                 line_num: 1,
                 word_num: 1,
-                conf: 0,
+                conf: confidence,
                 text: ""
             })
         })
@@ -230,6 +231,9 @@ const CroppingContainer = ({ url, expectedOutput=[] }) => {
     return (
         <div className="demo-cropping">
             <div className="demo-cropping__container">
+                {state.labels.length === 0 &&
+                    <p className="demo-cropping__result">OCR application failed.</p>
+                }
                 {state.annotationResult &&
                     <p className="demo-cropping__result">{state.annotationResult}</p>
                 }
