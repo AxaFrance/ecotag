@@ -3,7 +3,9 @@ import { storiesOf } from '@storybook/react';
 import useScript from '../Script/useScript.js';
 import TagOverTextContainer from './TagOverTextContainer';
 
-import {playAlgoWithCurrentTemplateAsync} from "./template";
+import {
+    playAlgoWithTemplateAndApplyTesseractAsync
+} from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
@@ -33,6 +35,7 @@ function TagOverTextGenerator( {templates =[]}){
         url : null,
         croppedUrl : null,
         confidenceRate: 0,
+        boundingBoxes: null,
         expectedOutput:[],
         outputInfo: null,
         isGray:false,
@@ -50,7 +53,7 @@ function TagOverTextGenerator( {templates =[]}){
         let index = 0;
         if(templates.length > index) {
             setState({...state, loaderMode: LoaderModes.get, croppedUrl: null});
-            playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, state, file);
+            playAlgoWithTemplateAndApplyTesseractAsync(templates[state.templateIndex], setState, state, file);
         }
     };
 
@@ -81,7 +84,7 @@ function TagOverTextGenerator( {templates =[]}){
                             icon="open"
                         />
                         {state.url &&
-                        <TagOverTextContainer  url={state.url} expectedOutput={state.expectedOutput} confidence={state.confidenceRate}/>
+                        <TagOverTextContainer  url={state.croppedContoursBase64[0]} expectedOutput={state.boundingBoxes.boundingBoxes} confidence={state.confidenceRate}/>
                         }
                     </div>
                 </div>

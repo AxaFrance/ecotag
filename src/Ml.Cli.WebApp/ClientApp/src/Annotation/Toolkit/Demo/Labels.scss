@@ -1,0 +1,80 @@
+
+
+.tagovertext-labels__ {
+    &container {
+        border-left: black solid 2px;
+        overflow-y: scroll;
+    }
+
+    &group-container {
+        padding-bottom: 10px;
+    }
+
+    &title {
+        font-size: 25px;
+        border-bottom: 1px solid #212121;
+        padding-left: 20px;
+        margin-left: 5px;
+    }
+
+    &input-container {
+        display: block;
+        padding-bottom: 4px;
+        margin-left: 2px;
+    }
+
+    &input {
+        background-color: transparent;
+        border: 2px solid grey;
+        color: #212121;
+        width: 90%;
+        right: 20px;
+        font-size: 1.4em;
+
+        &--hasbeencreated {
+            border-color: rgb(187,136,254);
+        }
+
+        &--hasbeenmodified {
+            border-color: blue;
+        }
+
+        &--hasbeenfocused {
+            border-color: #5ac8fa;
+        }
+
+        &--current {
+            border-color: greenyellow;
+        }
+
+        &--empty {
+            border-color: orange;
+        }
+    }
+
+    &input-conf {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin-left: 6px;
+        border-radius: 4px;
+        opacity: 0.6;
+
+        &--sup90 {
+            background-color: #2cc158;
+        }
+
+        &--between60and90 {
+            background-color: orange;
+        }
+
+        &--inf60 {
+            background-color: red;
+        }
+    }
+
+    &input-confirm-label {
+        margin-left: 10px;
+        color: red;
+    }
+}
