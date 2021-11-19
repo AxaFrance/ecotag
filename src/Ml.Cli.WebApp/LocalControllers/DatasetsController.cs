@@ -39,6 +39,15 @@ namespace Ml.Cli.WebApp.LocalControllers
             return Ok(FilesHandler.GetFilesFromPaths(_datasetsPaths.Paths, _basePath, _fileLoader));
         }
 
+        [HttpGet("/files/{id}")]
+        [ResponseCache(Duration = 1)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetFilesFromDirectory(string directory)
+        {
+            Console.WriteLine("It works");
+        }
+
         [HttpGet("{id}")]
         [ResponseCache(Duration = 1)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
