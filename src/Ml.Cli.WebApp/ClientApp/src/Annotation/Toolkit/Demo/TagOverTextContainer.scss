@@ -19,6 +19,29 @@
     background-color: white!important;
   }
 }
+
+.tag-over-text {
+  &__container {
+    display: flex;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 3px;
+    margin-bottom: 3em;
+  }
+
+  &__file-name {
+    margin-bottom: 0;
+    margin-top: 3%;
+  }
+
+  &__labels-list {
+    width: 30%;
+  }
+
+  &__annotation-zone {
+    width: 70%;
+  }
+}
   
 
 

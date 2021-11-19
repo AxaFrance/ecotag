@@ -1,14 +1,11 @@
 ﻿import React, {useState} from 'react';
 import { storiesOf } from '@storybook/react';
-import useScript from '../Script/useScript.js';
-import TagOverTextContainer from './TagOverTextContainer';
-
-import {
-    playAlgoWithTemplateAndApplyTesseractAsync
-} from "./template";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
+import {playAlgoAsync, playAlgoWithCurrentTemplateAsync} from "./template";
+import TagOverTextOCR from "./TagOverTextOCR";
+import useScript from "../Script/useScript";
 
 const french_identity_card_recto = require("./french_id_card_recto.json");
 const french_identity_card_verso = require('./french_id_card_verso.json');
@@ -29,36 +26,34 @@ function TagOverTextGenerator( {templates =[]}){
     const [loaded, error] = useScript(
         `https://docs.opencv.org/4.5.2/opencv.js`
     );
-
+    
     const [state, setState] = useState({
         files: [],
         url : null,
+        croppedContoursBase64: [null],
         croppedUrl : null,
-        confidenceRate: 0,
-        boundingBoxes: null,
         expectedOutput:[],
-        outputInfo: null,
-        isGray:false,
         filename:null,
         loaderMode: LoaderModes.none,
         templateIndex: 0
     });
 
+    const onChange = value => {
+        const file = value.values[0].file;
+        const currentTemplate = templates[state.templateIndex];
+        let index = 0;
+        if(templates.length > index) {
+            setState({...state, loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
+            playAlgoWithCurrentTemplateAsync(currentTemplate, setState, state, file);
+        }
+    };
+
     if(!loaded){
         return (<p>Loading</p>);
     }
 
-    const onChange = value => {
-        const file = value.values[0].file;
-        let index = 0;
-        if(templates.length > index) {
-            setState({...state, loaderMode: LoaderModes.get, croppedUrl: null});
-            playAlgoWithTemplateAndApplyTesseractAsync(templates[state.templateIndex], setState, state, file);
-        }
-    };
-
     return (
-        <Loader mode={state.loaderMode} text={"Your browser is working"}>
+        <Loader mode={state.loaderMode} text={"Cropping template"}>
             <form className="af-form ri__form-container" name="myform">
                 <div className="ri__form-content">
                     <div className="ri__form">
@@ -83,8 +78,12 @@ function TagOverTextGenerator( {templates =[]}){
                             label="Parcourir"
                             icon="open"
                         />
-                        {state.url &&
-                        <TagOverTextContainer  url={state.croppedContoursBase64[0]} expectedOutput={state.boundingBoxes.boundingBoxes} confidence={state.confidenceRate}/>
+                        {state.croppedContoursBase64[0] &&
+                            <TagOverTextOCR
+                                url={state.croppedContoursBase64[0]}
+                                loaderState={state}
+                                setLoaderState={setState}
+                            />
                         }
                     </div>
                 </div>

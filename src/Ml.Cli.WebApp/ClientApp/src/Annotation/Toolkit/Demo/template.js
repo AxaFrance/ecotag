@@ -6,8 +6,6 @@
     rotateImage,
     toImageBase64
 } from "../Opencv/image";
-import Tesseract from 'tesseract.js';
-import cuid from "cuid";
 import {computeAndComputeHomographyRectangle} from "../Opencv/match";
 import convertPdfToImagesAsync from "../Pdf/pdf";
 import convertTiffToImagesAsync from "../Tiff/tiff";
@@ -176,52 +174,6 @@ export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file
     playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
         if(result){
             setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename});
-        }
-    })
-}
-
-export const playAlgoWithTemplateAndApplyTesseractAsync = (template, setState, state, file) => {
-    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
-        if(result){
-            Tesseract.recognize(
-                result.data.croppedContoursBase64[0],
-                'fra',
-                {logger: m => console.log(m)}
-            ).then(tesseractResult => {
-                console.log(tesseractResult);
-                const {data: {text, lines}} = tesseractResult;
-                let expectedOutputs = [];
-                let currentWordIndex = 0;
-                lines.forEach((line, indexLine) => {
-                    line.words.forEach((word, indexWord) => {
-                        let expectedOutput = {
-                            "level": 5,
-                            "page_num": 1,
-                            "block_num": indexLine,
-                            "par_num": 1,
-                            "line_num": indexLine,
-                            "word_num": currentWordIndex,
-                            "left": word.bbox.x0,
-                            "top": word.bbox.y0,
-                            "width": word.bbox.x1 - word.bbox.x0,
-                            "height": word.bbox.y1 - word.bbox.y0,
-                            "conf": word.confidence,
-                            "text": word.text,
-                            "id": cuid()
-                        };
-
-                        if(word.text.length > 3){
-                            currentWordIndex++;
-                            expectedOutputs.push(expectedOutput);
-                        }
-                    })
-                })
-                let boundingBoxes ={ "boundingBoxes" :expectedOutputs};
-
-                console.log(expectedOutputs);
-                console.log(text);
-                setState({...state, ...result.data, text, boundingBoxes, workInProgress: false, filename: result.filename });
-            });
         }
     })
 }

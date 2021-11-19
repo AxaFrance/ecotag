@@ -74,7 +74,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
 
       const shape = state.shapes.find(s => s.labelId === label.id);
       const expectedElement = label.manual_rectangle
-        ? {
+          ? {
             id: label.id,
             level: 0,
             page_num: 0,
@@ -88,7 +88,7 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
             top: Math.round(Math.min(shape.begin.y, shape.end.y)),
             width: Math.round(Math.abs(shape.begin.x - shape.end.x)),
           }
-        : expectedOutput.find(eo => eo.id === label.id);
+          : expectedOutput.find(eo => eo.id === label.id);
       return {
         ...expectedElement,
         text_modified,
@@ -142,30 +142,30 @@ const ToolbarContainer = ({ setState, state, fitImage, onSubmit, image, expected
   };
   //<ToolbarButton title="Raccourci : M" onClick={() => {}} icon="move" label="Move"/>
   return (
-    <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-      <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit}>
-        <ToolbarButtonContainer>
-          <ToolbarSwitchButton
-            id="enable-creation"
-            checked={state.enableCreate}
-            onChange={enableCreateToggle}
-            label="Enable creation"
-          />
-        </ToolbarButtonContainer>
-        <ToolbarButtonContainer>
-          <ToolbarButton
-            title="Raccourci : Delete"
-            disabled={isDeleteDisabled}
-            onClick={onDelete}
-            icon="trash"
-            label="Delete"
-          />
-          <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
-          <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />
-          <ToolbarButton title="Raccourci : F" onClick={handleFitImage} icon="resize-full" label="Fit Image" />
-        </ToolbarButtonContainer>
-      </Toolbar>
-    </GlobalHotKeys>
+      <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
+        <Toolbar isSubmitDisabled={isSubmitDisabled} onSubmit={handleSubmit}>
+          <ToolbarButtonContainer>
+            <ToolbarSwitchButton
+                id="enable-creation"
+                checked={state.enableCreate}
+                onChange={enableCreateToggle}
+                label="Enable creation"
+            />
+          </ToolbarButtonContainer>
+          <ToolbarButtonContainer>
+            <ToolbarButton
+                title="Raccourci : Delete"
+                disabled={isDeleteDisabled}
+                onClick={onDelete}
+                icon="trash"
+                label="Delete"
+            />
+            <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
+            <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />
+            <ToolbarButton title="Raccourci : F" onClick={handleFitImage} icon="resize-full" label="Fit Image" />
+          </ToolbarButtonContainer>
+        </Toolbar>
+      </GlobalHotKeys>
   );
 };
 
