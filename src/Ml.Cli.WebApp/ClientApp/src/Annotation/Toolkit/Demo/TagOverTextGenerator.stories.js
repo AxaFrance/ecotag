@@ -74,8 +74,9 @@ function TagOverTextGenerator( {templates =[]}){
                             multiple={false}
                             isVisible={true}
                             readOnly={false}
+                            placeholder={"Drag and drop a pdf or tiff or png or jpg file"}
                             disabled={false}
-                            label="Parcourir"
+                            label="Browse"
                             icon="open"
                         />
                         {state.croppedContoursBase64[0] &&
