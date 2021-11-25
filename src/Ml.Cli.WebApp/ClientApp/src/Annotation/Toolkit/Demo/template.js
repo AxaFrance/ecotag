@@ -172,8 +172,18 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
 
 export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
     playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+        console.log(result);
         if(result){
-            setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename});
+            console.log(result.data.croppedContoursBase64);
+            if(result.data.expectedOutput.length > 0){
+                setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: ""});
+            }
+            else{
+                setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application"});
+            }
+        }
+        else{
+            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application"});
         }
     })
 }

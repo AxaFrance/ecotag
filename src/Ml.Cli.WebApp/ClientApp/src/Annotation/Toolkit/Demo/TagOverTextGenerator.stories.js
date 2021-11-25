@@ -3,9 +3,10 @@ import { storiesOf } from '@storybook/react';
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
-import {playAlgoAsync, playAlgoWithCurrentTemplateAsync} from "./template";
+import {playAlgoWithCurrentTemplateAsync} from "./template";
 import TagOverTextOCR from "./TagOverTextOCR";
 import useScript from "../Script/useScript";
+import './TagOverTextGenerator.scss';
 
 const french_identity_card_recto = require("./french_id_card_recto.json");
 const french_identity_card_verso = require('./french_id_card_verso.json');
@@ -35,7 +36,8 @@ function TagOverTextGenerator( {templates =[]}){
         expectedOutput:[],
         filename:null,
         loaderMode: LoaderModes.none,
-        templateIndex: 0
+        templateIndex: 0,
+        errorMessage: ""
     });
 
     const onChange = value => {
@@ -79,12 +81,19 @@ function TagOverTextGenerator( {templates =[]}){
                             label="Browse"
                             icon="open"
                         />
-                        {state.croppedContoursBase64[0] &&
-                            <TagOverTextOCR
-                                url={state.croppedContoursBase64[0]}
-                                loaderState={state}
-                                setLoaderState={setState}
-                            />
+                        {state.errorMessage ? (
+                            <p className="tag-over-text-generator__error">{state.errorMessage}</p>
+                        ) : (
+                            <>
+                                {state.croppedContoursBase64[0] &&
+                                <TagOverTextOCR
+                                    url={state.croppedContoursBase64[0]}
+                                    loaderState={state}
+                                    setLoaderState={setState}
+                                />
+                                }
+                            </>
+                        )
                         }
                     </div>
                 </div>
