@@ -1,74 +1,63 @@
-﻿import React, {useEffect, useState} from "react";
-import {fetchGetData, utf8_to_b64} from "../FetchHelper";
-import {getDataPaths} from "../Comparison/ImagesLoader";
-import {ToastContainer} from "react-toastify";
-import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
-import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
-import {QueryClient, QueryClientProvider} from "react-query";
-import TitleBar from "../TitleBar/TitleBar";
-import Gallery from "./Gallery";
-import GalleryOptions from "./GalleryOptions";
+﻿import React from "react";
+import default_icon from '@axa-fr/react-toolkit-core/dist/assets/icons/file.svg';
+import './ImageGallery.scss';
 
-const queryClient = new QueryClient();
-
-const getFiles = async(fetchFunction, controllerPath, filesPath) => {
-    if(filesPath){
-        const params = "directory=" + filesPath;
-        const result = await fetchGetData(fetchFunction)(controllerPath + utf8_to_b64(params));
-        return await getDataPaths(result);
+const ImageGallery = ({parentState}) => {
+    
+    const isImageOrPdf = (file) => {
+        const extensions = ["pdf", "png", "jpg", "jpeg"];
+        return extensions.includes(file.split('.').pop());
     }
-    return [];
-}
-
-const ImageGallery = ({fetchFunction}) => {
     
-    const [state, setState] = useState({
-        files: [],
-        filesPath: "",
-        sortName: "Recent to old",
-        size: '128px'
-    });
-    
-    useEffect(() => {
-        tick();
-        const timerID = setInterval(
-            () => tick(),
-            5000
-        );
-        return function cleanup(){
-            clearInterval(timerID);
-        }
-    }, []);
-    
-    const tick = () => {
-        getFiles(fetchFunction, "api/datasets", state.filesPath)
-            .then(files => {
-                setState({...state, files});
-            })
-    };
+    let imageSizeClassName;
+    let fileNameSizeClassName;
+    switch(parentState.size){
+        case "64px":
+            imageSizeClassName = "image-width__small";
+            fileNameSizeClassName = "filename-width__small";
+            break;
+        case "128px":
+            imageSizeClassName = "image-width__medium";
+            fileNameSizeClassName = "filename-width__medium";
+            break;
+        case "256px":
+            imageSizeClassName = "image-width__normal";
+            fileNameSizeClassName = "filename-width__normal";
+            break;
+        case "512px":
+            imageSizeClassName = "image-width__big";
+            fileNameSizeClassName = "filename-width__big";
+            break;
+    }
     
     return(
-        <QueryClientProvider client={queryClient}>
-            <Header>
-                <Name
-                    title="ML-CLI"
-                    subtitle="Made by AXA"
-                    img={logo}
-                    alt="AXA Logo"
-                />
-            </Header>
-            <TitleBar title="Image Gallery" classModifier="af-title-bar--no-space"/>
-            <GalleryOptions
-                parentState={state}
-                setParentState={setState}
-            />
-            <Gallery
-                parentState={state}
-            />
-            <ToastContainer/>
-        </QueryClientProvider>
+        <div className="image-gallery__container">
+            <a className="image-gallery__link" href="https://www.google.com/search?q=file+default+icon&rlz=1C1GCEA_enFR917FR917&oq=&aqs=chrome.0.69i59i450l8.34450j0j7&sourceid=chrome&ie=UTF-8">
+                <div className="image-gallery__image-container">
+                    <img className={`${imageSizeClassName}`} src={default_icon} alt="test"/>
+                </div>
+                <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
+                    <div className="image-gallery__filename">Fileazdlmqsdizqopmlsdlmzdsq.jpg</div>
+                </div>
+            </a>
+            {parentState.files.map(file => {
+                return(
+                    <>
+                        {isImageOrPdf(file) ? (
+                                <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
+                                    <img className="image-gallery__image" src={URL.createObjectURL(file)} alt={file}/>
+                                </a>
+                            ) : (
+                                <a href={URL.createObjectURL(file)} download={file}>
+                                    <img className="image-gallery__default" src={default_icon} alt="default icon"/>
+                                </a>
+                            )
+                        } 
+                    </>
+                )
+            })}
+        </div>
     )
-    
 };
 
 export default ImageGallery;

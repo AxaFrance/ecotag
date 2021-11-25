@@ -46,6 +46,7 @@ namespace Ml.Cli.WebApp.LocalControllers
         public IActionResult GetFilesFromDirectory(string directory)
         {
             Console.WriteLine("It works");
+            return Ok();
         }
 
         [HttpGet("{id}")]

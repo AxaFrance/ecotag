@@ -5,7 +5,7 @@ import Annotate from "./Annotation/Annotate";
 import React from "react";
 import NotFound from "./PageNotFound/NotFound";
 import withCustomFetch from "./withCustomFetch";
-import ImageGallery from "./Gallery/ImageGallery";
+import Gallery from "./Gallery/Gallery";
 
 const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 
@@ -29,7 +29,7 @@ export const Routes = ({fetch}) => {
                 />
             </Route>
             <Route path="/gallery">
-                <ImageGallery
+                <Gallery
                     fetchFunction={fetch}
                 />
             </Route>

@@ -12,22 +12,27 @@ const optionsSelect = [
 ];
 
 const sizeOptionsSelect = [
-    {value: 64, label: '64px'},
-    {value: 128, label: '128px'},
-    {value: 256, label: '256px'},
-    {value: 512, label: '512px'}
+    {value: "64px", label: '64px'},
+    {value: "128px", label: '128px'},
+    {value: "256px", label: '256px'},
+    {value: "512px", label: '512px'}
 ];
 
-const GalleryOptions = ({parentState, setParentState}) => {
+const GalleryOptions = ({state, setState}) => {
     
-    const [state, setState] = useState({
+    const [filterState, setFilterState] = useState({
         filesPath: "",
         sortName: "Recent to old",
-        size: '128px'
+        size: "128px"
     });
     
     const applyOptions = () => {
-        setParentState({...parentState, filesPath: state.filesPath,  sortName: state.sortName, size: state.size});
+        setState({
+            ...state,
+            filesPath: filterState.filesPath,
+            sortName: filterState.sortName,
+            size: filterState.size
+        });
     }
     
     return(
@@ -37,10 +42,10 @@ const GalleryOptions = ({parentState, setParentState}) => {
                 <Textarea
                     id="text_area_stringsMatcherModifier"
                     name="TextAreaStringsMatcherModifier"
-                    value={state.filesPath}
+                    value={filterState.filesPath}
                     onChange={e => {
-                        setState({
-                            ...state,
+                        setFilterState({
+                            ...filterState,
                             filesPath: e.value
                         });
                     }}
@@ -49,25 +54,25 @@ const GalleryOptions = ({parentState, setParentState}) => {
                 <SelectBase
                     id="select_type"
                     name="SelectType"
-                    value={state.sortName}
+                    value={filterState.sortName}
                     options={optionsSelect}
                     onChange={e => {
-                        setState({...state, sortName: e.value});
+                        setFilterState({...filterState, sortName: e.value});
                     }}
                 />
                 <p className="tabs__title">Size:</p>
                 <SelectBase
                     id="select_type"
                     name="SelectType"
-                    value={state.size}
+                    value={filterState.size}
                     options={sizeOptionsSelect}
                     onChange={e => {
-                        setState({...state, size: e.value});
+                        setFilterState({...filterState, size: e.value});
                     }}
                 />
             </div>
             <div className="gallery__options-container-right">
-                <Button onClick={() => applyOptions()}>Submit</Button>
+                <Button onClick={() => applyOptions()}>Apply filters</Button>
             </div>
         </div>
     )
