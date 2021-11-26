@@ -1,0 +1,399 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check page shifting Render home page and go to compare page 1`] = `
+<DocumentFragment>
+  <div
+    class="home"
+  >
+    <div
+      class="af-header"
+    >
+      <div
+        class="container af-header__wrapper"
+      >
+        <header
+          class="af-header__content"
+          role="banner"
+        >
+          <div
+            class="af-header__name"
+          >
+            <a
+              class="af-logo"
+              href="/"
+            >
+              <img
+                alt="AXA Logo"
+                class="af-logo__brand"
+                src="logo-axa.svg"
+              />
+            </a>
+            <h2
+              class="af-header__title"
+            >
+              ML-CLI
+              <span
+                class="af-header__subtitle"
+              >
+                Made by AXA
+              </span>
+            </h2>
+          </div>
+        </header>
+      </div>
+    </div>
+    <div
+      class="af-title-bar"
+    >
+      <div
+        class="container af-title-bar__wrapper"
+      >
+        <h1
+          class="af-title-bar__title"
+        >
+          Services
+        </h1>
+      </div>
+    </div>
+    <div
+      class="home__links-container"
+    >
+      <a
+        class="home__link"
+        href="/compare"
+      >
+        <div
+          class="home__link-container home__link-container--compare"
+        >
+          Comparison
+        </div>
+      </a>
+      <a
+        class="home__link"
+        href="/annotate"
+      >
+        <div
+          class="home__link-container home__link-container--annotate"
+        >
+          Annotation
+        </div>
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Check page shifting Render home page and go to compare page 2`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="AXA Logo"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            ML-CLI
+            <span
+              class="af-header__subtitle"
+            >
+              Made by AXA
+            </span>
+          </h2>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Compare JSON file
+      </h1>
+    </div>
+  </div>
+  <div
+    class="file-loader__container"
+  >
+    <div
+      class="file-loader__input"
+    >
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file_loader"
+          tabindex="0"
+        >
+          <input
+            accept="application/json"
+            autocomplete="off"
+            multiple=""
+            name="placeJsonFile"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Slide/Deposit files
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Browse
+        </button>
+      </div>
+    </div>
+    <div
+      class="library__container"
+    >
+      <p
+        class="library__title"
+      >
+        Files
+      </p>
+      <span>
+        No file found.
+      </span>
+      <div
+        class="library__files-list"
+      />
+    </div>
+  </div>
+  <div
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Filters
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="1"
+          >
+            Time
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="2"
+          >
+            Scripts
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="3"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div
+            class="tabs__container tabs__container--justify"
+          >
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                File state:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="select_type"
+                  name="SelectType"
+                >
+                  <option
+                    value="KO"
+                  >
+                    KO
+                  </option>
+                  <option
+                    value="OK"
+                  >
+                    OK
+                  </option>
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                </select>
+                <span
+                  aria-controls="select_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Files extensions:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="extension_type"
+                  name="ExtensionType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                  <option
+                    value="PNG"
+                  >
+                    PNG
+                  </option>
+                  <option
+                    value="JPG/JPEG"
+                  >
+                    JPG/JPEG
+                  </option>
+                  <option
+                    value="PDF"
+                  >
+                    PDF
+                  </option>
+                  <option
+                    value="TIFF"
+                  >
+                    TIFF
+                  </option>
+                </select>
+                <span
+                  aria-controls="extension_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Server status:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="status_code_type"
+                  name="StatusCodeType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                </select>
+                <span
+                  aria-controls="status_code_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+            </div>
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                Search Bar:
+              </p>
+              <textarea
+                class="af-form__input-textarea"
+                id="text_area_searchbar"
+                name="TextAreaSearchBar"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="file-input"
+  >
+    <button
+      class="btn af-btn"
+    >
+      Apply filters
+    </button>
+  </div>
+  <div
+    class="Toastify"
+  />
+</DocumentFragment>
+`;
