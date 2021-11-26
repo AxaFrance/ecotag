@@ -3,11 +3,12 @@ import cuid from "cuid";
 import React, {useEffect, useState} from "react";
 import TagOverTextContainer from "./TagOverTextContainer";
 import './TagOverTextOCR.scss';
+import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 
 const TagOverTextOCR = ({url}) => {
 
     const [state, setState] = useState({
-        isApplyingOCR: true,
+        loaderMode: LoaderModes.get,
         boundingBoxes: null,
         result: []
     });
@@ -53,16 +54,15 @@ const TagOverTextOCR = ({url}) => {
             let boundingBoxes ={ "boundingBoxes" :expectedOutputs};
             console.log(expectedOutputs);
             console.log(text);
-            setState({...state, boundingBoxes, isApplyingOCR: false });
+            setState({...state, boundingBoxes, loaderMode: LoaderModes.none });
         });
     }
     
-    if(state.isApplyingOCR){
-        return <p className="tag-over-text-ocr__ocr-application">Applying OCR, please wait...</p>;
-    }
-    
     return(
-        <>
+        <Loader mode={state.loaderMode} text={"Applying OCR..."}>
+            {state.loaderMode === LoaderModes.get &&
+                <div className="tag-over-text-ocr__ocr-application"/>
+            }
             {state.boundingBoxes ? (
                 <>
                     {state.result.map((boundingBox, index) => {
@@ -73,7 +73,7 @@ const TagOverTextOCR = ({url}) => {
                 ): (
                     <></>
             )}
-        </>
+        </Loader>
     )
     
 };
