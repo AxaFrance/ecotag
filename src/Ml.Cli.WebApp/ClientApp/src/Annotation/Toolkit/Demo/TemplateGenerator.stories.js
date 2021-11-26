@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 import {storiesOf} from "@storybook/react";
 import {File} from "@axa-fr/react-toolkit-form-input-file";
-import {toBase64Async} from "./template";
+import {playAlgoWithCurrentTemplateAsync, toBase64Async} from "./template";
 import {imageResize, loadImageAsync} from "../Opencv/image";
 import {detectAndComputeSerializable} from "../Opencv/match";
 import useScript from "../Script/useScript";
@@ -16,7 +16,9 @@ const TemplateGenerator = () => {
     
     const [state, setState] = useState({
         loaderMode: LoaderModes.none,
-        jsonContent: ""
+        jsonContent: "",
+        croppedContoursBase64: [null],
+        errorMessage: ""
     });
 
     if(!loaded){
@@ -34,13 +36,20 @@ const TemplateGenerator = () => {
         setState({...state, jsonContent: jsonValue});
     }
     
+    const onFileTest = value => {
+        const file = value.values[0].file;
+        const template = {imgDescription: JSON.parse(state.jsonContent), goodMatchSizeThreshold:5};
+        setState({...state, loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
+        playAlgoWithCurrentTemplateAsync(template, setState, state, file);
+    }
+    
     return(
         <Loader mode={state.loaderMode} text={"Your browser is working"}>
             <form className="af-form ri__form-container" name="myform">
                 <h1>Template Generator</h1>
                 <File
                     id="file"
-                    name="RI"
+                    name="TemplateGenerator"
                     accept={'image/jpg, image/jpeg, image/png'}
                     onChange={onChange}
                     multiple={false}
@@ -51,7 +60,35 @@ const TemplateGenerator = () => {
                     label="Browse"
                     icon="open"
                 />
-                <div className="generator-content">{state.jsonContent}</div>
+                <div className="template-generator__content">{state.jsonContent}</div>
+                {state.jsonContent &&
+                    <>
+                        <p>Insert a file to test your template</p>
+                        <File
+                            id="file_test"
+                            name="FileTest"
+                            accept={'image/jpeg, image/png, image/tiff, image/tif, application/*'}
+                            onChange={onFileTest}
+                            multiple={false}
+                            isVisible={true}
+                            readOnly={false}
+                            placeholder={"Drag and drop a pdf or tiff or png or jpg file"}
+                            disabled={false}
+                            label="Browse"
+                            icon="open"
+                        />
+                        {state.errorMessage ? (
+                            <p className="template-generator__error">{state.errorMessage}</p>
+                        ) : (
+                            <>
+                                {state.croppedContoursBase64[0] &&
+                                <img src={state.croppedContoursBase64[0]}  alt="image found"/>
+                                }
+                            </>
+                        )
+                        }
+                    </>
+                }
             </form>
         </Loader>
     )
