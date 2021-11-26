@@ -3,7 +3,7 @@ import {useMutation} from "react-query";
 import {Tabs} from "@axa-fr/react-toolkit-all";
 import './JsonEditorTab.scss';
 import ImagesLoader from "./ImagesLoader";
-import {fetchPostJson} from "../FetchHelper";
+import {fetchPostJson} from "../../FetchHelper";
 import {toast} from "react-toastify";
 
 const left_var = "left";

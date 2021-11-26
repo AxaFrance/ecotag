@@ -28,7 +28,13 @@ namespace Ml.Cli
 {
     public partial class Program
     {
+
         public static void Main(string[] args)
+        {
+            Main(args, "appsettings-cli");
+        }
+
+        public static void Main(string[] args, string appSettingsName)
         {
             var app = new CommandLineApplication()
             {
@@ -54,8 +60,8 @@ namespace Ml.Cli
                 IConfiguration configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddEnvironmentVariables()
-                    .AddJsonFile("appsettings-cli.json", false, true)
-                    .AddJsonFile($"appsettings-cli.{environmentName}.json", true, true)
+                    .AddJsonFile($"{appSettingsName}.json", false, true)
+                    .AddJsonFile($"{appSettingsName}.{environmentName}.json", true, true)
                     .Build();
 
                 var applicationName = configuration.GetValue<string>("Application:Name");

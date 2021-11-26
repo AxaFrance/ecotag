@@ -2,9 +2,9 @@
 
 import {useHistory} from "react-router";
 import {useMutation} from "react-query";
-import {fetchGetData, fetchPostJson, utf8_to_b64} from "../FetchHelper";
+import {fetchGetData, fetchPostJson, utf8_to_b64} from "../../FetchHelper";
 import {toast} from "react-toastify";
-import Annotations from "./Toolkit/Annotations/Annotations";
+import Annotations from "../../Toolkit/Annotations/Annotations";
 
 const selectItemById = (annotationState, id) => {
     if(id === "end")
@@ -102,7 +102,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     };
 
     const getBoundingBoxes = () => {
-        if(item.annotations){
+        if(item && item.annotations){
             const annotationsArray = JSON.parse(item.annotations);
             const lastAnnotation = annotationsArray[annotationsArray.length - 1];
             return lastAnnotation.labels.boundingBoxes;
