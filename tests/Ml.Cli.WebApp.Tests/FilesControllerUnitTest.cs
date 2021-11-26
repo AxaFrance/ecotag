@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32.SafeHandles;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.Controllers;
+using Ml.Cli.WebApp.LocalControllers;
 using Ml.Cli.WebApp.Paths;
 using Moq;
 using Xunit;

@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
-import {fetchGetData,utf8_to_b64} from "../FetchHelper";
-import JsonEditorContainer from "../Annotation/Toolkit/JsonEditor/JsonEditor.container";
+import {fetchGetData,utf8_to_b64} from "../../FetchHelper";
+import JsonEditorContainer from "./JsonEditor/JsonEditor.container";
 
 export const getDataPaths = async data => {
     if (data.status === 200) {

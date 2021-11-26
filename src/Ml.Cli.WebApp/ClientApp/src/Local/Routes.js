@@ -3,8 +3,8 @@ import Home from "./Home";
 import Compare from "./Comparison/Compare";
 import Annotate from "./Annotation/Annotate";
 import React from "react";
-import NotFound from "./PageNotFound/NotFound";
-import withCustomFetch from "./withCustomFetch";
+import NotFound from "../PageNotFound/NotFound";
+import withCustomFetch from "../withCustomFetch";
 
 const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 

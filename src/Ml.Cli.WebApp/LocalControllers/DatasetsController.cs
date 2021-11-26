@@ -9,7 +9,7 @@ using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Paths;
 using Newtonsoft.Json;
 
-namespace Ml.Cli.WebApp.Controllers
+namespace Ml.Cli.WebApp.LocalControllers
 {
     [ApiController]
     [Route("api/datasets")]

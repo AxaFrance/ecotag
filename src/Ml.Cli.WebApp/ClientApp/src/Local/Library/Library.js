@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 import "@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css";
-import {fetchGetData, StatusCodes, b64_to_utf8} from "../FetchHelper";
+import {fetchGetData, StatusCodes, b64_to_utf8} from "../../FetchHelper";
 import {getDataPaths} from "../Comparison/ImagesLoader";
 import './Library.scss';
 
