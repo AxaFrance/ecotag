@@ -16,6 +16,7 @@ const TemplateGenerator = () => {
     
     const [state, setState] = useState({
         loaderMode: LoaderModes.none,
+        templateImage: "",
         jsonContent: "",
         croppedContoursBase64: [null],
         errorMessage: ""
@@ -33,7 +34,7 @@ const TemplateGenerator = () => {
         const imgVersoCvTemplateResized = imageResize(cv)(imgVersoCvTemplate, 600).image;
         const resizedImg = detectAndComputeSerializable(cv)( imgVersoCvTemplateResized);
         const jsonValue = JSON.stringify(resizedImg);
-        setState({...state, jsonContent: jsonValue});
+        setState({...state, jsonContent: jsonValue, templateImage: convertedfile});
     }
     
     const onFileTest = value => {
@@ -60,6 +61,9 @@ const TemplateGenerator = () => {
                     label="Browse"
                     icon="open"
                 />
+                {state.templateImage &&
+                    <img src={state.templateImage} alt="template image"/>
+                }
                 <div className="template-generator__content">{state.jsonContent}</div>
                 {state.jsonContent &&
                     <>
