@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
-import {playAlgoWithCurrentTemplateAsync} from "./template";
+import {playAlgoNoTemplateAsync, playAlgoWithCurrentTemplateAsync} from "./template";
 import TagOverTextOCR from "./TagOverTextOCR";
 import useScript from "../Script/useScript";
 import './TagOverTextGenerator.scss';
@@ -19,13 +19,14 @@ const optionsSelect = [
     {value: 1, label: "French identity card verso"},
     {value: 2, label: "French Passport"},
     {value: 3, label: "French new license recto"},
-    {value: 4, label: "French new license verso"}
+    {value: 4, label: "French new license verso"},
+    {value: 5, label: "No template"}
 ];
 
 function TagOverTextGenerator( {templates =[]}){
 
     const [loaded, error] = useScript(
-        `https://docs.opencv.org/4.5.2/opencv.js`
+        `https://docs.opencv.org/4.5.4/opencv.js`
     );
     
     const [state, setState] = useState({
@@ -37,16 +38,23 @@ function TagOverTextGenerator( {templates =[]}){
         filename:null,
         loaderMode: LoaderModes.none,
         templateIndex: 0,
-        errorMessage: ""
+        errorMessage: "",
+        noTemplateImage: ""
     });
 
-    const onChange = value => {
+    const onChange = async value => {
         const file = value.values[0].file;
-        const currentTemplate = templates[state.templateIndex];
-        let index = 0;
-        if(templates.length > index) {
-            setState({...state, loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
-            playAlgoWithCurrentTemplateAsync(currentTemplate, setState, state, file);
+        if(state.templateIndex < 5){
+            const currentTemplate = templates[state.templateIndex];
+            let index = 0;
+            if(templates.length > index) {
+                setState({...state, noTemplateImage: "", loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
+                await playAlgoWithCurrentTemplateAsync(currentTemplate, setState, state, file);
+            }
+        }
+        else{
+            const files = await playAlgoNoTemplateAsync(file);
+            setState({...state, noTemplateImage: files[0], croppedContoursBase64: [null]});
         }
     };
 
@@ -86,11 +94,14 @@ function TagOverTextGenerator( {templates =[]}){
                         ) : (
                             <>
                                 {state.croppedContoursBase64[0] &&
-                                <TagOverTextOCR
-                                    url={state.croppedContoursBase64[0]}
-                                    loaderState={state}
-                                    setLoaderState={setState}
-                                />
+                                    <TagOverTextOCR
+                                        url={state.croppedContoursBase64[0]}
+                                        loaderState={state}
+                                        setLoaderState={setState}
+                                    />
+                                }
+                                {state.noTemplateImage &&
+                                    <img src={state.noTemplateImage} alt="No Template files"/>
                                 }
                             </>
                         )

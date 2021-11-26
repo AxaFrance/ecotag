@@ -51,6 +51,19 @@ export const playAlgoAsync= (cv) => async (file, imgDescription, goodMatchSizeTh
     return {data, filename, files};
 }
 
+export const playAlgoNoTemplateAsync = async(file) => {
+    const filename = file.name.toLowerCase();
+    let files;
+    if(filename.endsWith(".pdf")) {
+        files = await convertPdfToImagesAsync()(file, 2);
+    } else if(filename.endsWith(".tif") || filename.endsWith(".tiff")) {
+        files = await convertTiffToImagesAsync()(file);
+    } else {
+        files = [await toBase64Async(file)];
+    }
+    return files;
+}
+
 export const zoneAsync = (cv) => async (sceneUrl, imgDescription, goodMatchSizeThreshold = 6) => {
     const imgCv = await loadImageAsync(cv)(sceneUrl);
     
@@ -172,11 +185,10 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
 
 export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
     playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
-        console.log(result);
         if(result){
             console.log(result.data.croppedContoursBase64);
             if(result.data.expectedOutput.length > 0){
-                setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: ""});
+                setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: "", noTemplateImage: ""});
             }
             else{
                 setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application"});
