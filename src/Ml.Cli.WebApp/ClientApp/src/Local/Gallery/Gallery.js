@@ -17,8 +17,8 @@ const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
         ...state,
         status: resilienceStatus.LOADING,
     });
-    const params = "directory=" + filesPath;
-    const response = await fetchGetData(fetch)("api/datasets" + utf8_to_b64(params));
+    const uri = encodeURI("/api/gallery/" + filesPath);
+    const response = await fetchGetData(fetch)(uri);
     if (response.status >= 300) {
         setState({
             ...state,
@@ -58,22 +58,23 @@ function useInterval(callback, delay) {
 
 const Gallery = ({fetchFunction}) => {
     
+    //https://axafrance.visualstudio.com/Kubernetes/_git/dailyclean-api?path=%2Fweb%2Fsrc%2FApiStateProvider.js&version=GBmain
+    //En bas: solution au problème de sauvegarde du state
+    
     const [state, setState] = useState({
         files: [],
         filesPath: "",
         sortName: "Recent to old",
-        size: "128px"
+        size: "128px",
+        status: resilienceStatus.EMPTY,
+        firstStatus: resilienceStatus.EMPTY,
     });
 
     useInterval(() => {
         if(state.status !== resilienceStatus.LOADING && state.filesPath !== ""){
-            loadStateAsync(fetchFunction)(setState, state);
+            loadStateAsync(fetchFunction)(setState, state, state.filesPath);
         }
-    }, state.status === resilienceStatus.ERROR ? 15000: 2000);
-    
-    useEffect(() => {
-        loadStateAsync(fetchFunction)(setState, state);
-    }, []);
+    }, state.status === resilienceStatus.ERROR ? 15000: 5000);
     
     return(
         <QueryClientProvider client={queryClient}>

@@ -22,5 +22,20 @@ namespace Ml.Cli.WebApp.Paths
                 .SelectMany(fileLoader.EnumerateFiles)
                 .Where(file => Path.GetExtension(file) == jsonExtension);
         }
+
+        public static IEnumerable<string> GetFilesFromDirectoryPath(string directoryPath, BasePath basePath,
+            IFileLoader fileLoader)
+        {
+            var fullyQualifiedPath =
+                PathAdapter.AdaptPathForCurrentOs(Path.IsPathRooted(directoryPath)
+                    ? directoryPath
+                    : Path.Combine(basePath.Path, directoryPath));
+            if (!basePath.IsPathSecure(fullyQualifiedPath))
+            {
+                return null;
+            }
+
+            return fileLoader.EnumerateFiles(fullyQualifiedPath);
+        }
     }
 }
