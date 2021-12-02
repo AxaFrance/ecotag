@@ -186,7 +186,17 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
 export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
     playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
         if(result){
-            console.log(result.data.croppedContoursBase64);
+            setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: "", noTemplateImage: ""});
+        }
+        else{
+            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application (no result found)"});
+        }
+    })
+};
+
+export const getExpectedOutputWithCurrentTemplateAsync = (template, setState, state, file) => {
+    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+        if(result){
             if(result.data.expectedOutput.length > 0){
                 setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: "", noTemplateImage: ""});
             }
@@ -195,7 +205,7 @@ export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file
             }
         }
         else{
-            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application"});
+            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application (no result found)"});
         }
     })
 }

@@ -26,16 +26,18 @@ function Demo( {templates =[]}){
   const [loaded, error] = useScript(
       `https://docs.opencv.org/4.5.2/opencv.js`
   );
+  
+  const initialState = {
+      files: [],
+      loaderMode: LoaderModes.none,
+      outputInfo: null,
+      isGray:false,
+      filename:null,
+      croppedContoursBase64:null,
+      templateIndex: 0
+  };
 
-  const [state, setState] = useState({
-    files: [],
-    loaderMode: LoaderModes.none,
-    outputInfo: null,
-    isGray:false,
-    filename:null,
-    croppedContoursBase64:null,
-    templateIndex: 0
-  });
+  const [state, setState] = useState({...initialState});
  
   if(!loaded){
     return (<p>Loading</p>);
@@ -52,7 +54,7 @@ function Demo( {templates =[]}){
           files:[]
         });
         const file = value.values[0].file;
-        playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, state, file);
+        playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, {...initialState}, file);
     }
   };
   

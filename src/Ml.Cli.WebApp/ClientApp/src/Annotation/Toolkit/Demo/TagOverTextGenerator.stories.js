@@ -3,7 +3,10 @@ import { storiesOf } from '@storybook/react';
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import File from "@axa-fr/react-toolkit-form-input-file/dist/File";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
-import {playAlgoNoTemplateAsync, playAlgoWithCurrentTemplateAsync} from "./template";
+import {
+    getExpectedOutputWithCurrentTemplateAsync,
+    playAlgoNoTemplateAsync,
+} from "./template";
 import TagOverTextOCR from "./TagOverTextOCR";
 import useScript from "../Script/useScript";
 import './TagOverTextGenerator.scss';
@@ -49,7 +52,7 @@ function TagOverTextGenerator( {templates =[]}){
             let index = 0;
             if(templates.length > index) {
                 setState({...state, noTemplateImage: "", loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
-                await playAlgoWithCurrentTemplateAsync(currentTemplate, setState, state, file);
+                await getExpectedOutputWithCurrentTemplateAsync(currentTemplate, setState, state, file);
             }
         }
         else{
