@@ -2,12 +2,16 @@
 import default_icon from '@axa-fr/react-toolkit-core/dist/assets/icons/file.svg';
 import './ImageGallery.scss';
 
+const isImageOrPdf = (filename) => {
+    const extensions = ["pdf", "png", "jpg", "jpeg"];
+    return extensions.includes(filename.split('.').pop());
+}
+
+const getFileNameFromFullPath = (filePath) => {
+    return filePath.replace(/^.*[\\\/]/, '');
+}
+
 const ImageGallery = ({parentState}) => {
-    
-    const isImageOrPdf = (file) => {
-        const extensions = ["pdf", "png", "jpg", "jpeg"];
-        return extensions.includes(file.split('.').pop());
-    }
     
     let imageSizeClassName;
     let fileNameSizeClassName;
@@ -32,24 +36,26 @@ const ImageGallery = ({parentState}) => {
     
     return(
         <div className="image-gallery__container">
-            <a className="image-gallery__link" href="https://www.google.com/search?q=file+default+icon&rlz=1C1GCEA_enFR917FR917&oq=&aqs=chrome.0.69i59i450l8.34450j0j7&sourceid=chrome&ie=UTF-8">
-                <div className="image-gallery__image-container">
-                    <img className={`${imageSizeClassName}`} src={default_icon} alt="test"/>
-                </div>
-                <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
-                    <div className="image-gallery__filename">Fileazdlmqsdizqopmlsdlmzdsq.jpg</div>
-                </div>
-            </a>
             {parentState.files.map((file, index) => {
                 return(
-                    <div key={index}>
+                    <div key={index} className="image-gallery__link">
                         {isImageOrPdf(file.name) ? (
                                 <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                    <img className="image-gallery__image" src={file.url} alt={file.name}/>
+                                    <div className="image-gallery__image-container">
+                                        <img className={`image-gallery__image ${imageSizeClassName}`} src={file.url} alt={file.name}/>
+                                    </div>
+                                    <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
+                                        <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
+                                    </div>
                                 </a>
                             ) : (
-                                <a href={file.url} download={file.url}>
-                                    <img className="image-gallery__default" src={default_icon} alt="default icon"/>
+                                <a href={file.url} download={getFileNameFromFullPath(file.name)}>
+                                    <div className="image-gallery__image-container">
+                                        <img className={`${imageSizeClassName}`} src={default_icon} alt={file.name + "_default-icon"}/>
+                                    </div>
+                                    <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
+                                        <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
+                                    </div>
                                 </a>
                             )
                         } 
