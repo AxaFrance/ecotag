@@ -7,6 +7,10 @@ const isImageOrPdf = (filename) => {
     return extensions.includes(filename.split('.').pop());
 }
 
+const isPdf = (filename) => {
+    return filename.split('.'.pop() === "pdf");
+}
+
 const getFileNameFromFullPath = (filePath) => {
     return filePath.replace(/^.*[\\\/]/, '');
 }
@@ -40,25 +44,28 @@ const ImageGallery = ({parentState}) => {
                 return(
                     <div key={index} className="image-gallery__link">
                         {isImageOrPdf(file.name) ? (
-                                <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                    <div className="image-gallery__image-container">
+                            <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                <div className="image-gallery__image-container">
+                                    {file.name.split('.').pop() === "pdf" ? (
+                                        <embed className={`image-gallery__image ${imageSizeClassName}`} src={file.url}/>
+                                    ) : (
                                         <img className={`image-gallery__image ${imageSizeClassName}`} src={file.url} alt={file.name}/>
-                                    </div>
-                                    <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
-                                        <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
-                                    </div>
-                                </a>
-                            ) : (
-                                <a href={file.url} download={getFileNameFromFullPath(file.name)}>
-                                    <div className="image-gallery__image-container">
-                                        <img className={`${imageSizeClassName}`} src={default_icon} alt={file.name + "_default-icon"}/>
-                                    </div>
-                                    <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
-                                        <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
-                                    </div>
-                                </a>
-                            )
-                        } 
+                                    )}
+                                </div>
+                                <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
+                                    <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
+                                </div>
+                            </a>
+                        ) : (
+                            <a href={file.url} download={getFileNameFromFullPath(file.name)}>
+                                <div className="image-gallery__image-container">
+                                    <img className={`${imageSizeClassName}`} src={default_icon} alt={file.name + "_default-icon"}/>
+                                </div>
+                                <div className={`image-gallery__filename-container ${fileNameSizeClassName}`}>
+                                    <div className="image-gallery__filename">{getFileNameFromFullPath(file.name)}</div>
+                                </div>
+                            </a>
+                        )}
                     </div>
                 )
             })}
