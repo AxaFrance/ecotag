@@ -1,6 +1,5 @@
 ﻿import React, {useEffect, useState, useRef} from "react";
 import {fetchGetData, utf8_to_b64} from "../../FetchHelper";
-import {getDataPaths} from "../Comparison/ImagesLoader";
 import {ToastContainer} from "react-toastify";
 import {Header, Name} from "@axa-fr/react-toolkit-layout-header";
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
@@ -11,6 +10,17 @@ import TitleBar from "../TitleBar/TitleBar";
 import {resilienceStatus} from './withResilience';
 
 const queryClient = new QueryClient();
+
+export const getFilesInfo = async data => {
+    if(data.status === 200) {
+        const hardDriveLocations = await data.json();
+        let returnedList = [];
+        hardDriveLocations.forEach(file => returnedList.push({name: file, url: `api/files/${utf8_to_b64(file)}`}));
+        return returnedList;
+    } else {
+        return {};
+    }
+}
 
 const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
     setState({
@@ -27,10 +37,10 @@ const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
         });
         return;
     }
-    const data = await getDataPaths(response);
+    const filesList = await getFilesInfo(response);
     setState({
         ...state,
-        data,
+        files: filesList,
         status: resilienceStatus.EMPTY,
         firstStatus: resilienceStatus.EMPTY,
     });

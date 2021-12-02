@@ -40,20 +40,20 @@ const ImageGallery = ({parentState}) => {
                     <div className="image-gallery__filename">Fileazdlmqsdizqopmlsdlmzdsq.jpg</div>
                 </div>
             </a>
-            {parentState.files.map(file => {
+            {parentState.files.map((file, index) => {
                 return(
-                    <>
-                        {isImageOrPdf(file) ? (
-                                <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
-                                    <img className="image-gallery__image" src={URL.createObjectURL(file)} alt={file}/>
+                    <div key={index}>
+                        {isImageOrPdf(file.name) ? (
+                                <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                    <img className="image-gallery__image" src={file.url} alt={file.name}/>
                                 </a>
                             ) : (
-                                <a href={URL.createObjectURL(file)} download={file}>
+                                <a href={file.url} download={file.url}>
                                     <img className="image-gallery__default" src={default_icon} alt="default icon"/>
                                 </a>
                             )
                         } 
-                    </>
+                    </div>
                 )
             })}
         </div>
