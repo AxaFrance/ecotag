@@ -23,12 +23,12 @@ export const getFilesInfo = async data => {
     }
 }
 
-const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
+const loadStateAsync = (fetch) => async (setState, state) => {
     setState({
         ...state,
         status: resilienceStatus.LOADING,
     });
-    const uri = encodeURI("/api/gallery/" + filesPath);
+    const uri = encodeURI("/api/gallery/" + state.filesPath);
     const response = await fetchGetData(fetch)(uri);
     if (response.status >= 300) {
         const errorMessage = await response.text();
@@ -86,27 +86,25 @@ const Gallery = ({fetchFunction}) => {
 
     useInterval(() => {
         if(state.status !== resilienceStatus.LOADING && state.filesPath !== ""){
-            loadStateAsync(fetchFunction)(setState, state, state.filesPath);
+            console.log(state);
+            loadStateAsync(fetchFunction)(setState, state);
         }
     }, state.status === resilienceStatus.ERROR ? 15000: 5000);
     
     const onSubmit = async (options) => {
-        const {filesPath, sortName, size} = options;
+        const {filesPath} = options;
+        if(filesPath === ""){
+            setState({...state, ...options, files: [], errorMessage: ""});
+            return;
+        }
         const uri = encodeURI("/api/gallery/" + filesPath);
         const response = await fetchGetData(fetch)(uri);
         if(!response.ok){
-            setState({...state, errorMessage: "New files fetch on options submission failed"});
+            setState({...state, ...options, errorMessage: "New files fetch on options submission failed", files: []});
             return;
         }
         const filesList = await getFilesInfo(response);
-        setState({
-            ...state,
-            filesPath,
-            sortName,
-            size,
-            errorMessage: "",
-            files: filesList,
-        });
+        setState({...state, ...options, errorMessage: "", files: filesList});
     }
     
     return(
