@@ -77,7 +77,7 @@ const Gallery = ({fetchFunction}) => {
     const [state, setState] = useState({
         files: [],
         filesPath: "",
-        sortName: "Alphabetic asc",
+        sortName: "Recent to old",
         size: "128px",
         status: resilienceStatus.EMPTY,
         firstStatus: resilienceStatus.EMPTY,

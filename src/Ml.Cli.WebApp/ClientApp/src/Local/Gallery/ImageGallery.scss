@@ -29,6 +29,9 @@
 
   &__image {
     position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
   }
 }
 
@@ -50,24 +53,24 @@
   }
 }
 
-.image-width {
+.image-container-width {
   &__small {
     width: 64px;
-    max-height: 64px;
+    height: 64px;
   }
 
   &__medium {
     width: 128px;
-    max-height: 128px;
+    height: 128px;
   }
 
   &__normal {
     width: 256px;
-    max-height: 256px;
+    height: 256px;
   }
 
   &__big {
     width: 512px;
-    max-height: 512px;
+    height: 512px;
   }
 }
