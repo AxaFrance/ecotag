@@ -27,7 +27,7 @@ namespace Ml.Cli.WebApp.LocalControllers
             var files = FilesHandler.GetFilesFromDirectoryPath(directoryPath, _basePath, _fileLoader);
             if (files == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid path");
             }
 
             return Ok(files);

@@ -8,6 +8,7 @@ import ImageGallery from "./ImageGallery";
 import GalleryOptions from "./GalleryOptions";
 import TitleBar from "../TitleBar/TitleBar";
 import {resilienceStatus} from './withResilience';
+import './Gallery.scss';
 
 const queryClient = new QueryClient();
 
@@ -30,10 +31,12 @@ const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
     const uri = encodeURI("/api/gallery/" + filesPath);
     const response = await fetchGetData(fetch)(uri);
     if (response.status >= 300) {
+        const errorMessage = await response.text();
         setState({
             ...state,
+            errorMessage,
             status: resilienceStatus.ERROR,
-            firstStatus: resilienceStatus.EMPTY,
+            firstStatus: resilienceStatus.EMPTY
         });
         return;
     }
@@ -77,7 +80,8 @@ const Gallery = ({fetchFunction}) => {
         sortName: "Alphabetic asc",
         size: "128px",
         status: resilienceStatus.EMPTY,
-        firstStatus: resilienceStatus.EMPTY
+        firstStatus: resilienceStatus.EMPTY,
+        errorMessage: ""
     });
 
     useInterval(() => {
@@ -101,6 +105,12 @@ const Gallery = ({fetchFunction}) => {
                 state={state}
                 setState={setState}
             />
+            {state.filesPath === "" &&
+                <h3 className="gallery__info-message">Please provide a directory path</h3>
+            }
+            {state.errorMessage &&
+                <h3 className="gallery__error-message">{state.errorMessage}</h3>
+            }
             <ImageGallery
                 parentState={state}
             />

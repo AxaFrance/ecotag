@@ -31,7 +31,8 @@ const GalleryOptions = ({state, setState}) => {
             ...state,
             filesPath: filterState.filesPath,
             sortName: filterState.sortName,
-            size: filterState.size
+            size: filterState.size,
+            errorMessage: ""
         });
     }
     
