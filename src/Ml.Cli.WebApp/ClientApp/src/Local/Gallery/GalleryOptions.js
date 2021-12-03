@@ -18,23 +18,13 @@ const sizeOptionsSelect = [
     {value: "512px", label: '512px'}
 ];
 
-const GalleryOptions = ({state, setState}) => {
+const GalleryOptions = ({onSubmit}) => {
     
     const [filterState, setFilterState] = useState({
         filesPath: "",
         sortName: "Recent to old",
         size: "128px"
     });
-    
-    const applyOptions = () => {
-        setState({
-            ...state,
-            filesPath: filterState.filesPath,
-            sortName: filterState.sortName,
-            size: filterState.size,
-            errorMessage: ""
-        });
-    }
     
     return(
         <div className="gallery__header">
@@ -73,7 +63,7 @@ const GalleryOptions = ({state, setState}) => {
                 />
             </div>
             <div className="gallery__options-container-right">
-                <Button onClick={() => applyOptions()}>Apply filters</Button>
+                <Button onClick={() => onSubmit(filterState)}>Apply filters</Button>
             </div>
         </div>
     )

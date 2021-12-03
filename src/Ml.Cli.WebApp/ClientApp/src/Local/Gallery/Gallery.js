@@ -90,6 +90,25 @@ const Gallery = ({fetchFunction}) => {
         }
     }, state.status === resilienceStatus.ERROR ? 15000: 5000);
     
+    const onSubmit = async (options) => {
+        const {filesPath, sortName, size} = options;
+        const uri = encodeURI("/api/gallery/" + filesPath);
+        const response = await fetchGetData(fetch)(uri);
+        if(!response.ok){
+            setState({...state, errorMessage: "New files fetch on options submission failed"});
+            return;
+        }
+        const filesList = await getFilesInfo(response);
+        setState({
+            ...state,
+            filesPath,
+            sortName,
+            size,
+            errorMessage: "",
+            files: filesList,
+        });
+    }
+    
     return(
         <QueryClientProvider client={queryClient}>
             <Header>
@@ -102,8 +121,7 @@ const Gallery = ({fetchFunction}) => {
             </Header>
             <TitleBar title="Image Gallery" classModifier="af-title-bar--no-space"/>
             <GalleryOptions
-                state={state}
-                setState={setState}
+                onSubmit={onSubmit}
             />
             {state.filesPath === "" &&
                 <h3 className="gallery__info-message">Please provide a directory path</h3>
