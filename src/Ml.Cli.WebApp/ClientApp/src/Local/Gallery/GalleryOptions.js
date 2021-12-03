@@ -18,7 +18,7 @@ const sizeOptionsSelect = [
     {value: "512px", label: '512px'}
 ];
 
-const GalleryOptions = ({state, setState}) => {
+const GalleryOptions = ({state, setState, onSubmit}) => {
     
     const [filterState, setFilterState] = useState({
         filesPath: "",
@@ -29,10 +29,10 @@ const GalleryOptions = ({state, setState}) => {
     const applyOptions = () => {
         setState({
             ...state,
-            filesPath: filterState.filesPath,
             sortName: filterState.sortName,
             size: filterState.size
         });
+        onSubmit(filterState.filesPath);
     }
     
     return(

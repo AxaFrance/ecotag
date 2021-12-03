@@ -40,6 +40,7 @@ const loadStateAsync = (fetch) => async (setState, state, filesPath) => {
     const filesList = await getFilesInfo(response);
     setState({
         ...state,
+        filesPath,
         files: filesList,
         status: resilienceStatus.EMPTY,
         firstStatus: resilienceStatus.EMPTY,
@@ -77,14 +78,18 @@ const Gallery = ({fetchFunction}) => {
         sortName: "Recent to old",
         size: "128px",
         status: resilienceStatus.EMPTY,
-        firstStatus: resilienceStatus.EMPTY,
+        firstStatus: resilienceStatus.EMPTY
     });
 
     useInterval(() => {
-        if(state.status !== resilienceStatus.LOADING && state.filesPath !== ""){
-            loadStateAsync(fetchFunction)(setState, state, state.filesPath);
-        }
+        getFiles(state.filesPath);
     }, state.status === resilienceStatus.ERROR ? 15000: 5000);
+    
+    const getFiles = (filesPath) => {
+        if(state.status !== resilienceStatus.LOADING && filesPath !== ""){
+            loadStateAsync(fetchFunction)(setState, state, filesPath);
+        }
+    }
     
     return(
         <QueryClientProvider client={queryClient}>
@@ -100,6 +105,7 @@ const Gallery = ({fetchFunction}) => {
             <GalleryOptions
                 state={state}
                 setState={setState}
+                onSubmit={getFiles}
             />
             <ImageGallery
                 parentState={state}
