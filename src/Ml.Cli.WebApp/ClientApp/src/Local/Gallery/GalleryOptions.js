@@ -7,8 +7,8 @@ import './GalleryOptions.scss';
 const optionsSelect = [
     {value: 'Recent to old', label: 'Recent to old'},
     {value: 'Old to recent', label: 'Old to recent'},
-    {value: 'Alphabetic desc', label: 'Alphabetic desc'},
-    {value: 'Alphabetic asc', label: 'Alphabetic asc'}
+    {value: 'Alphabetic asc', label: 'Alphabetic asc'},
+    {value: 'Alphabetic desc', label: 'Alphabetic desc'}
 ];
 
 const sizeOptionsSelect = [

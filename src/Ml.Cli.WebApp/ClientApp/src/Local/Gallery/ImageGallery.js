@@ -4,7 +4,7 @@ import pdf_icon from '@axa-fr/react-toolkit-core/dist/assets/icons/file-pdf.svg'
 import './ImageGallery.scss';
 
 const isImageOrPdf = (filename) => {
-    const extensions = ["pdf", "png", "jpg", "jpeg"];
+    const extensions = ["pdf", "png", "jpg", "jpeg", "gif", "tiff"];
     return extensions.includes(filename.split('.').pop());
 }
 
@@ -35,9 +35,23 @@ const ImageGallery = ({parentState}) => {
             break;
     }
     
+    let sortedFiles;
+    switch (parentState.sortName) {
+        case "Recent to old":
+            break;
+        case "Old to recent":
+            break;
+        case "Alphabetic desc":
+            sortedFiles = parentState.files.sort((a, b) => (a.name > b.name) ? -1 : ((b.name > a.name) ? 1 : 0));
+            break;
+        case "Alphabetic asc":
+            sortedFiles = parentState.files.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            break;
+    }
+    
     return(
         <div className="image-gallery__container">
-            {parentState.files.map((file, index) => {
+            {sortedFiles.map((file, index) => {
                 return(
                     <div key={index} className="image-gallery__link">
                         {isImageOrPdf(file.name) ? (
