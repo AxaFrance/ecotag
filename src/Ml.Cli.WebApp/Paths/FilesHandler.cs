@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ml.Cli.FileLoader;
@@ -8,6 +9,18 @@ namespace Ml.Cli.WebApp.Paths
 {
     public static class FilesHandler
     {
+        public class FileInfo
+        {
+            public string File { get; set; }
+            public DateTime Date { get; set; }
+
+            public FileInfo(string file, DateTime date)
+            {
+                File = file;
+                Date = date;
+            }
+        }
+        
         public static IEnumerable<string> GetFilesFromPaths(string paths, BasePath basePath, IFileLoader fileLoader)
         {
             var jsonExtension = ".json";
@@ -23,7 +36,7 @@ namespace Ml.Cli.WebApp.Paths
                 .Where(file => Path.GetExtension(file) == jsonExtension);
         }
 
-        public static IEnumerable<string> GetFilesFromDirectoryPath(string directoryPath, BasePath basePath,
+        public static IEnumerable<FileInfo> GetFilesFromDirectoryPath(string directoryPath, BasePath basePath,
             IFileLoader fileLoader)
         {
             var fullyQualifiedPath =
@@ -34,8 +47,15 @@ namespace Ml.Cli.WebApp.Paths
             {
                 return null;
             }
+            
+            var files = fileLoader.EnumerateFiles(fullyQualifiedPath);
+            var filesInfoList = new List<FileInfo>();
+            foreach (var file in files)
+            {
+                filesInfoList.Add(new FileInfo(file, File.GetCreationTime(file)));
+            }
 
-            return fileLoader.EnumerateFiles(fullyQualifiedPath);
+            return filesInfoList;
         }
     }
 }

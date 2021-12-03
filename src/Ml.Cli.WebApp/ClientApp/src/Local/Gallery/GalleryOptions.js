@@ -1,5 +1,5 @@
 ﻿import React, {useState} from "react";
-import {Textarea} from "@axa-fr/react-toolkit-form-input-textarea";
+import {Text} from "@axa-fr/react-toolkit-form-input-text";
 import {SelectBase} from "@axa-fr/react-toolkit-form-input-select";
 import Button from '@axa-fr/react-toolkit-button';
 import './GalleryOptions.scss';
@@ -40,7 +40,7 @@ const GalleryOptions = ({state, setState}) => {
         <div className="gallery__header">
             <div className="gallery__options-container-left">
                 <p className="tabs__title">Directory name:</p>
-                <Textarea
+                <Text
                     id="text_area_stringsMatcherModifier"
                     name="TextAreaStringsMatcherModifier"
                     value={filterState.filesPath}

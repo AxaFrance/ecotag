@@ -14,9 +14,9 @@ const queryClient = new QueryClient();
 
 export const getFilesInfo = async data => {
     if(data.status === 200) {
-        const hardDriveLocations = await data.json();
+        const filesInfoList = await data.json();
         let returnedList = [];
-        hardDriveLocations.forEach(file => returnedList.push({name: file, url: `api/files/${utf8_to_b64(file)}`}));
+        filesInfoList.forEach(fileInfo => returnedList.push({name: fileInfo.file, url: `api/files/${utf8_to_b64(fileInfo.file)}`, date: fileInfo.date}));
         return returnedList;
     } else {
         return {};
