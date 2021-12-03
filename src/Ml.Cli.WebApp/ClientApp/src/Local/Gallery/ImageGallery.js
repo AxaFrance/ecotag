@@ -1,14 +1,11 @@
 ﻿import React from "react";
 import default_icon from '@axa-fr/react-toolkit-core/dist/assets/icons/file.svg';
+import pdf_icon from '@axa-fr/react-toolkit-core/dist/assets/icons/file-pdf.svg';
 import './ImageGallery.scss';
 
 const isImageOrPdf = (filename) => {
     const extensions = ["pdf", "png", "jpg", "jpeg"];
     return extensions.includes(filename.split('.').pop());
-}
-
-const isPdf = (filename) => {
-    return filename.split('.'.pop() === "pdf");
 }
 
 const getFileNameFromFullPath = (filePath) => {
@@ -47,7 +44,7 @@ const ImageGallery = ({parentState}) => {
                             <a href={file.url} target="_blank" rel="noopener noreferrer">
                                 <div className="image-gallery__image-container">
                                     {file.name.split('.').pop() === "pdf" ? (
-                                        <embed className={`image-gallery__image ${imageSizeClassName}`} src={file.url}/>
+                                        <img className={`image-gallery__image ${imageSizeClassName}`} src={pdf_icon} alt={file.name}/>
                                     ) : (
                                         <img className={`image-gallery__image ${imageSizeClassName}`} src={file.url} alt={file.name}/>
                                     )}
