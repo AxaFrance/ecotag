@@ -78,6 +78,16 @@ exports[`Check page shifting Render home page and go to compare page 1`] = `
           Annotation
         </div>
       </a>
+      <a
+        class="home__link"
+        href="/gallery"
+      >
+        <div
+          class="home__link-container home__link-container--gallery"
+        >
+          Gallery
+        </div>
+      </a>
     </div>
   </div>
 </DocumentFragment>
@@ -123,7 +133,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
     </div>
   </div>
   <div
-    class="af-title-bar af-title-bar--backhome"
+    class="af-title-bar af-title-bar--backhome "
   >
     <div
       class="container-fluid container af-title-bar__wrapper"
