@@ -1,7 +1,7 @@
 ﻿import Tesseract from "tesseract.js";
 import cuid from "cuid";
 import React, {useEffect, useState} from "react";
-import TagOverTextContainer from "./TagOverTextContainer";
+import TagOverTextContainer from "../TagOverText/TagOverText.container";
 import './TagOverTextOCR.scss';
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 
@@ -68,7 +68,9 @@ const TagOverTextOCR = ({url}) => {
                     {state.result.map((boundingBox, index) => {
                             return (<p className="tag-over-text-ocr__result" key={index}>Bounding box {index} : {JSON.stringify(boundingBox)}</p>);
                     })}
-                    <TagOverTextContainer  url={url} expectedOutput={state.boundingBoxes.boundingBoxes} onSubmit={(e) => setState({...state, result: e.labels.boundingBoxes})}/>
+                    <div className="tag-over-text-ocr__container">
+                        <TagOverTextContainer  url={url} expectedOutput={state.boundingBoxes.boundingBoxes} onSubmit={(e) => setState({...state, result: e.labels.boundingBoxes})}/>
+                    </div>
                 </>
                 ): (
                     <></>
