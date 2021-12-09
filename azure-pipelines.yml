@@ -93,7 +93,7 @@ steps:
     enabled: true
 
   - task: DotNetCoreCLI@2
-    displayName: Publish Unbuntu ml-cli
+    displayName: Publish Ubuntu ml-cli
     #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
@@ -103,7 +103,7 @@ steps:
       workingDirectory: "src/Ml.Cli"
 
   - task: DotNetCoreCLI@2
-    displayName: Publish Unbuntu ml-cli-webapp
+    displayName: Publish Ubuntu ml-cli-webapp
     #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     inputs:
       command: publish
