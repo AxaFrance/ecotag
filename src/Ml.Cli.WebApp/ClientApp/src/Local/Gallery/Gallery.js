@@ -71,9 +71,6 @@ function useInterval(callback, delay) {
 
 const Gallery = ({fetchFunction}) => {
     
-    //https://axafrance.visualstudio.com/Kubernetes/_git/dailyclean-api?path=%2Fweb%2Fsrc%2FApiStateProvider.js&version=GBmain
-    //En bas: solution au problème de sauvegarde du state
-    
     const [state, setState] = useState({
         files: [],
         filesPath: "",
@@ -86,7 +83,6 @@ const Gallery = ({fetchFunction}) => {
 
     useInterval(() => {
         if(state.status !== resilienceStatus.LOADING && state.filesPath !== ""){
-            console.log(state);
             loadStateAsync(fetchFunction)(setState, state);
         }
     }, state.status === resilienceStatus.ERROR ? 15000: 5000);
@@ -98,7 +94,7 @@ const Gallery = ({fetchFunction}) => {
             return;
         }
         const uri = encodeURI("/api/gallery/" + filesPath);
-        const response = await fetchGetData(fetch)(uri);
+        const response = await fetchGetData(fetchFunction)(uri);
         if(!response.ok){
             setState({...state, ...options, errorMessage: "New files fetch on options submission failed", files: []});
             return;
