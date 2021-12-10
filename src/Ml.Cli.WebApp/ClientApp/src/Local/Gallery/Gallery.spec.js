@@ -37,7 +37,7 @@ describe('Check images display', () => {
         await waitFor(() => expect(container.querySelector('.image-gallery__link')).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
         
-        const sizeSelect = document.getElementById("select_type_size");
+        const sizeSelect = container.querySelector("#select_type_size");
         fireEvent.change(sizeSelect, {target: {value: "256px"}});
         
         fireEvent.click(submitButton);
