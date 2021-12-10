@@ -35,19 +35,31 @@ const ImageGallery = ({parentState}) => {
             break;
     }
     
-    let sortedFiles;
+    let sortedFiles, tempSortDate;
     switch (parentState.sortName) {
         case "Recent to old":
-            sortedFiles = parentState.files.sort((a, b) => (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0));
+            sortedFiles = parentState.files.sort((a, b) => {
+                tempSortDate = (b.date > a.date) ? 1 : 0;
+                return (a.date > b.date) ? -1 : tempSortDate;
+            });
             break;
         case "Old to recent":
-            sortedFiles = parentState.files.sort((a, b) => (a.date> b.date) ? 1 : ((b.date > a.date) ? -1 : 0));
+            sortedFiles = parentState.files.sort((a, b) => {
+                tempSortDate = (b.date > a.date) ? -1 : 0;
+                return (a.date > b.date) ? 1 : tempSortDate;
+            });
             break;
         case "Alphabetic desc":
-            sortedFiles = parentState.files.sort((a, b) => (a.name > b.name) ? -1 : ((b.name > a.name) ? 1 : 0));
+            sortedFiles = parentState.files.sort((a, b) => {
+                tempSortDate = (b.name > a.name) ? 1 : 0;
+                return (a.name > b.name) ? -1 : tempSortDate;
+            });
             break;
         case "Alphabetic asc":
-            sortedFiles = parentState.files.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            sortedFiles = parentState.files.sort((a, b) => {
+                tempSortDate = (b.name > a.name) ? -1 : 0;
+                return (a.name > b.name) ? 1 : tempSortDate;
+            });
             break;
     }
     

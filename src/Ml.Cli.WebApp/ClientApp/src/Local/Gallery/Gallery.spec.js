@@ -18,8 +18,12 @@ const mockedFetchFunction = () => {
     };
 };
 
+const mockedFetchFunctionKO = () => {
+    return {ok: false, status: 400, json: () => Promise.resolve([])};
+}
+
 describe('Check images display', () => {
-    test('Should render Gallery page correctly', async () => {
+    test('Should render Gallery page correctly and sort dates', async () => {
         const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={mockedFetchFunction} /></Router>);
         
         expect(asFragment()).toMatchSnapshot();
@@ -32,5 +36,29 @@ describe('Check images display', () => {
         
         await waitFor(() => expect(container.querySelector('.image-gallery__link')).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
+        
+        const sizeSelect = document.getElementById("select_type_size");
+        fireEvent.change(sizeSelect, {target: {value: "256px"}});
+        
+        fireEvent.click(submitButton);
+        
+        await waitFor(() => expect(container.querySelector('.image-container-width__normal')).not.toBeNull());
+        
+        expect(asFragment()).toMatchSnapshot();
     });
+    
+    test('Should handle error on bad request', async () => {
+        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={mockedFetchFunctionKO} /></Router>);
+
+        expect(asFragment()).toMatchSnapshot();
+
+        const fileTextArea = container.querySelector(".af-form__input-text");
+        fireEvent.change(fileTextArea, {target: {value: "C:\\someFolder"}});
+
+        const submitButton = container.querySelector(".btn.af-btn");
+        fireEvent.click(submitButton);
+        
+        await waitFor(() => expect(container.querySelector('.gallery__error-message')).not.toBeNull());
+        expect(asFragment()).toMatchSnapshot();
+    })
 });

@@ -43,8 +43,8 @@ const GalleryOptions = ({onSubmit}) => {
                 />
                 <p className="tabs__title">Sort by:</p>
                 <SelectBase
-                    id="select_type"
-                    name="SelectType"
+                    id="select_type_sort"
+                    name="SelectTypeSort"
                     value={filterState.sortName}
                     options={optionsSelect}
                     onChange={e => {
@@ -53,8 +53,8 @@ const GalleryOptions = ({onSubmit}) => {
                 />
                 <p className="tabs__title">Size:</p>
                 <SelectBase
-                    id="select_type"
-                    name="SelectType"
+                    id="select_type_size"
+                    name="SelectTypeSize"
                     value={filterState.size}
                     options={sizeOptionsSelect}
                     onChange={e => {
