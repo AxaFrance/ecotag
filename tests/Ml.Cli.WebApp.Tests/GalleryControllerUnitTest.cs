@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.Tests;
 public class GalleryControllerUnitTest
 {
     [Fact]
-    public async Task ShouldGetFilesFromDirectory()
+    public void ShouldGetFilesFromDirectory()
     {
         var basePath = new Mock<BasePath>("");
         basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
