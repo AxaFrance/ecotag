@@ -3,6 +3,8 @@ import {fireEvent, render, waitFor} from '@testing-library/react';
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 
+jest.setTimeout(10000);
+
 const returnedFiles =  [
     {date: "2021-07-02T17:07:15.0575353+02:00", file: "C:\\someFolder\\compare-licenses-file-1.json"},
     {date: "2021-08-02T17:07:15.0575353+02:00", file: "C:\\someFolder\\compare-licenses-file-2.json"},
@@ -10,7 +12,10 @@ const returnedFiles =  [
     {date: "2021-10-02T17:07:15.0575353+02:00", file: "C:\\someFolder\\somePdf.pdf"}
 ];
 
+let nbFetchCalls = 0;
+
 const mockedFetchFunction = () => {
+    nbFetchCalls++;
     return {
         ok: true,
         status: 200,
@@ -44,6 +49,9 @@ describe('Check images display', () => {
         
         await waitFor(() => expect(container.querySelector('.image-container-width__normal')).not.toBeNull());
         
+        await new Promise((r) => setTimeout(r, 6000));
+        await waitFor(() => expect(nbFetchCalls).toBeGreaterThanOrEqual(3));
+
         expect(asFragment()).toMatchSnapshot();
     });
     
