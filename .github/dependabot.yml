@@ -9,6 +9,7 @@ updates:
       interval: 'weekly'
     commit-message:
       prefix: 'build(npm): '
+    versioning-strategy: increase
   - package-ecosystem: 'nuget'
     # Look for `package.json` and `lock` files in the `root` directory
     directory: '/src'
@@ -17,3 +18,4 @@ updates:
       interval: 'weekly'
     commit-message:
       prefix: 'build(nuget): '
+    versioning-strategy: increase
