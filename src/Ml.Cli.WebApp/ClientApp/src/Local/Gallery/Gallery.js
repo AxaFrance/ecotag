@@ -7,8 +7,15 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import ImageGallery from "./ImageGallery";
 import GalleryOptions from "./GalleryOptions";
 import TitleBar from "../TitleBar/TitleBar";
-import {resilienceStatus} from './withResilience';
 import './Gallery.scss';
+
+const resilienceStatus = {
+    EMPTY: 'empty',
+    LOADING: 'loading',
+    POST: 'post',
+    SUCCESS: 'success',
+    ERROR: 'error',
+};
 
 const queryClient = new QueryClient();
 
