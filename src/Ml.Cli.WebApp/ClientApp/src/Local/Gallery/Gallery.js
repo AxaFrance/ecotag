@@ -76,6 +76,31 @@ function useInterval(callback, delay) {
     }, [delay]);
 }
 
+export const sortItems = (sortName, files) => {
+    let sortedFiles, tempSortDate;
+    switch (sortName) {
+        case "Recent to old":
+            sortedFiles = [...files].sort((a, b) => {
+                tempSortDate = (b.date > a.date) ? 1 : 0;
+                return (a.date > b.date) ? -1 : tempSortDate;
+            });
+            break;
+        case "Old to recent":
+            sortedFiles = [...files].sort((a, b) => {
+                tempSortDate = (b.date > a.date) ? -1 : 0;
+                return (a.date > b.date) ? 1 : tempSortDate;
+            });
+            break;
+        case "Alphabetic desc":
+            sortedFiles = [...files.sort((a, b) => a.name.localeCompare(b.name))].reverse();
+            break;
+        case "Alphabetic asc":
+            sortedFiles = [...files.sort((a, b) => a.name.localeCompare(b.name))];
+            break;
+    }
+    return sortedFiles;
+}
+
 const Gallery = ({fetchFunction}) => {
     
     const [state, setState] = useState({
@@ -109,6 +134,8 @@ const Gallery = ({fetchFunction}) => {
         const filesList = await getFilesInfo(response);
         setState({...state, ...options, errorMessage: "", files: filesList});
     }
+
+    const sortedFiles = sortItems(state.sortName, state.files);
     
     return(
         <QueryClientProvider client={queryClient}>
@@ -131,7 +158,8 @@ const Gallery = ({fetchFunction}) => {
                 <h3 className="gallery__error-message">{state.errorMessage}</h3>
             }
             <ImageGallery
-                parentState={state}
+                size={state.size}
+                files={sortedFiles}
             />
             <ToastContainer/>
         </QueryClientProvider>

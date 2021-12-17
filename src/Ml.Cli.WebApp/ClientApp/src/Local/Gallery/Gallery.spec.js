@@ -1,4 +1,4 @@
-﻿import Gallery from "./Gallery";
+﻿import Gallery, {sortItems} from "./Gallery";
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
@@ -11,6 +11,13 @@ const returnedFiles =  [
     {date: "2021-09-02T17:07:15.0575353+02:00", file: "C:\\someFolder\\someImage.png"},
     {date: "2021-10-02T17:07:15.0575353+02:00", file: "C:\\someFolder\\somePdf.pdf"}
 ];
+
+const sortFiles = [
+    {date: "2021-07-02T17:07:15.0575353+02:00", name: "C:\\someFolder\\compare-licenses-file-1.json"},
+    {date: "2021-08-02T17:07:15.0575353+02:00", name: "C:\\someFolder\\compare-licenses-file-2.json"},
+    {date: "2021-09-02T17:07:15.0575353+02:00", name: "C:\\someFolder\\someImage.png"},
+    {date: "2021-10-02T17:07:15.0575353+02:00", name: "C:\\someFolder\\somePdf.pdf"}
+]
 
 let nbFetchCalls = 0;
 
@@ -70,5 +77,17 @@ describe('Check images display', () => {
         
         await waitFor(() => expect(container.querySelector('.gallery__error-message')).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
-    })
+    });
+});
+
+describe.each([
+    {sortName: "Recent to old", files: sortFiles, expected: [sortFiles[3], sortFiles[2], sortFiles[1], sortFiles[0]]},
+    {sortName: "Old to recent", files: sortFiles, expected: sortFiles},
+    {sortName: "Alphabetic asc", files: sortFiles, expected: sortFiles},
+    {sortName: "Alphabetic desc", files: sortFiles, expected: [sortFiles[3], sortFiles[2], sortFiles[1], sortFiles[0]]}
+])("Check files sorting order", ({sortName, files, expected}) =>  {
+    test(`Sort by order: ${sortName}`, () => {
+        const result = sortItems(sortName, files);
+        expect(result).toEqual(expected);
+    });
 });

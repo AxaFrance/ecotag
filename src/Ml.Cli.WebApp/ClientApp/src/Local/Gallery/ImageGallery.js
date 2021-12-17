@@ -12,11 +12,11 @@ const getFileNameFromFullPath = (filePath) => {
     return filePath.replace(/^.*[\\\/]/, '');
 }
 
-const ImageGallery = ({parentState}) => {
+const ImageGallery = ({size, files}) => {
     
     let imageContainerSizeClassName;
     let fileNameSizeClassName;
-    switch(parentState.size){
+    switch(size){
         case "64px":
             imageContainerSizeClassName = "image-container-width__small";
             fileNameSizeClassName = "filename-width__small";
@@ -35,37 +35,9 @@ const ImageGallery = ({parentState}) => {
             break;
     }
     
-    let sortedFiles, tempSortDate;
-    switch (parentState.sortName) {
-        case "Recent to old":
-            sortedFiles = parentState.files.sort((a, b) => {
-                tempSortDate = (b.date > a.date) ? 1 : 0;
-                return (a.date > b.date) ? -1 : tempSortDate;
-            });
-            break;
-        case "Old to recent":
-            sortedFiles = parentState.files.sort((a, b) => {
-                tempSortDate = (b.date > a.date) ? -1 : 0;
-                return (a.date > b.date) ? 1 : tempSortDate;
-            });
-            break;
-        case "Alphabetic desc":
-            sortedFiles = parentState.files.sort((a, b) => {
-                tempSortDate = (b.name > a.name) ? 1 : 0;
-                return (a.name > b.name) ? -1 : tempSortDate;
-            });
-            break;
-        case "Alphabetic asc":
-            sortedFiles = parentState.files.sort((a, b) => {
-                tempSortDate = (b.name > a.name) ? -1 : 0;
-                return (a.name > b.name) ? 1 : tempSortDate;
-            });
-            break;
-    }
-    
     return(
         <div className="image-gallery__container">
-            {sortedFiles.map((file, index) => {
+            {files.map((file, index) => {
                 return(
                     <div key={index} className="image-gallery__link">
                         {isImageOrPdf(file.name) ? (
