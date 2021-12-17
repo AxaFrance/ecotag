@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check images display Should handle error on bad request 1`] = `
+exports[`Check images display Should render Gallery page correctly, resize images and sort by names 1`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -182,371 +182,7 @@ exports[`Check images display Should handle error on bad request 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Check images display Should handle error on bad request 2`] = `
-<DocumentFragment>
-  <div
-    class="af-header"
-  >
-    <div
-      class="container af-header__wrapper"
-    >
-      <header
-        class="af-header__content"
-        role="banner"
-      >
-        <div
-          class="af-header__name"
-        >
-          <a
-            class="af-logo"
-            href="/"
-          >
-            <img
-              alt="AXA Logo"
-              class="af-logo__brand"
-              src="logo-axa.svg"
-            />
-          </a>
-          <h2
-            class="af-header__title"
-          >
-            ML-CLI
-            <span
-              class="af-header__subtitle"
-            >
-              Made by AXA
-            </span>
-          </h2>
-        </div>
-      </header>
-    </div>
-  </div>
-  <div
-    class="af-title-bar af-title-bar--backhome af-title-bar--no-space"
-  >
-    <div
-      class="container-fluid container af-title-bar__wrapper"
-    >
-      <a
-        class="btn af-btn--circle"
-        href="/"
-        title="Home page"
-      >
-        <i
-          class="glyphicon glyphicon-home"
-        />
-      </a>
-      <h1
-        class="af-title-bar__title"
-      >
-        Image Gallery
-      </h1>
-    </div>
-  </div>
-  <div
-    class="gallery__header"
-  >
-    <div
-      class="gallery__options-container-left"
-    >
-      <p
-        class="tabs__title"
-      >
-        Directory name:
-      </p>
-      <input
-        class="af-form__input-text"
-        id="text_area_stringsMatcherModifier"
-        name="TextAreaStringsMatcherModifier"
-        type="text"
-        value="C:\\\\someFolder"
-      />
-      <p
-        class="tabs__title"
-      >
-        Sort by:
-      </p>
-      <div
-        class="af-form__select-container"
-      >
-        <select
-          class="af-form__input-select"
-          id="select_type_sort"
-          name="SelectTypeSort"
-        >
-          <option
-            value="Recent to old"
-          >
-            Recent to old
-          </option>
-          <option
-            value="Old to recent"
-          >
-            Old to recent
-          </option>
-          <option
-            value="Alphabetic asc"
-          >
-            Alphabetic asc
-          </option>
-          <option
-            value="Alphabetic desc"
-          >
-            Alphabetic desc
-          </option>
-        </select>
-        <span
-          aria-controls="select_type_sort"
-          class="glyphicon glyphicon-menu-down"
-        />
-      </div>
-      <p
-        class="tabs__title"
-      >
-        Size:
-      </p>
-      <div
-        class="af-form__select-container"
-      >
-        <select
-          class="af-form__input-select"
-          id="select_type_size"
-          name="SelectTypeSize"
-        >
-          <option
-            value="64px"
-          >
-            64px
-          </option>
-          <option
-            value="128px"
-          >
-            128px
-          </option>
-          <option
-            value="256px"
-          >
-            256px
-          </option>
-          <option
-            value="512px"
-          >
-            512px
-          </option>
-        </select>
-        <span
-          aria-controls="select_type_size"
-          class="glyphicon glyphicon-menu-down"
-        />
-      </div>
-    </div>
-    <div
-      class="gallery__options-container-right"
-    >
-      <button
-        class="btn af-btn"
-      >
-        Apply filters
-      </button>
-    </div>
-  </div>
-  <h3
-    class="gallery__error-message"
-  >
-    New files fetch on options submission failed
-  </h3>
-  <div
-    class="image-gallery__container"
-  />
-  <div
-    class="Toastify"
-  />
-</DocumentFragment>
-`;
-
-exports[`Check images display Should render Gallery page correctly and sort dates 1`] = `
-<DocumentFragment>
-  <div
-    class="af-header"
-  >
-    <div
-      class="container af-header__wrapper"
-    >
-      <header
-        class="af-header__content"
-        role="banner"
-      >
-        <div
-          class="af-header__name"
-        >
-          <a
-            class="af-logo"
-            href="/"
-          >
-            <img
-              alt="AXA Logo"
-              class="af-logo__brand"
-              src="logo-axa.svg"
-            />
-          </a>
-          <h2
-            class="af-header__title"
-          >
-            ML-CLI
-            <span
-              class="af-header__subtitle"
-            >
-              Made by AXA
-            </span>
-          </h2>
-        </div>
-      </header>
-    </div>
-  </div>
-  <div
-    class="af-title-bar af-title-bar--backhome af-title-bar--no-space"
-  >
-    <div
-      class="container-fluid container af-title-bar__wrapper"
-    >
-      <a
-        class="btn af-btn--circle"
-        href="/"
-        title="Home page"
-      >
-        <i
-          class="glyphicon glyphicon-home"
-        />
-      </a>
-      <h1
-        class="af-title-bar__title"
-      >
-        Image Gallery
-      </h1>
-    </div>
-  </div>
-  <div
-    class="gallery__header"
-  >
-    <div
-      class="gallery__options-container-left"
-    >
-      <p
-        class="tabs__title"
-      >
-        Directory name:
-      </p>
-      <input
-        class="af-form__input-text"
-        id="text_area_stringsMatcherModifier"
-        name="TextAreaStringsMatcherModifier"
-        type="text"
-        value=""
-      />
-      <p
-        class="tabs__title"
-      >
-        Sort by:
-      </p>
-      <div
-        class="af-form__select-container"
-      >
-        <select
-          class="af-form__input-select"
-          id="select_type_sort"
-          name="SelectTypeSort"
-        >
-          <option
-            value="Recent to old"
-          >
-            Recent to old
-          </option>
-          <option
-            value="Old to recent"
-          >
-            Old to recent
-          </option>
-          <option
-            value="Alphabetic asc"
-          >
-            Alphabetic asc
-          </option>
-          <option
-            value="Alphabetic desc"
-          >
-            Alphabetic desc
-          </option>
-        </select>
-        <span
-          aria-controls="select_type_sort"
-          class="glyphicon glyphicon-menu-down"
-        />
-      </div>
-      <p
-        class="tabs__title"
-      >
-        Size:
-      </p>
-      <div
-        class="af-form__select-container"
-      >
-        <select
-          class="af-form__input-select"
-          id="select_type_size"
-          name="SelectTypeSize"
-        >
-          <option
-            value="64px"
-          >
-            64px
-          </option>
-          <option
-            value="128px"
-          >
-            128px
-          </option>
-          <option
-            value="256px"
-          >
-            256px
-          </option>
-          <option
-            value="512px"
-          >
-            512px
-          </option>
-        </select>
-        <span
-          aria-controls="select_type_size"
-          class="glyphicon glyphicon-menu-down"
-        />
-      </div>
-    </div>
-    <div
-      class="gallery__options-container-right"
-    >
-      <button
-        class="btn af-btn"
-      >
-        Apply filters
-      </button>
-    </div>
-  </div>
-  <h3
-    class="gallery__info-message"
-  >
-    Please provide a directory path
-  </h3>
-  <div
-    class="image-gallery__container"
-  />
-  <div
-    class="Toastify"
-  />
-</DocumentFragment>
-`;
-
-exports[`Check images display Should render Gallery page correctly and sort dates 2`] = `
+exports[`Check images display Should render Gallery page correctly, resize images and sort by names 2`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -834,7 +470,7 @@ exports[`Check images display Should render Gallery page correctly and sort date
 </DocumentFragment>
 `;
 
-exports[`Check images display Should render Gallery page correctly and sort dates 3`] = `
+exports[`Check images display Should render Gallery page correctly, resize images and sort by names 3`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -1009,17 +645,16 @@ exports[`Check images display Should render Gallery page correctly and sort date
       class="image-gallery__link"
     >
       <a
-        href="api/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
-        rel="noopener noreferrer"
-        target="_blank"
+        download="compare-licenses-file-1.json"
+        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
       >
         <div
           class="image-gallery__image-container image-container-width__normal"
         >
           <img
-            alt="C:\\\\someFolder\\\\somePdf.pdf"
+            alt="C:\\\\someFolder\\\\compare-licenses-file-1.json_default-icon"
             class="image-gallery__image"
-            src="file-pdf.svg"
+            src="file.svg"
           />
         </div>
         <div
@@ -1028,7 +663,34 @@ exports[`Check images display Should render Gallery page correctly and sort date
           <div
             class="image-gallery__filename"
           >
-            somePdf.pdf
+            compare-licenses-file-1.json
+          </div>
+        </div>
+      </a>
+    </div>
+    <div
+      class="image-gallery__link"
+    >
+      <a
+        download="compare-licenses-file-2.json"
+        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
+      >
+        <div
+          class="image-gallery__image-container image-container-width__normal"
+        >
+          <img
+            alt="C:\\\\someFolder\\\\compare-licenses-file-2.json_default-icon"
+            class="image-gallery__image"
+            src="file.svg"
+          />
+        </div>
+        <div
+          class="image-gallery__filename-container filename-width__normal"
+        >
+          <div
+            class="image-gallery__filename"
+          >
+            compare-licenses-file-2.json
           </div>
         </div>
       </a>
@@ -1065,16 +727,17 @@ exports[`Check images display Should render Gallery page correctly and sort date
       class="image-gallery__link"
     >
       <a
-        download="compare-licenses-file-2.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
+        href="api/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
+        rel="noopener noreferrer"
+        target="_blank"
       >
         <div
           class="image-gallery__image-container image-container-width__normal"
         >
           <img
-            alt="C:\\\\someFolder\\\\compare-licenses-file-2.json_default-icon"
+            alt="C:\\\\someFolder\\\\somePdf.pdf"
             class="image-gallery__image"
-            src="file.svg"
+            src="file-pdf.svg"
           />
         </div>
         <div
@@ -1083,34 +746,7 @@ exports[`Check images display Should render Gallery page correctly and sort date
           <div
             class="image-gallery__filename"
           >
-            compare-licenses-file-2.json
-          </div>
-        </div>
-      </a>
-    </div>
-    <div
-      class="image-gallery__link"
-    >
-      <a
-        download="compare-licenses-file-1.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
-      >
-        <div
-          class="image-gallery__image-container image-container-width__normal"
-        >
-          <img
-            alt="C:\\\\someFolder\\\\compare-licenses-file-1.json_default-icon"
-            class="image-gallery__image"
-            src="file.svg"
-          />
-        </div>
-        <div
-          class="image-gallery__filename-container filename-width__normal"
-        >
-          <div
-            class="image-gallery__filename"
-          >
-            compare-licenses-file-1.json
+            somePdf.pdf
           </div>
         </div>
       </a>

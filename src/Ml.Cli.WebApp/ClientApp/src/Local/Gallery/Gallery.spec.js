@@ -28,7 +28,7 @@ const mockedFetchFunctionKO = () => {
 }
 
 describe('Check images display', () => {
-    test('Should render Gallery page correctly and sort dates', async () => {
+    test('Should render Gallery page correctly, resize images and sort by names', async () => {
         const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={mockedFetchFunction} /></Router>);
         
         expect(asFragment()).toMatchSnapshot();
@@ -43,7 +43,9 @@ describe('Check images display', () => {
         expect(asFragment()).toMatchSnapshot();
         
         const sizeSelect = container.querySelector("#select_type_size");
+        const namesSelect = container.querySelector("#select_type_sort");
         fireEvent.change(sizeSelect, {target: {value: "256px"}});
+        fireEvent.change(namesSelect, {target: {value: "Alphabetic asc"}});
         
         fireEvent.click(submitButton);
         
