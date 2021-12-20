@@ -21,6 +21,8 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\public\environment.dev.json" />
+    <Content Include="ClientApp\public\environment.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverTextLabel\expectedOutput.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverTextLabel\Labels.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
@@ -30,10 +32,22 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\scss" />
+    <Folder Include="Logs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Ml.Cli\Ml.Cli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="LocalControllers\Projects\mocks\datasets.json" />
+    <_ContentIncludedByDefault Remove="LocalControllers\Projects\mocks\projects.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\BoundingBox\expectedOutput.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\BoundingBox\labels.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\rotation\rotation.dataset.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\expectedOutput.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\Labels.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\tagovertext.dataset.json" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -1,0 +1,50 @@
+.ft-project-page {
+    h2 {
+        margin-bottom: 0;
+        font-weight: 700;
+    }
+}
+
+.ft-project-page__informationsContainer {
+    padding: 0 50px;
+    margin-top: 2rem;
+}
+
+.ft-project-page__type-annotation {
+    font-style: italic;
+    margin-left: 5%;
+    font-size: 0.7em;
+}
+
+.ft-labels {
+    .ft-labels__table-td-color {
+        display: flex;
+        align-items: center;
+        span {
+            width: 60px;
+        }
+    }
+    .ft-labels__label-color {
+        display: inline;
+        margin-left: 5px;
+        height: 15px;
+        width: 25px;
+    }
+}
+
+.ft-rowLabelDataset {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 0px;
+    @media screen and (max-width: 900px) {
+        grid-template-columns: repeat(1, 1fr);
+
+    }
+}
+
+.ft-actionBar {
+    display: flex;
+    justify-content: space-around;
+}

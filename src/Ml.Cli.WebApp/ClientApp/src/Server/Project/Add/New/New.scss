@@ -1,0 +1,25 @@
+@import '@axa-fr/react-toolkit-panel/dist/panel.scss';
+@import '@axa-fr/react-toolkit-form-input-slider/dist/slider.scss';
+
+.af-btn--confirm {
+  text-align: center;
+}
+
+.af-steps-new--devis {
+  margin-bottom: 0;
+}
+
+.af-form__group .af-form__select > div.react-select {
+  width: 300px;
+  display: inline-block;
+}
+
+.react-select > div:nth-of-type(2) {
+  z-index: 4;
+}
+
+.af-panel__content {
+  &--new-project {
+    overflow: visible!important;
+  }
+} 

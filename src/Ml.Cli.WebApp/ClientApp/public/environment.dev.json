@@ -1,0 +1,26 @@
+{
+  "apiUrl": "https://localhost:5000/api/server/{path}",
+  "baseUrl": "",
+  "oidc": {
+    "isEnabled": false,
+    "configuration": {
+      "client_id": "interactive.public.short",
+      "redirect_uri": "https://localhost:5000/authentication/callback",
+      "response_type": "code",
+      "post_logout_redirect_uri": "https://localhost:5000/authentication/logout",
+      "scope": "openid profile email",
+      "authority": "'https://demo.identityserver.io",
+      "silent_redirect_uri": "https://localhost:5000/authentication/silent_callback",
+      "automaticSilentRenew": true,
+      "loadUserInfo": true,
+      "triggerAuthFlow": true
+    }
+  },
+  "appInsights": {
+    "active": true,
+    "instrumentationKey": "",
+    "logLevel": "debug",
+    "trackTrace": true,
+    "trackEvent": true
+  }
+}

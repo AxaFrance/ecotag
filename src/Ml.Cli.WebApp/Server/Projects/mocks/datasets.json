@@ -1,0 +1,31 @@
+{
+  "datasets": [
+    {
+      "id": "0001",
+      "name": "Carte verte",
+      "type": "Image",
+      "classification": "Publique",
+      "numberFiles": 300,
+      "createDate": "30/10/2019",
+      "isLock": true
+    },
+    {
+      "id": "0002",
+      "name": "Carte grise",
+      "type": "Text",
+      "classification": "Confidentiel",
+      "numberFiles": 2500,
+      "createDate": "30/10/2011",
+      "isLock": false
+    },
+    {
+      "id": "0003",
+      "name": "Mail GED",
+      "type": "Text",
+      "classification": "Critique",
+      "numberFiles": 5500,
+      "createDate": "30/10/2015",
+      "isLock": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+@import '@axa-fr/react-toolkit-form-filter-inline/dist/filter-inline.scss';
+
+.af-btn {
+  &--quote {
+    margin-bottom: 1em;
+  }
+  &--danger {
+    background-color: red;
+  }
+}
+
+.row--datasets-filters {
+  padding-bottom: 1.5rem;
+}

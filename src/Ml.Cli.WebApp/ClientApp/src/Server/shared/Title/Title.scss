@@ -1,0 +1,39 @@
+@import '@axa-fr/react-toolkit-layout-header/dist/NavBar/nav.scss';
+@import '@axa-fr/react-toolkit-layout-header/dist/Title/title-bar.scss';
+@import '@axa-fr/react-toolkit-layout-header/dist/Drawer/drawer.scss';
+
+.af-title-bar {
+
+  &--back {
+    .af-title-bar {
+      &__wrapper {
+        display: flex;
+        justify-content: flex-start;
+      }
+      &__title {
+        margin-left: 1em;
+      }
+    }
+  }
+
+  &--backhome {
+    .af-title-bar {
+      &__wrapper {
+        justify-content: flex-start;
+        .af-title-bar__title {
+          margin-left: 1em;
+        }
+      }
+    }
+  }
+  &--hasstepper {
+    margin-bottom: 0;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .af-title-bar__mobile-menu {
+    display: none!important;
+  }
+}

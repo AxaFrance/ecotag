@@ -1,0 +1,88 @@
+{
+  "projects": [
+    {
+      "id": "0001",
+      "name": "Relevé d'information",
+      "groupId": "0001",
+      "dataSetId": "0004",
+      "classification": "Publique",
+      "numberTagToDo": 10,
+      "createDate": "04/04/2011",
+      "typeAnnotation": "NER",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0002",
+      "name": "Carte d'identité",
+      "groupId": "0001",
+      "dataSetId": "0006",
+      "classification": "Confidentiel",
+      "numberTagToDo": 10,
+      "createDate": "23/09/2014",
+      "typeAnnotation": "OCR",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0003",
+      "name": "Plateau du self",
+      "groupId": "0001",
+      "dataSetId": "0005",
+      "classification": "Publique",
+      "numberTagToDo": 0,
+      "createDate": "30/10/2019",
+      "typeAnnotation": "CROPPING",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0004",
+      "name": "Carte grise",
+      "groupId": "0001",
+      "dataSetId": "0002",
+      "classification": "Critique",
+      "numberTagToDo": 140,
+      "createDate": "30/10/2019",
+      "typeAnnotation": "NER",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0005",
+      "name": "Carte verte",
+      "dataSetId": "0001",
+      "groupId": "0002",
+      "classification": "Publique",
+      "numberTagToDo": 2010,
+      "createDate": "30/10/2019",
+      "typeAnnotation": "OCR",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0006",
+      "name": "Buletin d'adhésion en ligne",
+      "dataSetId": "0005",
+      "groupId": "0003",
+      "classification": "Publique",
+      "numberTagToDo": 0,
+      "createDate": "30/10/2019",
+      "typeAnnotation": "CROPPING",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    },
+    {
+      "id": "0007",
+      "name": "GPS",
+      "dataSetId": "0005",
+      "groupId": "0003",
+      "classification": "Publique",
+      "numberTagToDo": 40,
+      "createDate": "30/10/2019",
+      "typeAnnotation": "NER",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]
+    }
+  ]
+}

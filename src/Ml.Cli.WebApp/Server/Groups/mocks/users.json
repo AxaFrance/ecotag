@@ -1,0 +1,44 @@
+{
+  "users": [
+    { "email": "clement.trofleau.lbc@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "gilles.cruchon@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "francois.descamps@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "guillaume.chervet@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.blancke@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.black@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.yellow@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.green@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.white@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    },
+    { "email": "antoine.griezmann@axa.fr",
+      "annotationCounter": 10,
+      "annotationToBeVerified": 1
+    }
+  ]
+}

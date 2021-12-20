@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Ml.Cli.FileLoader;
+using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.LocalControllers;
 using Ml.Cli.WebApp.Paths;
 using Moq;

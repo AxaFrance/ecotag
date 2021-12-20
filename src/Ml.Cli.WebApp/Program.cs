@@ -23,6 +23,9 @@ namespace Ml.Cli.WebApp
             };
             app.HelpOption("-?|-h|--help");
 
+            var mode = app.Option("-m|--mode <VALUE>",
+                "[Optional] - server or local",
+                CommandOptionType.SingleValue);
             var basePath = app.Option("-b|--base-path <VALUE>",
                 "[Required] - Defines the default base directory used by the paths inside your task.json file.",
                 CommandOptionType.SingleValue);
@@ -39,6 +42,7 @@ namespace Ml.Cli.WebApp
                 "[Optional] - Defines the repositories that contain datasets files that you can download and read from the webapp. To provide several repositories, please read the following example: '-d repository1,repository2'. The datasets paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided datasets paths, it probably means that the 'base directory path'/'dataset path' combination provided an incorrect path. It can also mean that the provided paths are not in the repository specified by the security path, as it is mandatory.",
                 CommandOptionType.SingleValue);
 
+            string modeValue = mode.Value();
             app.OnExecute(async () =>
             {
                 var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
@@ -71,8 +75,11 @@ namespace Ml.Cli.WebApp
                     "-b",
                     baseValue
                 };
-
-                var builder = CreateHostBuilder(providedArgs).Build();
+                if (string.IsNullOrEmpty(modeValue))
+                {
+                    modeValue = "server";
+                }
+                var builder = CreateHostBuilder(providedArgs, modeValue).Build();
                 await builder.RunAsync();
                 return 0;
             });
@@ -87,11 +94,23 @@ namespace Ml.Cli.WebApp
             }
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args, string mode) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    if (mode == "server")
+                    {
+                        webBuilder.UseStartup<StartupServer>();
+                    }
+                    else
+                    {
+                        webBuilder.UseStartup<StartupLocal>();
+                    }
+                    
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    if (mode == "server") return;
                     services.AddSingleton<IHostedService>(provider =>
                         new Worker(args.Skip(6).ToArray()));
                     services.AddSingleton(provider => new BasePath(args[1]));

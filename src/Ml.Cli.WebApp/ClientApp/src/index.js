@@ -8,7 +8,9 @@ import '@axa-fr/react-toolkit-form-input-select/dist/select.scss';
 import {HashRouter} from "react-router-dom";
 import Routes from "./Local/Routes";
 import EnvironmentProvider, {withEnvironment} from "./EnvironmentProvider";
+import index from "./Server/index.js";
 
+/*
 export const App = ({environment}) => (
     <HashRouter basename={environment.basePath}>
         <Routes/>
@@ -26,4 +28,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-export default App;
+export default App;*/
