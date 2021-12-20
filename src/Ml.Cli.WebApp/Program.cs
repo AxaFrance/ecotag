@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ml.Cli.PathManager;
@@ -96,6 +97,13 @@ namespace Ml.Cli.WebApp
 
         private static IHostBuilder CreateHostBuilder(string[] args, string mode) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((builderContext, config) =>
+                {
+                    var env = builderContext.HostingEnvironment;
+                    config.AddJsonFile($"appsettings-{mode}.json", false, true)
+                        .AddJsonFile($"appsettings-{mode}.{env.EnvironmentName}.json", true, true);
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     if (mode == "server")
