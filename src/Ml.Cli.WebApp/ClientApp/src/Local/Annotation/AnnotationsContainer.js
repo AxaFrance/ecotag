@@ -53,7 +53,7 @@ const saveAnnotation = (item, annotation) => {
     item.annotations = JSON.stringify(annotationsArray);
 };
 
-const AnnotationsContainer = ({setParentState, state, id, url, dataset, fetchFunction}) => {
+const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
     const history = useHistory();
     
     const item = selectItemById(state, id);
