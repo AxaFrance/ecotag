@@ -45,10 +45,15 @@ const sendConfirmationMessage = (isSuccess) => {
         progress: undefined,
         type: type
     });
-}
+};
 
+const saveAnnotation = (item, annotation) => {
+    const annotationsArray = JSON.parse(item.annotations);
+    annotationsArray.push(annotation);
+    item.annotations = JSON.stringify(annotationsArray);
+};
 
-const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
+const AnnotationsContainer = ({setParentState, state, id, url, dataset, fetchFunction}) => {
     const history = useHistory();
     
     const item = selectItemById(state, id);
@@ -63,6 +68,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         };
         await mutationDataset.mutateAsync(annotationObject, {
             onSuccess: () => {
+                saveAnnotation(item, annotationObject.annotation);
                 sendConfirmationMessage(true);
                 onNext();
             },
