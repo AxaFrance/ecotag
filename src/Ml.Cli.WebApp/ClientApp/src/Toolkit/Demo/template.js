@@ -1,5 +1,4 @@
 ﻿import {
-    computeMargin,
     cropImage,
     imageResize,
     isImgGray,
@@ -7,13 +6,14 @@
     rotateImage,
     toImageBase64
 } from "../Opencv/image";
-import {computeAndComputeHomographyRectangle, detectAndComputeSerializable} from "../Opencv/match";
+import {computeAndComputeHomographyRectangle} from "../Opencv/match";
 import convertPdfToImagesAsync from "../Pdf/pdf";
 import convertTiffToImagesAsync from "../Tiff/tiff";
 import {cropContours, findContours} from "../Opencv/contours";
+import {LoaderModes} from "@axa-fr/react-toolkit-loader";
 
 
-const toBase64Async = file => new Promise((resolve, reject) => {
+export const toBase64Async = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
@@ -49,6 +49,19 @@ export const playAlgoAsync= (cv) => async (file, imgDescription, goodMatchSizeTh
 
     const data = await findFirstGoodPageAsync(cv)(files, imgDescription, goodMatchSizeThreshold);
     return {data, filename, files};
+}
+
+export const playAlgoNoTemplateAsync = async(file) => {
+    const filename = file.name.toLowerCase();
+    let files;
+    if(filename.endsWith(".pdf")) {
+        files = await convertPdfToImagesAsync()(file, 2);
+    } else if(filename.endsWith(".tif") || filename.endsWith(".tiff")) {
+        files = await convertTiffToImagesAsync()(file);
+    } else {
+        files = [await toBase64Async(file)];
+    }
+    return files;
 }
 
 export const zoneAsync = (cv) => async (sceneUrl, imgDescription, goodMatchSizeThreshold = 6) => {
@@ -161,7 +174,6 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
     }
     
     const imgCropped = cropImage(cv)(rotatedImage ? rotatedImage: img, xmin, ymin,  witdh, height);
-    
     const base64url = toImageBase64(cv)(imgCropped);
     img.delete();
     if(rotatedImage){
@@ -169,4 +181,31 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin,  witdh,
     }
     imgCropped.delete();
     return base64url;
+}
+
+export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
+    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+        if(result){
+            setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: "", noTemplateImage: ""});
+        }
+        else{
+            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application (no result found)"});
+        }
+    })
+};
+
+export const getExpectedOutputWithCurrentTemplateAsync = (template, setState, state, file) => {
+    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+        if(result){
+            if(result.data.expectedOutput.length > 0){
+                setState({...state, ...result.data, files: result.files, loaderMode: LoaderModes.none, filename: result.filename, errorMessage: "", noTemplateImage: ""});
+            }
+            else{
+                setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application"});
+            }
+        }
+        else{
+            setState({...state, loaderMode: LoaderModes.none, errorMessage: "An error occured during cropping template application (no result found)"});
+        }
+    })
 }
