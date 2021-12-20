@@ -82,7 +82,7 @@ function TagOverTextGenerator( {templates =[]}){
                         <File
                             id="file"
                             name="RI"
-                            accept={'image/jpeg, image/png, image/tiff, image/tif, application/*'}
+                            accept={'image/jpeg, image/png, image/tiff, image/tif, application/pdf'}
                             onChange={onChange}
                             multiple={false}
                             isVisible={true}

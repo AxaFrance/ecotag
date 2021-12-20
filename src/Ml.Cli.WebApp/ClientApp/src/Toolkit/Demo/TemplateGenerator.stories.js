@@ -71,7 +71,7 @@ const TemplateGenerator = () => {
                         <File
                             id="file_test"
                             name="FileTest"
-                            accept={'image/jpeg, image/png, image/tiff, image/tif, application/*'}
+                            accept={'image/jpeg, image/png, image/tiff, image/tif, application/pdf'}
                             onChange={onFileTest}
                             multiple={false}
                             isVisible={true}
