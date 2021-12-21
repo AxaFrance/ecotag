@@ -30,7 +30,8 @@ namespace Ml.Cli.WebApp.Paths
             }
 
             path = PathAdapter.AdaptPathForCurrentOs(path);
-            if (!path.StartsWith(_path, StringComparison.Ordinal))
+            var currentBasePath = System.IO.Path.GetFullPath(_path);
+            if (!path.StartsWith(currentBasePath, StringComparison.Ordinal))
             {
                 return false;
             }
