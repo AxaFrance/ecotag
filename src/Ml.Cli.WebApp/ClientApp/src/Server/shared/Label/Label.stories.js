@@ -5,7 +5,7 @@ import LabelInput from "./LabelInput";
 const currentLabels = [{name: "recto", id: 1, color: "#212121"}];
 
 const onChange = e => {
-    console.log(e)
+    console.log(e);
 };
 
 export default {
