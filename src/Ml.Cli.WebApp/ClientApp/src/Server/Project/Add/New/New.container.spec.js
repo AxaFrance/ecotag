@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {CLASSIFICATION, DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
@@ -45,7 +45,7 @@ const givenGroups = [
 describe('New.container', () => {
   it('NewContainer render correctly', async () => {
     const { getByText } = render(<Router><NewContainer groups={givenGroups} fetch={fetch} /></Router>);
-    const messageEl = await waitForElement(() => getByText('Publique'));
+    const messageEl = await waitFor(() => getByText('Publique'));
     expect(messageEl).toHaveTextContent(
         'Publique'
     );

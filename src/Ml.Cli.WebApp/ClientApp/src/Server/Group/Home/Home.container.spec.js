@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 
 describe('Home.container for groups', () => {
@@ -23,7 +23,7 @@ describe('Home.container for groups', () => {
   
   it('HomeContainer render correctly the groups', async () => {
     const { getByText } = render(<Router history={history}><HomeContainer fetch={givenFetch} /></Router>);
-    const messageEl = await waitForElement(() => getByText('developpeurs'));
+    const messageEl = await waitFor(() => getByText('developpeurs'));
     expect(messageEl).toHaveTextContent(
       'developpeurs'
     );

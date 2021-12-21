@@ -2,130 +2,6 @@
 
 exports[`Home.container HomeContainer render correctly 1`] = `
 <DocumentFragment>
-  <div>
-    <div
-      class="af-nav-container"
-    >
-      <button
-        aria-controls="mainmenu"
-        aria-haspopup="true"
-        class="mask fade "
-        id="togglemenu"
-        type="button"
-      />
-      <nav
-        aria-label="Menu principal"
-        class="af-nav af-drawer left "
-        role="navigation"
-      >
-        <div
-          class="container af-nav__wrapper"
-        >
-          <div
-            class="af-nav__aside-header"
-          >
-            <h4
-              class="af-nav__aside-title"
-            >
-              Menu
-            </h4>
-            <button
-              aria-controls="mainmenu"
-              aria-haspopup="true"
-              class="af-nav__aside-close"
-              id="togglemenu"
-              type="button"
-            >
-              ×
-            </button>
-          </div>
-          <ul
-            aria-labelledby="togglemenu"
-            class="af-nav__list "
-            id="mainmenu"
-            role="menubar"
-          >
-            <li
-              class="af-nav__item "
-              role="none"
-            >
-              <a
-                aria-expanded="false"
-                class="af-nav__link"
-                href="/"
-                role="menuitem"
-                tabindex="-1"
-              >
-                Projets
-              </a>
-            </li>
-            <li
-              class="af-nav__item af-nav__item--active "
-              role="none"
-            >
-              <a
-                aria-expanded="false"
-                class="af-nav__link"
-                href="/datasets"
-                label="Forms"
-                role="menuitem"
-                tabindex="0"
-              >
-                Datasets
-              </a>
-            </li>
-            <li
-              class="af-nav__item "
-              role="none"
-            >
-              <a
-                aria-expanded="false"
-                class="af-nav__link"
-                href="/groups"
-                label="Forms"
-                role="menuitem"
-                tabindex="-1"
-              >
-                Groupes
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-    <div
-      class="af-title-bar"
-    >
-      <div
-        class="container af-title-bar__wrapper"
-      >
-        <a
-          aria-controls="mainmenu"
-          aria-haspopup="true"
-          class="btn af-btn--circle af-title-bar__mobile-menu"
-          href="#"
-          id="togglemenu"
-          role="button"
-          tabindex="0"
-          title="Toggle menu"
-        >
-          <i
-            class="glyphicon glyphicon-menu-hamburger"
-          />
-        </a>
-        <h1
-          class="af-title-bar__title"
-        >
-          Page datasets
-          <small
-            class="af-title-bar__subtitle"
-          >
-            un dataset représente un essemble de données
-          </small>
-        </h1>
-      </div>
-    </div>
-  </div>
   <div
     class="af-home container"
   >
@@ -189,6 +65,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       </div>
     </div>
     <div
+      class="af-loader"
       style="min-height: 94px; position: relative;"
     >
       <table
@@ -211,6 +88,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             </th>
             <th
               class="af-table__th af-table__th--sortable"
+              classmodifier="sortable"
             >
               <span
                 class="af-table__th-content"
@@ -231,6 +109,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             </th>
             <th
               class="af-table__th af-table__th--sortable"
+              classmodifier="sortable"
             >
               <span
                 class="af-table__th-content"
@@ -251,6 +130,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             </th>
             <th
               class="af-table__th af-table__th--sortable"
+              classmodifier="sortable"
             >
               <span
                 class="af-table__th-content"
@@ -271,6 +151,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             </th>
             <th
               class="af-table__th af-table__th--sortable"
+              classmodifier="sortable"
             >
               <span
                 class="af-table__th-content"
@@ -284,7 +165,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                     Date création
                   </span>
                   <i
-                    class="glyphicon glyphicon-sorting-desc"
+                    class="glyphicon glyphicon-sorting"
                   />
                 </button>
               </span>
@@ -479,7 +360,6 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           </nav>
         </div>
       </div>
-       
     </div>
   </div>
 </DocumentFragment>
