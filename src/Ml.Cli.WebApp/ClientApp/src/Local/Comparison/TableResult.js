@@ -100,13 +100,13 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
     const currentPage = pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage;
     const numberPages = computeNumberPages(filteredSearchBar, state.filters.pagingSelect);
     const onPagingChange = e => {
-        const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
+        const newNumberPages = computeNumberPages(filteredSearchBar, e.numberItems);
         setState({
             ...state,
             filters: {
                 ...state.filters,
                 pagingSelect: e.numberItems,
-                pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
+                pagingCurrent: state.filters.pagingCurrent > newNumberPages ? newNumberPages : e.page
             }
         });
     }
