@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import {init, initialState, PageContainer, reducer} from './Page.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import * as PageService from "./Page.service";
@@ -62,7 +62,7 @@ describe('Page.container', () => {
   };
   it('PageContainer render correctly', async () => {
     const { getByText } = render(<Router><PageContainer fetch={fetch} user={givenUser}/></Router>);
-    const messageEl = await waitForElement(() => getByText('Publique'));
+    const messageEl = await waitFor(() => getByText('Publique'));
     expect(messageEl).toHaveTextContent(
         'Publique'
     );

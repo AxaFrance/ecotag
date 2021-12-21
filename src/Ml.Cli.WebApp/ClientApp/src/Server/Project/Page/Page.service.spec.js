@@ -1,11 +1,5 @@
 import {fetchProject,fetchDataset} from "./Page.service";
-import {
-    fetchCreateOrUpdateGroup,
-    fetchDeleteGroup,
-    fetchGroup,
-    fetchGroups,
-    fetchUsers
-} from "../../Group/Group.service";
+import {fetchGroup} from "../../Group/Group.service";
 
 describe('Page.service', () => {
     describe('.fetchProject()', () => {

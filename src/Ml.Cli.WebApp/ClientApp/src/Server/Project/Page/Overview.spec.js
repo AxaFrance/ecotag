@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import {Overview} from './Overview';
 import {BrowserRouter as Router} from "react-router-dom";
 
@@ -37,7 +37,7 @@ describe('Overview', () => {
             "createDate": "30/10/2019"
         };
         const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project}/></Router>);
-        const messageEl = await waitForElement(() => getByText('Informations générales'));
+        const messageEl = await waitFor(() => getByText('Informations générales'));
         expect(messageEl).toHaveTextContent(
             'Informations générales'
         );
