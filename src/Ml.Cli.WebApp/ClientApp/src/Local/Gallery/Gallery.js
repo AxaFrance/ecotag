@@ -37,7 +37,7 @@ const loadStateAsync = (fetch) => async (setState, state) => {
     });
     const uri = encodeURI("/api/gallery/" + state.filesPath);
     const response = await fetchGetData(fetch)(uri);
-    if (response.status >= 300) {
+    if (response.status >= 400) {
         const errorMessage = await response.text();
         setState({
             ...state,
