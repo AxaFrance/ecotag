@@ -4,7 +4,7 @@ import './TitleBar.scss';
 
 const TitleBar = ({title, goTo = "/", goTitle="Home page", classModifier=""}) => {
     
-    const divClassName = "af-title-bar af-title-bar--backhome " + classModifier;
+    const divClassName = "af-title-bar af-title-bar--backhome" + (classModifier ? " " + classModifier : "");
     
     return (
         <div className={divClassName}>
