@@ -51,10 +51,10 @@ const initialState = {
       currentPage: 1,
     },
     columns: {
-      fullName: { value: null, timeLastUpdate: null },
-      type: { value: null, timeLastUpdate: null },
-      agent: { value: null, timeLastUpdate: null },
-      beginDate: { value: null, timeLastUpdate: null },
+      name: { value: null, timeLastUpdate: null },
+      classification: { value: null, timeLastUpdate: null },
+      numberFiles: { value: null, timeLastUpdate: null },
+      createDate: { value: null, timeLastUpdate: null },
     },
   },
 };
@@ -86,7 +86,7 @@ export const HomeContainer = ({ fetch }) => {
   };
   const items = filterPaging(itemsSorted, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
 
-  return <HomeWithLoader {...state} items={items} filters={filters} onChangePaging={onChangePaging} />;
+  return <HomeWithLoader {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeSort={() => console.log("TODO: onChangeSort")}/>;
 };
 
 export default withCustomFetch(fetch)(HomeContainer);
