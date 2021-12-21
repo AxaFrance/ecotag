@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import Edit from './Edit';
 
 const users = [
@@ -26,19 +25,25 @@ const eligibleUsers = [
 ];
 
 const onUpdateUser = (data) => {
-  console.log(data);
+    console.log(data);
 };
 const setManageUsersModalVisible = (data) => {
-  console.log(data);
+    console.log(data);
 };
 
-storiesOf('Groups/Edit', module).add('Edit Group', () => (
-  <Edit 
-    idGroup={'002'}
-    users={users}
-    eligibleUsers={eligibleUsers}
-    onUpdateUser={onUpdateUser}
-    isManageUsersModalVisible={true}
-    setManageUsersModalVisible={setManageUsersModalVisible}
-  />
-));
+export default {
+    title: 'Groups/Edit',
+    component: Edit
+}
+
+const Template = (args) => <Edit {...args}/>
+
+export const EditGroup = Template.bind({});
+EditGroup.args = {
+    idGroup: '002',
+    users: users,
+    eligibleUsers: eligibleUsers,
+    onUpdateUser: onUpdateUser,
+    isManageUsersModalVisible: true,
+    setManageUsersModalVisible: setManageUsersModalVisible
+};

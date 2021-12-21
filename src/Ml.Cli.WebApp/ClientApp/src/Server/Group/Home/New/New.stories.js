@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import New from './New';
 import { initialState } from '../Home.reducer';
 
@@ -10,6 +9,17 @@ const onSubmitCreateGroup = (data) => {
   console.log(data);
 };
 
-storiesOf('Groups/New', module).add('New Group', () => (
-  <New fields={initialState.fields} hasSubmit={false} onSubmitCreateGroup={onSubmitCreateGroup} onChangeCreateGroup={onChangeCreateGroup}/>
-));
+export default {
+  title: 'Groups/New',
+  component: New
+};
+
+const Template = (args) => <New {...args}/>;
+
+export const NewGroup = Template.bind({});
+NewGroup.args = {
+  fields: initialState.fields,
+  hasSubmit: false,
+  onSubmitCreateGroup: onSubmitCreateGroup,
+  onChangeCreateGroup: onChangeCreateGroup
+};

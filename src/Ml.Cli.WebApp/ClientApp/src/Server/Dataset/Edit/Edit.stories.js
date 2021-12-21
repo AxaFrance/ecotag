@@ -1,10 +1,14 @@
 ﻿import React from 'react';
-import { storiesOf } from '@storybook/react';
 import EditContainer from "./EditContainer";
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
 const history = createMemoryHistory();
-storiesOf('Edition dataset', module).add('Edit dataset', () => (
-    <Router history={history}><EditContainer /></Router>
-));
+
+export default {
+    title: 'Edition dataset',
+    component: EditContainer
+};
+
+const Template = () => <Router history={history}><EditContainer /></Router>;
+export const EditDataset = Template.bind({});

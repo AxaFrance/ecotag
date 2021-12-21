@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { initialState } from './Home.reducer';
 import { MemoryRouter } from 'react-router-dom';
 import Home from './Home';
@@ -33,20 +32,24 @@ const listOfGroups = [
 ];
 const history = () => {};
 
-storiesOf('Groups/Home', module).add('List of groups', () => (
-  <MemoryRouter>
-    <Home 
-      history={history} 
-      items={listOfGroups} 
-      numberItemsTotal={10} 
-      filters={initialState.filters}
-      fields={initialState.fields}
-      hasSubmit={false} 
-      onChangePaging={()=>{}} 
-      onChangeFilter={()=>{}} 
-      onDeleteGroup={()=>{}}
-      onChangeCreateGroup={()=>{}} 
-      onSubmitCreateGroup={()=>{}}
-    />
-  </MemoryRouter>
-));
+export default {
+  title: 'Groups/Home',
+  component: Home
+};
+
+const Template = (args) => <MemoryRouter><Home{...args}/></MemoryRouter>;
+
+export const ListOfGroups = Template.bind({});
+ListOfGroups.args = {
+  history: history,
+  items: listOfGroups,
+  numberItemsTotal: 10,
+  filters: initialState.filters,
+  fields: initialState.fields,
+  hasSubmit: false,
+  onChangePaging: () => {},
+  onChangeFilter: () => {},
+  onDeleteGroup: () => {},
+  onChangeCreateGroup: () => {},
+  onSubmitCreateGroup: () => {}
+}
