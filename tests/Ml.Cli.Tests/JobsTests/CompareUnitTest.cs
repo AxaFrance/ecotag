@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobCompare;
+using Ml.Cli.PathManager;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -110,6 +112,27 @@ namespace Ml.Cli.Tests.JobsTests
             await compare.CompareAsync(inputTask);
             
             fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\output\{FileName}.json", expectedString));
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"compare\",\"enabled\": true,\"onFileNotFound\": \"warning\",\"leftDirectory\": \"licenses/groundtruth/jsons\",\"rightDirectory\": \"licenses/output/{start-date}/jsons\",\"outputDirectory\": \"licenses/compares\",\"fileName\": \"compare-licenses-{start-date}.json\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+
+            var compareResult = JobCompare.Initializer.CreateTask(jObject, "compare", false, true, "baseDirectory", "1", pathValidatorHelper.Object);
+            var expectedCompareResult = new CompareTask(
+                "compare",
+                "1",
+                false,
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/groundtruth/jsons"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output/{start-date}/jsons"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/compares"),
+                "compare-licenses-{start-date}.json",
+                "warning"
+                );
+            Assert.Equal(JsonConvert.SerializeObject(expectedCompareResult), JsonConvert.SerializeObject(compareResult));
         }
     }
 }

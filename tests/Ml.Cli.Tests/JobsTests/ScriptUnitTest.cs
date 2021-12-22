@@ -3,7 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobScript;
+using Ml.Cli.PathManager;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -38,6 +41,26 @@ namespace Ml.Cli.Tests.JobsTests
             await script.FormatCallapiAsync(inputTask);
             
             fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\output\toto_pdf.json", It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"script\",\"id\": \"script_task\",\"enabled\": true,\"fileDirectory\": \"licenses/output\",\"outputDirectory\": \"licenses/scripts\",\"script\": \"try{ console.WriteLine('Write your JS code on this attribute (not necessarily in a try-catch block).') } catch(ex){ console.WriteLine(ex.toString) }\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+
+            var scriptResult = Initializer.CreateTask(jObject, "script", false, true, "baseDirectory", "1",
+                pathValidatorHelper.Object);
+            var expectedScriptResult = new ScriptTask(
+                "script",
+                "1",
+                false,
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/scripts"),
+                "try{ console.WriteLine('Write your JS code on this attribute (not necessarily in a try-catch block).') } catch(ex){ console.WriteLine(ex.toString) }"
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedScriptResult), JsonConvert.SerializeObject(scriptResult));
         }
     }
 }

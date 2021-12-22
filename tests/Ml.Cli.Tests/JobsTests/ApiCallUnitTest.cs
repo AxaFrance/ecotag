@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobApiCall;
 using Ml.Cli.JobApiCall.FileHandler;
+using Ml.Cli.PathManager;
 using Moq;
 using Moq.Contrib.HttpClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -143,6 +147,37 @@ namespace Ml.Cli.Tests.JobsTests
             
             var result = fileHandler.SetFileName(path, fileLoader.Object);
             Assert.Equal(@"C:\ml\test_1.png", result);
+        }
+
+        [Fact]
+        public void ApiCallShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"callapi\",\"enabled\": true,\"enabledSaveImages\":true,\"outputDirectoryImages\": \"licenses/groundtruth/images\",\"fileDirectory\": \"licenses/documents\",\"outputDirectoryJsons\": \"licenses/groundtruth/jsons\",\"numberParallel\": 1,\"url\" :\"http://localhost:6001/licenses/upload\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var serviceCollection = new Mock<IServiceCollection>();
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+
+            var callapiResult = Initializer.CreateTask(jObject, "callapi", false, true, "baseDirectory", "1", serviceCollection.Object, pathValidatorHelper.Object);
+            var expectedCallapiResult = new Callapi(
+                "callapi", 
+                "1", 
+                false, 
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/documents"), 
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory\\licenses\\groundtruth\\jsons"), 
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory\\licenses\\groundtruth\\images"), 
+                "", 
+                "", 
+                "", 
+                "", 
+                true, 
+                false, 
+                false, 
+                new Uri("http://localhost:6001/licenses/upload"), 
+                true, 
+                1, 
+                1
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedCallapiResult), JsonConvert.SerializeObject(callapiResult));
         }
     }
 }
