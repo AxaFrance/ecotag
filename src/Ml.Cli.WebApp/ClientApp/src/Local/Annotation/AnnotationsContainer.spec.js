@@ -25,12 +25,18 @@ const state = {
     }]
 };
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe("Should check AnnotationsContainer component behaviour", () => {
     test("Should display annotation", async () => {
         const {container, asFragment} = render(<QueryClientProvider client={client}><AnnotationsContainer state={state} id={1} dataset="someDataset" url="someUrl" fetchFunction={mockedFetchFunction}/></QueryClientProvider>);
         
         expect(asFragment()).toMatchSnapshot();
         
+        //necessary to force a longer waitFor
+        await sleep(3000);
         await waitFor(() => expect(container.querySelector(".tokenAnnotation-container")).not.toBeNull());
         
         expect(asFragment()).toMatchSnapshot();
