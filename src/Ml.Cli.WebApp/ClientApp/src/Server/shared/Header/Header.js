@@ -6,7 +6,7 @@ import './Header.scss';
 
 export const HeaderApp = ({ user: { title = 'Ecotag', link = null, name = 'Non Connecté', role = 'ADMIN' } }) => (
   <Header>
-    <Name title={title} subtitle="a data ecosystem" img={logo} alt={title} />
+    <Name title={title} subtitle="An eco-system that aim to be eco for the planet" img={logo} alt={title} />
     <User name={name} href={link} profile={role} />
   </Header>
 );

@@ -90,7 +90,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
               />
               <LabelInput
                 forceDisplayMessage={hasSubmit}
-                label="Ajouter des labels :"
+                label="Labels :"
                 name={LABELS}
                 id={LABELS}
                 onChange={onChange}
