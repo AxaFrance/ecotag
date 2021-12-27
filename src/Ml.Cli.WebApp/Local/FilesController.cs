@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Paths;
 
-namespace Ml.Cli.WebApp.LocalControllers
+namespace Ml.Cli.WebApp.Local
 {
     [ApiController]
     [Route("api/local/[controller]")]

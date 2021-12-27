@@ -7,9 +7,7 @@ const Stepper = ({ activeStep, link, title }) => (
     <Step id="id1" href={link} onClick={() => {}} number="1" title={title} icon="glyphicon-arrow-rounded-right" />
     <StepBase id="idf4" title="Confirmation" classModifier={`${activeStep === 'confirm' ? 'success' : ''}`}>
       <div className="af-steps-list-stepLabel" onClick={() => {}}>
-        <span className="af-steps-list-stepNumber">
-          <i className="glyphicon glyphicon-ok" />
-        </span>
+       
         <span className="af-steps-list-stepTitle">Confirmation</span>
       </div>
     </StepBase>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import Title from '../../shared/Title';
+import Title from 'TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Loader from '@axa-fr/react-toolkit-loader';
 import './Home.scss';
@@ -18,7 +18,7 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
 
     return (
         <>
-            <Title subtitle="un dataset représente un essemble de données" positionInit={1}>Page datasets</Title>
+            <Title title="Page datasets" subtitle="un dataset représente un essemble de données" />
             <div className="af-home container">
                 <Link className="btn af-btn af-btn--quote" to="/datasets/new">
                     <span className="af-btn__text">Nouveau dataset</span>

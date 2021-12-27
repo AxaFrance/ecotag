@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp
+﻿namespace Ml.Cli.WebApp.Local
 {
     public static class Separators
     {

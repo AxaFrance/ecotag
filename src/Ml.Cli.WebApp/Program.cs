@@ -7,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ml.Cli.PathManager;
+using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Paths;
+using Ml.Cli.WebApp.Server;
 
 namespace Ml.Cli.WebApp
 {
@@ -79,6 +81,10 @@ namespace Ml.Cli.WebApp
                 if (string.IsNullOrEmpty(modeValue))
                 {
                     modeValue = "server";
+                }
+                else
+                {
+                    modeValue = "local";
                 }
                 var builder = CreateHostBuilder(providedArgs, modeValue).Build();
                 await builder.RunAsync();

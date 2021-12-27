@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Title from '../../shared/Title';
+import Title from 'TitleBar';
 import New from './New';
 import Edit from './Edit';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
@@ -77,9 +77,7 @@ const Home = ({
 }) => {
   return (
     <>
-      <Title subtitle="Gestion des groupes d'annotateurs" positionInit={2}>
-        Page Groupes
-      </Title>
+      <Title subtitle="Gestion des groupes d'annotateurs" title="Page Groupes"  />
       <div className="af-home container">
         <h1 className="af-title--content">Création de groupe</h1>
         <New

@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Paths;
 
-namespace Ml.Cli.WebApp.LocalControllers
+namespace Ml.Cli.WebApp.Local
 {
     [ApiController]
-    [Route("api/gallery")]
+    [Route("api/local/gallery")]
     public class GalleryController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;

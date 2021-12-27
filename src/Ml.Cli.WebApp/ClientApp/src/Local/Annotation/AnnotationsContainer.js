@@ -93,7 +93,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         filePrimaryUrl: "",
     });
 
-    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
+    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/local/annotations", newData));
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);

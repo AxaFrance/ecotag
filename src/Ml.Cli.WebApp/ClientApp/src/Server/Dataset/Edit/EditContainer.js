@@ -4,7 +4,7 @@ import FileList from "./FileList";
 import Lock from "./Lock";
 import ConfirmModal from "./ConfirmModal";
 import './Edit.scss';
-import Title from "../../shared/Title/Title.container";
+import Title from "TitleBar";
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 
 
@@ -26,7 +26,7 @@ export const EditContainer = () => {
     return (
         <div className="edit-dataset">
             <ConfirmModal state={state} setState={setState}/>
-            <Title back>Edition du dataset</Title>
+            <Title title="Edition du dataset" goTo="/datasets" goTitle="Datasets" />
             <FileUpload state={state} setState={setState}/>
             {state.filesSend.length === 0 ? null : <FileList state={state} setState={setState} />}
             <Lock state={state} setState={setState} />

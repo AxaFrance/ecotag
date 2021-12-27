@@ -6,7 +6,7 @@ import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import {QueryClient, QueryClientProvider} from "react-query";
 import ImageGallery from "./ImageGallery";
 import GalleryOptions from "./GalleryOptions";
-import TitleBar from "../TitleBar/TitleBar";
+import TitleBar from "TitleBar";
 import './Gallery.scss';
 
 const resilienceStatus = {
@@ -35,7 +35,7 @@ const loadStateAsync = (fetch) => async (setState, state) => {
         ...state,
         status: resilienceStatus.LOADING,
     });
-    const uri = encodeURI("/api/gallery/" + state.filesPath);
+    const uri = encodeURI("/api/local/gallery/" + state.filesPath);
     const response = await fetchGetData(fetch)(uri);
     if (response.status >= 400) {
         const errorMessage = await response.text();
@@ -125,7 +125,7 @@ const Gallery = ({fetchFunction}) => {
             setState({...state, ...options, files: [], errorMessage: ""});
             return;
         }
-        const uri = encodeURI("/api/gallery/" + filesPath);
+        const uri = encodeURI("/api/local/gallery/" + filesPath);
         const response = await fetchGetData(fetchFunction)(uri);
         if(!response.ok){
             setState({...state, ...options, errorMessage: "New files fetch on options submission failed", files: []});

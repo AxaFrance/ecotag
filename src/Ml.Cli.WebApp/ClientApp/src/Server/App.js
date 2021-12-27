@@ -11,7 +11,7 @@ import Routes from './AppRoutes';
 export const RoutesBase = ({ environment }) => (
   <Router basename={environment.baseUrl}>
       <Header />
-    <Routes />
+      <Routes />
       <Footer />
   </Router>
 );

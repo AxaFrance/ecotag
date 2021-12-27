@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Projects
 {
-    [Route("api/[controller]")]
+    [Route("api/server/[controller]")]
     [ApiController]
     public class ProjectsController : Controller
     {

@@ -4,11 +4,11 @@ import Project from './Project';
 import Dataset from './Dataset';
 import GroupHome from './Group/Home';
 import PageNotFound from './NotFound';
-import ProjectList from './Project/List';
+import Home from './Home/Home';
 
 const Routes = () => (
     <Switch>
-      <Route exact path="/" component={ProjectList} />
+      <Route exact path="/" component={Home} />
       <Route path="/projects" component={Project} />
       <Route path="/datasets" component={Dataset} />
       <Route path="/groups" component={GroupHome} />

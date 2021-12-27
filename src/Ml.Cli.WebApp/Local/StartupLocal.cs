@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Ml.Cli.FileLoader;
 
-namespace Ml.Cli.WebApp
+namespace Ml.Cli.WebApp.Local
 {
     public class StartupLocal
     {

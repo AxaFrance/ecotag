@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from '../../../shared/Title';
+import Title from 'TitleBar';
 import Stepper from '../../../shared/Stepper';
 import Button from '@axa-fr/react-toolkit-button';
 import { useLocation, withRouter } from 'react-router-dom';
@@ -7,9 +7,7 @@ import './Confirm.scss';
 
 export const Confirm = ({ navBack, navViewProject }) => (
   <>
-    <Title backHome classModifier="hasstepper">
-      Confirmation
-    </Title>
+    <Title title="Confirmation" goTo="/projects" goTitle="Projets" />
     <Stepper activeStep="confirm" title="Nouveau projet" link="/projects/new" />
     <div className="af-confirm">
       <span className="glyphicon glyphicon--ring glyphicon-ok" />

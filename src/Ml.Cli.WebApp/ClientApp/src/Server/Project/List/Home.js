@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import Title from '../../shared/Title';
+import Title from 'TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Loader from '@axa-fr/react-toolkit-loader';
 import Action from '@axa-fr/react-toolkit-action';
@@ -70,7 +70,7 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onCh
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
     <>
-      <Title subtitle="tagger un ensemble de donnée">Page projets</Title>
+      <Title title="Page projets" subtitle="tagger un ensemble de donnée" />
       <div className="af-home container">
         <Link className="btn af-btn af-btn--quote" to="/projects/new">
           <span className="af-btn__text">Nouveau projet</span>

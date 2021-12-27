@@ -7,57 +7,79 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Ml.Cli.FileLoader;
 
-namespace Ml.Cli.WebApp
+namespace Ml.Cli.WebApp.Server
 {
     public class StartupServer
     {
-        public StartupServer(IConfiguration configuration)
+        public StartupServer(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            CurrentEnvironment = env;
         }
 
-        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment CurrentEnvironment { get; }
+
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { 
-                    Title = "EcoTag API", 
-                    Version = "v1",
-                    Description ="EcoTag API"
-                });
-            });
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    });
-            });
-            services.AddControllersWithViews();
-            services.AddScoped<IFileLoader, FileLoader.FileLoader>();
-            services.AddResponseCaching();
             services.AddOptions();
+            services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddResponseCaching();
             services.AddHsts(options =>
             {
                 options.Preload = true;
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+
+
+            /* services.AddAuthorization(options =>
+                  {
+                      var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                          JwtBearerDefaults.AuthenticationScheme);
+                      defaultAuthorizationPolicyBuilder =
+                          defaultAuthorizationPolicyBuilder
+                              .RequireAuthenticatedUser()
+                              .AddRequirements(new ScopeRequirement(Scopes.ApiFastag));
+                      options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+                  });
+              */
+            services
+                .AddControllersWithViews();
+
+            /*  var corsSettings = CorsSettings();
+              if (!string.IsNullOrEmpty(corsSettings.Origins))
+                  services.AddCors(options =>
+                  {
+                      options.AddPolicy("CorsPolicy",
+                          builder =>
+                          {
+                              builder.WithOrigins(corsSettings.Origins.Split(";"))
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader()
+                                  .AllowCredentials()
+                                  .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
+                          });
+                  });*/
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "AXA Fastag", Version = "v1"});
+            });
+
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseErrorLogging();
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "DENY");
@@ -69,28 +91,17 @@ namespace Ml.Cli.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
 
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            app.UseAuthentication();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
             app.UseRouting();
             app.UseResponseCaching();
             app.UseAuthorization();
-            app.UseCors();
-            
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ml-cli API V1");
-
-                // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
-                c.RoutePrefix = "swagger";
-            });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/isalive", async (HttpContext context) =>
@@ -98,13 +109,10 @@ namespace Ml.Cli.WebApp
                     context.Response.StatusCode = 200;
                     await context.Response.WriteAsync("ok");
                 });
+                endpoints.MapControllers(); //.RequireAuthorization();
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "/api/server/{controller}/{action=Index}/{id?}");
+                    "default", "{controller=Home}/{action=Index}/{id?}"); //.RequireAuthorization();
             });
-            
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
             app.UseSpa(spa =>
             {

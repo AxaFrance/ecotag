@@ -14,7 +14,7 @@ const Home = () => (
                 alt="AXA Logo"
             />
         </Header>
-        <Title title="Services"/>
+        <Title title="Home"/>
         <div className="home__links-container">
             <Link className="home__link" to="/compare">
                 <div className="home__link-container home__link-container--compare">Comparison</div>

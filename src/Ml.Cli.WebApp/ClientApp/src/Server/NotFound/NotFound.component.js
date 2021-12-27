@@ -1,12 +1,10 @@
 import React from 'react';
-import Title from '../shared/Title';
+import Title from 'TitleBar';
 import './notfound.scss';
 
 const NotFound = () => (
   <>
-    <Title backHome classModifier="hasstepper">
-      404 Page Not Found
-    </Title>
+    <Title title="404 Page Not Found" />
     <div className="container af-container--notfound">
       <h1 className="af-notfound__title">
         <div className="af-notfound__title-covernumber">

@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from '../../../shared/Title';
+import Title from 'TitleBar';
 import Stepper from '../../../shared/Stepper';
 import LabelInput from '../../../shared/Label/LabelInput';
 import { TextInput, SelectInput, MultiSelectInput, NumberInput, Button } from '@axa-fr/react-toolkit-all';
@@ -13,9 +13,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
     datasets && datasets.length > 0 ? datasets.map(dataset => ({ label: dataset.name, value: dataset.id })) : [];
   return (
     <>
-      <Title backHome classModifier="hasstepper">
-        Nouveau projet d&apos;annotation
-      </Title>
+      <Title title="Nouveau projet d'annotation" goTo="/projects" goTitle="Projets" />
       <Stepper title="Nouveau projet" link="/projects/new" />
       <div className="af-form">
         <form className="container" name="newProject">

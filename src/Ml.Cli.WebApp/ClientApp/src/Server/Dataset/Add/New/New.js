@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from '../../../shared/Title';
+import Title from 'TitleBar';
 import Stepper from '../../../shared/Stepper';
 import { TextInput, SelectInput, FileInput, Button } from '@axa-fr/react-toolkit-all';
 import HelpButton from '@axa-fr/react-toolkit-help';
@@ -13,9 +13,7 @@ import classifications from './classifications.png';
 
 const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
   <>
-    <Title backHome classModifier="hasstepper">
-      Nouveau dataset
-    </Title>
+      <Title title=" Nouveau dataset" goTo="/datasets" goTitle="Datasets" />
     <Stepper title="Nouveau dataset" link="/datasets/new" />
     <div className="af-form">
       <form className="container" name="newDataset">
