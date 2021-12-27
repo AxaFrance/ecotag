@@ -14,7 +14,7 @@ const Home = () => (
                 <div className="home__link-container home__link-container--datasets">Datasets</div>
             </Link>
             <Link className="home__link" to="/groups">
-                <div className="home__link-container home__link-container--groups">Groupes d'utilisateurs</div>
+                <div className="home__link-container home__link-container--groups">Groupes</div>
             </Link>
         </div>
     </div>

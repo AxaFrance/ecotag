@@ -47,6 +47,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit
     
     switch (annotationType) {
         case "Ocr":
+        case 'OCR':
             return <OcrLazy
                 labels={labels}
                 expectedLabels={[]}
@@ -54,12 +55,14 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit
                 onSubmit={onDatasetSubmit}
             />
         case "Cropping":
+        case 'CROPPING':
             return  <CroppingLazy
                 labels={labels}
                 url={url}
                 onSubmit={onDatasetSubmit}
             />
         case "Rotation":
+        case 'IROT':
             return <IrotLazy
                 expectedLabels={[]}
                 url={url}
@@ -79,6 +82,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit
                 labels={labels}
             />
         case "NamedEntityRecognition":
+        case 'NER':
             return  <NamedEntityLazy
                 text={"Hello, my name is Lilian Delouvy, and this is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
                 labels={labels}

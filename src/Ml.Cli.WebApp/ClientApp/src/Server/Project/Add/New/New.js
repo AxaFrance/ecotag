@@ -53,11 +53,11 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 onChange={onChange}
                 options={[
                   {
-                    value: 'IMAGE_BOUNDING_BOX',
+                    value: 'CROPPING',
                     label: "Séléction de zone d'image",
                   },
                   {
-                    value: 'IMAGE',
+                    value: 'ImageClassifier',
                     label: 'Saisi de texte contenu dans une image',
                   },
                   {
