@@ -1,6 +1,6 @@
-﻿﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Axa.Fastag.Web.Back.Authorization
+ namespace Ml.Cli.WebApp.Authorization
 {
     [ExcludeFromCodeCoverage]
     public static class Scopes

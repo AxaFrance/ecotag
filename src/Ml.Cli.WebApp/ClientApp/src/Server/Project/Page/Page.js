@@ -9,7 +9,7 @@ import './Page.scss';
 
 const Page = ({ project, dataset, user, group }) => (
   <div className="ft-project-page">
-    <Title title={project.name} subtitle={project.typeAnnotation} />
+    <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}`} goTo={"/projects"} goTitle={"Projets"} />
     <ActionBar project={project} dataset={dataset} currentUser={user} />
     <div className="ft-project-page__informationsContainer">
       <Overview project={project} dataset={dataset} />

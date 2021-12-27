@@ -1,6 +1,6 @@
 import React from 'react';
 import HandleAnnotation from './HandleAnnotation';
-import Title from 'TitleBar';
+
 
 const annotationAction = () => {
   console.log('Mock annotationAction');

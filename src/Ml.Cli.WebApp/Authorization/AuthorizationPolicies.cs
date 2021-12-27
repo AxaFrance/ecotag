@@ -1,4 +1,4 @@
-﻿﻿namespace Axa.Fastag.Web.Authorization
+﻿namespace Ml.Cli.WebApp.Authorization
 {
     public static class AuthorizationPolicies
     {
