@@ -22,6 +22,9 @@ const Home = () => (
             <Link className="home__link" to="/annotate">
                 <div className="home__link-container home__link-container--annotate">Annotation</div>
             </Link>
+            <Link className="home__link" to="/gallery">
+                <div className="home__link-container home__link-container--gallery">Gallery</div>
+            </Link>
         </div>
     </div>
 );
