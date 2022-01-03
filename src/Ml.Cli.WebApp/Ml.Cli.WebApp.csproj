@@ -49,6 +49,8 @@
     <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\expectedOutput.json" />
     <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\Labels.json" />
     <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\tagovertext.dataset.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\storybook-static\asset-manifest.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\storybook-static\manifest.json" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

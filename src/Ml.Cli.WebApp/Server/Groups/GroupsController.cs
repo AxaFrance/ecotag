@@ -15,15 +15,15 @@ namespace Ml.Cli.WebApp.Server.Groups
 
         private Group find(string id)
         {
-            return groups.Find(currentGroup => currentGroup.Id.Equals(id));
+            return groups.Find(currentGroup => currentGroup.Id == id);
         }
 
         public GroupsController()
         {
+            string groupsAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/groups.json");
             if (groups == null)
             {
                 Console.WriteLine("Loading groups...");
-                string groupsAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/groups.json");
                 var groupsAsJsonFile = JsonDocument.Parse(groupsAsString);
                 var groupsAsJson = groupsAsJsonFile.RootElement.GetProperty("groups");
                 groups = JsonConvert.DeserializeObject<List<Group>>(groupsAsJson.ToString());

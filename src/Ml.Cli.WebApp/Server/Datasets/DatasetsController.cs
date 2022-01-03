@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Projects;
 using Newtonsoft.Json;
 
-namespace Ml.Cli.WebApp.Server.Projects
+namespace Ml.Cli.WebApp.Server.Datasets
 {
     [Route("api/server/[controller]")]
     [ApiController]
@@ -23,14 +24,14 @@ namespace Ml.Cli.WebApp.Server.Projects
             if (datasets == null)
             {
                 Console.WriteLine("Loading datasets...");
-                string datasetsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/datasets.json");
+                string datasetsAsString = System.IO.File.ReadAllText("./Server/Datasets/mocks/datasets.json");
                 var datasetsAsJsonFile = JsonDocument.Parse(datasetsAsString);
                 var datasetsAsJson = datasetsAsJsonFile.RootElement.GetProperty("datasets");
                 datasets = JsonConvert.DeserializeObject<List<Dataset>>(datasetsAsJson.ToString());
             }
         }
 
-        [HttpGet()]
+        [HttpGet]
         public ActionResult<IEnumerable<Dataset>> GetAllDatasets()
         {
             return Ok(datasets);

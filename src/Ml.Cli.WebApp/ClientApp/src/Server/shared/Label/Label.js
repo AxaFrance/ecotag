@@ -124,7 +124,7 @@ const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete }) 
   const handleSubmit = e => {
     e.preventDefault();
     if (inputValue === '') {
-      return alert('Pas de label');
+      return;
     }
     setLabels([
       ...labels,
