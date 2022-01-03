@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { createMemoryHistory } from "history";
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 
@@ -22,11 +22,8 @@ describe('Home.container for groups', () => {
   const givenFetch = jest.fn(() => Promise.resolve(givenGroups));
   
   it('HomeContainer render correctly the groups', async () => {
-    const { getByText } = render(<Router history={history}><HomeContainer fetch={givenFetch} /></Router>);
-    const messageEl = await waitFor(() => getByText('developpeurs'));
-    expect(messageEl).toHaveTextContent(
-      'developpeurs'
-    );
+    const { asFragment } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 
