@@ -14,7 +14,6 @@
     "env-cmd": "^10.1.0",
     "glob": "^7.1.6",
     "js-levenshtein": "^1.1.6",
-    "json-stable-stringify": "^1.0.1",
     "konva": "^8.1.1",
     "lodash": "^4.17.21",
     "monaco-editor": "^0.25.2",
@@ -28,7 +27,6 @@
     "react-query": "^3.13.6",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
-    
     "react-toastify": "^8.0.3",
     "sass": "^1.26.10",
     "tesseract.js": "^2.1.5",
@@ -75,7 +73,6 @@
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^7.2.1",
     "css-loader": "^4.1.1",
-    "enzyme": "^3.11.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "prop-types": "^15.7.2",
     "react-hotkeys": "^2.0.0",

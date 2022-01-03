@@ -7,7 +7,12 @@ import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
-const AnnotationDispatchWithLoader = withLoader(AnnotationDispatch);
+
+
+const PageAnnotation = ({project, ...state}) => <>
+  <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}` } goTo={`/projects/${project.id}`} />
+  <AnnotationDispatch {...state} project={project} /></>
+const PageAnnotationWithLoader = withLoader(PageAnnotation);
 
 export const init = (fetch, dispatch) => async projectId => {
   const project = await fetchProject(fetch)(projectId);
@@ -34,6 +39,8 @@ export const initialState = {
   project: {
     labels: [],
     users: [],
+    name: "-",
+    typeAnnotation: ""
   },
 };
 
@@ -49,10 +56,7 @@ const usePage = (fetch, user) => {
 
 export const AnnotationDispatchContainer = ({ fetch, user }) => {
   const { state } = usePage(fetch, user);
-  const project = state.project;
-  return <>
-    <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}` } goTo={`/projects/${project.id}`} />
-    <AnnotationDispatchWithLoader {...state} /></>;
+  return <PageAnnotationWithLoader {...state} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

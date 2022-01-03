@@ -1,5 +1,4 @@
 import React from 'react';
-import HandleAnnotation from './HandleAnnotation';
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 
 
