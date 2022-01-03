@@ -59,7 +59,7 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
         </span>
         <input onChange={e => setValueInput(e.target.value)} value={valueInput} type="text" />
       </form>
-      <button onClick={e => handleSubmit(e)} type="submit" id="validateLabelButton" className="af-btn--circle">
+      <button onClick={e => handleSubmit(e)} type="submit" id="validateLabelButton" className="af-btn--circle" disabled={!valueInput}>
         <i className="glyphicon glyphicon-ok"/>
       </button>
     </>

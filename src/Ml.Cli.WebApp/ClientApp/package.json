@@ -30,14 +30,15 @@
     "react-toastify": "^8.0.3",
     "sass": "^1.26.10",
     "tesseract.js": "^2.1.5",
-    "use-image": "^1.0.7"
+    "use-image": "^1.0.7",
+    "react-hotkeys": "^2.0.0"
   },
   "scripts": {
     "start:local": "env-cmd -f .env.local react-scripts start",
     "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",
     "build:server": "env-cmd -f .env.server react-scripts build",
-    "test": " react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test": " react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
@@ -59,24 +60,19 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@storybook/addon-actions": "^6.1.21",
-    "@storybook/addon-essentials": "^6.1.21",
-    "@storybook/addon-knobs": "^6.1.21",
-    "@storybook/addon-links": "^6.1.21",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-knobs": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
     "@storybook/addons": "^6.2.9",
-    "@storybook/cli": "^6.1.21",
-    "@storybook/node-logger": "^6.1.21",
-    "@storybook/preset-create-react-app": "^3.1.7",
-    "@storybook/react": "^6.1.21",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^10.4.9",
-    "@testing-library/user-event": "^7.2.1",
-    "css-loader": "^4.1.1",
-    "jest-environment-jsdom-sixteen": "^1.0.3",
-    "prop-types": "^15.7.2",
-    "react-hotkeys": "^2.0.0",
-    "react-test-renderer": "^16.13.1",
+    "@storybook/cli": "^6.4.9 ",
+    "@storybook/node-logger": "^6.4.9",
+    "@storybook/preset-create-react-app": "^4.0.0",
+    "@storybook/react": "^6.4.9",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "prop-types": "^15.8.0",
     "react-scripts": "5.0.0"
   }
 }
