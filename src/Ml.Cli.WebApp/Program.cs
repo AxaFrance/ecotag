@@ -29,8 +29,27 @@ namespace Ml.Cli.WebApp
             var mode = app.Option("-m|--mode <VALUE>",
                 "[Optional] - server or local",
                 CommandOptionType.SingleValue);
+
+            var modeValue = "";
+            const string server = "server";
+            const string local = "local";
+            const string localBatch = "local-batch";
+            app.OnExecute(async () =>
+            {
+                modeValue = mode.Value();
+                
+                if (modeValue == server || modeValue == local || modeValue == localBatch) return 1;
+                modeValue = server;
+                var builder = CreateHostBuilderServer(args).Build();
+                await builder.RunAsync();
+                return 1;
+            });
+            app.Execute(args);
+
+            if (modeValue == server) return;
+
             var basePath = app.Option("-b|--base-path <VALUE>",
-                "[Required] - Defines the default base directory used by the paths inside your task.json file.",
+                $"[{(modeValue == server ? "Optional" : "Required" )}] - Defines the default base directory used by the paths inside your task.json file.",
                 CommandOptionType.SingleValue);
             var tasksPath = app.Option("-t|--tasks-path <VALUE>",
                 "[Optional] - Defines the path of the tasks.json file, which describes the tasks to execute.",
@@ -44,10 +63,10 @@ namespace Ml.Cli.WebApp
             var datasetsPaths = app.Option("-d|--datasets-paths <VALUE>",
                 "[Optional] - Defines the repositories that contain datasets files that you can download and read from the webapp. To provide several repositories, please read the following example: '-d repository1,repository2'. The datasets paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided datasets paths, it probably means that the 'base directory path'/'dataset path' combination provided an incorrect path. It can also mean that the provided paths are not in the repository specified by the security path, as it is mandatory.",
                 CommandOptionType.SingleValue);
-
-            string modeValue = mode.Value();
+     
             app.OnExecute(async () =>
             {
+                
                 var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
                 var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());
                 var comparesValue = PathAdapter.AdaptPathForCurrentOs(comparesPaths.Value());
@@ -78,18 +97,12 @@ namespace Ml.Cli.WebApp
                     "-b",
                     baseValue
                 };
-                if (string.IsNullOrEmpty(modeValue))
-                {
-                    modeValue = "server";
-                }
-                else
-                {
-                    modeValue = "local";
-                }
-                var builder = CreateHostBuilder(providedArgs, modeValue).Build();
+                
+                var builder = CreateHostBuilderLocal(providedArgs, modeValue).Build();
                 await builder.RunAsync();
-                return 0;
+                return 1;
             });
+            
             try
             {
                 app.Execute(args);
@@ -101,35 +114,41 @@ namespace Ml.Cli.WebApp
             }
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args, string mode) =>
+        private static IHostBuilder CreateHostBuilderServer(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
                     var env = builderContext.HostingEnvironment;
-                    config.AddJsonFile($"appsettings-{mode}.json", false, true)
-                        .AddJsonFile($"appsettings-{mode}.{env.EnvironmentName}.json", true, true);
+                    config.AddJsonFile($"appsettings-server.json", false, true)
+                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    if (mode == "server")
-                    {
-                        webBuilder.UseStartup<StartupServer>();
-                    }
-                    else
-                    {
-                        webBuilder.UseStartup<StartupLocal>();
-                    }
-                    
+                    webBuilder.UseStartup<StartupServer>();
+                });
+
+        private static IHostBuilder CreateHostBuilderLocal(string[] args, string mode) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((builderContext, config) =>
+                {
+                    var env = builderContext.HostingEnvironment;
+                    config.AddJsonFile($"appsettings-local.json", false, true)
+                        .AddJsonFile($"appsettings-local.{env.EnvironmentName}.json", true, true);
+                    config.AddEnvironmentVariables();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<StartupLocal>();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    if (mode == "server") return;
-                    services.AddSingleton<IHostedService>(provider =>
-                        new Worker(args.Skip(6).ToArray()));
                     services.AddSingleton(provider => new BasePath(args[1]));
                     services.AddSingleton(provider => new ComparesPaths(args[3]));
                     services.AddSingleton(provider => new DatasetsPaths(args[5]));
+                    if (mode != "local-batch") return;
+                    services.AddSingleton<IHostedService>(provider =>
+                        new Worker(args.Skip(6).ToArray()));
                 });
     }
 }

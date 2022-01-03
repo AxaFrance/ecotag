@@ -40,8 +40,9 @@ namespace Ml.Cli.WebApp.Local
                             .AllowAnyMethod();
                     });
             });
-            services.AddControllersWithViews();
             services.AddScoped<IFileLoader, FileLoader.FileLoader>();
+            services.AddControllersWithViews();
+            
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });

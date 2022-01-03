@@ -32,9 +32,10 @@ namespace Ml.Cli.WebApp.Paths
             var correctPaths =
                 fullyQualifiedPaths.Where(basePath.IsPathSecure);
             
-            return correctPaths
+            var results = correctPaths
                 .SelectMany(fileLoader.EnumerateFiles)
                 .Where(file => Path.GetExtension(file) == jsonExtension);
+            return results;
         }
 
         public static IEnumerable<FileInfo> GetFilesFromDirectoryPath(string directoryPath, BasePath basePath,

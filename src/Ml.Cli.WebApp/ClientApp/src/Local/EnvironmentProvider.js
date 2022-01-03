@@ -26,7 +26,7 @@ const EnvironmentProvider = ({ children }) => {
 
     useEffect(() => {
         const environment = {
-            "apiUrl": configureUrl(window.location.href) + "{path}",
+            "apiUrl": configureUrl(window.location.href) + "{path}" ,
             "basePath" : window.location.pathname
         };
         setEnvironment({ environment });

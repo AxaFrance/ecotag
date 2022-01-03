@@ -4,7 +4,7 @@ import Compare from "./Comparison/Compare";
 import Annotate from "./Annotation/Annotate";
 import React from "react";
 import NotFound from "../PageNotFound/NotFound";
-import withCustomFetch from "../withCustomFetch";
+import withCustomFetch from "./withCustomFetch";
 import Gallery from "./Gallery/Gallery";
 
 const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));

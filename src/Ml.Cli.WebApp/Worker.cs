@@ -17,7 +17,7 @@ namespace Ml.Cli.WebApp
         {
             if (_args[0] != string.Empty)
             {
-                Ml.Cli.Program.Main(_args, "appsettings");
+                Ml.Cli.Program.Main(_args, "appsettings-local");
             }
         }
     }

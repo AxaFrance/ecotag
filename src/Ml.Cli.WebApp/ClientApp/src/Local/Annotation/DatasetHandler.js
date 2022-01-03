@@ -60,7 +60,7 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
                 accept="application/json"
                 onLoad={(reader, e) => loadFile(reader, e)}
                 onFailure={e => onLoadFailure(e)}
-                controllerPath="api/datasets"
+                controllerPath="api/local/datasets"
                 fetchFunction={fetchFunction}
             />
             {handlerState.loadFileError &&
