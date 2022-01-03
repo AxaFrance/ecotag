@@ -1,8 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
-import {init, initialState, AnnotationDispatchContainer, reducer} from './AnnotationDispatch.container';
-import {BrowserRouter as Router} from "react-router-dom";
+import {init, initialState, reducer} from './AnnotationDispatch.container';
 import * as PageService from "../Page/Page.service";
 
 const fetch = () => Promise.resolve({

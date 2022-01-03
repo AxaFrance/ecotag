@@ -3,6 +3,33 @@
 exports[`Home.container HomeContainer render correctly 1`] = `
 <DocumentFragment>
   <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Page projets
+      </h1>
+      <small
+        class="af-title-bar__subtitle"
+      >
+        tagger un ensemble de donnée
+      </small>
+    </div>
+  </div>
+  <div
     class="af-home container"
   >
     <a
