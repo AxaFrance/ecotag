@@ -1,9 +1,10 @@
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
-import { configure, shallow } from 'enzyme';
 import NotFound from './NotFound.component';
+import {render} from "@testing-library/react";
 
-it('1. Renders NotFound page component without crashing', () => {
-  configure({ adapter: new Adapter() });
-  shallow(<NotFound />);
+describe('NotFound', () => {
+  it('1. Renders NotFound page component without crashing', () => {
+    const {asFragment} = render(<NotFound/>);
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

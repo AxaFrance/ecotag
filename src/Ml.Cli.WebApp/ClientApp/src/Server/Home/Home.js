@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import Title from "TitleBar";
+import Title from "../../TitleBar";
 import {Link} from 'react-router-dom';
 import './Home.scss';
 

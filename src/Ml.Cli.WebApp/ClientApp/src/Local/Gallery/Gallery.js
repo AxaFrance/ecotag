@@ -6,7 +6,7 @@ import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import {QueryClient, QueryClientProvider} from "react-query";
 import ImageGallery from "./ImageGallery";
 import GalleryOptions from "./GalleryOptions";
-import TitleBar from "TitleBar";
+import TitleBar from "../../TitleBar";
 import './Gallery.scss';
 
 const resilienceStatus = {

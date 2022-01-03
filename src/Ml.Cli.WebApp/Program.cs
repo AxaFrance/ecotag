@@ -17,6 +17,14 @@ namespace Ml.Cli.WebApp
     {
         public static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                var builder = CreateHostBuilderServer(args).Build();
+                var task = builder.RunAsync();
+                task.Wait();
+                return;
+            }
+
             var app = new CommandLineApplication()
             {
                 Name = "Ml.Cli",
@@ -27,29 +35,10 @@ namespace Ml.Cli.WebApp
             app.HelpOption("-?|-h|--help");
 
             var mode = app.Option("-m|--mode <VALUE>",
-                "[Optional] - server or local",
+                "[Optional] - local or local-batch",
                 CommandOptionType.SingleValue);
-
-            var modeValue = "";
-            const string server = "server";
-            const string local = "local";
-            const string localBatch = "local-batch";
-            app.OnExecute(async () =>
-            {
-                modeValue = mode.Value();
-                
-                if (modeValue == server || modeValue == local || modeValue == localBatch) return 1;
-                modeValue = server;
-                var builder = CreateHostBuilderServer(args).Build();
-                await builder.RunAsync();
-                return 1;
-            });
-            app.Execute(args);
-
-            if (modeValue == server) return;
-
             var basePath = app.Option("-b|--base-path <VALUE>",
-                $"[{(modeValue == server ? "Optional" : "Required" )}] - Defines the default base directory used by the paths inside your task.json file.",
+                "[Required] - Defines the default base directory used by the paths inside your task.json file.",
                 CommandOptionType.SingleValue);
             var tasksPath = app.Option("-t|--tasks-path <VALUE>",
                 "[Optional] - Defines the path of the tasks.json file, which describes the tasks to execute.",
@@ -64,8 +53,16 @@ namespace Ml.Cli.WebApp
                 "[Optional] - Defines the repositories that contain datasets files that you can download and read from the webapp. To provide several repositories, please read the following example: '-d repository1,repository2'. The datasets paths can be relative, and will be completed by using the base directory path. Please note that if 'No file found' appears on the webapp page but you provided datasets paths, it probably means that the 'base directory path'/'dataset path' combination provided an incorrect path. It can also mean that the provided paths are not in the repository specified by the security path, as it is mandatory.",
                 CommandOptionType.SingleValue);
      
+            const string local = "local";
+            const string localBatch = "local-batch";
+            var modeValue = local;
             app.OnExecute(async () =>
             {
+                modeValue = mode.Value();
+                if (modeValue != local && modeValue != localBatch)
+                {
+                    modeValue = local;
+                };
                 
                 var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
                 var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());

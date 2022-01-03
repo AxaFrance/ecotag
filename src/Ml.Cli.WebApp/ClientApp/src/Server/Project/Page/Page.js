@@ -3,7 +3,7 @@ import Overview from './Overview';
 import Label from './LabelsList';
 import DatasetInfo from './DatasetInfo';
 import Users from './Users';
-import Title from 'TitleBar';
+import Title from '../../../TitleBar';
 import ActionBar from './ActionBar';
 import './Page.scss';
 

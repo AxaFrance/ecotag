@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from 'TitleBar';
+import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
 import LabelInput from '../../../shared/Label/LabelInput';
 import { TextInput, SelectInput, MultiSelectInput, NumberInput, Button } from '@axa-fr/react-toolkit-all';

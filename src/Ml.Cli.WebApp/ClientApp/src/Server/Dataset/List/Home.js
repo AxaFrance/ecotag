@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import Title from 'TitleBar';
+import Title from '../../../TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Loader from '@axa-fr/react-toolkit-loader';
 import './Home.scss';

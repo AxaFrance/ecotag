@@ -4,7 +4,7 @@ import FileList from "./FileList";
 import Lock from "./Lock";
 import ConfirmModal from "./ConfirmModal";
 import './Edit.scss';
-import Title from "TitleBar";
+import Title from "../../../TitleBar";
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 
 

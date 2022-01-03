@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Title from 'TitleBar';
+import Title from '../../../TitleBar';
 import New from './New';
 import Edit from './Edit';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';

@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from 'TitleBar';
+import Title from '../../TitleBar';
 import './notfound.scss';
 
 const NotFound = () => (

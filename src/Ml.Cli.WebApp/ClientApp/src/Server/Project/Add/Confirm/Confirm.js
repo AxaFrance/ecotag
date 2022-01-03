@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from 'TitleBar';
+import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
 import Button from '@axa-fr/react-toolkit-button';
 import { useLocation, withRouter } from 'react-router-dom';

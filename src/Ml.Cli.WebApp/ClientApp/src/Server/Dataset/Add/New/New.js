@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from 'TitleBar';
+import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
 import { TextInput, SelectInput, FileInput, Button } from '@axa-fr/react-toolkit-all';
 import HelpButton from '@axa-fr/react-toolkit-help';

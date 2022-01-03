@@ -48,8 +48,8 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <span className="ft-label__">
-          <i className="glyphicon glyphicon-tint ft-label__color-glyph"></i>
+        <span>
+          <i className="glyphicon glyphicon-tint ft-label__color-glyph"/>
           <input
             className="ft-label__input-color"
             onChange={e => changeLabelColor(e.target.value)}
@@ -57,41 +57,41 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
             type="color"
           />
         </span>
-        <input onChange={e => setValueInput(e.target.value)} placeholder={label.name} type="text" />
+        <input onChange={e => setValueInput(e.target.value)} value={valueInput} type="text" />
       </form>
       <button onClick={e => handleSubmit(e)} type="submit" id="validateLabelButton" className="af-btn--circle">
-        <i className="glyphicon glyphicon-ok"></i>
+        <i className="glyphicon glyphicon-ok"/>
       </button>
     </>
   );
 };
 
-const LabelList = ({ labels, remove, showDelete, setLabels }) => {
-  const [showEditForm, setShowEditForm] = useState(false);
-
-  const labelOrEditForm = (label, setLabels, labels, setShowEditForm) => {
-    if (showEditForm === label.id) {
-      return (
+const LabelOrEditForm = ({label, setLabels, labels, setShowEditForm, showEditForm}) => {
+  if (showEditForm === label.id) {
+    return (
         <EditForm
-          label={label}
-          setLabels={setLabels}
-          labelList={labels}
-          setShowEditForm={setShowEditForm}
-          showEditForm={showEditForm}
+            label={label}
+            setLabels={setLabels}
+            labelList={labels}
+            setShowEditForm={setShowEditForm}
+            showEditForm={showEditForm}
         />
-      );
-    } else {
-      return (
+    );
+  } else {
+    return (
         <button
-          onClick={() => {
-            setShowEditForm(label.id);
-          }}>
+            onClick={() => {
+              setShowEditForm(label.id);
+            }}>
           {label.name}
         </button>
-      );
-    }
-  };
+    );
+  }
+};
 
+const LabelList = ({ labels, remove, showDelete, setLabels }) => {
+  const [showEditForm, setShowEditForm] = useState(false);
+  
   const editLabel = (e, label) => {
     e.preventDefault();
     setShowEditForm(label.id);
@@ -100,20 +100,20 @@ const LabelList = ({ labels, remove, showDelete, setLabels }) => {
   return labels.map((label, index) => (
     <div key={index} className="ft-label__label-container">
       <div style={{ backgroundColor: label.color }} className="ft-label__label">
-        {labelOrEditForm(label, setLabels, labels, setShowEditForm)}
+        <LabelOrEditForm label={label} setLabels={setLabels} labels={labels} setShowEditForm={setShowEditForm} showEditForm={showEditForm} />
       </div>
       <div className="ft-label__side-button-container">
         <button
           onClick={e => remove(e, index)}
           style={showDelete ? { display: 'none' } : {}}
           className="ft-label__side-button ft-label__side-button--delete">
-          <i className="glyphicon glyphicon-trash"></i>
+          <i className="glyphicon glyphicon-trash"/>
         </button>
         <button
           onClick={e => editLabel(e, label)}
           style={showDelete ? { marginLeft: '10px' } : {}}
           className="ft-label__side-button ft-label__side-button--edit">
-          <i className="glyphicon glyphicon-pencil"></i>
+          <i className="glyphicon glyphicon-pencil"/>
         </button>
       </div>
     </div>
@@ -152,12 +152,11 @@ const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete }) 
           type="text"
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
-          placeholder="Ex.: Recto"
         />
       </div>
       <div className="ft-label__validate-button">
-        <button onClick={handleSubmit} type="submit" className="af-btn--circle ft-label__validate-button">
-          <i className="glyphicon glyphicon-ok"></i>
+        <button onClick={handleSubmit} type="submit" className="af-btn--circle ft-label__validate-button" disabled={!inputValue}>
+          <i className="glyphicon glyphicon-plus" />
         </button>
       </div>
       <div className="ft-label__label-list">

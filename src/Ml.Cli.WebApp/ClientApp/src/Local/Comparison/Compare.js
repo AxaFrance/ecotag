@@ -5,7 +5,7 @@ import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import './Compare.scss';
 import {QueryClient, QueryClientProvider} from "react-query";
 import FileTreatment from "../FileTreatment/FileTreatment";
-import TitleBar from "TitleBar";
+import TitleBar from "../../TitleBar";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 

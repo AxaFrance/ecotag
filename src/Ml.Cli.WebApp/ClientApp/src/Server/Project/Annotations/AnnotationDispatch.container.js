@@ -6,7 +6,7 @@ import { fetchProject } from '../Page/Page.service';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
-import Title from 'TitleBar';
+import Title from '../../../TitleBar';
 const AnnotationDispatchWithLoader = withLoader(AnnotationDispatch);
 
 export const init = (fetch, dispatch) => async projectId => {

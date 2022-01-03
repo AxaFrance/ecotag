@@ -41,11 +41,7 @@
     justify-content: center;
     border-radius: 10px 10px 0px 0px;
     transition: 0.2s;
-
-    &:hover {
-      transition-duration: 0.3s;
-      transform: scale(1.1);
-    }
+    
     button {
       padding: 5px;
       margin: 0;
@@ -84,10 +80,6 @@
     color: white;
     transition-duration: 0.2s;
     margin-left: 10px;
-    &:hover {
-      transition-duration: 0.3s;
-      transform: scale(1.1);
-    }
     &--delete {
       background-color: red;
     }
