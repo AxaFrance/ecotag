@@ -9,8 +9,6 @@ import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
 import { NAME, CLASSIFICATION, TYPE, FILES } from './constants';
 
-import classifications from './classifications.png';
-
 const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
   <>
       <Title title=" Nouveau dataset" goTo="/datasets" goTitle="Datasets" />
@@ -19,7 +17,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
       <form className="container" name="newDataset">
         <h1 className="af-title--content">Nouveau dataset</h1>
         <article className="af-panel">
-          <section className="af-panel__content">
+          <section className="af-panel__content af-panel__content--new-dataset">
             <TextInput
               label="Nom *"
               name={NAME}
@@ -60,8 +58,21 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
               messageType="error"
               {...fields[CLASSIFICATION]}>
               <HelpButton mode="click" classModifier="classifications">
-                Information sur les criticités:
-                <img alt="tableau des classifications" src={classifications} />
+               <h2>Information sur les criticités</h2>
+                  <ul>
+                      <li>
+                          <span> <b>Public</b> : Une information créée délibérément pour le publique, ou spécifiquement conçue pour diffusion dans le public</span>
+                      </li>
+                      <li>
+                          <span><b>Interne</b>: Une information accessible à l'ensemble ou à une large partie des salariés qui n'est pas destinée à des personnes extérieures</span>
+                      </li>
+                      <li>
+                          <span><b>Confidentiel</b>: Une information dont l'accès est limité à un auditoire spécifiquement</span>
+                      </li>
+                      <li>
+                          <span><b>Critique</b>: Une information dont l'accès est limité à un auditoire très restreint</span>
+                      </li>
+                  </ul>
               </HelpButton>
             </SelectInput>
             <FileInput

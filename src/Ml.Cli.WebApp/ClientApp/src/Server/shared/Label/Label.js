@@ -120,7 +120,7 @@ const LabelList = ({ labels, remove, showDelete, setLabels }) => {
     </div>
   ));
 };
-const omitProperties = omit(['classModifier', 'helpMessage', 'className', 'id', 'componentclassname', "onChange", "value"]);
+const omitProperties = omit(['classModifier', 'helpMessage', 'className', 'id', 'componentClassName', 'componentclassname', "onChange", "value", "isVisible"]);
 const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete, name, ...otherProps }) => {
   const handleSubmit = e => {
     e.preventDefault();
