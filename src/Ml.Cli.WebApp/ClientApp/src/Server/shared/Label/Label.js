@@ -1,11 +1,11 @@
 ﻿import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Input, InputConstants as Constants, withInput } from '@axa-fr/react-toolkit-form-core';
+import { Input, InputConstants as Constants, withInput, omit } from '@axa-fr/react-toolkit-form-core';
 import cuid from 'cuid';
 import stringToRGB from './stringToRgb';
 import './Label.scss';
 
-const LabelContainer = ({ values, onChange, name, id }) => {
+const LabelContainer = ({ values, onChange, name, id, ...otherProps }) => {
   const [inputValue, setInputValue] = useState('');
   const showDelete = false;
 
@@ -18,6 +18,7 @@ const LabelContainer = ({ values, onChange, name, id }) => {
       setLabels={onChange}
       setInputValue={setInputValue}
       showDelete={showDelete}
+      {...otherProps}
     />
   );
 };
@@ -47,7 +48,7 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <div >
         <span>
           <i className="glyphicon glyphicon-tint ft-label__color-glyph"/>
           <input
@@ -58,7 +59,7 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
           />
         </span>
         <input onChange={e => setValueInput(e.target.value)} value={valueInput} type="text" />
-      </form>
+      </div>
       <button onClick={e => handleSubmit(e)} type="submit" id="validateLabelButton" className="af-btn--circle" disabled={!valueInput}>
         <i className="glyphicon glyphicon-ok"/>
       </button>
@@ -119,8 +120,8 @@ const LabelList = ({ labels, remove, showDelete, setLabels }) => {
     </div>
   ));
 };
-
-const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete }) => {
+const omitProperties = omit(['classModifier', 'helpMessage', 'className', 'id', 'componentclassname']);
+const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete, ...otherProps }) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (inputValue === '') {
@@ -152,6 +153,7 @@ const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete }) 
           type="text"
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
+          {...omitProperties(otherProps)}
         />
       </div>
       <div className="ft-label__validate-button">
@@ -167,14 +169,12 @@ const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete }) 
 };
 
 const propTypes = {
-  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Constants.propTypes,
   values: PropTypes.array,
 };
 const defaultClassName = 'react-select';
 
 const defaultProps = {
-  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Constants.defaultProps,
   values: null,
   className: defaultClassName,

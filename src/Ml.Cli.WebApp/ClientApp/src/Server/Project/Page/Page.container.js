@@ -50,7 +50,6 @@ const usePage = (fetch, user) => {
   useEffect(() => {
     state.user = user;
     init(fetch, dispatch)(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { state };
 };

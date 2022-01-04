@@ -50,6 +50,7 @@ const LabelInput = props => {
     placeholder,
     onChange,
     readOnly,
+    ...otherProps
   } = props;
   const inputClassModifier = FormClassManager.getInputClassModifier(classModifier, children);
   const inputFieldClassModifier = FormClassManager.getFieldInputClassModifier(classModifier, disabled);
@@ -84,6 +85,7 @@ const LabelInput = props => {
           readOnly={readOnly}
           disabled={disabled}
           classModifier={inputClassModifier}
+          
         />
         {children}
       </FieldInput>

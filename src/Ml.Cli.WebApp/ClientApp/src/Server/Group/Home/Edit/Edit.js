@@ -3,6 +3,8 @@ import { MultiSelectInput } from '@axa-fr/react-toolkit-form-input-select-multi'
 import { MessageTypes } from '@axa-fr/react-toolkit-form-core';
 import Modal from '@axa-fr/react-toolkit-modal-default';
 
+import "./Edit.scss";
+
 const Users = ({ idGroup, users, eligibleUsers, setUsersToSubmit }) => (
   <form className="af-form-multi-select-users">
     <MultiSelectInput
@@ -43,7 +45,8 @@ const Edit = ({
   }));
   return (
     <Modal
-      className={'af-modal'}
+        className="af-modal af-modal--group-edit"
+      classModifier={"group-edit"}
       isOpen={isManageUsersModalVisible}
       onOutsideTap={() => setManageUsersModalVisible(false)}>
       <Modal.HeaderBase>

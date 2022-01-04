@@ -7,6 +7,7 @@ import Header from './shared/Header';
 import Footer from './shared/Footer';
 
 import Routes from './AppRoutes';
+import {Helmet} from "react-helmet";
 
 export const RoutesBase = ({ environment }) => (
   <Router basename={environment.baseUrl}>
@@ -27,9 +28,18 @@ const Authentification = ({ environment }) => (
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
 
 const App = () => (
+    <>
+        <Helmet>
+            <title>Ecotag</title>
+            <meta
+                name="description"
+                content="Website part of the Ml Cli tool"
+            />
+        </Helmet>
   <EnvironmentProvider>
     <AuthentificationWithEnvironment />
   </EnvironmentProvider>
+        </>
 );
 
 export default App;

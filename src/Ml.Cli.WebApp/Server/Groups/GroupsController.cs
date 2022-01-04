@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +21,12 @@ namespace Ml.Cli.WebApp.Server.Groups
 
         public GroupsController()
         {
-            string groupsAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/groups.json");
-            if (groups == null)
-            {
-                Console.WriteLine("Loading groups...");
-                var groupsAsJsonFile = JsonDocument.Parse(groupsAsString);
-                var groupsAsJson = groupsAsJsonFile.RootElement.GetProperty("groups");
-                groups = JsonConvert.DeserializeObject<List<Group>>(groupsAsJson.ToString());
-            }
+            var groupsAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/groups.json");
+            if (groups != null) return;
+            Console.WriteLine("Loading groups...");
+            var groupsAsJsonFile = JsonDocument.Parse(groupsAsString);
+            var groupsAsJson = groupsAsJsonFile.RootElement.GetProperty("groups");
+            groups = JsonConvert.DeserializeObject<List<Group>>(groupsAsJson.ToString());
         }
 
         [HttpGet]
@@ -52,7 +51,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Group> Create(Group newGroup)
         {
-            if (String.IsNullOrEmpty(newGroup.Id))
+            if (string.IsNullOrEmpty(newGroup.Id))
             {
                 newGroup.Id = Guid.NewGuid().ToString();
                 newGroup.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
@@ -60,9 +59,8 @@ namespace Ml.Cli.WebApp.Server.Groups
             }
             else
             {
-                var idx = groups.IndexOf(newGroup);
-                groups[idx].Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
-
+                var group = groups.First(group => group.Id == newGroup.Id);
+                group.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
             }
             return find(newGroup.Id);
         }

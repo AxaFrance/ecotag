@@ -24,7 +24,6 @@ const IrotContainer = ({ url, expectedLabels, onSubmit, defaultImageDimensions =
   const expectedAngle = getExpectedAngle(expectedLabels);
   useEffect(() => {
     setState({ ...state, rotate: expectedAngle, imageAnomaly: false });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, expectedLabels]);
 
   return (

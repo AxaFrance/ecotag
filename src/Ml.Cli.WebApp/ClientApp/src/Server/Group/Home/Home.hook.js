@@ -52,7 +52,6 @@ export const useHome = fetch => {
   const onUpdateUser = (idGroup, users) => updateUsersInGroup(fetch, dispatch, state, idGroup, users);
   React.useEffect(() => {
     initListOfGroups(fetch, dispatch)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return {
     state,

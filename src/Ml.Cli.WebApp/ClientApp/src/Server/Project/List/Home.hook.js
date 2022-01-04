@@ -27,7 +27,6 @@ export const useHome = fetch => {
   const onDeleteProject = id => deleteProject(fetch, dispatch)(id);
   React.useEffect(() => {
     init(fetch, dispatch)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return {
     state,

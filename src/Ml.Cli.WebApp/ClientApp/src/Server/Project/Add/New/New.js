@@ -21,7 +21,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
             <section className="af-panel__content af-panel__content--new-project">
               <h1 className="af-title--content">Nouveau projet d&apos;annotation</h1>
               <TextInput
-                label="Nom *"
+                label="Nom"
                 name={NAME}
                 id={NAME}
                 onChange={onChange}
@@ -47,7 +47,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 {...fields[CLASSIFICATION]}
               />
               <SelectInput
-                label="Type *"
+                label="Type"
                 name={TYPE}
                 id={TYPE}
                 onChange={onChange}
@@ -90,7 +90,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
               />
               <LabelInput
                 forceDisplayMessage={hasSubmit}
-                label="Labels :"
+                label="Labels"
                 name={LABELS}
                 id={LABELS}
                 onChange={onChange}

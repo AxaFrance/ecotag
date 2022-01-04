@@ -1,5 +1,5 @@
 {
-  "name": "ml-cli",
+  "name": "ecotag",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -21,6 +21,7 @@
     "plotty": "^0.4.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
     "react-hotkeys": "^2.0.0",
     "react-json-pretty": "^2.2.0",
     "react-konva": "17.0.2-5",
@@ -39,7 +40,9 @@
     "build:server": "env-cmd -f .env.server react-scripts build",
     "test": " react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "npm rebuild canvas --update-binary"
+    "postinstall": "npm rebuild canvas --update-binary",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "homepage": ".",
   "browserslist": {
@@ -55,10 +58,31 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/builder-webpack5": "^6.4.9",
+    "@storybook/manager-webpack5": "^6.4.9",
+    "@storybook/node-logger": "^6.4.9",
+    "@storybook/preset-create-react-app": "^4.0.0",
+    "@storybook/react": "^6.4.9",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "prop-types": "^15.8.0",
-    "react-scripts": "5.0.0"
+    "react-scripts": "5.0.0",
+    "webpack": "^5.65.0"
+  },
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
   }
 }

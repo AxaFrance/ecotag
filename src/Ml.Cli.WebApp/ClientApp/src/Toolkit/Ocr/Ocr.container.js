@@ -25,7 +25,6 @@ const OcrContainer = ({ labels, expectedLabels, url, onSubmit }) => {
       });
       setState({ ...state, userInput });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   return (

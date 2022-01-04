@@ -33,8 +33,8 @@ const preInitState = {
     },
     [LABELS]: {
       name: LABELS,
-      values: [{ name: 'recto', id: '1', color: '#212121' }],
-      message: null,
+      values: [],
+      message: MSG_REQUIRED,
     },
   },
 };
@@ -97,7 +97,6 @@ const useNew = (fetch, history) => {
   const onSubmit = () => createProject(history, fetch, state, dispatch);
   React.useEffect(() => {
     init(fetch, dispatch)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { state, onChange, onSubmit };
 };

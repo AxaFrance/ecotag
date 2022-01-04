@@ -9,12 +9,21 @@ import '@axa-fr/react-toolkit-form-input-select/dist/select.scss';
 import {HashRouter} from "react-router-dom";
 import Routes from "./Routes";
 import EnvironmentProvider, {withEnvironment} from "./EnvironmentProvider";
-
+import {Helmet} from "react-helmet";
 
 export const App = ({environment}) => (
-    <HashRouter basename={environment.basePath}>
-        <Routes/>
-    </HashRouter>
+    <>
+        <Helmet>
+            <title>Ml Cli</title>
+            <meta
+                name="description"
+                content="Website part of the Ml Cli tool"
+            />
+        </Helmet>
+        <HashRouter basename={environment.basePath}>
+            <Routes/>
+        </HashRouter>
+    </>
 );
 
 const AppWithEnvironment = withEnvironment(App);

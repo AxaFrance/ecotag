@@ -66,7 +66,6 @@ const useHome = fetch => {
   };
   useEffect(() => {
     init(fetch, dispatch)();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { state, onChangePaging };
 };
