@@ -53,7 +53,14 @@ steps:
       arguments: build-storybook
 
   - task: Npm@0
-    displayName: "npm run build"
+    displayName: "npm run build:server"
+    inputs:
+      cwd: src/Ml.Cli.WebApp/ClientApp
+      command: run
+      arguments: build
+
+  - task: Npm@0
+    displayName: "npm run build:local"
     inputs:
       cwd: src/Ml.Cli.WebApp/ClientApp
       command: run
