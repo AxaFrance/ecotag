@@ -3,7 +3,7 @@
     "LocalBatch": {
       "commandName": "Project",
       "launchBrowser": true,
-      "commandLineArgs": "--mode local-batch --tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo --compares-paths licenses/compares --datasets-paths licenses/datasets",
+      "commandLineArgs": "--tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo --compares-paths licenses/compares --datasets-paths licenses/datasets",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -12,7 +12,7 @@
     "Local": {
       "commandName": "Project",
       "launchBrowser": true,
-      "commandLineArgs": "--mode local --tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo --compares-paths licenses/compares --datasets-paths licenses/datasets",
+      "commandLineArgs": "--base-path ../../demo --compares-paths licenses/compares --datasets-paths licenses/datasets",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
