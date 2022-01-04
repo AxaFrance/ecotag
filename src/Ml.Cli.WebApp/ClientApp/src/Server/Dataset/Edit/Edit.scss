@@ -1,0 +1,52 @@
+﻿.edit-dataset {
+  &__file-upload-container {
+    padding: 0 50px;
+    margin-bottom: 50px;
+   &--disabled {
+     display: none;
+   }
+ }
+
+  &__file-upload-title {
+    text-align: center;
+  }
+
+  .af-btn {
+    width: 25%
+  }
+
+  .af-tabs__control {
+    margin-left: 10px;
+  }
+
+  &__modal-core-text {
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 1.1px;
+  }
+
+ &__file-list-container {
+   margin-bottom: 50px;
+ }
+
+ &__lock-button-container {
+  display: flex;
+  justify-content: center;
+ }
+
+ &__lock-button-button {
+    &--disabled {
+      display: none;
+    }
+ }
+
+  &__lock-button-icon {
+    margin-left: 5%;
+  }
+}
+.af-modal__header-title {
+  letter-spacing: 1.2px;
+  font-size: 31px;
+  color: #ef0e0e;
+  font-weight: 700;
+}

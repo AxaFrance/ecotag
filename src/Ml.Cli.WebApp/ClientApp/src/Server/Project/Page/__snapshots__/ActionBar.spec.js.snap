@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ActionBar ActionBar render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="ft-actionBar"
+  >
+    <div>
+      <button
+        class="btn af-btn af-btn--success af-btn--hasiconRight"
+        tabindex="-1"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Edit Project
+        </span>
+        <i
+          class="glyphicon glyphicon-pencil"
+        />
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn"
+        id="startTagging"
+        name="Start Tagging"
+      >
+        <span
+          class="af-btn-text"
+        >
+          Start Tagging
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

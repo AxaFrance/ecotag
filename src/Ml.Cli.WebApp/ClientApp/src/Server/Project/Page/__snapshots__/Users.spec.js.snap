@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Users Users render correctly 1`] = `
+<DocumentFragment>
+  <div>
+    <h2>
+      Informations annotateurs
+    </h2>
+    <table
+      class="af-table"
+    >
+      <thead
+        class="af-table-thead"
+      >
+        <tr
+          class="af-table__tr"
+        >
+          <th
+            class="af-table__th"
+          >
+            Adresse e-mail
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Nombre d'annotations
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Annotations vérifiées
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="af-table__body"
+      >
+        <tr
+          class="af-table__tr"
+        >
+          <td
+            class="af-table__cell"
+          >
+            titi
+          </td>
+          <td
+            class="af-table__cell"
+          />
+          <td
+            class="af-table__cell"
+          />
+        </tr>
+        <tr
+          class="af-table__tr"
+        >
+          <td
+            class="af-table__cell"
+          >
+            toto
+          </td>
+          <td
+            class="af-table__cell"
+          />
+          <td
+            class="af-table__cell"
+          />
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</DocumentFragment>
+`;

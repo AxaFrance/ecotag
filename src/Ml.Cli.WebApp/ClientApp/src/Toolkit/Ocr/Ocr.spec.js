@@ -51,7 +51,7 @@ describe(`Annotation.Irot`, () => {
         const labels =   [{name: "0", color: "#212121", id: 0},
             {name: "1", color: "#ffbb00", id: 1},
             {name: "2", color: "#f20713", id: 2}];
-        const { container } = render(<OcrContainer labels={labels} expectedLabels={expectedLabels} url={url} onSubmit={onSubmit} />);
+        render(<OcrContainer labels={labels} expectedLabels={expectedLabels} url={url} onSubmit={onSubmit} />);
 
         await waitFor(() => {
             const item = screen.queryByText("Submit");
@@ -62,7 +62,9 @@ describe(`Annotation.Irot`, () => {
             const output = onSubmit.mock.calls[0][0];
             expect(output).toEqual({
                 labels: {
-                    Recto: "youhou"
+                    "0": "youhou",
+                    "1": "",
+                    "2": ""
                 },
                 width: 0,
                 height: 0,

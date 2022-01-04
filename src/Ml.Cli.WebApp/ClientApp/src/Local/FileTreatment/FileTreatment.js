@@ -190,7 +190,7 @@ try {
                 accept="application/json"
                 onLoad={(reader, e) => onLoad(reader, e)}
                 onFailure={e => onLoadFailure(e)}
-                controllerPath="api/compares"
+                controllerPath="api/local/compares"
                 fetchFunction={fetchFunction}
             />
 

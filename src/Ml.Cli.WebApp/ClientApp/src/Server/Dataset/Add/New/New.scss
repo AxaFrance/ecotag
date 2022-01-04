@@ -1,0 +1,27 @@
+@import '@axa-fr/react-toolkit-panel/dist/panel.scss';
+@import '@axa-fr/react-toolkit-core/src/common/scss/core.scss';
+@import '~@axa-fr/react-toolkit-all/dist/style/bootstrap/grid.css';
+@import '@axa-fr/react-toolkit-button/dist/button.scss';
+@import '@axa-fr/react-toolkit-form-core/dist/form.scss';
+@import '@axa-fr/react-toolkit-form-input-text/dist/inputtext.scss';
+@import '@axa-fr/react-toolkit-form-input-file/dist/file.scss';
+
+.af-panel {
+ 
+}
+
+.af-btn--confirm {
+  text-align: center;
+}
+
+.af-steps-new--devis {
+  margin-bottom: 0;
+}
+
+.af-popover__container--classifications {
+  margin-left: 20px;
+}
+
+.af-popover__container--classifications .af-popover__container-pop {
+  width: 650px;
+}

@@ -15,12 +15,15 @@
 	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.8" />
 	<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
 	<PackageReference Include="swashbuckle.aspnetcore" Version="6.2.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
   </ItemGroup>
   
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\public\environment.dev.json" />
+    <Content Include="ClientApp\public\environment.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverTextLabel\expectedOutput.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverTextLabel\Labels.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
@@ -30,10 +33,24 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\scss" />
+    <Folder Include="Logs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Ml.Cli\Ml.Cli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="LocalControllers\Projects\mocks\datasets.json" />
+    <_ContentIncludedByDefault Remove="LocalControllers\Projects\mocks\projects.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\BoundingBox\expectedOutput.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\BoundingBox\labels.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\rotation\rotation.dataset.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\expectedOutput.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\Labels.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\src\Server\Project\Annotations\TagOverTextLabels\tagovertext.dataset.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\storybook-static\asset-manifest.json" />
+    <_ContentIncludedByDefault Remove="ClientApp\storybook-static\manifest.json" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -49,7 +66,8 @@
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:local" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:server" />
 
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>

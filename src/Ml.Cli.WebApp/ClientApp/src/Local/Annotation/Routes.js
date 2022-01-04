@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import {Route, Switch, useRouteMatch, withRouter} from "react-router-dom";
 import AnnotationsContainer from "./AnnotationsContainer";
-import TitleBar from "../TitleBar/TitleBar";
+import TitleBar from "../../TitleBar";
 import DatasetHandler from "./DatasetHandler";
 
 const Annotation = props => {

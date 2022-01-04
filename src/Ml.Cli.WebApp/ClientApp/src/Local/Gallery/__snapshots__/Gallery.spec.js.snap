@@ -721,7 +721,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
       class="image-gallery__link"
     >
       <a
-        href="api/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
+        href="api/local/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -749,7 +749,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
       class="image-gallery__link"
     >
       <a
-        href="api/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -759,7 +759,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
           <img
             alt="C:\\\\someFolder\\\\someImage.png"
             class="image-gallery__image"
-            src="api/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
+            src="api/local/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
           />
         </div>
         <div
@@ -778,7 +778,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
     >
       <a
         download="compare-licenses-file-2.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
       >
         <div
           class="image-gallery__image-container image-container-width__medium"
@@ -805,7 +805,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
     >
       <a
         download="compare-licenses-file-1.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
       >
         <div
           class="image-gallery__image-container image-container-width__medium"
@@ -1010,7 +1010,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
     >
       <a
         download="compare-licenses-file-1.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMS5qc29u"
       >
         <div
           class="image-gallery__image-container image-container-width__normal"
@@ -1037,7 +1037,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
     >
       <a
         download="compare-licenses-file-2.json"
-        href="api/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxjb21wYXJlLWxpY2Vuc2VzLWZpbGUtMi5qc29u"
       >
         <div
           class="image-gallery__image-container image-container-width__normal"
@@ -1063,7 +1063,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
       class="image-gallery__link"
     >
       <a
-        href="api/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
+        href="api/local/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -1073,7 +1073,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
           <img
             alt="C:\\\\someFolder\\\\someImage.png"
             class="image-gallery__image"
-            src="api/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
+            src="api/local/files/Qzpcc29tZUZvbGRlclxzb21lSW1hZ2UucG5n"
           />
         </div>
         <div
@@ -1091,7 +1091,7 @@ exports[`Check images display Should render Gallery page correctly, resize image
       class="image-gallery__link"
     >
       <a
-        href="api/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
+        href="api/local/files/Qzpcc29tZUZvbGRlclxzb21lUGRmLnBkZg=="
         rel="noopener noreferrer"
         target="_blank"
       >

@@ -105,7 +105,6 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image, labels]);
 
   const onMouseLeaveCropping = () => {

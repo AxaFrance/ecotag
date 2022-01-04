@@ -2,7 +2,7 @@
 
 import {useHistory} from "react-router";
 import {useMutation} from "react-query";
-import {fetchGetData, fetchPostJson, utf8_to_b64} from "../../FetchHelper";
+import {fetchGetData, fetchPostJson, utf8_to_b64} from "../FetchHelper";
 import {toast} from "react-toastify";
 import Annotations from "../../Toolkit/Annotations/Annotations";
 
@@ -19,7 +19,7 @@ const fetchImages = async data => {
     if (data.status === 200) {
         const hardDriveLocations = await data.json();
         return hardDriveLocations.map(element => {
-            return `api/files/${utf8_to_b64(element)}`;
+            return `api/local/files/${utf8_to_b64(element)}`;
         });
     } else {
         return [];
@@ -28,7 +28,7 @@ const fetchImages = async data => {
 
 const getImages = (fetchFunction) => async (item) => {
     const params = "fileName=" + item.fileName + "&stringsMatcher="+ item.frontDefaultStringsMatcher + "&directory=" + item.imageDirectory
-    const fetchResult = await fetchGetData(fetchFunction)("api/datasets/"+utf8_to_b64(params));
+    const fetchResult = await fetchGetData(fetchFunction)("api/local/datasets/"+utf8_to_b64(params));
     return fetchImages(fetchResult);
 };
 
@@ -93,7 +93,7 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         filePrimaryUrl: "",
     });
 
-    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/annotations", newData));
+    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/local/annotations", newData));
 
     const getUrls = async () => {
         const newUrls = await getImages(fetchFunction)(item);

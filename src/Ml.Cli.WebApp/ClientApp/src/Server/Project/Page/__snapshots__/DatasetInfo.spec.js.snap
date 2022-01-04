@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetInfo DatasetInfo render correctly 1`] = `
+<DocumentFragment>
+  <div>
+    <h2>
+      Dataset
+    </h2>
+    <table
+      class="af-table"
+    >
+      <thead
+        class="af-table-thead"
+      >
+        <tr
+          class="af-table__tr"
+        >
+          <th
+            class="af-table__th"
+          >
+            Name
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Type
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Classification
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Nb fichier
+          </th>
+          <th
+            class="af-table__th"
+          >
+            Date de création
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="af-table__body"
+      >
+        <tr
+          class="af-table__tr"
+        >
+          <td
+            class="af-table__cell"
+          >
+            Carte verte
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            Image
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            Publique
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            300
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            30/10/2019
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</DocumentFragment>
+`;
