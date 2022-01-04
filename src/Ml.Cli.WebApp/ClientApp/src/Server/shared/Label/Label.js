@@ -48,7 +48,7 @@ const EditForm = ({ label, setLabels, labelList, setShowEditForm, showEditForm }
 
   return (
     <>
-      <div >
+      <div>
         <span>
           <i className="glyphicon glyphicon-tint ft-label__color-glyph"/>
           <input
@@ -120,8 +120,8 @@ const LabelList = ({ labels, remove, showDelete, setLabels }) => {
     </div>
   ));
 };
-const omitProperties = omit(['classModifier', 'helpMessage', 'className', 'id', 'componentclassname']);
-const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete, ...otherProps }) => {
+const omitProperties = omit(['classModifier', 'helpMessage', 'className', 'id', 'componentclassname', "onChange", "value"]);
+const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete, name, ...otherProps }) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (inputValue === '') {
@@ -151,6 +151,7 @@ const NewLabel = ({ setInputValue, inputValue, setLabels, labels, showDelete, ..
         <input
           className="af-form__input-text"
           type="text"
+          name={name}
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           {...omitProperties(otherProps)}
@@ -172,7 +173,7 @@ const propTypes = {
   ...Constants.propTypes,
   values: PropTypes.array,
 };
-const defaultClassName = 'react-select';
+const defaultClassName = '';
 
 const defaultProps = {
   ...Constants.defaultProps,

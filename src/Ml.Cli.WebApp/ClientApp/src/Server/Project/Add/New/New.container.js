@@ -53,7 +53,27 @@ export const reducer = (state, action) => {
       };
     }
     case 'onChange': {
-      const newField = genericHandleChange(rules, state.fields, action.event);
+      const event = action.event;
+      const name = event.name;
+      const newValues = event.values
+      const fields = state.fields;
+      let newField;
+      switch (name) {
+        case LABELS:
+          const message = newValues.length > 0 ? null : MSG_REQUIRED
+          newField = {
+            ...fields,
+                [name]: {
+              ...fields[name],
+                  message,
+                  values:newValues,
+            }};
+          break;
+        default:
+            newField = genericHandleChange(rules, fields, event);
+            break;      
+        }
+        
       return {
         ...state,
         fields: newField,

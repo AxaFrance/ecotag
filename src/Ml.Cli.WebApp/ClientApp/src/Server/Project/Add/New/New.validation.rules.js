@@ -22,7 +22,7 @@ const ruleNumber = {
 
 export const rules = {
   [NAME]: [rulesRequired],
-  [DATASET]: [],
+  [DATASET]: [rulesRequired],
   [TYPE]: [rulesRequired],
   [LABELS]: [],
   [NUMBER_CROSS_ANNOTATION]: [rulesMaxLength(10), ruleNumber],

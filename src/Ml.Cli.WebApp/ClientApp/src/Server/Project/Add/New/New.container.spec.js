@@ -73,7 +73,7 @@ describe('New.container', () => {
           [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
           [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED },
           [NUMBER_CROSS_ANNOTATION]: { name: NUMBER_CROSS_ANNOTATION, value: null, message: MSG_REQUIRED },
-          [LABELS]: { name: LABELS, values: [{"color": "#212121","id": "1","name": "recto"}], message: null },
+          [LABELS]: { name: LABELS, values: [], message: MSG_REQUIRED },
         }
       });
     });
