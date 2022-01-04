@@ -5,6 +5,8 @@ import { createMemoryHistory } from "history";
 import { BrowserRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
+import sleep from "../../../sleep";
+import {isPromise} from "env-cmd/dist/utils";
 
 describe('Home.container for groups', () => {
 
@@ -19,10 +21,22 @@ describe('Home.container for groups', () => {
       { "email": "guillaume.chervet@axa.fr" }
     ]
   }];
-  const givenFetch = jest.fn(() => Promise.resolve(givenGroups));
+  const givenFetch = async (url, config) => {
+    await sleep(1);
+    switch (url) {
+      case "groups":
+        return  Promise.resolve(givenGroups);
+      default:
+        return  Promise.resolve(["gilles.cruchon@axa.fr", "guillaume.chervet@axa.fr"]);
+    }
+  };
   
   it('HomeContainer render correctly the groups', async () => {
-    const { asFragment } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
+    const { asFragment, getByText } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
+    const messageEl = await waitFor(() => getByText('developpeurs'));
+    expect(messageEl).toHaveTextContent(
+        'developpeurs'
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 });

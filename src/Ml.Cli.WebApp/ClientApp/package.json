@@ -28,7 +28,7 @@
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
     "react-toastify": "^8.0.3",
-    "sass": "^1.26.10",
+    "sass": "^1.45.2",
     "tesseract.js": "^2.1.5",
     "use-image": "^1.0.7"
   },
@@ -37,10 +37,8 @@
     "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",
     "build:server": "env-cmd -f .env.server react-scripts build",
-    "test": " react-scripts test --env=jsdom  --coverage",
+    "test": " react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
     "postinstall": "npm rebuild canvas --update-binary"
   },
   "homepage": ".",

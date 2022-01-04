@@ -100,7 +100,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
     <h1
       class="af-title--content"
     >
-      Affichage des groupes - il y a actuellement (0) groupes
+      Affichage des groupes - il y a actuellement (1) groupes
     </h1>
     <div
       class="af-loader"
@@ -138,7 +138,50 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
         </thead>
         <tbody
           class="af-table__body"
-        />
+        >
+          <tr
+            class="af-table__tr"
+          >
+            <td
+              class="af-table__cell"
+            >
+              developpeurs
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              clement.trofleau.lbc@axa.fr, gilles.cruchon@axa.fr, francois.descamps@axa.fr, guillaume.chervet@axa.fr
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              <a
+                class="btn af-btn--circle"
+                href="#"
+                id="editActionId"
+                role="button"
+                tabindex="0"
+                title="Modifier"
+              >
+                <i
+                  class="glyphicon glyphicon-pencil"
+                />
+              </a>
+              <a
+                class="btn af-btn--circle"
+                href="#"
+                id="removeActionId"
+                role="button"
+                tabindex="0"
+                title="Supprimer"
+              >
+                <i
+                  class="glyphicon glyphicon-remove"
+                />
+              </a>
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div
         class="af-paging"
@@ -260,23 +303,6 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
               </li>
             </ul>
           </nav>
-        </div>
-      </div>
-      <div
-        class="af-loader af-loader-on"
-        style="background-color: rgba(180, 180, 180, 0.75); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"
-      >
-        <div
-          class="af-spinner af-spinner--active"
-        >
-          <div
-            class="af-spinner__animation"
-          />
-          <div
-            class="af-spinner__caption"
-          >
-            Chargement en cours
-          </div>
         </div>
       </div>
     </div>

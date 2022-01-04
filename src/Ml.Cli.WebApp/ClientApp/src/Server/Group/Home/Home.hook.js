@@ -20,9 +20,7 @@ export const createGroup = (fetch, dispatch) => async fields => {
 
 export const deleteGroup = (fetch, dispatch) => async id => {
   dispatch({ type: 'onActionGroupLoading' });
-
   await fetchDeleteGroup(fetch)(id);
-
   await initListOfGroups(fetch, dispatch)();
 };
 
