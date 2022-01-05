@@ -30,13 +30,14 @@ namespace Ml.Cli.WebApp.Paths
             }
 
             path = PathAdapter.AdaptPathForCurrentOs(path);
+            var currentPath = System.IO.Path.GetFullPath(path);
             var currentBasePath = System.IO.Path.GetFullPath(_path);
-            if (!path.StartsWith(currentBasePath, StringComparison.Ordinal))
+            if (!currentPath.StartsWith(currentBasePath, StringComparison.Ordinal))
             {
                 return false;
             }
 
-            var pathWithoutBase = path.Remove(0, _path.Length);
+            var pathWithoutBase = currentPath.Remove(0, _path.Length);
             if (pathWithoutBase.Contains(@"..", StringComparison.Ordinal))
             {
                 return false;
@@ -47,7 +48,7 @@ namespace Ml.Cli.WebApp.Paths
                 return false;
             }
 
-            return Directory.Exists(path) || File.Exists(path);
+            return Directory.Exists(currentPath) || File.Exists(currentPath);
         }
     }
 }
