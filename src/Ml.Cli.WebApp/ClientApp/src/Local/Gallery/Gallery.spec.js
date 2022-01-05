@@ -1,5 +1,5 @@
 ﻿import Gallery, {sortItems} from "./Gallery";
-import {fireEvent, render, waitFor} from '@testing-library/react';
+import {act, fireEvent, render, waitFor} from '@testing-library/react';
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 
@@ -58,7 +58,7 @@ describe('Check images display', () => {
         
         await waitFor(() => expect(container.querySelector('.image-container-width__normal')).not.toBeNull());
         
-        await new Promise((r) => setTimeout(r, 6000));
+        await act(async() => new Promise((r) => setTimeout(r, 6000)));
         await waitFor(() => expect(nbFetchCalls).toBeGreaterThanOrEqual(3));
 
         expect(asFragment()).toMatchSnapshot();
