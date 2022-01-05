@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: Publish win-x64 ml-cli-webapp
-            path: ./win-x64/fibonacci
+            path: ./ubuntu/ml-cli-webapp.zip
 #
 #      - name: version
 #        run: echo "::set-output name=version::1.0.1"
