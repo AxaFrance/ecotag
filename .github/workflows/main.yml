@@ -39,12 +39,18 @@ jobs:
 
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
 
-#      - name: Install zip
-#        uses: montudor/action-zip@v1
-#
-#      - name: Zip output
-#        run: zip -qq -r ml-cli-webapp.zip ml-cli-webapp
-#        working-directory: ./ubuntu/
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Zip output
+        run: zip -qq -r ml-cli-webapp.zip ml-cli-webapp
+        working-directory: ./ubuntu/
+        
+      - name: Upload ml-cli-webapp Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: Publish win-x64 ml-cli-webapp
+            path: ./win-x64/fibonacci
 #
 #      - name: version
 #        run: echo "::set-output name=version::1.0.1"
