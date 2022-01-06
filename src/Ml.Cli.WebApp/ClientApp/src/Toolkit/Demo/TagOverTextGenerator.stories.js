@@ -29,7 +29,7 @@ const optionsSelect = [
 function TagOverTextGenerator( {templates =[]}){
 
     const [loaded, error] = useScript(
-        `https://docs.opencv.org/4.5.4/opencv.js`
+        `https://docs.opencv.org/4.5.5/opencv.js`
     );
     
     const [state, setState] = useState({
