@@ -36,7 +36,7 @@ const findFirstGoodPageAsync = (cv) =>  async (files, imgDescription, goodMatchS
     }
 }
 
-export const playAlgoAsync= (cv) => async (file, imgDescription, goodMatchSizeThreshold = 6) => {
+export const playAlgoAsync= (cv) => async (file, imgDescription, goodMatchSizeThreshold = 6, feedback = message => message) => {
     const filename = file.name.toLowerCase();
     let files;
     if (filename.endsWith(".pdf")) {
@@ -46,9 +46,8 @@ export const playAlgoAsync= (cv) => async (file, imgDescription, goodMatchSizeTh
     } else {
         files = [await toBase64Async(file)];
     }
-
     const data = await findFirstGoodPageAsync(cv)(files, imgDescription, goodMatchSizeThreshold);
-    return {data, filename, files};
+    return {data, filename, files, feedback};
 }
 
 export const playAlgoNoTemplateAsync = async(file) => {
