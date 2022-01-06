@@ -167,11 +167,11 @@ jobs:
             ${{ needs.tags.outputs.changelog }}
           release_name: "v${{ needs.tags.outputs.new_version }}"
           tag_name: "v${{ needs.tags.outputs.new_version }}"
-          body_path: CHANGELOG.md
+          #body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: upload linux artifact
+      - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -181,7 +181,17 @@ jobs:
           asset_name: linux-x64-ml-cli.zip
           asset_content_type: application/zip
           
-      - name: upload windows artifact
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/linux-x64/ml-cli/linux-x64-demo-api.zip
+          asset_name: linux-x64-demo-api.zip
+          asset_content_type: application/zip
+          
+      - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -191,27 +201,57 @@ jobs:
           asset_name: win-x64-ml-cli.zip
           asset_content_type: application/zip
           
-      - name: upload windows artifact
+      - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/rhel-x64/ml-cli/win-x64-ml-cli.zip
+          asset_path: ./drop/win-x64/ml-cli/win-x64-demo-api.zip
+          asset_name: win-x64-demo-api.zip
+          asset_content_type: application/zip
+          
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/rhel-x64/ml-cli/rhel-x64-ml-cli.zip
           asset_name: rhel-x64-ml-cli.zip
           asset_content_type: application/zip
           
-      - name: upload windows artifact
+      - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/osx-x64/ml-cli/win-x64-ml-cli.zip
+          asset_path: ./drop/rhel-x64/ml-cli/rhel-x64-demo-api.zip
+          asset_name: rhel-x64-demo-api.zip
+          asset_content_type: application/zip
+          
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/osx-x64/ml-cli/osx-x64-ml-cli.zip
           asset_name: osx-x64-ml-cli.zip
           asset_content_type: application/zip 
           
-      - name: upload windows artifact
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/osx-x64/ml-cli/osx-x64-demo-api.zip
+          asset_name: osx-x64-demo-api.zip
+          asset_content_type: application/zip
+
+      - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
