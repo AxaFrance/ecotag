@@ -66,12 +66,13 @@
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:local" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:server" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:local" ContinueOnError="true" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:server" ContinueOnError="true" />
 
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>
-            <DistFiles Include="$(SpaRoot)build\**" />
+            <DistFiles Include="$(SpaRoot)build-server\**" />
+            <DistFiles Include="$(SpaRoot)build-local\**" />
             <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
                 <RelativePath>%(DistFiles.Identity)</RelativePath>
                 <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
