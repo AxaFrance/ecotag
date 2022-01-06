@@ -77,6 +77,7 @@ jobs:
     environment: ml-cli
     runs-on: ubuntu-latest
     needs: tags
+    steps:
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }}.0 --output ./drop/linux-x64/ml-cli 
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }}.0 --output ./drop/win-x64/ml-cli
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }}.0 --output ./drop/rhel-x64/ml-cli
