@@ -89,7 +89,7 @@ jobs:
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
-          filename: linux-x64-ml-cli.zip
+          filename: linux-x64-ml-cli.zip 
           path: .
           directory: ./drop/linux-x64/ml-cli
 
