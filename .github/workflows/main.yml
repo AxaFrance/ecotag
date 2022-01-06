@@ -148,12 +148,13 @@ jobs:
           filename: osx-x64-demo-api.zip
           path: .
           directory: ./drop/osx-x64/demo-api
-
-      #      - name: Upload linux-x64-ml-cli-webapp Build Artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#            name: linux-x64-ml-cli-webapp
-#            path: ./ubuntu/ml-cli-webapp
+          
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
+        with:
+          filename: demo.zip
+          path: .
+          directory: ./demo
 
       - name: release
         uses: actions/create-release@v1
@@ -208,4 +209,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./drop/osx-x64/ml-cli/win-x64-ml-cli.zip
           asset_name: osx-x64-ml-cli.zip
+          asset_content_type: application/zip 
+          
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./demo.zip
+          asset_name: demo.zip
           asset_content_type: application/zip 
