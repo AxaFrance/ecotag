@@ -68,24 +68,24 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=ClientApp/coverage/lcov.info
             -Dsonar.cs.opencover.reportsPaths=**/opencover.xml
 
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
+      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }}.0 --output ./drop/linux-x64/ml-cli 
+      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }}.0 --output ./drop/win-64/ml-cli
 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
-          filename: linux-x64-ml-cli-webapp.zip
+          filename: linux-x64-ml-cli.zip
           path: .
-          directory: ./ubuntu/ml-cli-webapp
-          
+          directory: ./drop/linux-x64/ml-cli
+
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
-          filename: win-x64-ml-cli-webapp.zip
+          filename: win-x64-ml-cli.zip
           path: .
-          directory: ./win/ml-cli-webapp
-        
-#      - name: Upload linux-x64-ml-cli-webapp Build Artifact
+          directory: ./drop/win-x64/ml-cli
+
+      #      - name: Upload linux-x64-ml-cli-webapp Build Artifact
 #        uses: actions/upload-artifact@v2
 #        with:
 #            name: linux-x64-ml-cli-webapp
@@ -98,20 +98,20 @@ jobs:
         with:
           draft: false
           prerelease: true
-          release_name: ${{ needs.tags.outputs.new_version }}
+          release_name: "v${{ needs.tags.outputs.new_version }}"
           tag_name: "v${{ needs.tags.outputs.new_version }}"
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: upload windows artifact
+      - name: upload linux artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ubuntu/linux-x64-ml-cli-webapp.zip
-          asset_name: linux-x64-ml-cli-webapp.zip
+          asset_path: ./drop/linux-x64/ml-cli/linux-x64-ml-cli.zip
+          asset_name: linux-x64-ml-cli.zip
           asset_content_type: application/zip
           
       - name: upload windows artifact
@@ -120,6 +120,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./win/win-x64-ml-cli-webapp.zip
-          asset_name: win-x64-ml-cli-webapp.zip
+          asset_path: ./drop/win-x64/ml-cli/win-x64-ml-cli.zip
+          asset_name: win-x64-ml-cli.zip
           asset_content_type: application/zip
