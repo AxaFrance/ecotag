@@ -24,7 +24,7 @@ const optionsSelect = [
 function Demo( {templates =[]}){
 
   const [loaded, error] = useScript(
-      `https://docs.opencv.org/4.5.2/opencv.js`
+      `https://docs.opencv.org/4.5.5/opencv.js`
   );
   
   const initialState = {
@@ -54,13 +54,14 @@ function Demo( {templates =[]}){
           files:[]
         });
         const file = value.values[0].file;
-        playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, {...initialState}, file);
+        playAlgoWithCurrentTemplateAsync(templates[state.templateIndex], setState, {...initialState,templateIndex: state.templateIndex}, file);
     }
   };
   
   return (
       <Loader mode={state.loaderMode} text={"Your browser is working"}><form className="af-form ri__form-container" name="myform">
         <h1>Find a document</h1>
+          <img id='inlierMatches' />
       <p>
           This component runs only in the browser.
           <br/>
@@ -68,11 +69,13 @@ function Demo( {templates =[]}){
           <br/>
           This component checks the quality of your document entering information systems. This brings several advantages :
           <br/>
+          </p>
           <ul>
               <li>This makes it possible to “quickly” warn the user that his document is not of good quality and therefore not very readable.</li>
               <li>This increases the quality of the data received in the systems.</li>
               <li>The processing of the requested documents needs less calculation and production infrastructure costs are reduced (part of the calculation is carried out in the browser client).</li>
           </ul>
+          <p>
           This component is currently experimental.
       </p>
   <div className="ri__form-content">
@@ -109,7 +112,7 @@ function Demo( {templates =[]}){
         </> : null}
       
       {state.files.length > 0 ? <><h2>Original image(s)</h2>
-          {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"max-width": "100%"}} />)} </>: null}
+          {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"maxWidth": "100%"}} />)} </>: null}
     </div>
   </div>
 </form>  
