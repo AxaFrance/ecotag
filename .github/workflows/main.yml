@@ -69,19 +69,27 @@ jobs:
             -Dsonar.cs.opencover.reportsPaths=**/opencover.xml
 
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
+      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
           filename: linux-x64-ml-cli-webapp.zip
-          path: ./ml-cli-webapp
-          directory: ./ubuntu
-        
-      - name: Upload linux-x64-ml-cli-webapp Build Artifact
-        uses: actions/upload-artifact@v2
+          path: .
+          directory: ./ubuntu/ml-cli-webapp
+          
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
         with:
-            name: linux-x64-ml-cli-webapp
-            path: ./ubuntu/ml-cli-webapp
+          filename: win-x64-ml-cli-webapp.zip
+          path: .
+          directory: ./win/ml-cli-webapp
+        
+#      - name: Upload linux-x64-ml-cli-webapp Build Artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#            name: linux-x64-ml-cli-webapp
+#            path: ./ubuntu/ml-cli-webapp
 
       - name: release
         uses: actions/create-release@v1
@@ -104,4 +112,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ubuntu/linux-x64-ml-cli-webapp.zip
           asset_name: linux-x64-ml-cli-webapp.zip
+          asset_content_type: application/zip
+          
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./win/win-x64-ml-cli-webapp.zip
+          asset_name: win-x64-ml-cli-webapp.zip
           asset_content_type: application/zip
