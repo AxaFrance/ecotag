@@ -69,7 +69,6 @@ jobs:
             -Dsonar.cs.opencover.reportsPaths=**/opencover.xml
 
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./ubuntu/ml-cli-webapp 
-        
 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
@@ -83,19 +82,7 @@ jobs:
         with:
             name: linux-x64-ml-cli-webapp
             path: ./ubuntu/ml-cli-webapp
-            
 
-#
-#      - name: version
-#        run: echo "::set-output name=version::1.0.1"
-#        id: version
-#
-#      - name: Upload WebApp1 Build Artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: Publish Unbuntu ml-cli-webapp
-#          path: ./ubuntu/ml-cli-webapp
-#
       - name: release
         uses: actions/create-release@v1
         #if: ${{ github.ref == 'refs/heads/master' }}
