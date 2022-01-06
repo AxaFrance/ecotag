@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: Publish win-x64 ml-cli-webapp
-            path: ./ubuntu/Ml.Cli.WebApp.zip
+            path: ./ubuntu/ml-cli-webapp
 #
 #      - name: version
 #        run: echo "::set-output name=version::1.0.1"
