@@ -6,7 +6,7 @@ const match = (cv) => (descriptors1, descriptors2) => {
     let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
     let matches = new cv.DMatchVector();
     bf.match(descriptors1, descriptors2, matches);
-    
+    bf.delete();
     console.log("matches.size: ", matches.size());
     const matchDistance_option = 70;
     for (let i = 0; i < matches.size(); i++) {
@@ -28,7 +28,7 @@ const knnMatch = (cv) =>  (descriptors1, descriptors2, knnDistanceOption = 0.6) 
     const matches = new cv.DMatchVectorVector();
     //Reference: https://docs.opencv.org/3.3.0/db/d39/classcv_1_1DescriptorMatcher.html#a378f35c9b1a5dfa4022839a45cdf0e89
     bf.knnMatch(descriptors1, descriptors2, matches, 4);
-
+    bf.delete();
     let counter = 0;
     for (let i = 0; i < matches.size(); ++i) {
         let match = matches.get(i);
@@ -219,7 +219,6 @@ export const computeHomography = (cv) => (imgDescription, sceneImg, minMatch=20,
     let goodMatchSize = goodMatches.size();
     
     for (let i = 0; i < goodMatchSize; i++) {
-
         sourcePoints.push(keypointsObject.get(goodMatches.get(i).queryIdx ).pt.x);
         sourcePoints.push(keypointsObject.get(goodMatches.get(i).queryIdx ).pt.y);
         destinationPoints.push(keypointsScene.get(goodMatches.get(i).trainIdx ).pt.x);
@@ -234,11 +233,34 @@ export const computeHomography = (cv) => (imgDescription, sceneImg, minMatch=20,
     const findHomographyMask = new cv.Mat();
     
     let homographyPoints;
-        if(inverseSourceAndDestination) {
-            homographyPoints = cv.findHomography(matSource, matDestination, cv.RHO   , 3, findHomographyMask);
-        } else {
-            homographyPoints = cv.findHomography(matDestination, matSource, cv.RHO   , 3, findHomographyMask);
+    if(inverseSourceAndDestination) {
+        homographyPoints = cv.findHomography(matSource, matDestination, cv.RHO, 3, findHomographyMask);
+    } else {
+        homographyPoints = cv.findHomography(matDestination, matSource, cv.RHO, 3, findHomographyMask);
+    }
+/*
+    let good_inlier_matches = new cv.DMatchVector();
+    for (let i = 0; i < findHomographyMask.rows; i=i+2) {
+        if(findHomographyMask.data[i] === 1 || findHomographyMask.data[i+1] === 1) {
+            let x = destinationPoints[i];
+            let y = destinationPoints[i + 1];
+            for (let j = 0; j < keypointsScene.size(); ++j) {
+                if (x === keypointsScene.get(j).pt.x && y === keypointsScene.get(j).pt.y) {
+                    for (let k = 0; k < goodMatches.size(); ++k) {
+                        if (j === goodMatches.get(k).trainIdx) {
+                            good_inlier_matches.push_back(goodMatches.get(k));
+                        }
+                    }
+                }
+            }
         }
+    }
+    var inlierMatches = new cv.Mat();
+    let color = new cv.Scalar(255, 0,0);
+    cv.drawMatches(sceneImg, keypointsObject, sceneImg, keypointsScene, good_inlier_matches, inlierMatches, color);
+    cv.imshow('inlierMatches', inlierMatches);
+    console.log("Good Matches: ", good_matches.size(), " inlier Matches: ", good_inlier_matches.size())*/
+    
     const localClean = () => {
         matSource.delete();
         matDestination.delete();
@@ -251,7 +273,7 @@ export const computeHomography = (cv) => (imgDescription, sceneImg, minMatch=20,
         console.warn("homography matrix empty!");
         return null;
     }
-
+    localClean();
 
     return {homographyPoints, goodMatchSize, clean:localClean};
 }
@@ -281,11 +303,11 @@ export const computeAndComputeHomographyRectangle = (cv) => (imgDescription, sce
             isBug=false; 
             return null;
         }
-        /*  const h = result.homographyPoints
+          const h = result.homographyPoints
           console.log("h:", h);
           console.log("[", h.data64F[0],",", h.data64F[1], ",", h.data64F[2]);
           console.log("", h.data64F[3],",", h.data64F[4], ",", h.data64F[5]);
-          console.log("", h.data64F[6],",", h.data64F[7], ",", h.data64F[8], "]");*/
+          console.log("", h.data64F[6],",", h.data64F[7], ",", h.data64F[8], "]");
         result.homographyPoints.data32F.forEach(d => {
             if(isNaN(d)){
                 
@@ -318,8 +340,6 @@ export const computeAndComputeHomographyRectangle = (cv) => (imgDescription, sce
             const localClean = () => {
                M.delete();
                homographyPoints.delete();
-    
-               clean();
            }
             localClean();
             return { rectangle, goodMatchSize, lines: rectangle.lines };
