@@ -1,6 +1,6 @@
 # Ml-Cli
 
-[![Build Status](https://dev.azure.com/axaguildev/ml-cli/_apis/build/status/AxaGuilDEv.ml-cli?branch=master)](https://dev.azure.com/axaguildev/ml-cli/_build/latest?definitionId=6&branchName=master)
+[![CI](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml/badge.svg)](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=alert_status)](https://sonarcloud.io/dashboard?id=AxaGuilDEv_ml-cli) [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=reliability_rating) [![Security](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=security_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=security_rating) [![Code Corevage](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=coverage)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=Coverage) [![Twitter](https://img.shields.io/twitter/follow/GuildDEvOpen?style=social)](https://twitter.com/intent/follow?screen_name=GuildDEvOpen)
 
 ![Ml-cli webapp](./docs/ml-cli-script-application.gif "Ml-cli webapp")
@@ -52,7 +52,7 @@ In production we use complex sequences of algorithm ML in a micro-service archit
 
 # Getting started
 
-To run the demo with .net core 3.1 on your machine :
+To run the demo with .NET 6 on your machine :
 
 ```sh
 git clone https://github.com/AxaGuilDEv/ml-cli
@@ -105,31 +105,30 @@ chmod +x Ml.Cli.WebApp
 Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
-## Getting started on windows 10
+## Getting started on Windows 10
 
 Run the following commands :
 ```cmd
 mkdir ml-cli
 cd ml-cli
 
-# Download ml-cli-web and demo-api
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL3dpbjEw0/content?format=zip --output ml-cli.zip
-unzip ml-cli.zip -d install
-# unzip ml-cli
-unzip ./install/win10/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
-# unzip demo-api
-unzip ./install/win10/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
+# Download ml-cli-web 
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/win-x64-ml-cli.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ml-cli
+# Download demo-api
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/win-x64-demo-api.zip --output demo-api.zip
+unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
-unzip demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+unzip demo.zip -d ./demo
 ```
 
 Then, in another command line :
 ```cmd
 # run the demo-api
 cd demo-api
-Ml.Cli.DemoApi.exe
+./Ml.Cli.DemoApi.exe
 # start demo api in background at https://localhost:6001
 ```
 
@@ -137,7 +136,7 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
+./Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # then navigate to: http://localhost:5000/ 
 ```
 
@@ -154,17 +153,16 @@ Run the following commands :
 mkdir ml-cli
 cd ml-cli
 
-# Download ml-cli-web and demo-api
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMzQvYXJ0aWZhY3ROYW1lL3VidW50dQ2/content?format=zip --output ml-cli.zip
-unzip ml-cli.zip -d install
-# unzip ml-cli
-unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli
-# unzip demo-api
-unzip ./install/ubuntu/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
+# Download ml-cli-web 
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/linux-x64-ml-cli.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ml-cli
+# Download demo-api
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/linux-x64-demo-api.zip --output demo-api.zip
+unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
-unzip demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+unzip demo.zip -d ./demo
 ```
 
 Then, in another command line :
@@ -192,17 +190,16 @@ Run the following commands :
 mkdir ml-cli
 cd ml-cli
 
-# Download ml-cli-web and demo-api
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL21hY29zeA2/content?format=zip --output ml-cli.zip
-unzip ml-cli.zip -d install
-# unzip ml-cli
-unzip ./install/macosx/ml-cli-webapp/Ml.Cli.WebApp.zip -d ml-cli 
-# unzip demo-api
-unzip ./install/macosx/ml-cli-webapp/Ml.Cli.DemoApi.zip -d demo-api
+# Download ml-cli-web 
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/osx-x64-ml-cli.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ml-cli
+# Download demo-api
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/osx-x64-demo-api.zip --output demo-api.zip
+unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl https://artprodsu6weu.artifacts.visualstudio.com/A8eadf117-5eb7-40c1-b8f1-aff749481679/895dba37-078c-4abd-b04e-b34978c90658/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2F4YWd1aWxkZXYvcHJvamVjdElkLzg5NWRiYTM3LTA3OGMtNGFiZC1iMDRlLWIzNDk3OGM5MDY1OC9idWlsZElkLzUwMjgvYXJ0aWZhY3ROYW1lL2RlbW81/content?format=zip --output demo.zip
-unzip demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+unzip demo.zip -d ./demo
 ```
 
 Then, in another command line :
