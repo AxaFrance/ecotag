@@ -2,6 +2,7 @@
 
   <PropertyGroup>
   <TargetFramework>net6.0</TargetFramework>
+      <Version>1.0.0</Version>
   <RuntimeIdentifiers>linux-x64;rhel-x64;osx-x64;win10-x64</RuntimeIdentifiers>
 	<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
 	<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
@@ -66,12 +67,13 @@
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:local" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:server" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:local" ContinueOnError="true" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:server" ContinueOnError="true" />
 
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>
-            <DistFiles Include="$(SpaRoot)build\**" />
+            <DistFiles Include="$(SpaRoot)build-server\**" />
+            <DistFiles Include="$(SpaRoot)build-local\**" />
             <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
                 <RelativePath>%(DistFiles.Identity)</RelativePath>
                 <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
