@@ -37,7 +37,7 @@ const Home = ({
         <h1 className="af-title--content">
           {`Affichage des groupes - il y a actuellement (${numberItemsTotal}) groupes`}
         </h1>
-        <EmptyArrayManager onArrayEmpty="Aucun élément !">
+        <EmptyArrayManager onEmptyArray="Aucun élément !">
           <ItemsTable
               items={items}
               filters={filters}

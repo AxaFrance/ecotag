@@ -10,7 +10,7 @@ class EmptyArrayManager extends Component {
                 return <div>{child}</div>
             }
         }
-        return <span className="empty-array__error"><b>{this.props.onArrayEmpty}</b></span>
+        return <span className="empty-array__error"><b>{this.props.onEmptyArray}</b></span>
     };
 }
 

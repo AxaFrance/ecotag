@@ -41,7 +41,7 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onCh
             </div>
           </div>
         </div>
-        <EmptyArrayManager onArrayEmpty="Aucun élément !">
+        <EmptyArrayManager onEmptyArray="Aucun élément !">
             <ItemsTable
                 items={items}
                 filters={filters}
