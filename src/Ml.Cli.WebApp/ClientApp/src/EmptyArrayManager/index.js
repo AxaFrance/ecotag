@@ -7,7 +7,7 @@ class EmptyArrayManager extends Component {
         const child = React.Children.only(this.props.children);
         if('items' in child.props){
             if(child.props.items.length){
-                return <div>{child}</div>
+                return <>{child}</>
             }
         }
         return <span className="empty-array__error"><b>{this.props.onEmptyArray}</b></span>
