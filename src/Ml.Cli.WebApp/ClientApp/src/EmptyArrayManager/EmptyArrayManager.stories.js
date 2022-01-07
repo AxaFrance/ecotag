@@ -1,8 +1,8 @@
-﻿import ItemsArray from "./index";
-import Home from "../Server/Dataset/List/Home";
-import {LoaderModes} from "@axa-fr/react-toolkit-all";
+﻿import {LoaderModes} from "@axa-fr/react-toolkit-all";
 import { action } from '@storybook/addon-actions';
 import { BrowserRouter as Router } from 'react-router-dom';
+import EmptyArrayManager from "./index";
+import ItemsTable from "../Server/Dataset/List/ItemsTable";
 
 const noItems = [];
 const items = [{
@@ -37,16 +37,15 @@ const filters = {
 };
 
 export default{
-    title: 'ItemsArray',
-    component: ItemsArray
+    title: 'EmptyArrayManager',
+    component: EmptyArrayManager
 };
 
-const Template = (args) => <Router><ItemsArray {...args}/></Router>
+const Template = (args) => <Router><EmptyArrayManager><ItemsTable {...args}/></EmptyArrayManager></Router>
 
 export const WithItems = Template.bind({});
 WithItems.args = {
     items,
-    SubComponent: Home,
     loaderMode: LoaderModes.none,
     filters: filters,
     onChangePaging: action('onChangePaging'),
@@ -56,7 +55,6 @@ WithItems.args = {
 export const NoItems = Template.bind({});
 NoItems.args = {
     items: noItems,
-    SubComponent: Home,
     loaderMode: LoaderModes.none,
     filters: filters,
     onChangePaging: action('onChangePaging'),
