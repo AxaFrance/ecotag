@@ -16,7 +16,7 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
                     <span className="af-btn__text">Nouveau dataset</span>
                 </Link>
                 <h1 className="af-title--content">Vos datasets actifs : {items.length}</h1>
-                <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément !">
+                <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément">
                     <ItemsTable 
                         items={items}
                         filters={filters}

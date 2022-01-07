@@ -155,7 +155,7 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
         });
     }
     
-    return <EmptyArrayManager items={items} emptyArrayMessage="There is no file related to that filter configuration !">
+    return <EmptyArrayManager items={items} emptyArrayMessage="There is no file related to that filter configuration">
         <TableContentDisplay
             items={items}
             state={state}
