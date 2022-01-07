@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Ml.Cli.PathManager;
@@ -8,28 +9,26 @@ namespace Ml.Cli.FileLoader
 {
     public class FileLoader : IFileLoader
     {
-
-
-
         public string Load(string basePath)
         {
             basePath = PathAdapter.AdaptPathForCurrentOs(basePath);
             return File.ReadAllText(basePath);
         }
         
+        private string GetBasePath()
+        {
+            using var processModule = Process.GetCurrentProcess().MainModule;
+            return Path.GetDirectoryName(processModule?.FileName);
+        }
+        
         public async Task<string> LoadAsync(string basePath)
         {
             basePath = PathAdapter.AdaptPathForCurrentOs(basePath);
-            var path = Path.GetDirectoryName(typeof(FileLoader).Assembly.Location);
-            if (path != null)
-            {
-                var mailPath = Path.Combine(path, basePath);
-                return await File.ReadAllTextAsync(mailPath);
-            }
-            else
-            {
-                throw new ArgumentException("FileLoader : path is invalid");
-            }
+            var path = GetBasePath();
+            if (path == null) throw new ArgumentException("FileLoader : path is invalid");
+            var mailPath = Path.Combine(path, basePath);
+            return await File.ReadAllTextAsync(mailPath);
+
         }
 
         public async Task WriteAllBytesOfFileAsync(string path, byte[] contents)
