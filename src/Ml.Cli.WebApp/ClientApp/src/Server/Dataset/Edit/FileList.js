@@ -26,14 +26,15 @@ const FileList = ({state, setState}) => {
     };
 
     const onChangePaging = ({numberItems, page}) => {
-        console.log(numberItems, page)
+        const newNumberPages = computeNumberPages(state.filesSend, numberItems);
+        const newCurrentPage = state.paging.currentPages > newNumberPages ? newNumberPages : page
         setState({...state,
             paging: {
                 itemByPages: numberItems,
-                currentPages: page,
-                itemFiltered: filterPaging(state.filesSend, numberItems, page),
-                numberPages: computeNumberPages(state.filesSend, numberItems)}
-        })
+                currentPages: newCurrentPage,
+                itemFiltered: filterPaging(state.filesSend, numberItems, newCurrentPage),
+                numberPages: newNumberPages
+        }});
     };
 
     return (
