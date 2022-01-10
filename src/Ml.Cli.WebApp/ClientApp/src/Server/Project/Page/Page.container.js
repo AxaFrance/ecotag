@@ -20,7 +20,7 @@ export const init = (fetch, dispatch) => async id => {
   const datasetPromise = fetchDataset(fetch)(project.dataSetId);
   const groupPromise = fetchGroup(fetch)(project.groupId);
   
-  const [datasetResponse, groupResponse] = Promise.all([datasetPromise, groupPromise]);
+  const [datasetResponse, groupResponse] = await Promise.all([datasetPromise, groupPromise]);
 
   if(datasetResponse.status >= 500 || groupPromise.status >= 500){
     dispatch({ type: 'init', data: { project:null, dataset:null, group:null, status: resilienceStatus.ERROR } });
@@ -29,7 +29,7 @@ export const init = (fetch, dispatch) => async id => {
   const dataset = await datasetResponse.json();
   const group = await groupResponse.json();
   
-  dispatch({ type: 'init', data: { project, dataset, group } });
+  dispatch({ type: 'init', data: { project, dataset, group, status: resilienceStatus.SUCCESS } });
 };
 
 export const reducer = (state, action) => {

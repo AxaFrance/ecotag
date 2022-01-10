@@ -20,7 +20,7 @@ export const Label = ({ labels }) => {
               <Table.Td>
                 <div className="ft-labels__table-td-color">
                   <span>{label.color}</span>
-                  <div style={{ backgroundColor: label.color }} className="ft-labels__label-color"></div>
+                  <div style={{backgroundColor: label.color}} className="ft-labels__label-color"/>
                 </div>
               </Table.Td>
               <Table.Td>{label.id}</Table.Td>

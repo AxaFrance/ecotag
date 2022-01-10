@@ -19,7 +19,7 @@ export const ActionBar = ({ currentUser, project, dataset }) => {
   const history = useHistory();
 
   const startTaggingButton = () => {
-    const path = `/projects/${project.id}/annotations/${dataset.id}`;
+    const path = `/projects/${project.id}/annotations`;
     history.push(path);
   };
 
