@@ -31,6 +31,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<Project>> GetAllProjects()
         {
             return Ok(projects);

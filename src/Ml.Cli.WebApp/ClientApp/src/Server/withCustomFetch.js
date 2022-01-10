@@ -17,7 +17,7 @@ const customFetch = fetch => apiBaseUrl => async (path, config) => {
   if (response.status === 204) {
     return [];
   }
-  return response.json();
+  return response
 };
 
 const withCustomFetch = Component => ({ environment, ...otherProps }) => (

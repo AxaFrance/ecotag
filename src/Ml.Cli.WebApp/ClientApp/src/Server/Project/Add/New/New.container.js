@@ -4,10 +4,21 @@ import React, { useReducer } from 'react';
 import { withRouter } from 'react-router-dom';
 import { fetchCreateProject } from './New.service';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
-import { GROUP, NAME, CLASSIFICATION, DATASET, NUMBER_CROSS_ANNOTATION, TYPE, MSG_REQUIRED, LABELS } from './constants';
+import {
+  GROUP,
+  NAME,
+  CLASSIFICATION,
+  DATASET,
+  NUMBER_CROSS_ANNOTATION,
+  TYPE,
+  MSG_REQUIRED,
+  LABELS,
+  MSG_PROJECT_NAME_ALREADY_EXIST
+} from './constants';
 import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
 import { init } from './New.hook';
+import {resilienceStatus, withResilience} from '../../../shared/Resilience';
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
@@ -15,7 +26,10 @@ const setErrorMessage = key => fields => fields[key].message !== null;
 
 const preInitState = {
   groups: [],
+  datasets:[],
+  projects: [],
   hasSubmit: false,
+  status: resilienceStatus.LOADING,
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
     [CLASSIFICATION]: {
@@ -44,18 +58,19 @@ export const initState = computeInitialStateErrorMessage(preInitState, rules);
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { groups, datasets } = action.data;
+      const { groups, datasets, projects, status } = action.data;
       return {
         ...state,
-        loading: false,
+        status,
         groups,
         datasets,
+        projects,
       };
     }
     case 'onChange': {
       const event = action.event;
       const name = event.name;
-      const newValues = event.values
+      const newValues = event.values;
       const fields = state.fields;
       let newField;
       switch (name) {
@@ -71,7 +86,17 @@ export const reducer = (state, action) => {
           break;
         default:
             newField = genericHandleChange(rules, fields, event);
-            break;      
+            if(NAME === name){
+               if(state.projects.find(project => project.name === event.value)) {
+                 newField = {
+                   ...newField,
+                   [name]: {
+                     ...newField[name],
+                     message: MSG_PROJECT_NAME_ALREADY_EXIST
+                   }};
+               }   
+            }
+            break;
         }
         
       return {
@@ -121,13 +146,15 @@ const useNew = (fetch, history) => {
   return { state, onChange, onSubmit };
 };
 
+const NewWithResilience = withResilience(New)
+
 export const NewContainer = ({ fetch, history }) => {
   const { state, onChange, onSubmit } = useNew(fetch, history);
-  return <New {...state} onChange={onChange} onSubmit={onSubmit} />;
+  return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit} />;
 };
 
-const enhance = compose(withCustomFetch(fetch), withRouter);
 
+const enhance = compose(withCustomFetch(fetch), withRouter);
 const EnhancedNewContainer = enhance(NewContainer);
 
 export default EnhancedNewContainer;

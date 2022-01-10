@@ -8,7 +8,7 @@ import './Home.scss';
 import Action from "@axa-fr/react-toolkit-action";
 import HeaderColumnCell from "../../Project/List/ColumnHeader";
 
-const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
+const Home = ({ items, filters, status, onChangePaging, onChangeSort }) => {
     const history = useHistory();
     const editDatasetButton = id => {
         const path = `datasets/${id}`
@@ -40,7 +40,6 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
                         </div>
                     </div>
                 </div>
-                <Loader mode={loaderMode}>
                     <Table>
                         <Table.Header>
                             <Table.Tr>
@@ -98,7 +97,6 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
                         currentPage={filters.paging.currentPage}
                         id="home_paging"
                     />
-                </Loader>
             </div>
         </>
     )
@@ -120,7 +118,7 @@ Home.propTypes = {
             begin: PropTypes.string,
         })
     ),
-    loaderMode: PropTypes.string,
+    status: PropTypes.string,
 };
 
 export default Home;

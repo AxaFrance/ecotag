@@ -21,23 +21,23 @@ namespace Ml.Cli.WebApp.Server.Datasets
         
         public DatasetsController()
         {
-            if (datasets == null)
-            {
-                Console.WriteLine("Loading datasets...");
-                string datasetsAsString = System.IO.File.ReadAllText("./Server/Datasets/mocks/datasets.json");
-                var datasetsAsJsonFile = JsonDocument.Parse(datasetsAsString);
-                var datasetsAsJson = datasetsAsJsonFile.RootElement.GetProperty("datasets");
-                datasets = JsonConvert.DeserializeObject<List<Dataset>>(datasetsAsJson.ToString());
-            }
+            if (datasets != null) return;
+            Console.WriteLine("Loading datasets...");
+            string datasetsAsString = System.IO.File.ReadAllText("./Server/Datasets/mocks/datasets.json");
+            var datasetsAsJsonFile = JsonDocument.Parse(datasetsAsString);
+            var datasetsAsJson = datasetsAsJsonFile.RootElement.GetProperty("datasets");
+            datasets = JsonConvert.DeserializeObject<List<Dataset>>(datasetsAsJson.ToString());
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<Dataset>> GetAllDatasets()
         {
             return Ok(datasets);
         }
 
         [HttpGet("{id}", Name = "GetDatasetById")]
+        [ResponseCache(Duration = 1)]
         public ActionResult<Dataset> GetDataset(string id)
         {
             var dataset = find(id);

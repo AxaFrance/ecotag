@@ -25,6 +25,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<User>> GetAllUsers()
         {
             return Ok(users);

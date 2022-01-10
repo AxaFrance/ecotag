@@ -3,26 +3,30 @@ import fetchDatasets from './Home.service';
 import { convertStringDateToDateObject } from '../../date';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
-import withLoader from '../../withLoader';
 import { computeNumberPages, filterPaging, getItemsSorted } from '../../shared/Home/Home.filters';
+import { resilienceStatus, withResilience } from '../../shared/Resilience';
 
-const HomeWithLoader = withLoader(Home);
+const HomeWithResilience = withResilience(Home);
 
 const init = (fetch, dispatch) => async () => {
-  const items = await fetchDatasets(fetch)();
-  dispatch({
-    type: 'init',
-    data: { items: convertStringDateToDateObject(items) },
-  });
+  const response = await fetchDatasets(fetch)();
+  let data;
+  if(response.status >= 500) {
+    data = { items: [], status: resilienceStatus.ERROR };
+  } else {
+    const items = await response.json()
+    data = { items: convertStringDateToDateObject(items), status: resilienceStatus.SUCCESS };
+  }
+  dispatch( {type: 'init', data});
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'init':
-      const { items } = action.data;
+      const { items, status } = action.data;
       return {
         ...state,
-        loading: false,
+        status,
         items,
       };
     case 'onChangePaging':
@@ -43,7 +47,7 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  loading: true,
+  status: resilienceStatus.LOADING,
   items: [],
   filters: {
     paging: {
@@ -85,7 +89,7 @@ export const HomeContainer = ({ fetch }) => {
   };
   const items = filterPaging(itemsSorted, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
 
-  return <HomeWithLoader {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeSort={() => console.log("TODO: onChangeSort")}/>;
+  return <HomeWithResilience {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeSort={() => console.log("TODO: onChangeSort")}/>;
 };
 
 export default withCustomFetch(fetch)(HomeContainer);

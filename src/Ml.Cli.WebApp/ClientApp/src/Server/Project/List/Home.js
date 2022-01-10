@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import Title from '../../../TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
-import Loader from '@axa-fr/react-toolkit-loader';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
 import './Home.scss';
@@ -66,7 +65,7 @@ const formatDateToString = createDate =>
         .padStart(2, '0')}/${createDate.getFullYear()}`
     : '';
 
-const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject }) => {
+const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
     <>
@@ -100,7 +99,6 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onCh
             </div>
           </div>
         </div>
-        <Loader mode={loaderMode}>
           <Table>
             <Table.Header>
               <Table.Tr>
@@ -156,7 +154,6 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onCh
             currentPage={filters.paging.currentPage}
             id="home_paging"
           />
-        </Loader>
       </div>
     </>
   );
@@ -164,7 +161,6 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeFilter, onCh
 
 Home.defaultProps = {
   items: [],
-  loaderMode: '',
 };
 Home.propTypes = {
   items: PropTypes.arrayOf(
@@ -177,8 +173,7 @@ Home.propTypes = {
       birthdate: PropTypes.string,
       begin: PropTypes.string,
     })
-  ),
-  loaderMode: PropTypes.string,
+  )
 };
 
 export default Home;

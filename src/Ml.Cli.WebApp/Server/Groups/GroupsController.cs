@@ -30,12 +30,14 @@ namespace Ml.Cli.WebApp.Server.Groups
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<Group>> GetAllGroups()
         {
             return Ok(groups);
         }
 
         [HttpGet("{id}", Name = "GetGroupById")]
+        [ResponseCache(Duration = 1)]
         public ActionResult<Group> GetGroup(string id)
         {
             var group = find(id);

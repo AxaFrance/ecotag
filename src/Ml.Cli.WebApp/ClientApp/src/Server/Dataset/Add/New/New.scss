@@ -25,3 +25,9 @@
 .af-popover__container--classifications .af-popover__container-pop {
   width: 650px;
 }
+
+.af-panel__content {
+  &--new-dataset {
+    overflow: visible!important;
+  }
+} 

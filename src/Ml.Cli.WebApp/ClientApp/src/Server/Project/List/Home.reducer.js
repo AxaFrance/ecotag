@@ -1,17 +1,20 @@
+import { resilienceStatus } from '../../shared/Resilience';
+import {convertStringDateToDateObject} from "../../date";
+
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items } = action.data;
+      const { items, status } = action.data;
       return {
         ...state,
-        loading: false,
-        items,
+        status: status,
+        items: convertStringDateToDateObject(items),
       };
     }
     case 'onActionProjectsLoading': {
       return {
         ...state,
-        loading: true,
+        loading: resilienceStatus.LOADING,
       };
     }
     case 'onChangePaging': {
@@ -76,7 +79,7 @@ export const reducer = (state, action) => {
 };
 
 export const initialState = {
-  loading: true,
+  status: resilienceStatus.LOADING,
   items: [],
   filters: {
     paging: {
