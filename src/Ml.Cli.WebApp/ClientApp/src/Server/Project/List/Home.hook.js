@@ -29,9 +29,26 @@ export const init = (fetch, dispatch) => async () => {
 export const deleteProject = (fetch, dispatch) => async id => {
   dispatch({ type: 'onActionProjectsLoading' });
 
-  await fetchDeleteProject(fetch)(id);
+  const response = await fetchDeleteProject(fetch)(id);
 
-  await init(fetch, dispatch)();
+  let data;
+  if(response.status >= 500){
+    data = {
+      id: null,
+      status: resilienceStatus.ERROR
+    };
+  } else {
+    const items = await response.json();
+    data = {
+      id,
+      status: resilienceStatus.SUCCESS
+    };
+  }
+
+  dispatch({
+    type: 'onProjectDeleted',
+    data
+  });
 };
 
 export const useHome = fetch => {

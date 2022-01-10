@@ -25,8 +25,7 @@ const preInitState = {
       name: CLASSIFICATION,
       value: '',
       message: MSG_REQUIRED,
-    },
-    [FILES]: { name: FILES, values: [], message: null },
+    }
   },
 };
 

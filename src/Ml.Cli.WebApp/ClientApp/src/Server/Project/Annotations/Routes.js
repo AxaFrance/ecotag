@@ -7,7 +7,7 @@ const Routes = () => {
   return (
       
     <Switch>
-      <Route path={`${path}/:documentId`} component={AnnotationDispatchContainer} />
+      <Route path={`${path}/:projectId`} component={AnnotationDispatchContainer} />
     </Switch>
   );
 };

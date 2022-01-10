@@ -9,7 +9,7 @@ const showEditButton = isAdmin => {
     <div>
       <Button className="btn af-btn af-btn--success af-btn--hasiconRight" tabIndex="-1">
         <span className="af-btn__text">Edit Project</span>
-        <i className="glyphicon glyphicon-pencil"></i>
+        <i className="glyphicon glyphicon-pencil"/>
       </Button>
     </div>
   ) : null;

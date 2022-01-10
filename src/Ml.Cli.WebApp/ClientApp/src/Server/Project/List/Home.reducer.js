@@ -7,10 +7,32 @@ export const reducer = (state, action) => {
       const { items, status } = action.data;
       return {
         ...state,
-        status: status,
+        status,
         items: convertStringDateToDateObject(items),
       };
     }
+    case 'onProjectDeleted':
+      const { status, id } = action.data;
+      if( status === resilienceStatus.ERROR) {
+        return {
+          ...state,
+          status,
+        };
+      }
+      const items = [...state.items];
+      const item = items.find(i => i.id === id);
+      if(item) {
+        const index = items.indexOf(item);
+        if (index > -1) {
+          items.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state,
+        status,
+        items
+      };
     case 'onActionProjectsLoading': {
       return {
         ...state,

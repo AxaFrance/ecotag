@@ -7,25 +7,40 @@ import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
+import {resilienceStatus, withResilience} from "../../shared/Resilience";
 
 
 const PageAnnotation = ({project, ...state}) => <>
   <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}` } goTo={`/projects/${project.id}`} />
   <AnnotationDispatch {...state} project={project} /></>
-const PageAnnotationWithLoader = withLoader(PageAnnotation);
+const PageAnnotationWithResilience = withResilience(PageAnnotation);
 
 export const init = (fetch, dispatch) => async projectId => {
-  const project = await fetchProject(fetch)(projectId);
-  dispatch({ type: 'init', data: { project } });
+  const response = await fetchProject(fetch)(projectId);
+  let data;
+  if(response.status >= 500){
+    data = {
+      project: null,
+      status: resilienceStatus.ERROR
+    };
+  } else {
+    const project = await response.json();
+    data = {
+      project,
+      status: resilienceStatus.SUCCESS
+    };
+  }
+  
+  dispatch({ type: 'init', data });
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { project } = action.data;
+      const { project, status } = action.data;
       return {
         ...state,
-        loading: false,
+        status,
         project,
       };
     }
@@ -35,7 +50,7 @@ export const reducer = (state, action) => {
 };
 
 export const initialState = {
-  loading: true,
+  status: resilienceStatus.LOADING,
   project: {
     labels: [],
     users: [],
@@ -44,19 +59,18 @@ export const initialState = {
   },
 };
 
-const usePage = (fetch, user) => {
+const usePage = (fetch) => {
   const { projectId } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    state.user = user;
     init(fetch, dispatch)(projectId);
   }, []);
   return { state };
 };
 
-export const AnnotationDispatchContainer = ({ fetch, user }) => {
-  const { state } = usePage(fetch, user);
-  return <PageAnnotationWithLoader {...state} />;
+export const AnnotationDispatchContainer = ({ fetch }) => {
+  const { state } = usePage(fetch);
+  return <PageAnnotationWithResilience {...state} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

@@ -9,6 +9,5 @@ const rulesRequired = {
 export const rules = {
   [NAME]: [rulesRequired],
   [TYPE]: [rulesRequired],
-  [FILES]: [],
   [CLASSIFICATION]: [rulesRequired],
 };
