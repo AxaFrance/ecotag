@@ -10,34 +10,44 @@ export const initListOfGroups = (fetch, dispatch) => async () => {
   if(groupsResponse.status >= 500 || usersResponse.status >= 500){
     data = { groups:[], users:[], status : resilienceStatus.ERROR};
   } else{
-
     const [groups, users] = await Promise.all([groupsResponse.json(), usersResponse.json()]);
     data = { groups, users, status : resilienceStatus.SUCCESS};
   }
   dispatch({type: 'init', data: data});
-
 }
 
 export const createGroup = (fetch, dispatch) => async fields => {
   dispatch({ type: 'onActionGroupLoading' });
-  await fetchCreateOrUpdateGroup(fetch)({
+  const newGroup = {
     name: fields[NAME].value,
     users: [],
-  });
-  dispatch({ type: 'onSubmitCreateGroup' });
-  await initListOfGroups(fetch, dispatch)();
+  };
+  const response = await fetchCreateOrUpdateGroup(fetch)(newGroup);
+  let data;
+  if(response.status >= 500 ){
+    data = {status: resilienceStatus.ERROR, newGroup: null };
+  } else {
+    data = {status: resilienceStatus.SUCCESS, newGroup : await response.json() };
+  }
+  dispatch({ type: 'onSubmitCreateGroup', data });
 };
 
 export const deleteGroup = (fetch, dispatch) => async id => {
   dispatch({ type: 'onActionGroupLoading' });
-  await fetchDeleteGroup(fetch)(id);
-  await initListOfGroups(fetch, dispatch)();
+  const response = await fetchDeleteGroup(fetch)(id);
+  let data;
+  if(response.status >= 500 ){
+    data = {status: resilienceStatus.ERROR, id: null };
+  } else {
+    data = {status: resilienceStatus.SUCCESS, id };
+  }
+  dispatch({ type: 'deleteUserEnded', data });
 };
 
 export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users) => {
   dispatch({ type: 'changeUserLoading'});
 
-  const groupToUpdate = state.items.find(group => group.id === idGroup);
+  const groupToUpdate = state.groups.find(group => group.id === idGroup);
   const updatedGroup = {
     id: groupToUpdate.id,
     name: groupToUpdate.name,

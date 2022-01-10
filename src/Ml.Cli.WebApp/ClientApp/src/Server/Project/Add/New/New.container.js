@@ -107,6 +107,14 @@ export const reducer = (state, action) => {
     case 'onSubmit': {
       return {
         ...state,
+        status : resilienceStatus.LOADING,
+        hasSubmit: true,
+      };
+    }
+    case 'onSubmitEnded': {
+      return {
+        ...state,
+        status : resilienceStatus.ERROR,
         hasSubmit: true,
       };
     }
@@ -128,11 +136,15 @@ export const createProject = async (history, fetch, state, dispatch) => {
       classification: state.fields[CLASSIFICATION].value,
       labels: state.fields[LABELS].values,
     };
-    const project = await fetchCreateProject(fetch)(newProject);
-    history.push({
-      pathname: '/projects/confirm',
-      state: { project },
-    });
+    const response = await fetchCreateProject(fetch)(newProject);
+    if(response.status >= 500){
+      dispatch({ type: 'onSubmitEnded'});
+    } else{
+      history.push({
+        pathname: '/projects/confirm',
+        state: { project : await response.json()},
+      });  
+    }
   }
 };
 

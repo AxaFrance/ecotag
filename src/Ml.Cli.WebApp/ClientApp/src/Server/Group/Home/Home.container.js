@@ -4,14 +4,24 @@ import withCustomFetch from '../../withCustomFetch';
 import { computeNumberPages, filterPaging } from '../../shared/Home/Home.filters';
 import { useHome } from './Home.hook';
 import {withResilience} from "../../shared/Resilience";
+import {NAME} from "./New/constants";
 
 const HomeWithResilience = withResilience(Home);
+
+const NOT_FOUND = -1;
+const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
+  const emails = actualUsers.map(user => user.email);
+  return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
+};
 
 export const HomeContainer = ({ fetch }) => {
   const { state, onChangePaging, onDeleteGroup, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
     fetch
   );
-  const numberPages = computeNumberPages(state.items, state.filters.paging.numberItemsByPage);
+  const {groups, users} = state;
+  const items = groups.map(group => {return { ...group, eligibleUsers : computeEligibleUsers(group.users, users) }});
+  
+  const numberPages = computeNumberPages(items, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;
   const filters = {
     ...state.filters,
@@ -21,13 +31,15 @@ export const HomeContainer = ({ fetch }) => {
       currentPage: currentPage > numberPages ? numberPages : currentPage,
     },
   };
-  const items = filterPaging(state.items, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
-
+  const itemsFiltered = filterPaging(items, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
+  const isSubmitable = !state.fields[NAME].message;
+  
   return (
     <HomeWithResilience
       {...state}
-      numberItemsTotal={state.items.length}
-      items={items}
+      isSubmitable={isSubmitable}
+      numberItemsTotal={items.length}
+      items={itemsFiltered}
       filters={filters}
       onChangePaging={onChangePaging}
       onDeleteGroup={onDeleteGroup}

@@ -5,7 +5,8 @@ import {resilienceStatus} from "../../shared/Resilience";
 
 export const initialState = {
   status: resilienceStatus.LOADING,
-  items: [],
+  groups: [],
+  users: [],
   filters: {
     paging: {
       numberItemsByPage: 10,
@@ -20,21 +21,16 @@ export const initialState = {
 
 export const initState = computeInitialStateErrorMessage(initialState, rules);
 
-const NOT_FOUND = -1;
-const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
-  const emails = actualUsers.map(user => user.email);
-  return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
-};
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
       const { groups, users, status } = action.data;
-      groups.forEach(group => (group.eligibleUsers = computeEligibleUsers(group.users, users)));
       return {
         ...state,
         status,
-        items : groups,
+        groups,
+        users
       };
     }
     case 'onChangePaging': {
@@ -64,10 +60,22 @@ export const reducer = (state, action) => {
       };
     }
     case 'onSubmitCreateGroup': {
+      const{status, newGroup} = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+
+      const groups = [...state.groups, newGroup];
+      
       return {
         ...state,
         hasSubmit: true,
         status: resilienceStatus.SUCCESS,
+        groups
       };
     }
     case 'changeUserLoading': {
@@ -85,20 +93,44 @@ export const reducer = (state, action) => {
           status,
         };
       }
-      const items = [...state.items];
-      const item = items.find(i => i.id === updatedGroup.id);
+      const groups = [...state.groups];
+      const item = groups.find(i => i.id === updatedGroup.id);
       if(item) {
-        const index = items.indexOf(item);
+        const index = groups.indexOf(item);
         if (index > -1) {
-          items.splice(index, 1);
-          items.splice(index, 0, updatedGroup)
+          groups.splice(index, 1);
+          groups.splice(index, 0, updatedGroup)
         }
       }
 
       return {
         ...state,
         status,
-        items,
+        groups,
+      };
+    }
+    case 'deleteUserEnded': {
+      const { status, id } = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+      const groups = [...state.groups];
+      const item = groups.find(i => i.id === id);
+      if(item) {
+        const index = groups.indexOf(item);
+        if (index > -1) {
+          groups.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state,
+        status,
+        groups,
       };
     }
     default:

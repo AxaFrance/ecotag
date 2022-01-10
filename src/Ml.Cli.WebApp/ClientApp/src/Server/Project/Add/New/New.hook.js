@@ -14,7 +14,7 @@ export const init = (fetch, dispatch) => async () => {
         data = { groups:[], datasets:[], projects:[], status:resilienceStatus.ERROR};
     }
     else {
-        const [groups, datasets, projects] = await Promise.all([datasetsResponse.json(), groupsResponse.json(), projectsResponse.json()])
+        const [datasets, groups, projects] = await Promise.all([datasetsResponse.json(), groupsResponse.json(), projectsResponse.json()])
         data = {
             groups,
             datasets,
