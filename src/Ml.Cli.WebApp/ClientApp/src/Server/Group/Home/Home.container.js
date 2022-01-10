@@ -1,11 +1,11 @@
 import Home from './Home';
 import React from 'react';
 import withCustomFetch from '../../withCustomFetch';
-import withLoader from '../../withLoader';
 import { computeNumberPages, filterPaging } from '../../shared/Home/Home.filters';
 import { useHome } from './Home.hook';
+import {withResilience} from "../../shared/Resilience";
 
-const HomeWithLoader = withLoader(Home);
+const HomeWithResilience = withResilience(Home);
 
 export const HomeContainer = ({ fetch }) => {
   const { state, onChangePaging, onDeleteGroup, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
@@ -24,7 +24,7 @@ export const HomeContainer = ({ fetch }) => {
   const items = filterPaging(state.items, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
 
   return (
-    <HomeWithLoader
+    <HomeWithResilience
       {...state}
       numberItemsTotal={state.items.length}
       items={items}

@@ -1,9 +1,10 @@
 import { rules } from './New/New.validation.rules';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../validation.generic';
 import { NAME, MSG_REQUIRED } from './New/constants';
+import {resilienceStatus} from "../../shared/Resilience";
 
 export const initialState = {
-  loading: true,
+  status: resilienceStatus.LOADING,
   items: [],
   filters: {
     paging: {
@@ -12,7 +13,6 @@ export const initialState = {
     },
   },
   hasSubmit: false,
-  isSubmitable: false,
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
   },
@@ -29,12 +29,12 @@ const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items, eligibleUsers } = action.data;
-      items.forEach(group => (group.eligibleUsers = computeEligibleUsers(group.users, eligibleUsers)));
+      const { groups, users, status } = action.data;
+      groups.forEach(group => (group.eligibleUsers = computeEligibleUsers(group.users, users)));
       return {
         ...state,
-        loading: false,
-        items,
+        status,
+        items : groups,
       };
     }
     case 'onChangePaging': {
@@ -52,32 +52,53 @@ export const reducer = (state, action) => {
     }
     case 'onChangeCreateGroup': {
       const newField = genericHandleChange(rules, state.fields, action.event);
-      const hasErrors = newField[NAME].message === null;
       return {
         ...state,
         fields: newField,
-        isSubmitable: hasErrors,
       };
     }
     case 'onActionGroupLoading': {
       return {
         ...state,
-        loading: true,
+        status: resilienceStatus.LOADING,
       };
     }
     case 'onSubmitCreateGroup': {
       return {
         ...state,
         hasSubmit: true,
-        loading: false,
-        isSubmitable: false,
+        status: resilienceStatus.SUCCESS,
       };
     }
     case 'changeUserLoading': {
-      const { loading } = action.data;
+        return {
+          ...state,
+          status : resilienceStatus.LOADING,
+        };
+    }
+    case 'changeUserEnded': {
+      const { status, updatedGroup } = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+      const items = [...state.items];
+      const item = items.find(i => i.id === updatedGroup.id);
+      if(item) {
+        const index = items.indexOf(item);
+        if (index > -1) {
+          items.splice(index, 1);
+          items.splice(index, 0, updatedGroup)
+        }
+      }
+
       return {
         ...state,
-        loading,
+        status,
+        items,
       };
     }
     default:

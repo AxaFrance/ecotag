@@ -4,7 +4,6 @@ import Title from '../../../TitleBar';
 import New from './New';
 import Edit from './Edit';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
-import Loader from '@axa-fr/react-toolkit-loader';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
 
@@ -65,7 +64,6 @@ const Home = ({
   items,
   numberItemsTotal,
   filters,
-  loaderMode,
   onChangePaging,
   onDeleteGroup,
   fields,
@@ -90,7 +88,6 @@ const Home = ({
         <h1 className="af-title--content">
           {`Affichage des groupes - il y a actuellement (${numberItemsTotal}) groupes`}
         </h1>
-        <Loader mode={loaderMode}>
           <Table>
             <Table.Header>
               <Table.Tr>
@@ -122,7 +119,6 @@ const Home = ({
             currentPage={filters.paging.currentPage}
             id="home_paging"
           />
-        </Loader>
       </div>
     </>
   );
@@ -130,7 +126,6 @@ const Home = ({
 
 Home.defaultProps = {
   items: [],
-  loaderMode: '',
 };
 Home.propTypes = {
   items: PropTypes.arrayOf(
@@ -141,7 +136,6 @@ Home.propTypes = {
     })
   ),
   fields: PropTypes.object,
-  loaderMode: PropTypes.string,
   isSubmitable: PropTypes.bool,
   hasSubmit: PropTypes.bool,
   onChangeCreateGroup: PropTypes.func,
