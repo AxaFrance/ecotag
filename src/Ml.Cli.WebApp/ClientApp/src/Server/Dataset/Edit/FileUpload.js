@@ -14,11 +14,47 @@ export const FileUpload = ({setState, state}) => {
         reader.readAsDataURL(value.values[0].file);
     };
 
-    const deleteFile = () => {
-        setState({ ...state, filesLoad: [] });
+    const deleteFile = (idFile) => {
+        console.log("test")
+        console.log(state)
+
+        const file = state.filesLoad.values.find(v => v.id === idFile);
+        const index = state.filesLoad.values.indexOf(file);
+        const newValues = [...state.filesLoad.values];
+        if (index > -1) {
+            newValues.splice(index, 1);
+        }
+        
+        setState({ ...state, filesLoad: { values : newValues }  });
     };
 
-    const sendFile = () => {
+    const sendFile = async() => {
+        
+            let i, j, temporary, chunk = 10;
+            const array = state.filesLoad.values;
+        const promises = [];
+            for (i = 0,j = array.length; i < j; i += chunk) {
+                temporary = array.slice(i, i + chunk);
+               
+                const formData = new FormData();
+                
+                for (const value of temporary) {
+                    formData.append('files', value.file);
+                   
+                }
+                const responsePromise = fetch(`/api/server/datasetfiles/${state.dataset.id}`, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    header: {
+                        'content-type': 'multipart/form-data',
+                    },
+                    body: formData,
+                });
+                promises.push(responsePromise)
+            }
+            
+            await Promise.all(promises);
+
         const newFilesSend = state.filesSend;
         state.filesLoad.values.map(file => {
             const newFile = {...file, id: cuid()};
@@ -48,6 +84,11 @@ export const FileUpload = ({setState, state}) => {
                     icon='open'
                 />
                 {state.filesLoad.length === 0 ? '' : <FileTable errors={[]} values={state.filesLoad.values} onClick={deleteFile} />}
+                
+                <div>
+                    
+                </div>
+                
                 <div>
                     <Button
                         name="sendFiles"

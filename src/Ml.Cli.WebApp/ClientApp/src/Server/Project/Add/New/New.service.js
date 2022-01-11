@@ -7,3 +7,4 @@ export const fetchCreateDataset = fetch => async newProject =>
 export const fetchGroups = fetch => async () => fetch('groups');
 
 export const fetchDatasets = fetch => async () => fetch('datasets');
+export const fetchDataset = fetch => async id => fetch(`datasets/${id}`);

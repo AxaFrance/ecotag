@@ -1,9 +1,8 @@
 import React from 'react';
 import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
-import { TextInput, SelectInput, FileInput, Button } from '@axa-fr/react-toolkit-all';
+import { TextInput, SelectInput, Button } from '@axa-fr/react-toolkit-all';
 import HelpButton from '@axa-fr/react-toolkit-help';
-import Alert from '@axa-fr/react-toolkit-alert';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
