@@ -54,7 +54,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public ActionResult<Project> Create(Project newProject)
         {
             newProject.Id = Guid.NewGuid().ToString();
-            newProject.CreateDate = DateTime.Now.ToString("dd/MM/yyyy");
+            newProject.CreateDate = DateTime.Now;
             projects.Add(newProject);
             
             return find(newProject.Id);

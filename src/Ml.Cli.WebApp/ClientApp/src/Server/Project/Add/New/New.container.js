@@ -2,7 +2,7 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import React, { useReducer } from 'react';
 import { withRouter } from 'react-router-dom';
-import { fetchCreateProject } from './New.service';
+import { fetchCreateDataset } from './New.service';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {
   GROUP,
@@ -136,7 +136,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
       classification: state.fields[CLASSIFICATION].value,
       labels: state.fields[LABELS].values,
     };
-    const response = await fetchCreateProject(fetch)(newProject);
+    const response = await fetchCreateDataset(fetch)(newProject);
     if(response.status >= 500){
       dispatch({ type: 'onSubmitEnded'});
     } else{

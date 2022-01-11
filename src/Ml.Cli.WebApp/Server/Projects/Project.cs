@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ml.Cli.WebApp.Server.Projects
 {
@@ -10,7 +11,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string GroupId { get; set; }
         public string Classification { get; set; }
         public int NumberTagToDo { get; set; }
-        public string CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public string TypeAnnotation { get; set; }
         public List<Label> Labels { get; set; }
     }

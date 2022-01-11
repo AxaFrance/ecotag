@@ -1,4 +1,4 @@
-import {fetchCreateProject,fetchDatasets,fetchGroups} from "./New.service";
+import {fetchCreateDataset,fetchDatasets,fetchGroups} from "./New.service";
 
 describe('Project/Add/New.service', () => {
     describe('.fetchCreateProject()', () => {
@@ -7,7 +7,7 @@ describe('Project/Add/New.service', () => {
         };
         const givenFetch = jest.fn();
         it('should call fetchCreateProject', () => {
-            fetchCreateProject(givenFetch)(givenNewProject);
+            fetchCreateDataset(givenFetch)(givenNewProject);
             expect(givenFetch).toHaveBeenCalledWith(`projects`, { method:'POST', body: JSON.stringify(givenNewProject) });
         });
     });

@@ -51,12 +51,20 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Dataset> Create(Dataset newDataset)
+        public ActionResult<Dataset> Create(DatasetInput newDataset)
         {
-            newDataset.Id = Guid.NewGuid().ToString();
-            datasets.Add(newDataset);
+            var dataset = new Dataset()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Classification = newDataset.Classification,
+                Name = newDataset.Name,
+                Type = newDataset.Type,
+                CreateDate = DateTime.Now,
+            };
             
-            return find(newDataset.Id);
+            datasets.Add(dataset);
+            
+            return find(dataset.Id);
         }
     }
 }

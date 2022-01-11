@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {NAME, TYPE, CLASSIFICATION, FILES, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
 import React, { useReducer } from 'react';
-import {fetchDatasets} from "../../../Project/Add/New/New.service";
+import {fetchCreateDataset, fetchDatasets} from "../../../Project/Add/New/New.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import {convertStringDateToDateObject} from "../../../date";
 import withCustomFetch from "../../../withCustomFetch";
@@ -86,12 +86,24 @@ export const init = (fetch, dispatch) => async () => {
 const useNew = (history, fetch) => {
   const [state, dispatch] = useReducer(reducer, initState);
   const onChange = event => dispatch({ type: 'onChange', event });
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const errors = errorList(state.fields);
+    let data = {status: resilienceStatus.SUCCESS};
     if (!errors.length) {
-      history.push('/datasets/confirm');
+      const fields = state.fields;
+      const newDataset = {
+        [NAME]: fields[NAME].value,
+        [TYPE]: fields[TYPE].value,
+        [CLASSIFICATION]: fields[CLASSIFICATION].value
+      }
+      const response = await fetchCreateDataset(fetch)(newDataset);
+      if(response.status >= 500){
+        data = {status: resilienceStatus.ERROR };
+      } else {
+        history.push('/datasets/confirm');
+      }
     }
-    dispatch({ type: 'onSubmit' });
+    dispatch({type: 'onSubmit', data});
   };
 
   React.useEffect(() => {

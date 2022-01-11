@@ -1,5 +1,5 @@
-export const fetchCreateProject = fetch => async newProject =>
-  fetch('projects', {
+export const fetchCreateDataset = fetch => async newProject =>
+  fetch('datasets', {
     method: 'POST',
     body: JSON.stringify(newProject),
   });
