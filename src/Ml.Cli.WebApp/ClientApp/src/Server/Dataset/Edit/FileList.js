@@ -61,6 +61,7 @@ const  FileList = ({state, setState}) => {
                                 <SectionRestitutionColumn>
                                     <Restitution label="Nom" value={state.dataset.name} />
                                     <Restitution label="Date de création" value={state.dataset.createDate} />
+                                    <Restitution label="Type" value={state.dataset.type} />
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>
                                     <Restitution label="nombre de fichier" value={state.files.filesSend.length} />

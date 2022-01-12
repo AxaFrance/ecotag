@@ -6,7 +6,7 @@ import HelpButton from '@axa-fr/react-toolkit-help';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
-import { NAME, CLASSIFICATION, TYPE, FILES } from './constants';
+import { NAME, CLASSIFICATION, TYPE } from './constants';
 
 const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
   <>
@@ -34,7 +34,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
               helpMessage="Ex : Guillaume Chervet"
               onChange={onChange}
               options={[
-                { value: 'Image', label: 'Images (.jpg, .png)' },
+                { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
                 { value: 'Text', label: 'Text (.txt)' },
               ]}
               forceDisplayMessage={hasSubmit}

@@ -2,7 +2,7 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
-import {NAME, TYPE, CLASSIFICATION, FILES, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
+import {NAME, TYPE, CLASSIFICATION, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets} from "../../../Project/Add/New/New.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
@@ -46,7 +46,7 @@ const reducer = (state, action) => {
       let newField = genericHandleChange(rules, state.fields, event);
       const name = event.name
       if(NAME === name){
-        if(state.datasets.find(dataset => dataset.name === event.value)) {
+        if(state.datasets.find(dataset => dataset.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
           newField = {
             ...newField,
             [name]: {

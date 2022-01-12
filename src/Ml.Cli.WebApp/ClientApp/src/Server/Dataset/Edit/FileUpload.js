@@ -15,9 +15,6 @@ export const FileUpload = ({fetch, setState, state}) => {
     };
 
     const deleteFile = (idFile) => {
-        console.log("test")
-        console.log(state)
-
         const files = state.files;
         const filesLoad = files.filesLoad;
         const file = filesLoad.values.find(v => v.id === idFile);
@@ -26,14 +23,13 @@ export const FileUpload = ({fetch, setState, state}) => {
         if (index > -1) {
             newValues.splice(index, 1);
         }
-        
         setState({ ...state, files : { ...state.files, filesLoad: { values : newValues }  }});
     };
 
     const sendFile = async() => {
 
         setState({...state, status : resilienceStatus.POST });
-        
+     
             let i, j, temporary, chunk = 10;
             const array = state.files.filesLoad.values;
             const promises = [];
@@ -72,7 +68,7 @@ export const FileUpload = ({fetch, setState, state}) => {
     return (
         <>
             <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.isLock ? 'disabled' : ''}`}>
-                <h2 className="edit-dataset__file-upload-title">Upload des fichiers</h2>
+                <h2 className="edit-dataset__file-upload-title">Upload des fichiers {state.dataset.type === "Image" ? '.jpg, .jpeg, .png, .tiff': '.txt'}</h2>
                 <File
                     id='file'
                     name='datasetUploadFiles'
@@ -81,6 +77,7 @@ export const FileUpload = ({fetch, setState, state}) => {
                     isVisible={true}
                     readOnly={false}
                     disabled={false}
+                    accept={state.dataset.type === "Image" ? 'image/jpeg, image/png, image/tiff': 'text/plain'}
                     label="Parcourir"
                     icon='open'
                 />

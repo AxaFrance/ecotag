@@ -23,7 +23,8 @@ export const init = (fetch, setState) => async (id, state) => {
         const datasetData = convertStringDateToDateObject({ name: dataset.name, 
             id: dataset.id, 
             createDate: dataset.createDate,
-            isLock: dataset.isLocked
+            isLock: dataset.isLocked,
+            type: dataset.type
         });
         const filesSend= dataset.files.map( f => { return  { file: { id: f.id, type: f.contentType, size: f.size, name: f.fileName } }})
         data = { status: resilienceStatus.SUCCESS, dataset:datasetData, files : {...state.files, filesSend} };

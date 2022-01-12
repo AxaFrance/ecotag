@@ -87,7 +87,7 @@ export const reducer = (state, action) => {
         default:
             newField = genericHandleChange(rules, fields, event);
             if(NAME === name){
-               if(state.projects.find(project => project.name === event.value)) {
+               if(state.projects.find(project => project.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
                  newField = {
                    ...newField,
                    [name]: {
