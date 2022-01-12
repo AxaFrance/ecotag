@@ -18,9 +18,9 @@ namespace Ml.Cli.Tests.JobsTests
         public async Task ShouldGenerateDataset()
         {
             var resultList = new List<DatasetResult>();
-            var datasetResult = new DatasetResult("{FileName}.pdf.json", @"C:\ml\raw_ap\input", @"C:\ml\raw_ap\images","","");
+            var datasetResult = new DatasetResult("{FileName}.pdf.json", PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"), PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/images"), "","");
             resultList.Add(datasetResult);
-            var expectedContent = new DatasetFileResult(@"C:\ml\raw_ap\output\dataset-result.json", "Ocr", "", resultList);
+            var expectedContent = new DatasetFileResult(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output/dataset-result.json"), "Ocr", "", resultList);
             var expectedResult = JsonConvert.SerializeObject(expectedContent, Formatting.Indented);
 
             var logger = Mock.Of<ILogger<TaskCompare>>();
@@ -36,9 +36,9 @@ namespace Ml.Cli.Tests.JobsTests
                 true,
                 "Ocr",
                 "",
-                @"C:\ml\raw_ap\input",
-                @"C:\ml\raw_ap\images",
-                @"C:\ml\raw_ap\output",
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/images"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output"),
                 "",
                 "dataset-result.json",
                 ""
@@ -46,7 +46,7 @@ namespace Ml.Cli.Tests.JobsTests
 
             await datasetTask.GenerateDatasetAsync(inputTask);
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\output\dataset-result.json", expectedResult));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output/dataset-result.json"), expectedResult));
         }
 
         [Fact]

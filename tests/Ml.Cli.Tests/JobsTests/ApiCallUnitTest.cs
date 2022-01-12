@@ -83,7 +83,15 @@ namespace Ml.Cli.Tests.JobsTests
             var outputResult2 = "{\n  \"ocr\": \"ocr_value\",\n  \"conf\": 86.33333333333333\n}";
             var handler = new Mock<HttpMessageHandler>();
             var factory = handler.CreateClientFactory();
-            
+            var indentedInputResult1 =
+                JsonConvert.SerializeObject(JsonConvert.DeserializeObject(inputResult1), Formatting.Indented);
+            var indentedInputResult2 =
+                JsonConvert.SerializeObject(JsonConvert.DeserializeObject(inputResult2), Formatting.Indented);
+            var indentedOutputResult1 =
+                JsonConvert.SerializeObject(JsonConvert.DeserializeObject(outputResult1), Formatting.Indented);
+            var indentedOutputResult2 =
+                JsonConvert.SerializeObject(JsonConvert.DeserializeObject(outputResult2), Formatting.Indented);
+
             Mock.Get(factory).Setup(x => x.CreateClient("unique_id")).Returns(() =>
             {
                 var client = handler.CreateClient();
@@ -130,10 +138,10 @@ namespace Ml.Cli.Tests.JobsTests
             
             fileLoader.Verify(mock => mock.WriteAllBytesOfFileAsync(Path.Combine(inputTask.OutputDirectoryImages, "test", "url_file_old_recto_zone.png"), It.IsAny<byte[]>()));
             fileLoader.Verify(mock => mock.WriteAllBytesOfFileAsync(Path.Combine(inputTask.OutputDirectoryImages,"test", "url_file_old_recto_orientation.png"), It.IsAny<byte[]>()));
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryInputs, "input_old_recto_zone.json"), inputResult1));
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryInputs, "input_old_birthdate.json"), inputResult2));
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryOutputs, "output_old_recto_zone.json"), outputResult1));
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryOutputs, "output_old_birthdate.json"), outputResult2));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryInputs, "input_old_recto_zone.json"), indentedInputResult1));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryInputs, "input_old_birthdate.json"), indentedInputResult2));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryOutputs, "output_old_recto_zone.json"), indentedOutputResult1));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(Path.Combine(inputTask.OutputDirectoryOutputs, "output_old_birthdate.json"), indentedOutputResult2));
         }
 
         [Fact]

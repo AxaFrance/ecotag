@@ -22,8 +22,8 @@ namespace Ml.Cli.Tests.JobsTests
             var logger = Mock.Of<ILogger<TaskCompare>>();
             var fileLoader = new Mock<IFileLoader>();
             fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"{FileName}.pdf.json"});
-            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync("baseDirectory/ml/raw_ap/input/left/{FileName}.pdf.json")).Returns(Task.FromResult(jsonContent));
-            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync("baseDirectory/ml/raw_ap/input/right/{FileName}.pdf.json")).Returns(Task.FromResult(jsonContent));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input/left/{FileName}.pdf.json"))).Returns(Task.FromResult(jsonContent));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input/right/{FileName}.pdf.json"))).Returns(Task.FromResult(jsonContent));
             fileLoader.Setup(mock => mock.FileExists(It.IsAny<string>())).Returns(true);
             fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
             fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
