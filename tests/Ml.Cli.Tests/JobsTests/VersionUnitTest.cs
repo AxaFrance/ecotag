@@ -24,6 +24,7 @@ namespace Ml.Cli.Tests.JobsTests
 
             var contentJSON = "[\r\n  {\r\n    \"url\": \"https://url\",\r\n    \"version\": \"1.0\"\r\n  }\r\n]";
             var result = "[\r\n  {\r\n    \"url\": \"https://url\",\r\n    \"version\": \"{\\\"version\\\":\\\"2.0\\\"}\"\r\n  }\r\n]";
+            var indentedResult = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(result), Formatting.Indented);
 
             Mock.Get(factory).Setup(x => x.CreateClient("Default")).Returns(() =>
             {
@@ -50,7 +51,7 @@ namespace Ml.Cli.Tests.JobsTests
                 true,
                 "https://url",
                 200,
-                @"C:\ml\raw_ap\urlLog",
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/urlLog"),
                 "urlLog.json"
             );
 
@@ -66,7 +67,7 @@ namespace Ml.Cli.Tests.JobsTests
                 Times.Once
             );
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\urlLog\urlLog.json", result));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/urlLog/urlLog.json"), indentedResult));
         }
 
         [Fact]
