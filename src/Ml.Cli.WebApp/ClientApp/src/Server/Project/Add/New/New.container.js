@@ -2,7 +2,7 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import React, { useReducer } from 'react';
 import { withRouter } from 'react-router-dom';
-import { fetchCreateDataset } from './New.service';
+import { fetchCreateProject } from './New.service';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {
   GROUP,
@@ -107,15 +107,19 @@ export const reducer = (state, action) => {
     case 'onSubmit': {
       return {
         ...state,
-        status : resilienceStatus.LOADING,
         hasSubmit: true,
+      };
+    }
+    case 'onSubmitStarted': {
+      return {
+        ...state,
+        status : resilienceStatus.LOADING,
       };
     }
     case 'onSubmitEnded': {
       return {
         ...state,
         status : resilienceStatus.ERROR,
-        hasSubmit: true,
       };
     }
     default:
@@ -126,7 +130,11 @@ export const reducer = (state, action) => {
 export const createProject = async (history, fetch, state, dispatch) => {
   const errors = errorList(state.fields);
   dispatch({ type: 'onSubmit' });
-  if (!errors.length) {
+  if (errors.length) {
+    return;
+  }
+  dispatch({ type: 'onSubmitStarted'});
+  
     const newProject = {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,
@@ -136,7 +144,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
       classification: state.fields[CLASSIFICATION].value,
       labels: state.fields[LABELS].values,
     };
-    const response = await fetchCreateDataset(fetch)(newProject);
+    const response = await fetchCreateProject(fetch)(newProject);
     if(response.status >= 500){
       dispatch({ type: 'onSubmitEnded'});
     } else{
@@ -145,7 +153,6 @@ export const createProject = async (history, fetch, state, dispatch) => {
         state: { project : await response.json()},
       });  
     }
-  }
 };
 
 const useNew = (fetch, history) => {

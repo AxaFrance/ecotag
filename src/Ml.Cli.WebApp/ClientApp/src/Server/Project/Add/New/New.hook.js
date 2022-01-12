@@ -4,7 +4,7 @@ import {convertStringDateToDateObject} from "../../../date";
 import { resilienceStatus } from '../../../shared/Resilience';
 
 export const init = (fetch, dispatch) => async () => {
-  const datasetsPromise = fetchDatasets(fetch)();
+  const datasetsPromise = fetchDatasets(fetch)(true);
   const groupsPromise = fetchGroups(fetch)();
   const projectsPromise = fetchProjects(fetch)();
   const [datasetsResponse, groupsResponse, projectsResponse] = await Promise.all([datasetsPromise, groupsPromise, projectsPromise]);
