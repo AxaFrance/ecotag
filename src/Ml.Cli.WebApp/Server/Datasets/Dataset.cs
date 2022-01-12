@@ -12,6 +12,17 @@ namespace Ml.Cli.WebApp.Server.Datasets
         public string Classification { get; set; }
     }
     
+    public class DatasetForList
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Classification { get; set; }
+        public DateTime CreateDate { get; set; }
+        public bool IsLocked { get; set; } = false;
+        public int NumberFiles { get; set; }
+    }
+    
     public class Dataset
     {
         public string Id { get; set; }
@@ -20,6 +31,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
         public string Classification { get; set; }
         public DateTime CreateDate { get; set; }
         public bool IsLocked { get; set; } = false;
-        public IList<string> FileIds { get; set; } = new List<string>();
+        public IList<EcotagFile> Files { get; set; } = new List<EcotagFile>();
     }
 }

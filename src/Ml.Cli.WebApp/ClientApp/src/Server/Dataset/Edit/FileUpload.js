@@ -2,14 +2,14 @@
 import { File, FileTable } from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
 import cuid from 'cuid';
-import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
+import {resilienceStatus} from "../../shared/Resilience";
 
-export const FileUpload = ({setState, state}) => {
+export const FileUpload = ({fetch, setState, state}) => {
 
     const onChange = value => {
         const reader = new FileReader();
         reader.onloadend = () => {
-            setState({ ...state, filesLoad: value, fileData: reader.result, isSend: !state.isSend });
+            setState({ ...state, files : { ...state.files, filesLoad: value }});
         };
         reader.readAsDataURL(value.values[0].file);
     };
@@ -18,31 +18,32 @@ export const FileUpload = ({setState, state}) => {
         console.log("test")
         console.log(state)
 
-        const file = state.filesLoad.values.find(v => v.id === idFile);
-        const index = state.filesLoad.values.indexOf(file);
-        const newValues = [...state.filesLoad.values];
+        const files = state.files;
+        const filesLoad = files.filesLoad;
+        const file = filesLoad.values.find(v => v.id === idFile);
+        const index = filesLoad.values.indexOf(file);
+        const newValues = [...filesLoad.values];
         if (index > -1) {
             newValues.splice(index, 1);
         }
         
-        setState({ ...state, filesLoad: { values : newValues }  });
+        setState({ ...state, files : { ...state.files, filesLoad: { values : newValues }  }});
     };
 
     const sendFile = async() => {
+
+        setState({...state, status : resilienceStatus.POST });
         
             let i, j, temporary, chunk = 10;
-            const array = state.filesLoad.values;
-        const promises = [];
+            const array = state.files.filesLoad.values;
+            const promises = [];
             for (i = 0,j = array.length; i < j; i += chunk) {
                 temporary = array.slice(i, i + chunk);
-               
                 const formData = new FormData();
-                
                 for (const value of temporary) {
                     formData.append('files', value.file);
-                   
                 }
-                const responsePromise = fetch(`/api/server/datasetfiles/${state.dataset.id}`, {
+                const responsePromise = fetch(`datasets/${state.dataset.id}/files`, {
                     method: 'POST',
                     mode: 'no-cors',
                     header: {
@@ -52,25 +53,25 @@ export const FileUpload = ({setState, state}) => {
                 });
                 promises.push(responsePromise)
             }
-            
-            await Promise.all(promises);
 
-        const newFilesSend = state.filesSend;
-        state.filesLoad.values.map(file => {
-            const newFile = {...file, id: cuid()};
-            newFilesSend.push(newFile);
-        });
-        setState({...state, filesLoad: [], filesSend: newFilesSend, paging: {
-                numberPages: computeNumberPages(state.filesSend, state.paging.itemByPages),
-                currentPages: 1,
-                itemByPages: 5,
-                itemFiltered: filterPaging(newFilesSend, state.paging.itemByPages, state.paging.currentPages)
-            }});
+        const responses = await Promise.all(promises);
+            
+            if(responses.find(response => response.status >= 500)){
+                setState({...state, status : resilienceStatus.ERROR });
+            } else {
+
+                const newFilesSend = state.files.filesSend;
+                state.files.filesLoad.values.map(file => {
+                    const newFile = {...file, id: cuid()};
+                    newFilesSend.push(newFile);
+                });
+                setState({...state, files: {...state.files, filesLoad: [], filesSend: newFilesSend}});
+            }
     };
 
     return (
         <>
-            <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.isLock ? 'disabled' : ''}`}>
+            <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.isLock ? 'disabled' : ''}`}>
                 <h2 className="edit-dataset__file-upload-title">Upload des fichiers</h2>
                 <File
                     id='file'
@@ -83,19 +84,14 @@ export const FileUpload = ({setState, state}) => {
                     label="Parcourir"
                     icon='open'
                 />
-                {state.filesLoad.length === 0 ? '' : <FileTable errors={[]} values={state.filesLoad.values} onClick={deleteFile} />}
-                
-                <div>
-                    
-                </div>
-                
+                {state.files.filesLoad.length === 0 ? '' : <FileTable errors={[]} values={state.files.filesLoad.values} onClick={deleteFile} />}
                 <div>
                     <Button
                         name="sendFiles"
                         id="sendFiles"
                         onClick={sendFile}
-                        disabled={state.filesLoad.length === 0}
-                        classModifier={state.filesLoad.length === 0 ? 'disabled' : ''}>
+                        disabled={state.files.filesLoad.length === 0}
+                        classModifier={state.files.filesLoad.length === 0 ? 'disabled' : ''}>
                         <span className="af-btn__text">Envoyer</span>
                     </Button>
                 </div>

@@ -13,17 +13,17 @@ namespace Ml.Cli.WebApp.Server.Projects
     {
         private static List<Project> projects;
 
-        private Project find(string id)
+        private Project Find(string id)
         {
             return projects.Find(currentProject => currentProject.Id.Equals(id));
         }
 
         public ProjectsController()
         {
+            string projectsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/projects.json");
             if (projects == null)
             {
                 Console.WriteLine("Loading projects...");
-                string projectsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/projects.json");
                 var projectsAsJsonnFile = JsonDocument.Parse(projectsAsString);
                 var projectsAsJson = projectsAsJsonnFile.RootElement.GetProperty("projects");
                 projects = JsonConvert.DeserializeObject<List<Project>>(projectsAsJson.ToString());
@@ -40,7 +40,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpGet("{id}", Name = "GetProjectById")]
         public ActionResult<Project> GetProject(string id)
         {
-            var project = find(id);
+            var project = Find(id);
             if (project == null)
             {
                 return NotFound();
@@ -57,20 +57,20 @@ namespace Ml.Cli.WebApp.Server.Projects
             newProject.CreateDate = DateTime.Now;
             projects.Add(newProject);
             
-            return find(newProject.Id);
+            return Created(newProject.Id, Find(newProject.Id));
         }
 
         [HttpDelete("{id}")]
         public ActionResult<Project> Delete(string id)
         {
-            var project = find(id);
+            var project = Find(id);
             if (project == null)
             {
                 return NotFound();
             }
 
             projects.Remove(project);
-            return this.NoContent();
+            return NoContent();
         }
     }
 }

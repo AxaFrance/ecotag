@@ -3,7 +3,7 @@ import fetchDatasets from './Home.service';
 import { convertStringDateToDateObject } from '../../date';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
-import { computeNumberPages, filterPaging, getItemsSorted } from '../../shared/Home/Home.filters';
+import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
 import { resilienceStatus, withResilience } from '../../shared/Resilience';
 
 const HomeWithResilience = withResilience(Home);
@@ -29,6 +29,25 @@ const reducer = (state, action) => {
         status,
         items,
       };
+      case 'onChangeFilter': {
+        const {filterValue} = action.data;
+        if (filterValue !== null && filterValue !== undefined && filterValue.length > 2) {
+          return {
+            ...state,
+            filters: {
+              ...state.filters,
+              filterValue,
+            },
+          };
+        }
+        return {
+          ...state,
+          filters: {
+            ...state.filters,
+            filterValue: null,
+          },
+        };
+      }
     case 'onChangePaging':
       const { numberItems, page } = action.data;
       return {
@@ -54,12 +73,14 @@ const initialState = {
       numberItemsByPage: 10,
       currentPage: 1,
     },
+    filterValue :null,
     columns: {
       name: { value: null, timeLastUpdate: null },
       classification: { value: null, timeLastUpdate: null },
       numberFiles: { value: null, timeLastUpdate: null },
       createDate: { value: null, timeLastUpdate: null },
-    },
+      type: { value: null, timeLastUpdate: null },
+    } 
   },
 };
 
@@ -68,16 +89,18 @@ const useHome = fetch => {
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
+  const onChangeFilter = value => dispatch({ type: 'onChangeFilter', data: { filterValue: value } });
   useEffect(() => {
     init(fetch, dispatch)();
   }, []);
-  return { state, onChangePaging };
+  return { state, onChangePaging, onChangeFilter };
 };
 
 export const HomeContainer = ({ fetch }) => {
-  const { state, onChangePaging } = useHome(fetch);
-  const itemsSorted = getItemsSorted(state.items, state.filters.columns);
-  const numberPages = computeNumberPages(itemsSorted, state.filters.paging.numberItemsByPage);
+  const { state, onChangePaging, onChangeFilter } = useHome(fetch);
+
+  const itemsFiltered = getItemsFiltered(state.items, state.filters.filterValue);
+  const numberPages = computeNumberPages(itemsFiltered, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;
   const filters = {
     ...state.filters,
@@ -87,9 +110,9 @@ export const HomeContainer = ({ fetch }) => {
       currentPage: currentPage > numberPages ? numberPages : currentPage,
     },
   };
-  const items = filterPaging(itemsSorted, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
+  const items = filterPaging(itemsFiltered, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
 
-  return <HomeWithResilience {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeSort={() => console.log("TODO: onChangeSort")}/>;
+  return <HomeWithResilience {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeFilter={onChangeFilter} />;
 };
 
 export default withCustomFetch(fetch)(HomeContainer);

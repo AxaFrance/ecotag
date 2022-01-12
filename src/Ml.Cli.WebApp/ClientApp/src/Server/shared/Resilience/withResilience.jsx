@@ -1,19 +1,17 @@
 ﻿import React from 'react';
 import { resilienceStatus } from '.';
-import withLoader from '../../withLoader';
-import { LoaderModes } from '@axa-fr/react-toolkit-loader';
+import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 
 import './withResilience.scss';
 
-export const withResilience = Component => ({ status, ...otherProps }) => {
+export const withResilience = Component => ({ status, loaderText=null, ...otherProps }) => {
     const { ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
-    const ComponentWithLoader = withLoader(Component);
     return (
         <>
             {
                 {
-                    [LOADING]: <ComponentWithLoader loaderMode={LoaderModes.get} {...otherProps} />,
-                    [POST]: <ComponentWithLoader loaderMode={LoaderModes.post} {...otherProps} />,
+                    [LOADING]: <Loader mode={LoaderModes.get} text={loaderText} ><Component loaderMode={LoaderModes.get} {...otherProps} /></Loader>,
+                    [POST]: <Loader mode={LoaderModes.get} text={loaderText}> <Component loaderMode={LoaderModes.post} {...otherProps} /></Loader>,
                     [ERROR]: (
                         <div className="resilience">
                             <div className="resilicience__error-message">

@@ -64,7 +64,7 @@ namespace Ml.Cli.WebApp.Server.Groups
                 var group = groups.First(group => group.Id == newGroup.Id);
                 group.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
             }
-            return find(newGroup.Id);
+            return Created(newGroup.Id, find(newGroup.Id));
         }
 
         [HttpDelete("{id}")]
@@ -77,7 +77,7 @@ namespace Ml.Cli.WebApp.Server.Groups
             }
 
             groups.Remove(group);
-            return this.NoContent();
+            return NoContent();
         }
     }
 }

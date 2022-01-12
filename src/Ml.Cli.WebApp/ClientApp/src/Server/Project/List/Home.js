@@ -57,13 +57,7 @@ const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numb
   );
 };
 
-const formatDateToString = createDate =>
-  createDate && createDate instanceof Date
-    ? `${createDate.getDay().toString().padStart(2, '0')}/${createDate
-        .getMonth()
-        .toString()
-        .padStart(2, '0')}/${createDate.getFullYear()}`
-    : '';
+const formatDateToString = createDate => createDate
 
 const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;

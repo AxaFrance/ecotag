@@ -1,19 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import Title from '../../../TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import './Home.scss';
 import Action from "@axa-fr/react-toolkit-action";
-import HeaderColumnCell from "../../Project/List/ColumnHeader";
 
-const Home = ({ items, filters, status, onChangePaging, onChangeSort }) => {
+const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
     const history = useHistory();
     const editDatasetButton = id => {
         const path = `datasets/${id}`
         history.push(path);
     };
-    const formatDateToString = createDate => (createDate && createDate instanceof Date) ? `${createDate.getDay().toString().padStart(2, '0')}/${createDate.getMonth().toString().padStart(2, '0')}/${createDate.getFullYear()}` : ``;
+    const formatDateToString = createDate => createDate 
 
     return (
         <>
@@ -33,7 +31,7 @@ const Home = ({ items, filters, status, onChangePaging, onChangeSort }) => {
                             <div className="af-filter-inline__field">
                                 <label className="af-form__group-label" htmlFor="inputtext1">Nom du dataset</label>
                                 <div className="af-form__text">
-                                    <input className="af-form__input-text" id="inputtext1" name="inputtextname" type="text" />
+                                    <input className="af-form__input-text" onChange={event => onChangeFilter(event.target.value)} id="inputtext1" name="inputtextname" type="text" />
                                 </div>
                             </div>
                         </div>
@@ -45,41 +43,40 @@ const Home = ({ items, filters, status, onChangePaging, onChangeSort }) => {
                                 <Table.Th>
                                     <span className="af-table__th-content">Vérouiller</span>
                                 </Table.Th>
-                                <HeaderColumnCell
-                                    onChangeSort={onChangeSort("name")}
-                                    headerColumnName={"Nom"}
-                                    filterColumnValue={filters.columns.name.value}/>
-                                <HeaderColumnCell
-                                    onChangeSort={onChangeSort("classification")}
-                                    headerColumnName={"Classification"}
-                                    filterColumnValue={filters.columns.classification.value}/>
-                                <HeaderColumnCell
-                                    onChangeSort={onChangeSort("numberFiles")}
-                                    headerColumnName={"Nombre de fichier"}
-                                    filterColumnValue={filters.columns.numberFiles.value}/>
-
-                                <HeaderColumnCell
-                                    onChangeSort={onChangeSort("createDate")}
-                                    headerColumnName={"Date création"}
-                                    filterColumnValue={filters.columns.createDate.value}/>
-                                <Table.Th>Action</Table.Th>
+                                <Table.Th>
+                                    <span className="af-table__th-content">Nom</span>
+                                </Table.Th>
+                                <Table.Th>
+                                    <span className="af-table__th-content">Classification</span>
+                                </Table.Th>
+                                <Table.Th>
+                                    <span className="af-table__th-content">Nombre de fichier</span>
+                                </Table.Th>
+                                <Table.Th>
+                                    <span className="af-table__th-content">Type</span>
+                                </Table.Th>
+                                <Table.Th>
+                                    <span className="af-table__th-content">Date création</span>
+                                </Table.Th>
+                                <Table.Th><span className="af-table__th-content">Action</span></Table.Th>
                             </Table.Tr>
                         </Table.Header>
                         <Table.Body>
                             {items.map(
-                                ({id, name, type, classification, numberFiles, createDate, isLock}) => (
+                                ({id, name, type, classification, numberFiles, createDate, isLocked}) => (
                                     <Table.Tr key={id}>
                                         <Table.Td>
-                                            <Action className={isLock ? 'btn af-btn--circle af-btn--danger' : 'btn af-btn--circle'}
-                                                    id="lock" icon={isLock ? "lock" : "unlock"}
-                                                    title={isLock ? "vérouillée" : "dévérouillée"}
+                                            <Action className={isLocked ? 'btn af-btn--circle af-btn--locked' : 'btn af-btn--circle'}
+                                                    id="lock" icon={isLocked ? "lock" : "unlock"}
+                                                    title={isLocked ? "vérouillée" : "dévérouillée"}
                                                     onClick={() => {}} />
                                         </Table.Td>
                                         <Table.Td>
                                             {name}
                                         </Table.Td>
                                         <Table.Td>{classification}</Table.Td>
-                                        <Table.Td>{numberFiles} {type}</Table.Td>
+                                        <Table.Td>{numberFiles}</Table.Td>
+                                        <Table.Td>{type}</Table.Td>
                                         <Table.Td>{formatDateToString(createDate)}</Table.Td>
                                         <Table.Td>
                                             <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
@@ -99,25 +96,6 @@ const Home = ({ items, filters, status, onChangePaging, onChangeSort }) => {
             </div>
         </>
     )
-};
-
-Home.defaultProps = {
-    items: [],
-    loaderMode: '',
-};
-Home.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            firstname: PropTypes.string,
-            lastname: PropTypes.string,
-            type: PropTypes.string,
-            agent: PropTypes.string,
-            birthdate: PropTypes.string,
-            begin: PropTypes.string,
-        })
-    ),
-    status: PropTypes.string,
 };
 
 export default Home;

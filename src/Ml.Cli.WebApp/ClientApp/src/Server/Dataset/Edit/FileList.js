@@ -13,29 +13,43 @@ import Tabs from "@axa-fr/react-toolkit-tabs/dist";
 import '@axa-fr/react-toolkit-tabs/dist/tabs.scss';
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 
-const FileList = ({state, setState}) => {
+const bytesToSize=(bytes) => {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Byte';
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+
+const  FileList = ({state, setState}) => {
 
     const deleteFile = file => {
-        let newFilesSend = state.filesSend.filter(item => item.id !== file.id);
-        setState({...state, filesSend: newFilesSend, paging: {
-                itemByPages: state.paging.itemByPages,
-                currentPages: state.paging.currentPages,
-                itemFiltered: filterPaging(newFilesSend, state.paging.itemByPages, state.paging.currentPages),
-                numberPages: computeNumberPages(newFilesSend, state.paging.itemByPages)
-            }});
+        const filesSend = [... state.files.filesSend];
+        const index = filesSend.indexOf(file);
+        if (index > -1) {
+            filesSend.splice(index, 1);
+        }
+        setState({...state, files : { ...state.files, filesSend}});
     };
 
     const onChangePaging = ({numberItems, page}) => {
-        const newNumberPages = computeNumberPages(state.filesSend, numberItems);
-        const newCurrentPage = state.paging.currentPages > newNumberPages ? newNumberPages : page
         setState({...state,
-            paging: {
+            files : {...state.files, paging: {
                 itemByPages: numberItems,
-                currentPages: newCurrentPage,
-                itemFiltered: filterPaging(state.filesSend, numberItems, newCurrentPage),
-                numberPages: newNumberPages
-        }});
+                currentPages: page,
+        }}});
     };
+    const files = state.files;
+    const paging = files.paging;
+    const itemByPages = paging.itemByPages
+    const currentPages = paging.currentPages
+    const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
+    const numberPages = computeNumberPages(files.filesSend, itemByPages);
+
+    const reducer = (previousValue, currentValue) => previousValue + currentValue.file.size;
+    const hasFiles = state.files.filesSend.length ===0;
+    const fileSizeTotal =  hasFiles? 0 : state.files.filesSend.reduce(reducer, 0);
+    const fileSizeAverage = hasFiles? 0 : fileSizeTotal / state.files.filesSend.length;
 
     return (
         <div className="edit-dataset__file-list-container">
@@ -45,13 +59,13 @@ const FileList = ({state, setState}) => {
                         <SectionRestitution>
                             <SectionRestitutionRow title="">
                                 <SectionRestitutionColumn>
-                                    <Restitution label="nombre de fichier" value={state.filesSend.length} />
-                                    <Restitution label="poids total des fichiers" value="valeur en dur" />
-                                    <Restitution label="poids moyen des fichiers" value="valeur en dur" />
+                                    <Restitution label="Nom" value={state.dataset.name} />
+                                    <Restitution label="Date de création" value={state.dataset.createDate} />
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>
-                                    <Restitution label="Date de création" value="valeur en dur" />
-                                    <Restitution label="Dernière modifications" value="valeur en dur" />
+                                    <Restitution label="nombre de fichier" value={state.files.filesSend.length} />
+                                    <Restitution label="poids total des fichiers" value={bytesToSize(fileSizeTotal)} />
+                                    <Restitution label="poids moyen des fichiers" value={bytesToSize(fileSizeAverage)} />
                                 </SectionRestitutionColumn>
                             </SectionRestitutionRow>
                         </SectionRestitution>
@@ -68,32 +82,32 @@ const FileList = ({state, setState}) => {
                                     <span className="af-table__th-content ">Type</span>
                                 </Table.Th>
                                 <Table.Th>Size</Table.Th>
-                                <Table.Th>Action</Table.Th>
+                                {state.dataset.isLock ? null :<Table.Th>Action</Table.Th>}
                             </Table.Tr>
                         </Table.Header>
                         <Table.Body>
-                            {state.paging.itemFiltered.map(file => (
+                            {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
                                             {file.file.name}
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
-                                        <Table.Td>{file.file.size}</Table.Td>
-                                        <Table.Td>{state.isLock ? "" : <Action
+                                        <Table.Td>{bytesToSize(file.file.size)}</Table.Td>
+                                        {state.dataset.isLock ? null :<Table.Td> <Action
                                             id="deleteButton"
                                             icon="trash"
-                                            title="Editer"
+                                            title="Supprimer"
                                             onClick={() => deleteFile(file)}
-                                        />}</Table.Td>
+                                        /></Table.Td>}
                                     </Table.Tr>
                                 ))}
                         </Table.Body>
                     </Table>
                     <Paging
                         onChange={onChangePaging}
-                        numberItems={state.paging.itemByPages}
-                        numberPages={state.paging.numberPages}
-                        currentPage={state.paging.currentPages}
+                        numberItems={itemByPages}
+                        numberPages={numberPages}
+                        currentPage={currentPages}
                         id="home_paging"
                     />
                 </Tabs.Tab>

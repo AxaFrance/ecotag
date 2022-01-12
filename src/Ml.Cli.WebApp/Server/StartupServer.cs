@@ -25,6 +25,7 @@ namespace Ml.Cli.WebApp.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddOptions();
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddResponseCaching();
@@ -47,6 +48,7 @@ namespace Ml.Cli.WebApp.Server
                       options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
                   });
               */
+            services.AddSingleton<IDateTime, SystemDateTime>();
             services
                 .AddControllersWithViews();
 

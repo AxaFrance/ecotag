@@ -59,7 +59,6 @@ export const reducer = (state, action) => {
           ...state,
           filters: {
             ...state.filters,
-            ...state.paging,
             filterValue,
           },
         };
@@ -68,7 +67,6 @@ export const reducer = (state, action) => {
         ...state,
         filters: {
           ...state.filters,
-          ...state.paging,
           filterValue: null,
         },
       };
