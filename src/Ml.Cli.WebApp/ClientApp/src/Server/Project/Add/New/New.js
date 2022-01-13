@@ -30,41 +30,22 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 messageType="error"
                 {...fields[NAME]}
               />
-              <SelectInput
-                label="Classification"
-                name={CLASSIFICATION}
-                id={CLASSIFICATION}
-                onChange={onChange}
-                helpMessage="Ex : Critique"
-                options={[
-                  { value: 'Publique', label: 'Publique' },
-                  { value: 'Interne', label: 'Interne' },
-                  { value: 'Confidentiel', label: 'Confidentiel' },
-                  { value: 'Critique', label: 'Critique' },
-                ]}
-                forceDisplayMessage={hasSubmit}
-                messageType="error"
-                {...fields[CLASSIFICATION]}
-              />
+                <MultiSelectInput
+                    label="Dataset"
+                    name={DATASET}
+                    id={DATASET}
+                    onChange={onChange}
+                    options={datasetsAsOptions}
+                    forceDisplayMessage={hasSubmit}
+                    messageType="error"
+                    {...fields[DATASET]}
+                />
               <SelectInput
                 label="Type"
                 name={TYPE}
                 id={TYPE}
+                disabled={!fields[DATASET].value}
                 onChange={onChange}
-                options={[
-                  {
-                    value: 'CROPPING',
-                    label: "Séléction de zone d'image",
-                  },
-                  {
-                    value: 'ImageClassifier',
-                    label: 'Saisi de texte contenu dans une image',
-                  },
-                  {
-                    value: 'NAMED_ENTITY',
-                    label: 'Séléction de zone de texte',
-                  },
-                ]}
                 forceDisplayMessage={hasSubmit}
                 messageType="error"
                 {...fields[TYPE]}
@@ -76,17 +57,6 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 messageType="error"
                 helpMessage="Croisement d'annotation réalisé par des annotateurs différents"
                 {...fields[NUMBER_CROSS_ANNOTATION]}
-              />
-              <MultiSelectInput
-                label="Dataset"
-                name={DATASET}
-                id={DATASET}
-                onChange={onChange}
-                disabled={!fields[TYPE].value}
-                options={datasetsAsOptions}
-                forceDisplayMessage={hasSubmit}
-                messageType="error"
-                {...fields[DATASET]}
               />
               <LabelInput
                 forceDisplayMessage={hasSubmit}

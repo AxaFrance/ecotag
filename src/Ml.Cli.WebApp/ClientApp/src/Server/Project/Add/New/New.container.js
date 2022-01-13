@@ -7,7 +7,6 @@ import { computeInitialStateErrorMessage, genericHandleChange } from '../../../v
 import {
   GROUP,
   NAME,
-  CLASSIFICATION,
   DATASET,
   NUMBER_CROSS_ANNOTATION,
   TYPE,
@@ -32,14 +31,9 @@ const preInitState = {
   status: resilienceStatus.LOADING,
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
-    [CLASSIFICATION]: {
-      name: CLASSIFICATION,
-      value: '',
-      message: MSG_REQUIRED,
-    },
     [DATASET]: { name: DATASET, value: '', message: MSG_REQUIRED },
     [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
-    [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED },
+    [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED, options:[] },
     [NUMBER_CROSS_ANNOTATION]: {
       name: NUMBER_CROSS_ANNOTATION,
       value: null,
@@ -72,11 +66,11 @@ export const reducer = (state, action) => {
       const name = event.name;
       const newValues = event.values;
       const fields = state.fields;
-      let newField;
+      let newFields;
       switch (name) {
         case LABELS:
           const message = newValues.length > 0 ? null : MSG_REQUIRED
-          newField = {
+          newFields = {
             ...fields,
                 [name]: {
               ...fields[name],
@@ -85,23 +79,58 @@ export const reducer = (state, action) => {
             }};
           break;
         default:
-            newField = genericHandleChange(rules, fields, event);
+            newFields = genericHandleChange(rules, fields, event);
             if(NAME === name){
                if(state.projects.find(project => project.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
-                 newField = {
-                   ...newField,
+                 newFields = {
+                   ...newFields,
                    [name]: {
-                     ...newField[name],
+                     ...newFields[name],
                      message: MSG_PROJECT_NAME_ALREADY_EXIST
                    }};
                }   
+            }else if(DATASET === name) {
+
+              const options = [{
+                    value: 'CROPPING',
+                    label: "Séléction de zone d'image",
+                    type: "Image"
+                  },
+                  {
+                    value: 'ImageClassifier',
+                    label: 'Saisi de texte contenu dans une image',
+                    type: "Image"
+                  },
+                  {
+                    value: 'NAMED_ENTITY',
+                    label: 'Séléction de zone de texte',
+                    type: "Text"
+                  }];
+              const datasetId = event.value
+              const datsetType = state.datasets.find(dataset => dataset.id === datasetId).type;
+              const reducer = (previousValue, currentValue) => {
+                if(currentValue.type === datsetType) {
+                  previousValue.push({value:currentValue.value, label:currentValue.label});
+                }
+                return previousValue;
+              }
+              newFields = {
+                ...newFields,
+                [TYPE]: {
+                  ...fields[TYPE],
+                  options : options.reduce(reducer, [])
+                }};
+              return {
+                ...state,
+                fields: newFields,
+              };
             }
             break;
         }
         
       return {
         ...state,
-        fields: newField,
+        fields: newFields,
       };
     }
     case 'onSubmit': {
@@ -135,13 +164,14 @@ export const createProject = async (history, fetch, state, dispatch) => {
   }
   dispatch({ type: 'onSubmitStarted'});
   
+    const datasetId = state.fields[DATASET].value
     const newProject = {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,
       groupId: state.fields[GROUP].value,
       typeAnnotation: state.fields[TYPE].value,
       numberTagToDo: state.fields[NUMBER_CROSS_ANNOTATION].value,
-      classification: state.fields[CLASSIFICATION].value,
+      classification: state.datasets.find(dataset => dataset.id === datasetId).classification,
       labels: state.fields[LABELS].values,
     };
     const response = await fetchCreateProject(fetch)(newProject);

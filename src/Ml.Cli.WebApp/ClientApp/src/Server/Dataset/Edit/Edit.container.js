@@ -86,7 +86,6 @@ export const EditContainer = ({fetch}) => {
         onSubmit : () => {
             lockDataset(fetch, setState)(state, id)
         }
-
     }
 
     React.useEffect(() => {

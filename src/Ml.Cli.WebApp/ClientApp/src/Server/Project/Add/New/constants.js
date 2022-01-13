@@ -1,5 +1,4 @@
 export const NAME = 'NAME';
-export const CLASSIFICATION = 'CLASSIFICATION';
 export const DATASET = 'DATASET';
 export const TYPE = 'TYPE';
 export const NUMBER_CROSS_ANNOTATION = 'NUMBER_CROSS_ANNOTATION';
