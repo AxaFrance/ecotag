@@ -5,6 +5,8 @@ using Ml.Cli.InputTask;
 using Ml.Cli.JobApiCall;
 using Ml.Cli.JobLoop;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -59,6 +61,24 @@ namespace Ml.Cli.Tests.JobsTests
             await loop.LoopExecution(loopTask, Wait);
 
             Assert.Equal(3, count);
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"loop\",\"id\": \"1\",\"enabled\": false,\"startMessage\": \"Starting loop procedure...\",\"endMessage\": \"End of loop procedure\",\"iterations\": 3,\"subTask\": {\"type\": \"callapi\",\"id\": \"child_task\",\"enabled\": true,\"fileDirectory\": \"licenses/documents\",\"outputDirectoryJsons\": \"licenses/output\",\"url\" :\"https://localhost:6001/licenses/upload\"}}";
+            var jObject = JObject.Parse(jsonContent);
+
+            var loopResult = JobLoop.Initializer.CreateTask(jObject, "loop", false, "1");
+            var expectedLoopResult = new LoopTask(
+                "loop",
+                "1",
+                false,
+                "Starting loop procedure...",
+                "End of loop procedure",
+                3
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedLoopResult), JsonConvert.SerializeObject(loopResult));
         }
     }
 }

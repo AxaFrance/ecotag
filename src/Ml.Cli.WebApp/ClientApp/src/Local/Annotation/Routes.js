@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import {Route, Switch, useRouteMatch, withRouter} from "react-router-dom";
+import {Route, Switch, useRouteMatch, withRouter} from "react-router";
 import AnnotationsContainer from "./AnnotationsContainer";
 import TitleBar from "../../TitleBar";
 import DatasetHandler from "./DatasetHandler";

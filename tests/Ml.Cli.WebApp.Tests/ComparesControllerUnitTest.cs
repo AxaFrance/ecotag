@@ -2,6 +2,7 @@
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Paths;
+using Ml.Cli.PathManager;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -19,14 +20,14 @@ namespace Ml.Cli.WebApp.Tests
             
             var contentObject = new ItemInfo("FileName", JsonConvert.DeserializeObject<Cli.Program.HttpResult>(httpResultLeft), JsonConvert.DeserializeObject<Cli.Program.HttpResult>(httpResultRight));
             var editorContent = new EditorContent(
-                "someFolder\\\\compareFile.json",
+                PathAdapter.AdaptPathForCurrentOs("someFolder/compareFile.json"),
                 JsonConvert.SerializeObject(contentObject),
-                "someFolder\\\\{fileName}_pdf.json"
+                PathAdapter.AdaptPathForCurrentOs("someFolder/{fileName}_pdf.json")
             );
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync("someFolder\\\\compareFile.json")).ReturnsAsync(jsonCompareContent);
-            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("someFolder/compareFile.json"))).ReturnsAsync(jsonCompareContent);
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("someFolder/compareFile.json"), It.IsAny<string>()));
 
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
@@ -41,7 +42,7 @@ namespace Ml.Cli.WebApp.Tests
             var expectedResultCompareContent =
                 JsonConvert.SerializeObject(JsonConvert.DeserializeObject(compareResultContent), Formatting.Indented);
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync("someFolder\\\\compareFile.json", expectedResultCompareContent));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("someFolder/compareFile.json"), expectedResultCompareContent));
         }
     }
 }

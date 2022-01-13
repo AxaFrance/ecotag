@@ -6,7 +6,7 @@ const customFetch = fetch => apiBaseUrl => async (path, config) => {
         path = path.replace("/", "") 
     }
     const url = apiBaseUrl.replace('{path}', path);
-    return await fetch(url, config);
+    return fetch(url, config);
 };
 
 const withCustomFetch = fetch => Component => ({ environment, ...otherProps }) => {
