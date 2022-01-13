@@ -1,5 +1,4 @@
 import React from 'react';
-import Table from '@axa-fr/react-toolkit-table';
 import {
   ArticleRestitution,
   SectionRestitution,
