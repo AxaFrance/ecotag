@@ -57,9 +57,8 @@ jobs:
           args: >
             -Dsonar.organization=axaguildev
             -Dsonar.projectKey=AxaGuilDEv_ml-cli
-            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.exclusions=**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
-            -Dsonar.javascript.lcov.reportPaths=ClientApp/coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=**/ClientApp/coverage/lcov.info
             -Dsonar.cs.opencover.reportsPaths=**/opencover.xml
 
   tags:
