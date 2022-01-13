@@ -40,15 +40,6 @@
 	{
 		"type": "dataset",
 		"enabled": true,
-		"annotationType": "JsonEditor",
-		"fileDirectory": "licenses/output/{start-date}/jsons",
-		"imageDirectory": "licenses/output/{start-date}/images",
-		"outputDirectory": "licenses/datasets",
-		"fileName": "dataset-{start-date}-jsoneditor.json"
-	},
-	{
-		"type": "dataset",
-		"enabled": true,
 		"annotationType": "Cropping",
 		"configuration": "[{\"id\": 1, \"name\":\"Lastname\"},{\"id\": 2, \"name\":\"Firstname\"}]",
 		"fileDirectory": "licenses/output/{start-date}/jsons",
