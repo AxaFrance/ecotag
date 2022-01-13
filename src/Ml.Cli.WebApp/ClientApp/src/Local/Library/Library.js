@@ -15,7 +15,7 @@ export const StringContent = {
 
 const getFiles = async (fetchFunction, controllerPath) => {
     const fetchResult = await fetchGetData(fetchFunction)(controllerPath);
-    return await getDataPaths(fetchResult);
+    return getDataPaths(fetchResult);
 }
 
 const Library = ({fetchFunction, onPlayClick, controllerPath}) => {

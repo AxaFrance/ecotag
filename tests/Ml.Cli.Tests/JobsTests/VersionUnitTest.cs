@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobVersion;
+using Ml.Cli.PathManager;
 using Moq;
 using Moq.Contrib.HttpClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 using Version = Ml.Cli.JobVersion.Version;
 
@@ -21,6 +24,7 @@ namespace Ml.Cli.Tests.JobsTests
 
             var contentJSON = "[\r\n  {\r\n    \"url\": \"https://url\",\r\n    \"version\": \"1.0\"\r\n  }\r\n]";
             var result = "[\r\n  {\r\n    \"url\": \"https://url\",\r\n    \"version\": \"{\\\"version\\\":\\\"2.0\\\"}\"\r\n  }\r\n]";
+            var indentedResult = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(result), Formatting.Indented);
 
             Mock.Get(factory).Setup(x => x.CreateClient("Default")).Returns(() =>
             {
@@ -47,7 +51,7 @@ namespace Ml.Cli.Tests.JobsTests
                 true,
                 "https://url",
                 200,
-                @"C:\ml\raw_ap\urlLog",
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/urlLog"),
                 "urlLog.json"
             );
 
@@ -63,7 +67,28 @@ namespace Ml.Cli.Tests.JobsTests
                 Times.Once
             );
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\urlLog\urlLog.json", result));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/urlLog/urlLog.json"), indentedResult));
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"wait_version_change\",\"id\": \"version_task\",\"enabled\": true,\"url\": \"https://localhost:6001/licenses/version\",\"timeout\": 5000,\"urlLogDirectory\": \"licenses/output/logs\",\"logFileName\": \"license.json\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+            
+            var versionResult =
+                Initializer.CreateTask(jObject, "wait_version_change", false, true, "baseDirectory", "1", pathValidatorHelper.Object);
+            var expectedVersionResult = new VersionTask(
+                "wait_version_change",
+                "1",
+                false,
+                "https://localhost:6001/licenses/version",
+                5000,
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output/logs"),
+                "license.json"
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedVersionResult), JsonConvert.SerializeObject(versionResult));
         }
     }
 }
