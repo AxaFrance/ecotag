@@ -52,10 +52,12 @@ export const reducer = (state, action) => {
 export const initialState = {
   status: resilienceStatus.LOADING,
   project: {
+    createDate: new Date(),
+    name: "",
     labels: [],
-    users: [],
+    numberTagToDo: 0
   },
-  dataset: {},
+  dataset: {name: "", classification:"", type:"", files:[], typeAnnotation:""},
   group: {},
   user: {},
 };

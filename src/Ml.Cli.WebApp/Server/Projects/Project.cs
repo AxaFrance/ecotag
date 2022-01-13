@@ -15,4 +15,9 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string TypeAnnotation { get; set; }
         public List<Label> Labels { get; set; }
     }
+    
+    public class ProjectList : Project
+    {
+        public int NumberTagTagged { get; set; }
+    }
 }
