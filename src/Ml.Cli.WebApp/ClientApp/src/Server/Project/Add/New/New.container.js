@@ -163,14 +163,13 @@ export const createProject = async (history, fetch, state, dispatch) => {
     return;
   }
   dispatch({ type: 'onSubmitStarted'});
-  
     const datasetId = state.fields[DATASET].value
     const newProject = {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,
       groupId: state.fields[GROUP].value,
       typeAnnotation: state.fields[TYPE].value,
-      numberTagToDo: state.fields[NUMBER_CROSS_ANNOTATION].value,
+      numberCrossAnnotation: state.fields[NUMBER_CROSS_ANNOTATION].value,
       classification: state.datasets.find(dataset => dataset.id === datasetId).classification,
       labels: state.fields[LABELS].values,
     };

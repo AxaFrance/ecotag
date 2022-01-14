@@ -55,7 +55,7 @@ export const initialState = {
     createDate: new Date(),
     name: "",
     labels: [],
-    numberTagToDo: 0
+    numberCrossAnnotation: 0
   },
   dataset: {name: "", classification:"", type:"", files:[], typeAnnotation:""},
   group: {},

@@ -10,14 +10,28 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string DataSetId { get; set; }
         public string GroupId { get; set; }
         public string Classification { get; set; }
-        public int NumberTagToDo { get; set; }
+        public int NumberCrossAnnotation { get; set; }
         public DateTime CreateDate { get; set; }
         public string TypeAnnotation { get; set; }
         public List<Label> Labels { get; set; }
+        
+        
+        public IList<ReserveInput> Reserves { get; set; }
     }
     
     public class ProjectList : Project
     {
         public int NumberTagTagged { get; set; }
     }
+
+    public class Annotations
+    {
+        
+    }
+
+    public class Annotation 
+    {
+        
+    }
+    
 }

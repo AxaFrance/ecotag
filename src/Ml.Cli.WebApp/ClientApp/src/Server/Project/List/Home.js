@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import Title from '../../../TitleBar';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
+import {formatDateToString} from "../../date";
 import './Home.scss';
 import '../../shared/Modal/modal.scss';
 import HeaderColumnCell from './ColumnHeader';
@@ -56,8 +56,6 @@ const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numb
     </Table.Tr>
   );
 };
-
-const formatDateToString = createDate => createDate
 
 const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;
@@ -119,7 +117,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, on
                 <HeaderColumnCell
                   onChangeSort={onChangeSort('numberTagToDo')}
                   headerColumnName={'Tags restants'}
-                  filterColumnValue={filters.columns.numberTagToDo.value}
+                  filterColumnValue={filters.columns.numberCrossAnnotation.value}
                 />
                 <Table.Th classModifier="sortable">
                   <span className="af-table__th-content af-btn__text">Action</span>
@@ -127,14 +125,14 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, on
               </Table.Tr>
             </Table.Header>
             <Table.Body>
-              {items.map(({ id, name, classification, createDate, numberTagToDo, typeAnnotation }) => (
+              {items.map(({ id, name, classification, createDate, numberCrossAnnotation, typeAnnotation }) => (
                 <ProjectRow
                   key={id}
                   id={id}
                   name={name}
                   classification={classification}
                   createDate={formatDateToString(createDate)}
-                  numberTagToDo={numberTagToDo}
+                  numberTagToDo={numberCrossAnnotation}
                   typeAnnotation={typeAnnotation}
                   onDeleteProject={onDeleteProject}
                 />
@@ -151,23 +149,6 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, on
       </div>
     </>
   );
-};
-
-Home.defaultProps = {
-  items: [],
-};
-Home.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      firstname: PropTypes.string,
-      lastname: PropTypes.string,
-      type: PropTypes.string,
-      agent: PropTypes.string,
-      birthdate: PropTypes.string,
-      begin: PropTypes.string,
-    })
-  )
 };
 
 export default Home;

@@ -112,7 +112,7 @@ export const initialState = {
       classification: { value: null, timeLastUpdate: null },
       createDate: { value: 'desc', timeLastUpdate: new Date() },
       typeAnnotation: { value: null, timeLastUpdate: null },
-      numberTagToDo: { value: null, timeLastUpdate: null },
+      numberCrossAnnotation: { value: null, timeLastUpdate: null },
     },
   },
 };

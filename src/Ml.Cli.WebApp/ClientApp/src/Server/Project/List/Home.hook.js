@@ -6,9 +6,8 @@ import { resilienceStatus } from '../../shared/Resilience';
 
 export const init = (fetch, dispatch) => async () => {
   const response = await fetchProjects(fetch)();
-  
   let data;
-  if(response.status >= 500){
+  if(response.status >= 500) {
     data = {
         items: [],
         status: resilienceStatus.ERROR
@@ -28,9 +27,7 @@ export const init = (fetch, dispatch) => async () => {
 
 export const deleteProject = (fetch, dispatch) => async id => {
   dispatch({ type: 'onActionProjectsLoading' });
-
   const response = await fetchDeleteProject(fetch)(id);
-
   let data;
   if(response.status >= 500){
     data = {
@@ -38,13 +35,12 @@ export const deleteProject = (fetch, dispatch) => async id => {
       status: resilienceStatus.ERROR
     };
   } else {
-    const items = await response.json();
+    await response.json();
     data = {
       id,
       status: resilienceStatus.SUCCESS
     };
   }
-
   dispatch({
     type: 'onProjectDeleted',
     data

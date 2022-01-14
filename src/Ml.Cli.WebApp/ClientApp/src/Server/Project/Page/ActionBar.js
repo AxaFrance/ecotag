@@ -19,7 +19,7 @@ export const ActionBar = ({ currentUser, project, dataset }) => {
   const history = useHistory();
 
   const startTaggingButton = () => {
-    const path = `/projects/${project.id}/annotations`;
+    const path = `/projects/${project.id}/annotations/iddocument`;
     history.push(path);
   };
 
@@ -27,7 +27,7 @@ export const ActionBar = ({ currentUser, project, dataset }) => {
     <div className="ft-actionBar">
       {showEditButton(currentUser.role === 'ADMIN')}
       <div>
-        <Button onClick={() => startTaggingButton()} id="startTagging" name="Start Tagging">
+        <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
           <span className="af-btn-text">Start Tagging</span>
         </Button>
       </div>

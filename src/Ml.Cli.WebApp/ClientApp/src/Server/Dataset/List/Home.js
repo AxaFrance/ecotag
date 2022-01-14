@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Title from '../../../TitleBar';
+import {formatDateToString} from '../../date';
+
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import './Home.scss';
 import Action from "@axa-fr/react-toolkit-action";
@@ -11,8 +13,6 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
         const path = `datasets/${id}`
         history.push(path);
     };
-    const formatDateToString = createDate => createDate 
-
     return (
         <>
             <Title title="Page datasets" subtitle="un dataset représente un essemble de données" />

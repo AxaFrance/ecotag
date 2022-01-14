@@ -20,14 +20,12 @@ namespace Ml.Cli.WebApp.Server.Projects
 
         public ProjectsController()
         {
-            string projectsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/projects.json");
-            if (projects == null)
-            {
-                Console.WriteLine("Loading projects...");
-                var projectsAsJsonnFile = JsonDocument.Parse(projectsAsString);
-                var projectsAsJson = projectsAsJsonnFile.RootElement.GetProperty("projects");
-                projects = JsonConvert.DeserializeObject<List<Project>>(projectsAsJson.ToString());
-            }
+            var projectsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/projects.json");
+            if (projects != null) return;
+            Console.WriteLine("Loading projects...");
+            var projectsAsJsonnFile = JsonDocument.Parse(projectsAsString);
+            var projectsAsJson = projectsAsJsonnFile.RootElement.GetProperty("projects");
+            projects = JsonConvert.DeserializeObject<List<Project>>(projectsAsJson.ToString());
         }
 
         [HttpGet]
@@ -58,6 +56,16 @@ namespace Ml.Cli.WebApp.Server.Projects
             projects.Add(newProject);
             
             return Created(newProject.Id, Find(newProject.Id));
+        }
+        
+        [HttpPost("{projectId}/reverse")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IList<string>> Reserve(ReserveInput reserveInput)
+        {
+
+            
+            return Ok(new List<string>[]{});
         }
 
         [HttpDelete("{id}")]
