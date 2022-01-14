@@ -28,8 +28,21 @@ describe('Check a compare file insertion', () => {
         const selectState = container.querySelector("select[id='select_type']");
 
         fireEvent.change(selectState, {target: {value: "All"}});
+        
+        const submitButton = container.querySelector(`[id='submit-btn']`);
+        
+        fireEvent.click(submitButton);
 
         await waitFor(() => expect(getAllByText(/JOHN/i)).not.toBeNull());
+        
+        const selectExtension = container.querySelector("select[id='extension_type']");
+        
+        fireEvent.change(selectExtension, {target: {value: "TIFF"}});
+        
+        fireEvent.click(submitButton);
+        
+        await waitFor(() => expect(getAllByText(/related/i)).not.toBeNull());
+        
         expect(asFragment()).toMatchSnapshot();
 
     });
