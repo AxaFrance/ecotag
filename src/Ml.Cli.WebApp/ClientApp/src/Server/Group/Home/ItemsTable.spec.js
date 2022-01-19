@@ -1,4 +1,4 @@
-﻿import {render} from "@testing-library/react";
+﻿import {render, fireEvent, waitFor} from "@testing-library/react";
 import {LoaderModes} from "@axa-fr/react-toolkit-all";
 import ItemsTable from "./ItemsTable";
 
@@ -34,10 +34,28 @@ const filters = {
 
 describe("Check Group ItemsTable behaviour", () => {
     
-    test("Should render correctly", () => {
-        const {asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onDeleteGroup={() => {}} onUpdateUser={() => {}}/>);
+    test("Should render correctly", async () => {
+        const {container, queryByText, getAllByText, getByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onDeleteGroup={() => {}} onUpdateUser={() => {}}/>);
 
         expect(asFragment()).toMatchSnapshot();
+        
+        const manageUserButton = container.querySelector("#editActionId");
+        
+        fireEvent.click(manageUserButton);
+        
+        await waitFor(() => expect(getAllByText(/Ajouter\/Supprimer des utilisateurs à ce groupe/i)).not.toBeNull());
+        
+        const quitModalButton = getByText(/Annuler/i);
+        
+        fireEvent.click(quitModalButton);
+        
+        await waitFor(() => expect(queryByText(/Annuler/i)).toBeNull());
+        
+        const deleteGroupButton = container.querySelector("#removeActionId");
+        
+        fireEvent.click(deleteGroupButton);
+        
+        await waitFor(() => expect(getAllByText(/Confirmer la suppression de groupe/i)).not.toBeNull());
     })
     
 })
