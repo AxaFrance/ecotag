@@ -1,4 +1,4 @@
-﻿import {render} from "@testing-library/react";
+﻿import {render, fireEvent, waitFor} from "@testing-library/react";
 import {LoaderModes} from "@axa-fr/react-toolkit-all";
 import ItemsTable from "./ItemsTable";
 
@@ -28,10 +28,16 @@ const filters = {
 
 describe("Check Project ItemsTable behaviour", () => {
     
-    test("Chould render correctly", () => {
-        const {asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onChangeSort={() => {}} onDeleteProject={() => {}}/>);
+    test("Chould render correctly", async () => {
+        const {container, getAllByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onChangeSort={() => {}} onDeleteProject={() => {}}/>);
 
         expect(asFragment()).toMatchSnapshot();
+        
+        const deleteProjectButton = container.querySelector("#removeActionId");
+        
+        fireEvent.click(deleteProjectButton);
+        
+        await waitFor(() => expect(getAllByText(/Confirmer la suppression du projet/i)).not.toBeNull());
     })
     
 })
