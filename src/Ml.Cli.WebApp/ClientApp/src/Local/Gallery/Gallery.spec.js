@@ -21,7 +21,7 @@ const sortFiles = [
 
 let nbFetchCalls = 0;
 
-const mockedFetchFunction = () => {
+const fetch = () => {
     nbFetchCalls++;
     return {
         ok: true,
@@ -30,13 +30,13 @@ const mockedFetchFunction = () => {
     };
 };
 
-const mockedFetchFunctionKO = () => {
+const fetchKO = () => {
     return {ok: false, status: 400, json: () => Promise.resolve([])};
 }
 
 describe('Check images display', () => {
     test('Should render Gallery page correctly, resize images and sort by names', async () => {
-        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={mockedFetchFunction} /></Router>);
+        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={fetch} /></Router>);
         
         expect(asFragment()).toMatchSnapshot();
         
@@ -65,7 +65,7 @@ describe('Check images display', () => {
     });
     
     test('Should handle error on bad request', async () => {
-        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={mockedFetchFunctionKO} /></Router>);
+        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={fetchKO} /></Router>);
 
         expect(asFragment()).toMatchSnapshot();
 

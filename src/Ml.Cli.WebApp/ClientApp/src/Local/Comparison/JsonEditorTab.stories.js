@@ -31,7 +31,7 @@ const item = {
 const MonacoEditor = React.lazy(() => import("@monaco-editor/react"));
 
 const mockedFunction = () => {};
-const mockedFetchFunction = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
+const fetch = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
 
 export default {
     title: 'Design System/JsonEditor/JsonEditorTab',
@@ -57,5 +57,5 @@ Default.args = {
     compareLocation: "",
     MonacoEditor: MonacoEditor,
     setCompareState: mockedFunction,
-    fetchFunction: mockedFetchFunction,
+    fetchFunction: fetch,
 }
