@@ -34,7 +34,7 @@ const filters = {
 
 describe("Check Group ItemsTable behaviour", () => {
     
-    test("Should render correctly", async () => {
+    test("Should render correctly and display users modification and group deletion modals", async () => {
         const {container, queryByText, getAllByText, getByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onDeleteGroup={() => {}} onUpdateUser={() => {}}/>);
 
         expect(asFragment()).toMatchSnapshot();

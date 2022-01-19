@@ -28,7 +28,7 @@ const filters = {
 
 describe("Check Project ItemsTable behaviour", () => {
     
-    test("Chould render correctly", async () => {
+    test("Chould render correctly and display deletion modal", async () => {
         const {container, getAllByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onChangeSort={() => {}} onDeleteProject={() => {}}/>);
 
         expect(asFragment()).toMatchSnapshot();
