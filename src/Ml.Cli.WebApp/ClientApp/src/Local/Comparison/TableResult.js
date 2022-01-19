@@ -33,7 +33,7 @@ const getExtensionName = (fileName) => {
     return reverseString(extension);
 }
 
-const filterExtensions = (items, extensionName) => {
+export const filterExtensions = (items, extensionName) => {
     return items.filter(item => {
         if (extensionName === "All") {
             return items;
@@ -45,7 +45,7 @@ const filterExtensions = (items, extensionName) => {
     });
 }
 
-const filterStatusCode = (items, statusCode) => {
+export const filterStatusCode = (items, statusCode) => {
     if (statusCode === "All")
         return items;
     else {
