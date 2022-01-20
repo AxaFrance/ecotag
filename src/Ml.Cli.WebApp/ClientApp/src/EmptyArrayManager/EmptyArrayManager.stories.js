@@ -1,5 +1,4 @@
-﻿import { BrowserRouter as Router } from 'react-router-dom';
-import EmptyArrayManager from "./index";
+﻿import EmptyArrayManager from "./index";
 
 const noItems = [];
 const items = ["test"];
@@ -9,11 +8,7 @@ export default{
     component: EmptyArrayManager
 };
 
-const Template = (args) => <Router>
-    <EmptyArrayManager {...args}>
-        <p>Demo</p>
-    </EmptyArrayManager>
-</Router>
+const Template = (args) => <EmptyArrayManager {...args}><p>Demo</p></EmptyArrayManager>
 
 export const WithItems = Template.bind({});
 WithItems.args = {
