@@ -13,15 +13,15 @@ export const getDataPaths = async data => {
     }
 };
 
-export const getImages = async (item, stringsMatcher, direction, fetchFunction) => {
+export const getImages = async (item, stringsMatcher, direction, fetch) => {
     const id = 
         "fileName=" +item.fileName + "&stringsMatcher="+ (!stringsMatcher ? item.right.FrontDefaultStringsMatcher : stringsMatcher) +"&directory=" + (direction === "left" ? item.left.ImageDirectory : item.right.ImageDirectory);
     
-    const fetchResult = await fetchGetData(fetchFunction)("api/local/datasets/"+ utf8_to_b64(id));
+    const fetchResult = await fetchGetData(fetch)("api/local/datasets/"+ utf8_to_b64(id));
     return getDataPaths(fetchResult);
 };
 
-const ImagesLoader = ({item, stringsMatcher, direction, fetchFunction, expectedOutput, onSubmit, MonacoEditor}) => {
+const ImagesLoader = ({item, stringsMatcher, direction, fetch, expectedOutput, onSubmit, MonacoEditor}) => {
 
     const [state, setState] = useState({
         fileUrls: []
@@ -29,7 +29,7 @@ const ImagesLoader = ({item, stringsMatcher, direction, fetchFunction, expectedO
 
     useEffect(() => {
         let isMounted = true;
-        getImages(item, stringsMatcher, direction, fetchFunction)
+        getImages(item, stringsMatcher, direction, fetch)
             .then(urls => {
                 if(isMounted){
                     setState({fileUrls: urls});

@@ -70,7 +70,7 @@ export const sortTime = (items, sortTimeType, timeCategory) => {
     return copiedArray;
 }
 
-const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
+const TableResult = ({state, setState, MonacoEditor, fetch}) => {
     const filterScripts = formatJson(state);
     const filteredFiles = filterItems(filterScripts, state.filters.filterName);
     const filteredStatusCodes = filterStatusCode(filteredFiles, state.filters.currentStatusCode);
@@ -88,12 +88,12 @@ const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
             filteredSearchBar={filteredSearchBar}
             setState={setState}
             MonacoEditor={MonacoEditor}
-            fetchFunction={fetchFunction}
+            fetch={fetch}
         />
     </>;
 }
 
-const TableContentDisplay = ({items, state, setParentState, currentPageComputed, numberPages, onPagingChange, fetchFunction, MonacoEditor}) => {
+const TableContentDisplay = ({items, state, setParentState, currentPageComputed, numberPages, onPagingChange, fetch, MonacoEditor}) => {
     return(
         <>
             <Paging
@@ -119,7 +119,7 @@ const TableContentDisplay = ({items, state, setParentState, currentPageComputed,
                     setCompareState={setParentState}
                     compareLocation={state.compareLocation}
                     MonacoEditor={MonacoEditor}
-                    fetchFunction={fetchFunction}
+                    fetch={fetch}
                 />
             ))}
 
@@ -138,7 +138,7 @@ const TableContentDisplay = ({items, state, setParentState, currentPageComputed,
     )
 };
 
-const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor, fetchFunction}) => {
+const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor, fetch}) => {
     const setParentState = (newData) => setState({...state, ...newData});
     const {items, currentPage} = pageItems;
     const currentPageComputed = currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : currentPage;
@@ -163,7 +163,7 @@ const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEdit
             numberPages={numberPages}
             currentPageComputed={currentPageComputed}
             onPagingChange={onPagingChange}
-            fetchFunction={fetchFunction}
+            fetch={fetch}
             MonacoEditor={MonacoEditor}
         />
     </EmptyArrayManager>

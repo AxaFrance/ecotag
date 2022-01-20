@@ -22,10 +22,10 @@ const setNewItem = (contentLeft, contentRight, items, item) => {
     });
 };
 
-const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompareState, MonacoEditor, fetchFunction}) => {
+const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompareState, MonacoEditor, fetch}) => {
 
-    const mutationCompare = useMutation(newData => fetchPostJson(fetchFunction)("/api/local/compares", newData));
-    const mutationJson = useMutation(newData => fetchPostJson(fetchFunction)("/api/local/datasets", newData));
+    const mutationCompare = useMutation(newData => fetchPostJson(fetch)("/api/local/compares", newData));
+    const mutationJson = useMutation(newData => fetchPostJson(fetch)("/api/local/datasets", newData));
 
     const saveItem = (direction, editorContent) => {
         const {left, right} = item;
@@ -73,7 +73,7 @@ const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompare
                     stringsMatcher={stringsMatcher}
                     direction={left_var}
                     MonacoEditor={MonacoEditor}
-                    fetchFunction={fetchFunction}
+                    fetch={fetch}
                 />
             </Tabs.Tab>
             <Tabs.Tab title="Right">
@@ -84,7 +84,7 @@ const JsonEditorTab = ({items, item, stringsMatcher, compareLocation, setCompare
                     stringsMatcher={stringsMatcher}
                     direction={right_var}
                     MonacoEditor={MonacoEditor}
-                    fetchFunction={fetchFunction}
+                    fetch={fetch}
                 />
             </Tabs.Tab>
         </Tabs>
