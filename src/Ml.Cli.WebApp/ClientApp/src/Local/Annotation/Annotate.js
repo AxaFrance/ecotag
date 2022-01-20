@@ -30,7 +30,7 @@ const Annotate = ({fetch}) => {
                     alt="AXA Logo"
                 />
             </Header>
-            <Routes state={state} setState={setState} fetchFunction={fetch}/>
+            <Routes state={state} setState={setState} fetch={fetch}/>
             <ToastContainer/>
         </QueryClientProvider>
     );
