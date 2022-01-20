@@ -15,8 +15,8 @@ namespace Ml.Cli.WebApp.Server.Datasets
     [ApiController]
     public class DatasetsController : Controller
     {
-        private static List<Dataset> datasets;
-        private static List<EcotagFileWithBytes> files = new List<EcotagFileWithBytes>();
+        public static List<Dataset> datasets;
+        public static List<EcotagFileWithBytes> files = new List<EcotagFileWithBytes>();
 
         private Dataset Find(string id)
         {
@@ -100,13 +100,12 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
-        public IActionResult GetFile(string datasetId,string id)
+        public IActionResult GetFile(string datasetId, string id)
         {
             var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
             if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
 
             return NotFound();
-
         }
         
         [HttpDelete("{datasetId}/files/{id}")]

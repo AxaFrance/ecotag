@@ -15,13 +15,19 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string TypeAnnotation { get; set; }
         public List<Label> Labels { get; set; }
         
-        
-        public IList<ReserveInput> Reserves { get; set; }
+        public IList<Reserve> Reservations { get; set; } = new List<Reserve>();
     }
     
     public class ProjectList : Project
     {
         public int NumberTagTagged { get; set; }
+    }
+    
+    public class Reserve
+    {
+        public string FileId { get; set; }
+        public long TimeStamp { get; set; }
+        
     }
 
     public class Annotations

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
 namespace Ml.Cli.WebApp.Server.Projects
 {
@@ -11,7 +13,7 @@ namespace Ml.Cli.WebApp.Server.Projects
     [ApiController]
     public class ProjectsController : Controller
     {
-        private static List<Project> projects;
+        public static List<Project> projects;
 
         private Project Find(string id)
         {
@@ -58,12 +60,38 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(newProject.Id, Find(newProject.Id));
         }
         
-        [HttpPost("{projectId}/reverse")]
+        [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IList<string>> Reserve(ReserveInput reserveInput)
+        public ActionResult<IList<string>> Reserve(string projectId, ReserveInput reserveInput)
         {
+            var project = Find(projectId);
 
+            var numberToReserve = reserveInput.Number;
+
+            var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
+            
+            var query = from datasetFiles in dataset.Files
+                join reserve in project.Reservations on datasetFiles.Id equals reserve.FileId into gj
+                from reservation in gj.DefaultIfEmpty()
+                orderby reservation?.TimeStamp ?? 0 descending 
+                select new { FileId=datasetFiles.Id, TimeStamp = reservation?.TimeStamp ?? 0 };
+
+            var results = query.Take(numberToReserve).ToList();
+
+            var ticks = DateTime.Now.Ticks;
+            foreach (var result in results)
+            {
+                var reserve = project.Reservations.FirstOrDefault(reserve => reserve.FileId == result.FileId);
+                if (reserve != null)
+                {
+                    project.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks});
+                }
+                else
+                {
+                    reserve.TimeStamp = ticks;
+                }
+            }
             
             return Ok(new List<string>[]{});
         }
