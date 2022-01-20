@@ -30,7 +30,7 @@ const setState = (args) => {
 
 describe("Check DatasetHandler component behaviour,",() => {
     test("Should  map items correctly", async () => {
-        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetchFunction={fetch}/>);
+        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetch={fetch}/>);
         
         expect(asFragment()).toMatchSnapshot();
 

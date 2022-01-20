@@ -13,5 +13,5 @@ const Template = (args) => <HashRouter basename={window.location.pathname}><Gall
 
 export const Default = Template.bind({});
 Default.args = {
-    fetchFunction: fetch
+    fetch: fetch
 };

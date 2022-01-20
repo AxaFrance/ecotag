@@ -36,7 +36,7 @@ const fetchKO = () => {
 
 describe('Check images display', () => {
     test('Should render Gallery page correctly, resize images and sort by names', async () => {
-        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={fetch} /></Router>);
+        const {container, asFragment} = render(<Router basename="/"><Gallery fetch={fetch} /></Router>);
         
         expect(asFragment()).toMatchSnapshot();
         
@@ -65,7 +65,7 @@ describe('Check images display', () => {
     });
     
     test('Should handle error on bad request', async () => {
-        const {container, asFragment} = render(<Router basename="/"><Gallery fetchFunction={fetchKO} /></Router>);
+        const {container, asFragment} = render(<Router basename="/"><Gallery fetch={fetchKO} /></Router>);
 
         expect(asFragment()).toMatchSnapshot();
 

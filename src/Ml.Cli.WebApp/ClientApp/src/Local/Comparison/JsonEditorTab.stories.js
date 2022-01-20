@@ -57,5 +57,5 @@ Default.args = {
     compareLocation: "",
     MonacoEditor: MonacoEditor,
     setCompareState: mockedFunction,
-    fetchFunction: fetch,
+    fetch: fetch,
 }

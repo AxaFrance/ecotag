@@ -34,7 +34,7 @@ describe("Check annotation tab behaviour", () => {
         const setState = (params) => {
             state = params;
         };
-        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetchFunction={fetch}/>);
+        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetch={fetch}/>);
 
         expect(asFragment()).toMatchSnapshot();
 
