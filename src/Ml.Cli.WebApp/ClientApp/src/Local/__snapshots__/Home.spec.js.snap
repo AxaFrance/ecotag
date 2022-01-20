@@ -398,6 +398,7 @@ exports[`Check page shifting Render home page and go to compare page 2`] = `
   >
     <button
       class="btn af-btn"
+      id="submit-btn"
     >
       Apply filters
     </button>
