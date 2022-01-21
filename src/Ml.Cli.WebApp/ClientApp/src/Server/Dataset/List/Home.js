@@ -5,7 +5,7 @@ import './Home.scss';
 import ItemsTable from "./ItemsTable";
 import EmptyArrayManager from "../../../EmptyArrayManager";
 
-const Home = ({ items, filters, onChangePaging, onChangeSort }) => {
+const Home = ({ items, filters, onChangePaging }) => {
 
     return (
         <>
@@ -19,8 +19,7 @@ const Home = ({ items, filters, onChangePaging, onChangeSort }) => {
                     <ItemsTable 
                         items={items}
                         filters={filters}
-                        onChangePaging={onChangePaging}
-                        onChangeSort={onChangeSort}/>
+                        onChangePaging={onChangePaging} />
                 </EmptyArrayManager>
             </div>
         </>

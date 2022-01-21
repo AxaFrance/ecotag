@@ -40,41 +40,40 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging, onChangeSort}) 
                             <Table.Th>
                                 <span className="af-table__th-content">Vérouiller</span>
                             </Table.Th>
-                            <HeaderColumnCell
-                                onChangeSort={onChangeSort("name")}
-                                headerColumnName={"Nom"}
-                                filterColumnValue={filters.columns.name.value}/>
-                            <HeaderColumnCell
-                                onChangeSort={onChangeSort("classification")}
-                                headerColumnName={"Classification"}
-                                filterColumnValue={filters.columns.classification.value}/>
-                            <HeaderColumnCell
-                                onChangeSort={onChangeSort("numberFiles")}
-                                headerColumnName={"Nombre de fichier"}
-                                filterColumnValue={filters.columns.numberFiles.value}/>
-
-                            <HeaderColumnCell
-                                onChangeSort={onChangeSort("createDate")}
-                                headerColumnName={"Date création"}
-                                filterColumnValue={filters.columns.createDate.value}/>
-                            <Table.Th>Action</Table.Th>
+                            <Table.Th>
+                                <span className="af-table__th-content">Nom</span>
+                            </Table.Th>
+                            <Table.Th>
+                                <span className="af-table__th-content">Classification</span>
+                            </Table.Th>
+                            <Table.Th>
+                                <span className="af-table__th-content">Nombre de fichier</span>
+                            </Table.Th>
+                            <Table.Th>
+                                <span className="af-table__th-content">Type</span>
+                            </Table.Th>
+                            <Table.Th>
+                                <span className="af-table__th-content">Date création</span>
+                            </Table.Th>
+                            <Table.Th><span className="af-table__th-content">Action</span></Table.Th>
                         </Table.Tr>
                     </Table.Header>
                     <Table.Body>
                         {items.map(
-                            ({id, name, type, classification, numberFiles, createDate, isLock}) => (
+                            ({id, name, type, classification, numberFiles, createDate, isLocked}) => (
                                 <Table.Tr key={id}>
                                     <Table.Td>
-                                        <Action className={isLock ? 'btn af-btn--circle af-btn--danger' : 'btn af-btn--circle'}
-                                                id="lock" icon={isLock ? "lock" : "unlock"}
-                                                title={isLock ? "vérouillée" : "dévérouillée"}
+                                        <Action className={isLocked ? 'btn af-btn--circle af-btn--locked' : 'btn af-btn--circle'}
+                                                id="lock" icon={isLocked ? "lock" : "unlock"}
+                                                title={isLocked ? "vérouillée" : "dévérouillée"}
                                                 onClick={() => {}} />
                                     </Table.Td>
                                     <Table.Td>
                                         {name}
                                     </Table.Td>
                                     <Table.Td>{classification}</Table.Td>
-                                    <Table.Td>{numberFiles} {type}</Table.Td>
+                                    <Table.Td>{numberFiles}</Table.Td>
+                                    <Table.Td>{type}</Table.Td>
                                     <Table.Td>{formatDateToString(createDate)}</Table.Td>
                                     <Table.Td>
                                         <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
