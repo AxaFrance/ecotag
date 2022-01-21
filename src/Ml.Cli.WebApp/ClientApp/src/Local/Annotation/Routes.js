@@ -10,7 +10,7 @@ const Annotation = props => {
             params: {id, dataset},
         },
         annotationState,
-        fetchFunction,
+        fetch,
         url
     } = props;
     return (
@@ -25,32 +25,32 @@ const Annotation = props => {
             id={id}
             url={url}
             dataset={dataset}
-            fetchFunction={fetchFunction}
+            fetch={fetch}
         />
     </>);
 }
 
-const Annotate = ({fetchFunction, state, setState}) => {
+const Annotate = ({fetch, state, setState}) => {
     return (
         <>
             <TitleBar title={`Annotate`} />
-            <DatasetHandler state={state} setState={setState} fetchFunction={fetchFunction}/>
+            <DatasetHandler state={state} setState={setState} fetch={fetch}/>
         </>
     );
 }
 
 const AnnotationWithRouter= React.memo(withRouter(Annotation));
 
-const Routes = ({state, setState, fetchFunction}) => {
+const Routes = ({state, setState, fetch}) => {
     const {url} = useRouteMatch();
     
     return(
         <Switch>
             <Route exact path={`${url}/:dataset/:id`} >
-                <AnnotationWithRouter annotationState={state} url={url} fetchFunction={fetchFunction}  />
+                <AnnotationWithRouter annotationState={state} url={url} fetch={fetch}  />
             </Route>
             <Route>
-                <Annotate state={state} setState={setState}  fetchFunction={fetchFunction}/>
+                <Annotate state={state} setState={setState}  fetch={fetch}/>
             </Route>
         </Switch>
     );

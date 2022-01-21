@@ -13,7 +13,7 @@ jest.mock('react-router', () => ({
 
 const dataSource = (`{"DatasetLocation": "..\\\\..\\\\demo\\\\licenses\\\\datasets\\\\dataset-ner.json", "AnnotationType": "NamedEntityRecognition", "Configuration": "[{\\\"id\\\": \\\"#008194\\\", \\\"name\\\":\\\"Firstname\\\", \\\"color\\\":\\\"#008194\\\"}]", "Content":[{\"FileName\": \"filename.json\", \"FileDirectory\": \"fileDirectory\", \"ImageDirectory\": \"\", \"FrontDefaultStringsMatcher\": \"\", \"Annotations\":\"\"}]}`);
 
-const mockedFetchFunction = () => { return {status: 400, ok: false}};
+const fetch = () => { return {status: 400, ok: false}};
 
 let state = {
     fileName: "",
@@ -30,7 +30,7 @@ const setState = (args) => {
 
 describe("Check DatasetHandler component behaviour,",() => {
     test("Should  map items correctly", async () => {
-        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetchFunction={mockedFetchFunction}/>);
+        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetch={fetch}/>);
         
         expect(asFragment()).toMatchSnapshot();
 

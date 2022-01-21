@@ -13,13 +13,13 @@ const returnedFiles = [
     "C:\\someFolder\\compare-licenses-file-9.json"
 ];
 
-const mockedFunction = async (queryUrl, data) => Promise.resolve({
+const fetch = async (queryUrl, data) => Promise.resolve({
     ok: true,
     status: 200,
     json: () => Promise.resolve(returnedFiles)
 });
 
-const noFilesFunction = async (queryUrl, data) => Promise.resolve({
+const noFilesFetch = async (queryUrl, data) => Promise.resolve({
     ok: true,
     status: 200,
     json: () => Promise.resolve([])
@@ -34,10 +34,10 @@ const Template = (args) => <Library {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-    fetchFunction: mockedFunction
+    fetch: fetch
 };
 
 export const NoFiles = Template.bind({});
 NoFiles.args = {
-    fetchFunction: noFilesFunction
+    fetch: noFilesFetch
 }

@@ -7,11 +7,11 @@ export default {
     component: Gallery
 };
 
-const mockedFetchFunction = () => {};
+const fetch = () => {};
 
 const Template = (args) => <HashRouter basename={window.location.pathname}><Gallery {...args}/></HashRouter>;
 
 export const Default = Template.bind({});
 Default.args = {
-    fetchFunction: mockedFetchFunction
+    fetch: fetch
 };
