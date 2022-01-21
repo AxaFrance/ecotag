@@ -35,7 +35,7 @@ const loadStateAsync = (fetch) => async (setState, state) => {
         ...state,
         status: resilienceStatus.LOADING,
     });
-    const uri = encodeURI("/api/local/gallery/" + state.filesPath);
+    const uri = encodeURI(`api/local/gallery/${utf8_to_b64(state.filesPath)}`);
     const response = await fetchGetData(fetch)(uri);
     if (response.status >= 400) {
         const errorMessage = await response.text();
