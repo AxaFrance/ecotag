@@ -113,14 +113,14 @@ mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/win-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/win-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/win-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/win-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -128,7 +128,7 @@ Then, in another command line :
 ```cmd
 # run the demo-api
 cd demo-api
-./Ml.Cli.DemoApi.exe
+Ml.Cli.DemoApi.exe
 # start demo api in background at https://localhost:6001
 ```
 
@@ -136,7 +136,7 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-./Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
+Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # then navigate to: http://localhost:5000/ 
 ```
 
@@ -154,14 +154,14 @@ mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/linux-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/linux-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/linux-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/linux-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -191,14 +191,14 @@ mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/osx-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/osx-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/osx-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/osx-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.19/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 

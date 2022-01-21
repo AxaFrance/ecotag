@@ -4,8 +4,10 @@ using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobCompare;
 using Ml.Cli.JobDataset;
+using Ml.Cli.PathManager;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -16,9 +18,9 @@ namespace Ml.Cli.Tests.JobsTests
         public async Task ShouldGenerateDataset()
         {
             var resultList = new List<DatasetResult>();
-            var datasetResult = new DatasetResult("{FileName}.pdf.json", @"C:\ml\raw_ap\input", @"C:\ml\raw_ap\images","","");
+            var datasetResult = new DatasetResult("{FileName}.pdf.json", PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"), PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/images"), "","");
             resultList.Add(datasetResult);
-            var expectedContent = new DatasetFileResult(@"C:\ml\raw_ap\output\dataset-result.json", "Ocr", "", resultList);
+            var expectedContent = new DatasetFileResult(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output/dataset-result.json"), "Ocr", "", resultList);
             var expectedResult = JsonConvert.SerializeObject(expectedContent, Formatting.Indented);
 
             var logger = Mock.Of<ILogger<TaskCompare>>();
@@ -34,9 +36,9 @@ namespace Ml.Cli.Tests.JobsTests
                 true,
                 "Ocr",
                 "",
-                @"C:\ml\raw_ap\input",
-                @"C:\ml\raw_ap\images",
-                @"C:\ml\raw_ap\output",
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/images"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output"),
                 "",
                 "dataset-result.json",
                 ""
@@ -44,7 +46,31 @@ namespace Ml.Cli.Tests.JobsTests
 
             await datasetTask.GenerateDatasetAsync(inputTask);
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\output\dataset-result.json", expectedResult));
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output/dataset-result.json"), expectedResult));
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"dataset\",\"enabled\": true,\"annotationType\": \"JsonEditor\",\"fileDirectory\": \"licenses/output/{start-date}/jsons\",\"imageDirectory\": \"licenses/output/{start-date}/images\",\"outputDirectory\": \"licenses/datasets\",\"fileName\": \"dataset-{start-date}-jsoneditor.json\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+
+            var datasetResult = JobDataset.Initializer.CreateTask(jObject, "dataset", false, true, "baseDirectory", "1", pathValidatorHelper.Object);
+            var expectedDatasetResult = new DatasetTask(
+                "1",
+                "dataset",
+                false,
+                "JsonEditor",
+                "",
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output/{start-date}/jsons"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output/{start-date}/images"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/datasets"),
+                "",
+                "dataset-{start-date}-jsoneditor.json",
+                ""
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedDatasetResult), JsonConvert.SerializeObject(datasetResult));
         }
     }
 }

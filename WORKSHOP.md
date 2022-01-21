@@ -1,10 +1,14 @@
 # Ml-cli Workshop (1 hour)
 
-Ml-cli is an OpenSource tool that automates AI API integration tests and more.
+Ml-cli is an OpenSource tool that automates AI API debug and more.
 
 ## 1) Presentation of a complex AI workflow and why this tool exists
 
 ## 2) Demonstration: Why we use ml-cli? How do we use it?
+
+1. Compare
+2. Annotation
+3. Image gallery on AzureML
 
 ## 3) Your turn to play !
 ### Download and run ml-cli
@@ -26,3 +30,12 @@ Your want to run ml-cli and the demo api on your laptop and play with it.
 
 1. Navigate to "annotation" page
 2. Open "Cropping" datasets generated in "./demo/datasets" folder
+
+### Play with "gallery"
+
+1. Insert a folder and display images
+
+## 4) What next ?
+
+1. Ecotag
+3. ml-toolkit 

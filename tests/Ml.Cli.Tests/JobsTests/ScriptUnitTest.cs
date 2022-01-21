@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobScript;
+using Ml.Cli.PathManager;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -28,8 +32,8 @@ namespace Ml.Cli.Tests.JobsTests
             "script",
             "unique_id",
             true,
-            @"C:\ml\raw_ap\input",
-            @"C:\ml\raw_ap\output",
+            PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"),
+            PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/output"),
             "try { \n\tvar dataBody = JSON.parse(rawBodyInput);\n\tconst result = [];\n\tdataBody.analysis.forEach(anal => {\n\t\tanal.elements.forEach(el => {\n\t\t\tlet new_data = null;\n\t\t\tif(el.document_type == \"nouveau_permis_recto\") {\n\t\t\t\tnew_data = {\n\t\t\t\t\tfirstname : el.firstname.value,\n\t\t\t\t\tlastname: el.lastname.value,\n\t\t\t\t\tbirthdate: el.birthdate.value,\n\t\t\t\t\tlicense_validity_date: el.license_validity_date.value,\n\t\t\t\t\tdocument_type:el.document_type,\n\t\t\t\t\tdocument_id: el.document_id,\n\t\t\t\t\tpage: anal.page,\n\t\t\t\t};\n\t\t\t\t\n\t\t\t\tresult.push(new_data);\n\t\t\t} \n\t\t\tif(el.document_type == \"nouveau_permis_verso\") {\n\t\t\t\tnew_data = {\n\t\t\t\t\tdocument_type:el.document_type,\n\t\t\t\t\tcategoryB: null,\n\t\t\t\t\tdocument_id: el.document_id,\n\t\t\t\t\tpage: anal.page,\n\t\t\t\t};\n\t\t\t\tel.category_table.forEach(ct => {\n\t\t\t\t\tif(ct.category === \"B\" && ct.license_procurement_date){\n\t\t\t\t\t\tnew_data.categoryB = ct.license_procurement_date.value;\n\t\t\t\t\t}\n\t\t\t\t})\n\t\t\t\tresult.push(new_data);\n\t\t\t}\n\t\t\tif(el.document_type == \"ancien_permis_recto\") {\n\t\t\t\tnew_data = {\n\t\t\t\t\tfirstname : el.firstname.value,\n\t\t\t\t\tlastname: el.lastname.value,\n\t\t\t\t\tbirthdate: el.birthdate.value,\n\t\t\t\t\tcategoryB: null,\n\t\t\t\t\tdocument_id: el.document_id,\n\t\t\t\t\tpage: anal.page,\n\t\t\t\t};\n\t\t\t\tel.category_table.forEach(ct => {\n\t\t\t\t\tif(ct.category === \"B\" && ct.license_procurement_date){\n\t\t\t\t\t\tnew_data.categoryB = ct.license_procurement_date.value;\n\t\t\t\t\t}\n\t\t\t\t})\n\t\t\t\tresult.push(new_data);\n\t\t\t}\n\t\t});\n\t});\n\trawBodyOutput = JSON.stringify(result.sort(function(a, b) {\n\t\treturn a.page - b.page;\n\t}));\n} catch(ex) {\n\tconsole.WriteLine(\"Plantage parsing right\");\n\tconsole.WriteLine(ex.toString());\n\trawBodyOutput = rawBodyInput;\n}"
             );
 
@@ -37,7 +41,27 @@ namespace Ml.Cli.Tests.JobsTests
 
             await script.FormatCallapiAsync(inputTask);
             
-            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(@"C:\ml\raw_ap\output\toto_pdf.json", It.IsAny<string>()), Times.Once);
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs(Path.Combine(inputTask.OutputDirectory, "toto_pdf.json")), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var jsonContent = "{\"type\": \"script\",\"id\": \"script_task\",\"enabled\": true,\"fileDirectory\": \"licenses/output\",\"outputDirectory\": \"licenses/scripts\",\"script\": \"try{ console.WriteLine('Write your JS code on this attribute (not necessarily in a try-catch block).') } catch(ex){ console.WriteLine(ex.toString) }\"}";
+            var jObject = JObject.Parse(jsonContent);
+            var pathValidatorHelper = new Mock<IPathValidatorHelper>();
+
+            var scriptResult = Initializer.CreateTask(jObject, "script", false, true, "baseDirectory", "1",
+                pathValidatorHelper.Object);
+            var expectedScriptResult = new ScriptTask(
+                "script",
+                "1",
+                false,
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/output"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/licenses/scripts"),
+                "try{ console.WriteLine('Write your JS code on this attribute (not necessarily in a try-catch block).') } catch(ex){ console.WriteLine(ex.toString) }"
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedScriptResult), JsonConvert.SerializeObject(scriptResult));
         }
     }
 }

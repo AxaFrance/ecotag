@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Ml.Cli.InputTask;
 using Ml.Cli.JobParallel;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.Tests.JobsTests
@@ -36,6 +37,18 @@ namespace Ml.Cli.Tests.JobsTests
 
             var result = (sw.ElapsedMilliseconds/1000f) < 3;
             Assert.True(result);
+        }
+        
+        [Fact]
+        public void ShouldInitialize()
+        {
+            var parallelResult = Initializer.CreateTask("parallel", false, "1");
+            var expectedParallelResult = new TasksGroup(
+                "parallel",
+                "1",
+                false
+            );
+            Assert.Equal(JsonConvert.SerializeObject(expectedParallelResult), JsonConvert.SerializeObject(parallelResult));
         }
     }
 }

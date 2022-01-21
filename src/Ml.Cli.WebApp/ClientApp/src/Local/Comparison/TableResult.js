@@ -5,6 +5,7 @@ import StatsTable from './StatsTable';
 import {formatJson} from "./FormatFilter";
 import {computeNumberPages, filterPaging} from "../Tables/Paging";
 import './TableResult.scss';
+import EmptyArrayManager from "../../EmptyArrayManager";
 
 export const filterItems = (items, filterName) => {
     return items.filter(item => {
@@ -32,7 +33,7 @@ const getExtensionName = (fileName) => {
     return reverseString(extension);
 }
 
-const filterExtensions = (items, extensionName) => {
+export const filterExtensions = (items, extensionName) => {
     return items.filter(item => {
         if (extensionName === "All") {
             return items;
@@ -44,7 +45,7 @@ const filterExtensions = (items, extensionName) => {
     });
 }
 
-const filterStatusCode = (items, statusCode) => {
+export const filterStatusCode = (items, statusCode) => {
     if (statusCode === "All")
         return items;
     else {
@@ -92,65 +93,80 @@ const TableResult = ({state, setState, MonacoEditor, fetchFunction}) => {
     </>;
 }
 
+const TableContentDisplay = ({items, state, setParentState, currentPageComputed, numberPages, onPagingChange, fetchFunction, MonacoEditor}) => {
+    return(
+        <>
+            <Paging
+                className="af-paging paging__top"
+                currentPage={currentPageComputed}
+                numberPages={numberPages}
+                numberItems={state.filters.pagingSelect}
+                id="paging-top"
+                previousLabel="Previous"
+                nextLabel="Next"
+                displayLabel="Show"
+                elementsLabel="elements"
+                onChange={onPagingChange}
+            />
+
+            {items.map(item => (
+                <TableItem
+                    key={item.id}
+                    item={item}
+                    items={state.items}
+                    stringsMatcher={state.filters.stringsModifier}
+                    isAnnotating={state.isAnnotationOpen}
+                    setCompareState={setParentState}
+                    compareLocation={state.compareLocation}
+                    MonacoEditor={MonacoEditor}
+                    fetchFunction={fetchFunction}
+                />
+            ))}
+
+            <Paging
+                currentPage={currentPageComputed}
+                numberPages={numberPages}
+                numberItems={state.filters.pagingSelect}
+                id="paging-bottom"
+                previousLabel="Previous"
+                nextLabel="Next"
+                displayLabel="Show"
+                elementsLabel="elements"
+                onChange={onPagingChange}
+            />
+        </>
+    )
+};
+
 const TableContent = ({state, pageItems, filteredSearchBar, setState, MonacoEditor, fetchFunction}) => {
     const setParentState = (newData) => setState({...state, ...newData});
-    if (pageItems.items.length === 0) {
-        return <h2 className="error-message">There is no file related to that filter configuration !</h2>;
-    }
-    const currentPage = pageItems.currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : pageItems.currentPage;
+    const {items, currentPage} = pageItems;
+    const currentPageComputed = currentPage === -1 ? computeNumberPages(filteredSearchBar, state.filters.pagingSelect) : currentPage;
     const numberPages = computeNumberPages(filteredSearchBar, state.filters.pagingSelect);
     const onPagingChange = e => {
-        const numberPages = computeNumberPages(filteredSearchBar, e.numberItems);
+        const newNumberPages = computeNumberPages(filteredSearchBar, e.numberItems);
         setState({
             ...state,
             filters: {
                 ...state.filters,
                 pagingSelect: e.numberItems,
-                pagingCurrent: state.filters.pagingCurrent > numberPages ? numberPages : e.page
+                pagingCurrent: state.filters.pagingCurrent > newNumberPages ? newNumberPages : e.page
             }
         });
     }
     
-    return <>
-        <Paging
-            className="af-paging paging__top"
-            currentPage={currentPage}
+    return <EmptyArrayManager items={items} emptyArrayMessage="There is no file related to that filter configuration">
+        <TableContentDisplay
+            items={items}
+            state={state}
+            setParentState={setParentState}
             numberPages={numberPages}
-            numberItems={state.filters.pagingSelect}
-            id="paging-top"
-            previousLabel="Previous"
-            nextLabel="Next"
-            displayLabel="Show"
-            elementsLabel="elements"
-            onChange={onPagingChange}
+            currentPageComputed={currentPageComputed}
+            onPagingChange={onPagingChange}
+            fetchFunction={fetchFunction}
+            MonacoEditor={MonacoEditor}
         />
-        
-        {pageItems.items.map(item => (
-            <TableItem
-                key={item.id}
-                item={item}
-                items={state.items}
-                stringsMatcher={state.filters.stringsModifier}
-                isAnnotating={state.isAnnotationOpen}
-                setCompareState={setParentState}
-                compareLocation={state.compareLocation}
-                MonacoEditor={MonacoEditor}
-                fetchFunction={fetchFunction}
-            />
-        ))}
-
-        <Paging
-            currentPage={currentPage}
-            numberPages={numberPages}
-            numberItems={state.filters.pagingSelect}
-            id="paging-bottom"
-            previousLabel="Previous"
-            nextLabel="Next"
-            displayLabel="Show"
-            elementsLabel="elements"
-            onChange={onPagingChange}
-        />
-    </>
+    </EmptyArrayManager>
 }
 
 const TableContentMemo = React.memo(TableContent)

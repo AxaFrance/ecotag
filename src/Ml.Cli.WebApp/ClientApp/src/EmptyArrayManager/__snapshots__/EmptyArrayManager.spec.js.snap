@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check EmptyArrayManager behaviour Should not render children if items list is empty 1`] = `
+<DocumentFragment>
+  <span
+    class="empty-array__error"
+  >
+    <b>
+      No elements found
+    </b>
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Check EmptyArrayManager behaviour Should render children correctly when items list is not empty 1`] = `
+<DocumentFragment>
+  <p>
+    Test
+  </p>
+</DocumentFragment>
+`;

@@ -315,7 +315,7 @@ try {
             </div>
 
             <div className="file-input">
-                <Button onClick={() => applyFilters()}>Apply filters</Button>
+                <Button id="submit-btn" onClick={() => applyFilters()}>Apply filters</Button>
             </div>
 
             {filterState.loadFileError &&

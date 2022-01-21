@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Paths;
+using Ml.Cli.PathManager;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -23,11 +24,11 @@ namespace Ml.Cli.WebApp.Tests
                 .Returns(new[]{"birthdateFolder", "firstnameFolder", "lastnameFolder"});
             
             fileLoader.Setup(mock => mock.EnumerateFiles("birthdateFolder"))
-                .Returns(new[]{"birthdateFolder\\{someFileName}.pdf.png", "birthdateFolder\\{otherFilename.pdf.png}"});
+                .Returns(new[]{PathAdapter.AdaptPathForCurrentOs("birthdateFolder/{someFileName}.pdf.png"), PathAdapter.AdaptPathForCurrentOs("birthdateFolder/{otherFilename.pdf.png}")});
             fileLoader.Setup(mock => mock.EnumerateFiles("firstnameFolder"))
-                .Returns(new[]{"firstnameFolder\\{someFileName}.pdf.png", "firstnameFolder\\{otherFilename.pdf.png}"});
+                .Returns(new[]{PathAdapter.AdaptPathForCurrentOs("firstnameFolder/{someFileName}.pdf.png"), PathAdapter.AdaptPathForCurrentOs("firstnameFolder/{otherFilename.pdf.png}")});
             fileLoader.Setup(mock => mock.EnumerateFiles("lastnameFolder"))
-                .Returns(new[]{"lastnameFolder\\{someFileName}.pdf.png", "lastnameFolder\\{otherFilename.pdf.png}"});
+                .Returns(new[]{PathAdapter.AdaptPathForCurrentOs("lastnameFolder/{someFileName}.pdf.png"), PathAdapter.AdaptPathForCurrentOs("lastnameFolder/{otherFilename.pdf.png}")});
             
             var basePath = new Mock<BasePath>("");
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
@@ -42,7 +43,7 @@ namespace Ml.Cli.WebApp.Tests
             var value = okResult.Value;
 
             var expectedResult = new[]
-                {"firstnameFolder\\{someFileName}.pdf.png", "lastnameFolder\\{someFileName}.pdf.png"};
+                {PathAdapter.AdaptPathForCurrentOs("firstnameFolder/{someFileName}.pdf.png"), PathAdapter.AdaptPathForCurrentOs("lastnameFolder/{someFileName}.pdf.png")};
             
             Assert.Equal(expectedResult, value);
         }
