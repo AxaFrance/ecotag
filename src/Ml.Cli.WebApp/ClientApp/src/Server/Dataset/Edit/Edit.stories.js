@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import EditContainer from "./EditContainer";
+import EditContainer from "./Edit.container";
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 

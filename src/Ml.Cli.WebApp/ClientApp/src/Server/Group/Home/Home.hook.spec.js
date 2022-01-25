@@ -4,15 +4,21 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createGroup, deleteGroup, initListOfGroups, updateUsersInGroup, useHome } from './Home.hook';
 import { initialState } from './Home.reducer';
-import { FETCH_CONFIG } from '../Group.service';
 import * as GroupService from '../Group.service';
 import {
   NAME
 } from './New/constants';
 
+function fail(message = "The fail function was called") {
+  throw new Error(message);
+}
+
+global.fail = fail;
+
 describe('Home.hook for groups', () => {
 
   let givenFetch;
+  let givenFetchWithData;
   let givenDispatch;
   let spyFetchGroups;
   let givenFetchRejected;
@@ -47,22 +53,23 @@ describe('Home.hook for groups', () => {
   beforeEach(() => {
     givenFetch = jest.fn();
     givenDispatch = jest.fn();
+    givenFetchWithData = jest.fn().mockResolvedValue({status: 500, ok: true});
     givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
     spyFetchGroups = jest.spyOn(
       GroupService,
       'fetchGroups'
     );
-    spyFetchGroups.mockReturnValue(() =>
-      Promise.resolve(givenGroups)
-    );
+    spyFetchGroups.mockReturnValue(() => {
+          return {ok: true, json: () => Promise.resolve(givenGroups)};
+    });
 
     spyFetchEligibleUsers = jest.spyOn(
       GroupService,
       'fetchUsers'
     );
-    spyFetchEligibleUsers.mockReturnValue(() =>
-      Promise.resolve(givenEligibleUsers)
-    );
+    spyFetchEligibleUsers.mockReturnValue(() => {
+      return {ok: true, json: () => Promise.resolve(givenEligibleUsers)};
+    });
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -74,7 +81,7 @@ describe('Home.hook for groups', () => {
         await initListOfGroups(givenFetch, givenDispatch)();
         expect(spyFetchGroups).toHaveBeenCalled();
         expect(spyFetchEligibleUsers).toHaveBeenCalled();
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { items: givenGroups, eligibleUsers: givenEligibleUsers } } );
+        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { groups: givenGroups, users: givenEligibleUsers, status: "success" } } );
       } catch (error) {
         fail(error);
       }
@@ -98,13 +105,11 @@ describe('Home.hook for groups', () => {
   describe('.deleteGroup()', () => {
     const givenGroupId = "0001";
     const DELETE_GROUP_ROUTE = `groups/${givenGroupId}`;
-    const givenFetch = jest.fn(() => Promise.resolve());
     it('should call deleteGroup and dispatch', async () => { 
       try {
-        await deleteGroup(givenFetch, givenDispatch)(givenGroupId);
-        expect(givenFetch).toHaveBeenCalledWith(DELETE_GROUP_ROUTE, {
-          method:'DELETE',
-          ...FETCH_CONFIG
+        await deleteGroup(givenFetchWithData, givenDispatch)(givenGroupId);
+        expect(givenFetchWithData).toHaveBeenCalledWith(DELETE_GROUP_ROUTE, {
+          method:'DELETE'
         });
         expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionGroupLoading" });
       } catch (error) {
@@ -127,18 +132,16 @@ describe('Home.hook for groups', () => {
     const givenFields = {
       [NAME]: { name: NAME, value: '002', message: null },
     }
-    const givenFetch = jest.fn(() => Promise.resolve());
     it('should call createGroup and dispatch', async () => { 
       try {
-        await createGroup(givenFetch, givenDispatch)(givenFields);
-        expect(givenFetch).toHaveBeenCalledWith(
+        await createGroup(givenFetchWithData, givenDispatch)(givenFields);
+        expect(givenFetchWithData).toHaveBeenCalledWith(
           GROUPS_ROUTE, {
             method:'POST',
-            body: JSON.stringify({name:givenFields[NAME].value, users:[]}),
-            ...FETCH_CONFIG
+            body: JSON.stringify({name:givenFields[NAME].value, users:[]})
           }
         );
-        expect(givenDispatch).toHaveBeenCalledTimes(3);
+        expect(givenDispatch).toHaveBeenCalledTimes(2);
       } catch (error) {
         fail(error);
       }
@@ -158,7 +161,7 @@ describe('Home.hook for groups', () => {
   describe('.updateUsersInGroup()', () => {
     const givenState = { ...initialState };
     const givenIdGroup = '002';
-    givenState.items = [
+    givenState.groups = [
       {
         id: givenIdGroup,
         name: givenIdGroup,
@@ -168,18 +171,16 @@ describe('Home.hook for groups', () => {
     const givenUsers = [
       "jean.valjean@mine.fr"
     ];
-    const givenFetch = jest.fn(() => Promise.resolve());
     it('should call updateUsersInGroup and dispatch', async () => { 
       try {
-        await updateUsersInGroup(givenFetch, givenDispatch, givenState, givenIdGroup, givenUsers);
-        expect(givenFetch).toHaveBeenCalledWith(
+        await updateUsersInGroup(givenFetchWithData, givenDispatch, givenState, givenIdGroup, givenUsers);
+        expect(givenFetchWithData).toHaveBeenCalledWith(
           GROUPS_ROUTE, {
             method:'POST',
-            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, users:givenUsers.map(user => ({ email: user}))}),
-            ...FETCH_CONFIG
+            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, users:givenUsers.map(user => ({ email: user}))})
           }
         );
-        expect(givenDispatch).toHaveBeenCalledTimes(3);
+        expect(givenDispatch).toHaveBeenCalledTimes(2);
       } catch (error) {
         fail(error);
       }
