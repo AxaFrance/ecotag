@@ -5,7 +5,7 @@ import HeaderColumnCell from "../../Project/List/ColumnHeader";
 import Action from "@axa-fr/react-toolkit-action";
 import {useHistory} from "react-router-dom";
 
-const ItemsTable = ({items, filters, loaderMode, onChangePaging, onChangeSort}) => {
+const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
 
     const history = useHistory();
     

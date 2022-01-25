@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Ml.Cli.WebApp.Server.Projects;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Datasets

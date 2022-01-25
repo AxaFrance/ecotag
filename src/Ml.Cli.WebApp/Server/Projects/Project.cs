@@ -15,6 +15,11 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string TypeAnnotation { get; set; }
         public List<Label> Labels { get; set; }
         
+        
+    }
+
+    public class ProjectReservation
+    {
         public IList<Reserve> Reservations { get; set; } = new List<Reserve>();
     }
     
