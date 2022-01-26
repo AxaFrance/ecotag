@@ -1,18 +1,30 @@
 import { useParams } from 'react-router';
 import React, { useEffect, useReducer } from 'react';
 import AnnotationDispatch from './AnnotationDispatch';
-import withLoader from '../../withLoader';
-import { fetchProject } from '../Page/Page.service';
+import { fetchProject, fetchReserveAnnotations } from '../Page/Page.service';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
+import Toolbar from "./Toolbar";
 
+const onSubmit = () => {
+  console.log('mock Submit');
+};
 
+const onNext = () => {
+  console.log('mock Submit');
+};
+const onPrevious = () => {
+  console.log('mock Submit');
+};
+
+const url = "https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-course-photos.s3.amazonaws.com/b3/b6693cb0424a938c0376ff89bb5f5b/RH_Logo_Whitebg1200x1200.png?auto=format%2Ccompress&dpr=1";
 const PageAnnotation = ({project, ...state}) => <>
   <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}` } goTo={`/projects/${project.id}`} />
-  <AnnotationDispatch {...state} project={project} /></>
+  <Toolbar onNext={onNext} onPrevious={onPrevious} />
+  <AnnotationDispatch {...state} project={project} onSubmit={onSubmit} url={url} /></>
 const PageAnnotationWithResilience = withResilience(PageAnnotation);
 
 export const init = (fetch, dispatch) => async projectId => {
@@ -34,6 +46,25 @@ export const init = (fetch, dispatch) => async projectId => {
   dispatch({ type: 'init', data });
 };
 
+export const reserveAnnotation = (fetch, dispatch) => async projectId => {
+  const response = await fetchReserveAnnotations(fetch)(projectId);
+  let data;
+  if(response.status >= 500){
+    data = {
+      status: resilienceStatus.ERROR,
+      items: [],
+    }
+  } else {
+    const annotations = await response.json();
+    data = {
+      status: resilienceStatus.ERROR,
+      items: [...annotations],
+    }
+  }
+
+  dispatch({ type: 'reserve_annotation', data });
+};
+
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
@@ -42,6 +73,16 @@ export const reducer = (state, action) => {
         ...state,
         status,
         project,
+      };
+    }
+    case 'reserve_annotation': {
+      const { status, items } = action.data;
+      return {
+        ...state,
+        annotations: {
+          status,
+          items: [...state.annotations.items, ...items]
+        }
       };
     }
     default:
@@ -57,13 +98,18 @@ export const initialState = {
     name: "-",
     typeAnnotation: ""
   },
+  annotations: {
+    status: resilienceStatus.LOADING,
+    items: [],
+  }
 };
 
 const usePage = (fetch) => {
   const { projectId } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    init(fetch, dispatch)(projectId);
+    init(fetch, dispatch)(projectId)
+        .then(() => reserveAnnotation(fetch, dispatch)(projectId));
   }, []);
   return { state };
 };
