@@ -3,31 +3,8 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
-import {CLASSIFICATION, DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
+import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
 import * as NewService from "./New.service";
-
-const fetch = () => Promise.resolve({
-  "id": "0001",
-  "name": "Relevé d'information",
-  "dataSetId": "0004",
-  "classification": "Publique",
-  "numberTagToDo": 10,
-  "createDate": "04/04/2011",
-  "typeAnnotation": "NER",
-  "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
-  "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}],
-  "users": [
-    {"annotationCounter": 10,
-      "annotationToBeVerified": 1,
-      "email": "clement.trofleau.lbc@axa.fr"},
-    {"annotationCounter": 24,
-      "annotationToBeVerified": 5,
-      "email": "Guillaume.chervet@axa.fr"},
-    {"annotationCounter": 35,
-      "annotationToBeVerified": 15,
-      "email": "Gille.Cruchont@axa.fr"}
-  ]
-});
 
 const givenGroups = [
   {
@@ -42,13 +19,36 @@ const givenGroups = [
   }
 ];
 
+const fetch = () => {
+  return {ok: true, json: () => Promise.resolve({
+      "id": "0001",
+      "name": "Relevé d'information",
+      "dataSetId": "0004",
+      "classification": "Publique",
+      "numberTagToDo": 10,
+      "createDate": "04/04/2011",
+      "typeAnnotation": "NER",
+      "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
+      "labels": [{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}],
+      "users": [
+        {"annotationCounter": 10,
+          "annotationToBeVerified": 1,
+          "email": "clement.trofleau.lbc@axa.fr"},
+        {"annotationCounter": 24,
+          "annotationToBeVerified": 5,
+          "email": "Guillaume.chervet@axa.fr"},
+        {"annotationCounter": 35,
+          "annotationToBeVerified": 15,
+          "email": "Gille.Cruchont@axa.fr"}
+      ]
+    })};
+};
+
 describe('New.container', () => {
   it('NewContainer render correctly', async () => {
-    const { getByText } = render(<Router><NewContainer groups={givenGroups} fetch={fetch} /></Router>);
-    const messageEl = await waitFor(() => getByText('Publique'));
-    expect(messageEl).toHaveTextContent(
-        'Publique'
-    );
+    const { container, getAllByText } = render(<Router><NewContainer groups={givenGroups} fetch={fetch} /></Router>);
+    await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
+    await waitFor(() => getAllByText(/Nouveau projet d'annotation/i));
   });
 
   describe('New.reducer', () => {
@@ -68,10 +68,9 @@ describe('New.container', () => {
         ...givenState,
         fields: {
           [NAME]: { name: NAME, value: 'toto', message: null },
-          [CLASSIFICATION]: { name: CLASSIFICATION, value: '', message: MSG_REQUIRED },
           [DATASET]: { name: DATASET, value: '', message: MSG_REQUIRED },
           [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
-          [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED },
+          [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED, options: [] },
           [NUMBER_CROSS_ANNOTATION]: { name: NUMBER_CROSS_ANNOTATION, value: null, message: MSG_REQUIRED },
           [LABELS]: { name: LABELS, values: [], message: MSG_REQUIRED },
         }
@@ -114,7 +113,6 @@ describe('New.container', () => {
       ...initState,
       fields: {
         [NAME]: { name: NAME, value: 'toto', message: null },
-        [CLASSIFICATION]: { name: CLASSIFICATION, value: 'Publique', message: null },
         [DATASET]: { name: DATASET, values: [], message: null },
         [GROUP]: { name: GROUP, value: '', message: null },
         [TYPE]: { name: TYPE, value: 'NER', message: null },
@@ -125,6 +123,10 @@ describe('New.container', () => {
     const givenProject = {
       name: "toto"
     };
+
+    function fail(message = "The fail function was called") {
+      throw new Error(message);
+    }
     
     beforeEach(() => {
       givenHistory = [];
