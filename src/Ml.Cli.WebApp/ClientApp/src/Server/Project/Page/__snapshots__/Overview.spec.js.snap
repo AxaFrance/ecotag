@@ -2,78 +2,229 @@
 
 exports[`Overview Overview render correctly 1`] = `
 <DocumentFragment>
-  <h2>
-    Informations générales
-  </h2>
-  <table
-    class="af-table"
+  <article
+    class="af-restitution"
   >
-    <thead
-      class="af-table-thead"
+    <header
+      class="af-restitution__header"
     >
-      <tr
-        class="af-table__tr"
+      <div
+        class="af-restitution__header-left"
       >
-        <th
-          class="af-table__th"
+        <div
+          class="af-restitution__title"
         >
-          Labels
-        </th>
-        <th
-          class="af-table__th"
-        >
-          Users
-        </th>
-        <th
-          class="af-table__th"
-        >
-          Tags restant
-        </th>
-        <th
-          class="af-table__th"
-        >
-          Pourcentage d'avancement
-        </th>
-        <th
-          class="af-table__th"
-        >
-          Date de création
-        </th>
-      </tr>
-    </thead>
-    <tbody
-      class="af-table__body"
+          <span
+            class="af-restitution__title-main"
+          >
+            Informations générales
+          </span>
+          <span
+            class="af-restitution__title-subtitle"
+          />
+        </div>
+      </div>
+    </header>
+    <section
+      class="af-restitution__content"
     >
-      <tr
-        class="af-table__tr"
+      <div
+        class="col col-sm-12 col-md-12 col-lg-12 col-xl-12"
       >
-        <td
-          class="af-table__cell"
+        <div
+          class="row af-restitution__content-left"
         >
-          3
-        </td>
-        <td
-          class="af-table__cell"
-        >
-          0
-        </td>
-        <td
-          class="af-table__cell"
-        >
-          10
-        </td>
-        <td
-          class="af-table__cell"
-        >
-          96.67%
-        </td>
-        <td
-          class="af-table__cell"
-        >
-          04/04/2011
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <div
+            class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+          >
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Nom
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Relevé d'information
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Type d'annotation
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                NER
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Date de création
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                -
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Nombre de fichier
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                0
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Nombre annotation croisée
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                -
+              </dd>
+            </dl>
+          </div>
+          <div
+            class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+          >
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Dataset
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Carte verte
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Type de dataset
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Image
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Classification
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Publique
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Groupe annotateurs
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                groupName
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Pourcentage d'avancement
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                100%
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
 </DocumentFragment>
 `;

@@ -5,14 +5,16 @@ import { render, waitFor, getByText } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 import {BrowserRouter as Router} from "react-router-dom";
 
-const fetch = () => Promise.resolve([{
-  "id": "0001",
-  "name": "Carte verte",
-  "type": "Image",
-  "classification": "Publique",
-  "numberFiles": 300,
-  "createDate": "30/10/2019"
-}]);
+const fetch = async (url, config) => {
+  return {ok: true, json: () => Promise.resolve([{
+      "id": "0001",
+      "name": "Carte verte",
+      "type": "Image",
+      "classification": "Publique",
+      "numberFiles": 300,
+      "createDate": "30/10/2019"
+    }])};
+};
 
 describe('Home.container', () => {
 

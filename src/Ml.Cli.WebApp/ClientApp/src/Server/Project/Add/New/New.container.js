@@ -170,7 +170,6 @@ export const createProject = async (history, fetch, state, dispatch) => {
       groupId: state.fields[GROUP].value,
       typeAnnotation: state.fields[TYPE].value,
       numberCrossAnnotation: state.fields[NUMBER_CROSS_ANNOTATION].value,
-      classification: state.datasets.find(dataset => dataset.id === datasetId).classification,
       labels: state.fields[LABELS].values,
     };
     const response = await fetchCreateProject(fetch)(newProject);

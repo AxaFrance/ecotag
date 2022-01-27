@@ -1,4 +1,4 @@
-import { format, parseISO, isValid } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 // Converti une date String internationale en objet Date local
 const dateTimeReviver = (propertyName, value) => {
@@ -32,8 +32,14 @@ export const convertStringDateToDateObject = origin => {
 
 
 export const formatDateToString = (date) =>{
+  //TODO: handle dates properly
   if(date instanceof Date) {
-    return format(date, 'dd/MM/yyyy');
+    try{
+      return format(date, 'dd/MM/yyyy');
+    }
+    catch (e) {
+      return "Invalid date";
+    }
   }
   return "-";
 }
