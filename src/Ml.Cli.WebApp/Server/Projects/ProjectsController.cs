@@ -30,6 +30,18 @@ namespace Ml.Cli.WebApp.Server.Projects
             var projectsAsJson = projectsAsJsonnFile.RootElement.GetProperty("projects");
             projects = JsonConvert.DeserializeObject<List<Project>>(projectsAsJson.ToString());
         }
+        
+        [HttpGet("{projectId}/files/{id}")]
+        [ResponseCache(Duration = 1)]
+        public IActionResult GetProjectFile(string projectId, string id)
+        {
+            var project = Find(projectId);
+            var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
+            var file = DatasetsController.files.FirstOrDefault(file => file.Id == id && file.DatasetId == dataset.Id);
+            if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
+
+            return NotFound();
+        }
 
         [HttpGet]
         [ResponseCache(Duration = 1)]
@@ -75,7 +87,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             var query = from datasetFiles in dataset.Files
                 join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
                 from reservation in gj.DefaultIfEmpty()
-                orderby reservation?.TimeStamp ?? 0 descending 
+                orderby reservation?.TimeStamp ?? 0 ascending 
                 select new ReserveOutput{ FileId=datasetFiles.Id, FileName=datasetFiles.FileName, TimeStamp = reservation?.TimeStamp ?? 0 };
 
             var results = query.Take(numberToReserve).ToList();
@@ -85,7 +97,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             foreach (var result in results)
             {
                 var reserve = ProjectReservation.Reservations.FirstOrDefault(reserve => reserve.FileId == result.FileId);
-                if (reserve != null)
+                if (reserve == null)
                 {
                     ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks});
                 }
@@ -98,16 +110,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Ok(results);
         }
         
-        [HttpGet("{projectId}/files/{id}")]
-        [ResponseCache(Duration = 1)]
-        public IActionResult GetFile(string datasetId, string id)
-        {
-
-            var file = DatasetsController.files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
-            if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
-
-            return NotFound();
-        }
+       
 
 
         [HttpDelete("{id}")]

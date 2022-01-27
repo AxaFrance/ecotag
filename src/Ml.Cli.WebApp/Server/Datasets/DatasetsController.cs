@@ -99,7 +99,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
-        public IActionResult GetFile(string datasetId, string id)
+        public IActionResult GetDatasetFile(string datasetId, string id)
         {
             var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
             if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
