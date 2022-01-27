@@ -6,11 +6,8 @@ import {BrowserRouter as Router} from "react-router-dom";
 
 describe('Users', () => {
   it('Users render correctly', async () => {
-    const { asFragment, getByText } = render(<Router><User users={[{'email':'titi'}, {'email':'toto'}]} /></Router>);
-    const messageEl = await waitFor(() => getByText('Informations annotateurs'));
-    expect(messageEl).toHaveTextContent(
-        'Informations annotateurs'
-    );
+    const { asFragment, getByText } = render(<Router><User users={[{email:'titi', annotationCounter: 10}, {email:'toto', annotationCounter: 0}]} /></Router>);
+    await waitFor(() => expect(getByText(/Annotateurs/i)).not.toBeNull());
     expect(asFragment()).toMatchSnapshot();
   });
 });
