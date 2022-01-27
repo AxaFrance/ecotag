@@ -33,7 +33,8 @@ const data = {
         "type": "Image",
         "classification": "Publique",
         "numberFiles": 300,
-        "createDate": "30/10/2019"
+        "createDate": "30/10/2019",
+        files: []
     },
     "group": {
         "id": "0001",

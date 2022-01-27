@@ -4,13 +4,12 @@ import Table from '@axa-fr/react-toolkit-table';
 export const User = ({ users = [] }) => {
   return (
     <div>
-      <h2>Informations annotateurs</h2>
+      <h2>Annotateurs</h2>
       <Table>
         <Table.Header>
           <Table.Tr>
             <Table.Th>Adresse e-mail</Table.Th>
             <Table.Th>Nombre d&apos;annotations</Table.Th>
-            <Table.Th>Annotations vérifiées</Table.Th>
           </Table.Tr>
         </Table.Header>
         <Table.Body>
@@ -18,7 +17,6 @@ export const User = ({ users = [] }) => {
             <Table.Tr key={index}>
               <Table.Td>{user.email}</Table.Td>
               <Table.Td>{user.annotationCounter}</Table.Td>
-              <Table.Td>{user.annotationToBeVerified}</Table.Td>
             </Table.Tr>
           ))}
         </Table.Body>

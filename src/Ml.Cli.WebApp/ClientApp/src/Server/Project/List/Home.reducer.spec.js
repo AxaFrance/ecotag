@@ -1,4 +1,5 @@
 import { initialState, reducer } from './Home.reducer';
+import {resilienceStatus} from "../../shared/Resilience";
 
 describe('Home.reducer', () => {
   describe('.reducer()', () => {
@@ -29,15 +30,16 @@ describe('Home.reducer', () => {
       const givenAction = {
         type: 'init',
         data : {
-          items: givenProjects
+          items: givenProjects,
+          status: resilienceStatus.LOADING
         }
       }
 
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        loading: false,
-        items: givenProjects
+        items: givenProjects,
+        status: resilienceStatus.LOADING
       });
     });
     
@@ -50,7 +52,7 @@ describe('Home.reducer', () => {
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        loading: true,
+        loading: resilienceStatus.LOADING,
       });
     });
 

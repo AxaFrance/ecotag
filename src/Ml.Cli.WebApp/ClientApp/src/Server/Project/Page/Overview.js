@@ -1,33 +1,45 @@
 import React from 'react';
-import Table from '@axa-fr/react-toolkit-table';
+import {
+  ArticleRestitution,
+  SectionRestitution,
+  SectionRestitutionColumn,
+  SectionRestitutionRow,
+  Restitution,
+  HeaderRestitution
+} from '@axa-fr/react-toolkit-restitution';
+import {formatDateToString} from "../../date";
 
 export const Overview = ({ project, dataset, group }) => {
-  const labels = project.labels && project.labels.length > 0 ? project.labels : [];
-  const percentAdvancement = ((100 * (dataset.numberFiles - project.numberTagToDo)) / dataset.numberFiles).toFixed(2);
+  //const labels = project.labels && project.labels.length > 0 ? project.labels : [];
+  //const percentAdvancement = ((100 * (dataset.numberFiles - project.numberTagToDo)) / dataset.numberFiles).toFixed(2);
 
   return (
     <>
-      <h2>Informations générales</h2>
-      <Table>
-        <Table.Header>
-          <Table.Tr>
-            <Table.Th>Labels</Table.Th>
-            <Table.Th>Users</Table.Th>
-            <Table.Th>Tags restant</Table.Th>
-            <Table.Th>Pourcentage d&apos;avancement</Table.Th>
-            <Table.Th>Date de création</Table.Th>
-          </Table.Tr>
-        </Table.Header>
-        <Table.Body>
-          <Table.Tr>
-            <Table.Td>{labels.length}</Table.Td>
-            <Table.Td>{group && group.users ? group.users.length : 0}</Table.Td>
-            <Table.Td>{project.numberTagToDo}</Table.Td>
-            <Table.Td>{percentAdvancement}%</Table.Td>
-            <Table.Td>{project.createDate}</Table.Td>
-          </Table.Tr>
-        </Table.Body>
-      </Table>
+      <ArticleRestitution>
+        <HeaderRestitution
+            title="Informations générales"
+        />
+        <SectionRestitution>
+          <SectionRestitutionRow >
+            <SectionRestitutionColumn>
+              <Restitution label="Nom" value={project.name} />
+              <Restitution label="Type d'annotation" value={project.typeAnnotation} />
+              <Restitution label="Date de création" value={formatDateToString(project.createDate)} />
+              <Restitution label="Nombre de fichier" value={dataset.files.length} />
+              <Restitution label="Nombre annotation croisée" value={project.numberCrossAnnotation} />
+              
+            </SectionRestitutionColumn>
+            <SectionRestitutionColumn>
+              <Restitution label="Dataset" value={dataset.name} />
+              <Restitution label="Type de dataset" value={dataset.type} />
+              <Restitution label="Classification" value={dataset.classification} />
+              <Restitution label="Groupe annotateurs" value={group.name} />
+              <Restitution label="Pourcentage d&apos;avancement" value="100%" />
+            </SectionRestitutionColumn>
+          </SectionRestitutionRow>
+        </SectionRestitution>
+      </ArticleRestitution>    
+
     </>
   );
 };

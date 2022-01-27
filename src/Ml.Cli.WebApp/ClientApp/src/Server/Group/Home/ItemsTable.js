@@ -1,5 +1,4 @@
 ﻿import React, {useState} from "react";
-import Loader from '@axa-fr/react-toolkit-loader';
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
@@ -55,9 +54,9 @@ const UserRow = ({ id, name, users, eligibleUsers, onUpdateUser, onDeleteGroup }
     );
 };
 
-const ItemsTable = ({items, filters, loaderMode, onChangePaging, onDeleteGroup, onUpdateUser}) => {
+const ItemsTable = ({items, filters, onChangePaging, onDeleteGroup, onUpdateUser}) => {
     return(
-        <Loader mode={loaderMode}>
+        <>
             <Table>
                 <Table.Header>
                     <Table.Tr>
@@ -89,7 +88,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging, onDeleteGroup, 
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
             />
-        </Loader>
+        </>
     )
 };
 

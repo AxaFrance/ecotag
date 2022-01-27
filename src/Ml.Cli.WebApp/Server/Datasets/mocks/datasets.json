@@ -6,7 +6,7 @@
       "type": "Image",
       "classification": "Publique",
       "numberFiles": 300,
-      "createDate": "30/10/2019",
+      "createDate": "1977-04-22T06:00:00Z",
       "isLock": true
     },
     {
@@ -15,7 +15,7 @@
       "type": "Text",
       "classification": "Confidentiel",
       "numberFiles": 2500,
-      "createDate": "30/10/2011",
+      "createDate": "1977-04-22T06:00:00Z",
       "isLock": false
     },
     {
@@ -24,7 +24,7 @@
       "type": "Text",
       "classification": "Critique",
       "numberFiles": 5500,
-      "createDate": "30/10/2015",
+      "createDate": "1977-04-22T06:00:00Z",
       "isLock": true
     }
   ]

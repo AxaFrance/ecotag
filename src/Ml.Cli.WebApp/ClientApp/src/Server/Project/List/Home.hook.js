@@ -1,22 +1,50 @@
 import { fetchProjects, fetchDeleteProject } from './Home.service';
-import { convertStringDateToDateObject } from '../../date';
+
 import React from 'react';
 import { initialState, reducer } from './Home.reducer';
+import { resilienceStatus } from '../../shared/Resilience';
 
 export const init = (fetch, dispatch) => async () => {
-  const items = await fetchProjects(fetch)();
+  const response = await fetchProjects(fetch)();
+  let data;
+  if(response.status >= 500) {
+    data = {
+        items: [],
+        status: resilienceStatus.ERROR
+      };
+  } else {
+    const items = await response.json();
+    data = {
+        items: items,
+        status: resilienceStatus.SUCCESS
+      };
+  }
   dispatch({
     type: 'init',
-    data: { items: convertStringDateToDateObject(items) },
+    data
   });
 };
 
 export const deleteProject = (fetch, dispatch) => async id => {
   dispatch({ type: 'onActionProjectsLoading' });
-
-  await fetchDeleteProject(fetch)(id);
-
-  await init(fetch, dispatch)();
+  const response = await fetchDeleteProject(fetch)(id);
+  let data;
+  if(response.status >= 500){
+    data = {
+      id: null,
+      status: resilienceStatus.ERROR
+    };
+  } else {
+    await response.json();
+    data = {
+      id,
+      status: resilienceStatus.SUCCESS
+    };
+  }
+  dispatch({
+    type: 'onProjectDeleted',
+    data
+  });
 };
 
 export const useHome = fetch => {

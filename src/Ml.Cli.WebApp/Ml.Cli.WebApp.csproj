@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\scss" />
-    <Folder Include="Logs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -34,9 +34,11 @@ describe('Overview', () => {
             "type": "Image",
             "classification": "Publique",
             "numberFiles": 300,
-            "createDate": "30/10/2019"
+            "createDate": "30/10/2019",
+            files: []
         };
-        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project}/></Router>);
+        const group = {name: "groupName"};
+        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project} group={group}/></Router>);
         const messageEl = await waitFor(() => getByText('Informations générales'));
         expect(messageEl).toHaveTextContent(
             'Informations générales'

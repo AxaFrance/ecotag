@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Title from '../../../TitleBar';
 import './Home.scss';
 import ItemsTable from "./ItemsTable";
 import EmptyArrayManager from "../../../EmptyArrayManager";
 
-const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
+const Home = ({ items, filters, onChangePaging }) => {
 
     return (
         <>
@@ -20,32 +19,11 @@ const Home = ({ items, filters, loaderMode, onChangePaging, onChangeSort }) => {
                     <ItemsTable 
                         items={items}
                         filters={filters}
-                        loaderMode={loaderMode}
-                        onChangePaging={onChangePaging}
-                        onChangeSort={onChangeSort}/>
+                        onChangePaging={onChangePaging} />
                 </EmptyArrayManager>
             </div>
         </>
     )
-};
-
-Home.defaultProps = {
-    items: [],
-    loaderMode: '',
-};
-Home.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            firstname: PropTypes.string,
-            lastname: PropTypes.string,
-            type: PropTypes.string,
-            agent: PropTypes.string,
-            birthdate: PropTypes.string,
-            begin: PropTypes.string,
-        })
-    ),
-    loaderMode: PropTypes.string,
 };
 
 export default Home;

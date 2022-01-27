@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import {init, initialState, reducer} from './AnnotationDispatch.container';
-import * as PageService from "../Page/Page.service";
+import {resilienceStatus} from "../../shared/Resilience";
 
 const fetch = () => Promise.resolve({
   "id": "0001",
@@ -58,6 +58,11 @@ describe('AnnotationDispatch.container', () => {
         "email": "Gille.Cruchont@axa.fr"}
     ]
   };
+
+  function fail(message = "The fail function was called") {
+    throw new Error(message);
+  }
+  
   /*it('AnnotationDispatchContainer render correctly', async () => {
     const { getByText } = render(<Router><AnnotationDispatchContainer fetch={fetch} user={givenUser}/></Router>);
     const messageEl = await waitFor(() => getByText('Soumettre l\'annotation'));
@@ -73,6 +78,7 @@ describe('AnnotationDispatch.container', () => {
         type: 'init',
         data: {
           project : givenProject,
+          status: resilienceStatus.LOADING
         }
       }
 
@@ -80,7 +86,6 @@ describe('AnnotationDispatch.container', () => {
 
       expect(actualState).toMatchObject({
         ...givenState,
-        loading: false,
         project : givenProject,
       });
     });
@@ -102,20 +107,12 @@ describe('AnnotationDispatch.container', () => {
   describe('.init()', () => {
     let givenFetch;
     let givenDispatch;
-    let spyFetchProjects;
     let givenFetchRejected;
     
     beforeEach(() => {
-      givenFetch = jest.fn();
+      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProject)}));
       givenDispatch = jest.fn();
       givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
-      spyFetchProjects = jest.spyOn(
-          PageService,
-          'fetchProject'
-      );
-      spyFetchProjects.mockReturnValue(() =>
-          Promise.resolve(givenProject)
-      );
     });
     afterEach(() => {
       jest.clearAllMocks();
@@ -124,8 +121,7 @@ describe('AnnotationDispatch.container', () => {
     it('should call init and dispatch', async () => {
       try {
         await init(givenFetch, givenDispatch)(givenProject.id);
-        expect(spyFetchProjects).toHaveBeenCalled();
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject } });
+        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject, status: resilienceStatus.SUCCESS } });
       } catch (error) {
         fail(error);
       }

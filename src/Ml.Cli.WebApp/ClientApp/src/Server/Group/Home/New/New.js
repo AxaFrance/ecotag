@@ -21,7 +21,7 @@ const New = ({ fields, disabled, hasSubmit, onChangeCreateGroup, onSubmitCreateG
           <Button
             classModifier={`hasiconRight confirm ${!disabled ? 'disabled' : ''}`}
             id="myForm"
-            onClick={() => onSubmitCreateGroup()}
+            onClick={onSubmitCreateGroup}
             disabled={!disabled}>
             <span className="af-btn-text">Valider</span>
             <i className="glyphicon glyphicon-arrowthin-right" />

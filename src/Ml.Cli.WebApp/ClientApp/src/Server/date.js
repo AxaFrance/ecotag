@@ -1,22 +1,19 @@
+import { format, parseISO } from 'date-fns'
+
 // Converti une date String internationale en objet Date local
-const dateTimeReviver = value => {
-  let a;
+const dateTimeReviver = (propertyName, value) => {
   if (typeof value === 'string') {
-    a = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(value);
-    if (a) {
-      const dateFields = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-      return new Date(
-        Date.UTC(parseInt(dateFields[3], 10), parseInt(dateFields[2], 10) - 1, parseInt(dateFields[1], 10))
-      );
+    if (propertyName.toLowerCase().includes("date")) {
+        return parseISO(value);
     }
   }
   return value;
 };
 
 export const convertStringDateToDateObject = origin => {
-  if (typeof origin === 'string') {
-    return dateTimeReviver(origin);
-  }
+ // if (typeof origin === 'string') {
+ //   return dateTimeReviver(origin);
+ // }
   if (Array.isArray(origin)) {
     return origin.map(e => convertStringDateToDateObject(e));
   }
@@ -24,7 +21,7 @@ export const convertStringDateToDateObject = origin => {
     if (Object.prototype.hasOwnProperty.call(origin, propertyName)) {
       const value = origin[propertyName];
       if (typeof value === 'string') {
-        origin[propertyName] = dateTimeReviver(value);
+        origin[propertyName] = dateTimeReviver(propertyName, value);
       } else if (typeof value === 'object') {
         convertStringDateToDateObject(value);
       }
@@ -32,3 +29,18 @@ export const convertStringDateToDateObject = origin => {
   }
   return origin;
 };
+
+
+export const formatDateToString = (date) =>{
+  //TODO: handle dates properly
+  if(date instanceof Date) {
+    try{
+      return format(date, 'dd/MM/yyyy');
+    }
+    catch (e) {
+      return "Invalid date";
+    }
+  }
+  return "-";
+}
+

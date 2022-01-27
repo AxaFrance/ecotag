@@ -1,19 +1,12 @@
 ﻿import React from "react";
 import BooleanModal from "@axa-fr/react-toolkit-modal-boolean";
 
-const ConfirmModal = ({state, setState}) => {
+const ConfirmModal = ({isOpen, onCancel, onSubmit}) => {
 
-    const onCancel = () => {
-        setState({...state, openLockModal: false});
-    };
-
-    const onSubmit = () => {
-        setState({...state, isLock: true, openLockModal: false});
-    };
 
     return (
         <BooleanModal
-            isOpen={state.openLockModal}
+            isOpen={isOpen}
             title='Voulez-vous verrouiller le dataset définitivement ?'
             id='modalId'
             onCancel={onCancel}

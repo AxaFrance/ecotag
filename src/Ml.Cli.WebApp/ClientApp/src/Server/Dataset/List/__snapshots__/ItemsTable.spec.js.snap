@@ -69,93 +69,58 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
             </span>
           </th>
           <th
-            class="af-table__th af-table__th--sortable"
-            classmodifier="sortable"
+            class="af-table__th"
           >
             <span
               class="af-table__th-content"
             >
-              <button
-                class="af-btn af-btn--table-sorting"
-              >
-                <span
-                  class="af-btn__text"
-                >
-                  Nom
-                </span>
-                <i
-                  class="glyphicon glyphicon-sorting-1"
-                />
-              </button>
-            </span>
-          </th>
-          <th
-            class="af-table__th af-table__th--sortable"
-            classmodifier="sortable"
-          >
-            <span
-              class="af-table__th-content"
-            >
-              <button
-                class="af-btn af-btn--table-sorting"
-              >
-                <span
-                  class="af-btn__text"
-                >
-                  Classification
-                </span>
-                <i
-                  class="glyphicon glyphicon-sorting-2"
-                />
-              </button>
-            </span>
-          </th>
-          <th
-            class="af-table__th af-table__th--sortable"
-            classmodifier="sortable"
-          >
-            <span
-              class="af-table__th-content"
-            >
-              <button
-                class="af-btn af-btn--table-sorting"
-              >
-                <span
-                  class="af-btn__text"
-                >
-                  Nombre de fichier
-                </span>
-                <i
-                  class="glyphicon glyphicon-sorting-3"
-                />
-              </button>
-            </span>
-          </th>
-          <th
-            class="af-table__th af-table__th--sortable"
-            classmodifier="sortable"
-          >
-            <span
-              class="af-table__th-content"
-            >
-              <button
-                class="af-btn af-btn--table-sorting"
-              >
-                <span
-                  class="af-btn__text"
-                >
-                  Date création
-                </span>
-                <i
-                  class="glyphicon glyphicon-sorting-4"
-                />
-              </button>
+              Nom
             </span>
           </th>
           <th
             class="af-table__th"
           >
-            Action
+            <span
+              class="af-table__th-content"
+            >
+              Classification
+            </span>
+          </th>
+          <th
+            class="af-table__th"
+          >
+            <span
+              class="af-table__th-content"
+            >
+              Nombre de fichier
+            </span>
+          </th>
+          <th
+            class="af-table__th"
+          >
+            <span
+              class="af-table__th-content"
+            >
+              Type
+            </span>
+          </th>
+          <th
+            class="af-table__th"
+          >
+            <span
+              class="af-table__th-content"
+            >
+              Date création
+            </span>
+          </th>
+          <th
+            class="af-table__th"
+          >
+            <span
+              class="af-table__th-content"
+            >
+              Action
+            </span>
           </th>
         </tr>
       </thead>
@@ -194,7 +159,12 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
           <td
             class="af-table__cell"
           >
-            300 Image
+            300
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            Image
           </td>
           <td
             class="af-table__cell"

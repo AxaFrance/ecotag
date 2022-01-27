@@ -27,11 +27,6 @@ exports[`Label Label render correctly 1`] = `
           >
             Couleur
           </th>
-          <th
-            class="af-table__th"
-          >
-            Id
-          </th>
         </tr>
       </thead>
       <tbody
@@ -51,19 +46,26 @@ exports[`Label Label render correctly 1`] = `
             <div
               class="ft-labels__table-td-color"
             >
-              <span>
-                red
-              </span>
               <div
-                class="ft-labels__label-color"
-                style="background-color: red;"
-              />
+                class="af-popover__wrapper"
+                role="button"
+                tabindex="0"
+              >
+                <div
+                  class="af-popover__container af-popover__container--color"
+                >
+                  <div
+                    class="af-popover__container-over"
+                    role="presentation"
+                  >
+                    <div
+                      class="ft-labels__label-color"
+                      style="background-color: red;"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </td>
-          <td
-            class="af-table__cell"
-          >
-            id
           </td>
         </tr>
       </tbody>
