@@ -3,7 +3,6 @@ import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 
 
 const AnnotationDispatch = ({ project, url, onSubmit }) => {
-  
   const  expectedOutput = {}
   return <AnnotationSwitch
       url={url}
