@@ -7,7 +7,6 @@ import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
-import Toolbar from "./Toolbar";
 import AnnotationsToolbar from "../../../Toolkit/Annotations/AnnotationsToolbar";
 
 
