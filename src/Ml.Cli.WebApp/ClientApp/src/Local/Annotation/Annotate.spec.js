@@ -11,7 +11,7 @@ jest.mock('react-router', () => ({
     })
 }));
 
-const mockedFetchFunction = () => {
+const fetch = () => {
     return {
         ok: false,
         status: 400,
@@ -34,7 +34,7 @@ describe("Check annotation tab behaviour", () => {
         const setState = (params) => {
             state = params;
         };
-        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetchFunction={mockedFetchFunction}/>);
+        const {container, asFragment} = render(<DatasetHandler state={state} setState={setState} fetch={fetch}/>);
 
         expect(asFragment()).toMatchSnapshot();
 

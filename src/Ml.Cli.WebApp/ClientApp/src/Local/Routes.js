@@ -19,18 +19,18 @@ export const Routes = ({fetch}) => {
             <Route path="/compare">
                 <Compare
                     MonacoEditor={MonacoEditor}
-                    fetchFunction={fetch}
+                    fetch={fetch}
                 />
             </Route>
             <Route path="/annotate">
                 <Annotate
                     MonacoEditor={MonacoEditor}
-                    fetchFunction={fetch}
+                    fetch={fetch}
                 />
             </Route>
             <Route path="/gallery">
                 <Gallery
-                    fetchFunction={fetch}
+                    fetch={fetch}
                 />
             </Route>
             <Route>

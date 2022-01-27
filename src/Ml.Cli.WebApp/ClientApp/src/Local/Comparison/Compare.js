@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
-const Compare = ({MonacoEditor, fetchFunction}) => {
+const Compare = ({MonacoEditor, fetch}) => {
 
     const [state, setState] = useState({
         fileName: "Compare JSON file",
@@ -69,9 +69,9 @@ try {
             </Header>
             <TitleBar
                 title={state.fileName === "Compare JSON file" ? state.fileName : "Visualising file : " + state.fileName}/>
-            <FileTreatment state={state} setState={setState} MonacoEditor={MonacoEditor}  fetchFunction={fetchFunction}/>
+            <FileTreatment state={state} setState={setState} MonacoEditor={MonacoEditor} fetch={fetch}/>
             {state.items.length > 0 &&
-            <TableResult state={state} setState={setState} MonacoEditor={MonacoEditor} fetchFunction={fetchFunction}/>
+            <TableResult state={state} setState={setState} MonacoEditor={MonacoEditor} fetch={fetch}/>
             }
             <ToastContainer/>
         </QueryClientProvider>

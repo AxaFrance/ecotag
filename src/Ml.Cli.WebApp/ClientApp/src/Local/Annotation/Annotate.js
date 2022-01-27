@@ -9,7 +9,7 @@ import Routes from "./Routes";
 
 const queryClient = new QueryClient();
 
-const Annotate = ({fetchFunction}) => {
+const Annotate = ({fetch}) => {
 
     const [state, setState] = useState({
         fileName: "Annotate a dataset",
@@ -30,7 +30,7 @@ const Annotate = ({fetchFunction}) => {
                     alt="AXA Logo"
                 />
             </Header>
-            <Routes state={state} setState={setState} fetchFunction={fetchFunction}/>
+            <Routes state={state} setState={setState} fetch={fetch}/>
             <ToastContainer/>
         </QueryClientProvider>
     );

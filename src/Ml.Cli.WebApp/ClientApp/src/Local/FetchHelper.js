@@ -10,8 +10,8 @@ export const utf8_to_b64 = str => {
     return window.btoa(unescape(encodeURIComponent( str )));
 }
 
-export const fetchGetData = fetchFunction => (controllerPath) => {
-    return fetchFunction(
+export const fetchGetData = fetch => (controllerPath) => {
+    return fetch(
         controllerPath,
         {
             method: 'GET',
@@ -23,8 +23,8 @@ export const fetchGetData = fetchFunction => (controllerPath) => {
     );
 };
 
-export const fetchPostJson = fetchFunction => (url, newData) => {
-    return fetchFunction(
+export const fetchPostJson = fetch => (url, newData) => {
+    return fetch(
         url,
         {
             method: 'POST',

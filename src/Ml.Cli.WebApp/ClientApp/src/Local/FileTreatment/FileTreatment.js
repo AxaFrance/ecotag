@@ -33,7 +33,7 @@ const timeSideVariables = [
     {value: 'Right', label: 'Right'}
 ];
 
-const FileTreatment = ({state, setState, MonacoEditor, fetchFunction}) => {
+const FileTreatment = ({state, setState, MonacoEditor, fetch}) => {
 
     const [filterState, setFilterState] = useState({
         filterName: "KO",
@@ -191,7 +191,7 @@ try {
                 onLoad={(reader, e) => onLoad(reader, e)}
                 onFailure={e => onLoadFailure(e)}
                 controllerPath="api/local/compares"
-                fetchFunction={fetchFunction}
+                fetch={fetch}
             />
 
             <div className="tabs">

@@ -55,7 +55,7 @@ Default.args = {
     items: allItems,
     imageDirectory: "",
     compareLocation: "",
-    fetchFunction: fetch
+    fetch: fetch
 }
 Default.parameters = {
     controls:{

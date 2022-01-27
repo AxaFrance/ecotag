@@ -20,7 +20,7 @@ const sortByAnnotations = (items) => {
     return items.sort((a, b) => (a.annotations.length > b.annotations.length) ? 1 : -1);
 }
 
-const DatasetHandler = ({state, setState, fetchFunction}) => {
+const DatasetHandler = ({state, setState, fetch}) => {
     const history=useHistory();
     const [handlerState, setHandlerState] = useState({
         loadFileError: false
@@ -61,7 +61,7 @@ const DatasetHandler = ({state, setState, fetchFunction}) => {
                 onLoad={(reader, e) => loadFile(reader, e)}
                 onFailure={e => onLoadFailure(e)}
                 controllerPath="api/local/datasets"
-                fetchFunction={fetchFunction}
+                fetch={fetch}
             />
             {handlerState.loadFileError &&
             <h2 className="error-message">
