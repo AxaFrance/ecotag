@@ -4,7 +4,6 @@ import { render, waitFor } from '@testing-library/react';
 import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
-import * as NewService from "./New.service";
 
 const givenGroups = [
   {
@@ -107,7 +106,6 @@ describe('New.container', () => {
     let givenHistory;
     let givenFetch;
     let givenDispatch;
-    let spyFetchProjects;
     let givenFetchRejected;
     const givenState = { 
       ...initState,
@@ -130,16 +128,9 @@ describe('New.container', () => {
     
     beforeEach(() => {
       givenHistory = [];
-      givenFetch = jest.fn();
+      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve({value: "something"})}));
       givenDispatch = jest.fn();
       givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
-      spyFetchProjects = jest.spyOn(
-          NewService,
-          'fetchCreateProject'
-      );
-      spyFetchProjects.mockReturnValue(() =>
-          Promise.resolve(givenProject)
-      );
     });
     afterEach(() => {
       jest.clearAllMocks();
@@ -148,7 +139,7 @@ describe('New.container', () => {
     it('should call fetchDeleteProject and dispatch', async () => {
       try {
         await createProject(givenHistory, givenFetch, givenState, givenDispatch);
-        expect(spyFetchProjects).toHaveBeenCalled();
+        expect(givenFetch).toHaveBeenCalledTimes(1);
         expect(givenDispatch).toHaveBeenCalledWith( { type: "onSubmit" });
       } catch (error) {
         fail(error);
@@ -160,7 +151,7 @@ describe('New.container', () => {
         await createProject(givenHistory, givenFetch, givenState, givenDispatch);
         fail(error);
       } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
+        expect(givenFetch).toHaveBeenCalledTimes(1);
         expect(givenDispatch).toHaveBeenCalledWith( { type: "onSubmit" });
       }
     });

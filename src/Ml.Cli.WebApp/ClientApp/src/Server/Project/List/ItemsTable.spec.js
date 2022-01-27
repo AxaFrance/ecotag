@@ -23,6 +23,7 @@ const filters = {
         createDate: { value: 'desc', timeLastUpdate: new Date() },
         typeAnnotation: { value: null, timeLastUpdate: null },
         numberTagToDo: { value: null, timeLastUpdate: null },
+        numberCrossAnnotation: {value: null}
     },
 };
 
