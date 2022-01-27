@@ -72,7 +72,7 @@ const usePage = (fetch) => {
 };
 
 export const PageContainer = ({ fetch, user }) => {
-  const { state } = usePage(fetch, user);
+  const { state } = usePage(fetch);
   return <PageWithResilience {...state} />;
 };
 
