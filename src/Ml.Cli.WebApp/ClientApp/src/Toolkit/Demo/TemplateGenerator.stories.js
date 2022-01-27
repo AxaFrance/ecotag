@@ -32,7 +32,7 @@ const TemplateGenerator = () => {
         const convertedfile = await toBase64Async(file);
         const imgVersoCvTemplate = await loadImageAsync(cv)(convertedfile);
         const imgVersoCvTemplateResized = imageResize(cv)(imgVersoCvTemplate, 600).image;
-        const resizedImg = detectAndComputeSerializable(cv)( imgVersoCvTemplateResized);
+        const resizedImg = detectAndComputeSerializable(cv)(imgVersoCvTemplateResized);
         const jsonValue = JSON.stringify(resizedImg);
         setState({...state, jsonContent: jsonValue, templateImage: convertedfile});
     }

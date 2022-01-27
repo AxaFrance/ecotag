@@ -101,7 +101,7 @@ export const sortItems = (sortName, files) => {
     return sortedFiles;
 }
 
-const Gallery = ({fetchFunction}) => {
+const Gallery = ({fetch}) => {
     
     const [state, setState] = useState({
         files: [],
@@ -115,7 +115,7 @@ const Gallery = ({fetchFunction}) => {
 
     useInterval(() => {
         if(state.status !== resilienceStatus.LOADING && state.filesPath !== ""){
-            loadStateAsync(fetchFunction)(setState, state);
+            loadStateAsync(fetch)(setState, state);
         }
     }, state.status === resilienceStatus.ERROR ? 15000: 5000);
     
@@ -126,7 +126,7 @@ const Gallery = ({fetchFunction}) => {
             return;
         }
         const uri = encodeURI("/api/local/gallery/" + filesPath);
-        const response = await fetchGetData(fetchFunction)(uri);
+        const response = await fetchGetData(fetch)(uri);
         if(!response.ok){
             setState({...state, ...options, errorMessage: "New files fetch on options submission failed", files: []});
             return;

@@ -26,9 +26,9 @@ const fetchImages = async data => {
     }
 };
 
-const getImages = (fetchFunction) => async (item) => {
+const getImages = (fetch) => async (item) => {
     const params = "fileName=" + item.fileName + "&stringsMatcher="+ item.frontDefaultStringsMatcher + "&directory=" + item.imageDirectory
-    const fetchResult = await fetchGetData(fetchFunction)("api/local/datasets/"+utf8_to_b64(params));
+    const fetchResult = await fetchGetData(fetch)("api/local/datasets/"+utf8_to_b64(params));
     return fetchImages(fetchResult);
 };
 
@@ -48,7 +48,7 @@ const sendConfirmationMessage = (isSuccess) => {
 }
 
 
-const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
+const AnnotationsContainer = ({state, id, url, dataset, fetch}) => {
     const history = useHistory();
     
     const item = selectItemById(state, id);
@@ -93,10 +93,10 @@ const AnnotationsContainer = ({state, id, url, dataset, fetchFunction}) => {
         filePrimaryUrl: "",
     });
 
-    const mutationDataset = useMutation(newData => fetchPostJson(fetchFunction)("/api/local/annotations", newData));
+    const mutationDataset = useMutation(newData => fetchPostJson(fetch)("/api/local/annotations", newData));
 
     const getUrls = async () => {
-        const newUrls = await getImages(fetchFunction)(item);
+        const newUrls = await getImages(fetch)(item);
         const newFileUrl = newUrls != null ? newUrls[0] : "";
         return {fileUrls: newUrls, filePrimaryUrl: newFileUrl};
     };

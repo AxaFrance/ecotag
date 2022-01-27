@@ -7,13 +7,13 @@ export default {
     component: Annotate
 };
 
-const mockedFetch = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
+const fetch = async (queryUrl, data) => Promise.resolve({ok: false, status: 400, statusText: "Bad Request", bodyUsed: false});
 
 const Template = (args) => <HashRouter basename={window.location.pathname}><Annotate {...args} /></HashRouter>;
 
 export const Default = Template.bind({});
 Default.args = {
-    fetchFunction: mockedFetch
+    fetch: fetch
 };
 
 Default.parameters = {

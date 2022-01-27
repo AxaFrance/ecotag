@@ -87,7 +87,6 @@ export const detectAndComputeSerializable= (cv) => (img) => {
     };
 
     descriptors.data.map(d => serializableDescriptor.data.push(d));
-    
 
     let serializableKeyPoints = [];
     for (let i=0; i< keypoints.size();i++){
@@ -101,8 +100,9 @@ export const detectAndComputeSerializable= (cv) => (img) => {
         });
     }
     return {
-        serializableDescriptor,
-        serializableKeyPoints
+        descriptor: serializableDescriptor,
+        keyPoints: serializableKeyPoints,
+        img: {cols: img.cols, rows: img.rows}
     }
 }
 

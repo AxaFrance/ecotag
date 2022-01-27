@@ -26,7 +26,7 @@ const onCopy = (item, name) => {
     document.body.removeChild(element)
 }
 
-const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, setCompareState, MonacoEditor, fetchFunction}) => {
+const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, setCompareState, MonacoEditor, fetch}) => {
 
     const [state, setState] = useState({
         isAnnotating: isAnnotating,
@@ -73,7 +73,7 @@ const TableItem = ({stringsMatcher, item, items, compareLocation, isAnnotating, 
                         compareLocation={compareLocation}
                         setCompareState={setCompareState}
                         MonacoEditor={MonacoEditor}
-                        fetchFunction={fetchFunction}
+                        fetch={fetch}
                     />
                 }
                 <div className="table-result__column-container">

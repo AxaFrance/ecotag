@@ -16,12 +16,12 @@ const returnedFiles = [
 
 const onPlayClick = () => {};
 
-const mockedFetch = async (queryUrl, data) => Promise.resolve({
+const fetch = async (queryUrl, data) => Promise.resolve({
     ok: false,
     status: 400
 });
 
-const mockedFetchWithFiles = async (queryUrl, data) => Promise.resolve({
+const fetchWithFiles = async (queryUrl, data) => Promise.resolve({
     ok: true,
     status: 200,
     json: () => Promise.resolve(returnedFiles)
@@ -29,13 +29,13 @@ const mockedFetchWithFiles = async (queryUrl, data) => Promise.resolve({
 
 describe('Check Library component behavior and display', () => {
     test('Should have correct display when no files found', async () => {
-        const {container, asFragment} = render(<Library onPlayClick={onPlayClick} fetchFunction={mockedFetch}/>);
+        const {container, asFragment} = render(<Library onPlayClick={onPlayClick} fetch={fetch}/>);
         await waitFor(() => expect(container.querySelector('.library__container')).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
     });
     test('Should have correct display when files found', async () => {
         const {container, asFragment} = render(<Library onPlayClick={onPlayClick}
-                                                        fetchFunction={mockedFetchWithFiles}/>);
+                                                        fetch={fetchWithFiles}/>);
         await waitFor(() => expect(container.querySelector('.library__container')).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
     })

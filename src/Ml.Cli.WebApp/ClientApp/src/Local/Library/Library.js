@@ -13,13 +13,13 @@ export const StringContent = {
     SPACE: ' '
 };
 
-const getFiles = async (fetchFunction, controllerPath) => {
-    const fetchResult = await fetchGetData(fetchFunction)(controllerPath);
+const getFiles = async (fetch, controllerPath) => {
+    const fetchResult = await fetchGetData(fetch)(controllerPath);
     return getDataPaths(fetchResult);
 }
 
-const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
-
+const Library = ({fetch, onPlayClick, controllerPath}) => {
+    
     const [state, setState] = useState({
         files: []
     });
@@ -37,7 +37,7 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
     }, []);
 
     const tick = () => {
-        getFiles(fetchFunction, controllerPath)
+        getFiles(fetch, controllerPath)
             .then(files => {
                     setState({files});
                 }
@@ -51,7 +51,7 @@ const Library = ({fetchFunction, onPlayClick, controllerPath}) => {
     };
     
     const loadSelectedFile = async file => {
-        const data = await fetchGetData(fetchFunction)(file);
+        const data = await fetchGetData(fetch)(file);
         if(data.status === StatusCodes.OK){
             const dataContent = await data.json();
             onPlayClick(dataContent, getFileName(file));
