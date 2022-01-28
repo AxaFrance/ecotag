@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -62,7 +63,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
                 Classification = newDataset.Classification,
                 Name = newDataset.Name,
                 Type = newDataset.Type,
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.Now.ToEpochTime(),
             };
             
             datasets.Add(dataset);

@@ -18,7 +18,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         public string Name { get; set; }
         public string Type { get; set; }
         public string Classification { get; set; }
-        public DateTime CreateDate { get; set; }
+        public long CreateDate { get; set; }
         public bool IsLocked { get; set; } = false;
         public int NumberFiles { get; set; }
     }
@@ -29,7 +29,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         public string Name { get; set; }
         public string Type { get; set; }
         public string Classification { get; set; }
-        public DateTime CreateDate { get; set; }
+        public long CreateDate { get; set; }
         public bool IsLocked { get; set; } = false;
         public IList<EcotagFile> Files { get; set; } = new List<EcotagFile>();
     }

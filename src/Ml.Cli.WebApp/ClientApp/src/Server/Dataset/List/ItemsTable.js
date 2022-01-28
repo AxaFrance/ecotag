@@ -13,7 +13,6 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
         const path = `datasets/${id}`
         history.push(path);
     };
-    const formatDateToString = createDate => (createDate && createDate instanceof Date) ? `${createDate.getDay().toString().padStart(2, '0')}/${createDate.getMonth().toString().padStart(2, '0')}/${createDate.getFullYear()}` : ``;
     
     return(
         <>
@@ -38,7 +37,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                     <Table.Header>
                         <Table.Tr>
                             <Table.Th>
-                                <span className="af-table__th-content">Vérouiller</span>
+                                <span className="af-table__th-content">Verrouiller</span>
                             </Table.Th>
                             <Table.Th>
                                 <span className="af-table__th-content">Nom</span>
@@ -47,7 +46,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                 <span className="af-table__th-content">Classification</span>
                             </Table.Th>
                             <Table.Th>
-                                <span className="af-table__th-content">Nombre de fichier</span>
+                                <span className="af-table__th-content">Nombre de fichiers</span>
                             </Table.Th>
                             <Table.Th>
                                 <span className="af-table__th-content">Type</span>
@@ -74,7 +73,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                     <Table.Td>{classification}</Table.Td>
                                     <Table.Td>{numberFiles}</Table.Td>
                                     <Table.Td>{type}</Table.Td>
-                                    <Table.Td>{formatDateToString(createDate)}</Table.Td>
+                                    <Table.Td>{createDate.toString()}</Table.Td>
                                     <Table.Td>
                                         <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
                                     </Table.Td>

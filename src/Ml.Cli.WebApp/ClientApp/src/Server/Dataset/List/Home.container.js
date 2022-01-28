@@ -1,6 +1,6 @@
 import Home from './Home';
-import fetchDatasets from '../Dataset.service';
-import { convertStringDateToDateObject } from '../../date';
+import fetchDatasets from './Home.service';
+import { convertTimestampToDateObject } from '../../date';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
@@ -15,7 +15,7 @@ const init = (fetch, dispatch) => async () => {
     data = { items: [], status: resilienceStatus.ERROR };
   } else {
     const items = await response.json()
-    data = { items: convertStringDateToDateObject(items), status: resilienceStatus.SUCCESS };
+    data = { items: convertTimestampToDateObject(items), status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };

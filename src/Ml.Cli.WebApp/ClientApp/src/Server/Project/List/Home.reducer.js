@@ -1,5 +1,5 @@
 import { resilienceStatus } from '../../shared/Resilience';
-import {convertStringDateToDateObject} from "../../date";
+import {convertTimestampToDateObject} from "../../date";
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -8,7 +8,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         status,
-        items: convertStringDateToDateObject(items),
+        items: convertTimestampToDateObject(items),
       };
     }
     case 'onProjectDeleted':

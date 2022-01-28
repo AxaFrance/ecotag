@@ -65,7 +65,7 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
             <span
               class="af-table__th-content"
             >
-              Vérouiller
+              Verrouiller
             </span>
           </th>
           <th
@@ -92,7 +92,7 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
             <span
               class="af-table__th-content"
             >
-              Nombre de fichier
+              Nombre de fichiers
             </span>
           </th>
           <th
@@ -168,7 +168,9 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
           </td>
           <td
             class="af-table__cell"
-          />
+          >
+            28/01/2022
+          </td>
           <td
             class="af-table__cell"
           >

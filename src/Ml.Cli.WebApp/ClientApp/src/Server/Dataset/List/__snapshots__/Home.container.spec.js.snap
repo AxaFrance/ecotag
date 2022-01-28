@@ -110,7 +110,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               <span
                 class="af-table__th-content"
               >
-                Vérouiller
+                Verrouiller
               </span>
             </th>
             <th
@@ -137,7 +137,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               <span
                 class="af-table__th-content"
               >
-                Nombre de fichier
+                Nombre de fichiers
               </span>
             </th>
             <th
@@ -214,7 +214,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             <td
               class="af-table__cell"
             >
-              NaN/NaN/NaN
+              30/10/2019
             </td>
             <td
               class="af-table__cell"
