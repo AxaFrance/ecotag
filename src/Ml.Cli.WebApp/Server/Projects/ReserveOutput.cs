@@ -8,6 +8,8 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string FileId{ get; set; }
         public string FileName{ get; set; }
         public long TimeStamp { get; set; }
+
+        public IList<Annotation> Annotations { get; set; } 
     }
     
 }

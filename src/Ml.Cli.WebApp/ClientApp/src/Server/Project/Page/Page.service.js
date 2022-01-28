@@ -4,8 +4,14 @@ export const fetchGroup = fetch => async id => fetch(`groups/${id}`);
 
 
 
-export const fetchReserveAnnotations = fetch => async projectId =>
+export const fetchReserveAnnotations = fetch => async (projectId, fileId) =>
     fetch(`projects/${projectId}/reserve`, {
         method: 'POST',
-        body: "{}"
+        body: JSON.stringify({fileId})
+    });
+
+export const fetchAnnotate = fetch => async (projectId, fileId, data) =>
+    fetch(`projects/${projectId}/annotations/{fileId}`, {
+        method: 'POST',
+        body: JSON.stringify({data})
     });

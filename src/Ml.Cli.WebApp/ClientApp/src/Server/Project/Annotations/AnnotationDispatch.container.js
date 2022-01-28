@@ -1,7 +1,7 @@
 import {useHistory, useParams} from 'react-router';
 import React, { useEffect, useReducer } from 'react';
 import AnnotationDispatch from './AnnotationDispatch';
-import { fetchProject, fetchReserveAnnotations } from '../Page/Page.service';
+import {fetchAnnotate, fetchProject, fetchReserveAnnotations} from '../Page/Page.service';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
@@ -10,14 +10,17 @@ import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import AnnotationsToolbar from "../../../Toolkit/Annotations/AnnotationsToolbar";
 
 
-const ReservationStatus = ({resilienceStatus}) => {
+const ReservationStatus = ({status}) => {
     const { ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
+    if(SUCCESS === status){
+      return null;
+    }
     return (
-        <div className="reservation-status" style={{absolute:true, top:"0px", right:"0px"}}>
+        <div className="reservation-status" style={{position:"absolute", top:"0px", right:"0px", "backgroundColor":"pink", color:"white"}}>
           {
             {
-              [LOADING]:<span>Chargement en cours</span> ,
-              [POST]: <span>Chargement en cours</span>,
+              [LOADING]:<span>Chargement élément suivant en cours</span> ,
+              [POST]: <span>Chargement élément suivant en cours</span>,
               [ERROR]: (
                   <span>Erreur lors du chargement</span>
               ),
@@ -37,8 +40,8 @@ const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPreviou
       return <p>Chargement en cours</p>;
     default:
       return (currentItem !=null ? <>
-        <ReservationStatus resilienceStatus={reservationStatus} />
-        <AnnotationsToolbar onNext={onNext} onPrevious={onPrevious}  isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext} text={currentItem.fileName}  />
+        <ReservationStatus status={reservationStatus} />
+        <AnnotationsToolbar onPreviousPlaceholder={"Précédent"} onNextPlaceholder={"Suivant"} onNext={onNext} onPrevious={onPrevious}  isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext} text={currentItem.fileName}  />
         <AnnotationDispatch project={project} onSubmit={onSubmit} url={`/api/server/projects/${project.id}/files/${currentItem.fileId}`} />
         </> : null);
   }
@@ -77,12 +80,18 @@ export const init = (fetch, dispatch) => async projectId => {
   dispatch({ type: 'init', data });
 };
 
-export const reserveAnnotation = (fetch, dispatch, history) => async (projectId, currentItemsLength, status) => {
+export const reserveAnnotation = (fetch, dispatch, history) => async (projectId, documentId, currentItemsLength, status) => {
   if(status === resilienceStatus.LOADING) {
     return;
   }
   dispatch({ type: 'reserve_annotation_start'});
-  const response = await fetchReserveAnnotations(fetch)(projectId);
+  
+  let fileId=null;
+  if(documentId !== "end" && documentId !== "start"){
+    fileId = documentId;
+  }
+  
+  const response = await fetchReserveAnnotations(fetch)(projectId, fileId);
   let data;
   if(response.status >= 500) {
     data = {
@@ -92,15 +101,47 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
   } else {
     const annotations = await response.json();
     data = {
-      status: resilienceStatus.ERROR,
+      status: resilienceStatus.SUCCESS,
       items: [...annotations],
     }
   }
   dispatch({ type: 'reserve_annotation', data });
-  if(currentItemsLength === 0 && data.items.length > 0){
+  
+  if(data.status === resilienceStatus.ERROR){
+    return;
+  }
+  
+  if(fileId == null && currentItemsLength === 0 && data.items.length > 0){
     const url = `${data.items[0].fileId}`;
     history.replace(url);
   }
+};
+
+export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, nextUrl) => {
+  if(status === resilienceStatus.LOADING) {
+    return;
+  }
+  dispatch({ type: 'annotate_start'});
+  
+  const response = await fetchAnnotate(fetch)(projectId, fileId, annotation);
+  let data;
+  if(response.status >= 500) {
+    data = {
+      status: resilienceStatus.ERROR,
+      items: [],
+    }
+  } else {
+    const annotations = await response.json();
+    data = {
+      status: resilienceStatus.SUCCESS,
+      items: [...annotations],
+    }
+  }
+  dispatch({ type: 'annotate', data });
+  if(data.status === resilienceStatus.ERROR){
+    return;
+  }
+  history.push(nextUrl);
 };
 
 export const reducer = (state, action) => {
@@ -124,8 +165,7 @@ export const reducer = (state, action) => {
             isReservationFinished=false;
           }
       })
-      console.log(newItems);
-      
+
       return {
         ...state,
         annotations: {
@@ -142,6 +182,33 @@ export const reducer = (state, action) => {
         annotations: {
           ...state.annotations,
           status: resilienceStatus.LOADING,
+        }
+      };
+    }
+    case 'annotate_start': {
+      return {
+        ...state,
+        annotations: {
+          ...state.annotations,
+          status: resilienceStatus.LOADING,
+        }
+      };
+    }
+    case 'annotate': {
+      const { annotation, fileId, status } = action.data;
+      const newItems = [...state.annotations.items];
+      const currentItem = newItems.find((item) => item.fileId === fileId);
+      
+      const newAnnotations = [...currentItem.annotations, annotation];
+      const newCurrentItem = {...currentItem, annotations: newAnnotations}
+
+      newItems.splice(newItems.indexOf(currentItem), 1, newCurrentItem);
+      return  {
+        ...state,
+        annotations: {
+          ...state.annotations,
+          status,
+          items: newItems
         }
       };
     }
@@ -173,13 +240,13 @@ const usePage = (fetch) => {
   useEffect(() => {
     if(state.status === resilienceStatus.LOADING){
     init(fetch, dispatch)(projectId)
-        .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, state.annotations.items.length, state.annotations.status));
+        .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.status));
     } else {
       const items = state.annotations.items;
       const currentItem = items.find((item) => item.fileId === documentId);
       const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
       if(currentIndex + 1 === items.length){
-        reserveAnnotation(fetch, dispatch, history)(projectId, state.annotations.items.length, state.annotations.status)
+        reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.status)
       }
     }
   }, [documentId]);
@@ -189,8 +256,6 @@ const usePage = (fetch) => {
   
   const currentItem = items.find((item) => item.fileId === documentId);
   const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-  //console.log(currentItem)
-  //console.log(currentIndex)
   let previousUrl = null;
   let nextUrl = null;
 
@@ -202,14 +267,12 @@ const usePage = (fetch) => {
       previousUrl = `${items[currentIndex-1].fileId}`;
     }
     hasNext = currentIndex + 1 < itemSize
-    if(hasNext) {
-      const nextDocumentId = currentIndex + 1 < itemSize ? items[currentIndex+1].fileId : "end" ;
-      nextUrl = `${nextDocumentId}`;
-    }
+    const nextDocumentId = hasNext ? items[currentIndex+1].fileId : "end" ;
+    nextUrl = `${nextDocumentId}`;
   }
 
-  const onSubmit = () => {
-    history.push(nextUrl);
+  const onSubmit = (annotation) => {
+    annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, nextUrl);
   };
   const onNext = () => {
     history.push(nextUrl);
@@ -226,8 +289,14 @@ export const AnnotationDispatchContainer = ({ fetch }) => {
   return <PageAnnotationWithResilience 
       project={state.project}
       status={state.status} 
-                                       documentId={documentId} currentItem={currentItem} onSubmit={onSubmit} onNext={onNext} onPrevious={onPrevious} 
-                                       hasPrevious={hasPrevious} hasNext={hasNext} reservationStatus={state.annotations.status} />;
+      documentId={documentId} 
+      currentItem={currentItem} 
+      onSubmit={onSubmit} 
+      onNext={onNext} 
+      onPrevious={onPrevious} 
+      hasPrevious={hasPrevious} 
+      hasNext={hasNext} 
+      reservationStatus={state.annotations.status} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

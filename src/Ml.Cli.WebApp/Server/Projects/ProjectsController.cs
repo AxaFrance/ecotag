@@ -15,6 +15,7 @@ namespace Ml.Cli.WebApp.Server.Projects
     {
         public static List<Project> projects;
         public static ProjectReservation ProjectReservation = new ProjectReservation();
+        public static ProjectAnnotations ProjectAnnotations = new ProjectAnnotations();
 
         private Project Find(string id)
         {
@@ -73,10 +74,21 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(newProject.Id, Find(newProject.Id));
         }
         
+        [HttpPost("{projectId}/annotations/{fileId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Annotation(string projectId, string fileId, AnnotationInput annotationInput)
+        {
+            var id = Guid.NewGuid().ToString();
+            ProjectAnnotations.Annotations.Add(new Annotation() { Id = id, FileId = fileId , ProjectId = projectId, Data = annotationInput.Data});
+            
+            return Created(id, null);
+        }
+        
         [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IList<ReserveOutput>> Reserve(string projectId)
+        public ActionResult<IList<ReserveOutput>> Reserve(string projectId, ReserveInput fileInput)
         {
             var project = Find(projectId);
 
@@ -86,17 +98,32 @@ namespace Ml.Cli.WebApp.Server.Projects
             
             var query = from datasetFiles in dataset.Files
                 join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
+                //join annotations in ProjectAnnotations.Annotations on datasetFiles.Id equals annotations.FileId into ano
                 from reservation in gj.DefaultIfEmpty()
+                //from annot in ano.DefaultIfEmpty()
                 orderby reservation?.TimeStamp ?? 0 ascending 
-                select new ReserveOutput{ FileId=datasetFiles.Id, FileName=datasetFiles.FileName, TimeStamp = reservation?.TimeStamp ?? 0 };
+                select new ReserveOutput { 
+                    FileId=datasetFiles.Id, 
+                    FileName=datasetFiles.FileName, 
+                    TimeStamp = reservation?.TimeStamp ?? 0,
+                    Annotations = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).ToList()
+                };
 
             var results = query.Take(numberToReserve).ToList();
 
-            var ticks = DateTime.Now.Ticks;
-
+            if (fileInput.FileId != null)
+            {
+                var currentFile =  dataset.Files.Where(file => file.Id == fileInput.FileId).Select(file => new ReserveOutput()
+                {
+                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0
+                }).FirstOrDefault();
+                results.Insert(0, currentFile);
+            }
+            
             foreach (var result in results)
             {
                 var reserve = ProjectReservation.Reservations.FirstOrDefault(reserve => reserve.FileId == result.FileId);
+                var ticks = DateTime.Now.Ticks;
                 if (reserve == null)
                 {
                     ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks});
@@ -110,8 +137,6 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Ok(results);
         }
         
-       
-
 
         [HttpDelete("{id}")]
         public ActionResult<Project> Delete(string id)
