@@ -14,6 +14,7 @@ const setAnnotationObject = (annotationType, e) => {
         case "TagOverTextLabel":
         case "TagOverText":
         case "Ocr":
+        case "OCR":
         case "Cropping":
             return {
                 "type": e.type,

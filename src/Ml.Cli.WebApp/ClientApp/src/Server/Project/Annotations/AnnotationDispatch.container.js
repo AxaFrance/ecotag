@@ -131,10 +131,11 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
       items: [],
     }
   } else {
-    const annotations = await response.json();
+   // const annotations = await response.json();
     data = {
       status: resilienceStatus.SUCCESS,
-      items: [...annotations],
+      annotation: annotation,
+      fileId
     }
   }
   dispatch({ type: 'annotate', data });

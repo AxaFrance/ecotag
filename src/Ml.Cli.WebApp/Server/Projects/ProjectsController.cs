@@ -115,7 +115,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             {
                 var currentFile =  dataset.Files.Where(file => file.Id == fileInput.FileId).Select(file => new ReserveOutput()
                 {
-                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0
+                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0, Annotations = new List<Annotation>()
                 }).FirstOrDefault();
                 results.Insert(0, currentFile);
             }
