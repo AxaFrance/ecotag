@@ -1,12 +1,9 @@
-
-import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { createMemoryHistory } from "history";
 import { BrowserRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 import sleep from "../../../sleep";
-import {isPromise} from "env-cmd/dist/utils";
 
 describe('Home.container for groups', () => {
 
@@ -25,9 +22,9 @@ describe('Home.container for groups', () => {
     await sleep(1);
     switch (url) {
       case "groups":
-        return  Promise.resolve(givenGroups);
+        return {ok: true, json: () => Promise.resolve(givenGroups)};
       default:
-        return  Promise.resolve(["gilles.cruchon@axa.fr", "guillaume.chervet@axa.fr"]);
+        return {ok: true, json: () => Promise.resolve(["gilles.cruchon@axa.fr", "guillaume.chervet@axa.fr"])};
     }
   };
   

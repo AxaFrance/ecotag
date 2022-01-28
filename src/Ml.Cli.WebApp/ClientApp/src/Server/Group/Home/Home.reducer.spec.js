@@ -20,15 +20,16 @@ describe('Home.reducer', () => {
       const givenAction = {
         type: 'init',
         data : {
-          items: givenGroups
+          groups: givenGroups
         }
       }
 
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        loading: false,
-        items: givenGroups
+        groups: givenGroups,
+        users: undefined,
+        status: undefined
       });
     });
     it('should set loading to true', () => {
@@ -40,20 +41,35 @@ describe('Home.reducer', () => {
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        loading: true,
+        status: "loading",
       });
     });
     it('should set loading to true and hasSubmit to false during a group creation', () => {
-      const givenState = {};
+      const newGroup = {
+        "id": "0001",
+        "name": "developpeurs",
+        "users": [
+          { "email": "clement.trofleau.lbc@axa.fr" },
+          { "email": "gilles.cruchon@axa.fr" },
+          { "email": "francois.descamps@axa.fr" },
+          { "email": "guillaume.chervet@axa.fr" }
+        ]
+      };
+      
+      const givenState = {groups: []};
       const givenAction = {
         type: 'onSubmitCreateGroup',
-      }
+        data: {
+          newGroup
+        }
+      };
 
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        loading: false,
-        hasSubmit: true
+        status: "success",
+        hasSubmit: true,
+        groups: [newGroup]
       });
     });
     it('should onChangeCreateGroup state during a group creation', () => {

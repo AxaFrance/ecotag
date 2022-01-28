@@ -1,4 +1,4 @@
-import {fetchCreateProject,fetchDatasets,fetchGroups} from "./New.service";
+import {fetchCreateProject, fetchDatasets, fetchGroups} from "./New.service";
 
 describe('Project/Add/New.service', () => {
     describe('.fetchCreateProject()', () => {

@@ -1,17 +1,42 @@
+import { resilienceStatus } from '../../shared/Resilience';
+import {convertStringDateToDateObject} from "../../date";
+
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items } = action.data;
+      const { items, status } = action.data;
       return {
         ...state,
-        loading: false,
-        items,
+        status,
+        items: convertStringDateToDateObject(items),
       };
     }
+    case 'onProjectDeleted':
+      const { status, id } = action.data;
+      if( status === resilienceStatus.ERROR) {
+        return {
+          ...state,
+          status,
+        };
+      }
+      const items = [...state.items];
+      const item = items.find(i => i.id === id);
+      if(item) {
+        const index = items.indexOf(item);
+        if (index > -1) {
+          items.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state,
+        status,
+        items
+      };
     case 'onActionProjectsLoading': {
       return {
         ...state,
-        loading: true,
+        loading: resilienceStatus.LOADING,
       };
     }
     case 'onChangePaging': {
@@ -34,7 +59,6 @@ export const reducer = (state, action) => {
           ...state,
           filters: {
             ...state.filters,
-            ...state.paging,
             filterValue,
           },
         };
@@ -43,7 +67,6 @@ export const reducer = (state, action) => {
         ...state,
         filters: {
           ...state.filters,
-          ...state.paging,
           filterValue: null,
         },
       };
@@ -76,7 +99,7 @@ export const reducer = (state, action) => {
 };
 
 export const initialState = {
-  loading: true,
+  status: resilienceStatus.LOADING,
   items: [],
   filters: {
     paging: {
@@ -89,7 +112,7 @@ export const initialState = {
       classification: { value: null, timeLastUpdate: null },
       createDate: { value: 'desc', timeLastUpdate: new Date() },
       typeAnnotation: { value: null, timeLastUpdate: null },
-      numberTagToDo: { value: null, timeLastUpdate: null },
+      numberCrossAnnotation: { value: null, timeLastUpdate: null },
     },
   },
 };

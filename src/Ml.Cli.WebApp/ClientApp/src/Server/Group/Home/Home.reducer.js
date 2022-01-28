@@ -1,10 +1,12 @@
 import { rules } from './New/New.validation.rules';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../validation.generic';
 import { NAME, MSG_REQUIRED } from './New/constants';
+import {resilienceStatus} from "../../shared/Resilience";
 
 export const initialState = {
-  loading: true,
-  items: [],
+  status: resilienceStatus.LOADING,
+  groups: [],
+  users: [],
   filters: {
     paging: {
       numberItemsByPage: 10,
@@ -12,7 +14,6 @@ export const initialState = {
     },
   },
   hasSubmit: false,
-  isSubmitable: false,
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
   },
@@ -20,21 +21,16 @@ export const initialState = {
 
 export const initState = computeInitialStateErrorMessage(initialState, rules);
 
-const NOT_FOUND = -1;
-const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
-  const emails = actualUsers.map(user => user.email);
-  return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
-};
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items, eligibleUsers } = action.data;
-      items.forEach(group => (group.eligibleUsers = computeEligibleUsers(group.users, eligibleUsers)));
+      const { groups, users, status } = action.data;
       return {
         ...state,
-        loading: false,
-        items,
+        status,
+        groups,
+        users
       };
     }
     case 'onChangePaging': {
@@ -52,32 +48,89 @@ export const reducer = (state, action) => {
     }
     case 'onChangeCreateGroup': {
       const newField = genericHandleChange(rules, state.fields, action.event);
-      const hasErrors = newField[NAME].message === null;
       return {
         ...state,
         fields: newField,
-        isSubmitable: hasErrors,
       };
     }
     case 'onActionGroupLoading': {
       return {
         ...state,
-        loading: true,
+        status: resilienceStatus.LOADING,
       };
     }
     case 'onSubmitCreateGroup': {
+      const{status, newGroup} = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+
+      const groups = [...state.groups, newGroup];
+      
       return {
         ...state,
         hasSubmit: true,
-        loading: false,
-        isSubmitable: false,
+        status: resilienceStatus.SUCCESS,
+        groups
       };
     }
     case 'changeUserLoading': {
-      const { loading } = action.data;
+        return {
+          ...state,
+          status : resilienceStatus.LOADING,
+        };
+    }
+    case 'changeUserEnded': {
+      const { status, updatedGroup } = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+      const groups = [...state.groups];
+      const item = groups.find(i => i.id === updatedGroup.id);
+      if(item) {
+        const index = groups.indexOf(item);
+        if (index > -1) {
+          groups.splice(index, 1);
+          groups.splice(index, 0, updatedGroup)
+        }
+      }
+
       return {
         ...state,
-        loading,
+        status,
+        groups,
+      };
+    }
+    case 'deleteUserEnded': {
+      const { status, id } = action.data;
+
+      if(status === resilienceStatus.ERROR){
+        return {
+          ...state,
+          status,
+        };
+      }
+      const groups = [...state.groups];
+      const item = groups.find(i => i.id === id);
+      if(item) {
+        const index = groups.indexOf(item);
+        if (index > -1) {
+          groups.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state,
+        status,
+        groups,
       };
     }
     default:

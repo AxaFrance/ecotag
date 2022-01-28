@@ -1,21 +1,17 @@
 ﻿import React from "react";
 import Button from '@axa-fr/react-toolkit-button';
 
-const Lock = ({state, setState}) => {
-    const buttonDisabled = state.filesSend.length === 0;
-    const lockDataset = () => {
-        setState({...state, openLockModal: !state.openLockModal});
-    };
-
+const Lock = ({state, onLockDataset}) => {
+    const buttonDisabled = state.files.filesSend.length === 0;
     return (
         <div className="edit-dataset__lock-button-container">
             <Button
                 id="lock-button"
-                classModifier={buttonDisabled || state.isLock ? 'disabled' : 'danger'}
-                onClick={lockDataset}
+                classModifier={buttonDisabled || state.dataset.isLock ? 'disabled' : 'danger'}
+                onClick={onLockDataset}
                 icon="lock"
                 disabled={buttonDisabled}>
-                <span className="af-btn__text">{state.isLock ? 'Dataset verrouillée' : "verrouillée"}</span>
+                <span className="af-btn__text">{state.dataset.isLock ? 'Dataset verrouiller' : "verrouiller"}</span>
                 <i className=' edit-dataset__lock-button-icon glyphicon glyphicon-lock' />
             </Button>
         </div>

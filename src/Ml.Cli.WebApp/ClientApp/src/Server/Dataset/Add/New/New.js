@@ -1,13 +1,12 @@
 import React from 'react';
 import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
-import { TextInput, SelectInput, FileInput, Button } from '@axa-fr/react-toolkit-all';
+import { TextInput, SelectInput, Button } from '@axa-fr/react-toolkit-all';
 import HelpButton from '@axa-fr/react-toolkit-help';
-import Alert from '@axa-fr/react-toolkit-alert';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
-import { NAME, CLASSIFICATION, TYPE, FILES } from './constants';
+import { NAME, CLASSIFICATION, TYPE } from './constants';
 
 const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
   <>
@@ -35,7 +34,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
               helpMessage="Ex : Guillaume Chervet"
               onChange={onChange}
               options={[
-                { value: 'Image', label: 'Images (.jpg, .png)' },
+                { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
                 { value: 'Text', label: 'Text (.txt)' },
               ]}
               forceDisplayMessage={hasSubmit}
@@ -75,30 +74,6 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
                   </ul>
               </HelpButton>
             </SelectInput>
-            <FileInput
-              label="Fichiers"
-              name={FILES}
-              id={FILES}
-              accept="image/jpeg, image/png, text/*"
-              onChange={onChange}
-              helpMessage="Upload your data : image/jpeg, image/png, text/*"
-              {...fields[FILES]}
-              multiple
-            />
-            <Alert classModifier="danger" icon="upload" title="Metadatas obligatoires pour chaque fichier">
-              <ul>
-                <li>
-                  <b>IdSouce</b>: l&apos;identifiant de la donnée dans le référentiel source. exemple:
-                  8e1ed568-b783-4ed0-83b0-746308417d1f
-                </li>
-                <li>
-                  <b>Source</b>: le nom de la source. exemple: GED
-                </li>
-                <li>
-                  <b>Classification</b>: classification des données. exemple: Privé, Publique, Confidentiel
-                </li>
-              </ul>
-            </Alert>
           </section>
         </article>
         <Button classModifier="hasiconRight confirm" id="myForm" onClick={onSubmit}>

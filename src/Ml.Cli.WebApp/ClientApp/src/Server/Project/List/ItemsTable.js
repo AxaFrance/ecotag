@@ -5,14 +5,7 @@ import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Loader from '@axa-fr/react-toolkit-loader';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
-
-const formatDateToString = createDate =>
-    createDate && createDate instanceof Date
-        ? `${createDate.getDay().toString().padStart(2, '0')}/${createDate
-            .getMonth()
-            .toString()
-            .padStart(2, '0')}/${createDate.getFullYear()}`
-        : '';
+import {formatDateToString} from "../../date";
 
 const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numberTagToDo, onDeleteProject }) => {
     const history = useHistory();
@@ -62,10 +55,10 @@ const DeleteProjectModal = ({ idProject, isDeleteModalVisible, setDeleteModalVis
     </BooleanModal>
 );
 
-const ItemsTable = ({items, filters, loaderMode, onChangePaging, onChangeSort, onDeleteProject}) => {
+const ItemsTable = ({items, filters, onChangePaging, onChangeSort, onDeleteProject}) => {
     
     return(
-        <Loader mode={loaderMode}>
+        <>
             <Table>
                 <Table.Header>
                     <Table.Tr>
@@ -92,7 +85,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging, onChangeSort, o
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('numberTagToDo')}
                             headerColumnName={'Tags restants'}
-                            filterColumnValue={filters.columns.numberTagToDo.value}
+                            filterColumnValue={filters.columns.numberCrossAnnotation.value}
                         />
                         <Table.Th classModifier="sortable">
                             <span className="af-table__th-content af-btn__text">Action</span>
@@ -121,7 +114,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging, onChangeSort, o
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
             />
-        </Loader>
+        </>
     )
     
 };

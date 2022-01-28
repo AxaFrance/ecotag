@@ -1,1 +1,1 @@
-﻿export { default } from './EditContainer.js';
+﻿export { default } from './Edit.container.js';
