@@ -51,7 +51,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         
         public string UserId { get; set; }
         
-        public string Data { get; set; }
+        public string ExpectedOutput { get; set; }
         public string FileId { get; set; }
     }
     

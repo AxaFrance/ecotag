@@ -51,7 +51,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit
         case 'OCR':
             return <OcrLazy
                 labels={labels}
-                expectedLabels={[]}
+                expectedLabels={expectedOutput?expectedOutput.labels : null}
                 url={url}
                 onSubmit={onDatasetSubmit}
             />

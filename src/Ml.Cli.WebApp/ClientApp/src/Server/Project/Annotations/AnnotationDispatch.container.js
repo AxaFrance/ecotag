@@ -8,7 +8,7 @@ import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import AnnotationsToolbar from "../../../Toolkit/Annotations/AnnotationsToolbar";
-
+import Alert from '@axa-fr/react-toolkit-alert';
 
 const ReservationStatus = ({status}) => {
     const { ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
@@ -16,7 +16,7 @@ const ReservationStatus = ({status}) => {
       return null;
     }
     return (
-        <div className="reservation-status" style={{position:"absolute", top:"0px", right:"0px", "backgroundColor":"pink", color:"white"}}>
+        <div className="reservation-status" style={{position:"fixed", "z-index": 100000, top:"0px", left:"0px", "backgroundColor": status === LOADING ?"green" : "red", color:"white"}}>
           {
             {
               [LOADING]:<span>Chargement élément suivant en cours</span> ,
@@ -29,34 +29,62 @@ const ReservationStatus = ({status}) => {
           }
         </div>
     );
-
 }
 
-const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus}) => {
+const AnnotationStatus = ({status}) => {
+  const { ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
+  if(SUCCESS === status){
+    return null;
+  }
+  return (
+      <div className="reservation-status" style={{position:"fixed", "z-index": 100000, top:"0px", right:"0px", "backgroundColor": status === LOADING ?"green" : "red", color:"white"}}>
+        {
+          {
+            [LOADING]:<span>Chargement élément suivant en cours</span> ,
+            [POST]: <span>Sauvegarde en cours</span>,
+            [ERROR]: (
+                <span>Erreur lors du chargement</span>
+            ),
+            [SUCCESS]: null
+          }[status]
+        }
+      </div>
+  );
+}
+
+const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus, annotationStatus}) => {
   switch (documentId){
     case "end":
-      return <p>Fin</p>;
+      return <div className="container"><Alert classModifier="info" title="Annotation">
+        L'annotation de se dataset est terminé.
+        Merci beaucoup !
+      </Alert></div>;
     case "start":
-      return <p>Chargement en cours</p>;
+      return <div className="container"><Alert classModifier="success" title="Annotation">
+        Chargement en cours
+      </Alert></div>;
     default:
       return (currentItem !=null ? <>
         <ReservationStatus status={reservationStatus} />
+        <AnnotationStatus status={annotationStatus} />
         <AnnotationsToolbar onPreviousPlaceholder={"Précédent"} onNextPlaceholder={"Suivant"} onNext={onNext} onPrevious={onPrevious}  isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext} text={currentItem.fileName}  />
-        <AnnotationDispatch project={project} onSubmit={onSubmit} url={`/api/server/projects/${project.id}/files/${currentItem.fileId}`} />
+        <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput} typeAnnotation={project.typeAnnotation} labels={project.labels} onSubmit={onSubmit} url={`/api/server/projects/${project.id}/files/${currentItem.fileId}`} />
         </> : null);
   }
 }
 
-const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, reservationStatus}) => <>
+const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, reservationStatus, documentId, annotationStatus}) => <>
   <Title title={project.name} subtitle={`Project de type ${project.typeAnnotation} classification ${project.classification}` } goTo={`/projects/${project.id}`} />
-  <Content reservationStatus={reservationStatus} 
+  <Content reservationStatus={reservationStatus}  
+           annotationStatus={annotationStatus} 
            onNext={onNext} 
            onPrevious={onPrevious}  
            project={project}
            onSubmit={onSubmit} 
            currentItem={currentItem} 
            hasPrevious={hasPrevious} 
-           hasNext={hasNext} />
+           hasNext={hasNext}
+           documentId={documentId}/>
   </>
 
 const PageAnnotationWithResilience = withResilience(PageAnnotation);
@@ -117,13 +145,13 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
   }
 };
 
-export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, nextUrl) => {
+export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl) => {
   if(status === resilienceStatus.LOADING) {
     return;
   }
   dispatch({ type: 'annotate_start'});
   
-  const response = await fetchAnnotate(fetch)(projectId, fileId, annotation);
+  const response = await fetchAnnotate(fetch)(projectId, fileId, annotationId, annotation);
   let data;
   if(response.status >= 500) {
     data = {
@@ -131,10 +159,10 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
       items: [],
     }
   } else {
-   // const annotations = await response.json();
+    const id = !annotationId ? await response.json(): annotationId;
     data = {
       status: resilienceStatus.SUCCESS,
-      annotation: annotation,
+      annotation: { id, expectedOutput: annotation },
       fileId
     }
   }
@@ -162,17 +190,24 @@ export const reducer = (state, action) => {
       items.forEach(item => {
          const currentItem = newItems.find((newItem) => newItem.fileId === item.fileId);
           if(!currentItem) {
-            newItems.push(item);
+            
+            const annotation = {
+              expectedOutput : item.annotation.expectedOutputJson ? JSON.parse(item.annotation.expectedOutputJson): null,
+              id: item.annotation.id,
+            }
+            
+            const itemFormatted = {...item, annotation };
+            newItems.push(itemFormatted);
             isReservationFinished=false;
           }
-      })
+      });
 
       return {
         ...state,
         annotations: {
           isReservationFinished,
           ...state.annotations,
-          status,
+          reservationStatus:status,
           items: newItems
         }
       };
@@ -182,7 +217,7 @@ export const reducer = (state, action) => {
         ...state,
         annotations: {
           ...state.annotations,
-          status: resilienceStatus.LOADING,
+          reservationStatus: resilienceStatus.LOADING,
         }
       };
     }
@@ -191,7 +226,7 @@ export const reducer = (state, action) => {
         ...state,
         annotations: {
           ...state.annotations,
-          status: resilienceStatus.LOADING,
+          annotationStatus: resilienceStatus.LOADING,
         }
       };
     }
@@ -199,16 +234,14 @@ export const reducer = (state, action) => {
       const { annotation, fileId, status } = action.data;
       const newItems = [...state.annotations.items];
       const currentItem = newItems.find((item) => item.fileId === fileId);
-      
-      const newAnnotations = [...currentItem.annotations, annotation];
-      const newCurrentItem = {...currentItem, annotations: newAnnotations}
+      const newCurrentItem = {...currentItem, annotation};
 
       newItems.splice(newItems.indexOf(currentItem), 1, newCurrentItem);
       return  {
         ...state,
         annotations: {
           ...state.annotations,
-          status,
+          annotationStatus: status,
           items: newItems
         }
       };
@@ -227,7 +260,8 @@ export const initialState = {
     typeAnnotation: ""
   },
   annotations: {
-    status: resilienceStatus.SUCCESS,
+    reservationStatus: resilienceStatus.SUCCESS,
+    annotationStatus: resilienceStatus.SUCCESS,
     items: [],
     isReservationFinished:false
   }
@@ -246,7 +280,7 @@ const usePage = (fetch) => {
       const items = state.annotations.items;
       const currentItem = items.find((item) => item.fileId === documentId);
       const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-      if(currentIndex + 1 === items.length){
+      if(currentIndex + 3 === items.length){
         reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.status)
       }
     }
@@ -273,7 +307,7 @@ const usePage = (fetch) => {
   }
 
   const onSubmit = (annotation) => {
-    annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, nextUrl);
+    annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, currentItem.annotation.id, nextUrl);
   };
   const onNext = () => {
     history.push(nextUrl);
@@ -297,7 +331,9 @@ export const AnnotationDispatchContainer = ({ fetch }) => {
       onPrevious={onPrevious} 
       hasPrevious={hasPrevious} 
       hasNext={hasNext} 
-      reservationStatus={state.annotations.status} />;
+      reservationStatus={state.annotations.reservationStatus} 
+      annotationStatus={state.annotations.annotationStatus} 
+  />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

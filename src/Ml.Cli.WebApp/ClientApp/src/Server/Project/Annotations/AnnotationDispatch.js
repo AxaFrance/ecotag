@@ -2,12 +2,11 @@ import React from 'react';
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 
 
-const AnnotationDispatch = ({ project, url, onSubmit }) => {
-  const  expectedOutput = {}
+const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutput={} }) => {
   return <AnnotationSwitch
       url={url}
-      annotationType={project.typeAnnotation}
-      labels ={project.labels}
+      annotationType={typeAnnotation}
+      labels ={labels}
       expectedOutput={expectedOutput}
       onSubmit={onSubmit}
   />

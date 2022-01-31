@@ -2,6 +2,6 @@
 {
     public class AnnotationInput
     {
-        public string Data { get; set; }
+        public string ExpectedOutput { get; set; }
     }
 }

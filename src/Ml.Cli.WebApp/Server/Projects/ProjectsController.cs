@@ -80,9 +80,22 @@ namespace Ml.Cli.WebApp.Server.Projects
         public ActionResult Annotation(string projectId, string fileId, AnnotationInput annotationInput)
         {
             var id = Guid.NewGuid().ToString();
-            ProjectAnnotations.Annotations.Add(new Annotation() { Id = id, FileId = fileId , ProjectId = projectId, Data = annotationInput.Data});
+
+            var annotation = new Annotation
+                {Id = id, FileId = fileId, ProjectId = projectId, ExpectedOutput = annotationInput.ExpectedOutput};
+            ProjectAnnotations.Annotations.Add(annotation);
             
-            return Created(id, null);
+            return Created($"{projectId}/annotations/{fileId}/{id}", annotation.Id);
+        }
+        
+        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Annotation(string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        {
+            var annotation = ProjectAnnotations.Annotations.FirstOrDefault(a => a.Id == annotationId);
+            annotation.ExpectedOutput = annotationInput.ExpectedOutput;
+            return Ok();
         }
         
         [HttpPost("{projectId}/reserve")]
@@ -106,7 +119,10 @@ namespace Ml.Cli.WebApp.Server.Projects
                     FileId=datasetFiles.Id, 
                     FileName=datasetFiles.FileName, 
                     TimeStamp = reservation?.TimeStamp ?? 0,
-                    Annotations = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).ToList()
+                    Annotation = new ReserveAnnotation() { 
+                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
+                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
+                    }
                 };
 
             var results = query.Take(numberToReserve).ToList();
@@ -115,7 +131,10 @@ namespace Ml.Cli.WebApp.Server.Projects
             {
                 var currentFile =  dataset.Files.Where(file => file.Id == fileInput.FileId).Select(file => new ReserveOutput()
                 {
-                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0, Annotations = new List<Annotation>()
+                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0, Annotation = new ReserveAnnotation() { 
+                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
+                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
+                    }
                 }).FirstOrDefault();
                 results.Insert(0, currentFile);
             }
@@ -126,7 +145,7 @@ namespace Ml.Cli.WebApp.Server.Projects
                 var ticks = DateTime.Now.Ticks;
                 if (reserve == null)
                 {
-                    ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks});
+                    ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks });
                 }
                 else
                 {

@@ -19,12 +19,18 @@ const OcrContainer = ({ labels, expectedLabels, url, onSubmit }) => {
 
   useEffect(() => {
     const userInput = {};
-    if (expectedLabels && expectedLabels.length > 0) {
-      labels.map(label => {
-        userInput[label.name] = expectedLabels[label.name] || '';
-      });
-      setState({ ...state, userInput });
+    if (expectedLabels) {
+      if(Array.isArray(labels)) {
+        labels.map(label => {
+          userInput[label.name] = expectedLabels[label.name] || '';
+        });
+      } else{
+        for (const [key, value] of Object.entries(labels)) {
+          userInput[key] = value;
+        }
+      }
     }
+    setState({ ...state, userInput });
   }, [url]);
 
   return (
