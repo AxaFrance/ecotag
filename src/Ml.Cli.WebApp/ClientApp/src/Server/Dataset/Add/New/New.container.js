@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {NAME, TYPE, CLASSIFICATION, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
 import React, { useReducer } from 'react';
-import {fetchCreateDataset, fetchDatasets} from "../../../Project/Add/New/New.service";
+import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import {convertStringDateToDateObject} from "../../../date";
 import withCustomFetch from "../../../withCustomFetch";

@@ -1,7 +1,7 @@
 ﻿import {resilienceStatus} from "../../shared/Resilience";
 import {useHistory, useParams} from "react-router";
 import {useEffect, useReducer} from "react";
-import {fetchAnnotate, fetchProject, fetchReserveAnnotations} from "../Page/Page.service";
+import {fetchAnnotate, fetchProject, fetchReserveAnnotations} from "../Project.service";
 import {reducer} from "./Annotation.reducer";
 
 export const initialState = {

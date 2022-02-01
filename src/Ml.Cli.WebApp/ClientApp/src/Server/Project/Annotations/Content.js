@@ -15,11 +15,11 @@ const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutp
     />
 };
 
-export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus, annotationStatus}) => {
+export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus, annotationStatus, apiUrl}) => {
     switch (documentId) {
         case "end":
             return <div className="container"><Alert classModifier="info" title="Annotation">
-                L'annotation de se dataset est terminé.
+                L'annotation de ce dataset est terminé.
                 Merci beaucoup !
             </Alert></div>;
         case "start":
@@ -35,7 +35,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     text={currentItem.fileName}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}
                                     typeAnnotation={project.typeAnnotation} labels={project.labels} onSubmit={onSubmit}
-                                    url={`/api/server/projects/${project.id}/files/${currentItem.fileId}`}/>
+                                    url={ apiUrl.replace('{path}', `projects/${project.id}/files/${currentItem.fileId}`)} />
             </> : null);
     }
 }

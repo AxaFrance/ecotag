@@ -1,7 +1,9 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useReducer } from 'react';
 import Page from './Page';
-import { fetchProject, fetchDataset, fetchGroup } from './Page.service';
+import { fetchProject } from '../Project.service';
+import { fetchDataset } from '../../Dataset/Dataset.service.js';
+import { fetchGroup } from '../../Group/Group.service.js';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';

@@ -1,141 +1,72 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import {resilienceStatus} from "../../shared/Resilience";
-import {init, initialState} from "./Annotation.hook";
-import {reducer} from "./Annotation.reducer";
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {MemoryRouter, Route} from "react-router-dom";
+import {AnnotationContainer} from "./Annotation.container";
+import {fetch} from "./Annotation.stories";
 
-const fetch = () => Promise.resolve({
-  "id": "0001",
-  "name": "Relevé d'information",
-  "dataSetId": "0004",
-  "classification": "Publique",
-  "numberTagToDo": 10,
-  "createDate": "04/04/2011",
-  "typeAnnotation": "NER",
-  "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
-  "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-  "users": [
-    {"annotationCounter": 10,
-      "annotationToBeVerified": 1,
-      "email": "clement.trofleau.lbc@axa.fr"},
-    {"annotationCounter": 24,
-      "annotationToBeVerified": 5,
-      "email": "Guillaume.chervet@axa.fr"},
-    {"annotationCounter": 35,
-      "annotationToBeVerified": 15,
-      "email": "Gille.Cruchont@axa.fr"}
-  ]
-});
+describe('Annotation.container', () => {
 
-describe('AnnotationDispatch.container', () => {
-  const givenUser = {};
-  const givenDataset = {
-    "id": "0001",
-    "name": "Carte verte",
-    "type": "Image",
-    "classification": "Publique",
-    "numberFiles": 300,
-    "createDate": "30/10/2019"
-  };
-  const givenProject = {
-    "id": "0001",
-    "name": "Relevé d'information",
-    "dataSetId": "0004",
-    "classification": "Publique",
-    "numberTagToDo": 10,
-    "createDate": "04/04/2011",
-    "typeAnnotation": "NER",
-    "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
-    "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-    "users": [
-      {"annotationCounter": 10,
-        "annotationToBeVerified": 1,
-        "email": "clement.trofleau.lbc@axa.fr"},
-      {"annotationCounter": 24,
-        "annotationToBeVerified": 5,
-        "email": "Guillaume.chervet@axa.fr"},
-      {"annotationCounter": 35,
-        "annotationToBeVerified": 15,
-        "email": "Gille.Cruchont@axa.fr"}
-    ]
-  };
+    it('should annotate until end', async() => {
 
-  function fail(message = "The fail function was called") {
-    throw new Error(message);
-  }
-  
-  /*it('AnnotationDispatchContainer render correctly', async () => {
-    const { getByText } = render(<Router><AnnotationDispatchContainer fetch={fetch} user={givenUser}/></Router>);
-    const messageEl = await waitFor(() => getByText('Soumettre l\'annotation'));
-    expect(messageEl).toHaveTextContent(
-        'Soumettre l\'annotation'
-    );
-  });*/
+       const environment = {apiUrl: "/server/{path}"}
+       const { asFragment, getByText, container } = render(<MemoryRouter initialEntries={["/projects/0005/start"]}>
+          <Route path="/:projectId/0005/:documentId">
+              <AnnotationContainer fetch={fetch} environment={environment} />
+          </Route>
+          </MemoryRouter>);
+        let imagefilename = await waitFor(() => getByText('1.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '1.PNG'
+        );
+        const annotation1 = screen.queryByText("annotation1");
+        fireEvent.change(annotation1, {target: {value: 'toto'}});
+        
+        const fireSumbit = () => {
+            const item = screen.queryByText("Submit");
+            fireEvent.click(item);
+        };
 
-  describe('.reducer()', () => {
-    it('should set the new fields with asked values after onChange action', () => {
-      const givenState = {...initialState};
-      const givenAction = {
-        type: 'init',
-        data: {
-          project : givenProject,
-          status: resilienceStatus.LOADING
-        }
-      }
+        fireSumbit();
+        imagefilename = await waitFor(() => getByText('2.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '2.PNG'
+        );
 
-      const actualState = reducer(givenState, givenAction);
+        let buttonNext = await waitFor(() => getByText('Suivant'));
+        fireEvent(
+            buttonNext,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        )
+        imagefilename = await waitFor(() => getByText('3.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '3.PNG'
+        );
 
-      expect(actualState).toMatchObject({
-        ...givenState,
-        project : givenProject,
-      });
-    });
-    it('should throw an error by default', (done) => {
-      const givenState = {};
-      const givenAction = {
-        type: 'unknown',
-      }
-  
-      try {
-        reducer(givenState, givenAction);
-        fail(error);
-      } catch (error) {
-        done();
-      }
-    });
-  });
+        fireEvent(
+            buttonNext,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        )
+        imagefilename = await waitFor(() => getByText('4.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '4.PNG'
+        );
 
-  describe('.init()', () => {
-    let givenFetch;
-    let givenDispatch;
-    let givenFetchRejected;
-    
-    beforeEach(() => {
-      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProject)}));
-      givenDispatch = jest.fn();
-      givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
-    });
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-    
-    it('should call init and dispatch', async () => {
-      try {
-        await init(givenFetch, givenDispatch)(givenProject.id);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject, status: resilienceStatus.SUCCESS } });
-      } catch (error) {
-        fail(error);
-      }
+        fireSumbit();
+
+        const finalMessage = 'L\'annotation de ce dataset est terminé. Merci beaucoup !'
+        let alertInfo = await waitFor(() => getByText(finalMessage));
+        
+        expect(alertInfo).toHaveTextContent(
+            finalMessage
+        );
     });
 
-    it('should fail because of error during init', async () => {
-      try {
-        await init(givenFetch, givenDispatch);
-        fail(error);
-      } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
-      }
-    });
-  });
 });
 

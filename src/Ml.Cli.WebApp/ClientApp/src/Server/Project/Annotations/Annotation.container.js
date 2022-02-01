@@ -4,8 +4,9 @@ import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import {PageAnnotationWithResilience} from "./PageAnnotation";
 import {usePage} from "./Annotation.hook";
+import {withEnvironment} from "../../EnvironmentProvider";
 
-export const AnnotationContainer = ({ fetch }) => {
+export const AnnotationContainer = ({ fetch, environment }) => {
   const { state, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId } = usePage(fetch);
   return <PageAnnotationWithResilience 
       project={state.project}
@@ -18,9 +19,10 @@ export const AnnotationContainer = ({ fetch }) => {
       hasPrevious={hasPrevious} 
       hasNext={hasNext} 
       reservationStatus={state.annotations.reservationStatus} 
-      annotationStatus={state.annotations.annotationStatus} 
+      annotationStatus={state.annotations.annotationStatus}
+      apiUrl={environment.apiUrl}
   />;
 };
 
-const enhance = compose(withCustomFetch(fetch), withAuthentication());
+const enhance = compose(withEnvironment, withCustomFetch(fetch), withAuthentication());
 export default enhance(AnnotationContainer);

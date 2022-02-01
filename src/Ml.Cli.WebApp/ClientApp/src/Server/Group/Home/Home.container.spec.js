@@ -18,7 +18,7 @@ describe('Home.container for groups', () => {
       { "email": "guillaume.chervet@axa.fr" }
     ]
   }];
-  const givenFetch = async (url, config) => {
+  const givenFetch = async (url) => {
     await sleep(1);
     switch (url) {
       case "groups":
