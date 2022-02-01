@@ -40,7 +40,7 @@ const setAnnotationObject = (annotationType, e) => {
     return null;
 }
 
-const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit}) => {
+const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSubmit}) => {
     
     const onDatasetSubmit = async e => {
         onSubmit(setAnnotationObject(annotationType, e));
