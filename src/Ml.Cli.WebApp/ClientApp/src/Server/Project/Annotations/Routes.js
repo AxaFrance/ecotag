@@ -1,13 +1,15 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import AnnotationDispatchContainer from './AnnotationDispatch.container';
+import AnnotationContainer from './Annotation.container';
+
+
 
 const Routes = () => {
   const { path } = useRouteMatch();
   return (
       
     <Switch>
-      <Route path={`${path}/:documentId`} component={AnnotationDispatchContainer} />
+      <Route path={`${path}/:documentId`} component={AnnotationContainer} />
     </Switch>
   );
 };

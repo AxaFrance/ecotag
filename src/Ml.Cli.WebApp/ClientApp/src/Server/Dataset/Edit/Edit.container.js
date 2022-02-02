@@ -6,7 +6,7 @@ import ConfirmModal from "./ConfirmModal";
 import './Edit.scss';
 import Title from "../../../TitleBar";
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
-import {fetchDataset, fetchLockDataset} from "../../Project/Add/New/New.service";
+import {fetchDataset, fetchLockDataset} from "../Dataset.service";
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import {useParams} from "react-router-dom";
 import withCustomFetch from "../../withCustomFetch";

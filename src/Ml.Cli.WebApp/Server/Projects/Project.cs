@@ -35,14 +35,24 @@ namespace Ml.Cli.WebApp.Server.Projects
         
     }
 
-    public class Annotations
+    public class ProjectAnnotations
     {
-        
+        public IList<Annotation> Annotations { get; set; } = new List<Annotation>();
     }
 
     public class Annotation 
     {
         
+        public string Id {
+            get;
+            set;
+        }
+        public string ProjectId { get; set; }
+        
+        public string UserId { get; set; }
+        
+        public string ExpectedOutput { get; set; }
+        public string FileId { get; set; }
     }
     
 }

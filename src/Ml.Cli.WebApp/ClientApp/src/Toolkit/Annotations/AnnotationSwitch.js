@@ -14,6 +14,7 @@ const setAnnotationObject = (annotationType, e) => {
         case "TagOverTextLabel":
         case "TagOverText":
         case "Ocr":
+        case "OCR":
         case "Cropping":
             return {
                 "type": e.type,
@@ -39,7 +40,7 @@ const setAnnotationObject = (annotationType, e) => {
     return null;
 }
 
-const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit}) => {
+const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSubmit}) => {
     
     const onDatasetSubmit = async e => {
         onSubmit(setAnnotationObject(annotationType, e));
@@ -50,7 +51,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput, onSubmit
         case 'OCR':
             return <OcrLazy
                 labels={labels}
-                expectedLabels={[]}
+                expectedLabels={expectedOutput?expectedOutput.labels : null}
                 url={url}
                 onSubmit={onDatasetSubmit}
             />

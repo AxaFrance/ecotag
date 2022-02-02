@@ -20,7 +20,7 @@ describe('Group.service', () => {
         const givenFetch = jest.fn();
         it('should call fetchGroup', () => {
             fetchGroup(givenFetch)(givenId);
-            expect(givenFetch).toHaveBeenCalledWith(`groups/${givenId}`, { method: "GET"});
+            expect(givenFetch).toHaveBeenCalledWith(`groups/${givenId}`);
         });
     });
     describe('.fetchDeleteGroup()', () => {

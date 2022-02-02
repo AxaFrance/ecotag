@@ -2,7 +2,7 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import React, { useReducer } from 'react';
 import { withRouter } from 'react-router-dom';
-import { fetchCreateProject } from './New.service';
+import { fetchCreateProject } from '../../Project.service';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {
   GROUP,

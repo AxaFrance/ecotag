@@ -1,5 +1,6 @@
-import { fetchGroups, fetchDatasets } from './New.service';
-import {fetchProjects} from "../../List/Home.service";
+import { fetchDatasets } from '../../../Dataset/Dataset.service';
+import { fetchGroups } from '../../../Group/Group.service';
+import { fetchProjects } from "../../Project.service";
 import {convertStringDateToDateObject} from "../../../date";
 import { resilienceStatus } from '../../../shared/Resilience';
 
