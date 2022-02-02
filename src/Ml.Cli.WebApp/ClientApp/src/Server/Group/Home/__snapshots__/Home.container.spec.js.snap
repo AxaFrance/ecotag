@@ -56,7 +56,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
                 class="af-form__group-label"
                 for="NAME"
               >
-                Nom : 
+                Nom:
               </label>
             </div>
             <div
