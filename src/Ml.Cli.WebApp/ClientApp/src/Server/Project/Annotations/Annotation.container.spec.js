@@ -7,10 +7,10 @@ import {fetch} from "./Annotation.stories";
 
 describe('Annotation.container', () => {
 
-    it('should annotate until end', async() => {
+    it('should annotate from start until end', async() => {
 
        const environment = {apiUrl: "/server/{path}"}
-       const { asFragment, getByText, container } = render(<MemoryRouter initialEntries={["/projects/0005/start"]}>
+       const { getByText } = render(<MemoryRouter initialEntries={["/projects/0005/start"]}>
           <Route path="/:projectId/0005/:documentId">
               <AnnotationContainer fetch={fetch} environment={environment} />
           </Route>
@@ -19,7 +19,7 @@ describe('Annotation.container', () => {
         expect(imagefilename).toHaveTextContent(
             '1.PNG'
         );
-        const annotation1 = screen.queryByText("annotation1");
+        let annotation1 = screen.queryByText("annotation1");
         fireEvent.change(annotation1, {target: {value: 'toto'}});
         
         const fireSumbit = () => {
@@ -66,6 +66,48 @@ describe('Annotation.container', () => {
         expect(alertInfo).toHaveTextContent(
             finalMessage
         );
+    });
+
+    it('should annotate from defined idDocument', async() => {
+
+        const environment = {apiUrl: "/server/{path}"}
+        const { getByText } = render(<MemoryRouter initialEntries={["/projects/0005/1"]}>
+            <Route path="/:projectId/0005/:documentId">
+                <AnnotationContainer fetch={fetch} environment={environment} />
+            </Route>
+        </MemoryRouter>);
+        let imagefilename = await waitFor(() => getByText('1.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '1.PNG'
+        );
+
+        let annotation1 = await waitFor(() => getByText('annotation1'));
+        fireEvent.change(annotation1, {target: {value: 'toto'}});
+
+        const fireSumbit = () => {
+            const item = screen.queryByText("Submit");
+            fireEvent.click(item);
+        };
+
+        fireSumbit();
+        imagefilename = await waitFor(() => getByText('2.PNG'));
+        expect(imagefilename).toHaveTextContent(
+            '2.PNG'
+        );
+
+        let buttonPrevious = await waitFor(() => getByText('Précédent'));
+        fireEvent(
+            buttonPrevious,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        )
+        annotation1 = await waitFor(() => getByText('toto'));
+        expect(annotation1).toHaveTextContent(
+            'toto'
+        );
+       
     });
 
 });

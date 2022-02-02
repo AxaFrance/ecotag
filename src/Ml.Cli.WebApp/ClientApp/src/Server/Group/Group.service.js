@@ -9,8 +9,6 @@ export const fetchDeleteGroup = fetch => async id =>
     method: 'DELETE',
   });
 
-
-
 export const fetchCreateOrUpdateGroup = fetch => async newGroup =>
   fetch('groups', {
     method: 'POST',

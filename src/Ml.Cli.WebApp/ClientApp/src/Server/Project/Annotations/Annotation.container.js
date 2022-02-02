@@ -24,5 +24,5 @@ export const AnnotationContainer = ({ fetch, environment }) => {
   />;
 };
 
-const enhance = compose(withEnvironment, withCustomFetch(fetch), withAuthentication());
+const enhance = compose(withCustomFetch(fetch), withAuthentication(), withEnvironment);
 export default enhance(AnnotationContainer);
