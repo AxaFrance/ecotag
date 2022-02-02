@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 
 const timeStampToDate = (propertyName, value) => {
   if (propertyName.toLowerCase().includes("date")) {
-      return formatDateToString(value);
+    return formatTimestampToString(value);
   }
   return value;
 };
@@ -26,7 +26,7 @@ export const convertTimestampToDateObject = origin => {
 };
 
 
-export const formatDateToString = (timeStamp) =>{
+export const formatTimestampToString = (timeStamp) =>{
   const date = new Date(timeStamp);
   try{
     return format(date, 'dd/MM/yyyy');

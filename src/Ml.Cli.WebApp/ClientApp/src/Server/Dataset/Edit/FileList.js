@@ -12,7 +12,7 @@ import Action from "@axa-fr/react-toolkit-action";
 import Tabs from "@axa-fr/react-toolkit-tabs/dist";
 import '@axa-fr/react-toolkit-tabs/dist/tabs.scss';
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
-import {formatDateToString} from "../../date";
+import {formatTimestampToString} from "../../date";
 
 const bytesToSize=(bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -61,7 +61,7 @@ const  FileList = ({state, setState}) => {
                             <SectionRestitutionRow title="">
                                 <SectionRestitutionColumn>
                                     <Restitution label="Nom" value={state.dataset.name} />
-                                    <Restitution label="Date de création" value={formatDateToString(state.dataset.createDate)} />
+                                    <Restitution label="Date de création" value={formatTimestampToString(state.dataset.createDate)} />
                                     <Restitution label="Type" value={state.dataset.type} />
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>

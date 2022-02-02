@@ -7,7 +7,7 @@ import {
   Restitution,
   HeaderRestitution
 } from '@axa-fr/react-toolkit-restitution';
-import {formatDateToString} from "../../date";
+import {formatTimestampToString} from "../../date";
 
 export const Overview = ({ project, dataset, group }) => {
   //const labels = project.labels && project.labels.length > 0 ? project.labels : [];
@@ -24,7 +24,7 @@ export const Overview = ({ project, dataset, group }) => {
             <SectionRestitutionColumn>
               <Restitution label="Nom" value={project.name} />
               <Restitution label="Type d'annotation" value={project.typeAnnotation} />
-              <Restitution label="Date de création" value={formatDateToString(project.createDate)} />
+              <Restitution label="Date de création" value={formatTimestampToString(project.createDate)} />
               <Restitution label="Nombre de fichier" value={dataset.files.length} />
               <Restitution label="Nombre annotation croisée" value={project.numberCrossAnnotation} />
               

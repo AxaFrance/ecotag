@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -68,7 +69,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public ActionResult<Project> Create(Project newProject)
         {
             newProject.Id = Guid.NewGuid().ToString();
-            newProject.CreateDate = DateTime.Now;
+            newProject.CreateDate = DateTime.Now.ToEpochTime();
             projects.Add(newProject);
             
             return Created(newProject.Id, Find(newProject.Id));
