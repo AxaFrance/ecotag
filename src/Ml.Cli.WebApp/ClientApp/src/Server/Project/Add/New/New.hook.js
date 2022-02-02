@@ -1,6 +1,5 @@
 import { fetchGroups, fetchDatasets } from './New.service';
 import {fetchProjects} from "../../List/Home.service";
-import {convertTimestampToDateObject} from "../../../date";
 import { resilienceStatus } from '../../../shared/Resilience';
 
 export const init = (fetch, dispatch) => async () => {
@@ -18,7 +17,7 @@ export const init = (fetch, dispatch) => async () => {
         data = {
             groups,
             datasets,
-            projects: convertTimestampToDateObject(projects),
+            projects,
             status: resilienceStatus.SUCCESS};
     }
   dispatch({ type: 'init', data});

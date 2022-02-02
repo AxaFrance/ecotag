@@ -6,7 +6,6 @@ import {NAME, TYPE, CLASSIFICATION, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
-import {convertTimestampToDateObject} from "../../../date";
 import withCustomFetch from "../../../withCustomFetch";
 import compose from "../../../compose";
 
@@ -77,8 +76,8 @@ export const init = (fetch, dispatch) => async () => {
   if(response.status >= 500) {
     data = { datasets: [], status: resilienceStatus.ERROR };
   } else {
-    const items = await response.json()
-    data = { datasets: convertTimestampToDateObject(items), status: resilienceStatus.SUCCESS };
+    const datasets = await response.json()
+    data = { datasets, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };

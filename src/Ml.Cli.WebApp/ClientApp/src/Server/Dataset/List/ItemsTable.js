@@ -4,6 +4,7 @@ import Loader from '@axa-fr/react-toolkit-loader';
 import HeaderColumnCell from "../../Project/List/ColumnHeader";
 import Action from "@axa-fr/react-toolkit-action";
 import {useHistory} from "react-router-dom";
+import {formatTimestampToString} from "../../date";
 
 const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
 
@@ -73,7 +74,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                     <Table.Td>{classification}</Table.Td>
                                     <Table.Td>{numberFiles}</Table.Td>
                                     <Table.Td>{type}</Table.Td>
-                                    <Table.Td>{createDate.toString()}</Table.Td>
+                                    <Table.Td>{formatTimestampToString(createDate)}</Table.Td>
                                     <Table.Td>
                                         <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
                                     </Table.Td>

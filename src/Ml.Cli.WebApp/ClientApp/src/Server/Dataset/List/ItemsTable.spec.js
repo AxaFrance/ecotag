@@ -1,9 +1,6 @@
 ﻿import ItemsTable from "./ItemsTable";
 import {render} from "@testing-library/react";
 import {LoaderModes} from "@axa-fr/react-toolkit-all";
-import { format } from 'date-fns'
-
-const date = new Date("01-28-2022");
 
 const items = [{
     id: "0001",
@@ -11,7 +8,7 @@ const items = [{
     type: "Image",
     classification: "Publique",
     numberFiles: 300,
-    createDate: format(date, 'dd/MM/yyyy')
+    createDate: new Date("01-28-2022").getTime()
 }];
 
 const filters = {
