@@ -8,7 +8,7 @@ const items = [{
     type: "Image",
     classification: "Publique",
     numberFiles: 300,
-    createDate: new Date("10-30-2019").getTime()
+    createDate: "30/10/2019"
 }];
 
 const filters = {
