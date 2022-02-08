@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "4.0.0-alpha.17",
+    "@axa-fr/react-oidc-context": "4.0.0-alpha.19",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
@@ -14,7 +14,6 @@
     "glob": "7.1.7",
     "js-levenshtein": "1.1.6",
     "konva": "8.3.1",
-    "lodash": "4.17.21",
     "monaco-editor": "0.25.2",
     "mw.validation": "1.0.15",
     "oidc-client": "1.11.5",
@@ -43,7 +42,8 @@
     "eject": "react-scripts eject",
     "postinstall": "npm rebuild canvas --update-binary",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepare": "cp -n ./public/environment.dev.json ./public/environment.dev-custom.json && npm run copy"
   },
   "homepage": ".",
   "browserslist": {
