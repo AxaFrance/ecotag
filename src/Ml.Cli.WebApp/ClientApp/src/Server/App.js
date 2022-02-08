@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthenticationProvider, withOidcSecure } from '@axa-fr/react-oidc-context';
+import { OidcProvider, withOidcSecure } from '@axa-fr/react-oidc-context';
 import EnvironmentProvider, { withEnvironment } from './EnvironmentProvider';
 import './App.scss';
 import Header from './shared/Header';
@@ -20,9 +20,9 @@ export const RoutesBase = ({ environment }) => (
 const SecureRouteBase = withOidcSecure(RoutesBase);
 
 const Authentification = ({ environment }) => (
-  <AuthenticationProvider configuration={environment.oidc.configuration} isEnabled={environment.oidc.isEnabled}>
+  <OidcProvider configuration={environment.oidc.configuration} >
     <SecureRouteBase environment={environment} />
-  </AuthenticationProvider>
+  </OidcProvider>
 );
 
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
