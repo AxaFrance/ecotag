@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  dotnettest:
+  build-windows:
     environment: ml-cli
     runs-on: windows-latest
     steps:
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
       - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
 
-  build:
+  build-linux:
     environment: ml-cli
     runs-on: ubuntu-latest
     steps:
