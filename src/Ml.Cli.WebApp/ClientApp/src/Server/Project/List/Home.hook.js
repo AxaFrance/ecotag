@@ -1,4 +1,4 @@
-import { fetchProjects, fetchDeleteProject } from './Home.service';
+import { fetchProjects, fetchDeleteProject } from '../Project.service';
 
 import React from 'react';
 import { initialState, reducer } from './Home.reducer';

@@ -16,7 +16,7 @@ const labels =   [{name: "Recto", color: "#212121", id: 0},
     {name: "Verso", color: "#ffbb00", id: 1},
     {name: "Signature", color: "#f20713", id: 2}];
 
-describe(`Annotation.Irot`, () => {
+describe(`Annotation.Ocr`, () => {
     test(`should return correct values`, async () => {
         const { container } = render(<OcrContainer labels={labels} expectedLabels={expectedLabels} url={url} onSubmit={onSubmit} />);
 
@@ -36,7 +36,9 @@ describe(`Annotation.Irot`, () => {
             const output = onSubmit.mock.calls[0][0];
             expect(output).toEqual({
                 labels: {
-                    Recto: "youhou"
+                    Recto: "youhou", 
+                    Signature: "",
+                    Verso: ""
                 },
                 width: 0,
                 height: 0,
