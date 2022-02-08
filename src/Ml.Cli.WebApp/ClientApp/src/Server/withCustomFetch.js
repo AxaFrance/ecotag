@@ -1,6 +1,6 @@
 import compose from './compose';
 import { withEnvironment } from './EnvironmentProvider';
-import { withAuthentication } from '@axa-fr/react-oidc-context-fetch';
+import {withOidcFetch} from '@axa-fr/react-oidc-context';
 import React from 'react';
 
 const FETCH_CONFIG = {
@@ -17,11 +17,11 @@ const customFetch = fetch => apiBaseUrl => async (path, config) => {
   if (response.status === 204) {
     return [];
   }
-  return response
+  return response;
 };
 
 const withCustomFetch = Component => ({ environment, ...otherProps }) => (
   <Component {...otherProps} fetch={customFetch(otherProps.fetch)(environment.apiUrl)} />
 );
 
-export default (fetch = undefined) => compose(withEnvironment, withAuthentication(fetch), withCustomFetch);
+export default (fetch = undefined) => compose(withEnvironment, withOidcFetch(fetch), withCustomFetch);

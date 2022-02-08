@@ -1,6 +1,6 @@
 import React from 'react';
 import { get, isEmpty } from 'lodash';
-import { useReactOidc } from '@axa-fr/react-oidc-context';
+import { useOidcIdToken } from '@axa-fr/react-oidc-context';
 
 const NON_CONNECTE = 'Non Connecté';
 
@@ -28,9 +28,9 @@ const extractDataFromOAuthToken = oidcUser => ({
   uid: getAuthUid(oidcUser),
 });
 
-const withAuthentication = (useReactOidcFn = useReactOidc) => Component => props => {
-  const { oidcUser } = useReactOidcFn();
-  return <Component {...props} user={extractDataFromOAuthToken(oidcUser)} />;
+const withAuthentication = (useReactOidcFn = useOidcIdToken) => Component => props => {
+  const { idToken } = useOidcIdToken();
+  return <Component {...props} user={extractDataFromOAuthToken(idToken)} />;
 };
 
 export default withAuthentication;

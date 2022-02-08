@@ -4,7 +4,6 @@ import AnnotationDispatch from './AnnotationDispatch';
 import { fetchProject, fetchReserveAnnotations } from '../Page/Page.service';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
-import withAuthentication from '../../withAuthentication';
 import Title from '../../../TitleBar';
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import AnnotationsToolbar from "../../../Toolkit/Annotations/AnnotationsToolbar";
@@ -230,5 +229,5 @@ export const AnnotationDispatchContainer = ({ fetch }) => {
                                        hasPrevious={hasPrevious} hasNext={hasNext} reservationStatus={state.annotations.status} />;
 };
 
-const enhance = compose(withCustomFetch(fetch), withAuthentication());
+const enhance = compose(withCustomFetch(fetch));
 export default enhance(AnnotationDispatchContainer);
