@@ -14,8 +14,8 @@ public record CreateGroupInput()
 
 public class CreateGroupCmd
 {
-    private const string InvalidModel = "InvalidModel";
-    private const string AlreadyTakenName = "AlreadyTakenName";
+    public const string InvalidModel = "InvalidModel";
+    public const string AlreadyTakenName = "AlreadyTakenName";
     private readonly IGroupsRepository _groupsRepository;
 
     public CreateGroupCmd(IGroupsRepository groupsRepository)

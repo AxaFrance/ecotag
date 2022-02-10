@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Ml.Cli.WebApp.Server.Groups.Database;
@@ -26,18 +29,18 @@ public class CreateGroupShould
     }
     
     [Theory]
-    [InlineData("[\"abcd\"]", "abcD", false)]
-    [InlineData("[]", "ab", false)]
-    [InlineData("[]", "abc", true)]
-    [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", false)]
-    [InlineData("[]", "abcdefgh", true)]
-    [InlineData("[]", "abd$", false)]
-    [InlineData("[]", "abcdefghzoiqsdzqosqodz^", false)]
-    [InlineData("[]", "P$", false)]
-    [InlineData("[]", "Abcd-dad", true)]
-    [InlineData("[]", "abdd_O", true)]
-    [InlineData("[]", "zqdsqd(", false)]
-    public async Task Create_NewGroup(string groupNamesInDatabase, string groupName, bool isSuccess)
+    [InlineData("[\"abcd\"]", "abcD", false, CreateGroupCmd.AlreadyTakenName)]
+    [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
+    [InlineData("[]", "abc", true, "[]")]
+    [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", false, CreateGroupCmd.InvalidModel)]
+    [InlineData("[]", "abcdefgh", true, "[]")]
+    [InlineData("[]", "abd$", false, CreateGroupCmd.InvalidModel)]
+    [InlineData("[]", "abcdefghzoiqsdzqosqodz^", false, CreateGroupCmd.InvalidModel)]
+    [InlineData("[]", "P$", false, CreateGroupCmd.InvalidModel)]
+    [InlineData("[]", "Abcd-dad", true, "[]")]
+    [InlineData("[]", "abdd_O", true, "[]")]
+    [InlineData("[]", "zqdsqd(", false, CreateGroupCmd.InvalidModel)]
+    public async Task Create_NewGroup(string groupNamesInDatabase, string groupName, bool isSuccess, string errorType)
     {
         var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
         var groupContext = GetInMemoryGroupContext();
@@ -51,10 +54,20 @@ public class CreateGroupShould
             Name = groupName
         };
         var repository = new GroupsRepository(groupContext);
+        var groupsController = new GroupsController();
         var createGroupCmd = new CreateGroupCmd(repository);
-        var result = await createGroupCmd.ExecuteAsync(newGroup);
-        Assert.Equal(isSuccess, result.IsSuccess);
-        //var result = await repository.CreateGroupAsync(groupName);
-        //exemple guid: 44e7ac60-c756-47e8-4d72-08d9ec7e2bc4
+        var result = await groupsController.Create(createGroupCmd, newGroup);
+        if (isSuccess)
+        {
+            var resultCreated = result.Result as CreatedResult;
+            Assert.NotNull(resultCreated);
+        }
+        else
+        {
+            var resultWithError = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultWithError);
+            var resultWithErrorValue = resultWithError.Value as ErrorResult;
+            Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
     }
 }

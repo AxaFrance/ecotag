@@ -53,7 +53,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Group>> Create([FromServices]CreateGroupCmd createGroupCmd, CreateGroupInput createGroupInput)
+        public async Task<ActionResult<string>> Create([FromServices]CreateGroupCmd createGroupCmd, CreateGroupInput createGroupInput)
         {
             var commandResult = await createGroupCmd.ExecuteAsync(createGroupInput);
             if (!commandResult.IsSuccess)
