@@ -106,7 +106,8 @@ namespace Ml.Cli.WebApp
                 {
                     var env = builderContext.HostingEnvironment;
                     config.AddJsonFile($"appsettings-server.json", false, true)
-                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true);
+                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true)
+                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}Custom.json", true, true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
