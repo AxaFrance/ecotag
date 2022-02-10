@@ -17,6 +17,7 @@
 	<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
 	<PackageReference Include="swashbuckle.aspnetcore" Version="6.2.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
   </ItemGroup>
   
   <ItemGroup>

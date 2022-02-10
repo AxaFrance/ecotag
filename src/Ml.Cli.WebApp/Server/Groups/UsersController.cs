@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using advalorem.Controllers.AF.AspNetCore.Authorization.Jwt.SiteMinder;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -26,6 +27,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<User>> GetAllUsers()
         {
+            var userMail = User.Identity.GetEmail();
             return Ok(users);
         }
     }

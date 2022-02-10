@@ -2,6 +2,6 @@
 {
     public static class AuthorizationAudience
     {
-        public static readonly string ApiEcotag = "etg";
+        public static readonly string ApiEcotag = "api-advalorem";
     }
 }
