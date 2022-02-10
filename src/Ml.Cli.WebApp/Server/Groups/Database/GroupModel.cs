@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,5 +12,7 @@ public class GroupModel
     public Guid Id { get; set; }
     
     [Column("GRP_Name")]
+    [MaxLength(16)]
+    [MinLength(3)]
     public string Name { get; set; }
 }

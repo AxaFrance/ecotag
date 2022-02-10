@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups
@@ -51,20 +53,14 @@ namespace Ml.Cli.WebApp.Server.Groups
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Group> Create(Group newGroup)
+        public async Task<ActionResult<Group>> Create([FromServices]CreateGroupCmd createGroupCmd, CreateGroupInput createGroupInput)
         {
-            if (string.IsNullOrEmpty(newGroup.Id))
+            var commandResult = await createGroupCmd.ExecuteAsync(createGroupInput);
+            if (!commandResult.IsSuccess)
             {
-                newGroup.Id = Guid.NewGuid().ToString();
-                newGroup.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
-                groups.Add(newGroup);
+                return BadRequest(commandResult.Error);
             }
-            else
-            {
-                var group = groups.First(group => group.Id == newGroup.Id);
-                group.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
-            }
-            return Created(newGroup.Id, find(newGroup.Id));
+            return Created(commandResult.Data, find(commandResult.Data));
         }
 
         [HttpDelete("{id}")]

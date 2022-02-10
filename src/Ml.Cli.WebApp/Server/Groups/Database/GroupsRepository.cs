@@ -19,6 +19,12 @@ public class GroupsRepository : IGroupsRepository
         return group?.ToGroupDataModel();
     }
 
+    public async Task<GroupDataModel> GetGroupByNameAsync(string name)
+    {
+        var group = await _groupsContext.Groups.AsNoTracking().FirstOrDefaultAsync(g => g.Name == name);
+        return group?.ToGroupDataModel();
+    }
+
     public async Task<string> CreateGroupAsync(string groupName)
     {
         var groupModel = new GroupModel
