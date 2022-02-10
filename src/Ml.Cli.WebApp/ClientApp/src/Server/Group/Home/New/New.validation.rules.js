@@ -13,6 +13,19 @@ const rulesMinLength = {
   },
 };
 
+const rulesMaxLength = {
+  maxLength: {
+    maxLength: 16,
+    message: 'Le champ contient trop de caractères (16 max)',
+  },
+};
+
+const rulesRegex = {
+  pattern: {
+    regex: /^[a-zA-Z-_]*$/
+  }
+}
+
 export const rules = {
-  [NAME]: [rulesRequired, rulesMinLength],
+  [NAME]: [rulesRequired, rulesMinLength, rulesMaxLength, rulesRegex],
 };
