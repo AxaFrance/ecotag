@@ -1,17 +1,17 @@
-﻿version: '3.7'
+﻿version: "3.4"
 
 services:
-  ml-cli:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+  db:
+    build: ./docker
+    container_name: "ecotag_db"
+    image: "mcr.microsoft.com/mssql/server"
     ports:
-      - 5000:5000
-    depends_on:
-      - ml-cli-demo
-  ml-cli-demo:
-    build:
-      context: ./src/Ml.Cli.DemoApi
-      dockerfile: ./Dockerfile
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+  blob:
+    image: "mcr.microsoft.com/azure-storage/azurite"
     ports:
-      - 6001:6001
+      - 10000:10000
+      - 10010:10001
