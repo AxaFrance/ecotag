@@ -21,11 +21,12 @@ public class GroupsRepository : IGroupsRepository
 
     public async Task<string> CreateGroupAsync(string groupName)
     {
-        _groupsContext.Groups.Add(new GroupModel
+        var groupModel = new GroupModel
         {
             Name = groupName
-        });
-        var result = await _groupsContext.SaveChangesAsync();
-        return result.ToString();
+        };
+        _groupsContext.Groups.Add(groupModel);
+        await _groupsContext.SaveChangesAsync();
+        return groupModel.Id.ToString();
     }
 }
