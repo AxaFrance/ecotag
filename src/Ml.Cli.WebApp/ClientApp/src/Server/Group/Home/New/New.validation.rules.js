@@ -1,4 +1,4 @@
-import { NAME, MSG_REQUIRED } from './constants';
+import {NAME, MSG_REQUIRED, MSG_MIN_LENGTH, MSG_MAX_LENGTH} from './constants';
 
 const rulesRequired = {
   required: {
@@ -9,14 +9,14 @@ const rulesRequired = {
 const rulesMinLength = {
   minLength: {
     minLength: 3,
-    message: 'Le champ ne contient pas assez de caractères (3 min)',
+    message: MSG_MIN_LENGTH,
   },
 };
 
 const rulesMaxLength = {
   maxLength: {
     maxLength: 16,
-    message: 'Le champ contient trop de caractères (16 max)',
+    message: MSG_MAX_LENGTH,
   },
 };
 

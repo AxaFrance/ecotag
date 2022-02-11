@@ -89,6 +89,19 @@ END
 
 GO
 
+/****** Object:  Table [sch_etg].[T_GroupUsers] ******/
+if not exists (select * from sysobjects where name='T_GroupUsers' and xtype='U')
+BEGIN
+CREATE TABLE [sch_etg].[T_GroupUsers](
+    [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid()
+    [GRP_Id] uniqueidentifier NOT NULL,
+    [USR_Id] uniqueidentifier NOT NULL
+    CONSTRAINT [PK_T_GroupUsers] UNIQUE([GPU_Id])
+    )
+END
+
+GO
+
 USE [EcotagContent]
 GO
 

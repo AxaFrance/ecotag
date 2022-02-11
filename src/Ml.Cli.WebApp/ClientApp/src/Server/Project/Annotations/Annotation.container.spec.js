@@ -60,7 +60,7 @@ describe('Annotation.container', () => {
 
         fireSumbit();
 
-        const finalMessage = 'L\'annotation de ce dataset est terminé. Merci beaucoup !'
+        const finalMessage = 'L\'annotation de ce dataset est terminée. Merci beaucoup !'
         let alertInfo = await waitFor(() => getByText(finalMessage));
         
         expect(alertInfo).toHaveTextContent(
