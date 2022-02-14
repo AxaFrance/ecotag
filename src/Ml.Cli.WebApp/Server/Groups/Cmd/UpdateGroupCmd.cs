@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Ml.Cli.WebApp.Server.Database.GroupUsers;
+using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups.Database;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -19,11 +21,16 @@ public class UpdateGroupCmd
 {
     public const string InvalidModel = "InvalidModel";
     public const string GroupNotFound = "GroupNotFound";
+    public const string UserNotFound = "UserNotFound";
     private readonly IGroupsRepository _groupsRepository;
+    private readonly IUsersRepository _usersRepository;
+    private readonly IGroupUsersRepository _groupUsersRepository;
     
-    public UpdateGroupCmd(IGroupsRepository groupsRepository)
+    public UpdateGroupCmd(IGroupsRepository groupsRepository, IUsersRepository usersRepository, IGroupUsersRepository groupUsersRepository)
     {
         _groupsRepository = groupsRepository;
+        _usersRepository = usersRepository;
+        _groupUsersRepository = groupUsersRepository;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(UpdateGroupInput updateGroupInput)
@@ -50,12 +57,23 @@ public class UpdateGroupCmd
             };
             return commandResult;
         }
-        
-        //TODO: verifier si l'utilisateur existe en base
 
         foreach (var user in updateGroupInput.Users)
         {
-            await _groupsRepository.AddUserToGroupAsync(updateGroupInput.Id, user.Id);
+            var isUserInDatabase = await _usersRepository.GetUserByEmailAsync(user.Email) != null;
+            if (!isUserInDatabase)
+            {
+                commandResult.Error = new ErrorResult
+                {
+                    Key = UserNotFound
+                };
+                return commandResult;
+            }
+        }
+
+        foreach (var user in updateGroupInput.Users)
+        {
+            await _groupUsersRepository.AddUserToGroupAsync(updateGroupInput.Id, user.Id);
         }
         
         commandResult.Data = updateGroupInput.Id;

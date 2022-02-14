@@ -35,16 +35,4 @@ public class GroupsRepository : IGroupsRepository
         await _groupsContext.SaveChangesAsync();
         return groupModel.Id.ToString();
     }
-
-    public async Task<string> AddUserToGroupAsync(string groupId, string userId)
-    {
-        var groupUserModel = new GroupUsersModel
-        {
-            GroupId = new Guid(groupId),
-            UserId = new Guid(userId)
-        };
-        _groupsContext.GroupUsers.Add(groupUserModel);
-        await _groupsContext.SaveChangesAsync();
-        return groupUserModel.Id.ToString();
-    }
 }

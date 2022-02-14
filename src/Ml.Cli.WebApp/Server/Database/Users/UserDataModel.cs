@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Server.Groups.Database;
+﻿namespace Ml.Cli.WebApp.Server.Database.Users;
 
 public class UserDataModel
 {
