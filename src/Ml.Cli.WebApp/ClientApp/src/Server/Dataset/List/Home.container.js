@@ -1,10 +1,9 @@
 import Home from './Home';
-import fetchDatasets from '../Dataset.service';
-import { convertStringDateToDateObject } from '../../date';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
 import { resilienceStatus, withResilience } from '../../shared/Resilience';
+import fetchDatasets from "../Dataset.service";
 
 const HomeWithResilience = withResilience(Home);
 
@@ -15,7 +14,7 @@ const init = (fetch, dispatch) => async () => {
     data = { items: [], status: resilienceStatus.ERROR };
   } else {
     const items = await response.json()
-    data = { items: convertStringDateToDateObject(items), status: resilienceStatus.SUCCESS };
+    data = { items, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };

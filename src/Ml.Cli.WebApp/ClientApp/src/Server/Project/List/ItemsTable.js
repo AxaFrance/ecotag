@@ -2,10 +2,9 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
-import Loader from '@axa-fr/react-toolkit-loader';
 import Action from '@axa-fr/react-toolkit-action';
 import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
-import {formatDateToString} from "../../date";
+import {formatTimestampToString} from "../../date";
 
 const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numberTagToDo, onDeleteProject }) => {
     const history = useHistory();
@@ -99,7 +98,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, onDeleteProje
                             id={id}
                             name={name}
                             classification={classification}
-                            createDate={formatDateToString(createDate)}
+                            createDate={formatTimestampToString(createDate)}
                             numberTagToDo={numberTagToDo}
                             typeAnnotation={typeAnnotation}
                             onDeleteProject={onDeleteProject}

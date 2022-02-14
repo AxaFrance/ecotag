@@ -12,7 +12,7 @@ const fetch = async (url, config) => {
       "type": "Image",
       "classification": "Publique",
       "numberFiles": 300,
-      "createDate": "30/10/2019"
+      "createDate": new Date("10-30-2019").getTime()
     }])};
 };
 
@@ -28,4 +28,3 @@ describe('Home.container', () => {
   });
 
 });
-
