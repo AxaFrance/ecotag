@@ -1,6 +1,7 @@
-import { fetchGroups, fetchDatasets } from './New.service';
-import {fetchProjects} from "../../List/Home.service";
 import { resilienceStatus } from '../../../shared/Resilience';
+import fetchDatasets from "../../../Dataset/Dataset.service";
+import {fetchGroups} from "../../../Group/Group.service";
+import {fetchProjects} from "../../Project.service";
 
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)(true);

@@ -1,9 +1,9 @@
 import Home from './Home';
-import fetchDatasets from './Home.service';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
 import { resilienceStatus, withResilience } from '../../shared/Resilience';
+import fetchDatasets from "../Dataset.service";
 
 const HomeWithResilience = withResilience(Home);
 

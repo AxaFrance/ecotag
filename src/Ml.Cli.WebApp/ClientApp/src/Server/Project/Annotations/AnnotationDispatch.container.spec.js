@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import {init, initialState, reducer} from './AnnotationDispatch.container';
 import {resilienceStatus} from "../../shared/Resilience";
+import {init, initialState} from "./Annotation.hook";
+import {reducer} from "./Annotation.reducer";
 
 const fetch = () => Promise.resolve({
   "id": "0001",
