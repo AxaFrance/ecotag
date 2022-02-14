@@ -30,14 +30,14 @@ public class CreateGroupShould
     [Theory]
     [InlineData("[\"abcd\"]", "abcD", false, CreateGroupCmd.AlreadyTakenName)]
     [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "abc", true, "[]")]
+    [InlineData("[]", "abc", true, "")]
     [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "abcdefgh", true, "[]")]
+    [InlineData("[]", "abcdefgh", true, "")]
     [InlineData("[]", "abd$", false, CreateGroupCmd.InvalidModel)]
     [InlineData("[]", "abcdefghzoiqsdzqosqodz^", false, CreateGroupCmd.InvalidModel)]
     [InlineData("[]", "P$", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "Abcd-dad", true, "[]")]
-    [InlineData("[]", "abdd_O", true, "[]")]
+    [InlineData("[]", "Abcd-dad", true, "")]
+    [InlineData("[]", "abdd_O", true, "")]
     [InlineData("[]", "zqdsqd(", false, CreateGroupCmd.InvalidModel)]
     public async Task Create_NewGroup(string groupNamesInDatabase, string groupName, bool isSuccess, string errorType)
     {
@@ -60,6 +60,34 @@ public class CreateGroupShould
         {
             var resultCreated = result.Result as CreatedResult;
             Assert.NotNull(resultCreated);
+        }
+        else
+        {
+            var resultWithError = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultWithError);
+            var resultWithErrorValue = resultWithError.Value as ErrorResult;
+            Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
+
+    [Theory]
+    [InlineData("10000000-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", true, "")]
+    [InlineData("15625896-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", false, UpdateGroupCmd.GroupNotFound)]
+    public async Task Update_Group(string groupId, string jsonUpdateGroupInput, bool isSuccess, string errorType)
+    {
+        var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
+        var groupContext = GetInMemoryGroupContext();
+        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupId), Name = "something" });
+        await groupContext.SaveChangesAsync();
+
+        var repository = new GroupsRepository(groupContext);
+        var groupsController = new GroupsController();
+        var updateGroupCmd = new UpdateGroupCmd(repository);
+        var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
+        if (isSuccess)
+        {
+            var resultOk = result.Result as OkObjectResult;
+            Assert.NotNull(resultOk);
         }
         else
         {

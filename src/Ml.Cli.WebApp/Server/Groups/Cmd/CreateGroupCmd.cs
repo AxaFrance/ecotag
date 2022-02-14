@@ -4,7 +4,7 @@ using Ml.Cli.WebApp.Server.Groups.Database;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
-public record CreateGroupInput()
+public record CreateGroupInput
 {
     [MaxLength(16)]
     [MinLength(3)]

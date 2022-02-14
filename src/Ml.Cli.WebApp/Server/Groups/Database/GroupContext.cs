@@ -24,6 +24,8 @@ public class GroupContext : DbContext
     }
     
     public virtual DbSet<GroupModel> Groups { get; set; }
+    
+    public virtual DbSet<GroupUsersModel> GroupUsers { get; set; }
 
     public Task<int> SaveChangesAsync()
     {

@@ -62,6 +62,20 @@ namespace Ml.Cli.WebApp.Server.Groups
             return Created(commandResult.Data, find(commandResult.Data));
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> Update([FromServices] UpdateGroupCmd updateGroupCmd, UpdateGroupInput updateGroupInput)
+        {
+            var commandResult = await updateGroupCmd.ExecuteAsync(updateGroupInput);
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+
+            return Ok(commandResult.Data);
+        }
+
         [HttpDelete("{id}")]
         public ActionResult<Group> Delete(string id)
         {
