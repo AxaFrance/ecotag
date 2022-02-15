@@ -102,12 +102,12 @@ public class CreateGroupShould
     [InlineData("10000000-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", true, "")]
     [InlineData("15625896-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", false, UpdateGroupCmd.GroupNotFound)]
     [InlineData("10000000-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"unknownUser@gmail.com\"}]}", false, UpdateGroupCmd.UserNotFound)]
-    public async Task Update_Group(string groupId, string jsonUpdateGroupInput, bool isSuccess, string errorType)
+    public async Task Update_Group(string groupInDatabaseId, string jsonUpdateGroupInput, bool isSuccess, string errorType)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
         
         var groupContext = GetInMemoryGroupContext();
-        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupId), Name = "something" });
+        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupInDatabaseId), Name = "something" });
         await groupContext.SaveChangesAsync();
 
         var userContext = GetInMemoryUserContext();
@@ -126,6 +126,91 @@ public class CreateGroupShould
         {
             var resultOk = result.Result as OkObjectResult;
             Assert.NotNull(resultOk);
+        }
+        else
+        {
+            var resultWithError = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultWithError);
+            var resultWithErrorValue = resultWithError.Value as ErrorResult;
+            Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
+
+    [Theory]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
+        "[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"},{\"Id\": \"11110000-0000-0000-0000-000000000000\", \"Email\":\"third@gmail.com\"}]",
+        "[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]",
+        "10000000-0000-0000-0000-000000000000",
+        "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"Users\":[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"}]}",
+        true,
+        ""
+    )]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName1\"}, {\"Id\": \"10000000-0000-0000-0000-000000000001\", \"Name\": \"groupName2\"}]",
+        "[]",
+        "[]",
+        "11111111-0000-0000-0000-000000000000",
+        "{}",
+        false,
+        GetGroupCmd.GroupNotFound
+    )]
+    public async Task Get_Group(string groupsInDatabase, string usersInDatabase, string strUsersInGroup,
+        string searchedId, string strExpectedGroupWithUsers, bool isSuccess, string errorType)
+    {
+        var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
+        var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+        var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
+        var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupWithUsersDataModel>(strExpectedGroupWithUsers);
+        var groupContext = GetInMemoryGroupContext();
+        var usersContext = GetInMemoryUserContext();
+        var groupUsersContext = GetInMemoryGroupUsersContext();
+        if (groupsList != null)
+            foreach (var group in groupsList)
+            {
+                groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
+            }
+
+        if (usersList != null)
+        {
+            foreach (var userDataModel in usersList)
+            {
+                usersContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
+            }
+        }
+
+        if (usersInGroup != null)
+        {
+            foreach (var userId in usersInGroup)
+            {
+                foreach (var group in groupsList)
+                {
+                    groupUsersContext.GroupUsers.Add(new GroupUsersModel
+                        { Id = new Guid(), GroupId = new Guid(group.Id), UserId = new Guid(userId) });
+                }
+            }
+        }
+
+        await groupContext.SaveChangesAsync();
+        await usersContext.SaveChangesAsync();
+        await groupUsersContext.SaveChangesAsync();
+        
+        var groupsRepository = new GroupsRepository(groupContext);
+        var usersRepository = new UsersRepository(usersContext);
+        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
+
+        var groupsController = new GroupsController();
+        var getGroupCmd = new GetGroupCmd(groupsRepository, groupUsersRepository, usersRepository);
+
+        var result = await groupsController.GetGroup(getGroupCmd, searchedId);
+        if (isSuccess)
+        {
+            var resultOk = result.Result as OkObjectResult;
+            Assert.NotNull(resultOk);
+            var resultValue = resultOk.Value as GroupWithUsersDataModel;
+            var serializedExpectedGroup = JsonConvert.SerializeObject(expectedGroupWithUsers);
+            var serializedResultValue = JsonConvert.SerializeObject(resultValue);
+            Assert.Equal(serializedExpectedGroup, serializedResultValue);
         }
         else
         {

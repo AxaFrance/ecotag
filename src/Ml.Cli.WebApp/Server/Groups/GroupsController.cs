@@ -49,6 +49,19 @@ namespace Ml.Cli.WebApp.Server.Groups
             return Ok(group);
         }
 
+        [HttpGet]
+        [ResponseCache(Duration = 1)]
+        public async Task<ActionResult<GroupWithUsersDataModel>> GetGroup([FromServices]GetGroupCmd getGroupCmd, string id)
+        {
+            var commandResult = await getGroupCmd.ExecuteAsync(id);
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+
+            return Ok(commandResult.Data);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
