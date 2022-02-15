@@ -35,4 +35,17 @@ public class GroupUsersRepository : IGroupUsersRepository
             .Select(element => element.ToGroupUsersDataModel())
             .ToListAsync();
     }
+
+    public async Task RemoveUsersFromGroup(string groupId)
+    {
+        foreach (var groupUserModel in _groupUsersContext.GroupUsers)
+        {
+            if (groupUserModel.GroupId == new Guid(groupId))
+            {
+                _groupUsersContext.GroupUsers.Remove(groupUserModel);
+            }
+        }
+        
+        await _groupUsersContext.SaveChangesAsync();
+    }
 }

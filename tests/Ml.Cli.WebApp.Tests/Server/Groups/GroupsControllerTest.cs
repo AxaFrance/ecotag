@@ -220,4 +220,61 @@ public class CreateGroupShould
             Assert.Equal(errorType, resultWithErrorValue?.Key);
         }
     }
+
+    [Theory]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
+        "[{\"Id\": \"10000000-1000-0000-0000-000000000000\",\"Email\":\"firstPerson@gmail.com\"}]",
+        "10000000-0000-0000-0000-000000000000",
+        true,
+        ""
+    )]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
+        "[{\"Id\": \"10000000-1000-0000-0000-000000000000\",\"Email\":\"firstPerson@gmail.com\"}]",
+        "11111111-0000-0000-0000-000000000000",
+        false,
+        DeleteGroupCmd.GroupNotFound
+    )]
+    public async Task Delete_Group(string groupsInDatabase, string usersInDatabase, string groupId, bool isSuccess, string errorType)
+    {
+        var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
+        var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+        var groupContext = GetInMemoryGroupContext();
+        var groupUsersContext = GetInMemoryGroupUsersContext();
+        if (groupsList != null)
+            foreach (var group in groupsList)
+            {
+                groupContext.Groups.Add(new GroupModel { Id = new Guid(@group.Id), Name = @group.Name });
+            }
+
+        foreach (var group in groupsList)
+        {
+            foreach (var user in usersList)
+            {
+                groupUsersContext.GroupUsers.Add(new GroupUsersModel
+                    { Id = new Guid(), GroupId = new Guid(group.Id), UserId = new Guid(user.Id) });
+            }
+        }
+        await groupContext.SaveChangesAsync();
+        await groupUsersContext.SaveChangesAsync();
+        var groupsRepository = new GroupsRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
+        var groupsController = new GroupsController();
+        var deleteGroupCmd = new DeleteGroupCmd(groupsRepository, groupUsersRepository);
+
+        var result = await groupsController.Delete(deleteGroupCmd, groupId);
+        if (isSuccess)
+        {
+            var resultNoContent = result as NoContentResult;
+            Assert.NotNull(resultNoContent);
+        }
+        else
+        {
+            var resultWithError = result as BadRequestObjectResult;
+            Assert.NotNull(resultWithError);
+            var resultWithErrorValue = resultWithError.Value as ErrorResult;
+            Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
 }

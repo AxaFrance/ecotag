@@ -9,4 +9,6 @@ public interface IGroupsRepository
     Task<string> CreateGroupAsync(string groupName);
 
     Task<GroupDataModel> GetGroupByNameAsync(string name);
+
+    Task DeleteGroupAsync(string id);
 }
