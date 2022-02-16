@@ -38,14 +38,11 @@ public class GroupsRepository : IGroupsRepository
 
     public async Task DeleteGroupAsync(string id)
     {
-        var group = await _groupsContext.Groups.AsNoTracking()
-            .FirstOrDefaultAsync(element => element.Id == new Guid(id));
+        var group = await _groupsContext.Groups.FirstOrDefaultAsync(element => element.Id == new Guid(id));
         if (group == null)
         {
             throw new Exception("GroupNotFound");
         }
-        _groupsContext.ChangeTracker.Clear();
-        //if(_groupsContext.Entry(group).State == EntityState.Detached)
         _groupsContext.Groups.Remove(group);
         await _groupsContext.SaveChangesAsync();
     }

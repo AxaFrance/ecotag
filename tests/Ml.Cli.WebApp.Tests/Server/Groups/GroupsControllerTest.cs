@@ -245,7 +245,7 @@ public class CreateGroupShould
         if (groupsList != null)
             foreach (var group in groupsList)
             {
-                groupContext.Groups.Add(new GroupModel { Id = new Guid(@group.Id), Name = @group.Name });
+                groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
             }
 
         foreach (var group in groupsList)
