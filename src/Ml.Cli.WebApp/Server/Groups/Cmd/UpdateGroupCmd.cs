@@ -98,12 +98,9 @@ public class UpdateGroupCmd
             }
             usersList.Add(userInDatabase);
         }
-
-        foreach (var user in usersList)
-        {
-            await _groupUsersRepository.AddUserToGroupAsync(groupInDatabase.Id, user.Id);
-        }
-
+        
+        await _groupUsersRepository.UpdateGroupUsers(groupInDatabase.Id, usersList);
+        
         commandResult.Data = groupInDatabase.Id;
         return commandResult;
     }

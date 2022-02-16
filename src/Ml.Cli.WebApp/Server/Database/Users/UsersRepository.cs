@@ -22,7 +22,7 @@ public class UsersRepository : IUsersRepository
     
     public async Task<UserDataModel> GetUserByEmailAsync(string email)
     {
-        var user = await _usersContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _usersContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email.ToLower());
         return user?.ToUserDataModel();
     }
 
@@ -30,7 +30,7 @@ public class UsersRepository : IUsersRepository
     {
         var userModel = new UserModel
         {
-            Email = email
+            Email = email.ToLower()
         };
         _usersContext.Users.Add(userModel);
         await _usersContext.SaveChangesAsync();
