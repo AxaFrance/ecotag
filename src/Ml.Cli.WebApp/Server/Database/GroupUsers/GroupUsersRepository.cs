@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups.Database;
 
@@ -62,7 +63,14 @@ public class GroupUsersRepository : IGroupUsersRepository
 
     public async Task UpdateGroupUsers(string groupId, List<UserDataModel> newUsersList)
     {
-        await RemoveUsersFromGroup(groupId);
+        foreach (var groupUserModel in _groupUsersContext.GroupUsers)
+        {
+            var isRelationOnRemovedUser = newUsersList.Where(current => new Guid(current.Id) == groupUserModel.UserId).IsNullOrEmpty();
+            if (groupUserModel.GroupId == new Guid(groupId) && isRelationOnRemovedUser)
+            {
+                _groupUsersContext.GroupUsers.Remove(groupUserModel);
+            }
+        }
 
         foreach (var newUser in newUsersList)
         {
