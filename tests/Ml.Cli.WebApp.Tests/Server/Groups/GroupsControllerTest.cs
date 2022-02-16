@@ -99,22 +99,33 @@ public class CreateGroupShould
     }
 
     [Theory]
-    [InlineData("10000000-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", true, "")]
-    [InlineData("15625896-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"something@gmail.com\"}]}", false, UpdateGroupCmd.GroupNotFound)]
-    [InlineData("10000000-0000-0000-0000-000000000000", "{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\":\"something\", \"Users\": [{\"Id\":\"10000000-0000-0000-0000-000000000001\", \"Email\": \"unknownUser@gmail.com\"}]}", false, UpdateGroupCmd.UserNotFound)]
-    public async Task Update_Group(string groupInDatabaseId, string jsonUpdateGroupInput, bool isSuccess, string errorType)
+    [InlineData("10000000-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}", true, "")]
+    [InlineData("10000000-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"Guillaume.chervet@gmail.com\"}]}", false, UpdateGroupCmd.UserDuplicate)]
+    [InlineData("10000000-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"chervet@gmail.com\"}]}", false, UpdateGroupCmd.UserNotFound)]
+    [InlineData("10000000-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": [{\"Email\": \"Guillaume.chervetgmail.com\"}]}", false, UpdateGroupCmd.InvalidMailAddress)]
+    [InlineData("15625896-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": [{\"Email\": \"LILIAN.DELOUVY@gmail.com\"}]}", true, "")]
+    [InlineData("10000000-0000-0000-0000-000000000000", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"something\", \"Users\": []}", true, "")]
+    public async Task Update_Group(string groupInDatabaseId, string usersInDatabase, string jsonUpdateGroupInput, bool isSuccess, string errorType)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
+        var knownUsers = JsonConvert.DeserializeObject<List<string>>(usersInDatabase);
         
         var groupContext = GetInMemoryGroupContext();
-        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupInDatabaseId), Name = "something" });
-        await groupContext.SaveChangesAsync();
-
-        var userContext = GetInMemoryUserContext();
-        userContext.Users.Add(new UserModel { Id = new Guid(updateGroupInput!.Users[0].Id), Email = "something@gmail.com"});
-        await userContext.SaveChangesAsync();
-
         var groupUsersContext = GetInMemoryGroupUsersContext();
+        var userContext = GetInMemoryUserContext();
+        
+        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupInDatabaseId), Name = "something" });
+
+        if (knownUsers != null)
+        {
+            foreach (var newUser in knownUsers)
+            {
+                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower()});
+            }
+        }
+        
+        await groupContext.SaveChangesAsync();
+        await userContext.SaveChangesAsync();
 
         var groupsRepository = new GroupsRepository(groupContext);
         var usersRepository = new UsersRepository(userContext);

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ml.Cli.WebApp.Server.Groups.Database;
+namespace Ml.Cli.WebApp.Server.Database.Users;
 
 [Table("T_User", Schema = "sch_etg")]
 public class UserModel

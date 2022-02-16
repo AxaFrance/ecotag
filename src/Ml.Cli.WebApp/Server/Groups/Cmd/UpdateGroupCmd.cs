@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Database.Users;
@@ -13,8 +15,7 @@ public record UpdateGroupInput
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z-_]*$")]
     public string Name { get; set; }
-    public string Id { get; set; }
-    public List<UserDataModel> Users { get; set; }
+    public List<User> Users { get; set; }
 }
 
 public class UpdateGroupCmd
@@ -22,6 +23,8 @@ public class UpdateGroupCmd
     public const string InvalidModel = "InvalidModel";
     public const string GroupNotFound = "GroupNotFound";
     public const string UserNotFound = "UserNotFound";
+    public const string InvalidMailAddress = "InvalidMailAddress";
+    public const string UserDuplicate = "UserDuplicate";
     private readonly IGroupsRepository _groupsRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IGroupUsersRepository _groupUsersRepository;
@@ -47,8 +50,9 @@ public class UpdateGroupCmd
             };
             return commandResult;
         }
-        
-        var isGroupInDatabase = await _groupsRepository.GetGroupAsync(updateGroupInput.Id) != null;
+
+        var groupInDatabase = await _groupsRepository.GetGroupByNameAsync(updateGroupInput.Name);
+        var isGroupInDatabase = groupInDatabase != null;
         if (!isGroupInDatabase)
         {
             commandResult.Error = new ErrorResult
@@ -58,9 +62,23 @@ public class UpdateGroupCmd
             return commandResult;
         }
 
+        var usersList = new List<UserDataModel>();
         foreach (var user in updateGroupInput.Users)
         {
-            var isUserInDatabase = await _usersRepository.GetUserByEmailAsync(user.Email) != null;
+            try
+            {
+                var unused = new MailAddress(user.Email).Address;
+            }
+            catch (FormatException)
+            {
+                commandResult.Error = new ErrorResult
+                {
+                    Key = InvalidMailAddress
+                };
+                return commandResult;
+            }
+            var userInDatabase = await _usersRepository.GetUserByEmailAsync(user.Email.ToLower());
+            var isUserInDatabase = userInDatabase != null;
             if (!isUserInDatabase)
             {
                 commandResult.Error = new ErrorResult
@@ -69,14 +87,24 @@ public class UpdateGroupCmd
                 };
                 return commandResult;
             }
+
+            if (usersList.Find(current => current.Id == userInDatabase.Id) != null)
+            {
+                commandResult.Error = new ErrorResult
+                {
+                    Key = UserDuplicate
+                };
+                return commandResult;
+            }
+            usersList.Add(userInDatabase);
         }
 
-        foreach (var user in updateGroupInput.Users)
+        foreach (var user in usersList)
         {
-            await _groupUsersRepository.AddUserToGroupAsync(updateGroupInput.Id, user.Id);
+            await _groupUsersRepository.AddUserToGroupAsync(groupInDatabase.Id, user.Id);
         }
-        
-        commandResult.Data = updateGroupInput.Id;
+
+        commandResult.Data = groupInDatabase.Id;
         return commandResult;
     }
 }
