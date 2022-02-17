@@ -12,5 +12,6 @@ public class UserModel
     public Guid Id { get; set; }
     
     [Column("USR_Email")]
+    [EmailAddress]
     public string Email { get; set; }
 }

@@ -73,6 +73,38 @@ public class CreateGroupShould
     }
 
     [Theory]
+    [InlineData("[\"firstGroupName\",\"secondGroupName\"]")]
+    [InlineData("[]")]
+    public async Task Get_AllGroups(string groupNamesInDatabase)
+    {
+        var groupsList = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
+
+        var groupContext = GetInMemoryGroupContext();
+
+        foreach (var groupName in groupsList)
+        {
+            groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
+        }
+
+        await groupContext.SaveChangesAsync();
+        
+        var groupsRepository = new GroupsRepository(groupContext);
+        var groupsController = new GroupsController();
+        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository);
+
+        var result = await groupsController.GetAllGroups(getAllGroupsCmd);
+        var okObjectResult = result.Result as OkObjectResult;
+        Assert.NotNull(okObjectResult);
+        var resultList = okObjectResult.Value as List<GroupDataModel>;
+        Assert.NotNull(resultList);
+        Assert.Equal(resultList.Count, groupsList.Count);
+        foreach (var groupName in groupsList)
+        {
+            Assert.Contains(resultList, resultElement => resultElement.Name.Equals(groupName));
+        }
+    }
+
+    [Theory]
     [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
         "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}", true, "")]
     [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",

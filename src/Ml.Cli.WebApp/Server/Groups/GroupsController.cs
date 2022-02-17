@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
+using Ml.Cli.WebApp.Server.Groups.Database;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups
@@ -35,6 +36,14 @@ namespace Ml.Cli.WebApp.Server.Groups
         public ActionResult<IEnumerable<Group>> GetAllGroups()
         {
             return Ok(groups);
+        }
+
+        [HttpGet]
+        [ResponseCache(Duration = 1)]
+        public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllGroups([FromServices] GetAllGroupsCmd getAllGroupsCmd)
+        {
+            var result = await getAllGroupsCmd.ExecuteAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}", Name = "GetGroupById")]

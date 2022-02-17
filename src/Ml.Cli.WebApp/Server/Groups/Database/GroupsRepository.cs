@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,18 @@ public class GroupsRepository : IGroupsRepository
     public GroupsRepository(GroupContext groupsContext)
     {
         _groupsContext = groupsContext;
+    }
+
+    public async Task<List<GroupDataModel>> GetAllGroupsAsync()
+    {
+        var resultList = new List<GroupDataModel>();
+        var groupModelEnum = _groupsContext.Groups.AsAsyncEnumerable();
+        await foreach (var group in groupModelEnum)
+        {
+            resultList.Add(group.ToGroupDataModel());
+        }
+
+        return resultList;
     }
 
     public async Task<GroupDataModel> GetGroupAsync(string id)
