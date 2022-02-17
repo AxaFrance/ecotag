@@ -7,22 +7,22 @@ namespace Ml.Cli.WebApp.Server.Database.Users;
 
 public class UsersRepository : IUsersRepository
 {
-    private readonly UserContext _usersContext;
+    private readonly GroupContext _groupsContext;
 
-    public UsersRepository(UserContext usersContext)
+    public UsersRepository(GroupContext groupsContext)
     {
-        _usersContext = usersContext;
+        _groupsContext = groupsContext;
     }
     
     public async Task<UserDataModel> GetUserAsync(string id)
     {
-        var user = await _usersContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == new Guid(id));
+        var user = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == new Guid(id));
         return user?.ToUserDataModel();
     }
     
     public async Task<UserDataModel> GetUserByEmailAsync(string email)
     {
-        var user = await _usersContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email.ToLower());
+        var user = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email.ToLower());
         return user?.ToUserDataModel();
     }
 
@@ -32,8 +32,8 @@ public class UsersRepository : IUsersRepository
         {
             Email = email.ToLower()
         };
-        _usersContext.Users.Add(userModel);
-        await _usersContext.SaveChangesAsync();
+        _groupsContext.Users.Add(userModel);
+        await _groupsContext.SaveChangesAsync();
         return userModel.Id.ToString();
     }
 }

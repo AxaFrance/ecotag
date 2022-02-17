@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Ml.Cli.WebApp.Server.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database;
 
@@ -24,6 +25,10 @@ public class GroupContext : DbContext
     }
     
     public virtual DbSet<GroupModel> Groups { get; set; }
+    
+    public virtual DbSet<GroupUsersModel> GroupUsers { get; set; }
+    
+    public virtual DbSet<UserModel> Users { get; set; }
 
     public Task<int> SaveChangesAsync()
     {

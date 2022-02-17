@@ -88,18 +88,5 @@ namespace Ml.Cli.WebApp.Server.Groups
 
             return Ok(commandResult.Data);
         }
-
-        [HttpDelete("{id}")]
-        public ActionResult<Group> Delete(string id)
-        {
-            var group = find(id);
-            if (group == null)
-            {
-                return NotFound();
-            }
-
-            groups.Remove(group);
-            return NoContent();
-        }
     }
 }

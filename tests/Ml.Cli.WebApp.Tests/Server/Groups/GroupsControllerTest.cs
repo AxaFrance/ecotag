@@ -29,32 +29,6 @@ public class CreateGroupShould
         return groupContext;
     }
 
-    private static UserContext GetInMemoryUserContext()
-    {
-        var builder = new DbContextOptionsBuilder<UserContext>();
-        var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
-
-        var options = builder.Options;
-        var userContext = new UserContext(options);
-        userContext.Database.EnsureCreated();
-        userContext.Database.EnsureCreatedAsync();
-        return userContext;
-    }
-
-    private static GroupUsersContext GetInMemoryGroupUsersContext()
-    {
-        var builder = new DbContextOptionsBuilder<GroupUsersContext>();
-        var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
-
-        var options = builder.Options;
-        var groupUsersContext = new GroupUsersContext(options);
-        groupUsersContext.Database.EnsureCreated();
-        groupUsersContext.Database.EnsureCreatedAsync();
-        return groupUsersContext;
-    }
-
     [Theory]
     [InlineData("[\"abcd\"]", "abcD", false, CreateGroupCmd.AlreadyTakenName)]
     [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
@@ -123,8 +97,6 @@ public class CreateGroupShould
         var knownUsers = JsonConvert.DeserializeObject<List<string>>(usersInDatabase);
 
         var groupContext = GetInMemoryGroupContext();
-        var groupUsersContext = GetInMemoryGroupUsersContext();
-        var userContext = GetInMemoryUserContext();
 
         groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
 
@@ -132,16 +104,15 @@ public class CreateGroupShould
         {
             foreach (var newUser in knownUsers)
             {
-                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
+                groupContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
             }
         }
 
         await groupContext.SaveChangesAsync();
-        await userContext.SaveChangesAsync();
 
         var groupsRepository = new GroupsRepository(groupContext);
-        var usersRepository = new UsersRepository(userContext);
-        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
+        var usersRepository = new UsersRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupContext);
         var groupsController = new GroupsController();
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository, usersRepository, groupUsersRepository);
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
@@ -171,8 +142,6 @@ public class CreateGroupShould
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
 
         var groupContext = GetInMemoryGroupContext();
-        var groupUsersContext = GetInMemoryGroupUsersContext();
-        var userContext = GetInMemoryUserContext();
 
         groupContext.Groups.Add(new GroupModel
             { Id = new Guid("10000000-0000-0000-0000-000000000000"), Name = groupName });
@@ -181,21 +150,20 @@ public class CreateGroupShould
         {
             foreach (var newUser in knownUsers)
             {
-                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
+                groupContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
             }
         }
 
         await groupContext.SaveChangesAsync();
-        await userContext.SaveChangesAsync();
 
         if (usersInGroup != null)
         {
             foreach (var userEmail in usersInGroup)
             {
-                var userModel = await userContext.Users.AsNoTracking()
+                var userModel = await groupContext.Users.AsNoTracking()
                     .FirstOrDefaultAsync(current => current.Email == userEmail.ToLower());
                 Assert.NotNull(userModel);
-                groupUsersContext.GroupUsers.Add(new GroupUsersModel
+                groupContext.GroupUsers.Add(new GroupUsersModel
                 {
                     Id = new Guid(), GroupId = new Guid("10000000-0000-0000-0000-000000000000"),
                     UserId = userModel.Id
@@ -203,11 +171,11 @@ public class CreateGroupShould
             }
         }
 
-        await groupUsersContext.SaveChangesAsync();
+        await groupContext.SaveChangesAsync();
 
         var groupsRepository = new GroupsRepository(groupContext);
-        var usersRepository = new UsersRepository(userContext);
-        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
+        var usersRepository = new UsersRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupContext);
         var groupsController = new GroupsController();
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository, usersRepository, groupUsersRepository);
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
@@ -252,8 +220,6 @@ public class CreateGroupShould
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
         var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupWithUsersDataModel>(strExpectedGroupWithUsers);
         var groupContext = GetInMemoryGroupContext();
-        var usersContext = GetInMemoryUserContext();
-        var groupUsersContext = GetInMemoryGroupUsersContext();
         if (groupsList != null)
             foreach (var group in groupsList)
             {
@@ -264,7 +230,7 @@ public class CreateGroupShould
         {
             foreach (var userDataModel in usersList)
             {
-                usersContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
+                groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
             }
         }
 
@@ -274,19 +240,17 @@ public class CreateGroupShould
             {
                 foreach (var group in groupsList)
                 {
-                    groupUsersContext.GroupUsers.Add(new GroupUsersModel
+                    groupContext.GroupUsers.Add(new GroupUsersModel
                         { Id = new Guid(), GroupId = new Guid(group.Id), UserId = new Guid(userId) });
                 }
             }
         }
 
         await groupContext.SaveChangesAsync();
-        await usersContext.SaveChangesAsync();
-        await groupUsersContext.SaveChangesAsync();
 
         var groupsRepository = new GroupsRepository(groupContext);
-        var usersRepository = new UsersRepository(usersContext);
-        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
+        var usersRepository = new UsersRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupContext);
 
         var groupsController = new GroupsController();
         var getGroupCmd = new GetGroupCmd(groupsRepository, groupUsersRepository, usersRepository);

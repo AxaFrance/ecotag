@@ -11,16 +11,16 @@ namespace Ml.Cli.WebApp.Server.Database.GroupUsers;
 
 public class GroupUsersRepository : IGroupUsersRepository
 {
-    private readonly GroupUsersContext _groupUsersContext;
+    private readonly GroupContext _groupsContext;
 
-    public GroupUsersRepository(GroupUsersContext groupUsersContext)
+    public GroupUsersRepository(GroupContext groupsContext)
     {
-        _groupUsersContext = groupUsersContext;
+        _groupsContext = groupsContext;
     }
 
     public async Task<bool> IsUserInGroup(string groupId, string userId)
     {
-        var relationInDatabase = await _groupUsersContext.GroupUsers.AsNoTracking().FirstOrDefaultAsync(current =>
+        var relationInDatabase = await _groupsContext.GroupUsers.AsNoTracking().FirstOrDefaultAsync(current =>
             current.GroupId == new Guid(groupId) && current.UserId == new Guid(userId));
         return relationInDatabase != null;
     }
@@ -36,13 +36,13 @@ public class GroupUsersRepository : IGroupUsersRepository
             GroupId = new Guid(groupId),
             UserId = new Guid(userId)
         };
-        _groupUsersContext.GroupUsers.Add(groupUserModel);
-        await _groupUsersContext.SaveChangesAsync();
+        _groupsContext.GroupUsers.Add(groupUserModel);
+        await _groupsContext.SaveChangesAsync();
     }
 
     public async Task<List<GroupUsersDataModel>> GetUsersByGroupId(string groupId)
     {
-        return await _groupUsersContext.GroupUsers.AsNoTracking()
+        return await _groupsContext.GroupUsers.AsNoTracking()
             .Where(element => element.GroupId == new Guid(groupId))
             .Select(element => element.ToGroupUsersDataModel())
             .ToListAsync();
@@ -50,25 +50,25 @@ public class GroupUsersRepository : IGroupUsersRepository
 
     public async Task RemoveUsersFromGroup(string groupId)
     {
-        foreach (var groupUserModel in _groupUsersContext.GroupUsers)
+        foreach (var groupUserModel in _groupsContext.GroupUsers)
         {
             if (groupUserModel.GroupId == new Guid(groupId))
             {
-                _groupUsersContext.GroupUsers.Remove(groupUserModel);
+                _groupsContext.GroupUsers.Remove(groupUserModel);
             }
         }
         
-        await _groupUsersContext.SaveChangesAsync();
+        await _groupsContext.SaveChangesAsync();
     }
 
     public async Task UpdateGroupUsers(string groupId, List<UserDataModel> newUsersList)
     {
-        foreach (var groupUserModel in _groupUsersContext.GroupUsers)
+        foreach (var groupUserModel in _groupsContext.GroupUsers)
         {
             var isRelationOnRemovedUser = newUsersList.Where(current => new Guid(current.Id) == groupUserModel.UserId).IsNullOrEmpty();
             if (groupUserModel.GroupId == new Guid(groupId) && isRelationOnRemovedUser)
             {
-                _groupUsersContext.GroupUsers.Remove(groupUserModel);
+                _groupsContext.GroupUsers.Remove(groupUserModel);
             }
         }
 
@@ -77,6 +77,6 @@ public class GroupUsersRepository : IGroupUsersRepository
             await AddUserToGroupAsync(groupId, newUser.Id);
         }
 
-        await _groupUsersContext.SaveChangesAsync();
+        await _groupsContext.SaveChangesAsync();
     }
 }
