@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Groups.Database;
@@ -12,6 +13,18 @@ public class UsersRepository : IUsersRepository
     public UsersRepository(GroupContext groupsContext)
     {
         _groupsContext = groupsContext;
+    }
+    
+    public async Task<List<UserDataModel>> GetAllUsersAsync()
+    {
+        var resultList = new List<UserDataModel>();
+        var userModelEnum = _groupsContext.Users.AsAsyncEnumerable();
+        await foreach (var user in userModelEnum)
+        {
+            resultList.Add(user.ToUserDataModel());
+        }
+
+        return resultList;
     }
     
     public async Task<UserDataModel> GetUserAsync(string id)
