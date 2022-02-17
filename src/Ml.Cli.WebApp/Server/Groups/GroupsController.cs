@@ -101,17 +101,5 @@ namespace Ml.Cli.WebApp.Server.Groups
             groups.Remove(group);
             return NoContent();
         }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromServices] DeleteGroupCmd deleteGroupCmd, string id)
-        {
-            var commandResult = await deleteGroupCmd.ExecuteAsync(id);
-            if (!commandResult.IsSuccess)
-            {
-                return BadRequest(commandResult.Error);
-            }
-
-            return NoContent();
-        }
     }
 }

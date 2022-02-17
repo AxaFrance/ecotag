@@ -54,7 +54,7 @@ public class CreateGroupShould
         groupUsersContext.Database.EnsureCreatedAsync();
         return groupUsersContext;
     }
-    
+
     [Theory]
     [InlineData("[\"abcd\"]", "abcD", false, CreateGroupCmd.AlreadyTakenName)]
     [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
@@ -99,29 +99,40 @@ public class CreateGroupShould
     }
 
     [Theory]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"Guillaume.chervet@gmail.com\"}]}", false, UpdateGroupCmd.UserDuplicate)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"chervet@gmail.com\"}]}", false, UpdateGroupCmd.UserNotFound)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervetgmail.com\"}]}", false, UpdateGroupCmd.InvalidMailAddress)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"LILIAN.DELOUVY@gmail.com\"}]}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": []}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"UnknownGroupName\", \"Users\": []}", false, UpdateGroupCmd.GroupNotFound)]
-    public async Task Update_Group(string groupName, string usersInDatabase, string jsonUpdateGroupInput, bool isSuccess, string errorType)
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}", true, "")]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"Guillaume.chervet@gmail.com\"}]}",
+        false, UpdateGroupCmd.UserDuplicate)]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"chervet@gmail.com\"}]}",
+        false, UpdateGroupCmd.UserNotFound)]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervetgmail.com\"}]}", false,
+        UpdateGroupCmd.InvalidMailAddress)]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"LILIAN.DELOUVY@gmail.com\"}]}", true, "")]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": []}", true, "")]
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"UnknownGroupName\", \"Users\": []}", false, UpdateGroupCmd.GroupNotFound)]
+    public async Task Update_Group(string groupName, string usersInDatabase, string jsonUpdateGroupInput,
+        bool isSuccess, string errorType)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
         var knownUsers = JsonConvert.DeserializeObject<List<string>>(usersInDatabase);
-        
+
         var groupContext = GetInMemoryGroupContext();
         var groupUsersContext = GetInMemoryGroupUsersContext();
         var userContext = GetInMemoryUserContext();
-        
+
         groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
 
         if (knownUsers != null)
         {
             foreach (var newUser in knownUsers)
             {
-                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower()});
+                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
             }
         }
 
@@ -149,27 +160,31 @@ public class CreateGroupShould
     }
 
     [Theory]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]", "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}")]
-    public async Task Delete_Users_From_Group(string groupName, string usersInDatabase, string strUsersInGroup, string jsonUpdateGroupInput)
+    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}")]
+    public async Task Delete_Users_From_Group(string groupName, string usersInDatabase, string strUsersInGroup,
+        string jsonUpdateGroupInput)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
         var knownUsers = JsonConvert.DeserializeObject<List<string>>(usersInDatabase);
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
-        
+
         var groupContext = GetInMemoryGroupContext();
         var groupUsersContext = GetInMemoryGroupUsersContext();
         var userContext = GetInMemoryUserContext();
-        
-        groupContext.Groups.Add(new GroupModel { Id = new Guid("10000000-0000-0000-0000-000000000000"), Name = groupName });
+
+        groupContext.Groups.Add(new GroupModel
+            { Id = new Guid("10000000-0000-0000-0000-000000000000"), Name = groupName });
 
         if (knownUsers != null)
         {
             foreach (var newUser in knownUsers)
             {
-                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower()});
+                userContext.Users.Add(new UserModel { Id = new Guid(), Email = newUser.ToLower() });
             }
         }
-        
+
         await groupContext.SaveChangesAsync();
         await userContext.SaveChangesAsync();
 
@@ -187,6 +202,7 @@ public class CreateGroupShould
                 });
             }
         }
+
         await groupUsersContext.SaveChangesAsync();
 
         var groupsRepository = new GroupsRepository(groupContext);
@@ -195,12 +211,12 @@ public class CreateGroupShould
         var groupsController = new GroupsController();
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository, usersRepository, groupUsersRepository);
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
-        
+
         var resultOk = result.Result as OkObjectResult;
         Assert.NotNull(resultOk);
         var updatedGroup = await groupsRepository.GetGroupAsync(resultOk.Value!.ToString());
         var newUsersInGroup = await groupUsersRepository.GetUsersByGroupId(updatedGroup.Id);
-        
+
         Assert.Equal(updateGroupInput.Users.Count, newUsersInGroup.Count);
         foreach (var newUser in updateGroupInput.Users)
         {
@@ -267,7 +283,7 @@ public class CreateGroupShould
         await groupContext.SaveChangesAsync();
         await usersContext.SaveChangesAsync();
         await groupUsersContext.SaveChangesAsync();
-        
+
         var groupsRepository = new GroupsRepository(groupContext);
         var usersRepository = new UsersRepository(usersContext);
         var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
@@ -288,63 +304,6 @@ public class CreateGroupShould
         else
         {
             var resultWithError = result.Result as BadRequestObjectResult;
-            Assert.NotNull(resultWithError);
-            var resultWithErrorValue = resultWithError.Value as ErrorResult;
-            Assert.Equal(errorType, resultWithErrorValue?.Key);
-        }
-    }
-
-    [Theory]
-    [InlineData(
-        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
-        "[{\"Id\": \"10000000-1000-0000-0000-000000000000\",\"Email\":\"firstPerson@gmail.com\"}]",
-        "10000000-0000-0000-0000-000000000000",
-        true,
-        ""
-    )]
-    [InlineData(
-        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
-        "[{\"Id\": \"10000000-1000-0000-0000-000000000000\",\"Email\":\"firstPerson@gmail.com\"}]",
-        "11111111-0000-0000-0000-000000000000",
-        false,
-        DeleteGroupCmd.GroupNotFound
-    )]
-    public async Task Delete_Group(string groupsInDatabase, string usersInDatabase, string groupId, bool isSuccess, string errorType)
-    {
-        var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-        var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
-        var groupContext = GetInMemoryGroupContext();
-        var groupUsersContext = GetInMemoryGroupUsersContext();
-        if (groupsList != null)
-            foreach (var group in groupsList)
-            {
-                groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
-            }
-
-        foreach (var group in groupsList)
-        {
-            foreach (var user in usersList)
-            {
-                groupUsersContext.GroupUsers.Add(new GroupUsersModel
-                    { Id = new Guid(), GroupId = new Guid(group.Id), UserId = new Guid(user.Id) });
-            }
-        }
-        await groupContext.SaveChangesAsync();
-        await groupUsersContext.SaveChangesAsync();
-        var groupsRepository = new GroupsRepository(groupContext);
-        var groupUsersRepository = new GroupUsersRepository(groupUsersContext);
-        var groupsController = new GroupsController();
-        var deleteGroupCmd = new DeleteGroupCmd(groupsRepository, groupUsersRepository);
-
-        var result = await groupsController.Delete(deleteGroupCmd, groupId);
-        if (isSuccess)
-        {
-            var resultNoContent = result as NoContentResult;
-            Assert.NotNull(resultNoContent);
-        }
-        else
-        {
-            var resultWithError = result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
             Assert.Equal(errorType, resultWithErrorValue?.Key);

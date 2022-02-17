@@ -35,15 +35,4 @@ public class GroupsRepository : IGroupsRepository
         await _groupsContext.SaveChangesAsync();
         return groupModel.Id.ToString();
     }
-
-    public async Task DeleteGroupAsync(string id)
-    {
-        var group = await _groupsContext.Groups.FirstOrDefaultAsync(element => element.Id == new Guid(id));
-        if (group == null)
-        {
-            throw new Exception("GroupNotFound");
-        }
-        _groupsContext.Groups.Remove(group);
-        await _groupsContext.SaveChangesAsync();
-    }
 }
