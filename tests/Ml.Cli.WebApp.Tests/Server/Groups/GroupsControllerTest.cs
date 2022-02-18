@@ -105,32 +105,65 @@ public class CreateGroupShould
     }
 
     [Theory]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"Guillaume.chervet@gmail.com\"}]}",
-        false, UpdateGroupCmd.UserDuplicate)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"chervet@gmail.com\"}]}",
-        false, UpdateGroupCmd.UserNotFound)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervetgmail.com\"}]}", false,
-        UpdateGroupCmd.InvalidMailAddress)]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"LILIAN.DELOUVY@gmail.com\"}]}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": []}", true, "")]
-    [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"UnknownGroupName\", \"Users\": []}", false, UpdateGroupCmd.GroupNotFound)]
-    public async Task Update_Group(string groupName, string usersInDatabase, string jsonUpdateGroupInput,
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}",
+        true,
+        ""
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"Guillaume.chervet@gmail.com\"}]}",
+        false,
+        UpdateGroupCmd.UserDuplicate
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"},{\"Email\":\"chervet@gmail.com\"}]}",
+        false,
+        UpdateGroupCmd.UserNotFound
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervetgmail.com\"}]}",
+        false,
+        UpdateGroupCmd.InvalidMailAddress
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"LILIAN.DELOUVY@gmail.com\"}]}",
+        true,
+        ""
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": []}",
+        true,
+        ""
+    )]
+    [InlineData(
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+        "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
+        "{\"Id\": \"10000000-0000-0000-0000-000000000001\", \"Name\":\"UnknownGroupName\", \"Users\": []}",
+        false,
+        UpdateGroupCmd.GroupNotFound
+    )]
+    public async Task Update_Group(string strGroupDataModel, string usersInDatabase, string jsonUpdateGroupInput,
         bool isSuccess, string errorType)
     {
+        var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
         var knownUsers = JsonConvert.DeserializeObject<List<string>>(usersInDatabase);
 
         var groupContext = GetInMemoryGroupContext();
 
-        groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
+        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupDataModel.Id), Name = groupDataModel.Name });
 
         if (knownUsers != null)
         {

@@ -11,6 +11,8 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
 public record UpdateGroupInput
 {
+    public string Id { get; set; }
+    
     [MaxLength(16)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z-_]*$")]
@@ -51,7 +53,7 @@ public class UpdateGroupCmd
             return commandResult;
         }
 
-        var groupInDatabase = await _groupsRepository.GetGroupByNameAsync(updateGroupInput.Name);
+        var groupInDatabase = await _groupsRepository.GetGroupAsync(updateGroupInput.Id);
         var isGroupInDatabase = groupInDatabase != null;
         if (!isGroupInDatabase)
         {
@@ -77,7 +79,7 @@ public class UpdateGroupCmd
                 };
                 return commandResult;
             }
-            var userInDatabase = await _usersRepository.GetUserByEmailAsync(user.Email.ToLower());
+            var userInDatabase = await _usersRepository.GetUserByEmailAsync(user.Email);
             var isUserInDatabase = userInDatabase != null;
             if (!isUserInDatabase)
             {
