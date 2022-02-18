@@ -13,13 +13,21 @@ const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
   const emails = actualUsers.map(user => user.email);
   return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
 };
+const computeGroupUsers = (groupUsersIds, allEligibleUsers) => {
+  let users = [];
+  for(let user of groupUsersIds){
+    const relatedUser = allEligibleUsers.find(usr => usr.id === user);
+    users.push(relatedUser);
+  }
+  return users;
+}
 
 export const HomeContainer = ({ fetch }) => {
   const { state, onChangePaging, onDeleteGroup, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
     fetch
   );
   const {groups, users} = state;
-  const items = groups.map(group => {return { ...group, eligibleUsers : computeEligibleUsers(group.users, users) }});
+  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.users, users),eligibleUsers : computeEligibleUsers(group.users, users) }});
   
   const numberPages = computeNumberPages(items, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;

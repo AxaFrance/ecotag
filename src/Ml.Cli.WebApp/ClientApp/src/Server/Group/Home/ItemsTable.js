@@ -55,6 +55,7 @@ const UserRow = ({ id, name, users, eligibleUsers, onUpdateUser, onDeleteGroup }
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onDeleteGroup, onUpdateUser}) => {
+    console.log(items);
     return(
         <>
             <Table>

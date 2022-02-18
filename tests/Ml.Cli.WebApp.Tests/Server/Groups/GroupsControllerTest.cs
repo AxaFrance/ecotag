@@ -92,13 +92,14 @@ public class CreateGroupShould
         await groupContext.SaveChangesAsync();
         
         var groupsRepository = new GroupsRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupContext);
         var groupsController = new GroupsController();
-        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository);
+        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository, groupUsersRepository);
 
         var result = await groupsController.GetAllGroups(getAllGroupsCmd);
         var okObjectResult = result.Result as OkObjectResult;
         Assert.NotNull(okObjectResult);
-        var resultList = okObjectResult.Value as List<GroupDataModel>;
+        var resultList = okObjectResult.Value as List<GroupWithUsersDataModel>;
         Assert.NotNull(resultList);
         Assert.Equal(resultList.Count, groupsList.Count);
         foreach (var groupName in groupsList)
@@ -267,7 +268,7 @@ public class CreateGroupShould
         "[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"},{\"Id\": \"11110000-0000-0000-0000-000000000000\", \"Email\":\"third@gmail.com\"}]",
         "[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]",
         "10000000-0000-0000-0000-000000000000",
-        "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"Users\":[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"}]}",
+        "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"UsersId\":[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]}",
         true,
         ""
     )]

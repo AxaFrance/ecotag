@@ -36,11 +36,11 @@ public class GetGroupCmd
         }
 
         var usersInGroup = await _groupUsersRepository.GetUsersByGroupId(groupId);
-        var users = new List<UserDataModel>();
+        var users = new List<string>();
         foreach (var groupUser in usersInGroup)
         {
             var user = await _usersRepository.GetUserAsync(groupUser.UserId);
-            users.Add(user);
+            users.Add(user.Id);
         }
 
         var groupWithUsers = new GroupWithUsersDataModel

@@ -7,5 +7,5 @@ public class GroupWithUsersDataModel
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public List<UserDataModel> Users { get; set; }
+    public List<string> Users { get; set; }
 }

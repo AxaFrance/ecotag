@@ -129,6 +129,7 @@ INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thi
 INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
 INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
 INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
+INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
 
 GO
 
