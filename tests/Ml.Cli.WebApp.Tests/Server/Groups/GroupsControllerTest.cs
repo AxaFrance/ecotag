@@ -198,7 +198,7 @@ public class CreateGroupShould
     [Theory]
     [InlineData("groupName", "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
         "[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]",
-        "{\"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}")]
+        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\":\"groupName\", \"Users\": [{\"Email\": \"Guillaume.chervet@gmail.com\"}]}")]
     public async Task Delete_Users_From_Group(string groupName, string usersInDatabase, string strUsersInGroup,
         string jsonUpdateGroupInput)
     {
