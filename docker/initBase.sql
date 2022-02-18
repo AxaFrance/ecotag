@@ -93,12 +93,42 @@ GO
 if not exists (select * from sysobjects where name='T_GroupUsers' and xtype='U')
 BEGIN
 CREATE TABLE [sch_etg].[T_GroupUsers](
-    [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid()
+    [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Id] uniqueidentifier NOT NULL,
     [USR_Id] uniqueidentifier NOT NULL
     CONSTRAINT [PK_T_GroupUsers] UNIQUE([GPU_Id])
     )
 END
+
+GO
+
+DECLARE @firstUserId uniqueidentifier
+DECLARE @secondUserId uniqueidentifier
+DECLARE @thirdUserId uniqueidentifier
+
+DECLARE @firstGroupId uniqueidentifier
+DECLARE @secondGroupId uniqueidentifier
+DECLARE @thirdGroupId uniqueidentifier
+
+SET @firstUserId = newid()
+SET @secondUserId = newid()
+SET @thirdUserId = newid()
+
+SET @firstGroupId = newid()
+SET @secondGroupId = newid()
+SET @thirdGroupId = newid()
+
+INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first@gmail.com")
+INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
+INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
+
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstGroup")
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondGroup")
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdGroup")
+
+INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
+INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
+INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
 
 GO
 
