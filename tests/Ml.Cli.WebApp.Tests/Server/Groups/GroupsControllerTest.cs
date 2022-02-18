@@ -55,9 +55,12 @@ public class CreateGroupShould
             Name = groupName
         };
         var repository = new GroupsRepository(groupContext);
+        var groupUsersRepository = new GroupUsersRepository(groupContext);
+        var usersRepository = new UsersRepository(groupContext);
         var groupsController = new GroupsController();
         var createGroupCmd = new CreateGroupCmd(repository);
-        var result = await groupsController.Create(createGroupCmd, newGroup);
+        var getGroupCmd = new GetGroupCmd(repository, groupUsersRepository, usersRepository);
+        var result = await groupsController.Create(createGroupCmd, getGroupCmd, newGroup);
         if (isSuccess)
         {
             var resultCreated = result.Result as CreatedResult;

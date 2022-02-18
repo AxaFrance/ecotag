@@ -12,25 +12,6 @@ namespace Ml.Cli.WebApp.Server.Groups
     [ApiController]
     public class UsersController : Controller
     {
-        private static List<User> users;
-
-        public UsersController()
-        {
-            if (users != null) return;
-            Console.WriteLine("Loading users...");
-            var usersAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/users.json");
-            var usersAsJsonFile = JsonDocument.Parse(usersAsString);
-            var usersAsJson = usersAsJsonFile.RootElement.GetProperty("users");
-            users = JsonConvert.DeserializeObject<List<User>>(usersAsJson.ToString());
-        }
-
-        [HttpGet]
-        [ResponseCache(Duration = 1)]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
-        {
-            return Ok(users);
-        }
-
         [HttpGet]
         [ResponseCache(Duration = 1)]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers([FromServices] GetAllUsersCmd getAllUsersCmd)
