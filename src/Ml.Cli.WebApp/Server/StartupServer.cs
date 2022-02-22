@@ -62,6 +62,7 @@ namespace Ml.Cli.WebApp.Server
                 {
                     var oidcSettings = Configuration.GetSection("Oidc").Get<OidcSettings>();
                     options.Audience = AuthorizationAudience.ApiEcotag;
+                    
                     var proxyUrl = oidcSettings.ProxyUrl;
                     if (!string.IsNullOrEmpty(proxyUrl))
                     {

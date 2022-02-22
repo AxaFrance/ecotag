@@ -41,7 +41,6 @@ export const FileUpload = ({fetch, setState, state}) => {
                 }
                 const responsePromise = fetch(`datasets/${state.dataset.id}/files`, {
                     method: 'POST',
-                    mode: 'no-cors',
                     header: {
                         'content-type': 'multipart/form-data',
                     },
