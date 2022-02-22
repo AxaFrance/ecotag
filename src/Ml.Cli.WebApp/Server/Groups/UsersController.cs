@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using advalorem.Controllers.AF.AspNetCore.Authorization.Jwt.SiteMinder;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups
@@ -25,9 +27,10 @@ namespace Ml.Cli.WebApp.Server.Groups
 
         [HttpGet]
         [ResponseCache(Duration = 1)]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers([FromServices] OidcUserInfoService oidcUserInfoService)
         {
-            var userMail = User.Identity.GetEmail();
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var useInfo = await oidcUserInfoService.GetUserEmailAsync(accessToken);
             return Ok(users);
         }
     }

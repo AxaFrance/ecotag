@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ml.Cli.WebApp.Authorization;
+using Ml.Cli.WebApp.Server.Authorization;
+using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Groups.Oidc;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -32,7 +35,25 @@ namespace Ml.Cli.WebApp.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.Configure<OidcSettings>(
+                Configuration.GetSection(OidcSettings.Oidc));
+            var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
+            var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
+
+            if (!string.IsNullOrEmpty(oidcSettings.ProxyUrl))
+            {
+                httpClientService.ConfigurePrimaryHttpMessageHandler(() => 
+                    new SocketsHttpHandler()
+                    {
+                        UseProxy = true,
+                        Proxy =  new WebProxy(oidcSettings.ProxyUrl)
+                        {
+                            Credentials = CredentialCache.DefaultCredentials
+                        }
+                    });
+            }
+                
+            services.AddScoped<OidcUserInfoService>();
             services.AddOptions();
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddResponseCaching();
@@ -60,7 +81,7 @@ namespace Ml.Cli.WebApp.Server
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
                 {
-                    var oidcSettings = Configuration.GetSection("Oidc").Get<OidcSettings>();
+                    
                     options.Audience = AuthorizationAudience.ApiEcotag;
                     
                     var proxyUrl = oidcSettings.ProxyUrl;

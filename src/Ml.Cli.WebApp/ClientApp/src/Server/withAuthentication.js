@@ -1,5 +1,5 @@
 import React from 'react';
-import {useOidcAccessToken, useOidcIdToken} from '@axa-fr/react-oidc-context';
+import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc-context';
 
 const NON_CONNECTE = 'Non Connecté';
 
@@ -15,8 +15,8 @@ export const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
  * MAAM gives us : "member_of": [ "CN=ADMIN"]
  * @param {Object} oidcUser
  */
-const extractDataFromOAuthToken = oidcUser => ({
-  name: getAuthName(oidcUser),
+const extractDataFromOAuthToken = (idTokenPayload, oidcUser) => ({
+  name: getAuthName(idTokenPayload),
   email: getAuthEmail(oidcUser)
  /* role: getAuthRole(oidcUser),
   uid: getAuthUid(oidcUser),*/
@@ -24,7 +24,10 @@ const extractDataFromOAuthToken = oidcUser => ({
 
 const withAuthentication = () => Component => props => {
   const { idTokenPayload } = useOidcIdToken();
-  return <Component {...props} user={extractDataFromOAuthToken(idTokenPayload)} />;
+  const{ oidcUser } = useOidcUser();
+  
+  
+  return <Component {...props} user={extractDataFromOAuthToken(idTokenPayload, oidcUser)} />;
 };
 
 export default withAuthentication;

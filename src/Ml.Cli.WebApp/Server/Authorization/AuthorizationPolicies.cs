@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Authorization
+﻿namespace Ml.Cli.WebApp.Server.Authorization
 {
     public static class AuthorizationPolicies
     {
