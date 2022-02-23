@@ -32,10 +32,12 @@ export const createGroup = (fetch, dispatch) => async fields => {
   const response = await fetchCreateGroup(fetch)(newGroup);
   let data;
   if(response.status >= 500 ){
-    data = {status: resilienceStatus.ERROR, newGroup: null };
+    data = {status: resilienceStatus.ERROR, newGroup: {id: null, ...newGroup} };
   } else {
-    data = {status: resilienceStatus.SUCCESS, newGroup : await response.json() };
+    const groupId = await response.json()
+    data = {status: resilienceStatus.SUCCESS, newGroup: {id: groupId, ...newGroup} };
   }
+  
   dispatch({ type: 'onSubmitCreateGroup', data });
 };
 
