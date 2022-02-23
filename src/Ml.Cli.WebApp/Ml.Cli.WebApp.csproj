@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\scss" />
-    <Folder Include="Server\Database" />
   </ItemGroup>
 
   <ItemGroup>

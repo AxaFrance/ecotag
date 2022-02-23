@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
-namespace Ml.Cli.WebApp.Server.Groups.Database;
+namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 [Table("T_Group", Schema = "sch_etg")]
 public class GroupModel
@@ -15,4 +17,6 @@ public class GroupModel
     [MaxLength(16)]
     [MinLength(3)]
     public string Name { get; set; }
+    
+    public List<GroupUsersModel> GroupUsers { get; set; }
 }

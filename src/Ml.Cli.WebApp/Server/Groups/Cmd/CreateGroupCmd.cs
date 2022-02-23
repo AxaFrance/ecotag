@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Groups.Database;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 

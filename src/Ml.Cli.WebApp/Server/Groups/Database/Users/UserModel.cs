@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Database.Users;
 
@@ -14,4 +16,6 @@ public class UserModel
     [Column("USR_Email")]
     [EmailAddress]
     public string Email { get; set; }
+    
+    public List<GroupUsersModel> GroupUsers { get; set; }
 }
