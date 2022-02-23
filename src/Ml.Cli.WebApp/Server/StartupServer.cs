@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Axa.Advalorem;
@@ -13,9 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Ml.Cli.WebApp.Authorization;
-using Ml.Cli.WebApp.Server.Authorization;
-using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 
 namespace Ml.Cli.WebApp.Server
@@ -38,6 +37,7 @@ namespace Ml.Cli.WebApp.Server
             services.Configure<OidcSettings>(
                 Configuration.GetSection(OidcSettings.Oidc));
             var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
+            var oidcUserSettings = Configuration.GetSection(OidcUserSettings.OidcUser).Get<OidcUserSettings>();
             var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
 
             if (!string.IsNullOrEmpty(oidcSettings.ProxyUrl))
@@ -70,7 +70,7 @@ namespace Ml.Cli.WebApp.Server
                           JwtBearerDefaults.AuthenticationScheme);
                       defaultAuthorizationPolicyBuilder =
                           defaultAuthorizationPolicyBuilder
-                              .RequireAuthenticatedUser();
+                              .RequireAuthenticatedUser().RequireScope(oidcUserSettings.RequireScopes.ToArray());
                       options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
                   });
               
@@ -81,9 +81,11 @@ namespace Ml.Cli.WebApp.Server
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
                 {
-                    
-                    options.Audience = AuthorizationAudience.ApiEcotag;
-                    
+                    if (!String.IsNullOrEmpty(oidcUserSettings.RequireAudience))
+                    {
+                        options.Audience = oidcUserSettings.RequireAudience;
+                    }
+
                     var proxyUrl = oidcSettings.ProxyUrl;
                     if (!string.IsNullOrEmpty(proxyUrl))
                     {
@@ -138,9 +140,10 @@ namespace Ml.Cli.WebApp.Server
             //app.UseErrorLogging();
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("X-Frame-Options", "DENY");
-                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                //context.Response.Headers.Add("X-Frame-Options", "sameorigin");
+                //context.Response.Headers.Add("Content-Security-Policy", "worker-src https://localhost:5001; frame-src https://localhost:5001");
+               ///context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+                //context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                 await next();
             });
             if (!env.IsDevelopment())
@@ -181,5 +184,12 @@ namespace Ml.Cli.WebApp.Server
                 }
             });
         }
+    }
+
+    public class OidcUserSettings
+    {
+        public string RequireAudience { get; set; }
+        public IList<string> RequireScopes { get; set; }
+        public const string OidcUser = "OidcUser";
     }
 }

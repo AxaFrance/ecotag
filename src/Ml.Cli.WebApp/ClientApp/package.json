@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "4.0.0-beta.9",
+    "@axa-fr/react-oidc-context": "4.0.0",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
@@ -34,7 +34,7 @@
   "scripts": {
     "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public",
     "start:local": "env-cmd -f .env.local react-scripts start",
-    "start:server": "npm run copy && env-cmd -f .env.server react-scripts start",
+    "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",
     "build:server": "npm run copy && env-cmd -f .env.server react-scripts build",
     "test": "react-scripts test --env=jsdom",
