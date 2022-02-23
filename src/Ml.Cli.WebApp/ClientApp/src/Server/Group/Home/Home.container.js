@@ -9,9 +9,8 @@ import {NAME} from "./New/constants";
 const HomeWithResilience = withResilience(Home);
 
 const NOT_FOUND = -1;
-const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
-  const emails = actualUsers.map(user => user.email);
-  return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
+const computeEligibleUsers = (groupUserIds = [], users = []) => {
+  return users.filter(user => groupUserIds.indexOf(user.id) === NOT_FOUND);
 };
 const computeGroupUsers = (groupUsersIds, allEligibleUsers) => {
   let users = [];
@@ -27,7 +26,7 @@ export const HomeContainer = ({ fetch }) => {
     fetch
   );
   const {groups, users} = state;
-  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.users, users),eligibleUsers : computeEligibleUsers(group.users, users) }});
+  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.users, users), eligibleUsers : computeEligibleUsers(group.users, users) }});
   
   const numberPages = computeNumberPages(items, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;
