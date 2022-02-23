@@ -33,8 +33,8 @@ namespace Ml.Cli.WebApp.Server.Groups
             return Created(commandResult.Data, commandResult.Data);
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> Update([FromServices] UpdateGroupCmd updateGroupCmd, UpdateGroupInput updateGroupInput)
         {

@@ -1,5 +1,12 @@
 import React from 'react';
-import { fetchGroups, fetchUsers, fetchDeleteGroup, fetchCreateOrUpdateGroup } from '../Group.service';
+import {
+  fetchGroups,
+  fetchUsers,
+  fetchDeleteGroup,
+  fetchCreateOrUpdateGroup,
+  fetchCreateGroup,
+  fetchUpdateGroup
+} from '../Group.service';
 import { reducer, initState } from './Home.reducer';
 import { NAME } from './New/constants';
 import {resilienceStatus} from "../../shared/Resilience";
@@ -22,7 +29,7 @@ export const createGroup = (fetch, dispatch) => async fields => {
     name: fields[NAME].value,
     users: [],
   };
-  const response = await fetchCreateOrUpdateGroup(fetch)(newGroup);
+  const response = await fetchCreateGroup(fetch)(newGroup);
   let data;
   if(response.status >= 500 ){
     data = {status: resilienceStatus.ERROR, newGroup: null };
@@ -51,10 +58,10 @@ export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users)
   const updatedGroup = {
     id: groupToUpdate.id,
     name: groupToUpdate.name,
-    users: users.map(email => ({ email })),
+    users: users,
   };
 
-  const response = await fetchCreateOrUpdateGroup(fetch)(updatedGroup);
+  const response = await fetchUpdateGroup(fetch)(updatedGroup);
   
   let data;
   if(response.status >= 500 ){

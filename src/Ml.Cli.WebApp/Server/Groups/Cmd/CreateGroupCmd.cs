@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -11,6 +11,8 @@ public record CreateGroupInput
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z-_]*$")]
     public string Name { get; set; }
+    
+    public List<string> Users { get; set; }
 }
 
 public class CreateGroupCmd

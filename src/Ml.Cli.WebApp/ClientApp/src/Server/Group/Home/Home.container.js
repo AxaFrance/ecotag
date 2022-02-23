@@ -12,7 +12,7 @@ const NOT_FOUND = -1;
 const computeEligibleUsers = (groupUserIds = [], users = []) => {
   return users.filter(user => groupUserIds.indexOf(user.id) === NOT_FOUND);
 };
-const computeGroupUsers = (groupUsersIds, allEligibleUsers) => {
+const computeGroupUsers = (groupUsersIds = [], allEligibleUsers = []) => {
   let users = [];
   for(let user of groupUsersIds){
     const relatedUser = allEligibleUsers.find(usr => usr.id === user);
