@@ -57,7 +57,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
           -
         </td>
         <td
-          class="af-table__cell"
+          class="af-table__cell af-table__small"
         >
           <a
             class="btn af-btn--circle"

@@ -157,7 +157,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
             gilles.cruchon@axa.fr, guillaume.chervet@axa.fr
           </td>
           <td
-            class="af-table__cell"
+            class="af-table__cell af-table__small"
           >
             <a
               class="btn af-btn--circle"
