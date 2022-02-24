@@ -122,9 +122,9 @@ INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first
 INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
 INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
 
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstGroup")
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondGroup")
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdGroup")
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
+INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdgroup")
 
 INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
 INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
