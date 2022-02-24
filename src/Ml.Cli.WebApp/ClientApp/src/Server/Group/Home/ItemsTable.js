@@ -3,12 +3,19 @@ import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import Edit from "./Edit";
 
+const computeUsersList = users => {
+    if(users.length === 0){
+        return "-";
+    }
+    return users.map(user => user.email).join(', ');
+}
+
 const UserRow = ({ id, name, users, eligibleUsers, onUpdateUser }) => {
     const [isManageUsersModalVisible, setManageUsersModalVisible] = useState(false);
     return (
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
-            <Table.Td>{users.map(user => user.email).join(', ')}</Table.Td>
+            <Table.Td>{computeUsersList(users)}</Table.Td>
             <Table.Td>
                 <Action id="editActionId" icon="pencil" title="Modifier" onClick={() => setManageUsersModalVisible(true)} />
                 <Edit
@@ -33,8 +40,12 @@ const ItemsTable = ({items, filters, onChangePaging, onUpdateUser}) => {
                         <Table.Th>
                             <span className="af-table__th-content">Nom du groupe</span>
                         </Table.Th>
-                        <Table.Th>Utilisateurs</Table.Th>
-                        <Table.Th>Actions</Table.Th>
+                        <Table.Th>
+                            <span className="af-table__th-content">Utilisateurs</span>
+                        </Table.Th>
+                        <Table.Th>
+                            <span className="af-table__th-content">Actions</span>
+                        </Table.Th>
                     </Table.Tr>
                 </Table.Header>
                 <Table.Body>
