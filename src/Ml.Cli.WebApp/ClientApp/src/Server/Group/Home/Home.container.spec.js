@@ -11,7 +11,7 @@ describe('Home.container for groups', () => {
   const givenGroups = [{
     id: "0001",
     name: "developpeurs",
-    users: ["0001","0002"]
+    userIds: ["0001","0002"]
   }];
   const givenFetch = async (url) => {
     await sleep(1);

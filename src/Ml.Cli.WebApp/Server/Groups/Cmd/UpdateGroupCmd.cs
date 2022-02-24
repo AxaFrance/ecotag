@@ -7,7 +7,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 public record UpdateGroupInput
 {
     public string Id { get; set; }
-    public List<string> Users { get; set; }
+    public List<string> UserIds { get; set; }
 }
 
 public class UpdateGroupCmd
@@ -37,7 +37,7 @@ public class UpdateGroupCmd
         }
 
         var duplicateFinder = new HashSet<string>();
-        foreach (var userId in updateGroupInput.Users)
+        foreach (var userId in updateGroupInput.UserIds)
         {
             var isDuplicate = !duplicateFinder.Add(userId);
             if (isDuplicate)
@@ -50,7 +50,7 @@ public class UpdateGroupCmd
             }
         }
 
-        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.Users);
+        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.UserIds);
         return commandResult;
     }
 }

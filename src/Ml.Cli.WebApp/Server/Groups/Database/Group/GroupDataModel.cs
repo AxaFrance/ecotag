@@ -7,5 +7,5 @@ public class GroupDataModel
     public string Id { get; set; }
     public string Name { get; set; }
     
-    public IList<string> Users { get; set; }
+    public IList<string> UserIds { get; set; }
 }

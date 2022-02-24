@@ -12,7 +12,7 @@ public record CreateGroupInput
     [RegularExpression(@"^[a-zA-Z-_]*$")]
     public string Name { get; set; }
     
-    public List<string> Users { get; set; }
+    public List<string> UserIds { get; set; }
 }
 
 public class CreateGroupCmd

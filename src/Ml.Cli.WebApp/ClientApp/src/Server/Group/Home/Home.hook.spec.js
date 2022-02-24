@@ -112,7 +112,7 @@ describe('Home.hook for groups', () => {
         expect(givenFetchWithData).toHaveBeenCalledWith(
           GROUPS_ROUTE, {
             method:'POST',
-            body: JSON.stringify({name:givenFields[NAME].value, users:[]})
+            body: JSON.stringify({name:givenFields[NAME].value, userIds:[]})
           }
         );
         expect(givenDispatch).toHaveBeenCalledTimes(2);
@@ -151,7 +151,7 @@ describe('Home.hook for groups', () => {
         expect(givenFetchWithData).toHaveBeenCalledWith(
           GROUPS_ROUTE, {
             method:'PUT',
-            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, users:givenUsers})
+            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, userIds:givenUsers})
           }
         );
         expect(givenDispatch).toHaveBeenCalledTimes(2);

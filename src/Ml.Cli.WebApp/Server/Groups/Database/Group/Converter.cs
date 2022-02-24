@@ -10,7 +10,7 @@ public static class Converter
         {
             Id = groupModel.Id.ToString(),
             Name = groupModel.Name,
-            Users = groupModel.GroupUsers?.Select(groupUser => groupUser.UserId.ToString()).ToList()
+            UserIds = groupModel.GroupUsers?.Select(groupUser => groupUser.UserId.ToString()).ToList()
         };
     }
 }

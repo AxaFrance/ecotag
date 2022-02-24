@@ -123,12 +123,20 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
           <th
             class="af-table__th"
           >
-            Utilisateurs
+            <span
+              class="af-table__th-content"
+            >
+              Utilisateurs
+            </span>
           </th>
           <th
             class="af-table__th"
           >
-            Actions
+            <span
+              class="af-table__th-content"
+            >
+              Actions
+            </span>
           </th>
         </tr>
       </thead>

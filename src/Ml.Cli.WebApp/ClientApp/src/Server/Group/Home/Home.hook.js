@@ -25,7 +25,7 @@ export const createGroup = (fetch, dispatch) => async fields => {
   dispatch({ type: 'onActionGroupLoading' });
   const newGroup = {
     name: fields[NAME].value.toLowerCase(),
-    users: [],
+    userIds: [],
   };
   const response = await fetchCreateGroup(fetch)(newGroup);
   let data;
@@ -46,7 +46,7 @@ export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users)
   const updatedGroup = {
     id: groupToUpdate.id,
     name: groupToUpdate.name,
-    users: users,
+    userIds: users,
   };
 
   const response = await fetchUpdateGroup(fetch)(updatedGroup);

@@ -23,12 +23,20 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
         <th
           class="af-table__th"
         >
-          Utilisateurs
+          <span
+            class="af-table__th-content"
+          >
+            Utilisateurs
+          </span>
         </th>
         <th
           class="af-table__th"
         >
-          Actions
+          <span
+            class="af-table__th-content"
+          >
+            Actions
+          </span>
         </th>
       </tr>
     </thead>
@@ -45,7 +53,9 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
         </td>
         <td
           class="af-table__cell"
-        />
+        >
+          -
+        </td>
         <td
           class="af-table__cell"
         >

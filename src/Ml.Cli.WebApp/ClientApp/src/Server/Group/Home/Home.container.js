@@ -26,8 +26,7 @@ export const HomeContainer = ({ fetch }) => {
     fetch
   );
   const {groups, users} = state;
-  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.users, users), eligibleUsers : computeEligibleUsers(group.users, users) }});
-  
+  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.userIds, users), eligibleUsers : computeEligibleUsers(group.userIds, users) }});
   const numberPages = computeNumberPages(items, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;
   const filters = {
