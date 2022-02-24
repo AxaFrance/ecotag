@@ -22,7 +22,7 @@ const computeGroupUsers = (groupUsersIds = [], allEligibleUsers = []) => {
 }
 
 export const HomeContainer = ({ fetch }) => {
-  const { state, onChangePaging, onDeleteGroup, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
+  const { state, onChangePaging, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
     fetch
   );
   const {groups, users} = state;
@@ -49,7 +49,6 @@ export const HomeContainer = ({ fetch }) => {
       items={itemsFiltered}
       filters={filters}
       onChangePaging={onChangePaging}
-      onDeleteGroup={onDeleteGroup}
       onChangeCreateGroup={onChangeCreateGroup}
       onSubmitCreateGroup={onSubmitCreateGroup}
       onUpdateUser={onUpdateUser}

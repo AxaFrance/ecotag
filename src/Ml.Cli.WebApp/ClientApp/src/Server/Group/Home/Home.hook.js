@@ -2,7 +2,6 @@ import React from 'react';
 import {
   fetchGroups,
   fetchUsers,
-  fetchDeleteGroup,
   fetchCreateOrUpdateGroup,
   fetchCreateGroup,
   fetchUpdateGroup
@@ -41,18 +40,6 @@ export const createGroup = (fetch, dispatch) => async fields => {
   dispatch({ type: 'onSubmitCreateGroup', data });
 };
 
-export const deleteGroup = (fetch, dispatch) => async id => {
-  dispatch({ type: 'onActionGroupLoading' });
-  const response = await fetchDeleteGroup(fetch)(id);
-  let data;
-  if(response.status >= 500 ){
-    data = {status: resilienceStatus.ERROR, id: null };
-  } else {
-    data = {status: resilienceStatus.SUCCESS, id };
-  }
-  dispatch({ type: 'deleteUserEnded', data });
-};
-
 export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users) => {
   dispatch({ type: 'changeUserLoading'});
 
@@ -79,7 +66,6 @@ export const useHome = fetch => {
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
-  const onDeleteGroup = id => deleteGroup(fetch, dispatch)(id);
   const onChangeCreateGroup = event => dispatch({ type: 'onChangeCreateGroup', event });
   const onSubmitCreateGroup = () => createGroup(fetch, dispatch)(state.fields);
   const onUpdateUser = (idGroup, users) => updateUsersInGroup(fetch, dispatch, state, idGroup, users);
@@ -89,7 +75,6 @@ export const useHome = fetch => {
   return {
     state,
     onChangePaging,
-    onDeleteGroup,
     onChangeCreateGroup,
     onSubmitCreateGroup,
     onUpdateUser,

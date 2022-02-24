@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { createGroup, deleteGroup, initListOfGroups, updateUsersInGroup, useHome } from './Home.hook';
+import { createGroup, initListOfGroups, updateUsersInGroup, useHome } from './Home.hook';
 import { initialState } from './Home.reducer';
 import * as GroupService from '../Group.service';
 import {
@@ -102,32 +102,6 @@ describe('Home.hook for groups', () => {
     });
   });
 
-  describe('.deleteGroup()', () => {
-    const givenGroupId = "0001";
-    const DELETE_GROUP_ROUTE = `groups/${givenGroupId}`;
-    it('should call deleteGroup and dispatch', async () => { 
-      try {
-        await deleteGroup(givenFetchWithData, givenDispatch)(givenGroupId);
-        expect(givenFetchWithData).toHaveBeenCalledWith(DELETE_GROUP_ROUTE, {
-          method:'DELETE'
-        });
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionGroupLoading" });
-      } catch (error) {
-        fail(error);
-      }
-    });
-
-    it('should fail because of error during deleteGroup', async () => { 
-      try {
-        await deleteGroup(givenFetchRejected, givenDispatch)(givenGroupId);
-        fail(error);
-      } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionGroupLoading" });
-      }
-    });
-  });
-
   describe('.createGroup()', () => {
     const givenFields = {
       [NAME]: { name: NAME, value: '002', message: null },
@@ -169,15 +143,15 @@ describe('Home.hook for groups', () => {
       }
     ];
     const givenUsers = [
-      "jean.valjean@mine.fr"
+      "someUserId"
     ];
     it('should call updateUsersInGroup and dispatch', async () => { 
       try {
         await updateUsersInGroup(givenFetchWithData, givenDispatch, givenState, givenIdGroup, givenUsers);
         expect(givenFetchWithData).toHaveBeenCalledWith(
           GROUPS_ROUTE, {
-            method:'POST',
-            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, users:givenUsers.map(user => ({ email: user}))})
+            method:'PUT',
+            body: JSON.stringify({id: givenIdGroup, name:givenIdGroup, users:givenUsers})
           }
         );
         expect(givenDispatch).toHaveBeenCalledTimes(2);
@@ -213,8 +187,7 @@ describe('Home.hook for groups', () => {
       });
       const expectedHook = {
         state: expect.any(Object),
-        onChangePaging: expect.any(Function), 
-        onDeleteGroup: expect.any(Function), 
+        onChangePaging: expect.any(Function),
         onChangeCreateGroup: expect.any(Function),
         onSubmitCreateGroup: expect.any(Function),
       };

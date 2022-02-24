@@ -1,4 +1,4 @@
-import {fetchCreateOrUpdateGroup, fetchGroup, fetchGroups, fetchDeleteGroup, fetchUsers} from "./Group.service";
+import {fetchCreateOrUpdateGroup, fetchGroup, fetchGroups, fetchUsers} from "./Group.service";
 
 describe('Group.service', () => {
     describe('.fetchGroups()', () => {
@@ -21,14 +21,6 @@ describe('Group.service', () => {
         it('should call fetchGroup', () => {
             fetchGroup(givenFetch)(givenId);
             expect(givenFetch).toHaveBeenCalledWith(`groups/${givenId}`);
-        });
-    });
-    describe('.fetchDeleteGroup()', () => {
-        const givenId = "0001";
-        const givenFetch = jest.fn();
-        it('should call ', () => {
-            fetchDeleteGroup(givenFetch)("0001");
-            expect(givenFetch).toHaveBeenCalledWith(`groups/${givenId}`, { method:"DELETE" });
         });
     });
     describe('.fetchCreateOrUpdateGroup()', () => {

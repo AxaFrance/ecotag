@@ -61,18 +61,6 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
               class="glyphicon glyphicon-pencil"
             />
           </a>
-          <a
-            class="btn af-btn--circle"
-            href="#"
-            id="removeActionId"
-            role="button"
-            tabindex="0"
-            title="Supprimer"
-          >
-            <i
-              class="glyphicon glyphicon-remove"
-            />
-          </a>
         </td>
       </tr>
     </tbody>

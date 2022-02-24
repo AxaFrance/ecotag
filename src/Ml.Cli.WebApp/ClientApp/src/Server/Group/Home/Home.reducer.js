@@ -109,30 +109,6 @@ export const reducer = (state, action) => {
         groups,
       };
     }
-    case 'deleteUserEnded': {
-      const { status, id } = action.data;
-
-      if(status === resilienceStatus.ERROR){
-        return {
-          ...state,
-          status,
-        };
-      }
-      const groups = [...state.groups];
-      const item = groups.find(i => i.id === id);
-      if(item) {
-        const index = groups.indexOf(item);
-        if (index > -1) {
-          groups.splice(index, 1);
-        }
-      }
-
-      return {
-        ...state,
-        status,
-        groups,
-      };
-    }
     default:
       throw new Error();
   }

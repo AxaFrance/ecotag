@@ -12,7 +12,6 @@ const Home = ({
                 numberItemsTotal,
                 filters,
                 onChangePaging,
-                onDeleteGroup,
                 fields,
                 isSubmitable,
                 hasSubmit,
@@ -40,7 +39,6 @@ const Home = ({
                 items={items}
                 filters={filters}
                 onChangePaging={onChangePaging}
-                onDeleteGroup={onDeleteGroup}
                 onUpdateUser={onUpdateUser}
             />
           </EmptyArrayManager>
