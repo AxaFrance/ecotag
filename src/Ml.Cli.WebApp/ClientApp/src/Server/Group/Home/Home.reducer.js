@@ -78,7 +78,7 @@ export const reducer = (state, action) => {
         ...state,
         hasSubmit: true,
         fields: {
-          [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
+          [NAME]: { name: NAME, value: '', message: "" },
         },
         status: resilienceStatus.SUCCESS,
         groups
