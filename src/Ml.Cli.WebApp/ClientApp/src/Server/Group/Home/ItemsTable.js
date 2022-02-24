@@ -2,6 +2,7 @@
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import Edit from "./Edit";
+import './ItemsTable.scss';
 
 const computeUsersList = users => {
     if(users.length === 0){
@@ -16,7 +17,7 @@ const UserRow = ({ id, name, users, eligibleUsers, onUpdateUser }) => {
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
             <Table.Td>{computeUsersList(users)}</Table.Td>
-            <Table.Td>
+            <Table.Td class="af-table__cell af-table__small">
                 <Action id="editActionId" icon="pencil" title="Modifier" onClick={() => setManageUsersModalVisible(true)} />
                 <Edit
                     idGroup={id}
