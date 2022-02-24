@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
 {
     [Route("api/server/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.DataScientist)]
     public class DatasetsController : Controller
     {
         public static List<Dataset> datasets;

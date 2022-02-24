@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Axa.Advalorem;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +28,7 @@ namespace Ml.Cli.WebApp.Server
             Configuration = configuration;
             CurrentEnvironment = env;
         }
+        
 
         private IWebHostEnvironment CurrentEnvironment { get; }
 
@@ -81,6 +84,17 @@ namespace Ml.Cli.WebApp.Server
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
                 {
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = ctx =>
+                        {
+                            var profiles = ctx.Principal.Identity.GetProfiles();
+                            var claims = profiles.Select(profile => new Claim(ClaimTypes.Role, profile));
+                            ((ClaimsIdentity)ctx.Principal.Identity).AddClaims(claims);
+                            return Task.CompletedTask;
+                        }
+                    };
+                    
                     if (!String.IsNullOrEmpty(oidcUserSettings.RequireAudience))
                     {
                         options.Audience = oidcUserSettings.RequireAudience;
