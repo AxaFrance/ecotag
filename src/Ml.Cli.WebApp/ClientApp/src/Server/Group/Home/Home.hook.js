@@ -24,7 +24,7 @@ export const initListOfGroups = (fetch, dispatch) => async () => {
 export const createGroup = (fetch, dispatch) => async fields => {
   dispatch({ type: 'onActionGroupLoading' });
   const newGroup = {
-    name: fields[NAME].value,
+    name: fields[NAME].value.toLowerCase(),
     users: [],
   };
   const response = await fetchCreateGroup(fetch)(newGroup);

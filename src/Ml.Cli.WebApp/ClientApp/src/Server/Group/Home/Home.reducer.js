@@ -69,7 +69,10 @@ export const reducer = (state, action) => {
         };
       }
 
-      const groups = [...state.groups, newGroup];
+      let groups = [...state.groups];
+      if(state.groups.filter(group => group.name === newGroup.name).length === 0){
+        groups = [...state.groups, newGroup];
+      }
       
       return {
         ...state,

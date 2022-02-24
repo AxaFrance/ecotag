@@ -8,7 +8,7 @@ const computeUsersList = users => {
         return "-";
     }
     return users.map(user => user.email).join(', ');
-}
+};
 
 const UserRow = ({ id, name, users, eligibleUsers, onUpdateUser }) => {
     const [isManageUsersModalVisible, setManageUsersModalVisible] = useState(false);
