@@ -140,10 +140,9 @@ namespace Ml.Cli.WebApp.Server
             //app.UseErrorLogging();
             app.Use(async (context, next) =>
             {
-                //context.Response.Headers.Add("X-Frame-Options", "sameorigin");
-                //context.Response.Headers.Add("Content-Security-Policy", "worker-src https://localhost:5001; frame-src https://localhost:5001");
-               ///context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-                //context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("X-Frame-Options", "sameorigin");
+                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                 await next();
             });
             if (!env.IsDevelopment())
