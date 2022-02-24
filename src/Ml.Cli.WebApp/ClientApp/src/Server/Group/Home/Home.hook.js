@@ -2,7 +2,6 @@ import React from 'react';
 import {
   fetchGroups,
   fetchUsers,
-  fetchCreateOrUpdateGroup,
   fetchCreateGroup,
   fetchUpdateGroup
 } from '../Group.service';

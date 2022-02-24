@@ -15,9 +15,3 @@ export const fetchUpdateGroup = fetch => async newGroup =>
       method: 'PUT',
       body: JSON.stringify(newGroup),
   });
-
-export const fetchCreateOrUpdateGroup = fetch => async newGroup =>
-  fetch('groups', {
-    method: 'POST',
-    body: JSON.stringify(newGroup),
-  });

@@ -1,4 +1,10 @@
-import {fetchCreateOrUpdateGroup, fetchGroup, fetchGroups, fetchUsers} from "./Group.service";
+import {
+    fetchCreateGroup,
+    fetchGroup,
+    fetchGroups,
+    fetchUpdateGroup,
+    fetchUsers
+} from "./Group.service";
 
 describe('Group.service', () => {
     describe('.fetchGroups()', () => {
@@ -23,14 +29,27 @@ describe('Group.service', () => {
             expect(givenFetch).toHaveBeenCalledWith(`groups/${givenId}`);
         });
     });
-    describe('.fetchCreateOrUpdateGroup()', () => {
+    describe('.fetchCreateGroup()', () => {
         const newGroup = {
-            "name": "test"
+            name: "test",
+            users: []
         };
         const givenFetch = jest.fn();
-        it('should call ', () => {
-            fetchCreateOrUpdateGroup(givenFetch)(newGroup);
-            expect(givenFetch).toHaveBeenCalledWith(`groups`, { method:'POST', body: JSON.stringify(newGroup) });
-        });
+        it('should call fetchCreateGroup', () => {
+            fetchCreateGroup(givenFetch)(newGroup);
+            expect(givenFetch).toHaveBeenCalledWith('groups', { method: 'POST', body: JSON.stringify(newGroup)});
+        })
+    });
+    describe('.fetchUpdateGroup()', () => {
+        const updatedGroup = {
+            id: "1",
+            name: "test",
+            users: ["1","2","3"]
+        };
+        const givenFetch = jest.fn();
+        it('should call fetchUpdateGroup', () => {
+            fetchUpdateGroup(givenFetch)(updatedGroup);
+            expect(givenFetch).toHaveBeenCalledWith('groups', { method: 'PUT', body: JSON.stringify(updatedGroup)});
+        })
     });
 });
