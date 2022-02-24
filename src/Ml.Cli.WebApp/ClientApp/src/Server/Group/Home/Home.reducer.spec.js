@@ -75,7 +75,7 @@ describe('Home.reducer', () => {
     it('should onChangeCreateGroup state during a group creation', () => {
       const givenState = Object.assign({}, initialState);
       const givenEvent = {
-        "value": "002",
+        "value": "abc",
         "name": NAME,
         "id": NAME
       };

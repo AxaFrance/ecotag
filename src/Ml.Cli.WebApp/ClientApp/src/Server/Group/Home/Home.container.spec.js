@@ -9,14 +9,9 @@ describe('Home.container for groups', () => {
 
   const history = createMemoryHistory({ initialEntries: ['/'] });
   const givenGroups = [{
-    "id": "0001",
-    "name": "developpeurs",
-    "users": [
-      { "email": "clement.trofleau.lbc@axa.fr" },
-      { "email": "gilles.cruchon@axa.fr" },
-      { "email": "francois.descamps@axa.fr" },
-      { "email": "guillaume.chervet@axa.fr" }
-    ]
+    id: "0001",
+    name: "developpeurs",
+    users: ["0001","0002"]
   }];
   const givenFetch = async (url) => {
     await sleep(1);
@@ -24,7 +19,7 @@ describe('Home.container for groups', () => {
       case "groups":
         return {ok: true, json: () => Promise.resolve(givenGroups)};
       default:
-        return {ok: true, json: () => Promise.resolve(["gilles.cruchon@axa.fr", "guillaume.chervet@axa.fr"])};
+        return {ok: true, json: () => Promise.resolve([{id: "0001", email: "gilles.cruchon@axa.fr"}, {id: "0002", email: "guillaume.chervet@axa.fr"}])};
     }
   };
   
