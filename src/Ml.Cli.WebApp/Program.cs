@@ -109,9 +109,20 @@ namespace Ml.Cli.WebApp
                         .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true)
                         .AddJsonFile($"appsettings-server.{env.EnvironmentName}Custom.json", true, true);
                     config.AddEnvironmentVariables();
-                })
+                })/*.ConfigureAppConfiguration((context, config) =>
+                {
+                    if (!context.HostingEnvironment.IsDevelopment()) {
+                        var builtConfig = config.Build();
+                        var keyVaultConfigBuilder = new ConfigurationBuilder();
+                        keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+                        var keyVaultConfig = keyVaultConfigBuilder.Build();
+                        config.AddConfiguration(keyVaultConfig);
+                    }
+                })*/
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
+                    webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<StartupServer>();
                 });
 
