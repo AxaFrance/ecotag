@@ -41,10 +41,10 @@ namespace Ml.Cli.WebApp.Server.Oidc
             {
                 result.Add(Roles.DataAnnoteur);
             }
-            if (result.Contains(Roles.DataAdministateur))
+            else if (result.Contains(Roles.DataAdministateur))
             {
-                result.Add(Roles.DataAnnoteur);
                 result.Add(Roles.DataScientist);
+                result.Add(Roles.DataAnnoteur);
             }
 
             const string iamEcotag = "IAM_ECOTAG";
