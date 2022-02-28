@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Datasets

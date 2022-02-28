@@ -1,6 +1,5 @@
-﻿namespace Axa.Advalorem
+﻿namespace Ml.Cli.WebApp.Server.Oidc
 {
-    
     public class OidcSettings
     {
         public const string Oidc = "Oidc";

@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 
-namespace Ml.Cli.WebApp.Server
+namespace Ml.Cli.WebApp.Server.Oidc
 {
     public static class IdentityExtensions
     {
@@ -26,6 +26,7 @@ namespace Ml.Cli.WebApp.Server
             }
 
             if (!(identity is ClaimsIdentity claimsIdentity)) return new string[0];
+            
             const int profileGroupIndex = 1;
             var result = new List<string>();
             foreach (var profile in claimsIdentity
@@ -36,7 +37,6 @@ namespace Ml.Cli.WebApp.Server
                 result.AddRange(from Match match in matches select match.Groups[profileGroupIndex].Value.Trim());
             }
             return result;
-
         }
     }
 }

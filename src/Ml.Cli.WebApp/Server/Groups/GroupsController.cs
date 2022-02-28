@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups
 {
     [Route("api/server/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.DataAdministateur)]
     public class GroupsController : Controller
     {
         private static List<Group> groups;

@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Axa.Advalorem;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
+using Ml.Cli.WebApp.Server.Oidc;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -29,7 +28,6 @@ namespace Ml.Cli.WebApp.Server
             CurrentEnvironment = env;
         }
         
-
         private IWebHostEnvironment CurrentEnvironment { get; }
 
         public IConfiguration Configuration { get; }
@@ -197,12 +195,5 @@ namespace Ml.Cli.WebApp.Server
                 }
             });
         }
-    }
-
-    public class OidcUserSettings
-    {
-        public string RequireAudience { get; set; }
-        public IList<string> RequireScopes { get; set; }
-        public const string OidcUser = "OidcUser";
     }
 }

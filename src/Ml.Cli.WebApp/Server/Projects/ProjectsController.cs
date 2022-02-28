@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
@@ -11,6 +13,7 @@ namespace Ml.Cli.WebApp.Server.Projects
 {
     [Route("api/server/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.DataAnnoteur)]
     public class ProjectsController : Controller
     {
         public static List<Project> projects;

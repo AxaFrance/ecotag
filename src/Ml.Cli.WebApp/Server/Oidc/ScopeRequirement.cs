@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Ml.Cli.WebApp.Server
+namespace Ml.Cli.WebApp.Server.Oidc
 {
     public static class ScopeRequirement 
     {
