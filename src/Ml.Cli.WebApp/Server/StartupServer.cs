@@ -130,8 +130,10 @@ namespace Ml.Cli.WebApp.Server
                         RequireSignedTokens = true
                     };
                 });
-
-            /*  var corsSettings = CorsSettings();
+            
+            services.Configure<CorsSettings>(
+                Configuration.GetSection(CorsSettings.Cors));
+            var corsSettings = Configuration.GetSection(CorsSettings.Cors).Get<CorsSettings>();
               if (!string.IsNullOrEmpty(corsSettings.Origins))
                   services.AddCors(options =>
                   {
@@ -144,10 +146,13 @@ namespace Ml.Cli.WebApp.Server
                                   .AllowCredentials()
                                   .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
                           });
-                  });*/
+                  });
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build-server"; });
+            if (IsSpaStaticFiles())
+            {
+                services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build-server"; });
+            }
 
             services.AddSwaggerGen(options =>
             {
@@ -173,8 +178,12 @@ namespace Ml.Cli.WebApp.Server
                 app.UseHsts();
             }
 
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            var isSpaStaticFiles = IsSpaStaticFiles();
+            if (isSpaStaticFiles)
+            {
+                app.UseStaticFiles();
+                app.UseSpaStaticFiles();
+            }
 
             app.UseAuthentication();
            
@@ -195,14 +204,17 @@ namespace Ml.Cli.WebApp.Server
                     "default", "{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
             });
 
-            app.UseSpa(spa =>
+            if (isSpaStaticFiles)
             {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
+                app.UseSpa(spa =>
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start:server");
-                }
-            });
+                    spa.Options.SourcePath = "ClientApp";
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseReactDevelopmentServer(npmScript: "start:server");
+                    }
+                });
+            }
         }
         
         private bool IsSpaStaticFiles()

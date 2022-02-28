@@ -45,8 +45,14 @@ namespace Ml.Cli.WebApp.Server.Oidc
             {
                 result.Add(Roles.DataAnnoteur);
                 result.Add(Roles.DataScientist);
-            } 
-            
+            }
+
+            const string iamEcotag = "IAM_ECOTAG";
+            if (result.Contains(iamEcotag))
+            {
+                result.Remove(iamEcotag);
+            }
+
             return result;
         }
     }
