@@ -72,11 +72,13 @@ namespace Ml.Cli.WebApp.Server
                       defaultAuthorizationPolicyBuilder =
                           defaultAuthorizationPolicyBuilder
                               .RequireAuthenticatedUser();
-                      var requireScopes = oidcUserSettings.RequireScopes.ToArray();
-
-                      if (requireScopes.Length > 0)
+                      if (oidcUserSettings.RequireScopes != null)
                       {
-                          defaultAuthorizationPolicyBuilder.RequireScope(oidcUserSettings.RequireScopes.ToArray());
+                          var requireScopes = oidcUserSettings.RequireScopes.ToArray();
+                          if (requireScopes.Length > 0)
+                          {
+                              defaultAuthorizationPolicyBuilder.RequireScope(oidcUserSettings.RequireScopes.ToArray());
+                          }
                       }
 
                       options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
