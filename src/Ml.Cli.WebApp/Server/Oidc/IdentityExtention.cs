@@ -36,6 +36,17 @@ namespace Ml.Cli.WebApp.Server.Oidc
                 var matches = ProfileMatcher.Matches(profile.Value);
                 result.AddRange(from Match match in matches select match.Groups[profileGroupIndex].Value.Trim());
             }
+
+            if (result.Contains(Roles.DataScientist))
+            {
+                result.Add(Roles.DataAnnoteur);
+            }
+            if (result.Contains(Roles.DataAdministateur))
+            {
+                result.Add(Roles.DataAnnoteur);
+                result.Add(Roles.DataScientist);
+            } 
+            
             return result;
         }
     }

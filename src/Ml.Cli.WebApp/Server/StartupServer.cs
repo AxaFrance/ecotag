@@ -71,7 +71,14 @@ namespace Ml.Cli.WebApp.Server
                           JwtBearerDefaults.AuthenticationScheme);
                       defaultAuthorizationPolicyBuilder =
                           defaultAuthorizationPolicyBuilder
-                              .RequireAuthenticatedUser().RequireScope(oidcUserSettings.RequireScopes.ToArray());
+                              .RequireAuthenticatedUser();
+                      var requireScopes = oidcUserSettings.RequireScopes.ToArray();
+
+                      if (requireScopes.Length > 0)
+                      {
+                          defaultAuthorizationPolicyBuilder.RequireScope(oidcUserSettings.RequireScopes.ToArray());
+                      }
+
                       options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
                   });
               
