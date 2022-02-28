@@ -204,5 +204,11 @@ namespace Ml.Cli.WebApp.Server
                 }
             });
         }
+        
+        private bool IsSpaStaticFiles()
+        {
+            var isSpaStaticFiles = Configuration.GetSection("SpaStaticFiles").Get<bool>();
+            return isSpaStaticFiles;
+        }
     }
 }

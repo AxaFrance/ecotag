@@ -14,10 +14,6 @@ export const getAuthRole = oidcUser => {
   }
 }
 
-/**
- * MAAM gives us : "member_of": [ "CN=ADMIN"]
- * @param {Object} oidcUser
- */
 const extractDataFromOAuthToken = (idTokenPayload, oidcUser) => ({
   name: getAuthName(idTokenPayload),
   email: getAuthEmail(oidcUser),

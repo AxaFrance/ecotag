@@ -26,6 +26,5 @@ export const rules = {
   [TYPE]: [rulesRequired],
   [LABELS]: [],
   [NUMBER_CROSS_ANNOTATION]: [rulesMaxLength(10), ruleNumber],
-  [CLASSIFICATION]: [rulesRequired],
   [GROUP]: [rulesRequired],
 };

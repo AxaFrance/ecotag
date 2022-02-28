@@ -3,7 +3,7 @@ import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
 import LabelInput from '../../../shared/Label/LabelInput';
 import { TextInput, SelectInput, MultiSelectInput, NumberInput, Button } from '@axa-fr/react-toolkit-all';
-import { GROUP, CLASSIFICATION, NAME, TYPE, LABELS, DATASET, NUMBER_CROSS_ANNOTATION } from './constants';
+import { GROUP, NAME, TYPE, LABELS, DATASET, NUMBER_CROSS_ANNOTATION } from './constants';
 import './New.scss';
 
 const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
