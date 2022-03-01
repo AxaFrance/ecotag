@@ -32,6 +32,7 @@
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Include="ClientApp\public\web.config" />
   </ItemGroup>
 
   <ItemGroup>
