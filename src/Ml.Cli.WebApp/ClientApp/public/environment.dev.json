@@ -11,12 +11,5 @@
       "service_worker_relative_url":"/OidcServiceWorker.js",
       "service_worker_only": true
     }
-  },
-  "appInsights": {
-    "active": true,
-    "instrumentationKey": "",
-    "logLevel": "debug",
-    "trackTrace": true,
-    "trackEvent": true
   }
 }
