@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import '@testing-library/jest-dom';
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {Home} from "./Home";
 import {BrowserRouter as Router} from "react-router-dom";
 
@@ -16,7 +16,19 @@ describe.each([
             roles:roles ? roles.split(","): [],
             name: 'Guillaume Chervet'
         }
-        const { asFragment  } = render(<Router basename="/"><Home user={user} /></Router>);
-        expect(asFragment()).toMatchSnapshot();
+        const { container } = render(<Router basename="/"><Home user={user} /></Router>);
+
+        if(roles.includes("ECOTAG_ANNOTATEUR")) {
+            await waitFor(() => expect(container.querySelector('.home__link-container--projects')).not.toBeNull());
+        }
+        if(roles.includes("ECOTAG_DATA_SCIENTIST")) {
+            await waitFor(() => expect(container.querySelector('.home__link-container--datasets')).not.toBeNull());
+        }
+        if(roles.includes("ECOTAG_ADMINISTRATEUR")) {
+            await waitFor(() => expect(container.querySelector('.home__link-container--groups')).not.toBeNull());
+        }
+        
+        
+       // expect(asFragment()).toMatchSnapshot();
     });
 });
