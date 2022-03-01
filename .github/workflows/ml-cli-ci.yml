@@ -50,7 +50,7 @@ jobs:
       - name: Sonarqube Begin
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:axaguildev /k:AxaGuilDEv_ml-cli /d:sonar.exclusions=**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts /d:sonar.javascript.lcov.reportPaths=**/ClientApp/coverage/lcov.info /d:sonar.cs.opencover.reportsPaths=**/opencover.xml
+          dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:axaguildev /k:AxaGuilDEv_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 
       - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
     
