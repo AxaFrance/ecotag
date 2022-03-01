@@ -44,6 +44,11 @@ exports[`Header Render header page 1`] = `
           >
             Guillaume Chervet
           </span>
+          <span
+            class="af-info-user__profile"
+          >
+            [youhou, youhou]
+          </span>
         </div>
       </header>
     </div>
