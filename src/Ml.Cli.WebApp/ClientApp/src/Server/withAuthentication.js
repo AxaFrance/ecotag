@@ -3,14 +3,13 @@ import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc-context';
 
 const NON_CONNECTE = 'Non Connecté';
 
-export const getAuthName = oidcUser => oidcUser ? oidcUser.name : NON_CONNECTE;
+const getAuthName = oidcUser => oidcUser ? oidcUser.name : NON_CONNECTE;
 
-export const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
+const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
 
-    const DataScientist = "ECOTAG_DATA_SCIENTIST";
-    const Annoteur = "ECOTAG_ANNOTATEUR";
-    const Administateur = "ECOTAG_ADMINISTRATEUR";
-    
+export const DataScientist = "ECOTAG_DATA_SCIENTIST";
+export const Annotateur = "ECOTAG_ANNOTATEUR";
+export const Administateur = "ECOTAG_ADMINISTRATEUR";
     
 export const extractRoles = oidcUser => {
     const roles = [];
@@ -27,11 +26,11 @@ export const extractRoles = oidcUser => {
           });
       });
       if(roles.includes(DataScientist)){
-          roles.push(Annoteur);
+          roles.push(Annotateur);
       }
       else if(roles.includes(Administateur)){
           roles.push(DataScientist);
-          roles.push(Annoteur);
+          roles.push(Annotateur);
       }
       
    return roles;  
