@@ -1,4 +1,4 @@
-import { NAME, DATASET, NUMBER_CROSS_ANNOTATION, TYPE, MSG_REQUIRED, LABELS, CLASSIFICATION, GROUP } from './constants';
+import { NAME, DATASET, NUMBER_CROSS_ANNOTATION, TYPE, MSG_REQUIRED, LABELS, GROUP } from './constants';
 
 const rulesRequired = {
   required: {
