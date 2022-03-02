@@ -77,6 +77,7 @@ const Edit = ({
         </button>
         <button
           className="btn af-btn"
+          aria-label="SubmitUpdate"
           type="button"
           onClick={() => {
             onUpdateUser(idGroup, findUsersIds(usersToSubmit));

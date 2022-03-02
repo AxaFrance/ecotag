@@ -1,9 +1,10 @@
 import React from 'react';
 import { createMemoryHistory } from "history";
 import { BrowserRouter } from 'react-router-dom';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 import sleep from "../../../sleep";
+import {fireEvent} from "@testing-library/dom";
 
 describe('Home.container for groups', () => {
 
@@ -24,12 +25,20 @@ describe('Home.container for groups', () => {
   };
   
   it('HomeContainer render correctly the groups', async () => {
-    const { asFragment, getByText } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
+    const { container, asFragment, getByText } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
     const messageEl = await waitFor(() => getByText('developpeurs'));
     expect(messageEl).toHaveTextContent(
         'developpeurs'
     );
     expect(asFragment()).toMatchSnapshot();
+    
+    const updateButton = container.querySelector('.glyphicon-pencil');
+    fireEvent.click(updateButton);
+    await waitFor(() => expect(getByText(/Supprimer/i)).not.toBeNull());
+    
+    const submitUpdateButton = screen.getByLabelText(/SubmitUpdate/i);
+    fireEvent.click(submitUpdateButton);
+    await waitFor(() => expect(screen.queryByText(/Supprimer/i)).toBeNull());
   });
 });
 
