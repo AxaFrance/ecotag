@@ -28,7 +28,6 @@ public class GroupsRepository : IGroupsRepository
         {
             resultList.Add(group.ToGroupDataModel());
         }
-
         return resultList;
     }
 
@@ -87,10 +86,5 @@ public class GroupsRepository : IGroupsRepository
         await _groupsContext.SaveChangesAsync();
 
         return commandResult;
-
-        // groupModelEnum.GroupUsers.Add(new GroupUsersModel(){ Group = groupModelEnum, UserId = new Guid("")});
-        // groupModelEnum.GroupUsers.Remove()
-
-
     }
 }

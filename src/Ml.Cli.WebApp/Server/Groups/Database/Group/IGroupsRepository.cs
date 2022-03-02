@@ -7,8 +7,6 @@ public interface IGroupsRepository
 {
     Task<List<GroupDataModel>> GetAllGroupsAsync();
     
-    Task<GroupDataModel> GetGroupAsync(string id);
-
     Task<string> CreateGroupAsync(string groupName);
 
     Task<GroupDataModel> GetGroupByNameAsync(string name);

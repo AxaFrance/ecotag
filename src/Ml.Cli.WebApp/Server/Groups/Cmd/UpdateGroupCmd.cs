@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 
@@ -6,6 +7,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
 public record UpdateGroupInput
 {
+    [Required]
     public string Id { get; set; }
     public List<string> UserIds { get; set; }
 }
