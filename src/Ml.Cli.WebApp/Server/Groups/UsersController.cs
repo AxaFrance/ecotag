@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
+using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups
 {
     [Route("api/server/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.DataAnnoteur)]
     public class UsersController : Controller
     {
         private static List<User> users;

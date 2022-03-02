@@ -14,7 +14,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
 {
     [Route("api/server/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.DataScientist)]
     public class DatasetsController : Controller
     {
         public static List<Dataset> datasets;
@@ -37,6 +36,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataScientist)]
         public ActionResult<IEnumerable<DatasetForList>> GetAllDatasets([FromQuery]bool? locked)
         {
             return Ok(locked.HasValue ? datasets.Where(dataset => dataset.IsLocked == locked.Value ).Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}) : datasets.Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}));
@@ -44,6 +44,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{id}", Name = "GetDatasetById")]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataAnnoteur)]
         public ActionResult<Dataset> GetDataset(string id)
         {
             var dataset = Find(id);
@@ -57,6 +58,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.DataScientist)]
         public ActionResult<Dataset> Create(DatasetInput newDataset)
         {
             var dataset = new Dataset()
@@ -77,6 +79,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost("{datasetId}/files")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.DataScientist)]
         public async Task<IActionResult> OnPostUploadAsync(string datasetId, [FromForm(Name = "files")] List<IFormFile> formFiles)
         {
             var dataset = Find(datasetId);
@@ -102,6 +105,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataScientist)]
         public IActionResult GetDatasetFile(string datasetId, string id)
         {
             var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
@@ -112,6 +116,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         
         [HttpDelete("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataScientist)]
         public IActionResult DeleteFile(string datasetId, string id)
         {
             var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
@@ -125,6 +130,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost("{datasetId}/lock")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.DataScientist)]
         public ActionResult<Dataset> Lock(string datasetId)
         {
             var dataset = Find(datasetId);

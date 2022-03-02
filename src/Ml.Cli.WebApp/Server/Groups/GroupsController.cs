@@ -12,7 +12,6 @@ namespace Ml.Cli.WebApp.Server.Groups
 {
     [Route("api/server/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.DataAdministateur)]
     public class GroupsController : Controller
     {
         private static List<Group> groups;
@@ -34,6 +33,7 @@ namespace Ml.Cli.WebApp.Server.Groups
 
         [HttpGet]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataScientist)]
         public ActionResult<IEnumerable<Group>> GetAllGroups()
         {
             return Ok(groups);
@@ -41,6 +41,7 @@ namespace Ml.Cli.WebApp.Server.Groups
 
         [HttpGet("{id}", Name = "GetGroupById")]
         [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataAnnoteur)]
         public ActionResult<Group> GetGroup(string id)
         {
             var group = find(id);
@@ -54,6 +55,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.DataAdministateur)]
         public ActionResult<Group> Create(Group newGroup)
         {
             if (string.IsNullOrEmpty(newGroup.Id))
@@ -71,6 +73,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.DataAdministateur)]
         public ActionResult<Group> Delete(string id)
         {
             var group = find(id);
