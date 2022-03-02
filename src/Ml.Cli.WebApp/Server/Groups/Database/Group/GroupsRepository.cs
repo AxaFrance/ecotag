@@ -42,7 +42,10 @@ public class GroupsRepository : IGroupsRepository
 
     public async Task<GroupDataModel> GetGroupByNameAsync(string name)
     {
-        var group = await _groupsContext.Groups.AsNoTracking().FirstOrDefaultAsync(g => g.Name == name);
+        var group = await _groupsContext.Groups
+            .Include(group => group.GroupUsers)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(g => g.Name == name);
         return group?.ToGroupDataModel();
     }
 
