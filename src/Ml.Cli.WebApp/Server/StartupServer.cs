@@ -135,7 +135,7 @@ namespace Ml.Cli.WebApp.Server
             
             services.Configure<CorsSettings>(
                 Configuration.GetSection(CorsSettings.Cors));
-            var corsSettings = Configuration.GetSection(CorsSettings.Cors).Get<CorsSettings>();
+            var corsSettings = GetCorsSettings();
               if (!string.IsNullOrEmpty(corsSettings.Origins))
                   services.AddCors(options =>
                   {
@@ -162,6 +162,12 @@ namespace Ml.Cli.WebApp.Server
             });
         }
 
+        private CorsSettings GetCorsSettings()
+        {
+            var corsSettings = Configuration.GetSection(CorsSettings.Cors).Get<CorsSettings>();
+            return corsSettings;
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -186,7 +192,8 @@ namespace Ml.Cli.WebApp.Server
                 app.UseStaticFiles();
                 app.UseSpaStaticFiles();
             }
-
+            var corsSettings = GetCorsSettings();
+            if (!string.IsNullOrEmpty(corsSettings.Origins)) app.UseCors("CorsPolicy");
             app.UseAuthentication();
            
             app.UseSwagger();
