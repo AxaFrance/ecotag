@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Ml.Cli.WebApp.Server;
 
 namespace Ml.Cli.WebApp
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         public static void Main(string[] args)
