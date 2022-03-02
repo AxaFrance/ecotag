@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,6 +21,7 @@ using Ml.Cli.WebApp.Server.Oidc;
 
 namespace Ml.Cli.WebApp.Server
 {
+    [ExcludeFromCodeCoverage]
     public class StartupServer
     {
         public StartupServer(IConfiguration configuration, IWebHostEnvironment env)

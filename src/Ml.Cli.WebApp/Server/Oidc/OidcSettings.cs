@@ -1,5 +1,8 @@
-﻿namespace Ml.Cli.WebApp.Server.Oidc
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Ml.Cli.WebApp.Server.Oidc
 {
+    [ExcludeFromCodeCoverage]
     public class OidcSettings
     {
         public const string Oidc = "Oidc";

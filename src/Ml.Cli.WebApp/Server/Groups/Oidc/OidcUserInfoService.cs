@@ -6,7 +6,12 @@ using Ml.Cli.WebApp.Server.Oidc;
 
 namespace Ml.Cli.WebApp.Server.Groups.Oidc
 {
-    public class OidcUserInfoService
+    public interface IOidcUserInfoService
+    {
+        Task<OidcUserInfo> GetUserEmailAsync(string accessToken);
+    }
+
+    public class OidcUserInfoService : IOidcUserInfoService
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly OidcSettings _oidcSettings;

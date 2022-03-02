@@ -1,5 +1,8 @@
-﻿namespace Ml.Cli.WebApp.Server.Oidc
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Ml.Cli.WebApp.Server.Oidc
 {
+    [ExcludeFromCodeCoverage]
     public class Roles
     {
         public const string DataScientist = "ECOTAG_DATA_SCIENTIST";
