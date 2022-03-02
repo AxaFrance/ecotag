@@ -18,6 +18,19 @@ namespace Ml.Cli.WebApp.Server.Groups
             var result = await getAllGroupsCmd.ExecuteAsync();
             return Ok(result);
         }
+        
+        [HttpGet("{id}")]
+        [ResponseCache(Duration = 1)]
+        public async Task<ActionResult<GroupDataModel>> GetGroup([FromServices]GetGroupCmd getGroupCmd, string id)
+        {
+            var commandResult = await getGroupCmd.ExecuteAsync(id);
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+
+            return Ok(commandResult.Data);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

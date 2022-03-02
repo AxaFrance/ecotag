@@ -9,6 +9,8 @@ public interface IGroupsRepository
     
     Task<string> CreateGroupAsync(string groupName);
 
+    Task<GroupDataModel> GetGroupAsync(string id);
+    
     Task<GroupDataModel> GetGroupByNameAsync(string name);
 
     Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users);

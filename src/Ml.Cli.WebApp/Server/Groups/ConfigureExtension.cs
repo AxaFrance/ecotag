@@ -19,6 +19,7 @@ public static class ConfigureExtension
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<CreateGroupCmd, CreateGroupCmd>();
         services.AddScoped<GetAllGroupsCmd, GetAllGroupsCmd>();
+        services.AddScoped<GetGroupCmd, GetGroupCmd>();
         services.AddScoped<GetAllUsersCmd, GetAllUsersCmd>();
         services.AddScoped<UpdateGroupCmd, UpdateGroupCmd>();
     }

@@ -33,7 +33,10 @@ public class GroupsRepository : IGroupsRepository
 
     public async Task<GroupDataModel> GetGroupAsync(string id)
     {
-        var group = await _groupsContext.Groups.AsNoTracking().FirstOrDefaultAsync(g => g.Id == new Guid(id));
+        var group = await _groupsContext.Groups
+            .Include(group => group.GroupUsers)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(g => g.Id == new Guid(id));
         return group?.ToGroupDataModel();
     }
 

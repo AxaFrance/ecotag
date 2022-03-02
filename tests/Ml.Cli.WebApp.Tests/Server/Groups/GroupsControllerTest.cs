@@ -105,6 +105,85 @@ public class CreateGroupShould
             Assert.Contains(resultList, resultElement => resultElement.Name.Equals(groupName));
         }
     }
+    
+    [Theory]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
+        "[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"},{\"Id\": \"11110000-0000-0000-0000-000000000000\", \"Email\":\"third@gmail.com\"}]",
+        "[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]",
+        "10000000-0000-0000-0000-000000000000",
+        "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"UserIds\":[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]}",
+        true,
+        ""
+    )]
+    [InlineData(
+        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName1\"}, {\"Id\": \"10000000-0000-0000-0000-000000000001\", \"Name\": \"groupName2\"}]",
+        "[]",
+        "[]",
+        "11111111-0000-0000-0000-000000000000",
+        "{}",
+        false,
+        GetGroupCmd.GroupNotFound
+    )]
+    public async Task Get_Group(string groupsInDatabase, string usersInDatabase, string strUsersInGroup,
+        string searchedId, string strExpectedGroupWithUsers, bool isSuccess, string errorType)
+    {
+        var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
+        var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+        var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
+        var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
+        var groupContext = GetInMemoryGroupContext();
+        if (groupsList != null)
+            foreach (var group in groupsList)
+            {
+                groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
+            }
+
+        if (usersList != null)
+        {
+            foreach (var userDataModel in usersList)
+            {
+                groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
+            }
+        }
+
+        if (usersInGroup != null)
+        {
+            foreach (var userId in usersInGroup)
+            {
+                foreach (var group in groupsList)
+                {
+                    groupContext.GroupUsers.Add(new GroupUsersModel
+                        { GroupId = new Guid(group.Id), UserId = new Guid(userId) });
+                }
+            }
+        }
+
+        await groupContext.SaveChangesAsync();
+
+        var groupsRepository = new GroupsRepository(groupContext);
+
+        var groupsController = new GroupsController();
+        var getGroupCmd = new GetGroupCmd(groupsRepository);
+
+        var result = await groupsController.GetGroup(getGroupCmd, searchedId);
+        if (isSuccess)
+        {
+            var resultOk = result.Result as OkObjectResult;
+            Assert.NotNull(resultOk);
+            var resultValue = resultOk.Value as GroupDataModel;
+            var serializedExpectedGroup = JsonConvert.SerializeObject(expectedGroupWithUsers);
+            var serializedResultValue = JsonConvert.SerializeObject(resultValue);
+            Assert.Equal(serializedExpectedGroup, serializedResultValue);
+        }
+        else
+        {
+            var resultWithError = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultWithError);
+            var resultWithErrorValue = resultWithError.Value as ErrorResult;
+            Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
 
     [Theory]
     [InlineData(
@@ -240,6 +319,6 @@ public class CreateGroupShould
         var resultOk = result.Result as NoContentResult;
         Assert.NotNull(resultOk);
         var updatedGroup = await groupsRepository.GetGroupAsync("10000000-0000-0000-0000-000000000000");
-        Assert.Null(updatedGroup.UserIds);
+        Assert.Empty(updatedGroup.UserIds);
     }
 }
