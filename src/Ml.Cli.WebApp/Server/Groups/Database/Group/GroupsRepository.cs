@@ -12,6 +12,7 @@ public class GroupsRepository : IGroupsRepository
     private readonly GroupContext _groupsContext;
     public const string GroupNotFound = "GroupNotFound";
     public const string UserNotFound = "UserNotFound";
+    public const string AlreadyTakenName = "AlreadyTakenName";
 
     public GroupsRepository(GroupContext groupsContext)
     {
@@ -20,15 +21,10 @@ public class GroupsRepository : IGroupsRepository
 
     public async Task<List<GroupDataModel>> GetAllGroupsAsync()
     {
-        var resultList = new List<GroupDataModel>();
         var groupModelEnum = await _groupsContext.Groups
             .Include(group => group.GroupUsers)
             .AsNoTracking().ToListAsync();
-        foreach (var group in groupModelEnum)
-        {
-            resultList.Add(group.ToGroupDataModel());
-        }
-        return resultList;
+        return groupModelEnum.ConvertAll(element => element.ToGroupDataModel());
     }
 
     public async Task<GroupDataModel> GetGroupAsync(string id)
@@ -49,15 +45,22 @@ public class GroupsRepository : IGroupsRepository
         return group?.ToGroupDataModel();
     }
 
-    public async Task<string> CreateGroupAsync(string groupName)
+    public async Task<ResultWithError<string, ErrorResult>> CreateGroupAsync(string groupName)
     {
+        var commandResult = new ResultWithError<string, ErrorResult>();
         var groupModel = new GroupModel
         {
             Name = groupName
         };
-        _groupsContext.Groups.Add(groupModel);
+        var result = _groupsContext.Groups.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
+        if (result == null)
+        {
+            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            return commandResult;
+        }
         await _groupsContext.SaveChangesAsync();
-        return groupModel.Id.ToString();
+        commandResult.Data = groupModel.Id.ToString();
+        return commandResult;
     }
     
     public async Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users){

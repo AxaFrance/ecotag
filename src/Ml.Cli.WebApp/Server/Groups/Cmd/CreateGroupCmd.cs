@@ -18,7 +18,6 @@ public record CreateGroupInput
 public class CreateGroupCmd
 {
     public const string InvalidModel = "InvalidModel";
-    public const string AlreadyTakenName = "AlreadyTakenName";
     private readonly IGroupsRepository _groupsRepository;
 
     public CreateGroupCmd(IGroupsRepository groupsRepository)
@@ -40,18 +39,14 @@ public class CreateGroupCmd
             };
             return commandResult;
         }
-
-        var groupName = createGroupInput.Name;
-        var groupInDatabase = await _groupsRepository.GetGroupByNameAsync(groupName.ToLower()) != null;
-        if (groupInDatabase)
+        
+        var result = await _groupsRepository.CreateGroupAsync(createGroupInput.Name.ToLower());
+        if (!result.IsSuccess)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = AlreadyTakenName
-            };
+            commandResult.Error = result.Error;
             return commandResult;
         }
-        commandResult.Data = await _groupsRepository.CreateGroupAsync(createGroupInput.Name.ToLower());
+        commandResult.Data = result.Data;
 
         return commandResult;
     }

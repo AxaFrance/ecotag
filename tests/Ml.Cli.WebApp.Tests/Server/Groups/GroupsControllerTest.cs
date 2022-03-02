@@ -32,7 +32,7 @@ public class CreateGroupShould
     }
 
     [Theory]
-    [InlineData("[\"abcd\"]", "abcD", false, CreateGroupCmd.AlreadyTakenName)]
+    [InlineData("[\"abcd\"]", "abcD", false, GroupsRepository.AlreadyTakenName)]
     [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
     [InlineData("[]", "abc", true, "")]
     [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", false, CreateGroupCmd.InvalidModel)]
