@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
@@ -111,7 +112,7 @@ namespace Ml.Cli.WebApp
                         .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true)
                         .AddJsonFile($"appsettings-server.{env.EnvironmentName}Custom.json", true, true);
                     config.AddEnvironmentVariables();
-                })/*.ConfigureAppConfiguration((context, config) =>
+                }).ConfigureAppConfiguration((context, config) =>
                 {
                     if (!context.HostingEnvironment.IsDevelopment()) {
                         var builtConfig = config.Build();
@@ -120,7 +121,7 @@ namespace Ml.Cli.WebApp
                         var keyVaultConfig = keyVaultConfigBuilder.Build();
                         config.AddConfiguration(keyVaultConfig);
                     }
-                })*/
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
