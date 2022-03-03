@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SonarQubeAnalysisProperties  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
     <Property Name="sonar.host.url">https://sonarcloud.io</Property>
-    <Property Name="sonar.exclusions">**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts,**/ClientApp/public/OidcTrustedDomains.production.js</Property>
+    <Property Name="sonar.exclusions">**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*Sould.cs,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build-local/**,**/ClientApp/build-server/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts,**/ClientApp/public/**</Property>
     <Property Name="sonar.cs.opencover.reportsPaths">**/opencover.xml</Property>
     <Property Name="sonar.javascript.lcov.reportPaths">**/ClientApp/coverage/lcov.info</Property>
 </SonarQubeAnalysisProperties>
