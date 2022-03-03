@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Ml.Cli.WebApp.Server.Oidc;
 using Xunit;
 using static System.String;
@@ -23,6 +24,20 @@ namespace Ml.Cli.WebApp.Tests
             
             var roles = Join(',', profiles);
             Assert.Equal(expectedRoles, roles);
+        }
+        
+        [Theory]
+        [InlineData("openid profile email urn:axa:france:etg urn:axa:france:wac urn:axa:france:entity offline_access", true)]
+        [InlineData("openid profile email", false)]
+        public void ReturnCheckRequireScopeScope(string scopes, bool expectIsAuthorized)
+        {
+            var authorizationRequirements = new List<IAuthorizationRequirement>();
+            var user = new ClaimsPrincipal();
+            user.AddIdentity(new ClaimsIdentity(new List<Claim>(){new Claim("scope", scopes)}));
+            
+            var authorizationHandlerContext = new AuthorizationHandlerContext(authorizationRequirements, user, null);
+            var isAuthorized = ScopeRequirement.IsAuthorized(authorizationHandlerContext, new[] {"urn:axa:france:etg"});
+            Assert.Equal(expectIsAuthorized, isAuthorized);
         }
     }
 }
