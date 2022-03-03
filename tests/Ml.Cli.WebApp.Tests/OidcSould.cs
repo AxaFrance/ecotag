@@ -6,14 +6,14 @@ using static System.String;
 
 namespace Ml.Cli.WebApp.Tests
 {
-    public class OidcUnitTest
+    public class OidcSould
     {
         [Theory]
         [InlineData("CN=ECOTAG_DATA_SCIENTIST,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
         [InlineData("CN=ECOTAG_ANNOTATEUR,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_ANNOTATEUR")]
         [InlineData("CN=ECOTAG_ADMINISTRATEUR,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_ADMINISTRATEUR,ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
         [InlineData("OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "")]
-        public void GetProfilesShouldReturnProfiles(string memberOf, string expectedRoles)
+        public void ReturnProfiles(string memberOf, string expectedRoles)
         {
             IList<Claim> claims = new List<Claim>();
             claims.Add(new Claim(IdentityExtensions.EcotagClaimTypes.MemberOf, memberOf));

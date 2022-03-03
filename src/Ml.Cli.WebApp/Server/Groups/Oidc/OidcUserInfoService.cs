@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Oidc
 {
     public interface IOidcUserInfoService
     {
-        Task<OidcUserInfo> GetUserEmailAsync(string accessToken);
+        public Task<OidcUserInfo> GetUserEmailAsync(string accessToken);
     }
 
     public class OidcUserInfoService : IOidcUserInfoService
