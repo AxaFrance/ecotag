@@ -18,7 +18,7 @@ using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
-public class CreateGroupShould
+public class GroupsControllerTest
 {
     private static GroupContext GetInMemoryGroupContext()
     {
@@ -45,43 +45,62 @@ public class CreateGroupShould
         return serviceProvider;
     }
 
-    [Theory]
-    [InlineData("[\"abcd\"]", "abcD", false, GroupsRepository.AlreadyTakenName)]
-    [InlineData("[]", "ab", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "abc", true, "")]
-    [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "abcdefgh", true, "")]
-    [InlineData("[]", "abd$", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "abcdefghzoiqsdzqosqodz^", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "P$", false, CreateGroupCmd.InvalidModel)]
-    [InlineData("[]", "Abcd-dad", true, "")]
-    [InlineData("[]", "abdd_O", true, "")]
-    [InlineData("[]", "zqdsqd(", false, CreateGroupCmd.InvalidModel)]
-    public async Task Create_NewGroup(string groupNamesInDatabase, string groupName, bool isSuccess, string errorType)
+    public class CreateGroupTests
     {
-        var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
-        var groupContext = GetInMemoryGroupContext();
-        if (groupNamesArray != null)
-            groupNamesArray.ForEach(current =>
-                groupContext.Groups.Add(new GroupModel { Id = Guid.NewGuid(), Name = current })
-            );
-        await groupContext.SaveChangesAsync();
-        var newGroup = new CreateGroupInput
+        private static async Task<GroupContext> GetGroupContext(List<string> groupNamesArray)
         {
-            Name = groupName
-        };
-        var serviceProvider = GetMockedServiceProvider(groupContext);
-        var repository = new GroupsRepository(groupContext, serviceProvider.Object);
-        var groupsController = new GroupsController();
-        var createGroupCmd = new CreateGroupCmd(repository);
-        var result = await groupsController.Create(createGroupCmd, newGroup);
-        if (isSuccess)
+            var groupContext = GetInMemoryGroupContext();
+            if (groupNamesArray != null)
+                groupNamesArray.ForEach(current =>
+                    groupContext.Groups.Add(new GroupModel { Id = Guid.NewGuid(), Name = current })
+                );
+            await groupContext.SaveChangesAsync();
+            return groupContext;
+        }
+        
+        [Theory]
+        [InlineData("[]", "abc")]
+        [InlineData("[]", "abcdefgh")]
+        [InlineData("[]", "Abcd-dad")]
+        [InlineData("[]", "abdd_O")]
+        public async Task Should_Create_New_Group(string groupNamesInDatabase, string newGroupName)
         {
+            var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
+            var groupContext = await GetGroupContext(groupNamesArray);
+            var newGroup = new CreateGroupInput
+            {
+                Name = newGroupName
+            };
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+            var repository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var groupsController = new GroupsController();
+            var createGroupCmd = new CreateGroupCmd(repository);
+            var result = await groupsController.Create(createGroupCmd, newGroup);
             var resultCreated = result.Result as CreatedResult;
             Assert.NotNull(resultCreated);
         }
-        else
+        
+        [Theory]
+        [InlineData("[\"abcd\"]", "abcD", GroupsRepository.AlreadyTakenName)]
+        [InlineData("[]", "ab", CreateGroupCmd.InvalidModel)]
+        [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", CreateGroupCmd.InvalidModel)]
+        [InlineData("[]", "abd$", CreateGroupCmd.InvalidModel)]
+        [InlineData("[]", "abcdefghzoiqsdzqosqodz^", CreateGroupCmd.InvalidModel)]
+        [InlineData("[]", "P$", CreateGroupCmd.InvalidModel)]
+        [InlineData("[]", "zqdsqd(", CreateGroupCmd.InvalidModel)]
+        public async Task Should_Return_Error_On_New_Group_Creation(string groupNamesInDatabase, string groupName, string errorType)
         {
+            var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
+            var groupContext = await GetGroupContext(groupNamesArray);
+            var newGroup = new CreateGroupInput
+            {
+                Name = groupName
+            };
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+            var repository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var groupsController = new GroupsController();
+            var createGroupCmd = new CreateGroupCmd(repository);
+            var result = await groupsController.Create(createGroupCmd, newGroup);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
@@ -121,71 +140,66 @@ public class CreateGroupShould
             Assert.Contains(resultList, resultElement => resultElement.Name.Equals(groupName));
         }
     }
-    
-    [Theory]
-    [InlineData(
-        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
-        "[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"},{\"Id\": \"11110000-0000-0000-0000-000000000000\", \"Email\":\"third@gmail.com\"}]",
-        "[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]",
-        "10000000-0000-0000-0000-000000000000",
-        "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"UserIds\":[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]}",
-        true,
-        ""
-    )]
-    [InlineData(
-        "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName1\"}, {\"Id\": \"10000000-0000-0000-0000-000000000001\", \"Name\": \"groupName2\"}]",
-        "[]",
-        "[]",
-        "11111111-0000-0000-0000-000000000000",
-        "{}",
-        false,
-        GetGroupCmd.GroupNotFound
-    )]
-    public async Task Get_Group(string groupsInDatabase, string usersInDatabase, string strUsersInGroup,
-        string searchedId, string strExpectedGroupWithUsers, bool isSuccess, string errorType)
+
+    public class GetGroupTests
     {
-        var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-        var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
-        var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
-        var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
-        var groupContext = GetInMemoryGroupContext();
-        if (groupsList != null)
-            foreach (var group in groupsList)
-            {
-                groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
-            }
-
-        if (usersList != null)
+        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModel> usersList, List<string> usersInGroup)
         {
-            foreach (var userDataModel in usersList)
-            {
-                groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
-            }
-        }
-
-        if (usersInGroup != null)
-        {
-            foreach (var userId in usersInGroup)
-            {
+            var groupContext = GetInMemoryGroupContext();
+            if (groupsList != null)
                 foreach (var group in groupsList)
                 {
-                    groupContext.GroupUsers.Add(new GroupUsersModel
-                        { GroupId = new Guid(group.Id), UserId = new Guid(userId) });
+                    groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
+                }
+
+            if (usersList != null)
+            {
+                foreach (var userDataModel in usersList)
+                {
+                    groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
                 }
             }
+
+            if (usersInGroup != null)
+            {
+                foreach (var userId in usersInGroup)
+                {
+                    foreach (var group in groupsList)
+                    {
+                        groupContext.GroupUsers.Add(new GroupUsersModel
+                            { GroupId = new Guid(group.Id), UserId = new Guid(userId) });
+                    }
+                }
+            }
+
+            await groupContext.SaveChangesAsync();
+            return groupContext;
         }
-
-        await groupContext.SaveChangesAsync();
-
-        var serviceProvider = GetMockedServiceProvider(groupContext);
-        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
-
-        var groupsController = new GroupsController();
-        var getGroupCmd = new GetGroupCmd(groupsRepository);
-
-        var result = await groupsController.GetGroup(getGroupCmd, searchedId);
-        if (isSuccess)
+        
+        [Theory]
+        [InlineData(
+            "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}]",
+            "[{\"Id\": \"11000000-0000-0000-0000-000000000000\", \"Email\":\"first@gmail.com\"},{\"Id\": \"11100000-0000-0000-0000-000000000000\", \"Email\":\"second@gmail.com\"},{\"Id\": \"11110000-0000-0000-0000-000000000000\", \"Email\":\"third@gmail.com\"}]",
+            "[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]",
+            "10000000-0000-0000-0000-000000000000",
+            "{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"groupName\",\"UserIds\":[\"11000000-0000-0000-0000-000000000000\",\"11100000-0000-0000-0000-000000000000\"]}"
+        )]
+        public async Task Should_Get_Group(string groupsInDatabase, string usersInDatabase, string strUsersInGroup,
+            string searchedId, string strExpectedGroupWithUsers)
         {
+            var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
+            var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
+            var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
+
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+            var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+
+            var groupsController = new GroupsController();
+            var getGroupCmd = new GetGroupCmd(groupsRepository);
+
+            var result = await groupsController.GetGroup(getGroupCmd, searchedId);
             var resultOk = result.Result as OkObjectResult;
             Assert.NotNull(resultOk);
             var resultValue = resultOk.Value as GroupDataModel;
@@ -193,8 +207,30 @@ public class CreateGroupShould
             var serializedResultValue = JsonConvert.SerializeObject(resultValue);
             Assert.Equal(serializedExpectedGroup, serializedResultValue);
         }
-        else
+        
+        [Theory]
+        [InlineData(
+            "[{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName1\"}, {\"Id\": \"10000000-0000-0000-0000-000000000001\", \"Name\": \"groupName2\"}]",
+            "[]",
+            "[]",
+            "11111111-0000-0000-0000-000000000000",
+            GetGroupCmd.GroupNotFound
+        )]
+        public async Task Should_Return_Error_On_Get_Group(string groupsInDatabase, string usersInDatabase, string strUsersInGroup,
+            string searchedId, string errorType)
         {
+            var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
+            var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
+
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+            var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+
+            var groupsController = new GroupsController();
+            var getGroupCmd = new GetGroupCmd(groupsRepository);
+
+            var result = await groupsController.GetGroup(getGroupCmd, searchedId);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
@@ -202,83 +238,96 @@ public class CreateGroupShould
         }
     }
 
-    [Theory]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\"]}",
-        true,
-        ""
-    )]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\",\"10000000-1000-0000-0000-000000000000\"]}",
-        false,
-        UpdateGroupCmd.UserDuplicate
-    )]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\",\"10000000-5000-0000-0000-000000000000\"]}",
-        false,
-        GroupsRepository.UserNotFound
-    )]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-2000-0000-0000-000000000000\"]}",
-        true,
-        ""
-    )]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": []}",
-        true,
-        ""
-    )]
-    [InlineData(
-        "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
-        "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
-        "{\"Id\": \"10000000-0000-0000-0000-000000000001\", \"UserIds\": []}",
-        false,
-        GroupsRepository.GroupNotFound
-    )]
-    public async Task Update_Group(string strGroupDataModel, string usersInDatabase, string jsonUpdateGroupInput,
-        bool isSuccess, string errorType)
+    public class UpdateGroupTests
     {
-        var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
-        var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
-        var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
-
-        var groupContext = GetInMemoryGroupContext();
-
-        groupContext.Groups.Add(new GroupModel { Id = new Guid(groupDataModel.Id), Name = groupDataModel.Name });
-
-        if (knownUsers != null)
+        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModel> knownUsers)
         {
-            foreach (var newUser in knownUsers)
+            var groupContext = GetInMemoryGroupContext();
+
+            groupContext.Groups.Add(new GroupModel { Id = new Guid(groupDataModel.Id), Name = groupDataModel.Name });
+
+            if (knownUsers != null)
             {
-                groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower() });
+                foreach (var newUser in knownUsers)
+                {
+                    groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower() });
+                }
             }
+
+            await groupContext.SaveChangesAsync();
+            return groupContext;
         }
 
-        await groupContext.SaveChangesAsync();
-
-        var serviceProvider = GetMockedServiceProvider(groupContext);
-        
-        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
-        var groupsController = new GroupsController();
-        var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
-        var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
-        if (isSuccess)
+        [Theory]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\"]}"
+        )]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-2000-0000-0000-000000000000\"]}"
+        )]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": []}"
+        )]
+        public async Task Should_Update_Group(string strGroupDataModel, string usersInDatabase,
+            string jsonUpdateGroupInput)
         {
+            var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
+
+            var groupContext = await GetGroupContext(groupDataModel, knownUsers);
+
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+        
+            var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var groupsController = new GroupsController();
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultOk = result.Result as NoContentResult;
             Assert.NotNull(resultOk);
         }
-        else
+
+        [Theory]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\",\"10000000-1000-0000-0000-000000000000\"]}",
+            UpdateGroupCmd.UserDuplicate
+        )]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"UserIds\": [\"10000000-1000-0000-0000-000000000000\",\"10000000-5000-0000-0000-000000000000\"]}",
+            GroupsRepository.UserNotFound
+        )]
+    
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "[{\"Id\":\"10000000-1000-0000-0000-000000000000\", \"Email\": \"Guillaume.chervet@gmail.com\"},{\"Id\": \"10000000-2000-0000-0000-000000000000\", \"Email\": \"Lilian.delouvy@gmail.com\"}]",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000001\", \"UserIds\": []}",
+            GroupsRepository.GroupNotFound
+        )]
+        public async Task Should_Return_Error_On_Update_Group(string strGroupDataModel, string usersInDatabase,
+            string jsonUpdateGroupInput, string errorType)
         {
+            var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
+
+            var groupContext = await GetGroupContext(groupDataModel, knownUsers);
+
+            var serviceProvider = GetMockedServiceProvider(groupContext);
+        
+            var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var groupsController = new GroupsController();
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
