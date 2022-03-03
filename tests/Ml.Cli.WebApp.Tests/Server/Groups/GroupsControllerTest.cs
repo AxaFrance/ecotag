@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
@@ -11,6 +12,7 @@ using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -29,6 +31,18 @@ public class CreateGroupShould
         groupContext.Database.EnsureCreated();
         groupContext.Database.EnsureCreatedAsync();
         return groupContext;
+    }
+
+    private static Mock<IServiceProvider> GetMockedServiceProvider(GroupContext groupContext)
+    {
+        var serviceProvider = new Mock<IServiceProvider>();
+        serviceProvider.Setup(foo => foo.GetService(typeof(GroupContext))).Returns(groupContext);
+        var serviceScope = new Mock<IServiceScope>();
+        serviceScope.Setup(foo => foo.ServiceProvider).Returns(serviceProvider.Object);
+        var serviceScopeFactory = new Mock<IServiceScopeFactory>();
+        serviceScopeFactory.Setup(foo => foo.CreateScope()).Returns(serviceScope.Object);
+        serviceProvider.Setup(foo => foo.GetService(typeof(IServiceScopeFactory))).Returns(serviceScopeFactory.Object);
+        return serviceProvider;
     }
 
     [Theory]
@@ -56,7 +70,8 @@ public class CreateGroupShould
         {
             Name = groupName
         };
-        var repository = new GroupsRepository(groupContext);
+        var serviceProvider = GetMockedServiceProvider(groupContext);
+        var repository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
         var createGroupCmd = new CreateGroupCmd(repository);
         var result = await groupsController.Create(createGroupCmd, newGroup);
@@ -89,8 +104,9 @@ public class CreateGroupShould
         }
 
         await groupContext.SaveChangesAsync();
-        
-        var groupsRepository = new GroupsRepository(groupContext);
+
+        var serviceProvider = GetMockedServiceProvider(groupContext);
+        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
         var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository);
 
@@ -161,7 +177,8 @@ public class CreateGroupShould
 
         await groupContext.SaveChangesAsync();
 
-        var groupsRepository = new GroupsRepository(groupContext);
+        var serviceProvider = GetMockedServiceProvider(groupContext);
+        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
 
         var groupsController = new GroupsController();
         var getGroupCmd = new GetGroupCmd(groupsRepository);
@@ -249,7 +266,9 @@ public class CreateGroupShould
 
         await groupContext.SaveChangesAsync();
 
-        var groupsRepository = new GroupsRepository(groupContext);
+        var serviceProvider = GetMockedServiceProvider(groupContext);
+        
+        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
@@ -311,7 +330,9 @@ public class CreateGroupShould
 
         await groupContext.SaveChangesAsync();
 
-        var groupsRepository = new GroupsRepository(groupContext);
+        var serviceProvider = GetMockedServiceProvider(groupContext);
+        
+        var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);

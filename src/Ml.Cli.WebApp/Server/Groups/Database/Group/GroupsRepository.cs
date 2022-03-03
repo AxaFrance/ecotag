@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
@@ -10,13 +11,15 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 public class GroupsRepository : IGroupsRepository
 {
     private readonly GroupContext _groupsContext;
+    private readonly IServiceProvider _serviceProvider;
     public const string GroupNotFound = "GroupNotFound";
     public const string UserNotFound = "UserNotFound";
     public const string AlreadyTakenName = "AlreadyTakenName";
 
-    public GroupsRepository(GroupContext groupsContext)
+    public GroupsRepository(GroupContext groupsContext, IServiceProvider serviceProvider)
     {
         _groupsContext = groupsContext;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task<List<GroupDataModel>> GetAllGroupsAsync()
@@ -62,25 +65,33 @@ public class GroupsRepository : IGroupsRepository
         commandResult.Data = groupModel.Id.ToString();
         return commandResult;
     }
-    
-    public async Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users){
+
+    public async Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users)
+    {
         var commandResult = new ResultWithError<string, ErrorResult>();
-        
-        var groupModel = await _groupsContext.Groups.Where(group => group.Id == new Guid(groupId))
+
+        var groupsTask = _groupsContext.Groups.Where(group => group.Id == new Guid(groupId))
             .Include(group => group.GroupUsers).FirstOrDefaultAsync();
+        var scope = _serviceProvider.CreateScope();
+        var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
+        
+        var usersTask = groupContext2.Users.Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
+            .ToListAsync();
+        Task.WaitAll(groupsTask, usersTask);
+        var groupModel = groupsTask.Result;
         if (groupModel == null)
         {
             commandResult.Error = new ErrorResult { Key = GroupNotFound };
             return commandResult;
         }
-        
-        var usersDb = await _groupsContext.Users.Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id)).ToListAsync();
+
+        var usersDb = usersTask.Result;
         if (usersDb.Count < users.Count)
         {
             commandResult.Error = new ErrorResult { Key = UserNotFound };
             return commandResult;
         }
-        
+
         groupModel.GroupUsers.RemoveAll(groupUser => !users.Contains(groupUser.UserId.ToString()));
 
         foreach (var newUser in users)
@@ -88,7 +99,7 @@ public class GroupsRepository : IGroupsRepository
             var isElementInGroupUsers = groupModel.GroupUsers.Any(element => element.UserId == new Guid(newUser));
             if (!isElementInGroupUsers)
             {
-                groupModel.GroupUsers.Add(new GroupUsersModel(){Group = groupModel, UserId = new Guid(newUser)});
+                groupModel.GroupUsers.Add(new GroupUsersModel() { Group = groupModel, UserId = new Guid(newUser) });
             }
         }
 
