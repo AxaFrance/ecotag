@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Newtonsoft.Json;
 using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
@@ -49,11 +50,20 @@ namespace Ml.Cli.WebApp.Server.Projects
             return NotFound();
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [ResponseCache(Duration = 1)]
         public ActionResult<IEnumerable<Project>> GetAllProjects()
         {
             return Ok(projects);
+        }*/
+
+        [HttpGet]
+        [ResponseCache(Duration = 1)]
+        public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAllProjects(
+            [FromServices] GetAllProjectsCmd getAllProjectsCmd)
+        {
+            var result = await getAllProjectsCmd.ExecuteAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}", Name = "GetProjectById")]

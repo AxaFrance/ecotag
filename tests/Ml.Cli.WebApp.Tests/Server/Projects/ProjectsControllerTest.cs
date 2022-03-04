@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +79,38 @@ public class ProjectsControllerTest
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
             Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
+
+    [Theory]
+    [InlineData("[\"firstProjectName\",\"secondProjectName\"]")]
+    [InlineData("[]")]
+    public async Task Should_Get_All_projects(string projectsNamesInDatabase)
+    {
+        var projectsList = JsonConvert.DeserializeObject<List<string>>(projectsNamesInDatabase);
+
+        var projectContext = GetInMemoryProjectContext();
+
+        foreach (var projectName in projectsList)
+        {
+            projectContext.Projects.Add(new ProjectModel { Name = projectName });
+        }
+
+        await projectContext.SaveChangesAsync();
+
+        var projectsRepository = new ProjectsRepository(projectContext);
+        var projectsController = new ProjectsController();
+        var getAllProjectsCmd = new GetAllProjectsCmd(projectsRepository);
+
+        var result = await projectsController.GetAllProjects(getAllProjectsCmd);
+        var okObjectResult = result.Result as OkObjectResult;
+        Assert.NotNull(okObjectResult);
+        var resultList = okObjectResult.Value as List<ProjectDataModel>;
+        Assert.NotNull(resultList);
+        Assert.Equal(resultList.Count, projectsList.Count);
+        foreach (var projectName in projectsList)
+        {
+            Assert.Contains(resultList, element => element.Name.Equals(projectName));
         }
     }
 }
