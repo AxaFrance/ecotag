@@ -1,0 +1,36 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
+
+[Table("T_Project", Schema = "sch_etg")]
+public class ProjectModel
+{
+    [Key]
+    [Column("PRJ_Id")]
+    public Guid Id { get; set; }
+
+    [Column("PRJ_Name")]
+    [MaxLength(16)]
+    [MinLength(3)]
+    public string Name { get; set; }
+    
+    [Column("PRJ_Classification")]
+    public string Classification { get; set; }
+    
+    [Column("PRJ_NumberTags")]
+    public int NumberTagsToDo { get; set; }
+    
+    [Column("PRJ_CreateDate")]
+    public DateTime CreateDate { get; set; }
+    
+    [Column("PRJ_AnnotationType")]
+    public string AnnotationType { get; set; }
+    
+    [Column("PRJ_Text")]
+    public string Text { get; set; }
+    
+    [Column("PRJ_Labels")]
+    public string Labels { get; set; }
+}

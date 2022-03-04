@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Newtonsoft.Json;
 using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
@@ -65,7 +67,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Ok(project);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Project> Create(Project newProject)
@@ -75,6 +77,21 @@ namespace Ml.Cli.WebApp.Server.Projects
             projects.Add(newProject);
             
             return Created(newProject.Id, Find(newProject.Id));
+        }*/
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> Create([FromServices] CreateProjectCmd createProjectCmd,
+            CreateProjectInput createProjectInput)
+        {
+            var commandResult = await createProjectCmd.ExecuteAsync(createProjectInput);
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+
+            return Created(commandResult.Data, commandResult.Data);
         }
         
         [HttpPost("{projectId}/annotations/{fileId}")]

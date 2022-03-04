@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
+namespace Ml.Cli.WebApp.Server;
 
 public static class DbSetExtension
 {
