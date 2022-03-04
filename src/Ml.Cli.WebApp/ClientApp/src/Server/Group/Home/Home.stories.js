@@ -49,7 +49,6 @@ ListOfGroups.args = {
   hasSubmit: false,
   onChangePaging: () => {},
   onChangeFilter: () => {},
-  onDeleteGroup: () => {},
   onChangeCreateGroup: () => {},
   onSubmitCreateGroup: () => {}
 }

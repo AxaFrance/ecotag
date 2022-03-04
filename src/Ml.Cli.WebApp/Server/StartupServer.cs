@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Groups.Database;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -35,6 +37,8 @@ namespace Ml.Cli.WebApp.Server
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+            
+            services.ConfigureGroupRattachment(Configuration);
 
 
             /* services.AddAuthorization(options =>

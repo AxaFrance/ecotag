@@ -123,12 +123,20 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
           <th
             class="af-table__th"
           >
-            Utilisateurs
+            <span
+              class="af-table__th-content"
+            >
+              Utilisateurs
+            </span>
           </th>
           <th
             class="af-table__th"
           >
-            Actions
+            <span
+              class="af-table__th-content"
+            >
+              Actions
+            </span>
           </th>
         </tr>
       </thead>
@@ -146,10 +154,10 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
           <td
             class="af-table__cell"
           >
-            clement.trofleau.lbc@axa.fr, gilles.cruchon@axa.fr, francois.descamps@axa.fr, guillaume.chervet@axa.fr
+            gilles.cruchon@axa.fr, guillaume.chervet@axa.fr
           </td>
           <td
-            class="af-table__cell"
+            class="af-table__cell af-table__small"
           >
             <a
               class="btn af-btn--circle"
@@ -161,18 +169,6 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
             >
               <i
                 class="glyphicon glyphicon-pencil"
-              />
-            </a>
-            <a
-              class="btn af-btn--circle"
-              href="#"
-              id="removeActionId"
-              role="button"
-              tabindex="0"
-              title="Supprimer"
-            >
-              <i
-                class="glyphicon glyphicon-remove"
               />
             </a>
           </td>

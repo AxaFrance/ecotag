@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Ml.Cli.WebApp.Server.Groups.Cmd;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 namespace Ml.Cli.WebApp.Server.Groups
 {
@@ -12,71 +11,52 @@ namespace Ml.Cli.WebApp.Server.Groups
     [ApiController]
     public class GroupsController : Controller
     {
-        private static List<Group> groups;
-
-        private Group find(string id)
-        {
-            return groups.Find(currentGroup => currentGroup.Id == id);
-        }
-
-        public GroupsController()
-        {
-            var groupsAsString = System.IO.File.ReadAllText("./Server/Groups/mocks/groups.json");
-            if (groups != null) return;
-            Console.WriteLine("Loading groups...");
-            var groupsAsJsonFile = JsonDocument.Parse(groupsAsString);
-            var groupsAsJson = groupsAsJsonFile.RootElement.GetProperty("groups");
-            groups = JsonConvert.DeserializeObject<List<Group>>(groupsAsJson.ToString());
-        }
-
         [HttpGet]
         [ResponseCache(Duration = 1)]
-        public ActionResult<IEnumerable<Group>> GetAllGroups()
+        public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllGroups([FromServices] GetAllGroupsCmd getAllGroupsCmd)
         {
-            return Ok(groups);
+            var result = await getAllGroupsCmd.ExecuteAsync();
+            return Ok(result);
         }
-
-        [HttpGet("{id}", Name = "GetGroupById")]
+        
+        [HttpGet("{id}")]
         [ResponseCache(Duration = 1)]
-        public ActionResult<Group> GetGroup(string id)
+        public async Task<ActionResult<GroupDataModel>> GetGroup([FromServices]GetGroupCmd getGroupCmd, string id)
         {
-            var group = find(id);
-            if (group == null)
+            var commandResult = await getGroupCmd.ExecuteAsync(id);
+            if (!commandResult.IsSuccess)
             {
-                return NotFound();
+                return BadRequest(commandResult.Error);
             }
-            return Ok(group);
+
+            return Ok(commandResult.Data);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Group> Create(Group newGroup)
+        public async Task<ActionResult<string>> Create([FromServices]CreateGroupCmd createGroupCmd, CreateGroupInput createGroupInput)
         {
-            if (string.IsNullOrEmpty(newGroup.Id))
+            var commandResult = await createGroupCmd.ExecuteAsync(createGroupInput);
+            if (!commandResult.IsSuccess)
             {
-                newGroup.Id = Guid.NewGuid().ToString();
-                newGroup.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
-                groups.Add(newGroup);
+                return BadRequest(commandResult.Error);
             }
-            else
-            {
-                var group = groups.First(group => group.Id == newGroup.Id);
-                group.Users = newGroup.Users?.Count > 0 ? newGroup.Users : new List<User>();
-            }
-            return Created(newGroup.Id, find(newGroup.Id));
+            
+            return Created(commandResult.Data, commandResult.Data);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<Group> Delete(string id)
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> Update([FromServices] UpdateGroupCmd updateGroupCmd, UpdateGroupInput updateGroupInput)
         {
-            var group = find(id);
-            if (group == null)
+            var commandResult = await updateGroupCmd.ExecuteAsync(updateGroupInput);
+            if (!commandResult.IsSuccess)
             {
-                return NotFound();
+                return BadRequest(commandResult.Error);
             }
 
-            groups.Remove(group);
             return NoContent();
         }
     }

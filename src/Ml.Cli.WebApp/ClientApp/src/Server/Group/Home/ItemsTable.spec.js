@@ -35,7 +35,7 @@ const filters = {
 describe("Check Group ItemsTable behaviour", () => {
     
     test("Should render correctly and display users modification and group deletion modals", async () => {
-        const {container, queryByText, getAllByText, getByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onDeleteGroup={() => {}} onUpdateUser={() => {}}/>);
+        const {container, queryByText, getAllByText, getByText, asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onUpdateUser={() => {}}/>);
 
         expect(asFragment()).toMatchSnapshot();
         
@@ -50,12 +50,6 @@ describe("Check Group ItemsTable behaviour", () => {
         fireEvent.click(quitModalButton);
         
         await waitFor(() => expect(queryByText(/Annuler/i)).toBeNull());
-        
-        const deleteGroupButton = container.querySelector("#removeActionId");
-        
-        fireEvent.click(deleteGroupButton);
-        
-        await waitFor(() => expect(getAllByText(/Confirmer la suppression de groupe/i)).not.toBeNull());
     })
     
 })

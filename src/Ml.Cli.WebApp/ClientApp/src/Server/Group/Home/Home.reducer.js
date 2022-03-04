@@ -69,11 +69,17 @@ export const reducer = (state, action) => {
         };
       }
 
-      const groups = [...state.groups, newGroup];
+      let groups = [...state.groups];
+      if(state.groups.filter(group => group.name === newGroup.name).length === 0){
+        groups = [...state.groups, newGroup];
+      }
       
       return {
         ...state,
         hasSubmit: true,
+        fields: {
+          [NAME]: { name: NAME, value: '', message: "" },
+        },
         status: resilienceStatus.SUCCESS,
         groups
       };
@@ -100,30 +106,6 @@ export const reducer = (state, action) => {
         if (index > -1) {
           groups.splice(index, 1);
           groups.splice(index, 0, updatedGroup)
-        }
-      }
-
-      return {
-        ...state,
-        status,
-        groups,
-      };
-    }
-    case 'deleteUserEnded': {
-      const { status, id } = action.data;
-
-      if(status === resilienceStatus.ERROR){
-        return {
-          ...state,
-          status,
-        };
-      }
-      const groups = [...state.groups];
-      const item = groups.find(i => i.id === id);
-      if(item) {
-        const index = groups.indexOf(item);
-        if (index > -1) {
-          groups.splice(index, 1);
         }
       }
 

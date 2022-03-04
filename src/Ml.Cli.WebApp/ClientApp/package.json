@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "4.0.0-alpha.19",
+    "@axa-fr/react-oidc-context": "4.0.1",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
@@ -13,10 +13,9 @@
     "env-cmd": "10.1.0",
     "glob": "7.1.7",
     "js-levenshtein": "1.1.6",
-    "konva": "8.3.1",
+    "konva": "8.3.2",
     "monaco-editor": "0.25.2",
     "mw.validation": "1.0.15",
-    "oidc-client": "1.11.5",
     "plotty": "^0.4.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -43,7 +42,7 @@
     "postinstall": "npm rebuild canvas --update-binary",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "prepare": "cp -n ./public/environment.dev.json ./public/environment.dev-custom.json && npm run copy"
+    "prepare": "copyfiles -n ./public/environment.dev.json ./public/environment.dev.json && npm run copy"
   },
   "homepage": ".",
   "browserslist": {
@@ -71,10 +70,11 @@
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
     "copyfiles": "2.4.1",
+    "jest-watch-typeahead": "^0.6.5",
     "prop-types": "15.8.0",
     "react-scripts": "5.0.0",
-    "webpack": "5.65.0",
-    "typescript": "4.5.5"
+    "typescript": "4.5.5",
+    "webpack": "5.65.0"
   },
   "eslintConfig": {
     "overrides": [
