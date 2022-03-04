@@ -66,7 +66,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Ok(result);
         }
 
-        [HttpGet("{id}", Name = "GetProjectById")]
+        /*[HttpGet("{id}", Name = "GetProjectById")]
         public ActionResult<Project> GetProject(string id)
         {
             var project = Find(id);
@@ -75,6 +75,17 @@ namespace Ml.Cli.WebApp.Server.Projects
                 return NotFound();
             }
             return Ok(project);
+        }*/
+
+        [HttpGet("{id}", Name = "GetProjectById")]
+        public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
+        {
+            var commandResult = await getProjectCmd.ExecuteAsync(id);
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+            return Ok(commandResult.Data);
         }
 
         /*[HttpPost]

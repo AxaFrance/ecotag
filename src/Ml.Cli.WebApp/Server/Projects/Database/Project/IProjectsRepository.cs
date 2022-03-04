@@ -7,4 +7,5 @@ public interface IProjectsRepository
 {
     Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(string projectName);
     Task<List<ProjectDataModel>> GetAllProjectsAsync();
+    Task<ProjectDataModel> GetProjectAsync(string projectId);
 }

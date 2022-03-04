@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +64,7 @@ public class ProjectsControllerTest
         [InlineData("[\"projectName\"]", "projectName", ProjectsRepository.AlreadyTakenName)]
         [InlineData("[]", "ab", CreateProjectCmd.InvalidModel)]
         [InlineData("[]", "qzkjdlmqzzdizqomdqzpiduozqjidqsd", CreateProjectCmd.InvalidModel)]
-        public async Task Should_Return_Error_On_Group_Creation(string projectNamesInDatabase, string newProjectName, string errorType)
+        public async Task Should_Return_Error_On_Project_Creation(string projectNamesInDatabase, string newProjectName, string errorType)
         {
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
             var newProject = new CreateProjectInput { Name = newProjectName };
@@ -79,6 +78,58 @@ public class ProjectsControllerTest
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;
             Assert.Equal(errorType, resultWithErrorValue?.Key);
+        }
+    }
+
+    public class GetProjectTest
+    {
+        private static async Task<ProjectContext> GetProjectContext(List<ProjectDataModel> projectsNamesArray)
+        {
+            var projectContext = GetInMemoryProjectContext();
+            foreach (var projectDataModel in projectsNamesArray)
+            {
+                projectContext.Projects.Add(new ProjectModel { Id = new Guid(projectDataModel.Id), Name = projectDataModel.Name });
+            }
+
+            await projectContext.SaveChangesAsync();
+            return projectContext;
+        }
+
+        [Theory]
+        [InlineData("[{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\": \"projectName\"}]",
+            "10000000-0000-0000-0000-000000000000", "projectName")]
+        public async Task Should_Get_Project(string strProjectsInDatabase, string searchedId, string expectedProjectName)
+        {
+            var projectsInDatabase = JsonConvert.DeserializeObject<List<ProjectDataModel>>(strProjectsInDatabase);
+            var projectContext = await GetProjectContext(projectsInDatabase);
+            var projectsRepository = new ProjectsRepository(projectContext);
+            var projectsController = new ProjectsController();
+            var getProjectCmd = new GetProjectCmd(projectsRepository);
+
+            var result = await projectsController.GetProject(getProjectCmd, searchedId);
+            var resultOk = result.Result as OkObjectResult;
+            Assert.NotNull(resultOk);
+            var resultValue = resultOk.Value as ProjectDataModel;
+            Assert.Equal(expectedProjectName, resultValue?.Name);
+        }
+
+        [Theory]
+        [InlineData("[{\"Id\":\"10000000-0000-0000-0000-000000000000\", \"Name\": \"projectName\"}]",
+            "11111111-0000-0000-0000-000000000000", GetProjectCmd.ProjectNotFound)]
+        public async Task Should_Return_Error_On_Get_Project(string strProjectsInDatabase, string searchedId,
+            string errorType)
+        {
+            var projectsInDatabase = JsonConvert.DeserializeObject<List<ProjectDataModel>>(strProjectsInDatabase);
+            var projectContext = await GetProjectContext(projectsInDatabase);
+            var projectsRepository = new ProjectsRepository(projectContext);
+            var projectsController = new ProjectsController();
+            var getProjectCmd = new GetProjectCmd(projectsRepository);
+
+            var result = await projectsController.GetProject(getProjectCmd, searchedId);
+            var resultOk = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultOk);
+            var resultValue = resultOk.Value as ErrorResult;
+            Assert.Equal(errorType, resultValue?.Key);
         }
     }
 

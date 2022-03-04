@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,5 +41,12 @@ public class ProjectsRepository : IProjectsRepository
     {
         var projectModelEnum = await _projectsContext.Projects.AsNoTracking().ToListAsync();
         return projectModelEnum.ConvertAll(element => element.ToProjectDataModel());
+    }
+
+    public async Task<ProjectDataModel> GetProjectAsync(string projectId)
+    {
+        var projectModel = await _projectsContext.Projects.AsNoTracking()
+            .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
+        return projectModel?.ToProjectDataModel();
     }
 }
