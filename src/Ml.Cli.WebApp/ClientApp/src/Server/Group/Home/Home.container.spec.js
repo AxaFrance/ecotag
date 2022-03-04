@@ -1,22 +1,18 @@
 import React from 'react';
 import { createMemoryHistory } from "history";
 import { BrowserRouter } from 'react-router-dom';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 import sleep from "../../../sleep";
+import {fireEvent} from "@testing-library/dom";
 
 describe('Home.container for groups', () => {
 
   const history = createMemoryHistory({ initialEntries: ['/'] });
   const givenGroups = [{
-    "id": "0001",
-    "name": "developpeurs",
-    "users": [
-      { "email": "clement.trofleau.lbc@axa.fr" },
-      { "email": "gilles.cruchon@axa.fr" },
-      { "email": "francois.descamps@axa.fr" },
-      { "email": "guillaume.chervet@axa.fr" }
-    ]
+    id: "0001",
+    name: "developpeurs",
+    userIds: ["0001","0002"]
   }];
   const givenFetch = async (url) => {
     await sleep(1);
@@ -24,17 +20,25 @@ describe('Home.container for groups', () => {
       case "groups":
         return {ok: true, json: () => Promise.resolve(givenGroups)};
       default:
-        return {ok: true, json: () => Promise.resolve(["gilles.cruchon@axa.fr", "guillaume.chervet@axa.fr"])};
+        return {ok: true, json: () => Promise.resolve([{id: "0001", email: "gilles.cruchon@axa.fr"}, {id: "0002", email: "guillaume.chervet@axa.fr"}])};
     }
   };
   
   it('HomeContainer render correctly the groups', async () => {
-    const { asFragment, getByText } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
+    const { container, asFragment, getByText } = render(<BrowserRouter history={history}><HomeContainer fetch={givenFetch} /></BrowserRouter>);
     const messageEl = await waitFor(() => getByText('developpeurs'));
     expect(messageEl).toHaveTextContent(
         'developpeurs'
     );
     expect(asFragment()).toMatchSnapshot();
+    
+    const updateButton = container.querySelector('.glyphicon-pencil');
+    fireEvent.click(updateButton);
+    await waitFor(() => expect(getByText(/Supprimer/i)).not.toBeNull());
+    
+    const submitUpdateButton = screen.getByLabelText(/SubmitUpdate/i);
+    fireEvent.click(submitUpdateButton);
+    await waitFor(() => expect(screen.queryByText(/Supprimer/i)).toBeNull());
   });
 });
 

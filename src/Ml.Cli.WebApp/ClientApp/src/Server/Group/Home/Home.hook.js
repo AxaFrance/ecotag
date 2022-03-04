@@ -1,5 +1,10 @@
 import React from 'react';
-import { fetchGroups, fetchUsers, fetchDeleteGroup, fetchCreateOrUpdateGroup } from '../Group.service';
+import {
+  fetchGroups,
+  fetchUsers,
+  fetchCreateGroup,
+  fetchUpdateGroup
+} from '../Group.service';
 import { reducer, initState } from './Home.reducer';
 import { NAME } from './New/constants';
 import {resilienceStatus} from "../../shared/Resilience";
@@ -19,29 +24,19 @@ export const initListOfGroups = (fetch, dispatch) => async () => {
 export const createGroup = (fetch, dispatch) => async fields => {
   dispatch({ type: 'onActionGroupLoading' });
   const newGroup = {
-    name: fields[NAME].value,
-    users: [],
+    name: fields[NAME].value.toLowerCase(),
+    userIds: [],
   };
-  const response = await fetchCreateOrUpdateGroup(fetch)(newGroup);
+  const response = await fetchCreateGroup(fetch)(newGroup);
   let data;
   if(response.status >= 500 ){
-    data = {status: resilienceStatus.ERROR, newGroup: null };
+    data = {status: resilienceStatus.ERROR, newGroup: {id: null, ...newGroup} };
   } else {
-    data = {status: resilienceStatus.SUCCESS, newGroup : await response.json() };
+    const groupId = await response.json()
+    data = {status: resilienceStatus.SUCCESS, newGroup: {id: groupId, ...newGroup} };
   }
+  
   dispatch({ type: 'onSubmitCreateGroup', data });
-};
-
-export const deleteGroup = (fetch, dispatch) => async id => {
-  dispatch({ type: 'onActionGroupLoading' });
-  const response = await fetchDeleteGroup(fetch)(id);
-  let data;
-  if(response.status >= 500 ){
-    data = {status: resilienceStatus.ERROR, id: null };
-  } else {
-    data = {status: resilienceStatus.SUCCESS, id };
-  }
-  dispatch({ type: 'deleteUserEnded', data });
 };
 
 export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users) => {
@@ -51,10 +46,10 @@ export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users)
   const updatedGroup = {
     id: groupToUpdate.id,
     name: groupToUpdate.name,
-    users: users.map(email => ({ email })),
+    userIds: users,
   };
 
-  const response = await fetchCreateOrUpdateGroup(fetch)(updatedGroup);
+  const response = await fetchUpdateGroup(fetch)(updatedGroup);
   
   let data;
   if(response.status >= 500 ){
@@ -70,7 +65,6 @@ export const useHome = fetch => {
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
-  const onDeleteGroup = id => deleteGroup(fetch, dispatch)(id);
   const onChangeCreateGroup = event => dispatch({ type: 'onChangeCreateGroup', event });
   const onSubmitCreateGroup = () => createGroup(fetch, dispatch)(state.fields);
   const onUpdateUser = (idGroup, users) => updateUsersInGroup(fetch, dispatch, state, idGroup, users);
@@ -80,7 +74,6 @@ export const useHome = fetch => {
   return {
     state,
     onChangePaging,
-    onDeleteGroup,
     onChangeCreateGroup,
     onSubmitCreateGroup,
     onUpdateUser,

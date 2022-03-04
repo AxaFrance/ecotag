@@ -43,6 +43,17 @@ const Edit = ({
     label: email,
     clearableValue: true,
   }));
+  
+  const findUsersIds = usersEmails => {
+      const usersIds = [];
+      for(let user of [...users, ...eligibleUsers]){
+          if(usersEmails.includes(user.email)){
+              usersIds.push(user.id);
+          }
+      }
+      return usersIds;
+  }
+  
   return (
     <Modal
         className="af-modal af-modal--group-edit"
@@ -66,9 +77,10 @@ const Edit = ({
         </button>
         <button
           className="btn af-btn"
+          aria-label="SubmitUpdate"
           type="button"
           onClick={() => {
-            onUpdateUser(idGroup, usersToSubmit);
+            onUpdateUser(idGroup, findUsersIds(usersToSubmit));
             setManageUsersModalVisible(false);
             return false;
           }}>

@@ -10,8 +10,6 @@ import {fetchDataset, fetchLockDataset} from "../Dataset.service";
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import {useParams} from "react-router-dom";
 import withCustomFetch from "../../withCustomFetch";
-import {convertStringDateToDateObject} from "../../date";
-
 
 export const init = (fetch, setState) => async (id, state) => {
     const response = await fetchDataset(fetch)(id);
@@ -20,12 +18,12 @@ export const init = (fetch, setState) => async (id, state) => {
         data = { status: resilienceStatus.ERROR };
     } else {
         const dataset = await response.json()
-        const datasetData = convertStringDateToDateObject({ name: dataset.name, 
+        const datasetData = { name: dataset.name, 
             id: dataset.id, 
             createDate: dataset.createDate,
             isLock: dataset.isLocked,
             type: dataset.type
-        });
+        };
         const filesSend= dataset.files.map( f => { return  { file: { id: f.id, type: f.contentType, size: f.size, name: f.fileName } }})
         data = { status: resilienceStatus.SUCCESS, dataset:datasetData, files : {...state.files, filesSend} };
     }

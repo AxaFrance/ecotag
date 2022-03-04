@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Server.Groups;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -29,7 +30,7 @@ namespace Ml.Cli.WebApp.Server
             Configuration = configuration;
             CurrentEnvironment = env;
         }
-        
+
         private IWebHostEnvironment CurrentEnvironment { get; }
 
         public IConfiguration Configuration { get; }
@@ -66,6 +67,7 @@ namespace Ml.Cli.WebApp.Server
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+            services.ConfigureGroupRattachment(Configuration);
             
              services.AddAuthorization(options =>
                   {

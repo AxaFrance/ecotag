@@ -1,8 +1,7 @@
-import { fetchDatasets } from '../../../Dataset/Dataset.service';
-import { fetchGroups } from '../../../Group/Group.service';
-import { fetchProjects } from "../../Project.service";
-import {convertStringDateToDateObject} from "../../../date";
 import { resilienceStatus } from '../../../shared/Resilience';
+import fetchDatasets from "../../../Dataset/Dataset.service";
+import {fetchGroups} from "../../../Group/Group.service";
+import {fetchProjects} from "../../Project.service";
 
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)(true);
@@ -19,7 +18,7 @@ export const init = (fetch, dispatch) => async () => {
         data = {
             groups,
             datasets,
-            projects: convertStringDateToDateObject(projects),
+            projects,
             status: resilienceStatus.SUCCESS};
     }
   dispatch({ type: 'init', data});

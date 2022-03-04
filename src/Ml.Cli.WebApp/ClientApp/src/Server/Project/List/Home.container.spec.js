@@ -10,7 +10,7 @@ const fetch = () => Promise.resolve({ok: true, json: () => Promise.resolve([{
     "name": "Relevé d'information",
     "classification": "Publique",
     "numberTagToDo": 10,
-    "createDate": "04/04/2011",
+    "createDate": new Date("04-04-2011").getTime(),
     "typeAnnotation": "NER",
     "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
   }])});

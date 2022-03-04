@@ -71,7 +71,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public ActionResult<Project> Create(Project newProject)
         {
             newProject.Id = Guid.NewGuid().ToString();
-            newProject.CreateDate = DateTime.Now;
+            newProject.CreateDate = DateTime.Now.Ticks;
             projects.Add(newProject);
             
             return Created(newProject.Id, Find(newProject.Id));

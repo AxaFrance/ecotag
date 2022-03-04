@@ -9,18 +9,24 @@ import {NAME} from "./New/constants";
 const HomeWithResilience = withResilience(Home);
 
 const NOT_FOUND = -1;
-const computeEligibleUsers = (actualUsers = [], allEligibleUsers = []) => {
-  const emails = actualUsers.map(user => user.email);
-  return allEligibleUsers.filter(user => emails.indexOf(user.email) === NOT_FOUND);
+const computeEligibleUsers = (groupUserIds = [], users = []) => {
+  return users.filter(user => groupUserIds.indexOf(user.id) === NOT_FOUND);
 };
+const computeGroupUsers = (groupUsersIds = [], allEligibleUsers = []) => {
+  let users = [];
+  for(let user of groupUsersIds){
+    const relatedUser = allEligibleUsers.find(usr => usr.id === user);
+    users.push(relatedUser);
+  }
+  return users;
+}
 
 export const HomeContainer = ({ fetch }) => {
-  const { state, onChangePaging, onDeleteGroup, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
+  const { state, onChangePaging, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
     fetch
   );
   const {groups, users} = state;
-  const items = groups.map(group => {return { ...group, eligibleUsers : computeEligibleUsers(group.users, users) }});
-  
+  const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.userIds, users), eligibleUsers : computeEligibleUsers(group.userIds, users) }});
   const numberPages = computeNumberPages(items, state.filters.paging.numberItemsByPage);
   const currentPage = state.filters.paging.currentPage;
   const filters = {
@@ -42,7 +48,6 @@ export const HomeContainer = ({ fetch }) => {
       items={itemsFiltered}
       filters={filters}
       onChangePaging={onChangePaging}
-      onDeleteGroup={onDeleteGroup}
       onChangeCreateGroup={onChangeCreateGroup}
       onSubmitCreateGroup={onSubmitCreateGroup}
       onUpdateUser={onUpdateUser}

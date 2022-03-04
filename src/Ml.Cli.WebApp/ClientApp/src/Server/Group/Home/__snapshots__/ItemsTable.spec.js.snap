@@ -23,12 +23,20 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
         <th
           class="af-table__th"
         >
-          Utilisateurs
+          <span
+            class="af-table__th-content"
+          >
+            Utilisateurs
+          </span>
         </th>
         <th
           class="af-table__th"
         >
-          Actions
+          <span
+            class="af-table__th-content"
+          >
+            Actions
+          </span>
         </th>
       </tr>
     </thead>
@@ -45,9 +53,11 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
         </td>
         <td
           class="af-table__cell"
-        />
+        >
+          -
+        </td>
         <td
-          class="af-table__cell"
+          class="af-table__cell af-table__small"
         >
           <a
             class="btn af-btn--circle"
@@ -59,18 +69,6 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
           >
             <i
               class="glyphicon glyphicon-pencil"
-            />
-          </a>
-          <a
-            class="btn af-btn--circle"
-            href="#"
-            id="removeActionId"
-            role="button"
-            tabindex="0"
-            title="Supprimer"
-          >
-            <i
-              class="glyphicon glyphicon-remove"
             />
           </a>
         </td>

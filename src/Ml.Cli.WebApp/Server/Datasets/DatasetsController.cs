@@ -67,7 +67,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
                 Classification = newDataset.Classification,
                 Name = newDataset.Name,
                 Type = newDataset.Type,
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.Now.Ticks,
             };
             
             datasets.Add(dataset);
