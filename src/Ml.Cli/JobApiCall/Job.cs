@@ -33,7 +33,7 @@ namespace Ml.Cli.JobApiCall
         {
             return source
                 .Select((x, i) => new { Index = i, Value = x })
-                .GroupBy(x => x.Index / chunkSize)
+                .GroupBy(x => x.Index / (chunkSize == 0 ? 1 : chunkSize))
                 .Select(x => x.Select(v => v.Value).ToList())
                 .ToList();
         }
