@@ -13,7 +13,7 @@ public static class ConfigureExtension
     public static void ConfigureGroupRattachment(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<GroupContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("GroupContext")));
+            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<GroupContext, GroupContext>();
         services.AddScoped<IGroupsRepository, GroupsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
