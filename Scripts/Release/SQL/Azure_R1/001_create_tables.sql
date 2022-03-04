@@ -1,4 +1,4 @@
-﻿USE [EcotagContent]
+﻿USE [ecotag]
 GO
 
 /****** Object:  Table [sch_etg].[T_User] ******/

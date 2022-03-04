@@ -22,7 +22,7 @@ public class GroupContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=EcotagContent;Integrated Security=False;User ID=sa;Password=Your_password123;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=ecotag;Integrated Security=False;User ID=sa;Password=Your_password123;MultipleActiveResultSets=True");
         }
     }
 

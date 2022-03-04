@@ -1,4 +1,4 @@
-﻿USE [EcotagContent]
+﻿USE [ecotag]
 GO
 
 CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_etg].[T_Group]

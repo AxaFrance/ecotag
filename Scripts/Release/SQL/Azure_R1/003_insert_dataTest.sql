@@ -1,4 +1,4 @@
-﻿USE [EcotagContent]
+﻿USE [ecotag]
 GO
 
 DECLARE @firstUserId uniqueidentifier
