@@ -203,6 +203,7 @@ namespace Ml.Cli.WebApp.Server
             app.UseRouting();
             app.UseResponseCaching();
             app.UseAuthorization();
+            app.UseCreateUser();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/isalive", async (HttpContext context) =>

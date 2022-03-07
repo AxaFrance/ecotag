@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -9,9 +10,10 @@ using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Groups;
 
+    [ExcludeFromCodeCoverage]
   public static class UserMiddlewareExtensions
     {
-        public static IApplicationBuilder UserManagement(
+        public static IApplicationBuilder UseCreateUser(
             this IApplicationBuilder app)
         {
             if (app == null)
