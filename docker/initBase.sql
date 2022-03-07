@@ -71,7 +71,8 @@ if not exists (select * from sysobjects where name='T_User' and xtype='U')
 BEGIN
 CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
-    [USR_Email] [varchar](254) NOT NULL
+    [USR_Email] [varchar](254) NOT NULL,
+    [USR_Subject] [varchar](16) NOT NULL,
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]))
 END
 
@@ -108,6 +109,12 @@ CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
+CREATE CLUSTERED INDEX [IND_UserSubject] ON [sch_ECOTAG].[T_User]
+(
+    [USR_Subject] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
 DECLARE @firstUserId uniqueidentifier
 DECLARE @secondUserId uniqueidentifier
 DECLARE @thirdUserId uniqueidentifier
@@ -124,9 +131,9 @@ SET @firstGroupId = newid()
 SET @secondGroupId = newid()
 SET @thirdGroupId = newid()
 
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first@gmail.com")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
