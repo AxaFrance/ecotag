@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -78,8 +80,10 @@ public class CreateUserMiddlewareSould
             var oidcUserInfo = new OidcUserInfo() { Email = "guillaume.chervet@toto.fr" };
             oidcUserInfoServiceMock.Setup(it => it.GetUserEmailAsync(It.IsAny<string>())).ReturnsAsync(oidcUserInfo);
 
+
+            var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             createUserMidleware.InvokeAsync(httpContext,
-                new CreateUserCmd(new UsersRepository(groupContext), oidcUserInfoServiceMock.Object));
+                new CreateUserCmd(new UsersRepository(groupContext,memoryCache), oidcUserInfoServiceMock.Object));
             
             Assert.Equal(expectedStatusCode, httpContext.Response.StatusCode);
             Assert.Equal(groupContext.Users.Count(), expectedNumberUsersInDatabase);

@@ -43,7 +43,7 @@ namespace Ml.Cli.WebApp.Server
             var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
             var oidcUserSettings = Configuration.GetSection(OidcUserSettings.OidcUser).Get<OidcUserSettings>();
             var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
-
+            services.AddMemoryCache();
             if (!string.IsNullOrEmpty(oidcSettings.ProxyUrl))
             {
                 httpClientService.ConfigurePrimaryHttpMessageHandler(() => 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -12,10 +13,12 @@ public class UsersRepository : IUsersRepository
 {
     public const string SubjectAlreadyExist = "SubjectAlreadyExist";
     private readonly GroupContext _groupsContext;
+    private readonly IMemoryCache _cache;
 
-    public UsersRepository(GroupContext groupsContext)
+    public UsersRepository(GroupContext groupsContext, IMemoryCache cache)
     {
         _groupsContext = groupsContext;
+        _cache = cache;
     }
     
     public async Task<List<UserDataModel>> GetAllUsersAsync()
@@ -29,12 +32,19 @@ public class UsersRepository : IUsersRepository
 
         return resultList;
     }
-    
-    
+
     public async Task<UserDataModel> GetUserBySubjectAsync(string subject)
     {
-        var user = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Subject == subject.ToLower());
-        return user?.ToUserDataModel();
+        var cacheEntry = await _cache.GetOrCreateAsync($"GetUserBySubjectAsync({subject})", async entry =>
+        {
+            var user = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Subject == subject.ToLower());
+            entry.AbsoluteExpirationRelativeToNow =
+                user == null ? TimeSpan.FromMilliseconds(1) : TimeSpan.FromHours(1);
+            entry.SlidingExpiration = TimeSpan.FromMinutes(1);
+            return user;
+        });
+            
+        return cacheEntry?.ToUserDataModel();
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string subject)
