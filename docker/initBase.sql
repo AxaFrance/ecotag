@@ -63,13 +63,13 @@ END
 
 USE ecotag
 GO
-CREATE SCHEMA sch_etg AUTHORIZATION [dbo];
+CREATE SCHEMA sch_ECOTAG AUTHORIZATION [dbo];
 GO
 
-/****** Object:  Table [sch_etg].[T_User] ******/
+/****** Object:  Table [sch_ECOTAG].[T_User] ******/
 if not exists (select * from sysobjects where name='T_User' and xtype='U')
 BEGIN
-CREATE TABLE [sch_etg].[T_User](
+CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [USR_Email] [varchar](254) NOT NULL
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]))
@@ -77,10 +77,10 @@ END
 
 GO 
 
-/****** Object:  Table [sch_etg].[T_Group] ******/
+/****** Object:  Table [sch_ECOTAG].[T_Group] ******/
 if not exists (select * from sysobjects where name='T_Group' and xtype='U')
 BEGIN
-CREATE TABLE [sch_etg].[T_Group](
+CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Name] [varchar](16) NOT NULL
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id])
@@ -89,10 +89,10 @@ END
 
 GO
 
-/****** Object:  Table [sch_etg].[T_GroupUsers] ******/
+/****** Object:  Table [sch_ECOTAG].[T_GroupUsers] ******/
 if not exists (select * from sysobjects where name='T_GroupUsers' and xtype='U')
 BEGIN
-CREATE TABLE [sch_etg].[T_GroupUsers](
+CREATE TABLE [sch_ECOTAG].[T_GroupUsers](
     [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Id] uniqueidentifier NOT NULL,
     [USR_Id] uniqueidentifier NOT NULL
@@ -102,7 +102,7 @@ END
 
 GO
 
-CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_etg].[T_Group]
+CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
 (
     [GRP_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
@@ -124,18 +124,18 @@ SET @firstGroupId = newid()
 SET @secondGroupId = newid()
 SET @thirdGroupId = newid()
 
-INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first@gmail.com")
-INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
-INSERT INTO [sch_etg].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first@gmail.com")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
 
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
-INSERT INTO [sch_etg].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdgroup")
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdgroup")
 
-INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
-INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
-INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
-INSERT INTO [sch_etg].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
+INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
+INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
+INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
+INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
 
 GO
 

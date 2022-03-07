@@ -6,7 +6,7 @@ using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Database.Users;
 
-[Table("T_User", Schema = "sch_etg")]
+[Table("T_User", Schema = "sch_ECOTAG")]
 public class UserModel
 {
     [Key]
