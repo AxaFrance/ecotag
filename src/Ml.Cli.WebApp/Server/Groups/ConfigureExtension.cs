@@ -6,6 +6,7 @@ using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Groups.Oidc;
 
 namespace Ml.Cli.WebApp.Server.Groups;
 
@@ -23,6 +24,7 @@ public static class ConfigureExtension
         services.AddScoped<GetGroupCmd, GetGroupCmd>();
         services.AddScoped<GetAllUsersCmd, GetAllUsersCmd>();
         services.AddScoped<CreateUserCmd, CreateUserCmd>();
+        services.AddScoped<IOidcUserInfoService, OidcUserInfoService>();
         services.AddScoped<UpdateGroupCmd, UpdateGroupCmd>();
     }
 }
