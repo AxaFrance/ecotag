@@ -22,6 +22,7 @@ public static class ConfigureExtension
         services.AddScoped<GetAllGroupsCmd, GetAllGroupsCmd>();
         services.AddScoped<GetGroupCmd, GetGroupCmd>();
         services.AddScoped<GetAllUsersCmd, GetAllUsersCmd>();
+        services.AddScoped<CreateUserCmd, CreateUserCmd>();
         services.AddScoped<UpdateGroupCmd, UpdateGroupCmd>();
     }
 }

@@ -195,7 +195,10 @@ namespace Ml.Cli.WebApp.Server
                 app.UseSpaStaticFiles();
             }
             var corsSettings = GetCorsSettings();
-            if (!string.IsNullOrEmpty(corsSettings.Origins)) app.UseCors("CorsPolicy");
+            if (!string.IsNullOrEmpty(corsSettings.Origins))
+            {
+                app.UseCors("CorsPolicy");
+            }
             app.UseAuthentication();
            
             app.UseSwagger();
