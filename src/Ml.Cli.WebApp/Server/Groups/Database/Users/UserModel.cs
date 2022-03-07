@@ -17,5 +17,9 @@ public class UserModel
     [EmailAddress]
     public string Email { get; set; }
     
+    [Column("USR_Subject")]
+    [Required]
+    public string Subject { get; set; }
+    
     public List<GroupUsersModel> GroupUsers { get; set; }
 }

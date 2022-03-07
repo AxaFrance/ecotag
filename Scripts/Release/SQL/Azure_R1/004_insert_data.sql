@@ -17,9 +17,9 @@ SET @firstGroupId = newid()
 SET @secondGroupId = newid()
 SET @thirdGroupId = newid()
 
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@firstUserId,"first@gmail.com")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@secondUserId,"second@gmail.com")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email]) VALUES (@thirdUserId,"third@gmail.com")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")

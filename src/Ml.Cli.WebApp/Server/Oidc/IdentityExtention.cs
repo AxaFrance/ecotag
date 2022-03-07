@@ -16,6 +16,22 @@ namespace Ml.Cli.WebApp.Server.Oidc
         public class EcotagClaimTypes
         {
             public static readonly string MemberOf = "member_of";
+            public static readonly string Sub = "sub";
+        }
+        
+        public static string GetSubject(this IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
+            if (!(identity is ClaimsIdentity claimsIdentity)) return string.Empty;
+            
+            var sub = claimsIdentity
+                .Claims.FirstOrDefault(c => c.Type == EcotagClaimTypes.Sub);
+
+            return sub?.Value;
         }
 
         public static ICollection<string> GetProfiles(this IIdentity identity)

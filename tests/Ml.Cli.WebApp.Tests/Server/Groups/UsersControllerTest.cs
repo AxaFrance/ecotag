@@ -40,7 +40,7 @@ public class UsersControllerTest
 
         foreach (var userEmail in usersList)
         {
-            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail });
+            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, Subject = "S666666" });
         }
 
         await groupContext.SaveChangesAsync();

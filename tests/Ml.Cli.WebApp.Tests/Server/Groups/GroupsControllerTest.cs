@@ -156,7 +156,7 @@ public class GroupsControllerTest
             {
                 foreach (var userDataModel in usersList)
                 {
-                    groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email });
+                    groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email, Subject = "S666666" });
                 }
             }
 
@@ -250,7 +250,7 @@ public class GroupsControllerTest
             {
                 foreach (var newUser in knownUsers)
                 {
-                    groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower() });
+                    groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), Subject = "S666666" });
                 }
             }
 
@@ -356,7 +356,7 @@ public class GroupsControllerTest
         {
             foreach (var newUser in knownUsers)
             {
-                groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower() });
+                groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), Subject = "S666666"});
             }
         }
 
