@@ -74,6 +74,8 @@ CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Email] [varchar](254) NOT NULL,
     [USR_Subject] [varchar](16) NOT NULL,
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]))
+    CONSTRAINT [PK_T_User_Email] UNIQUE([USR_Email])
+    CONSTRAINT [PK_T_User_Subject] UNIQUE([USR_Subject])
 END
 
 GO 
@@ -85,7 +87,8 @@ CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Name] [varchar](16) NOT NULL
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id])
-)
+    CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name])
+    )
 END
 
 GO

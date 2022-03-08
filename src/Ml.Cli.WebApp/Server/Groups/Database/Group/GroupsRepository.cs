@@ -61,7 +61,15 @@ public class GroupsRepository : IGroupsRepository
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
-        await _groupsContext.SaveChangesAsync();
+        try
+        {
+            await _groupsContext.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            return commandResult;
+        }
         commandResult.Data = groupModel.Id.ToString();
         return commandResult;
     }

@@ -56,14 +56,16 @@ public class UsersRepository : IUsersRepository
             Email = email.ToLower(),
             Subject = subjectLowerCase
         };
-        
-        var result = _groupsContext.Users.AddIfNotExists(userModel, user => user.Subject == subjectLowerCase);
-        if (result == null)
+        _groupsContext.Users.Add(userModel);
+        try
+        {
+            await _groupsContext.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
         {
             commandResult.Error = new ErrorResult { Key = SubjectAlreadyExist };
             return commandResult;
         }
-        await _groupsContext.SaveChangesAsync();
         commandResult.Data = userModel.Id.ToString();
         return commandResult;
     }
