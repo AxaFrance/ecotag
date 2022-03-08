@@ -61,7 +61,7 @@ public class UsersRepository : IUsersRepository
         {
             await _groupsContext.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateException)
         {
             commandResult.Error = new ErrorResult { Key = SubjectAlreadyExist };
             return commandResult;
