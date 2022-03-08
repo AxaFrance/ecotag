@@ -24,7 +24,7 @@ namespace Ml.Cli.WebApp.Server.Groups;
 
     public class CreateUserMiddleware
     {
-        public const string AccessToken = "access_token";
+        public const string Authorization = "Authorization";
         private readonly RequestDelegate _next;
 
         public CreateUserMiddleware(RequestDelegate next)
@@ -41,20 +41,27 @@ namespace Ml.Cli.WebApp.Server.Groups;
             }
             
             var subject = context.User.Identity.GetSubject();
-            var accessToken = context.Request.Headers[AccessToken];
+            var authorisation = context.Request.Headers[Authorization].ToString();
+            var accessToken = String.IsNullOrEmpty(authorisation) ? String.Empty : authorisation.Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await HttpCode(context, 401);
+            }
+            
             if (!string.IsNullOrEmpty(subject))
             {
                 await createUserCmd.ExecuteAsync(new CreateUserInput() { Subject = subject, AccessToken = accessToken });
                 await _next.Invoke(context);
                 return;
             }
-            await Http403(context);
+            await HttpCode(context);
         }
 
-        private static async Task Http403(HttpContext context, string keyValue = "")
+        private static async Task HttpCode(HttpContext context,int httpCode=403, string keyValue = "")
         {
             var response = context.Response;
-            response.StatusCode = 403;
+            response.StatusCode = httpCode;
             var jsonString = JsonConvert.SerializeObject(new UnAuthorized
             {
                 Key = keyValue

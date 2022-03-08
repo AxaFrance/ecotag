@@ -39,7 +39,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Oidc
             var oidcConfiguration = await GetOidcConfigurationAsync();
             var request = new HttpRequestMessage(HttpMethod.Get,
                 oidcConfiguration.UserinfoEndpoint);
-            request.Headers.Add("authorization", "Bearer "+ accessToken);
+            request.Headers.Add("authorization", $"Bearer {accessToken}");
             var client = _clientFactory.CreateClient(NamedHttpClients.ProxiedClient);
             var response = await client.SendAsync(request);
             await using var responseStream = await response.Content.ReadAsStreamAsync();

@@ -37,7 +37,7 @@ public class CreateUserMiddlewareSould
             return groupContext;
         }
 
-        private static DefaultHttpContext DefaultHttpContext(string path, string subject)
+        private static DefaultHttpContext DefaultHttpContext(string path, string subject, string authorization= "Bearer access_token")
         {
             var context = new DefaultHttpContext()
             {
@@ -46,20 +46,20 @@ public class CreateUserMiddlewareSould
                     new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, subject),
                 }
                 ))
-                
             };
             context.Request.Path = path;
-            context.Request.Headers[CreateUserMiddleware.AccessToken] = "access_token";
+            context.Request.Headers[CreateUserMiddleware.Authorization] = authorization;
              return context;
         }
         
         [Theory]
-        [InlineData("/api/toto", "S66666", "[]", 1, 200)]
-        [InlineData("/api/toto", "S123456789abcdefghijkl", "[]", 0, 200)]
-        [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"Subject\":\"s66666\"}]", 1, 200)]
-        [InlineData("/api/toto","", "[]", 0, 403)]
-        [InlineData("/notapi","s66666", "[]", 0, 200)]
-        public async Task CreateUser(string path, string subject, string usersInDatabase, int expectedNumberUsersInDatabase, int expectedStatusCode)
+        [InlineData("/api/toto", "S66666", "[]", 1, 200, "Bearer access_token")]
+        [InlineData("/api/toto", "S123456789abcdefghijkl", "[]", 0, 200, "Bearer access_token")]
+        [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"Subject\":\"s66666\"}]", 1, 200, "Bearer access_token")]
+        [InlineData("/api/toto","", "[]", 0, 403, "Bearer access_token")]
+        [InlineData("/notapi","s66666", "[]", 0, 200, "Bearer access_token")]
+        [InlineData("/api/toto","s66666", "[]", 0, 401, "")]
+        public async Task CreateUser(string path, string subject, string usersInDatabase, int expectedNumberUsersInDatabase, int expectedStatusCode, string authorization)
         {
             var groupContext = GetInMemoryGroupContext();
             
@@ -75,12 +75,11 @@ public class CreateUserMiddlewareSould
                 return Task.FromResult("");
             };
             var createUserMidleware = new CreateUserMiddleware(nextMiddleware);
-            var httpContext = DefaultHttpContext(path, subject);
+            var httpContext = DefaultHttpContext(path, subject, authorization);
             var oidcUserInfoServiceMock = new Mock<IOidcUserInfoService>();
             var oidcUserInfo = new OidcUserInfo() { Email = "guillaume.chervet@toto.fr" };
             oidcUserInfoServiceMock.Setup(it => it.GetUserEmailAsync(It.IsAny<string>())).ReturnsAsync(oidcUserInfo);
-
-
+            
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             createUserMidleware.InvokeAsync(httpContext,
                 new CreateUserCmd(new UsersRepository(groupContext,memoryCache), oidcUserInfoServiceMock.Object));
