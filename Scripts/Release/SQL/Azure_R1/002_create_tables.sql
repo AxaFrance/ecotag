@@ -11,8 +11,9 @@ CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Subject] [varchar](16) NOT NULL,
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]),
     CONSTRAINT [PK_T_User_Email] UNIQUE([USR_Email]),
-    CONSTRAINT [PK_T_User_Subject] UNIQUE([USR_Subject])
-    )
+    CONSTRAINT [PK_T_User_Subject] UNIQUE([USR_Subject]),
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
 END
 
 GO 
@@ -25,7 +26,8 @@ CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Name] [varchar](16) NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
     CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name]),
-    )
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
 END
 
 GO
@@ -37,6 +39,7 @@ CREATE TABLE [sch_ECOTAG].[T_GroupUsers](
     [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Id] uniqueidentifier NOT NULL,
     [USR_Id] uniqueidentifier NOT NULL
-    CONSTRAINT [PK_T_GroupUsers] UNIQUE([GPU_Id])
-    )
+    CONSTRAINT [PK_T_GroupUsers] UNIQUE([GPU_Id]),
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
 END
