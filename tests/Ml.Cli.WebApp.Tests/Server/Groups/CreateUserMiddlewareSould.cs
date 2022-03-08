@@ -43,7 +43,7 @@ public class CreateUserMiddlewareSould
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(IdentityExtensions.EcotagClaimTypes.Sub, subject),
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, subject),
                 }
                 ))
                 
