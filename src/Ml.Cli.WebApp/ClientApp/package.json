@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "4.0.1",
+    "@axa-fr/react-oidc-context": "4.2.10",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
@@ -16,7 +16,7 @@
     "konva": "8.3.2",
     "monaco-editor": "0.25.2",
     "mw.validation": "1.0.15",
-    "plotty": "^0.4.7",
+    "plotty": "0.4.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
@@ -32,9 +32,9 @@
     "use-image": "1.0.7"
   },
   "scripts": {
-    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public",
+    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcKeepAliveServiceWorker.json ./public",
     "start:local": "env-cmd -f .env.local react-scripts start",
-    "start:server": "npm run copy && env-cmd -f .env.server react-scripts start",
+    "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",
     "build:server": "npm run copy && env-cmd -f .env.server react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -42,7 +42,7 @@
     "postinstall": "npm rebuild canvas --update-binary",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "prepare": "copyfiles -n ./public/environment.dev.json ./public/environment.dev.json && npm run copy"
+    "prepare": "cp -n ./public/environment.dev.json ./public/environment.dev-custom.json && npm run copy"
   },
   "homepage": ".",
   "browserslist": {
@@ -70,11 +70,11 @@
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
     "copyfiles": "2.4.1",
-    "jest-watch-typeahead": "^0.6.5",
+    "jest-watch-typeahead": "0.6.5",
     "prop-types": "15.8.0",
     "react-scripts": "5.0.0",
-    "typescript": "4.5.5",
-    "webpack": "5.65.0"
+    "webpack": "5.65.0",
+    "typescript": "4.5.5"
   },
   "eslintConfig": {
     "overrides": [

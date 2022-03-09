@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -40,12 +42,12 @@ public class UsersControllerTest
 
         foreach (var userEmail in usersList)
         {
-            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail });
+            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, Subject = "S666666" });
         }
 
         await groupContext.SaveChangesAsync();
-        
-        var usersRepository = new UsersRepository(groupContext);
+        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        var usersRepository = new UsersRepository(groupContext, memoryCache);
         var usersController = new UsersController();
         var getAllUsersCmd = new GetAllUsersCmd(usersRepository);
 

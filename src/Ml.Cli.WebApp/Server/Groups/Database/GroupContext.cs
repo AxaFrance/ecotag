@@ -17,14 +17,6 @@ public class GroupContext : DbContext
     public GroupContext(DbContextOptionsBuilder options) : base(options.Options)
     {
     }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=EcotagContent;Integrated Security=False;User ID=sa;Password=Your_password123;MultipleActiveResultSets=True");
-        }
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,4 +42,5 @@ public class GroupContext : DbContext
     {
         return SaveChangesAsync(default);
     }
+    
 }

@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-.env.server.dev-custom
 /public/environment.dev-custom.json
+/public/OidcServiceWorker.js
+/public/OidcKeepAliveServiceWorker.json
 
 # dependencies
 /node_modules

@@ -1,32 +1,54 @@
 import React from 'react';
-import { useOidcIdToken } from '@axa-fr/react-oidc-context';
+import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc-context';
 
 const NON_CONNECTE = 'Non Connecté';
 
-export const getAuthName = oidcUser => oidcUser ? oidcUser.name : NON_CONNECTE;
+const getAuthName = oidcUser => oidcUser ? oidcUser.name : NON_CONNECTE;
 
-export const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
+const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
 
-export const getAuthRole = oidcUser =>
-    oidcUser && oidcUser.member_of ? oidcUser.member_of[0].replace('CN=', '') : '';
+export const DataScientist = "ECOTAG_DATA_SCIENTIST";
+export const Annotateur = "ECOTAG_ANNOTATEUR";
+export const Administateur = "ECOTAG_ADMINISTRATEUR";
+    
+export const extractRoles = oidcUser => {
+    const roles = [];
+  if(oidcUser && oidcUser.member_of && oidcUser.member_of.length > 0) { 
+   
+      oidcUser.member_of.forEach(member => {
+          member.split(",").forEach(subMember => {
+              if(subMember.startsWith('CN=')){
+                  const role = subMember.replace('CN=', '');
+                  if(role.includes("ECOTAG_")) {
+                      roles.push(role);
+                  }
+              }
+          });
+      });
+      if(roles.includes(DataScientist)){
+          roles.push(Annotateur);
+      }
+      else if(roles.includes(Administateur)){
+          roles.push(DataScientist);
+          roles.push(Annotateur);
+      }
+      
+   return roles;  
+  }
+}
 
-export const getAuthUid = oidcUser =>
-    oidcUser && oidcUser.axa_uid_racf ? oidcUser.axa_uid_racf : '';
-
-/**
- * MAAM gives us : "member_of": [ "CN=ADMIN"]
- * @param {Object} oidcUser
- */
-const extractDataFromOAuthToken = oidcUser => ({
-  name: getAuthName(oidcUser),
+const extractDataFromOAuthToken = (idTokenPayload, oidcUser) => ({
+  name: getAuthName(idTokenPayload),
   email: getAuthEmail(oidcUser),
-  role: getAuthRole(oidcUser),
-  uid: getAuthUid(oidcUser),
+  roles: extractRoles(oidcUser)
 });
 
-const withAuthentication = (useReactOidcFn = useOidcIdToken) => Component => props => {
-  const { idToken } = useOidcIdToken();
-  return <Component {...props} user={extractDataFromOAuthToken(idToken)} />;
+const withAuthentication = () => Component => props => {
+  const { idTokenPayload } = useOidcIdToken();
+  const{ oidcUser } = useOidcUser();
+  
+  
+  return <Component {...props} user={extractDataFromOAuthToken(idTokenPayload, oidcUser)} />;
 };
 
 export default withAuthentication;

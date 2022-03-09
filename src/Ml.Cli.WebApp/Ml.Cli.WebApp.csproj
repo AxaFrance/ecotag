@@ -13,12 +13,20 @@
   </PropertyGroup>
   
   <ItemGroup>
+	<PackageReference Include="Azure.Identity" Version="1.5.0" />
+	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.2" />
 	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.8" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.2" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
 	<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
 	<PackageReference Include="swashbuckle.aspnetcore" Version="6.2.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+      <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
+      <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+      <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />
+      <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
   </ItemGroup>
   
   <ItemGroup>
@@ -32,6 +40,7 @@
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Include="ClientApp\public\web.config" />
   </ItemGroup>
 
   <ItemGroup>

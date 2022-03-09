@@ -1,26 +1,16 @@
 {
-  "apiUrl": "#{apiUrl}#",
-  "baseUrl": "/",
+  "apiUrl": "#{Spa:ApiUrl}#",
+  "baseUrl": "#{Spa:BaseUrl}#",
   "oidc": {
     "isEnabled": false,
     "configuration": {
-      "client_id": "#{Oidc:ClientId}#",
-      "redirect_uri": "#{Oidc:RedirectUri}#",
-      "response_type": "code",
-      "post_logout_redirect_uri": "#{Oidc:PostLogoutRedirectUri}#",
-      "scope": "openid profile email api offline_access",
-      "authority": "#{Oidc:Authority}#",
-      "silent_redirect_uri": "#{Oidc:SilentRedirectUri}#",
-      "automaticSilentRenew": true,
-      "loadUserInfo": true,
-      "triggerAuthFlow": true
+      "client_id": "#{Spa:Oidc:ClientId}#",
+      "redirect_uri": "#{Spa:Oidc:RedirectUri}#",
+      "post_logout_redirect_uri": "#{Spa:Oidc:PostLogoutUri}#",
+      "scope": "#{Spa:Oidc:Scope}#",
+      "authority": "#{Spa:Oidc:Authority}#",
+      "service_worker_relative_url":"/OidcServiceWorker.js",
+      "service_worker_only": true
     }
-  },
-  "appInsights": {
-    "instrumentationKey": "#{APPINSIGHTS_INSTRUMENTATIONKEY}#",
-    "logLevel": "#{APPINSIGHTS_LOG_LEVEL}#",
-    "active": #{ACTIVE_APPINSIGHTS}#,
-    "trackTrace": #{ACTIVE_APPINSIGHTS_TRACK_TRACE}#,
-    "trackEvent": #{ACTIVE_APPINSIGHTS_TRACK_EVENT}#
- }
+  }
 }

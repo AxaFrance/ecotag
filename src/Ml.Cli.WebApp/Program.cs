@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
@@ -10,9 +12,11 @@ using Ml.Cli.PathManager;
 using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Paths;
 using Ml.Cli.WebApp.Server;
+using Serilog;
 
 namespace Ml.Cli.WebApp
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         public static void Main(string[] args)
@@ -106,12 +110,26 @@ namespace Ml.Cli.WebApp
                 {
                     var env = builderContext.HostingEnvironment;
                     config.AddJsonFile($"appsettings-server.json", false, true)
-                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true);
+                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}.json", true, true)
+                        .AddJsonFile($"appsettings-server.{env.EnvironmentName}Custom.json", true, true);
                     config.AddEnvironmentVariables();
+                }).ConfigureAppConfiguration((context, config) =>
+                {
+                    if (!context.HostingEnvironment.IsDevelopment()) {
+                        var builtConfig = config.Build();
+                        var keyVaultConfigBuilder = new ConfigurationBuilder();
+                        keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+                        var keyVaultConfig = keyVaultConfigBuilder.Build();
+                        config.AddConfiguration(keyVaultConfig);
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
+                    webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<StartupServer>();
+                    webBuilder.UseSerilog(
+                                            (context, logger) => { logger.ReadFrom.Configuration(context.Configuration); });
                 });
 
         private static IHostBuilder CreateHostBuilderLocal(string[] args) =>

@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
-namespace Ml.Cli.WebApp.Server.Database.Users;
+namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 public interface IUsersRepository
 {
     Task<List<UserDataModel>> GetAllUsersAsync();
     
-    Task<UserDataModel> GetUserAsync(string id);
+    Task<UserDataModel> GetUserBySubjectAsync(string email);
     
-    Task<UserDataModel> GetUserByEmailAsync(string email);
-    
-    Task<string> CreateUserAsync(string email);
+    Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string subject);
 }

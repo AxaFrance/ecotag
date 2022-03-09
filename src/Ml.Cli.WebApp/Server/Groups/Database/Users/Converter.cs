@@ -9,7 +9,8 @@ public static class Converter
         return new UserDataModel
         {
             Id = userModel.Id.ToString(),
-            Email = userModel.Email
+            Email = userModel.Email,
+            Subject = userModel.Subject
         };
     }
 }
