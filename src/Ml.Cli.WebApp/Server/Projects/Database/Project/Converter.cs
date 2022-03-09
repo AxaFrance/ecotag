@@ -7,13 +7,14 @@ public static class Converter
         return new ProjectDataModel
         {
             Id = projectModel.Id.ToString(),
+            DatasetId = projectModel.DatasetId.ToString(),
+            GroupId = projectModel.GroupId.ToString(),
             Classification = projectModel.Classification,
-            Labels = projectModel.Labels,
+            LabelsJson = projectModel.LabelsJson,
             Name = projectModel.Name,
-            Text = projectModel.Text,
             AnnotationType = projectModel.AnnotationType,
             CreateDate = projectModel.CreateDate,
-            NumberTagsToDo = projectModel.NumberTagsToDo
+            NumberCrossAnnotation = projectModel.NumberCrossAnnotation
         };
     }
 }

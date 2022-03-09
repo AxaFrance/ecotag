@@ -10,6 +10,12 @@ public class ProjectModel
     [Key]
     [Column("PRJ_Id")]
     public Guid Id { get; set; }
+    
+    [Column("PRJ_DatasetId")]
+    public Guid DatasetId { get; set; }
+    
+    [Column("PRJ_GroupId")]
+    public Guid GroupId { get; set; }
 
     [Column("PRJ_Name")]
     [MaxLength(16)]
@@ -19,18 +25,15 @@ public class ProjectModel
     [Column("PRJ_Classification")]
     public string Classification { get; set; }
     
-    [Column("PRJ_NumberTags")]
-    public int NumberTagsToDo { get; set; }
+    [Column("PRJ_NumberCrossAnnotation")]
+    public int NumberCrossAnnotation { get; set; }
     
     [Column("PRJ_CreateDate")]
     public DateTime CreateDate { get; set; }
     
     [Column("PRJ_AnnotationType")]
     public string AnnotationType { get; set; }
-    
-    [Column("PRJ_Text")]
-    public string Text { get; set; }
-    
+
     [Column("PRJ_Labels")]
-    public string Labels { get; set; }
+    public string LabelsJson { get; set; }
 }
