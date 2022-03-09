@@ -1,6 +1,6 @@
 import { rules } from './New/New.validation.rules';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../validation.generic';
-import { NAME, MSG_REQUIRED } from './New/constants';
+import {NAME, MSG_REQUIRED, MSG_GROUP_NAME_ALREADY_EXIST} from './New/constants';
 import {resilienceStatus} from "../../shared/Resilience";
 
 export const initialState = {
@@ -47,7 +47,22 @@ export const reducer = (state, action) => {
       };
     }
     case 'onChangeCreateGroup': {
+      const newGroupName = action.event.value;
       const newField = genericHandleChange(rules, state.fields, action.event);
+      if(newField[NAME].message.includes("format")){
+        newField[NAME].message += " (Lettres, - ou _)";
+        return {
+          ...state,
+          fields: newField
+        }
+      }
+      if(state.groups.find(group => group.name === newGroupName)){
+        newField[NAME].message = MSG_GROUP_NAME_ALREADY_EXIST
+        return {
+          ...state,
+          fields: newField
+        }
+      }
       return {
         ...state,
         fields: newField,
