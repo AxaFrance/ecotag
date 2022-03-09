@@ -49,7 +49,7 @@ export const reducer = (state, action) => {
     case 'onChangeCreateGroup': {
       const newGroupName = action.event.value;
       const newField = genericHandleChange(rules, state.fields, action.event);
-      if(newField[NAME].message.includes("format")){
+      if(newField[NAME].message?.includes("format")){
         newField[NAME].message += " (Lettres, - ou _)";
         return {
           ...state,
