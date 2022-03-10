@@ -163,7 +163,6 @@ export const createProject = async (history, fetch, state, dispatch) => {
     return;
   }
   dispatch({ type: 'onSubmitStarted'});
-    const datasetId = state.fields[DATASET].value
     const newProject = {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,

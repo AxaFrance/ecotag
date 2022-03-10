@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check Project ItemsTable behaviour Chould render correctly and display deletion modal 1`] = `
+exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
 <DocumentFragment>
   <table
     class="af-table"
@@ -168,18 +168,6 @@ exports[`Check Project ItemsTable behaviour Chould render correctly and display 
           >
             <i
               class="glyphicon glyphicon-zoom-in"
-            />
-          </a>
-          <a
-            class="btn af-btn--circle"
-            href="#"
-            id="removeActionId"
-            role="button"
-            tabindex="0"
-            title="Supprimer"
-          >
-            <i
-              class="glyphicon glyphicon-remove"
             />
           </a>
         </td>

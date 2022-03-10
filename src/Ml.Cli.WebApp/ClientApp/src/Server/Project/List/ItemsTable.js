@@ -1,18 +1,16 @@
 ﻿import HeaderColumnCell from "./ColumnHeader";
-import React, {useState} from "react";
+import React from "react";
 import {useHistory} from "react-router-dom";
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
-import BooleanModal from '@axa-fr/react-toolkit-modal-boolean';
 import {formatTimestampToString} from "../../date";
 
-const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numberTagToDo, onDeleteProject }) => {
+const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numberTagToDo }) => {
     const history = useHistory();
     const projectPageButton = id => {
         const path = `/projects/${id}`;
         history.push(path);
     };
-    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     return (
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
@@ -22,39 +20,12 @@ const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numb
             <Table.Td>{numberTagToDo}</Table.Td>
             <Table.Td>
                 <Action id="id" icon="zoom-in" title="Editer" onClick={() => projectPageButton(id)} />
-                <Action id="removeActionId" icon="remove" title="Supprimer" onClick={() => setDeleteModalVisible(true)} />
-                <DeleteProjectModal
-                    idProject={id}
-                    isDeleteModalVisible={isDeleteModalVisible}
-                    setDeleteModalVisible={setDeleteModalVisible}
-                    onDeleteProject={onDeleteProject}
-                />
             </Table.Td>
         </Table.Tr>
     );
 };
 
-const DeleteProjectModal = ({ idProject, isDeleteModalVisible, setDeleteModalVisible, onDeleteProject }) => (
-    <BooleanModal
-        className={'af-modal'}
-        classModifier={''}
-        isOpen={isDeleteModalVisible}
-        title={'Confirmer la suppression du projet ?'}
-        id={'deleteModalId'}
-        onCancel={() => setDeleteModalVisible(false)}
-        onOutsideTap={() => setDeleteModalVisible(false)}
-        onSubmit={() => {
-            onDeleteProject(idProject);
-            setDeleteModalVisible(false);
-            return false;
-        }}
-        submitTitle={'Supprimer'}
-        cancelTitle={'Annuler'}>
-        <p>Confirmez-vous la suppression de ce projet ?</p>
-    </BooleanModal>
-);
-
-const ItemsTable = ({items, filters, onChangePaging, onChangeSort, onDeleteProject}) => {
+const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
     
     return(
         <>
@@ -101,7 +72,6 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, onDeleteProje
                             createDate={formatTimestampToString(createDate)}
                             numberTagToDo={numberTagToDo}
                             typeAnnotation={typeAnnotation}
-                            onDeleteProject={onDeleteProject}
                         />
                     ))}
                 </Table.Body>

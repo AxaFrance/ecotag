@@ -136,7 +136,7 @@ describe('New.container', () => {
       jest.clearAllMocks();
     });
     
-    it('should call fetchDeleteProject and dispatch', async () => {
+    it('should call createProject and dispatch', async () => {
       try {
         await createProject(givenHistory, givenFetch, givenState, givenDispatch);
         expect(givenFetch).toHaveBeenCalledTimes(1);

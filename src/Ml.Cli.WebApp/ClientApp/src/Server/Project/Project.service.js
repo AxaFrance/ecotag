@@ -1,11 +1,6 @@
 export const fetchProject = fetch => async id => fetch(`projects/${id}`);
 export const fetchProjects = fetch => async () => fetch(`projects`);
 
-export const fetchDeleteProject = fetch => async id =>
-    fetch(`projects/${id}`, {
-        method: 'DELETE',
-    });
-
 export const fetchReserveAnnotations = fetch => async (projectId, fileId) =>
     fetch(`projects/${projectId}/reserve`, {
         method: 'POST',

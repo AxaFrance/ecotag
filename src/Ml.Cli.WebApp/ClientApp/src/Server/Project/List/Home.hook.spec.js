@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { deleteProject, init, useHome } from './Home.hook';
+import { init, useHome } from './Home.hook';
 import { initialState } from './Home.reducer';
 import {resilienceStatus} from "../../shared/Resilience";
 
@@ -68,33 +68,6 @@ describe('Home.hook for projects', () => {
       }
     });
   });
-
-  describe('.deleteProject()', () => {
-    const givenProjectId = "0001";
-    const DELETE_GROUP_ROUTE = `projects/${givenProjectId}`;
-    givenFetch = jest.fn(() => Promise.resolve({ok: true, status: 200, json: () => Promise.resolve()}));
-    it('should call fetchDeleteProject and dispatch', async () => { 
-      try {
-        await deleteProject(givenFetch, givenDispatch)(givenProjectId);
-        expect(givenFetch).toHaveBeenCalledWith(DELETE_GROUP_ROUTE, {
-          method:'DELETE'
-        });
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionProjectsLoading" });
-      } catch (error) {
-        fail(error);
-      }
-    });
-
-    it('should fail because of error during deleteGroup', async () => { 
-      try {
-        await deleteProject(givenFetchRejected, givenDispatch)(givenProjectId);
-        fail(error);
-      } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionProjectsLoading" });
-      }
-    });
-  });
   
   describe('.useHome()', () => {
     const givenDispatch = jest.fn();
@@ -115,15 +88,13 @@ describe('Home.hook for projects', () => {
           state: expect.any(Object),
           onChangePaging: expect.any(Function),
           onChangeFilter: expect.any(Function),
-          onChangeSort: expect.any(Function),
-          onDeleteProject: expect.any(Function),
+          onChangeSort: expect.any(Function)
         };
         expect(actualHook).toMatchObject(expectedHook);
         actualHook.onChangePaging({numberItems: 10, page: 1});
         actualHook.onChangeFilter('filterValue');
         actualHook.onChangeSort('name')();
-        actualHook.onDeleteProject('id');
-        expect(givenDispatch).toBeCalledTimes(4);
+        expect(givenDispatch).toBeCalledTimes(3);
       });
     });
   });
