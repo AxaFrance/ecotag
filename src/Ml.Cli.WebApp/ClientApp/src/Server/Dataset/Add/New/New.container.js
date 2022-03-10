@@ -2,12 +2,13 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
-import {NAME, TYPE, CLASSIFICATION, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
+import {NAME, TYPE, CLASSIFICATION, GROUP, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import withCustomFetch from "../../../withCustomFetch";
 import compose from "../../../compose";
+import {fetchGroups} from "../../../Group/Group.service";
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
@@ -16,9 +17,11 @@ const setErrorMessage = key => fields => fields[key].message !== null;
 const preInitState = {
   hasSubmit: false,
   status: resilienceStatus.LOADING,
+  groups : [],
   datasets : [],
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
+    [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
     [TYPE]: { name: TYPE, value: '', message: MSG_REQUIRED },
     [CLASSIFICATION]: {
       name: CLASSIFICATION,
@@ -33,11 +36,12 @@ export const initState = computeInitialStateErrorMessage(preInitState, rules);
 const reducer = (state, action) => {
   switch (action.type) {
     case 'init':{
-        const { datasets, status } = action.data;
+        const { datasets, groups, status } = action.data;
         return {
           ...state,
           status,
-          datasets
+          datasets,
+          groups
         };
       }
     case 'onChange': {
@@ -71,13 +75,17 @@ const reducer = (state, action) => {
 };
 
 export const init = (fetch, dispatch) => async () => {
-  const response = await fetchDatasets(fetch)();
+  const datasetsPromise = fetchDatasets(fetch)();
+  const groupsPromise = fetchGroups(fetch)();
+
+  const [datasetsResponse, groupsResponse] = await Promise.all([datasetsPromise, groupsPromise]);
   let data;
-  if(response.status >= 500) {
-    data = { datasets: [], status: resilienceStatus.ERROR };
+  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 ) {
+    data = { datasets: [], groups:[], status: resilienceStatus.ERROR };
   } else {
-    const datasets = await response.json()
-    data = { datasets, status: resilienceStatus.SUCCESS };
+    const datasets = await datasetsResponse.json()
+    const groups = await groupsResponse.json()
+    data = { datasets, groups, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };
@@ -93,6 +101,7 @@ const useNew = (history, fetch) => {
       const newDataset = {
         [NAME]: fields[NAME].value,
         [TYPE]: fields[TYPE].value,
+        [GROUP]: fields[GROUP].value,
         [CLASSIFICATION]: fields[CLASSIFICATION].value
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
@@ -116,7 +125,7 @@ const NewWithResilience = withResilience(New);
 
 const NewContainer = ({ history, fetch }) => {
   const { state, onChange, onSubmit } = useNew(history, fetch);
-  return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit} />;
+   return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit}  />;
 };
 const enhance = compose(withCustomFetch(fetch), withRouter);
 export default  enhance(NewContainer);

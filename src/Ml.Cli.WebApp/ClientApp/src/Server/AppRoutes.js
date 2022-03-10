@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Project from './Project';
 import Dataset from './Dataset';
+import Token from './Token/token';
 import GroupHome from './Group/Home';
 import PageNotFound from './NotFound';
 import Home from './Home/Home';
@@ -13,6 +14,7 @@ const Routes = () => (
       <Route path="/datasets" component={Dataset} />
       <Route path="/groups" component={GroupHome} />
       <Route path="/datasets" component={Dataset} />
+      <Route path="/token" component={Token} />
       <Route component={PageNotFound} />
     </Switch>
   );
