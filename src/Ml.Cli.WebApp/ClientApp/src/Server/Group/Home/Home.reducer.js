@@ -49,13 +49,6 @@ export const reducer = (state, action) => {
     case 'onChangeCreateGroup': {
       const newGroupName = action.event.value;
       const newField = genericHandleChange(rules, state.fields, action.event);
-      if(newField[NAME].message?.includes("format")){
-        newField[NAME].message += " (Lettres, - ou _)";
-        return {
-          ...state,
-          fields: newField
-        }
-      }
       if(state.groups.find(group => group.name === newGroupName)){
         newField[NAME].message = MSG_GROUP_NAME_ALREADY_EXIST
         return {
