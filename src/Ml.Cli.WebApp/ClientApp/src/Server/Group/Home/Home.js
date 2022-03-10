@@ -23,7 +23,7 @@ const Home = ({
       <>
         <Title subtitle="Gestion des groupes d'annotateurs" title="Page Groupes"  />
         <div className="af-home container">
-          <h1 className="af-title--content">Création de groupe</h1>
+          <h1 className="af-title--content">Création</h1>
           <New
               disabled={isSubmitable}
               fields={fields}
@@ -32,7 +32,7 @@ const Home = ({
               onSubmitCreateGroup={onSubmitCreateGroup}
           />
           <h1 className="af-title--content">
-            {`Affichage des groupes - il y a actuellement (${numberItemsTotal}) groupes`}
+            {`Affichage - il y a actuellement (${numberItemsTotal}) groupes`}
           </h1>
           <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément">
             <ItemsTable

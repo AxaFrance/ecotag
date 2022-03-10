@@ -35,7 +35,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
     <h1
       class="af-title--content"
     >
-      Création de groupe
+      Création
     </h1>
     <form
       name="newGroup"
@@ -100,7 +100,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
     <h1
       class="af-title--content"
     >
-      Affichage des groupes - il y a actuellement (1) groupes
+      Affichage - il y a actuellement (1) groupes
     </h1>
     <table
       class="af-table"
@@ -117,7 +117,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
             <span
               class="af-table__th-content"
             >
-              Nom du groupe
+              Nom
             </span>
           </th>
           <th

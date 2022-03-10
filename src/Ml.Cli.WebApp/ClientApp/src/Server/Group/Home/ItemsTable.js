@@ -39,7 +39,7 @@ const ItemsTable = ({items, filters, onChangePaging, onUpdateUser}) => {
                 <Table.Header>
                     <Table.Tr>
                         <Table.Th>
-                            <span className="af-table__th-content">Nom du groupe</span>
+                            <span className="af-table__th-content">Nom</span>
                         </Table.Th>
                         <Table.Th>
                             <span className="af-table__th-content">Utilisateurs</span>

@@ -22,8 +22,9 @@ const rulesMaxLength = {
 
 const rulesRegex = {
   pattern: {
-    regex: /^[a-zA-Z-_]*$/
-  }
+    regex: /^[a-zA-Z-_]*$/,
+    message: "Veuillez respecter le bon format (Lettres, '-' ou '_' uniquement)"
+  },
 }
 
 export const rules = {
