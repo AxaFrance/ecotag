@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-[Table("T_Project", Schema = "sch_etg")]
+[Table("T_Project", Schema = "sch_ECOTAG")]
 public class ProjectModel
 {
     [Key]

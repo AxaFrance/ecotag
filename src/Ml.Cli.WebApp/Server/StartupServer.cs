@@ -20,6 +20,7 @@ using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -70,6 +71,7 @@ namespace Ml.Cli.WebApp.Server
             });
             services.ConfigureGroups(Configuration);
             services.ConfigureDatasets(Configuration);
+            services.ConfigureProjectRattachment(Configuration);
             
              services.AddAuthorization(options =>
                   {

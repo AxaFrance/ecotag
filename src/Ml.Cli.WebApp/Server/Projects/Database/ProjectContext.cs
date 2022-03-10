@@ -16,15 +16,6 @@ public class ProjectContext : DbContext
     {
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(
-                "Data Source=localhost,1433;Initial Catalog=EcotagContent;Integrated Security=False;User ID=sa;Password=Your_password123;MultipleActiveResultSets=True");
-        }
-    }
-    
     public virtual DbSet<ProjectModel> Projects { get; set; }
 
     public Task<int> SaveChangesAsync()

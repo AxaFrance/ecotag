@@ -148,6 +148,26 @@ END
 GO
 
 
+/****** Object:  Table [sch_ECOTAG].[T_Project] ******/
+if not exists (select * from sysobjects where name='T_Project' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Project](
+    [PRJ_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [PRJ_DatasetId] uniqueidentifier NOT NULL,
+    [PRJ_GroupId] uniqueidentifier NOT NULL,
+    [PRJ_Name] [varchar](16) NOT NULL,
+    [PRJ_Classification] [varchar](MAX) NOT NULL,
+    [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
+    [PRJ_CreateDate] [datetime2] NOT NULL,
+    [PRJ_AnnotationType] [varchar](MAX) NOT NULL,
+    [PRJ_Labels] [nvarchar](MAX) NOT NULL,
+    CONSTRAINT [PK_T_Project] UNIQUE([PRJ_Id])
+    )
+END
+
+GO
+
+
 CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 (
     [DTS_IsLocked] ASC
@@ -166,6 +186,12 @@ CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
+CREATE CLUSTERED INDEX [IND_ProjectName] ON [sch_ECOTAG].[T_Project]
+(
+    [PRJ_Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
 DECLARE @firstUserId uniqueidentifier
 DECLARE @secondUserId uniqueidentifier
 DECLARE @thirdUserId uniqueidentifier
@@ -174,6 +200,10 @@ DECLARE @firstGroupId uniqueidentifier
 DECLARE @secondGroupId uniqueidentifier
 DECLARE @thirdGroupId uniqueidentifier
 
+DECLARE @firstProjectId uniqueidentifier
+DECLARE @secondProjectId uniqueidentifier
+DECLARE @thirdProjectId uniqueidentifier
+
 SET @firstUserId = newid()
 SET @secondUserId = newid()
 SET @thirdUserId = newid()
@@ -181,6 +211,10 @@ SET @thirdUserId = newid()
 SET @firstGroupId = newid()
 SET @secondGroupId = newid()
 SET @thirdGroupId = newid()
+
+SET @firstProjectId = newid()
+SET @secondProjectId = newid()
+SET @thirdProjectId = newid()
 
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
@@ -194,6 +228,12 @@ INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newi
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
+
+INSERT INTO [sch_ECOTAG].[T_Project](
+    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_Classification],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_Labels]
+) VALUES (
+    newid(), newid(), @firstGroupId, "firstproject", "Publique", 10, '10/03/2022', 'NER', '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]'
+)
 
 GO
 
