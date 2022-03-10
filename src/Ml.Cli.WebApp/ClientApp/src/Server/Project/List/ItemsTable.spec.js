@@ -6,7 +6,6 @@ const items = [{
     id: "0001",
     name: "Carte verte",
     type: "Image",
-    classification: "Publique",
     numberFiles: 300,
     createDate: new Date("10-30-2019").getTime()
 }];
@@ -19,7 +18,6 @@ const filters = {
     filterValue: null,
         columns: {
         name: { value: null, timeLastUpdate: null },
-        classification: { value: null, timeLastUpdate: null },
         createDate: { value: 'desc', timeLastUpdate: new Date() },
         typeAnnotation: { value: null, timeLastUpdate: null },
         numberTagToDo: { value: null, timeLastUpdate: null },

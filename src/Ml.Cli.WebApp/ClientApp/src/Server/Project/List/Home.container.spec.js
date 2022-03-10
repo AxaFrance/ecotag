@@ -8,7 +8,6 @@ import {BrowserRouter as Router} from "react-router-dom";
 const fetch = () => Promise.resolve({ok: true, json: () => Promise.resolve([{
     "id": "0001",
     "name": "Relevé d'information",
-    "classification": "Publique",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
     "typeAnnotation": "NER",
@@ -18,9 +17,9 @@ const fetch = () => Promise.resolve({ok: true, json: () => Promise.resolve([{
 describe('Home.container', () => {
   it('HomeContainer render correctly', async () => {
     const { asFragment, getByText } = render(<Router><HomeContainer fetch={fetch} /></Router>);
-    const messageEl = await waitFor(() => getByText('Publique'));
+    const messageEl = await waitFor(() => getByText('04/04/2011'));
     expect(messageEl).toHaveTextContent(
-      'Publique'
+      '04/04/2011'
     );
     expect(asFragment()).toMatchSnapshot();
   });

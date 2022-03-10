@@ -11,9 +11,7 @@ public class ProjectDataModel
     public string GroupId { get; set; }
     
     public string Name { get; set; }
-    
-    public string Classification { get; set; }
-    
+
     public int NumberCrossAnnotation { get; set; }
     
     public DateTime CreateDate { get; set; }

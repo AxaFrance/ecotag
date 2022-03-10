@@ -12,7 +12,6 @@ public record CreateProjectInput
     public string Name { get; set; }
     public string DataSetId { get; set; }
     public string GroupId { get; set; }
-    public string Classification { get; set; }
     [Range(1, 10)]
     public int NumberCrossAnnotation { get; set; }
     public long CreateDate { get; set; }

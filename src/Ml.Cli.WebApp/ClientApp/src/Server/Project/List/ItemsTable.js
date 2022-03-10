@@ -5,7 +5,7 @@ import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import {formatTimestampToString} from "../../date";
 
-const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numberTagToDo }) => {
+const ProjectRow = ({ id, name, createDate, typeAnnotation, numberTagToDo }) => {
     const history = useHistory();
     const projectPageButton = id => {
         const path = `/projects/${id}`;
@@ -14,7 +14,6 @@ const ProjectRow = ({ id, name, classification, createDate, typeAnnotation, numb
     return (
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
-            <Table.Td>{classification}</Table.Td>
             <Table.Td>{createDate}</Table.Td>
             <Table.Td>{typeAnnotation}</Table.Td>
             <Table.Td>{numberTagToDo}</Table.Td>
@@ -38,11 +37,6 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                             filterColumnValue={filters.columns.name.value}
                         />
                         <HeaderColumnCell
-                            onChangeSort={onChangeSort('classification')}
-                            headerColumnName={'Classification'}
-                            filterColumnValue={filters.columns.classification.value}
-                        />
-                        <HeaderColumnCell
                             onChangeSort={onChangeSort('createDate')}
                             headerColumnName={'Date création'}
                             filterColumnValue={filters.columns.createDate.value}
@@ -63,12 +57,11 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                     </Table.Tr>
                 </Table.Header>
                 <Table.Body>
-                    {items.map(({ id, name, classification, createDate, numberTagToDo, typeAnnotation }) => (
+                    {items.map(({ id, name, createDate, numberTagToDo, typeAnnotation }) => (
                         <ProjectRow
                             key={id}
                             id={id}
                             name={name}
-                            classification={classification}
                             createDate={formatTimestampToString(createDate)}
                             numberTagToDo={numberTagToDo}
                             typeAnnotation={typeAnnotation}

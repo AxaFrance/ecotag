@@ -9,7 +9,6 @@ public static class Converter
             Id = projectModel.Id.ToString(),
             DatasetId = projectModel.DatasetId.ToString(),
             GroupId = projectModel.GroupId.ToString(),
-            Classification = projectModel.Classification,
             LabelsJson = projectModel.LabelsJson,
             Name = projectModel.Name,
             AnnotationType = projectModel.AnnotationType,

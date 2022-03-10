@@ -7,7 +7,6 @@ describe('Home.reducer', () => {
       "id": "0001",
       "name": "Relevé d'information",
       "dataSetId": "0004",
-      "classification": "Publique",
       "numberTagToDo": 10,
       "createDate": new Date("04-04-2011").getTime(),
       "typeAnnotation": "NER",
@@ -141,7 +140,6 @@ describe('Home.reducer', () => {
         items: givenProjects,
         columns :{
           name : { value: "asc", timeLastUpdate : null},
-          classification: { value: null, timeLastUpdate : null},
           createDate: { value: null, timeLastUpdate : null},
           typeAnnotation: { value: null, timeLastUpdate : null},
           numberTagToDo: { value: null, timeLastUpdate : null}
@@ -170,7 +168,6 @@ describe('Home.reducer', () => {
         items: givenProjects,
         columns :{
           name : { value: "desc", timeLastUpdate : null},
-          classification: { value: null, timeLastUpdate : null},
           createDate: { value: null, timeLastUpdate : null},
           typeAnnotation: { value: null, timeLastUpdate : null},
           numberTagToDo: { value: null, timeLastUpdate : null}

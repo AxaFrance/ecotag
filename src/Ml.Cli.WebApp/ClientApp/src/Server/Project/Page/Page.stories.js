@@ -9,7 +9,6 @@ const data = {
     "project": {
         "id": "0001",
         "name": "Relevé d'information",
-        "classification": "Publique",
         "numberTagToDo": 10,
         "createDate": "04/04/2011",
         "typeAnnotation": "NER",
@@ -31,7 +30,6 @@ const data = {
         "id": "0001",
         "name": "Carte verte",
         "type": "Image",
-        "classification": "Publique",
         "numberFiles": 300,
         "createDate": "30/10/2019",
         files: []

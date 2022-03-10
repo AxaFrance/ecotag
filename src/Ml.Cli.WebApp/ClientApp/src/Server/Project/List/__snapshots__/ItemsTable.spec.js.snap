@@ -45,27 +45,6 @@ exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
               <span
                 class="af-btn__text"
               >
-                Classification
-              </span>
-              <i
-                class="glyphicon glyphicon-sorting"
-              />
-            </button>
-          </span>
-        </th>
-        <th
-          class="af-table__th af-table__th--sortable"
-          classmodifier="sortable"
-        >
-          <span
-            class="af-table__th-content"
-          >
-            <button
-              class="af-btn af-btn--table-sorting"
-            >
-              <span
-                class="af-btn__text"
-              >
                 Date création
               </span>
               <i
@@ -142,12 +121,7 @@ exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
         <td
           class="af-table__cell"
         >
-          Publique
-        </td>
-        <td
-          class="af-table__cell"
-        >
-          02/01/0001
+          30/10/2019
         </td>
         <td
           class="af-table__cell"

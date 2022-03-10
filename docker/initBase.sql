@@ -156,11 +156,10 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
     [PRJ_DatasetId] uniqueidentifier NOT NULL,
     [PRJ_GroupId] uniqueidentifier NOT NULL,
     [PRJ_Name] [varchar](16) NOT NULL,
-    [PRJ_Classification] [varchar](MAX) NOT NULL,
     [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
     [PRJ_CreateDate] [datetime2] NOT NULL,
     [PRJ_AnnotationType] [varchar](MAX) NOT NULL,
-    [PRJ_Labels] [nvarchar](MAX) NOT NULL,
+    [PRJ_LabelsJson] [nvarchar](MAX) NOT NULL,
     CONSTRAINT [PK_T_Project] UNIQUE([PRJ_Id])
     )
 END
@@ -230,9 +229,9 @@ INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newi
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
 
 INSERT INTO [sch_ECOTAG].[T_Project](
-    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_Classification],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_Labels]
+    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_Labels]
 ) VALUES (
-    newid(), newid(), @firstGroupId, "firstproject", "Publique", 10, '10/03/2022', 'NER', '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]'
+    newid(), newid(), @firstGroupId, "firstproject", 10, '10/03/2022', 'NER', '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]'
 )
 
 GO

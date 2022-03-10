@@ -9,7 +9,6 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string Name { get; set; }
         public string DataSetId { get; set; }
         public string GroupId { get; set; }
-        public string Classification { get; set; }
         public int NumberCrossAnnotation { get; set; }
         public long CreateDate { get; set; }
         public string TypeAnnotation { get; set; }

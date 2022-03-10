@@ -21,10 +21,7 @@ public class ProjectModel
     [MaxLength(16)]
     [MinLength(3)]
     public string Name { get; set; }
-    
-    [Column("PRJ_Classification")]
-    public string Classification { get; set; }
-    
+
     [Column("PRJ_NumberCrossAnnotation")]
     public int NumberCrossAnnotation { get; set; }
     
