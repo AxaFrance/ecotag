@@ -1,3 +1,4 @@
+
 import { NAME, DATASET, NUMBER_CROSS_ANNOTATION, TYPE, MSG_REQUIRED, LABELS, GROUP } from './constants';
 
 const rulesRequired = {
@@ -9,9 +10,23 @@ const rulesRequired = {
 const rulesMaxLength = max => ({
   maxLength: {
     maxLength: max,
-    message: 'Le champ contient trop de caractères',
+    message: 'Veuillez saisir au plus ' + max + " caractères)",
   },
 });
+
+const rulesMinLength = min => ({
+  minLength: {
+    minLength: min,
+    message: 'Veuillez saisir au moins ' + min + " caractères)"
+  }
+});
+
+const ruleText = {
+  pattern: {
+    regex: /^[a-zA-Z-_]*$/,
+    message: "Veuillez respecter le bon format (Lettres, '-' ou '_' uniquement)"
+  }
+}
 
 const ruleNumber = {
   pattern: {
@@ -21,7 +36,7 @@ const ruleNumber = {
 };
 
 export const rules = {
-  [NAME]: [rulesRequired],
+  [NAME]: [rulesRequired, rulesMaxLength(16), rulesMinLength(3), ruleText],
   [DATASET]: [rulesRequired],
   [TYPE]: [rulesRequired],
   [LABELS]: [],
