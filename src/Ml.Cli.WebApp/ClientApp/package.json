@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "4.2.10",
+    "@axa-fr/react-oidc-context": "4.2.13",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
