@@ -15,8 +15,8 @@ const rulesMaxLength = max => ({
 
 const ruleNumber = {
   pattern: {
-    regex: /^[0-9]*$/,
-    message: 'Veuillez saisir un nombre',
+    regex: /^([1-9]|10)$/,
+    message: 'Veuillez saisir un nombre entier compris entre 1 et 10',
   },
 };
 
