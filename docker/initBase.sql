@@ -229,7 +229,7 @@ INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newi
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
 
 INSERT INTO [sch_ECOTAG].[T_Project](
-    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_Labels]
+    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_LabelsJson]
 ) VALUES (
     newid(), newid(), @firstGroupId, "firstproject", 10, '10/03/2022', 'NER', '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]'
 )

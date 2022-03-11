@@ -49,7 +49,7 @@ public class ProjectsControllerTest
         public async Task Should_Create_New_Project(string projectNamesInDatabase, string newProjectName)
         {
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
-            var newProject = new CreateProjectInput { Name = newProjectName };
+            var newProject = new CreateProjectInput { Name = newProjectName, NumberCrossAnnotation = 1};
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);
@@ -67,7 +67,7 @@ public class ProjectsControllerTest
         public async Task Should_Return_Error_On_Project_Creation(string projectNamesInDatabase, string newProjectName, string errorType)
         {
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
-            var newProject = new CreateProjectInput { Name = newProjectName };
+            var newProject = new CreateProjectInput { Name = newProjectName, NumberCrossAnnotation = 1};
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);

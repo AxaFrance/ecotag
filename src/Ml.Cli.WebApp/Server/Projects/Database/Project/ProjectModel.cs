@@ -31,6 +31,6 @@ public class ProjectModel
     [Column("PRJ_AnnotationType")]
     public string AnnotationType { get; set; }
 
-    [Column("PRJ_Labels")]
+    [Column("PRJ_LabelsJson")]
     public string LabelsJson { get; set; }
 }
