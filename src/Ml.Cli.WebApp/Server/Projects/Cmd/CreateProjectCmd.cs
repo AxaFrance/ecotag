@@ -9,20 +9,33 @@ public record CreateProjectInput
 {
     [MaxLength(16)]
     [MinLength(3)]
+    [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
+    [Required]
     public string Name { get; set; }
-    public string DataSetId { get; set; }
+    [Required]
+    public string DatasetId { get; set; }
+    [Required]
     public string GroupId { get; set; }
     [Range(1, 10)]
+    [Required]
     public int NumberCrossAnnotation { get; set; }
-    public long CreateDate { get; set; }
-    public string TypeAnnotation { get; set; }
+    [Required]
+    public string AnnotationType { get; set; }
+    [Required]
     public List<CreateProjectLabelInput> Labels { get; set; }
 }
 
 public record CreateProjectLabelInput
 {
+    [MaxLength(16)]
+    [MinLength(3)]
+    [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
+    [Required]
     public string Name { get; set; }
+    [RegularExpression(@"^#(?:[0-9a-fA-F]{3}){1,2}$")]
+    [Required]
     public string Color { get; set; }
+    [Required]
     public string Id { get; set; }
 }
 
@@ -40,7 +53,7 @@ public class CreateProjectCmd
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
-        var validationResult = new Validation().Validate(createProjectInput);
+        var validationResult = new Validation().Validate(createProjectInput, true);
         if (!validationResult.IsSuccess)
         {
             commandResult.Error = new ErrorResult
@@ -51,7 +64,7 @@ public class CreateProjectCmd
             return commandResult;
         }
 
-        var result = await _projectsRepository.CreateProjectAsync(createProjectInput.Name.ToLower());
+        var result = await _projectsRepository.CreateProjectAsync(createProjectInput);
         if (!result.IsSuccess)
         {
             commandResult.Error = result.Error;

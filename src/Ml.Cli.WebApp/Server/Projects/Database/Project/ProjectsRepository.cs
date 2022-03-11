@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
@@ -15,12 +17,18 @@ public class ProjectsRepository : IProjectsRepository
         _projectsContext = projectsContext;
     }
     
-    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(string projectName)
+    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectInput projectInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
         var projectModel = new ProjectModel
         {
-            Name = projectName
+            Name = projectInput.Name,
+            AnnotationType = projectInput.AnnotationType,
+            DatasetId = new Guid(projectInput.DatasetId),
+            GroupId = new Guid(projectInput.GroupId),
+            LabelsJson = JsonConvert.SerializeObject(projectInput.Labels),
+            NumberCrossAnnotation = projectInput.NumberCrossAnnotation,
+            CreateDate = new DateTime()
         };
         var result =  _projectsContext.Projects.AddIfNotExists(projectModel);
         if (result == null)

@@ -45,35 +45,46 @@ public class ProjectsControllerTest
         }
         
         [Theory]
-        [InlineData("[]", "someProjectName")]
-        public async Task Should_Create_New_Project(string projectNamesInDatabase, string newProjectName)
+        [InlineData(
+            "[]",
+            "{\"Name\": \"someProjectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}")]
+        public async Task Should_Create_New_Project(string projectNamesInDatabase, string newProject)
         {
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
-            var newProject = new CreateProjectInput { Name = newProjectName, NumberCrossAnnotation = 1};
+            var newProjectInput = JsonConvert.DeserializeObject<CreateProjectInput>(newProject);
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);
             var projectsController = new ProjectsController();
             var createProjectCmd = new CreateProjectCmd(repository);
-            var result = await projectsController.Create(createProjectCmd, newProject);
+            var result = await projectsController.Create(createProjectCmd, newProjectInput);
             var resultCreated = result.Result as CreatedResult;
             Assert.NotNull(resultCreated);
         }
 
         [Theory]
-        [InlineData("[\"projectName\"]", "projectName", ProjectsRepository.AlreadyTakenName)]
-        [InlineData("[]", "ab", CreateProjectCmd.InvalidModel)]
-        [InlineData("[]", "qzkjdlmqzzdizqomdqzpiduozqjidqsd", CreateProjectCmd.InvalidModel)]
-        public async Task Should_Return_Error_On_Project_Creation(string projectNamesInDatabase, string newProjectName, string errorType)
+        [InlineData(
+            "[\"projectName\"]",
+            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            ProjectsRepository.AlreadyTakenName)]
+        [InlineData(
+            "[]",
+            "{\"Name\": \"a\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            CreateProjectCmd.InvalidModel)]
+        [InlineData(
+            "[]",
+            "{\"Name\": \"dzuqidjzuidhuizjdoqdiuozqdsd\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            CreateProjectCmd.InvalidModel)]
+        public async Task Should_Return_Error_On_Project_Creation(string projectNamesInDatabase, string newProject, string errorType)
         {
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
-            var newProject = new CreateProjectInput { Name = newProjectName, NumberCrossAnnotation = 1};
+            var newProjectInput = JsonConvert.DeserializeObject<CreateProjectInput>(newProject);
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);
             var projectsController = new ProjectsController();
             var createProjectCmd = new CreateProjectCmd(repository);
-            var result = await projectsController.Create(createProjectCmd, newProject);
+            var result = await projectsController.Create(createProjectCmd, newProjectInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;

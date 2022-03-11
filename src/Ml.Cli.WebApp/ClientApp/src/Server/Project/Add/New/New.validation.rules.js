@@ -23,8 +23,8 @@ const rulesMinLength = min => ({
 
 const ruleText = {
   pattern: {
-    regex: /^[a-zA-Z-_]*$/,
-    message: "Veuillez respecter le bon format (Lettres, '-' ou '_' uniquement)"
+    regex: /^[a-zA-Z0-9-_]*$/,
+    message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
   }
 }
 
@@ -40,6 +40,6 @@ export const rules = {
   [DATASET]: [rulesRequired],
   [TYPE]: [rulesRequired],
   [LABELS]: [],
-  [NUMBER_CROSS_ANNOTATION]: [rulesMaxLength(10), ruleNumber],
+  [NUMBER_CROSS_ANNOTATION]: [ruleNumber],
   [GROUP]: [rulesRequired],
 };
