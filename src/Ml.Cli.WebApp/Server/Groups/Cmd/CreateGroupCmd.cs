@@ -9,7 +9,7 @@ public record CreateGroupInput
 {
     [MaxLength(16)]
     [MinLength(3)]
-    [RegularExpression(@"^[a-zA-Z-_]*$")]
+    [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
     
     public List<string> UserIds { get; set; }
