@@ -22,8 +22,8 @@ const rulesMaxLength = {
 
 const rulesRegex = {
   pattern: {
-    regex: /^[a-zA-Z-_]*$/,
-    message: "Veuillez respecter le bon format (Lettres, '-' ou '_' uniquement)"
+    regex: /^[a-zA-Z0-9-_]*$/,
+    message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
   },
 }
 
