@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Project from './Project';
 import Dataset from './Dataset';
-import Token from './Token/token';
+import Token from './Token/Token';
 import GroupHome from './Group/Home';
 import PageNotFound from './NotFound';
 import Home from './Home/Home';

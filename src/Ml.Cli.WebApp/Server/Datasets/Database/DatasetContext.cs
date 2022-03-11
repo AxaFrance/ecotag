@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups.Database;
-using Ml.Cli.WebApp.Server.Groups.Database.Group;
-using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -33,11 +30,9 @@ public class DatasetContext : DbContext
             .HasForeignKey(gu => gu.UserId);*/
     }
 
-    public virtual DbSet<GroupModel> Groups { get; set; }
+    public virtual DbSet<DatasetModel> Datasets { get; set; }
     
-    public virtual DbSet<GroupUsersModel> GroupUsers { get; set; }
-    
-    public virtual DbSet<UserModel> Users { get; set; }
+    public virtual DbSet<FileModel> Files { get; set; }
 
     public Task<int> SaveChangesAsync()
     {

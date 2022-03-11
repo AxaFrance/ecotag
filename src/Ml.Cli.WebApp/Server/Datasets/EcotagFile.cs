@@ -4,12 +4,11 @@
     public class EcotagFile
     {
         public string Id { get; set; }
-        
-        
         public string FileName { get; set; }
         public int Size { get; set; }
         public string ContentType { get; set; }
     }
+    
     public class EcotagFileWithBytes
     {
         public string Id { get; set; }

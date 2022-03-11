@@ -22,7 +22,7 @@ const rulesMaxLength = {
 
 const rulesRegex = {
   pattern: {
-    regex: /^[a-zA-Z-_]*$/
+    regex: /^[a-zA-Z0-9-_]*$/
   }
 }
 
