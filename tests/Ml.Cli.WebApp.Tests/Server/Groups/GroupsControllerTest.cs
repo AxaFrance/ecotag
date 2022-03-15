@@ -20,7 +20,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
 public class GroupsControllerTest
 {
-    private static GroupContext GetInMemoryGroupContext()
+    public static GroupContext GetInMemoryGroupContext()
     {
         var builder = new DbContextOptionsBuilder<GroupContext>();
         var databaseName = Guid.NewGuid().ToString();

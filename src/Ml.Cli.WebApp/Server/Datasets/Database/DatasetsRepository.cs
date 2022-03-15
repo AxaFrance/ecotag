@@ -1,36 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
 public class DatasetsRepository {
     private readonly DatasetContext _datasetsContext;
-    private const string AlreadyTakenName = "AlreadyTakenName";
+    public const string AlreadyTakenName = "AlreadyTakenName";
 
     public DatasetsRepository(DatasetContext datasetsContext)
     {
         _datasetsContext = datasetsContext;
-    }
-
-    private DatasetTypeEnumeration ToDatasetType(string type)
-    {
-        return type switch
-        {
-            nameof(DatasetTypeEnumeration.Image) => DatasetTypeEnumeration.Image,
-            _ => DatasetTypeEnumeration.Text
-        };
-    }
-
-    private DatasetClassificationEnumeration ToDatasetClassification(string type)
-    {
-        return type switch
-        {
-            nameof(DatasetClassificationEnumeration.Public) => DatasetClassificationEnumeration.Public,
-            nameof(DatasetClassificationEnumeration.Internal) => DatasetClassificationEnumeration.Internal,
-            nameof(DatasetClassificationEnumeration.Confidential) => DatasetClassificationEnumeration.Confidential,
-            _ => DatasetClassificationEnumeration.Critical
-        };
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
@@ -39,8 +22,8 @@ public class DatasetsRepository {
         var groupModel = new DatasetModel()
         {
             Name = createDataset.Name,
-            Classification = ToDatasetClassification(createDataset.Classification),
-            Type = ToDatasetType(createDataset.Type),
+            Classification = createDataset.Classification.ToDatasetClassification(),
+            Type = createDataset.Type.ToDatasetType(),
             CreateDate = DateTime.Now.Ticks,
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
@@ -62,6 +45,21 @@ public class DatasetsRepository {
         }
         commandResult.Data = groupModel.Id.ToString();
         return commandResult;
+    }
+    
+    public async Task<IList<ListDataset>> ListDatasetAsync(bool? locked, IList<string> groupIds)
+    {
+        IList<DatasetModel> datasets;
+        if (locked.HasValue)
+        {
+            datasets = await _datasetsContext.Datasets.Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files).ToListAsync();
+        }
+        else
+        {
+            datasets = await _datasetsContext.Datasets.Where(dataset => groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files).ToListAsync();
+        }
+        
+        return datasets.Select(d => d.ToListDatasetResult()).ToList();
     }
 
 }

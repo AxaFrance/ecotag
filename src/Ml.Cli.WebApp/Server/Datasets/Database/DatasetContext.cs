@@ -8,7 +8,7 @@ public class DatasetContext : DbContext
 {
     public DatasetContext() { }
 
-    public DatasetContext(DbContextOptions<GroupContext> options) : base(options)
+    public DatasetContext(DbContextOptions<DatasetContext> options) : base(options)
     {
     }
 
@@ -18,16 +18,10 @@ public class DatasetContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*modelBuilder.Entity<GroupUsersModel>()
-            .HasKey(gu => new { gu.GroupId, gu.UserId });
-        modelBuilder.Entity<GroupUsersModel>()
-            .HasOne(gu => gu.Group)
-            .WithMany(g => g.GroupUsers)
-            .HasForeignKey(gu => gu.GroupId);
-        modelBuilder.Entity<GroupUsersModel>()
-            .HasOne(gu => gu.User)
-            .WithMany(u => u.GroupUsers)
-            .HasForeignKey(gu => gu.UserId);*/
+        modelBuilder.Entity<FileModel>()
+            .HasOne(gu => gu.Dataset)
+            .WithMany(u => u.Files)
+            .HasForeignKey(gu => gu.DatasetId);
     }
 
     public virtual DbSet<DatasetModel> Datasets { get; set; }

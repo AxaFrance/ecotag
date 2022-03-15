@@ -21,8 +21,6 @@ public class DatasetModel
     public DatasetTypeEnumeration Type { get; set; }
     
     [Column("DTS_Classification")]
-    [MaxLength(16)]
-    [MinLength(3)]
     public DatasetClassificationEnumeration Classification { get; set; }
     
     [Column("GRP_GroupId")]
@@ -35,6 +33,9 @@ public class DatasetModel
     
     [Column("DTS_CreateDate")]
     public long CreateDate { get; set; }
+
+    [Column("DTS_IsLocked")]
+    public bool IsLocked { get; set; } = false;
     
     public List<FileModel> Files { get; set; }
 }

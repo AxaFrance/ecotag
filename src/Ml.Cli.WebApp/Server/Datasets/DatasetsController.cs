@@ -38,9 +38,10 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpGet]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
-        public ActionResult<IEnumerable<DatasetForList>> GetAllDatasets([FromQuery]bool? locked)
+        public async Task<IList<ListDataset>> GetAllDatasets([FromServices] ListDatasetCmd listDatasetCmd,[FromQuery]bool? locked)
         {
-            return Ok(locked.HasValue ? datasets.Where(dataset => dataset.IsLocked == locked.Value ).Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}) : datasets.Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}));
+            var nameIdentifier = User.Identity.GetSubject();
+            return await listDatasetCmd.ExecuteAsync(locked, nameIdentifier);
         }
 
         [HttpGet("{id}", Name = "GetDatasetById")]

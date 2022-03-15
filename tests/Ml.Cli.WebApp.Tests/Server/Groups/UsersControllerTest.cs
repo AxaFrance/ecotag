@@ -17,19 +17,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
 public class UsersControllerTest
 {
-    private static GroupContext GetInMemoryGroupContext()
-    {
-        var builder = new DbContextOptionsBuilder<GroupContext>();
-        var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
 
-        var options = builder.Options;
-        var groupContext = new GroupContext(options);
-        groupContext.Database.EnsureCreated();
-        groupContext.Database.EnsureCreatedAsync();
-        return groupContext;
-    }
-    
     [Theory]
     [InlineData("[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]")]
     [InlineData("[]")]
@@ -38,7 +26,7 @@ public class UsersControllerTest
         var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
         Assert.NotNull(usersList);
 
-        var groupContext = GetInMemoryGroupContext();
+        var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
 
         foreach (var userEmail in usersList)
         {
@@ -54,7 +42,7 @@ public class UsersControllerTest
         var result = await usersController.GetAllUsers(getAllUsersCmd);
         var okObjectResult = result.Result as OkObjectResult;
         Assert.NotNull(okObjectResult);
-        var resultList = okObjectResult.Value as List<UserDataModel>;
+        var resultList = okObjectResult.Value as List<ListUserDataModel>;
         Assert.NotNull(resultList);
         Assert.Equal(resultList.Count, usersList.Count);
         foreach (var userEmail in usersList)

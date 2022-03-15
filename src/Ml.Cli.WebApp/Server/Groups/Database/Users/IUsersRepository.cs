@@ -5,7 +5,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 public interface IUsersRepository
 {
-    Task<List<UserDataModel>> GetAllUsersAsync();
+    Task<List<ListUserDataModel>> GetAllUsersAsync();
     
     Task<UserDataModel> GetUserBySubjectAsync(string email);
     

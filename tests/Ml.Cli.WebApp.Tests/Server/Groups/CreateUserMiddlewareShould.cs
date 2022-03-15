@@ -21,7 +21,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
 using Xunit;
 
-public class CreateUserMiddlewareSould
+public class CreateUserMiddlewareShould
     {
         
         private static GroupContext GetInMemoryGroupContext()

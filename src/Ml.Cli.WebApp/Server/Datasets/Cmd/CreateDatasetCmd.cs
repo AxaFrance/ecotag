@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
@@ -29,14 +30,17 @@ public record CreateDatasetCmdInput
 public class CreateDatasetCmd
 {
     public const string InvalidModel = "InvalidModel";
+    public const string UserNotInGroup = "UserNotInGroup";
     
     private readonly IGroupsRepository _groupsRepository;
     private readonly DatasetsRepository _datasetsRepository;
+    private readonly IUsersRepository _usersRepository;
 
-    public CreateDatasetCmd(IGroupsRepository groupsRepository, DatasetsRepository datasetsRepository)
+    public CreateDatasetCmd(IGroupsRepository groupsRepository, DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
     {
         _groupsRepository = groupsRepository;
         _datasetsRepository = datasetsRepository;
+        _usersRepository = usersRepository;
     }
     
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createGroupInput)
@@ -60,6 +64,17 @@ public class CreateDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = InvalidModel,
+                Error = validationResult.Errors
+            };
+            return commandResult;
+        }
+
+        var user = await _usersRepository.GetUserBySubjectAsync(createGroupInput.CreatorNameIdentifier);
+        if (user.GroupIds.Contains(createGroupInput.GroupId) == false)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UserNotInGroup,
                 Error = validationResult.Errors
             };
             return commandResult;

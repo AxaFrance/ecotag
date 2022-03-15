@@ -39,6 +39,6 @@ public class FileModel
     
     [Column("DTS_Id")]
     public Guid DatasetId { get; set; }
-    public DatasetModel Dataset { get; set; }
     
+    public DatasetModel Dataset { get; set; }
 }
