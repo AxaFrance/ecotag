@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
@@ -15,12 +15,11 @@ using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Tests.Server.Groups;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 
-public class DatasetsControllerShould
+public class CreateDatasetShould
 {
 
     private static DatasetContext GetInMemoryDatasetContext()
@@ -35,55 +34,15 @@ public class DatasetsControllerShould
         groupContext.Database.EnsureCreatedAsync();
         return groupContext;
     }
-    
-    [Theory]
-    [InlineData("[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]")]
-    [InlineData("[]")]
-    public async Task List_Datastes(string userEmailsInDatabase)
-    {
-        var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
 
-        var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
-        foreach (var userEmail in usersList)
-        {
-            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, Subject = "S666666" });
-        }
-        await groupContext.SaveChangesAsync();
-        var datasetContext = GetInMemoryDatasetContext();
-        
-        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var usersRepository = new UsersRepository(groupContext, memoryCache);
-        var datasetsRepository = new DatasetsRepository(datasetContext);
-        var datasetsController = new DatasetsController();
-
-        var context = new DefaultHttpContext()
-        {
-            User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
-                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, "S607718"),
-                }
-            ))
-        };
-    
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        
-        var listDatasetCmd = new ListDatasetCmd(datasetsRepository, usersRepository);
-        var datasets = await datasetsController.GetAllDatasets(listDatasetCmd, true);
-    }
-    
-    
     [Theory]
-    [InlineData("abcD", "[\"S666666\"]","[\"abcd\"]", "abcD", DatasetsRepository.AlreadyTakenName)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "ab", CreateDatasetCmd.InvalidModel)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "daizidosqdhuzqijodzqoazdjskqldz", CreateDatasetCmd.InvalidModel)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "abd$", CreateDatasetCmd.InvalidModel)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "abcdefghzoiqsdzqosqodz^", CreateDatasetCmd.InvalidModel)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "P$", CreateDatasetCmd.InvalidModel)]
-    [InlineData("abcD", "[\"S666666\"]","[]", "zqdsqd(", CreateDatasetCmd.InvalidModel)]
-    public async Task ReturnError_WhenCreateDataset(string groupeName, string userSubjectsInDatabase, string datasetNamesInDatabase, string datasetName, string errorType)
+    [InlineData("Public", "dataset1","Image", "S666666", DatasetsRepository.AlreadyTakenName, null)]
+    [InlineData("Public", "ds","Image", "S666666", CreateDatasetCmd.InvalidModel, null)]
+    [InlineData("Public", "ds**","Image", "S666666", CreateDatasetCmd.InvalidModel, null)]
+    [InlineData("Public", "datasetgood","Image", "S607718", CreateDatasetCmd.UserNotFound, null)]
+    [InlineData("Public", "datasetgood","Image", "S666667", CreateDatasetCmd.UserNotInGroup, null)]
+    [InlineData("Public", "datasetgood","Image", "S666667", CreateDatasetCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
+    public async Task ReturnError_WhenCreateDataset(string classification, string name, string type, string nameIdentifier, string errorKey, string groupId)
     {
         var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
 
@@ -93,8 +52,10 @@ public class DatasetsControllerShould
         groupContext.Groups.Add(group2);
         await groupContext.SaveChangesAsync();
 
-        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "S666666" };
+        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
         groupContext.Users.Add(user1);
+        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        groupContext.Users.Add(user2);
         await groupContext.SaveChangesAsync();
         
         groupContext.GroupUsers.Add(new GroupUsersModel() {GroupId = group1.Id, UserId = user1.Id });
@@ -122,7 +83,7 @@ public class DatasetsControllerShould
         {
             User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
-                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, "S607718")
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
                 }
             ))
         };
@@ -132,13 +93,17 @@ public class DatasetsControllerShould
             HttpContext = context
         };
         var createDatasetCmd = new CreateDatasetCmd(groupRepository, datasetsRepository, usersRepository);
-        var datasets = await datasetsController.Create(createDatasetCmd, new DatasetInput()
+        var result = await datasetsController.Create(createDatasetCmd, new DatasetInput()
         {
-            Classification = "Public",
-            Name = "Name",
-            Type = "Image",
+            Classification = classification,
+            Name = name,
+            Type = type,
+            GroupId = groupId ?? group1.Id.ToString()
         });
         
-        
+        var resultWithError = result.Result as BadRequestObjectResult;
+        Assert.NotNull(resultWithError);
+        var resultWithErrorValue = resultWithError.Value as ErrorResult;
+        Assert.Equal(errorKey, resultWithErrorValue?.Key);
     }
 }

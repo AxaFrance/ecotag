@@ -31,6 +31,8 @@ public class CreateDatasetCmd
 {
     public const string InvalidModel = "InvalidModel";
     public const string UserNotInGroup = "UserNotInGroup";
+    public const string UserNotFound = "UserNotFound";
+    public const string GroupNotFound = "GroupNotFound";
     
     private readonly IGroupsRepository _groupsRepository;
     private readonly DatasetsRepository _datasetsRepository;
@@ -64,18 +66,28 @@ public class CreateDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = InvalidModel,
-                Error = validationResult.Errors
+                Error = null
             };
             return commandResult;
         }
 
         var user = await _usersRepository.GetUserBySubjectAsync(createGroupInput.CreatorNameIdentifier);
+        if (user == null)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UserNotFound,
+                Error = null
+            };
+            return commandResult;
+        }
+        
         if (user.GroupIds.Contains(createGroupInput.GroupId) == false)
         {
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotInGroup,
-                Error = validationResult.Errors
+                Error = null
             };
             return commandResult;
         }
@@ -91,7 +103,7 @@ public class CreateDatasetCmd
 
         if (!createDatasetResult.IsSuccess)
         {
-            commandResult.Error = commandResult.Error;
+            commandResult.Error = createDatasetResult.Error;
         }
         
         return commandResult;
