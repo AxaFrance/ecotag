@@ -7,7 +7,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 
 const fetch = async (url, config) => {
     
-    if(url.include("datasets")) {
+    if(url.includes("datasets")) {
         return {
             ok: true, json: () => Promise.resolve([{
                 "id": "0001",
