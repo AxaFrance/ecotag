@@ -24,7 +24,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
               name={NAME}
               id={NAME}
               onChange={onChange}
-              helpMessage="Ex : Meunier"
+              helpMessage="Ex: cni-dataset"
               forceDisplayMessage={hasSubmit}
               messageType="error"
               {...fields[NAME]}
@@ -42,7 +42,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
               label="Type"
               name={TYPE}
               id={TYPE}
-              helpMessage="Ex : Guillaume Chervet"
+              helpMessage="Ex : Image, Text"
               onChange={onChange}
               options={[
                 { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },

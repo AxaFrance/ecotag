@@ -87,7 +87,7 @@ public class CreateDatasetShould
 
     public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context)> InitMockAsync(string nameIdentifier)
     {
-        var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
+        var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
         var group1 = new GroupModel() { Name = "group1" };
         groupContext.Groups.Add(group1);

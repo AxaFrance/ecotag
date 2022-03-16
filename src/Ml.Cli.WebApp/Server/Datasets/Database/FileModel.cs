@@ -34,7 +34,7 @@ public class FileModel
     [Column("USR_Id")]
     public Guid UserId { get; set; }
 
-    [Column("DTS_CreateDate")]
+    [Column("FLE_CreateDate")]
     public long CreateDate { get; set; }
     
     [Column("DTS_Id")]

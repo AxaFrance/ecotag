@@ -1,4 +1,4 @@
-export const fetchGroups = fetch => async () => fetch('groups');
+export const fetchGroups = fetch => async (isMine) => fetch('groups' + (isMine ? '?mine=true':''));
 
 export const fetchGroup = fetch => async id => fetch(`groups/${id}`);
 

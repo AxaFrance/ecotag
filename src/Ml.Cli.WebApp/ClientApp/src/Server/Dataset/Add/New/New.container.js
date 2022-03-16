@@ -76,7 +76,7 @@ const reducer = (state, action) => {
 
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)();
-  const groupsPromise = fetchGroups(fetch)();
+  const groupsPromise = fetchGroups(fetch)(true);
 
   const [datasetsResponse, groupsResponse] = await Promise.all([datasetsPromise, groupsPromise]);
   let data;

@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
-public class UsersControllerTest
+public class UsersControllerShould
 {
 
     [Theory]
@@ -26,7 +26,7 @@ public class UsersControllerTest
         var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
         Assert.NotNull(usersList);
 
-        var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
+        var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
         foreach (var userEmail in usersList)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,11 +23,23 @@ public class GroupsRepository : IGroupsRepository
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<List<GroupDataModel>> GetAllGroupsAsync()
+    public async Task<List<GroupDataModel>> GetAllGroupsAsync(bool? mine, IList<string> groupIds)
     {
-        var groupModelEnum = await _groupsContext.Groups
-            .Include(group => group.GroupUsers)
-            .AsNoTracking().ToListAsync();
+        List<GroupModel> groupModelEnum;
+        if (mine.HasValue)
+        {
+            groupModelEnum = await _groupsContext.Groups
+                .Where(group => groupIds.Contains(group.Id.ToString()))
+                .Include(group => group.GroupUsers)
+                .AsNoTracking().ToListAsync();
+        }
+        else
+        {
+            groupModelEnum = await _groupsContext.Groups
+                .Include(group => group.GroupUsers)
+                .AsNoTracking().ToListAsync();
+        }
+
         return groupModelEnum.ConvertAll(element => element.ToGroupDataModel());
     }
 

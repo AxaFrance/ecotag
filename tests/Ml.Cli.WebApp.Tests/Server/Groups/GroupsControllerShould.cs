@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
@@ -12,13 +16,14 @@ using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Oidc;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
-public class GroupsControllerTest
+public class GroupsControllerShould
 {
     public static GroupContext GetInMemoryGroupContext()
     {
@@ -109,25 +114,49 @@ public class GroupsControllerTest
     }
 
     [Theory]
-    [InlineData("[\"firstGroupName\",\"secondGroupName\"]")]
-    [InlineData("[]")]
-    public async Task Get_AllGroups(string groupNamesInDatabase)
+    [InlineData("[\"firstGroupName\",\"secondGroupName\"]", "s666666")]
+    [InlineData("[]", "s666667")]
+    [InlineData("[]", "s666665")]
+    public async Task ListGroups(string groupNamesInDatabase, string nameIdentifier)
     {
         var groupsList = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
 
         var groupContext = GetInMemoryGroupContext();
 
+        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
+        groupContext.Users.Add(user1);
+        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        groupContext.Users.Add(user2);
+        
         foreach (var groupName in groupsList)
         {
-            groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
+            var group = new GroupModel { Id = new Guid(), Name = groupName };
+            groupContext.Groups.Add(group);
+            groupContext.GroupUsers.Add(new GroupUsersModel() { Group = group, User = user1 });
         }
-
+        
         await groupContext.SaveChangesAsync();
-
+        
         var serviceProvider = GetMockedServiceProvider(groupContext);
         var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        var usersRepository = new UsersRepository(groupContext, memoryCache);
+        var context = new DefaultHttpContext()
+        {
+            User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
+                }
+            ))
+        };
+        
         var groupsController = new GroupsController();
-        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository);
+        groupsController.ControllerContext = new ControllerContext
+        {
+            HttpContext = context
+        };
+        
+        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository, usersRepository);
 
         var result = await groupsController.GetAllGroups(getAllGroupsCmd);
         var okObjectResult = result.Result as OkObjectResult;

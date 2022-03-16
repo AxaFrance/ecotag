@@ -44,19 +44,20 @@ CREATE TABLE [sch_ECOTAG].[T_GroupUsers](
     ) ON [PRIMARY]
 END
 
+
 /****** Object:  Table [sch_ECOTAG].[T_Dataset] ******/
-if not exists (select * from sysobjects where name='T_Group' and xtype='U')
+if not exists (select * from sysobjects where name='T_Dataset' and xtype='U')
 BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [DTS_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [DTS_Name] [varchar](16) NOT NULL,
-    [DTS_Type] [tinyint] NOT NULL,
-    [DTS_Classification] [tinyint] NOT NULL,
-    [GRP_Id] [varchar](16) NOT NULL,
+    [DTS_Type] tinyint NOT NULL,
+    [DTS_Classification] tinyint NOT NULL,
+    [GRP_Id] uniqueidentifier NOT NULL,
     [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [DTS_CreateDate] BIGINT NOT NULL,
-    [DTS_IsLocked] [bit] NULL,  
-    CONSTRAINT [PK_T_Dataset] UNIQUE([GRP_Id]),
+    [DTS_IsLocked] bit NULL,
+    CONSTRAINT [PK_T_Dataset] UNIQUE([DTS_Id]),
     CONSTRAINT [PK_T_Dataset_Name] UNIQUE([DTS_Name])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
@@ -76,10 +77,12 @@ CREATE TABLE [sch_ECOTAG].[T_File](
     [FLE_CreateDate] BIGINT NOT NULL,
     [USR_Id] uniqueidentifier NOT NULL,
     [DTS_Id] uniqueidentifier NOT NULL,
-    CONSTRAINT [PK_T_File] UNIQUE([GRP_Id]),
+    CONSTRAINT [PK_T_File] UNIQUE([FLE_Id]),
     CONSTRAINT [PK_T_File_Path] UNIQUE([FLE_Path])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
 END
 
 GO
+
+
