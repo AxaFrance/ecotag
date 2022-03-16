@@ -3,50 +3,6 @@
 exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="row row--datasets-filters"
-  >
-    <div
-      class="col"
-    >
-      <div
-        class="af-filter-inline"
-      >
-        <span
-          class="af-filter-inline__title"
-        >
-          <span
-            class="glyphicon glyphicon-filter"
-          />
-          <span
-            class="af-filter-inline__title-text"
-          >
-            Filtrer par
-          </span>
-        </span>
-        <div
-          class="af-filter-inline__field"
-        >
-          <label
-            class="af-form__group-label"
-            for="inputtext1"
-          >
-            Nom du dataset
-          </label>
-          <div
-            class="af-form__text"
-          >
-            <input
-              class="af-form__input-text"
-              id="inputtext1"
-              name="inputtextname"
-              type="text"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
     class="af-loader"
     style="min-height: 94px; position: relative;"
   >

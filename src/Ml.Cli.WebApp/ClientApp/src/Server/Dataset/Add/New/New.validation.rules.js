@@ -1,5 +1,5 @@
 
-import { NAME, TYPE, GROUP, CLASSIFICATION, MSG_REQUIRED, MSG_MAX_LENGTH, MSG_MIN_LENGTH } from './constants';
+import { NAME, TYPE, GROUP, CLASSIFICATION, MSG_REQUIRED, MSG_MAX_LENGTH, MSG_MIN_LENGTH, MSG_DATASET_NAME_FORMAT } from './constants';
 
 const rulesRequired = {
   required: {
@@ -24,7 +24,7 @@ const rulesMaxLength = {
 const rulesRegex = {
   pattern: {
     regex: /^[a-zA-Z0-9-_]*$/,
-    message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
+    message: MSG_DATASET_NAME_FORMAT
   }
 }
 

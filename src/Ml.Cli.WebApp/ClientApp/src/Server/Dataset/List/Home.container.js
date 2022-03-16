@@ -88,7 +88,7 @@ const useHome = fetch => {
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
-  const onChangeFilter = value => dispatch({ type: 'onChangeFilter', data: { filterValue: value } });
+  const onChangeFilter = event => dispatch({ type: 'onChangeFilter', data: { filterValue: event.target.value } });
   useEffect(() => {
     init(fetch, dispatch)();
   }, []);

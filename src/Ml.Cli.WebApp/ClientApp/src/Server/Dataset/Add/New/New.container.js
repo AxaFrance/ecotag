@@ -64,8 +64,10 @@ const reducer = (state, action) => {
       };
     }
     case 'onSubmit': {
+      const { status } = action.data;
       return {
         ...state,
+        status,
         hasSubmit: true,
       };
     }
@@ -97,6 +99,7 @@ const useNew = (history, fetch) => {
     const errors = errorList(state.fields);
     let data = {status: resilienceStatus.SUCCESS};
     if (!errors.length) {
+      dispatch({type: 'onSubmit', data:{status: resilienceStatus.POST}});
       const fields = state.fields;
       const newDataset = {
         [NAME]: fields[NAME].value,

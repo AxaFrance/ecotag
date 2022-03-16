@@ -16,23 +16,6 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
     };
     
     return(
-        <>
-            <div className="row row--datasets-filters">
-                <div className="col">
-                    <div className="af-filter-inline">
-                            <span className="af-filter-inline__title">
-                                <span className="glyphicon glyphicon-filter" />
-                                <span className="af-filter-inline__title-text">Filtrer par</span>
-                            </span>
-                        <div className="af-filter-inline__field">
-                            <label className="af-form__group-label" htmlFor="inputtext1">Nom du dataset</label>
-                            <div className="af-form__text">
-                                <input className="af-form__input-text" id="inputtext1" name="inputtextname" type="text" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <Loader mode={loaderMode}>
                 <Table>
                     <Table.Header>
@@ -91,7 +74,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                     id="home_paging"
                 />
             </Loader>
-        </>
+
     )
 };
 
