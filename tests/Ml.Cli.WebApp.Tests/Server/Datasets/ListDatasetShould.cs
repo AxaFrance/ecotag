@@ -24,42 +24,24 @@ namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 public class ListDatasetShould
 {
     
-    /* [Theory]
-     [InlineData("[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]")]
-     [InlineData("[]")]
-     public async Task List_Datastes(string userEmailsInDatabase)
+     [Theory]
+     [InlineData("s666666", false, 1)]
+     [InlineData("s666666", null, 2)]
+     [InlineData("s666666", true, 1)]
+     [InlineData("s666667", true, 0)]
+     [InlineData("s666668", true, 0)]
+     public async Task ListDataset(string nameIdentifier, bool? locked, int numberResult)
      {
-         var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
- 
-         var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
-         foreach (var userEmail in usersList)
-         {
-             groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, Subject = "S666666" });
-         }
-         await groupContext.SaveChangesAsync();
-         var datasetContext = GetInMemoryDatasetContext();
+         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
          
-         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-         var usersRepository = new UsersRepository(groupContext, memoryCache);
-         var datasetsRepository = new DatasetsRepository(datasetContext);
-         var datasetsController = new DatasetsController();
- 
-         var context = new DefaultHttpContext()
-         {
-             User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                 {
-                     new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, "S607718"),
-                 }
-             ))
-         };
-     
+         var listDatasetCmd = new ListDatasetCmd(datasetsRepository, usersRepository);
          datasetsController.ControllerContext = new ControllerContext
          {
              HttpContext = context
          };
+         var datasets = await datasetsController.GetAllDatasets(listDatasetCmd, locked);
          
-         var listDatasetCmd = new ListDatasetCmd(datasetsRepository, usersRepository);
-         var datasets = await datasetsController.GetAllDatasets(listDatasetCmd, true);
-     }*/
+         Assert.Equal(numberResult, datasets.Count);
+     }
     
 }

@@ -21,8 +21,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 
 public class CreateDatasetShould
 {
-
-    private static DatasetContext GetInMemoryDatasetContext()
+    public static DatasetContext GetInMemoryDatasetContext()
     {
         var builder = new DbContextOptionsBuilder<DatasetContext>();
         var databaseName = Guid.NewGuid().ToString();
@@ -39,7 +38,7 @@ public class CreateDatasetShould
     [InlineData("Public", "datasetgood","Image", "s666666")]
     public async Task CreateDataset(string classification, string name, string type, string nameIdentifier)
     {
-        var result = await InitAndExecute(classification, name, type, nameIdentifier, null);
+        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, null);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
@@ -58,7 +57,7 @@ public class CreateDatasetShould
     [InlineData("Public", "datasetgood","Image", "S666667", CreateDatasetCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
     public async Task ReturnError_WhenCreateDataset(string classification, string name, string type, string nameIdentifier, string errorKey, string groupId)
     {
-        var result = await InitAndExecute(classification, name, type, nameIdentifier, groupId);
+        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, groupId);
 
         var resultWithError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultWithError);
@@ -66,8 +65,27 @@ public class CreateDatasetShould
         Assert.Equal(errorKey, resultWithErrorValue?.Key);
     }
 
-    private static async Task<ActionResult<string>> InitAndExecute(string classification, string name, string type, string nameIdentifier,
+    private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name, string type, string nameIdentifier,
         string groupId)
+    {
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context) = await InitMockAsync(nameIdentifier);
+
+        datasetsController.ControllerContext = new ControllerContext
+        {
+            HttpContext = context
+        };
+        var createDatasetCmd = new CreateDatasetCmd(groupRepository, datasetsRepository, usersRepository);
+        var result = await datasetsController.Create(createDatasetCmd, new DatasetInput()
+        {
+            Classification = classification,
+            Name = name,
+            Type = type,
+            GroupId = groupId ?? group1.Id.ToString()
+        });
+        return result;
+    }
+
+    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context)> InitMockAsync(string nameIdentifier)
     {
         var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
 
@@ -97,6 +115,16 @@ public class CreateDatasetShould
             IsLocked = false,
             GroupId = group1.Id
         });
+        datasetContext.Datasets.Add(new DatasetModel
+        {
+            Classification = DatasetClassificationEnumeration.Confidential,
+            Name = "dataset2",
+            Type = DatasetTypeEnumeration.Image,
+            CreateDate = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "S666666",
+            IsLocked = true,
+            GroupId = group1.Id
+        });
         await datasetContext.SaveChangesAsync();
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
@@ -113,19 +141,6 @@ public class CreateDatasetShould
                 }
             ))
         };
-
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var createDatasetCmd = new CreateDatasetCmd(groupRepository, datasetsRepository, usersRepository);
-        var result = await datasetsController.Create(createDatasetCmd, new DatasetInput()
-        {
-            Classification = classification,
-            Name = name,
-            Type = type,
-            GroupId = groupId ?? group1.Id.ToString()
-        });
-        return result;
+        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context);
     }
 }
