@@ -151,7 +151,7 @@ public class GroupsControllerTest
                 {
                     groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
                 }
-
+            
             if (usersList != null)
             {
                 foreach (var userDataModel in usersList)

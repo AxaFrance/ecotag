@@ -60,12 +60,12 @@ public class CreateDatasetCmd
             return commandResult;
         }
 
-        var group = _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
+        var group = await _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
         if (group == null)
         {
             commandResult.Error = new ErrorResult
             {
-                Key = InvalidModel,
+                Key = GroupNotFound,
                 Error = null
             };
             return commandResult;
@@ -104,8 +104,10 @@ public class CreateDatasetCmd
         if (!createDatasetResult.IsSuccess)
         {
             commandResult.Error = createDatasetResult.Error;
+            return commandResult;
         }
-        
+
+        commandResult.Data = createDatasetResult.Data;
         return commandResult;
     }
 }

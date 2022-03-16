@@ -34,15 +34,40 @@ public class CreateDatasetShould
         groupContext.Database.EnsureCreatedAsync();
         return groupContext;
     }
+    
+    [Theory]
+    [InlineData("Public", "datasetgood","Image", "s666666")]
+    public async Task CreateDataset(string classification, string name, string type, string nameIdentifier)
+    {
+        var result = await InitAndExecute(classification, name, type, nameIdentifier, null);
+
+        var resultOk = result.Result as CreatedResult;
+        Assert.NotNull(resultOk);
+        var resultValue = resultOk.Value as string;
+        Assert.NotNull(resultValue);
+    }
 
     [Theory]
     [InlineData("Public", "dataset1","Image", "S666666", DatasetsRepository.AlreadyTakenName, null)]
     [InlineData("Public", "ds","Image", "S666666", CreateDatasetCmd.InvalidModel, null)]
     [InlineData("Public", "ds**","Image", "S666666", CreateDatasetCmd.InvalidModel, null)]
+    [InlineData("Public", "datasetgood","Bad", "S607718", CreateDatasetCmd.InvalidModel, null)]
+    [InlineData("Bad", "datasetgood","Text", "S607718", CreateDatasetCmd.InvalidModel, null)]
     [InlineData("Public", "datasetgood","Image", "S607718", CreateDatasetCmd.UserNotFound, null)]
     [InlineData("Public", "datasetgood","Image", "S666667", CreateDatasetCmd.UserNotInGroup, null)]
     [InlineData("Public", "datasetgood","Image", "S666667", CreateDatasetCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
     public async Task ReturnError_WhenCreateDataset(string classification, string name, string type, string nameIdentifier, string errorKey, string groupId)
+    {
+        var result = await InitAndExecute(classification, name, type, nameIdentifier, groupId);
+
+        var resultWithError = result.Result as BadRequestObjectResult;
+        Assert.NotNull(resultWithError);
+        var resultWithErrorValue = resultWithError.Value as ErrorResult;
+        Assert.Equal(errorKey, resultWithErrorValue?.Key);
+    }
+
+    private static async Task<ActionResult<string>> InitAndExecute(string classification, string name, string type, string nameIdentifier,
+        string groupId)
     {
         var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
 
@@ -57,19 +82,20 @@ public class CreateDatasetShould
         var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
         groupContext.Users.Add(user2);
         await groupContext.SaveChangesAsync();
-        
-        groupContext.GroupUsers.Add(new GroupUsersModel() {GroupId = group1.Id, UserId = user1.Id });
+
+        groupContext.GroupUsers.Add(new GroupUsersModel() { GroupId = group1.Id, UserId = user1.Id });
         await groupContext.SaveChangesAsync();
-        
+
         var datasetContext = GetInMemoryDatasetContext();
-        datasetContext.Datasets.Add(new DatasetModel { Classification = DatasetClassificationEnumeration.Confidential,
+        datasetContext.Datasets.Add(new DatasetModel
+        {
+            Classification = DatasetClassificationEnumeration.Confidential,
             Name = "dataset1",
             Type = DatasetTypeEnumeration.Image,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
             GroupId = group1.Id
-            
         });
         await datasetContext.SaveChangesAsync();
 
@@ -87,7 +113,7 @@ public class CreateDatasetShould
                 }
             ))
         };
-    
+
         datasetsController.ControllerContext = new ControllerContext
         {
             HttpContext = context
@@ -100,10 +126,6 @@ public class CreateDatasetShould
             Type = type,
             GroupId = groupId ?? group1.Id.ToString()
         });
-        
-        var resultWithError = result.Result as BadRequestObjectResult;
-        Assert.NotNull(resultWithError);
-        var resultWithErrorValue = resultWithError.Value as ErrorResult;
-        Assert.Equal(errorKey, resultWithErrorValue?.Key);
+        return result;
     }
 }
