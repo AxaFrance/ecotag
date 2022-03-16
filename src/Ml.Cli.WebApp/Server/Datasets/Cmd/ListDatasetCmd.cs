@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 public class ListDatasetCmd
 {
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly UsersRepository _usersRepository;
+    private readonly IUsersRepository _usersRepository;
 
-    public ListDatasetCmd(DatasetsRepository datasetsRepository, UsersRepository usersRepository)
+    public ListDatasetCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

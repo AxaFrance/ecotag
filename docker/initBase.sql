@@ -107,15 +107,62 @@ END
 
 GO
 
-CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
+/****** Object:  Table [sch_ECOTAG].[T_Dataset] ******/
+if not exists (select * from sysobjects where name='T_Dataset' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Dataset](
+    [DTS_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [DTS_Name] [varchar](16) NOT NULL,
+    [DTS_Type] tinyint NOT NULL,
+    [DTS_Classification] tinyint NOT NULL,
+    [GRP_Id] uniqueidentifier NOT NULL,
+    [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [DTS_CreateDate] BIGINT NOT NULL,
+    [DTS_IsLocked] bit NULL,
+    CONSTRAINT [PK_T_Dataset] UNIQUE([DTS_Id]),
+    CONSTRAINT [PK_T_Dataset_Name] UNIQUE([DTS_Name])
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+END
+
+GO
+
+/****** Object:  Table [sch_ECOTAG].[T_File] ******/
+if not exists (select * from sysobjects where name='T_File' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_File](
+    [FLE_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FLE_Path] [varchar](1024) NOT NULL,
+    [FLE_Size] int NOT NULL,
+    [FLE_ContentType] [varchar](256) NOT NULL,
+    [FLE_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [FLE_CreateDate] BIGINT NOT NULL,
+    [USR_Id] uniqueidentifier NOT NULL,
+    [DTS_Id] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_T_File] UNIQUE([FLE_Id]),
+    CONSTRAINT [PK_T_File_Path] UNIQUE([FLE_Path])
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+END
+
+GO
+
+
+CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 (
-    [GRP_Name] ASC
+    [DTS_IsLocked] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
 CREATE CLUSTERED INDEX [IND_UserSubject] ON [sch_ECOTAG].[T_User]
 (
     [USR_Subject] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
+(
+    [GRP_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
