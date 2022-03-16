@@ -7,7 +7,8 @@ public interface IUsersRepository
 {
     Task<List<UserDataModel>> GetAllUsersAsync();
     
-    Task<UserDataModel> GetUserBySubjectAsync(string email);
+    Task<UserDataModel> GetUserBySubjectAsync(string nameIdentity);
+    Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity);
     
     Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string subject);
 }

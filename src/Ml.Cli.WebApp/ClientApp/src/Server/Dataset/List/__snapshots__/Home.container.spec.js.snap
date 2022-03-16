@@ -20,7 +20,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <h1
         class="af-title-bar__title"
       >
-        Page datasets
+        Datasets
       </h1>
       <small
         class="af-title-bar__subtitle"
@@ -75,7 +75,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               class="af-form__group-label"
               for="inputtext1"
             >
-              Nom du dataset
+              Nom
             </label>
             <div
               class="af-form__text"
@@ -120,6 +120,15 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                 class="af-table__th-content"
               >
                 Nom
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Groupe
               </span>
             </th>
             <th
@@ -199,6 +208,11 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             <td
               class="af-table__cell"
             >
+              mon groupe
+            </td>
+            <td
+              class="af-table__cell"
+            >
               Publique
             </td>
             <td
@@ -214,7 +228,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             <td
               class="af-table__cell"
             >
-              30/10/2019
+              02/01/0001
             </td>
             <td
               class="af-table__cell"

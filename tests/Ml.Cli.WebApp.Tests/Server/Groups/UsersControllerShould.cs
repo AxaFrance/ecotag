@@ -15,21 +15,9 @@ using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
-public class UsersControllerTest
+public class UsersControllerShould
 {
-    private static GroupContext GetInMemoryGroupContext()
-    {
-        var builder = new DbContextOptionsBuilder<GroupContext>();
-        var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
 
-        var options = builder.Options;
-        var groupContext = new GroupContext(options);
-        groupContext.Database.EnsureCreated();
-        groupContext.Database.EnsureCreatedAsync();
-        return groupContext;
-    }
-    
     [Theory]
     [InlineData("[\"Guillaume.chervet@gmail.com\",\"Lilian.delouvy@gmail.com\"]")]
     [InlineData("[]")]
@@ -38,7 +26,7 @@ public class UsersControllerTest
         var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
         Assert.NotNull(usersList);
 
-        var groupContext = GetInMemoryGroupContext();
+        var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
         foreach (var userEmail in usersList)
         {

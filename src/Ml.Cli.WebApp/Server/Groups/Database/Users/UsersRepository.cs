@@ -27,12 +27,17 @@ public class UsersRepository : IUsersRepository
         var userModelEnum = _groupsContext.Users.AsAsyncEnumerable();
         await foreach (var user in userModelEnum)
         {
-            resultList.Add(user.ToUserDataModel());
+            resultList.Add(user.ToListUserDataModel());
         }
-
         return resultList;
     }
 
+    public async Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity)
+    { 
+        var user = await _groupsContext.Users.Include(user => user.GroupUsers).AsNoTracking().FirstOrDefaultAsync(u => u.Subject == nameIdentity.ToLower());
+        return user?.ToUserDataModelWithGroups();
+    }
+    
     public async Task<UserDataModel> GetUserBySubjectAsync(string subject)
     {
         var cacheEntry = await _cache.GetOrCreateAsync($"GetUserBySubjectAsync({subject})", async entry =>

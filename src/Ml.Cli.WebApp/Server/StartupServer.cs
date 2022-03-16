@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
@@ -67,7 +68,8 @@ namespace Ml.Cli.WebApp.Server
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
-            services.ConfigureGroupRattachment(Configuration);
+            services.ConfigureGroups(Configuration);
+            services.ConfigureDatasets(Configuration);
             
              services.AddAuthorization(options =>
                   {

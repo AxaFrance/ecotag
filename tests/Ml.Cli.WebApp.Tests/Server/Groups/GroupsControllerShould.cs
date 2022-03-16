@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
@@ -12,15 +16,16 @@ using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Oidc;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
-public class GroupsControllerTest
+public class GroupsControllerShould
 {
-    private static GroupContext GetInMemoryGroupContext()
+    public static GroupContext GetInMemoryGroupContext()
     {
         var builder = new DbContextOptionsBuilder<GroupContext>();
         var databaseName = Guid.NewGuid().ToString();
@@ -109,25 +114,49 @@ public class GroupsControllerTest
     }
 
     [Theory]
-    [InlineData("[\"firstGroupName\",\"secondGroupName\"]")]
-    [InlineData("[]")]
-    public async Task Get_AllGroups(string groupNamesInDatabase)
+    [InlineData("[\"firstGroupName\",\"secondGroupName\"]", "s666666")]
+    [InlineData("[]", "s666667")]
+    [InlineData("[]", "s666665")]
+    public async Task ListGroups(string groupNamesInDatabase, string nameIdentifier)
     {
         var groupsList = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
 
         var groupContext = GetInMemoryGroupContext();
 
+        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
+        groupContext.Users.Add(user1);
+        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        groupContext.Users.Add(user2);
+        
         foreach (var groupName in groupsList)
         {
-            groupContext.Groups.Add(new GroupModel { Id = new Guid(), Name = groupName });
+            var group = new GroupModel { Id = new Guid(), Name = groupName };
+            groupContext.Groups.Add(group);
+            groupContext.GroupUsers.Add(new GroupUsersModel() { Group = group, User = user1 });
         }
-
+        
         await groupContext.SaveChangesAsync();
-
+        
         var serviceProvider = GetMockedServiceProvider(groupContext);
         var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        var usersRepository = new UsersRepository(groupContext, memoryCache);
+        var context = new DefaultHttpContext()
+        {
+            User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
+                }
+            ))
+        };
+        
         var groupsController = new GroupsController();
-        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository);
+        groupsController.ControllerContext = new ControllerContext
+        {
+            HttpContext = context
+        };
+        
+        var getAllGroupsCmd = new GetAllGroupsCmd(groupsRepository, usersRepository);
 
         var result = await groupsController.GetAllGroups(getAllGroupsCmd);
         var okObjectResult = result.Result as OkObjectResult;
@@ -143,7 +172,7 @@ public class GroupsControllerTest
 
     public class GetGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModel> usersList, List<string> usersInGroup)
+        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModelWithGroups> usersList, List<string> usersInGroup)
         {
             var groupContext = GetInMemoryGroupContext();
             if (groupsList != null)
@@ -151,7 +180,7 @@ public class GroupsControllerTest
                 {
                     groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
                 }
-
+            
             if (usersList != null)
             {
                 foreach (var userDataModel in usersList)
@@ -188,7 +217,7 @@ public class GroupsControllerTest
             string searchedId, string strExpectedGroupWithUsers)
         {
             var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
             var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
             var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
@@ -220,7 +249,7 @@ public class GroupsControllerTest
             string searchedId, string errorType)
         {
             var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
             var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
 
@@ -240,7 +269,7 @@ public class GroupsControllerTest
 
     public class UpdateGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModel> knownUsers)
+        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModelWithGroups> knownUsers)
         {
             var groupContext = GetInMemoryGroupContext();
 
@@ -278,7 +307,7 @@ public class GroupsControllerTest
             string jsonUpdateGroupInput)
         {
             var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
-            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
 
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
@@ -317,7 +346,7 @@ public class GroupsControllerTest
             string jsonUpdateGroupInput, string errorType)
         {
             var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
-            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
 
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
@@ -344,7 +373,7 @@ public class GroupsControllerTest
         string jsonUpdateGroupInput)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
-        var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(userDataModels);
+        var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(userDataModels);
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
 
         var groupContext = GetInMemoryGroupContext();

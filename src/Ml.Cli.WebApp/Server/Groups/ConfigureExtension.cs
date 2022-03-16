@@ -12,11 +12,10 @@ namespace Ml.Cli.WebApp.Server.Groups;
 
 public static class ConfigureExtension
 {
-    public static void ConfigureGroupRattachment(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureGroups(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<GroupContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-        services.AddScoped<GroupContext, GroupContext>();
         services.AddScoped<IGroupsRepository, GroupsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<CreateGroupCmd, CreateGroupCmd>();

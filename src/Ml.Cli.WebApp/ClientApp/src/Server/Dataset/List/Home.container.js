@@ -4,17 +4,21 @@ import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
 import { resilienceStatus, withResilience } from '../../shared/Resilience';
 import fetchDatasets from "../Dataset.service";
+import {fetchGroups} from "../../Group/Group.service";
 
 const HomeWithResilience = withResilience(Home);
 
 const init = (fetch, dispatch) => async () => {
-  const response = await fetchDatasets(fetch)();
+  const datasetsPromise = fetchDatasets(fetch)();
+  const groupsPromise = fetchGroups(fetch)(true);
+  const [datasetsResponse, groupsResponse] = await Promise.all([datasetsPromise, groupsPromise]);
   let data;
-  if(response.status >= 500) {
+  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 ) {
     data = { items: [], status: resilienceStatus.ERROR };
   } else {
-    const items = await response.json()
-    data = { items, status: resilienceStatus.SUCCESS };
+    const items = await datasetsResponse.json();
+    const groups = await groupsResponse.json()
+    data = { items, groups, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };
@@ -22,11 +26,11 @@ const init = (fetch, dispatch) => async () => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'init':
-      const { items, status } = action.data;
+      const { items, groups, status } = action.data;
       return {
         ...state,
         status,
-        items,
+        items: items.map( item => {return {...item, groupName: groups.find(g => g.id === item.groupId).name}}),
       };
       case 'onChangeFilter': {
         const {filterValue} = action.data;
@@ -88,7 +92,7 @@ const useHome = fetch => {
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
-  const onChangeFilter = value => dispatch({ type: 'onChangeFilter', data: { filterValue: value } });
+  const onChangeFilter = event => dispatch({ type: 'onChangeFilter', data: { filterValue: event.target.value } });
   useEffect(() => {
     init(fetch, dispatch)();
   }, []);

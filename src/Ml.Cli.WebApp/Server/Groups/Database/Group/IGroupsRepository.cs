@@ -5,7 +5,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 public interface IGroupsRepository
 {
-    Task<List<GroupDataModel>> GetAllGroupsAsync();
+    Task<List<GroupDataModel>> GetAllGroupsAsync(bool? mine, IList<string> groupIds);
 
     Task<ResultWithError<string, ErrorResult>> CreateGroupAsync(string groupName);
 

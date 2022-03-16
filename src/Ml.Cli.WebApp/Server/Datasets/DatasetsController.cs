@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 
@@ -37,9 +38,10 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpGet]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
-        public ActionResult<IEnumerable<DatasetForList>> GetAllDatasets([FromQuery]bool? locked)
+        public async Task<IList<ListDataset>> GetAllDatasets([FromServices] ListDatasetCmd listDatasetCmd,[FromQuery]bool? locked)
         {
-            return Ok(locked.HasValue ? datasets.Where(dataset => dataset.IsLocked == locked.Value ).Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}) : datasets.Select(dataset => new DatasetForList(){Classification = dataset.Classification, Id = dataset.Id,Name = dataset.Name, Type = dataset.Type, CreateDate = dataset.CreateDate,IsLocked = dataset.IsLocked, NumberFiles = dataset.Files.Count}));
+            var nameIdentifier = User.Identity.GetSubject();
+            return await listDatasetCmd.ExecuteAsync(locked, nameIdentifier);
         }
 
         [HttpGet("{id}", Name = "GetDatasetById")]
@@ -59,22 +61,24 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataScientist)]
-        public ActionResult<Dataset> Create(DatasetInput newDataset)
+        public async Task<ActionResult<string>> Create([FromServices] CreateDatasetCmd createDatasetCmd, DatasetInput datasetInput)
         {
-            var dataset = new Dataset()
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await createDatasetCmd.ExecuteAsync(new CreateDatasetCmdInput()
             {
-                Id = Guid.NewGuid().ToString(),
-                Classification = newDataset.Classification,
-                Name = newDataset.Name,
-                Type = newDataset.Type,
-                CreateDate = DateTime.Now.Ticks,
-            };
+                CreatorNameIdentifier = nameIdentifier,
+                Classification = datasetInput.Classification,
+                Name = datasetInput.Name,
+                Type = datasetInput.Type,
+                GroupId = datasetInput.GroupId
+            });
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
             
-            datasets.Add(dataset);
-
-            return Created(dataset.Id, Find(dataset.Id));
+            return Created(commandResult.Data, commandResult.Data);
         }
-        
         
         [HttpPost("{datasetId}/files")]
         [ProducesResponseType(StatusCodes.Status201Created)]

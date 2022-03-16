@@ -10,7 +10,7 @@ export const init = (fetch, dispatch) => async () => {
   const [datasetsResponse, groupsResponse, projectsResponse] = await Promise.all([datasetsPromise, groupsPromise, projectsPromise]);
     
   let data; 
-    if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 || projectsResponse.status >= 500){
+    if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 || projectsResponse.status >= 500) {
         data = { groups:[], datasets:[], projects:[], status:resilienceStatus.ERROR};
     }
     else {

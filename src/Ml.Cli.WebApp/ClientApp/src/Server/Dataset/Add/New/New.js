@@ -1,14 +1,16 @@
 import React from 'react';
 import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
-import { TextInput, SelectInput, Button } from '@axa-fr/react-toolkit-all';
+import { TextInput, SelectInput, Button, MultiSelectInput } from '@axa-fr/react-toolkit-all';
 import HelpButton from '@axa-fr/react-toolkit-help';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
-import { NAME, CLASSIFICATION, TYPE } from './constants';
+import { NAME, CLASSIFICATION, TYPE, GROUP } from './constants';
 
-const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
+const groupsAsOptions = (groups) => groups && groups.length > 0 ? groups.map(group => ({ label: group.name, value: group.id })) : [];
+
+const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
   <>
       <Title title=" Nouveau dataset" goTo="/datasets" goTitle="Datasets" />
     <Stepper title="Nouveau dataset" link="/datasets/new" />
@@ -18,20 +20,29 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
         <article className="af-panel">
           <section className="af-panel__content af-panel__content--new-dataset">
             <TextInput
-              label="Nom *"
+              label="Nom"
               name={NAME}
               id={NAME}
               onChange={onChange}
-              helpMessage="Ex : Meunier"
+              helpMessage="Ex: cni-dataset"
               forceDisplayMessage={hasSubmit}
               messageType="error"
               {...fields[NAME]}
             />
+              <MultiSelectInput
+                label="Groupe"
+                name={GROUP}
+                id={GROUP}
+                onChange={onChange}
+                options={groupsAsOptions(groups)}
+                forceDisplayMessage={hasSubmit}
+                messageType="error"
+                  {...fields[GROUP]}/>
             <SelectInput
-              label="Type *"
+              label="Type"
               name={TYPE}
               id={TYPE}
-              helpMessage="Ex : Guillaume Chervet"
+              helpMessage="Ex : Image, Text"
               onChange={onChange}
               options={[
                 { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
@@ -42,16 +53,16 @@ const New = ({ fields, onChange, hasSubmit, onSubmit }) => (
               {...fields[TYPE]}
             />
             <SelectInput
-              label="Classification *"
+              label="Classification"
               name={CLASSIFICATION}
               id={CLASSIFICATION}
               helpMessage="Ex : Critique"
               onChange={onChange}
               options={[
-                { value: 'Publique', label: 'Publique' },
-                { value: 'Interne', label: 'Interne' },
-                { value: 'Confidentiel', label: 'Confidentiel' },
-                { value: 'Critique', label: 'Critique' },
+                { value: 'Public', label: 'Publique' },
+                { value: 'Internal', label: 'Interne' },
+                { value: 'Confidential', label: 'Confidentiel' },
+                { value: 'Critical', label: 'Critique' },
               ]}
               forceDisplayMessage={hasSubmit}
               messageType="error"
