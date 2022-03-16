@@ -27,6 +27,9 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                 <span className="af-table__th-content">Nom</span>
                             </Table.Th>
                             <Table.Th>
+                                <span className="af-table__th-content">Groupe</span>
+                            </Table.Th>
+                            <Table.Th>
                                 <span className="af-table__th-content">Classification</span>
                             </Table.Th>
                             <Table.Th>
@@ -43,7 +46,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                     </Table.Header>
                     <Table.Body>
                         {items.map(
-                            ({id, name, type, classification, numberFiles, createDate, isLocked}) => (
+                            ({id, name, type, groupName, classification, numberFiles, createDate, isLocked}) => (
                                 <Table.Tr key={id}>
                                     <Table.Td>
                                         <Action className={isLocked ? 'btn af-btn--circle af-btn--locked' : 'btn af-btn--circle'}
@@ -51,9 +54,8 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                                 title={isLocked ? "vérouillée" : "dévérouillée"}
                                                 onClick={() => {}} />
                                     </Table.Td>
-                                    <Table.Td>
-                                        {name}
-                                    </Table.Td>
+                                    <Table.Td>{name}</Table.Td>
+                                    <Table.Td>{groupName}</Table.Td>
                                     <Table.Td>{classification}</Table.Td>
                                     <Table.Td>{numberFiles}</Table.Td>
                                     <Table.Td>{type}</Table.Td>

@@ -6,14 +6,27 @@ import { HomeContainer } from './Home.container';
 import {BrowserRouter as Router} from "react-router-dom";
 
 const fetch = async (url, config) => {
-  return {ok: true, json: () => Promise.resolve([{
-      "id": "0001",
-      "name": "Carte verte",
-      "type": "Image",
-      "classification": "Publique",
-      "numberFiles": 300,
-      "createDate": new Date("10-30-2019").getTime()
-    }])};
+    
+    if(url.include("datasets")) {
+        return {
+            ok: true, json: () => Promise.resolve([{
+                "id": "0001",
+                "name": "Carte verte",
+                "type": "Image",
+                "groupId": "1",
+                "classification": "Publique",
+                "numberFiles": 300,
+                "createDate": new Date("10-30-2019").getTime()
+            }])
+        };
+    }
+
+    return {
+        ok: true, json: () => Promise.resolve([{
+            "id": "1",
+            "name": "mon groupe"
+        }])
+    };
 };
 
 describe('Home.container', () => {

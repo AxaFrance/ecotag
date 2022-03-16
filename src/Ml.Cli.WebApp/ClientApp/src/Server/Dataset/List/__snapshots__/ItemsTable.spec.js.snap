@@ -39,6 +39,15 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
             <span
               class="af-table__th-content"
             >
+              Groupe
+            </span>
+          </th>
+          <th
+            class="af-table__th"
+          >
+            <span
+              class="af-table__th-content"
+            >
               Classification
             </span>
           </th>
@@ -107,6 +116,9 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
           >
             Carte verte
           </td>
+          <td
+            class="af-table__cell"
+          />
           <td
             class="af-table__cell"
           >

@@ -35,7 +35,7 @@ public class UsersRepository : IUsersRepository
     public async Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity)
     { 
         var user = await _groupsContext.Users.Include(user => user.GroupUsers).AsNoTracking().FirstOrDefaultAsync(u => u.Subject == nameIdentity.ToLower());
-        return user.ToUserDataModelWithGroups();
+        return user?.ToUserDataModelWithGroups();
     }
     
     public async Task<UserDataModel> GetUserBySubjectAsync(string subject)
