@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Projects;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -30,6 +33,23 @@ public class ProjectsControllerTest
 
     public class CreateProjectTest
     {
+        private readonly ProjectsController _projectsController;
+        public CreateProjectTest()
+        {
+            _projectsController = new ProjectsController();
+            var nameIdentifier = "someone@gmail.com";
+            var context = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
+                }))
+            };
+            _projectsController.ControllerContext = new ControllerContext
+            {
+                HttpContext = context
+            };
+        }
         private static async Task<ProjectContext> GetProjectContext(List<string> projectNamesArray)
         {
             var projectContext = GetInMemoryProjectContext();
@@ -40,7 +60,8 @@ public class ProjectsControllerTest
                 );
                 await projectContext.SaveChangesAsync();
             }
-
+            
+            
             return projectContext;
         }
         
@@ -55,9 +76,8 @@ public class ProjectsControllerTest
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);
-            var projectsController = new ProjectsController();
             var createProjectCmd = new CreateProjectCmd(repository);
-            var result = await projectsController.Create(createProjectCmd, newProjectInput);
+            var result = await _projectsController.Create(createProjectCmd, newProjectInput);
             var resultCreated = result.Result as CreatedResult;
             Assert.NotNull(resultCreated);
         }
@@ -82,9 +102,8 @@ public class ProjectsControllerTest
 
             var projectContext = await GetProjectContext(projectNamesArray);
             var repository = new ProjectsRepository(projectContext);
-            var projectsController = new ProjectsController();
             var createProjectCmd = new CreateProjectCmd(repository);
-            var result = await projectsController.Create(createProjectCmd, newProjectInput);
+            var result = await _projectsController.Create(createProjectCmd, newProjectInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
             var resultWithErrorValue = resultWithError.Value as ErrorResult;

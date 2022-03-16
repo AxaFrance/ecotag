@@ -106,7 +106,8 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult<string>> Create([FromServices] CreateProjectCmd createProjectCmd,
             CreateProjectInput createProjectInput)
         {
-            var commandResult = await createProjectCmd.ExecuteAsync(createProjectInput);
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await createProjectCmd.ExecuteAsync(new CreateProjectWithUserInput{CreateProjectInput = createProjectInput, CreatorNameIdentifier = creatorNameIdentifier});
             if (!commandResult.IsSuccess)
             {
                 return BadRequest(commandResult.Error);

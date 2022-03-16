@@ -14,9 +14,11 @@ public class ProjectDataModel
 
     public int NumberCrossAnnotation { get; set; }
     
-    public DateTime CreateDate { get; set; }
+    public long CreateDate { get; set; }
     
     public string AnnotationType { get; set; }
 
     public string LabelsJson { get; set; }
+    
+    public string CreatorNameIdentifier { get; set; }
 }

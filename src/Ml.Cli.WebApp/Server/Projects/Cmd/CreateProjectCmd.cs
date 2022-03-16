@@ -39,6 +39,14 @@ public record CreateProjectLabelInput
     public string Id { get; set; }
 }
 
+public record CreateProjectWithUserInput
+{
+    [Required]
+    public CreateProjectInput CreateProjectInput { get; set; }
+    [Required]
+    public string CreatorNameIdentifier { get; set; }
+}
+
 public class CreateProjectCmd
 {
     public const string InvalidModel = "InvalidModel";
@@ -49,11 +57,11 @@ public class CreateProjectCmd
         _projectsRepository = projectsRepository;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateProjectInput createProjectInput)
+    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateProjectWithUserInput createProjectWithUserInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
-        var validationResult = new Validation().Validate(createProjectInput, true);
+        var validationResult = new Validation().Validate(createProjectWithUserInput, true);
         if (!validationResult.IsSuccess)
         {
             commandResult.Error = new ErrorResult
@@ -64,7 +72,7 @@ public class CreateProjectCmd
             return commandResult;
         }
 
-        var result = await _projectsRepository.CreateProjectAsync(createProjectInput);
+        var result = await _projectsRepository.CreateProjectAsync(createProjectWithUserInput);
         if (!result.IsSuccess)
         {
             commandResult.Error = result.Error;

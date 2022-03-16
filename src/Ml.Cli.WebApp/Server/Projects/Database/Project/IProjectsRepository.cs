@@ -6,7 +6,7 @@ namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 public interface IProjectsRepository
 {
-    Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectInput projectName);
+    Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectWithUserInput projectName);
     Task<List<ProjectDataModel>> GetAllProjectsAsync();
     Task<ProjectDataModel> GetProjectAsync(string projectId);
 }

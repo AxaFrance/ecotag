@@ -13,7 +13,8 @@ public static class Converter
             Name = projectModel.Name,
             AnnotationType = projectModel.AnnotationType,
             CreateDate = projectModel.CreateDate,
-            NumberCrossAnnotation = projectModel.NumberCrossAnnotation
+            NumberCrossAnnotation = projectModel.NumberCrossAnnotation,
+            CreatorNameIdentifier = projectModel.CreatorNameIdentifier
         };
     }
 }

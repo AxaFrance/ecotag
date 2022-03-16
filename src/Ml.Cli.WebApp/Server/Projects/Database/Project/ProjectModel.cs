@@ -26,11 +26,16 @@ public class ProjectModel
     public int NumberCrossAnnotation { get; set; }
     
     [Column("PRJ_CreateDate")]
-    public DateTime CreateDate { get; set; }
+    public long CreateDate { get; set; }
     
     [Column("PRJ_AnnotationType")]
     public string AnnotationType { get; set; }
 
     [Column("PRJ_LabelsJson")]
     public string LabelsJson { get; set; }
+    
+    [Column("PRJ_CreatorNameIdentifier")]
+    [MaxLength(32)]
+    [MinLength(1)]
+    public string CreatorNameIdentifier { get; set; }
 }

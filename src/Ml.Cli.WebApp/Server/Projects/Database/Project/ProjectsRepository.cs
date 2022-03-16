@@ -17,9 +17,10 @@ public class ProjectsRepository : IProjectsRepository
         _projectsContext = projectsContext;
     }
     
-    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectInput projectInput)
+    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectWithUserInput projectWithUserInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
+        var projectInput = projectWithUserInput.CreateProjectInput;
         var projectModel = new ProjectModel
         {
             Name = projectInput.Name,
@@ -28,7 +29,8 @@ public class ProjectsRepository : IProjectsRepository
             GroupId = new Guid(projectInput.GroupId),
             LabelsJson = JsonConvert.SerializeObject(projectInput.Labels),
             NumberCrossAnnotation = projectInput.NumberCrossAnnotation,
-            CreateDate = new DateTime()
+            CreateDate = new DateTime().Ticks,
+            CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
         var result =  _projectsContext.Projects.AddIfNotExists(projectModel);
         if (result == null)
