@@ -128,6 +128,15 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               <span
                 class="af-table__th-content"
               >
+                Groupe
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
                 Classification
               </span>
             </th>
@@ -195,6 +204,11 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               class="af-table__cell"
             >
               Carte verte
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              mon groupe
             </td>
             <td
               class="af-table__cell"
