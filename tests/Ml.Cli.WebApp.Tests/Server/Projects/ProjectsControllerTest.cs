@@ -5,14 +5,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Database.Users;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
+using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Projects;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Tests.Server.Groups;
 using Newtonsoft.Json;
 using Xunit;
+using Options = Microsoft.Extensions.Options.Options;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects;
 
@@ -37,7 +44,7 @@ public class ProjectsControllerTest
         public CreateProjectTest()
         {
             _projectsController = new ProjectsController();
-            var nameIdentifier = "someone@gmail.com";
+            var nameIdentifier = "s666666";
             var context = new DefaultHttpContext()
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
@@ -61,7 +68,6 @@ public class ProjectsControllerTest
                 await projectContext.SaveChangesAsync();
             }
             
-            
             return projectContext;
         }
         
@@ -75,8 +81,19 @@ public class ProjectsControllerTest
             var newProjectInput = JsonConvert.DeserializeObject<CreateProjectInput>(newProject);
 
             var projectContext = await GetProjectContext(projectNamesArray);
-            var repository = new ProjectsRepository(projectContext);
-            var createProjectCmd = new CreateProjectCmd(repository);
+            var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
+            var group1 = new GroupModel
+                { Id = new Guid("10000000-0000-0000-0000-000000000000"), Name = "group1" };
+            groupContext.Groups.Add(group1);
+            var user1 = new UserModel { Subject = "s666666", Email = "someone@gmail.com" };
+            groupContext.Users.Add(user1);
+            groupContext.GroupUsers.Add(new GroupUsersModel { GroupId = group1.Id, UserId = user1.Id });
+            await groupContext.SaveChangesAsync();
+            var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var projectsRepository = new ProjectsRepository(projectContext);
+            var groupsRepository = new GroupsRepository(groupContext, null);
+            var usersRepository = new UsersRepository(groupContext, memoryCache);
+            var createProjectCmd = new CreateProjectCmd(projectsRepository, groupsRepository, usersRepository);
             var result = await _projectsController.Create(createProjectCmd, newProjectInput);
             var resultCreated = result.Result as CreatedResult;
             Assert.NotNull(resultCreated);
@@ -84,25 +101,60 @@ public class ProjectsControllerTest
 
         [Theory]
         [InlineData(
-            "[\"projectName\"]",
-            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
-            ProjectsRepository.AlreadyTakenName)]
-        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s666666\"}",
             "[]",
             "{\"Name\": \"a\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
             CreateProjectCmd.InvalidModel)]
         [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s666666\"}",
             "[]",
             "{\"Name\": \"dzuqidjzuidhuizjdoqdiuozqdsd\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
             CreateProjectCmd.InvalidModel)]
-        public async Task Should_Return_Error_On_Project_Creation(string projectNamesInDatabase, string newProject, string errorType)
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-111111111111\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s666666\"}",
+            "[]",
+            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            CreateProjectCmd.GroupNotFound)]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s000000\"}",
+            "[]",
+            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            CreateProjectCmd.UserNotFound)]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-111111111111\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s666666\"}",
+            "[]",
+            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            CreateProjectCmd.UserNotInGroup)]
+        [InlineData(
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Name\": \"groupName\"}",
+            "{\"Id\": \"10000000-0000-0000-0000-000000000000\", \"Email\": \"someone@gmail.com\", \"Subject\": \"s666666\"}",
+            "[\"projectName\"]",
+            "{\"Name\": \"projectName\", \"DatasetId\": \"10000000-0000-0000-0000-000000000000\", \"GroupId\":\"10000000-0000-0000-0000-000000000000\", \"NumberCrossAnnotation\": 1, \"AnnotationType\": \"NER\", \"Labels\": [{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]}",
+            ProjectsRepository.AlreadyTakenName)]
+        public async Task Should_Return_Error_On_Project_Creation(string groupInDatabase, string userInDatabase, string projectNamesInDatabase, string newProject, string errorType)
         {
+            var group = JsonConvert.DeserializeObject<GroupDataModel>(groupInDatabase);
+            var user = JsonConvert.DeserializeObject<UserDataModel>(userInDatabase);
             var projectNamesArray = JsonConvert.DeserializeObject<List<string>>(projectNamesInDatabase);
             var newProjectInput = JsonConvert.DeserializeObject<CreateProjectInput>(newProject);
 
             var projectContext = await GetProjectContext(projectNamesArray);
-            var repository = new ProjectsRepository(projectContext);
-            var createProjectCmd = new CreateProjectCmd(repository);
+            var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
+            groupContext.Groups.Add(new GroupModel { Id = new Guid(group.Id), Name = group.Name });
+            groupContext.Users.Add(new UserModel
+                    { Id = new Guid(user.Id), Email = user.Email, Subject = user.Subject });
+            groupContext.GroupUsers.Add(new GroupUsersModel { GroupId = new Guid(group.Id), UserId = new Guid("10000000-0000-0000-0000-000000000000") });
+            await groupContext.SaveChangesAsync();
+            var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var projectsRepository = new ProjectsRepository(projectContext);
+            var groupsRepository = new GroupsRepository(groupContext, null);
+            var usersRepository = new UsersRepository(groupContext, memoryCache);
+            var createProjectCmd = new CreateProjectCmd(projectsRepository, groupsRepository, usersRepository);
             var result = await _projectsController.Create(createProjectCmd, newProjectInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
@@ -50,11 +52,19 @@ public record CreateProjectWithUserInput
 public class CreateProjectCmd
 {
     public const string InvalidModel = "InvalidModel";
+    public const string GroupNotFound = "GroupNotFound";
+    public const string UserNotFound = "UserNotFound";
+    public const string UserNotInGroup = "UserNotInGroup";
+    
     private readonly IProjectsRepository _projectsRepository;
+    private readonly IGroupsRepository _groupsRepository;
+    private readonly IUsersRepository _usersRepository;
 
-    public CreateProjectCmd(IProjectsRepository projectsRepository)
+    public CreateProjectCmd(IProjectsRepository projectsRepository, IGroupsRepository groupsRepository, IUsersRepository usersRepository)
     {
         _projectsRepository = projectsRepository;
+        _groupsRepository = groupsRepository;
+        _usersRepository = usersRepository;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateProjectWithUserInput createProjectWithUserInput)
@@ -68,6 +78,38 @@ public class CreateProjectCmd
             {
                 Key = InvalidModel,
                 Error = validationResult.Errors
+            };
+            return commandResult;
+        }
+
+        var group = await _groupsRepository.GetGroupAsync(createProjectWithUserInput.CreateProjectInput.GroupId);
+        if (group == null)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = GroupNotFound,
+                Error = null
+            };
+            return commandResult;
+        }
+
+        var user = await _usersRepository.GetUserBySubjectAsync(createProjectWithUserInput.CreatorNameIdentifier);
+        if (user == null)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UserNotFound,
+                Error = null
+            };
+            return commandResult;
+        }
+        
+        if (user.GroupIds.Contains(createProjectWithUserInput.CreateProjectInput.GroupId) == false)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UserNotInGroup,
+                Error = null
             };
             return commandResult;
         }
