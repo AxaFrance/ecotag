@@ -1,4 +1,6 @@
-﻿public record CreateDataset
+﻿namespace Ml.Cli.WebApp.Server.Datasets.Database;
+
+public record CreateDataset
 {
     public string Name { get; set; }
     

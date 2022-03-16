@@ -23,7 +23,7 @@ public class DatasetModel
     [Column("DTS_Classification")]
     public DatasetClassificationEnumeration Classification { get; set; }
     
-    [Column("GRP_GroupId")]
+    [Column("GRP_Id")]
     public Guid GroupId { get; set; }
     
     [Column("DTS_CreatorNameIdentifier")]

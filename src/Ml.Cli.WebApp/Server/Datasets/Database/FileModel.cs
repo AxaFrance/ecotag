@@ -13,10 +13,10 @@ public class FileModel
     [Column("FLE_Id")]
     public Guid Id { get; set; }
     
-    [Column("FLE_FileName")]
-    [MaxLength(16)]
+    [Column("FLE_Path")]
+    [MaxLength(512)]
     [MinLength(1)]
-    public string FileName { get; set; }
+    public string Path { get; set; }
     
     [Column("FLE_Size")]
     public int Size { get; set; }
@@ -25,10 +25,7 @@ public class FileModel
     [MaxLength(16)]
     [MinLength(3)]
     public string ContentType { get; set; }
-    
-    [Column("FLE_GroupId")]
-    public Guid GroupId { get; set; }
-    
+
     [Column("FLE_CreatorNameIdentifier")]
     [MaxLength(32)]
     [MinLength(1)]
@@ -36,6 +33,9 @@ public class FileModel
     
     [Column("USR_Id")]
     public Guid UserId { get; set; }
+
+    [Column("DTS_CreateDate")]
+    public long CreateDate { get; set; }
     
     [Column("DTS_Id")]
     public Guid DatasetId { get; set; }
