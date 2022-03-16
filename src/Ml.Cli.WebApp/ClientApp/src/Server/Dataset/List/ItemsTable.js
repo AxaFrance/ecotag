@@ -74,7 +74,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                     <Table.Td>{classification}</Table.Td>
                                     <Table.Td>{numberFiles}</Table.Td>
                                     <Table.Td>{type}</Table.Td>
-                                    <Table.Td>{formatTimestampToString(createDate)}</Table.Td>
+                                    <Table.Td>{formatTimestampToString(createDate )}</Table.Td>
                                     <Table.Td>
                                         <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
                                     </Table.Td>

@@ -11,8 +11,8 @@ public static class Converter
         {
             Id = groupModel.Id.ToString(),
             Name = groupModel.Name,
-            Classification = nameof(groupModel.Classification),
-            Type = nameof(groupModel.Type),
+            Classification = groupModel.Classification.ToString(),
+            Type = groupModel.Type.ToString(),
             CreateDate = groupModel.CreateDate,
             GroupId = groupModel.GroupId.ToString(),
             IsLocked = groupModel.IsLocked,

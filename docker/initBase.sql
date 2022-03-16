@@ -113,8 +113,8 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [DTS_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [DTS_Name] [varchar](16) NOT NULL,
-    [DTS_Type] tinyint NOT NULL,
-    [DTS_Classification] tinyint NOT NULL,
+    [DTS_Type] int NOT NULL,
+    [DTS_Classification] int NOT NULL,
     [GRP_Id] uniqueidentifier NOT NULL,
     [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [DTS_CreateDate] BIGINT NOT NULL,
