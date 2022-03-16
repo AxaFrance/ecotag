@@ -6,25 +6,25 @@ import Modal from '@axa-fr/react-toolkit-modal-default';
 import "./Edit.scss";
 
 const Users = ({ idGroup, users, eligibleUsers, setUsersToSubmit }) => (
-  <form className="af-form-multi-select-users">
-    <MultiSelectInput
-      label={''}
-      name={`group_${idGroup}`}
-      options={eligibleUsers}
-      onChange={data => setUsersToSubmit(data.values)}
-      values={users}
-      messageType={MessageTypes.error}
-      forceDisplayMessage={false}
-      readOnly={false}
-      disabled={false}
-      isVisible={true}
-      className={'multi-select-users'}
-      classModifier={'multi-select-users'}
-      placeholder={'Ajouter un utilisateur'}
-      classNameContainerLabel={'classNameContainerLabel'}
-      classNameContainerInput={'classNameContainerInput'}
-    />
-  </form>
+    <form className="af-form-multi-select-users" onSubmit={(event) => event.preventDefault()}>
+        <MultiSelectInput
+            label={''}
+            name={`group_${idGroup}`}
+            options={eligibleUsers}
+            onChange={data => setUsersToSubmit(data.values)}
+            values={users}
+            messageType={MessageTypes.error}
+            forceDisplayMessage={false}
+            readOnly={false}
+            disabled={false}
+            isVisible={true}
+            className={'multi-select-users'}
+            classModifier={'multi-select-users'}
+            placeholder={'Ajouter un utilisateur'}
+            classNameContainerLabel={'classNameContainerLabel'}
+            classNameContainerInput={'classNameContainerInput'}
+        />
+    </form>
 );
 
 const Edit = ({

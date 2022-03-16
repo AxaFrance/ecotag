@@ -22,8 +22,9 @@ const rulesMaxLength = {
 
 const rulesRegex = {
   pattern: {
-    regex: /^[a-zA-Z-_]*$/
-  }
+    regex: /^[a-zA-Z0-9-_]*$/,
+    message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
+  },
 }
 
 export const rules = {

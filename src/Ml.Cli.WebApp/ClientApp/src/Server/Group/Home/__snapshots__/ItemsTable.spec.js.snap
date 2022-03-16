@@ -17,7 +17,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
           <span
             class="af-table__th-content"
           >
-            Nom du groupe
+            Nom
           </span>
         </th>
         <th
