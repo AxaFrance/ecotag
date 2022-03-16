@@ -12,13 +12,23 @@ public static class Converter
             Id = userModel.Id.ToString(),
             Email = userModel.Email,
             Subject = userModel.Subject,
+        };
+    }
+    
+    public static UserDataModelWithGroups ToUserDataModelWithGroups(this UserModel userModel)
+    {
+        return new UserDataModelWithGroups
+        {
+            Id = userModel.Id.ToString(),
+            Email = userModel.Email,
+            Subject = userModel.Subject,
             GroupIds = userModel.GroupUsers.Select(groupUsers => groupUsers.GroupId.ToString()).ToList()
         };
     }
     
-    public static ListUserDataModel ToListUserDataModel(this UserModel userModel)
+    public static UserDataModel ToListUserDataModel(this UserModel userModel)
     {
-        return new ListUserDataModel
+        return new UserDataModel
         {
             Id = userModel.Id.ToString(),
             Email = userModel.Email,

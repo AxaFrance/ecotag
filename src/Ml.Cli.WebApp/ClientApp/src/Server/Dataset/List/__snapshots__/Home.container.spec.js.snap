@@ -39,7 +39,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <span
         class="af-btn__text"
       >
-        Nouveau
+        Nouveau dataset
       </span>
     </a>
     <h1

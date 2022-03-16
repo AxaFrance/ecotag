@@ -21,9 +21,9 @@ public class UsersRepository : IUsersRepository
         _cache = cache;
     }
     
-    public async Task<List<ListUserDataModel>> GetAllUsersAsync()
+    public async Task<List<UserDataModel>> GetAllUsersAsync()
     {
-        var resultList = new List<ListUserDataModel>();
+        var resultList = new List<UserDataModel>();
         var userModelEnum = _groupsContext.Users.AsAsyncEnumerable();
         await foreach (var user in userModelEnum)
         {
@@ -32,11 +32,17 @@ public class UsersRepository : IUsersRepository
         return resultList;
     }
 
+    public async Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity)
+    { 
+        var user = await _groupsContext.Users.Include(user => user.GroupUsers).AsNoTracking().FirstOrDefaultAsync(u => u.Subject == nameIdentity.ToLower());
+        return user.ToUserDataModelWithGroups();
+    }
+    
     public async Task<UserDataModel> GetUserBySubjectAsync(string subject)
     {
         var cacheEntry = await _cache.GetOrCreateAsync($"GetUserBySubjectAsync({subject})", async entry =>
         {
-            var user = await _groupsContext.Users.Include(user => user.GroupUsers).AsNoTracking().FirstOrDefaultAsync(u => u.Subject == subject.ToLower());
+            var user = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Subject == subject.ToLower());
             entry.AbsoluteExpirationRelativeToNow =
                 user == null ? TimeSpan.FromMilliseconds(1) : TimeSpan.FromHours(1);
             entry.SlidingExpiration = TimeSpan.FromMinutes(1);

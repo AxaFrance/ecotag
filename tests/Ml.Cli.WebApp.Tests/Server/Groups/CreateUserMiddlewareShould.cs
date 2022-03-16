@@ -63,7 +63,7 @@ public class CreateUserMiddlewareShould
         {
             var groupContext = GetInMemoryGroupContext();
             
-            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             foreach (var userDataModel in usersList)
             {
                 groupContext.Users.Add(new UserModel()
@@ -81,7 +81,7 @@ public class CreateUserMiddlewareShould
             oidcUserInfoServiceMock.Setup(it => it.GetUserEmailAsync(It.IsAny<string>())).ReturnsAsync(oidcUserInfo);
             
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-            createUserMidleware.InvokeAsync(httpContext,
+            await createUserMidleware.InvokeAsync(httpContext,
                 new CreateUserCmd(new UsersRepository(groupContext,memoryCache), oidcUserInfoServiceMock.Object));
             
             Assert.Equal(expectedStatusCode, httpContext.Response.StatusCode);

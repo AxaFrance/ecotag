@@ -42,7 +42,7 @@ public class UsersControllerShould
         var result = await usersController.GetAllUsers(getAllUsersCmd);
         var okObjectResult = result.Result as OkObjectResult;
         Assert.NotNull(okObjectResult);
-        var resultList = okObjectResult.Value as List<ListUserDataModel>;
+        var resultList = okObjectResult.Value as List<UserDataModel>;
         Assert.NotNull(resultList);
         Assert.Equal(resultList.Count, usersList.Count);
         foreach (var userEmail in usersList)

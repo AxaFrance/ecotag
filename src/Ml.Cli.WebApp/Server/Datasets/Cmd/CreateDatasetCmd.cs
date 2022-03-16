@@ -71,7 +71,7 @@ public class CreateDatasetCmd
             return commandResult;
         }
 
-        var user = await _usersRepository.GetUserBySubjectAsync(createGroupInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult
@@ -82,7 +82,7 @@ public class CreateDatasetCmd
             return commandResult;
         }
         
-        if (user.GroupIds.Contains(createGroupInput.GroupId) == false)
+        if (!user.GroupIds.Contains(createGroupInput.GroupId))
         {
             commandResult.Error = new ErrorResult
             {

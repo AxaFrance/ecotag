@@ -14,7 +14,7 @@ public class GetAllUsersCmd
         _usersRepository = usersRepository;
     }
 
-    public async Task<List<ListUserDataModel>> ExecuteAsync()
+    public async Task<List<UserDataModel>> ExecuteAsync()
     {
         return await _usersRepository.GetAllUsersAsync();
     }

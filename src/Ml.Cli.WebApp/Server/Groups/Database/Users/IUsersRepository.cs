@@ -5,9 +5,10 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 public interface IUsersRepository
 {
-    Task<List<ListUserDataModel>> GetAllUsersAsync();
+    Task<List<UserDataModel>> GetAllUsersAsync();
     
-    Task<UserDataModel> GetUserBySubjectAsync(string email);
+    Task<UserDataModel> GetUserBySubjectAsync(string nameIdentity);
+    Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity);
     
     Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string subject);
 }

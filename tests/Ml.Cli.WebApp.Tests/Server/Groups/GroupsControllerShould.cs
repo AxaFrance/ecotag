@@ -172,7 +172,7 @@ public class GroupsControllerShould
 
     public class GetGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModel> usersList, List<string> usersInGroup)
+        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModelWithGroups> usersList, List<string> usersInGroup)
         {
             var groupContext = GetInMemoryGroupContext();
             if (groupsList != null)
@@ -217,7 +217,7 @@ public class GroupsControllerShould
             string searchedId, string strExpectedGroupWithUsers)
         {
             var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
             var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
             var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
@@ -249,7 +249,7 @@ public class GroupsControllerShould
             string searchedId, string errorType)
         {
             var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
-            var usersList = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
             var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
 
@@ -269,7 +269,7 @@ public class GroupsControllerShould
 
     public class UpdateGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModel> knownUsers)
+        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModelWithGroups> knownUsers)
         {
             var groupContext = GetInMemoryGroupContext();
 
@@ -307,7 +307,7 @@ public class GroupsControllerShould
             string jsonUpdateGroupInput)
         {
             var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
-            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
 
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
@@ -346,7 +346,7 @@ public class GroupsControllerShould
             string jsonUpdateGroupInput, string errorType)
         {
             var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
-            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(usersInDatabase);
+            var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
 
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
@@ -373,7 +373,7 @@ public class GroupsControllerShould
         string jsonUpdateGroupInput)
     {
         var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
-        var knownUsers = JsonConvert.DeserializeObject<List<UserDataModel>>(userDataModels);
+        var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(userDataModels);
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
 
         var groupContext = GetInMemoryGroupContext();
