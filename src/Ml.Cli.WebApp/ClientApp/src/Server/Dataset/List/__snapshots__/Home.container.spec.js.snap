@@ -20,7 +20,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <h1
         class="af-title-bar__title"
       >
-        Page datasets
+        Datasets
       </h1>
       <small
         class="af-title-bar__subtitle"
@@ -39,7 +39,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <span
         class="af-btn__text"
       >
-        Nouveau dataset
+        Nouveau
       </span>
     </a>
     <h1
@@ -75,7 +75,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               class="af-form__group-label"
               for="inputtext1"
             >
-              Nom du dataset
+              Nom
             </label>
             <div
               class="af-form__text"

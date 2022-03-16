@@ -8,7 +8,7 @@ import EmptyArrayManager from "../../../EmptyArrayManager";
 const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
     return (
         <>
-            <Title title="Page datasets" subtitle="un dataset représente un essemble de données" />
+            <Title title="Datasets" subtitle="un dataset représente un essemble de données" />
             <div className="af-home container">
                 <Link className="btn af-btn af-btn--quote" to="/datasets/new">
                     <span className="af-btn__text">Nouveau dataset</span>
@@ -22,7 +22,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
                                 <span className="af-filter-inline__title-text">Filtrer par</span>
                             </span>
                             <div className="af-filter-inline__field">
-                                <label className="af-form__group-label" htmlFor="inputtext1">Nom du dataset</label>
+                                <label className="af-form__group-label" htmlFor="inputtext1">Nom</label>
                                 <div className="af-form__text">
                                     <input className="af-form__input-text" id="inputtext1" name="inputtextname" onChange={onChangeFilter} type="text" />
                                 </div>
