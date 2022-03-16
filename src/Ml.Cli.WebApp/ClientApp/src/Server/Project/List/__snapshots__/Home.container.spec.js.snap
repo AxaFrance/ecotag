@@ -25,7 +25,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <small
         class="af-title-bar__subtitle"
       >
-        tagger un ensemble de donnée
+        Tagger un ensemble de données
       </small>
     </div>
   </div>
