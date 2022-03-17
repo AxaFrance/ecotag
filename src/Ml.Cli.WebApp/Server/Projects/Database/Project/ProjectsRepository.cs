@@ -32,7 +32,7 @@ public class ProjectsRepository : IProjectsRepository
             CreateDate = new DateTime().Ticks,
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
-        var result =  _projectsContext.Projects.AddIfNotExists(projectModel);
+        var result =  _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult
