@@ -3,11 +3,11 @@ import { resilienceStatus } from '../../shared/Resilience';
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items, status } = action.data;
+      const { items, groups, status } = action.data;
       return {
         ...state,
         status,
-        items,
+        items: items.map( item => {return {...item, groupName: groups.find(g => g.id === item.groupId).name}}),
       };
     }
     case 'onActionProjectsLoading': {
@@ -86,6 +86,7 @@ export const initialState = {
     filterValue: null,
     columns: {
       name: { value: null, timeLastUpdate: null },
+      groupName: {value: null, timeLastUpdate: null},
       createDate: { value: 'desc', timeLastUpdate: new Date() },
       typeAnnotation: { value: null, timeLastUpdate: null },
       numberCrossAnnotation: { value: null, timeLastUpdate: null },

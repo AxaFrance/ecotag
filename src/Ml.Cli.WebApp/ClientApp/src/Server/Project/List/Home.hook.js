@@ -3,21 +3,22 @@ import { fetchProjects } from '../Project.service';
 import React from 'react';
 import { initialState, reducer } from './Home.reducer';
 import { resilienceStatus } from '../../shared/Resilience';
+import {fetchGroups} from "../../Group/Group.service";
 
 export const init = (fetch, dispatch) => async () => {
-  const response = await fetchProjects(fetch)();
+  const projectsPromise = fetchProjects(fetch)();
+  const groupsPromise = fetchGroups(fetch)(false);
+  const[projectsResponse, groupsResponse] = await Promise.all([projectsPromise, groupsPromise]);
   let data;
-  if(response.status >= 500) {
+  if(projectsResponse.status >= 500 || groupsResponse.status >= 500) {
     data = {
         items: [],
         status: resilienceStatus.ERROR
       };
   } else {
-    const items = await response.json();
-    data = {
-        items: items,
-        status: resilienceStatus.SUCCESS
-      };
+    const items = await projectsResponse.json();
+    const groups = await groupsResponse.json();
+    data = { items, groups, status: resilienceStatus.SUCCESS };
   }
   dispatch({
     type: 'init',
