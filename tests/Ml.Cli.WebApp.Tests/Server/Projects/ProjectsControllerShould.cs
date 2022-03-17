@@ -101,7 +101,7 @@ public class ProjectsControllerShould
                 ProjectsRepository projectsRepository, ProjectsController projectsController, DefaultHttpContext context
                 )> InitMockAsync(string nameIdentifier)
         {
-            var groupContext = GroupsControllerTest.GetInMemoryGroupContext();
+            var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
             var group = new GroupModel() { Name = "group", Id = new Guid("10000000-0000-0000-0000-000000000000") };
             groupContext.Groups.Add(group);

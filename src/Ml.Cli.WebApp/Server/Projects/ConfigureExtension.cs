@@ -9,7 +9,7 @@ namespace Ml.Cli.WebApp.Server.Projects;
 
 public static class ConfigureExtension
 {
-    public static void ConfigureProjectRattachment(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));

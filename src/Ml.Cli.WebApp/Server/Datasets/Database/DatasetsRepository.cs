@@ -28,7 +28,7 @@ public class DatasetsRepository {
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
         };
-        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Datasets, groupModel, group => group.Name == groupModel.Name);
+        var result = _datasetsContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };

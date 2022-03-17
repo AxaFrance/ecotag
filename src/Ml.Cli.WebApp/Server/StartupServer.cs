@@ -71,7 +71,7 @@ namespace Ml.Cli.WebApp.Server
             });
             services.ConfigureGroups(Configuration);
             services.ConfigureDatasets(Configuration);
-            services.ConfigureProjectRattachment(Configuration);
+            services.ConfigureProjects(Configuration);
             
              services.AddAuthorization(options =>
                   {
