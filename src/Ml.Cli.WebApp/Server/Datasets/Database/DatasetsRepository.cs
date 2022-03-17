@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,44 @@ public class DatasetsRepository {
         }
         
         return datasets.Select(d => d.ToListDatasetResult()).ToList();
+    }
+    
+    public async Task<GetDataset> GetDatasetAsync(string datasetId)
+    {
+        var dataset = await _datasetsContext.Datasets.AsNoTracking()
+            .Where(dataset => dataset.Id == new Guid(datasetId))
+            .Include(dataset => dataset.Files)
+            .FirstOrDefaultAsync();
+        return dataset?.ToGetDataset();
+    }
+    
+    public async Task<GetDatasetInfo> GetDatasetInfoAsync(string datasetId)
+    {
+        var dataset = await _datasetsContext.Datasets.AsNoTracking()
+            .Where(dataset => dataset.Id == new Guid(datasetId))
+            .FirstOrDefaultAsync();
+        return dataset?.ToGetDatasetInfo();
+    }
+    
+    public async Task<string> CreateFileAsync(string datasetId, string fileName, string contentType, long size, string creatorNameIdentifier)
+    {
+        var dataset = await _datasetsContext.Datasets
+            .Where(dataset => dataset.Id == new Guid(datasetId))
+            .FirstOrDefaultAsync();
+
+        var file = new FileModel()
+        {
+            Name = fileName,
+            ContentType = contentType,
+            CreatorNameIdentifier = creatorNameIdentifier,
+            CreateDate = DateTime.Now.Ticks,
+            Size = size
+        };
+        dataset.Files.Add(file);
+
+        await _datasetsContext.SaveChangesAsync();
+        
+        return file.Id.ToString();
     }
 
 }

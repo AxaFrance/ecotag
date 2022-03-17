@@ -17,10 +17,10 @@ namespace Ml.Cli.WebApp.Server.Datasets
     [ApiController]
     public class DatasetsController : Controller
     {
-        public static List<Dataset> datasets;
+        public static List<GetDataset> datasets;
         public static List<EcotagFileWithBytes> files = new List<EcotagFileWithBytes>();
 
-        private Dataset Find(string id)
+        private GetDataset Find(string id)
         {
             return datasets.Find(currentDataset => currentDataset.Id.Equals(id));
         }
@@ -32,7 +32,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
             var datasetsAsString = System.IO.File.ReadAllText("./Server/Datasets/mocks/datasets.json");
             var datasetsAsJsonFile = JsonDocument.Parse(datasetsAsString);
             var datasetsAsJson = datasetsAsJsonFile.RootElement.GetProperty("datasets");
-            datasets = JsonConvert.DeserializeObject<List<Dataset>>(datasetsAsJson.ToString());
+            datasets = JsonConvert.DeserializeObject<List<GetDataset>>(datasetsAsJson.ToString());
         }
 
         [HttpGet]
@@ -47,14 +47,10 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpGet("{id}", Name = "GetDatasetById")]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataAnnoteur)]
-        public ActionResult<Dataset> GetDataset(string id)
+        public async Task<ActionResult<GetDataset>> GetDataset([FromServices] GetDatasetCmd getDatasetCmd, string id)
         {
-            var dataset = Find(id);
-            if (dataset == null)
-            {
-                return NotFound();
-            }
-            return Ok(dataset);
+            var getSataset = await getDatasetCmd.ExecuteAsync(id);
+            return Ok(getSataset);
         }
 
         [HttpPost]
@@ -84,24 +80,21 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataScientist)]
-        public async Task<IActionResult> OnPostUploadAsync(string datasetId, [FromForm(Name = "files")] List<IFormFile> formFiles)
+        public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId)
         {
-            var dataset = Find(datasetId);
-            foreach (var formFile in formFiles.Where(formFile => formFile.Length > 0))
+            var files = Request.Form.Files;
+            var nameIdentifier = User.Identity.GetSubject();
+            foreach (var formFile in files.Where(formFile => formFile.Length > 0))
             {
-                var streamContent = new StreamContent(formFile.OpenReadStream());
-                var bytes = await streamContent.ReadAsByteArrayAsync();
-                var file = new EcotagFileWithBytes()
+                var stream = formFile.OpenReadStream();
+                var fileId = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput()
                 {
-                    Bytes = bytes,
-                    FileName = formFile.FileName,
+                    Name = formFile.FileName,
+                    Stream = stream,
                     ContentType = formFile.ContentType,
                     DatasetId = datasetId,
-                    Size = bytes.Length,
-                    Id = Guid.NewGuid().ToString()
-                };
-                dataset.Files.Add(new EcotagFile(){Id = file.Id,ContentType = file.ContentType, FileName = file.FileName, Size = file.Size});
-                files.Add(file);
+                    NameIdentifier = nameIdentifier
+                });
             }
 
             return Ok("");
@@ -128,14 +121,13 @@ namespace Ml.Cli.WebApp.Server.Datasets
             if (file != null) return NoContent();
 
             return NotFound();
-
         }
         
         [HttpPost("{datasetId}/lock")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataScientist)]
-        public ActionResult<Dataset> Lock(string datasetId)
+        public ActionResult<GetDataset> Lock(string datasetId)
         {
             var dataset = Find(datasetId);
             dataset.IsLocked = true;

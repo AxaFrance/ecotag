@@ -50,11 +50,9 @@ export const FileUpload = ({fetch, setState, state}) => {
             }
 
         const responses = await Promise.all(promises);
-            
             if(responses.find(response => response.status >= 500)){
                 setState({...state, status : resilienceStatus.ERROR });
             } else {
-
                 const newFilesSend = state.files.filesSend;
                 state.files.filesLoad.values.map(file => {
                     const newFile = {...file, id: cuid()};

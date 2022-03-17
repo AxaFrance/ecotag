@@ -13,13 +13,13 @@ public class FileModel
     [Column("FLE_Id")]
     public Guid Id { get; set; }
     
-    [Column("FLE_Path")]
+    [Column("FLE_Name")]
     [MaxLength(512)]
     [MinLength(1)]
-    public string Path { get; set; }
+    public string Name { get; set; }
     
     [Column("FLE_Size")]
-    public int Size { get; set; }
+    public long Size { get; set; }
     
     [Column("FLE_ContentType")]
     [MaxLength(16)]
@@ -30,9 +30,6 @@ public class FileModel
     [MaxLength(32)]
     [MinLength(1)]
     public string CreatorNameIdentifier { get; set; }
-    
-    [Column("USR_Id")]
-    public Guid UserId { get; set; }
 
     [Column("FLE_CreateDate")]
     public long CreateDate { get; set; }

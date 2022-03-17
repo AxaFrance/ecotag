@@ -70,15 +70,14 @@ if not exists (select * from sysobjects where name='T_File' and xtype='U')
 BEGIN
 CREATE TABLE [sch_ECOTAG].[T_File](
     [FLE_Id] uniqueidentifier NOT NULL DEFAULT newid(),
-    [FLE_Path] [varchar](1024) NOT NULL,
-    [FLE_Size] int NOT NULL,
+    [FLE_Name] [varchar](1024) NOT NULL,
+    [FLE_Size] BIGINT NOT NULL,
     [FLE_ContentType] [varchar](256) NOT NULL,
     [FLE_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [FLE_CreateDate] BIGINT NOT NULL,
-    [USR_Id] uniqueidentifier NOT NULL,
     [DTS_Id] uniqueidentifier NOT NULL,
     CONSTRAINT [PK_T_File] UNIQUE([FLE_Id]),
-    CONSTRAINT [PK_T_File_Path] UNIQUE([FLE_Path])
+    CONSTRAINT [PK_T_File_Name] UNIQUE([FLE_Name])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
 END
