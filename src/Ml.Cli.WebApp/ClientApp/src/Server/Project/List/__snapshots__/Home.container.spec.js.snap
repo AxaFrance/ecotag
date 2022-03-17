@@ -134,6 +134,27 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                 <span
                   class="af-btn__text"
                 >
+                  Groupe
+                </span>
+                <i
+                  class="glyphicon glyphicon-sorting"
+                />
+              </button>
+            </span>
+          </th>
+          <th
+            class="af-table__th af-table__th--sortable"
+            classmodifier="sortable"
+          >
+            <span
+              class="af-table__th-content"
+            >
+              <button
+                class="af-btn af-btn--table-sorting"
+              >
+                <span
+                  class="af-btn__text"
+                >
                   Date création
                 </span>
                 <i
@@ -210,13 +231,16 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           <td
             class="af-table__cell"
           >
-            04/04/2011
+            groupName
           </td>
           <td
             class="af-table__cell"
           >
-            NER
+            02/01/0001
           </td>
+          <td
+            class="af-table__cell"
+          />
           <td
             class="af-table__cell"
           >

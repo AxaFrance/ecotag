@@ -46,9 +46,9 @@ describe('Page.container', () => {
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
     const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={givenUser}/></Router>);
-    const messageEl = await waitFor(() => getByText('04/04/2011'));
+    const messageEl = await waitFor(() => getByText('02/01/0001'));
     expect(messageEl).toHaveTextContent(
-        '04/04/2011'
+        '02/01/0001'
     );
   });
 

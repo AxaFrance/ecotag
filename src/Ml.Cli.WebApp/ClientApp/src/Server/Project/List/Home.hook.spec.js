@@ -15,6 +15,7 @@ describe('Home.hook for projects', () => {
   const givenProjects = [{
     "id": "0001",
     "name": "Relevé d'information",
+    "groupId": "0001",
     "dataSetId": "0004",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
@@ -33,13 +34,20 @@ describe('Home.hook for projects', () => {
         "email": "Gille.Cruchont@axa.fr"}
     ]
   }];
+  
+  const givenGroups = [{
+    "id": "0001",
+    "name": "groupName"
+  }];
 
   function fail(message = "The fail function was called") {
     throw new Error(message);
   }
 
   beforeEach(() => {
-    givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProjects)}));
+    givenFetch = jest.fn()
+        .mockImplementationOnce(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProjects)}))
+        .mockImplementationOnce(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenGroups)}));
     givenDispatch = jest.fn();
     givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
   });
@@ -51,7 +59,7 @@ describe('Home.hook for projects', () => {
     it('should call fetchProjects and dispatch', async () => { 
       try {
         await init(givenFetch, givenDispatch)();
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { items: givenProjects, status: resilienceStatus.SUCCESS } } );
+        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { items: givenProjects, groups: givenGroups, status: resilienceStatus.SUCCESS } } );
       } catch (error) {
         fail(error);
       }

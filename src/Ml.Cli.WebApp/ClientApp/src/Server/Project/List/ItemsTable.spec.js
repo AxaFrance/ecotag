@@ -5,8 +5,9 @@ import ItemsTable from "./ItemsTable";
 const items = [{
     id: "0001",
     name: "Carte verte",
-    type: "Image",
-    numberFiles: 300,
+    groupName: "groupName",
+    annotationType: "Image",
+    numberTagToDo: 300,
     createDate: new Date("10-30-2019").getTime()
 }];
 
@@ -18,6 +19,7 @@ const filters = {
     filterValue: null,
         columns: {
         name: { value: null, timeLastUpdate: null },
+        groupName: {value: null, timeLastUpdate: null},
         createDate: { value: 'desc', timeLastUpdate: new Date() },
         typeAnnotation: { value: null, timeLastUpdate: null },
         numberTagToDo: { value: null, timeLastUpdate: null },
