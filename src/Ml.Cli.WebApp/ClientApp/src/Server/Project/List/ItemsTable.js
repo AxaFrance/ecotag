@@ -5,7 +5,7 @@ import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import {formatTimestampToString} from "../../date";
 
-const ProjectRow = ({ id, name, groupName, createDate, typeAnnotation, numberTagToDo }) => {
+const ProjectRow = ({ id, name, groupName, createDate, annotationType, numberTagToDo }) => {
     const history = useHistory();
     const projectPageButton = id => {
         const path = `/projects/${id}`;
@@ -16,7 +16,7 @@ const ProjectRow = ({ id, name, groupName, createDate, typeAnnotation, numberTag
             <Table.Td>{name}</Table.Td>
             <Table.Td>{groupName}</Table.Td>
             <Table.Td>{createDate}</Table.Td>
-            <Table.Td>{typeAnnotation}</Table.Td>
+            <Table.Td>{annotationType}</Table.Td>
             <Table.Td>{numberTagToDo}</Table.Td>
             <Table.Td>
                 <Action id="id" icon="zoom-in" title="Editer" onClick={() => projectPageButton(id)} />
@@ -26,7 +26,7 @@ const ProjectRow = ({ id, name, groupName, createDate, typeAnnotation, numberTag
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
-    
+    console.log(items);
     return(
         <>
             <Table>
@@ -63,7 +63,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                     </Table.Tr>
                 </Table.Header>
                 <Table.Body>
-                    {items.map(({ id, name, groupName, createDate, numberTagToDo, typeAnnotation }) => (
+                    {items.map(({ id, name, groupName, createDate, numberTagToDo, annotationType }) => (
                         <ProjectRow
                             key={id}
                             id={id}
@@ -71,7 +71,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                             groupName={groupName}
                             createDate={formatTimestampToString(createDate)}
                             numberTagToDo={numberTagToDo}
-                            typeAnnotation={typeAnnotation}
+                            annotationType={annotationType}
                         />
                     ))}
                 </Table.Body>
