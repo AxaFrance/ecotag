@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,14 @@ public class GroupModel
     [MaxLength(16)]
     [MinLength(3)]
     public string Name { get; set; }
+    
+    [Column("GRP_CreatorNameIdentifier")]
+    [MaxLength(32)]
+    [MinLength(1)]
+    public string CreatorNameIdentifier { get; set; }
+    
+    [Column("GRP_CreateDate")]
+    public long CreateDate { get; set; }
     
     public List<GroupUsersModel> GroupUsers { get; set; }
 }

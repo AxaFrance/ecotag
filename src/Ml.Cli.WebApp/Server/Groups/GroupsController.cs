@@ -41,9 +41,15 @@ namespace Ml.Cli.WebApp.Server.Groups
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataAdministateur)]
-        public async Task<ActionResult<string>> Create([FromServices]CreateGroupCmd createGroupCmd, CreateGroupInput createGroupInput)
+        public async Task<ActionResult<string>> Create([FromServices]CreateGroupCmd createGroupCmd, GroupInput groupInput)
         {
-            var commandResult = await createGroupCmd.ExecuteAsync(createGroupInput);
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await createGroupCmd.ExecuteAsync(new CreateGroupInput()
+            {
+                Name = groupInput.Name,
+                UserIds = groupInput.UserIds,
+                CreatorNameIdentifier = nameIdentifier
+            });
             if (!commandResult.IsSuccess)
             {
                 return BadRequest(commandResult.Error);
