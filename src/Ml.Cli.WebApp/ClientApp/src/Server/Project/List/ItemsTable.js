@@ -26,7 +26,7 @@ const ProjectRow = ({ id, name, groupName, createDate, annotationType, numberTag
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
-    console.log(items);
+    
     return(
         <>
             <Table>
