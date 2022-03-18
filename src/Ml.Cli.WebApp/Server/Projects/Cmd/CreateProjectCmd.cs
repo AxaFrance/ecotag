@@ -106,7 +106,7 @@ public class CreateProjectCmd
             return commandResult;
         }
         
-        if (user.GroupIds.Contains(createProjectWithUserInput.CreateProjectInput.GroupId) == false)
+        if (!user.GroupIds.Contains(createProjectWithUserInput.CreateProjectInput.GroupId))
         {
             commandResult.Error = new ErrorResult
             {
