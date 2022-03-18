@@ -25,6 +25,7 @@ public record CreateProjectInput
     [RegularExpression(@"Cropping|ImageClassifier|NamedEntity$")]
     public string AnnotationType { get; set; }
     [Required]
+    [MaxLength(10)]
     public List<CreateProjectLabelInput> Labels { get; set; }
 }
 

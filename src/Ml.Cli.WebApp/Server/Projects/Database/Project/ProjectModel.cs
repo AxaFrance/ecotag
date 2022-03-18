@@ -32,6 +32,7 @@ public class ProjectModel
     public AnnotationTypeEnumeration AnnotationType { get; set; }
 
     [Column("PRJ_LabelsJson")]
+    [MaxLength(2048)]
     public string LabelsJson { get; set; }
     
     [Column("PRJ_CreatorNameIdentifier")]

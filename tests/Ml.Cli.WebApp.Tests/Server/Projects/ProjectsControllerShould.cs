@@ -40,7 +40,7 @@ public class ProjectsControllerShould
     public class CreateProjectTest
     {
         [Theory]
-        [InlineData("projectName", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", "10000000-0000-0000-0000-000000000000")]
+        [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", "10000000-0000-0000-0000-000000000000")]
         public async Task CreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
             string nameIdentifier, string groupId)
         {
@@ -55,12 +55,13 @@ public class ProjectsControllerShould
         }
 
         [Theory]
-        [InlineData("a", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
-        [InlineData("too_long_project_name", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
-        [InlineData("projectName", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
-        [InlineData("projectName", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s777777", CreateProjectCmd.UserNotFound, null)]
-        [InlineData("projectName", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666667", CreateProjectCmd.UserNotInGroup, null)]
-        [InlineData("project1", 1, "NER", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", ProjectsRepository.AlreadyTakenName, null)]
+        [InlineData("a", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
+        [InlineData("too_long_project_name", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
+        [InlineData("projectName", 1, "wrongAnnotationType", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]        [InlineData("project1", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000001\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000002\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000003\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000004\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000005\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000006\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000007\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000008\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000009\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000010\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000011\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000012\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000013\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
+        [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
+        [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s777777", CreateProjectCmd.UserNotFound, null)]
+        [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666667", CreateProjectCmd.UserNotInGroup, null)]
+        [InlineData("project1", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", ProjectsRepository.AlreadyTakenName, null)]
         public async Task ReturnError_WhenCreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
             string nameIdentifier, string errorKey, string groupId)
         {
@@ -120,7 +121,7 @@ public class ProjectsControllerShould
             projectContext.Projects.Add(new ProjectModel
             {
                 Name = "project1",
-                AnnotationType = "NER",
+                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
@@ -131,7 +132,7 @@ public class ProjectsControllerShould
             projectContext.Projects.Add(new ProjectModel
             {
                 Name = "project2",
-                AnnotationType = "NER",
+                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,

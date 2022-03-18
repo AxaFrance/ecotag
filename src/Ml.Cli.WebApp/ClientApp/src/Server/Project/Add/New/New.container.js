@@ -12,7 +12,7 @@ import {
   TYPE,
   MSG_REQUIRED,
   LABELS,
-  MSG_PROJECT_NAME_ALREADY_EXIST, MSG_MIN_LENGTH, MSG_MAX_LENGTH, MSG_TEXT_REGEX
+  MSG_PROJECT_NAME_ALREADY_EXIST, MSG_MIN_LENGTH, MSG_MAX_LENGTH, MSG_TEXT_REGEX, MSG_MAX_LABELS_LENGTH
 } from './constants';
 import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
@@ -73,18 +73,21 @@ export const reducer = (state, action) => {
           if(newValues.length === 0){
             message = MSG_REQUIRED
           }
+          else if(newValues.length > 10){
+            message = MSG_MAX_LABELS_LENGTH
+          }
           else{
-            for(let value of newValues){
+            newValues.forEach(function(value, index){
               if(value.name.length < 3){
-                message = MSG_MIN_LENGTH
+                message = `Label numéro ${index + 1} : ${MSG_MIN_LENGTH}`
               }
               else if(value.name.length > 16){
-                message = MSG_MAX_LENGTH
+                message = `Label numéro ${index + 1} : ${MSG_MAX_LENGTH}`
               }
               else if(!value.name.match(/^[a-zA-Z-_]*$/)){
-                message = MSG_TEXT_REGEX
+                message = `Label numéro ${index + 1} : ${MSG_TEXT_REGEX}`
               }
-            }
+            })
           }
           newFields = {
             ...fields,
