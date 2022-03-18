@@ -50,13 +50,6 @@ namespace Ml.Cli.WebApp.Server.Projects
             return NotFound();
         }
 
-        /*[HttpGet]
-        [ResponseCache(Duration = 1)]
-        public ActionResult<IEnumerable<Project>> GetAllProjects()
-        {
-            return Ok(projects);
-        }*/
-
         [HttpGet]
         [ResponseCache(Duration = 1)]
         public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAllProjects(
@@ -66,17 +59,6 @@ namespace Ml.Cli.WebApp.Server.Projects
             var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
-
-        /*[HttpGet("{id}", Name = "GetProjectById")]
-        public ActionResult<Project> GetProject(string id)
-        {
-            var project = Find(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-            return Ok(project);
-        }*/
 
         [HttpGet("{id}", Name = "GetProjectById")]
         public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
@@ -90,18 +72,6 @@ namespace Ml.Cli.WebApp.Server.Projects
             }
             return Ok(commandResult.Data);
         }
-
-        /*[HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Project> Create(Project newProject)
-        {
-            newProject.Id = Guid.NewGuid().ToString();
-            newProject.CreateDate = DateTime.Now.Ticks;
-            projects.Add(newProject);
-            
-            return Created(newProject.Id, Find(newProject.Id));
-        }*/
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

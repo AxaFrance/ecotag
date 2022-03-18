@@ -48,10 +48,18 @@ public class GetProjectsShould
         };
 
         var result = await projectsController.GetProject(getProjectCmd, searchedId);
-        var resultError = result.Result as BadRequestObjectResult;
-        Assert.NotNull(resultError);
-        var resultErrorValue = resultError.Value as ErrorResult;
-        Assert.Equal(errorType, resultErrorValue?.Key);
+        if (errorType == ProjectsRepository.Forbidden)
+        {
+            var resultError = result.Result as ForbidResult;
+            Assert.NotNull(resultError);
+        }
+        else
+        {
+            var resultError = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultError);
+            var resultErrorValue = resultError.Value as ErrorResult;
+            Assert.Equal(errorType, resultErrorValue?.Key);
+        }
     }
 
     [Theory]

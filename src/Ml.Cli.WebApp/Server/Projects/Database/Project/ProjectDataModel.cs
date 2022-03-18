@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
@@ -18,7 +19,7 @@ public class ProjectDataModel
     
     public string AnnotationType { get; set; }
 
-    public string LabelsJson { get; set; }
+    public List<LabelDataModel> Labels { get; set; }
     
     public string CreatorNameIdentifier { get; set; }
 }
