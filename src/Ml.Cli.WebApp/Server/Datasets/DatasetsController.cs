@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -67,10 +68,11 @@ namespace Ml.Cli.WebApp.Server.Datasets
         {
            // var files = Request.Form.Files;
             var nameIdentifier = User.Identity.GetSubject();
+            var results = new List<ResultWithError<string, ErrorResult>>();
             foreach (var formFile in files.Where(formFile => formFile.Length > 0))
             {
                 var stream = formFile.OpenReadStream();
-                var fileId = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput()
+                var result = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput()
                 {
                     Name = formFile.FileName,
                     Stream = stream,
@@ -78,9 +80,10 @@ namespace Ml.Cli.WebApp.Server.Datasets
                     DatasetId = datasetId,
                     NameIdentifier = nameIdentifier
                 });
+                results.Add(result);
             }
 
-            return Ok("");
+            return Ok(results);
         }
 
         [HttpGet("{datasetId}/files/{id}")]

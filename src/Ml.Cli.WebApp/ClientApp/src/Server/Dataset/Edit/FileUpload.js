@@ -49,9 +49,7 @@ export const FileUpload = ({fetch, setState, state}) => {
                 }
                 const responsePromise = fetch(`datasets/${state.dataset.id}/files`, {
                     method: 'POST',
-                    headers: {
-                       // 'Content-Type': 'multipart/form-data',
-                    },
+                    headers: {}, // This is necessary to override the default headers content-type: json
                     body: formData,
                 });
                 promises.push(responsePromise)

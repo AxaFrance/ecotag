@@ -80,15 +80,15 @@ const FileList = ({state, setState, fetch}) => {
                                     <Restitution label="Type" value={state.dataset.type} />
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>
-                                    <Restitution label="nombre de fichier" value={state.files.filesSend.length} />
-                                    <Restitution label="poids total des fichiers" value={bytesToSize(fileSizeTotal)} />
-                                    <Restitution label="poids moyen des fichiers" value={bytesToSize(fileSizeAverage)} />
+                                    <Restitution label="Nombre de fichier" value={state.files.filesSend.length} />
+                                    <Restitution label="Poids total des fichiers" value={bytesToSize(fileSizeTotal)} />
+                                    <Restitution label="Poids moyen des fichiers" value={bytesToSize(fileSizeAverage)} />
                                 </SectionRestitutionColumn>
                             </SectionRestitutionRow>
                         </SectionRestitution>
                     </ArticleRestitution>
                 </Tabs.Tab>
-                <Tabs.Tab title="liste des fichiers">
+                <Tabs.Tab title="Liste des fichiers">
                     <Table>
                         <Table.Header>
                             <Table.Tr>
