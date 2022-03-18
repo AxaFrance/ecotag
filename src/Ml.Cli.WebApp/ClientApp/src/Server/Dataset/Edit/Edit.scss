@@ -1,4 +1,12 @@
 ﻿.edit-dataset {
+  &__file-upload-files-load-error{
+    color: red;
+    margin-left: 4em;
+  }
+  &__file-upload-files-send-error{
+    color: red;
+    margin-left: 4em;
+  }
   &__file-upload-container {
     padding: 0 50px;
     margin-bottom: 50px;

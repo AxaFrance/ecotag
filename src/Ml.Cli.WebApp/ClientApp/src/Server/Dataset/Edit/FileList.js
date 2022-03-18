@@ -58,9 +58,9 @@ const FileList = ({state, setState, fetch}) => {
     const files = state.files;
     const paging = files.paging;
     const itemByPages = paging.itemByPages
-    const currentPages = paging.currentPages
-    const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
     const numberPages = computeNumberPages(files.filesSend, itemByPages);
+    const currentPages = paging.currentPages > numberPages ? numberPages :  paging.currentPages
+    const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
 
     const reducer = (previousValue, currentValue) => previousValue + currentValue.file.size;
     const hasFiles = state.files.filesSend.length ===0;
@@ -106,7 +106,7 @@ const FileList = ({state, setState, fetch}) => {
                             {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
-                                         <a href="#" alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
+                                         <a href={"#"+file.file.name} alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
                                         <Table.Td>{bytesToSize(file.file.size)}</Table.Td>

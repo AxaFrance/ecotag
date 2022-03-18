@@ -57,8 +57,10 @@ export const EditContainer = ({fetch}) => {
         dataset: { name: "", id: "", createDate:null, isLock:false },
         status: resilienceStatus.LOADING,
         files:{
-            filesLoad: [],
+            filesLoad: { values : [] },
+            filesLoadError: [],
             filesSend: [],
+            filesSendError: [],
             paging: {
                 numberPages: computeNumberPages([], 10),
                 currentPages: 1,

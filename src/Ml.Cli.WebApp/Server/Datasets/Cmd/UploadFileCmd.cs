@@ -83,10 +83,16 @@ public class UploadFileCmd
         var stream = uploadFileCmdInput.Stream;
         
 
-        var fileId = await _datasetsRepository.CreateFileAsync(datasetId, stream, fileName, uploadFileCmdInput.ContentType,
+        var fileResult = await _datasetsRepository.CreateFileAsync(datasetId, stream, fileName, uploadFileCmdInput.ContentType,
             nameIdentifier);
 
-        commandResult.Data = fileId;
+        if (!fileResult.IsSuccess)
+        {
+            commandResult.Error = fileResult.Error;
+            return commandResult;
+        }
+        
+        commandResult.Data = fileResult.Data;
         return commandResult;
     }
 

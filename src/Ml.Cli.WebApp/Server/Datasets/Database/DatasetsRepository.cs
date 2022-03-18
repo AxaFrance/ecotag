@@ -125,9 +125,10 @@ public class DatasetsRepository {
 
     private const string FileNotFound = "FileNotFound";
 
-    public async Task<string> CreateFileAsync(string datasetId, Stream stream, string fileName, string contentType, string creatorNameIdentifier)
+    public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream, string fileName, string contentType, string creatorNameIdentifier)
     {
-        var file = new FileModel()
+        var commandResult = new ResultWithError<string, ErrorResult>();
+        var fileModel = new FileModel()
         {
             Name = fileName,
             ContentType = contentType,
@@ -136,12 +137,27 @@ public class DatasetsRepository {
             Size = stream.Length,
             DatasetId = new Guid(datasetId)
         };
-        _datasetsContext.Files.Add(file);
-        var taskSave = _datasetsContext.SaveChangesAsync();
-        var taskUpload = _fileService.UploadStreamAsync(datasetId, fileName, stream);
-        Task.WaitAll(taskSave, taskUpload);
+        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Files, fileModel, group => group.Name == fileName);
+        if (result == null)
+        {
+            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            return commandResult;
+        }
+        try
+        {
+            var taskSave = _datasetsContext.SaveChangesAsync();
+            var taskUpload = _fileService.UploadStreamAsync(datasetId, fileName, stream);
+            Task.WaitAll(taskSave, taskUpload);
+        }
+        catch (DbUpdateException)
+        {
+            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            return commandResult;
+        }
         await stream.DisposeAsync();
-        return file.Id.ToString();
+        
+        commandResult.Data = fileModel.Id.ToString();
+        return commandResult;
     }
 
 }
