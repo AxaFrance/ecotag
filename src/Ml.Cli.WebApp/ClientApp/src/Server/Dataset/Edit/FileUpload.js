@@ -36,9 +36,10 @@ export const FileUpload = ({fetch, setState, state}) => {
     const deleteFile = (idFile) => {
         const files = state.files;
         const filesLoad = files.filesLoad;
-        const file = filesLoad.values.find(v => v.id === idFile);
-        const index = filesLoad.values.indexOf(file);
-        const newValues = [...filesLoad.values];
+        let values = filesLoad.values;
+        const file = values.find(v => v.id === idFile);
+        const index = values.indexOf(file);
+        const newValues = [...values];
         if (index > -1) {
             newValues.splice(index, 1);
         }
