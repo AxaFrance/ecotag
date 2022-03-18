@@ -130,7 +130,7 @@ public class CreateDatasetShould
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
-        var datasetsRepository = new DatasetsRepository(datasetContext);
+        var datasetsRepository = new DatasetsRepository(datasetContext, null, new MemoryCache(Options.Create(new MemoryCacheOptions())));
         var datasetsController = new DatasetsController();
 
         var context = new DefaultHttpContext()

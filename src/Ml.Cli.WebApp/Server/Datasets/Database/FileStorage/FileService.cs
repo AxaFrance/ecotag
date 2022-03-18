@@ -49,30 +49,25 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
         }
 
         public const string FileNameMissing = "FileNameMissing";
-        public async Task<ResultWithError<FileDataModel, Error>> DownloadAsync(string containerName, string fileName)
+        public async Task<ResultWithError<FileDataModel, ErrorResult>> DownloadAsync(string containerName, string fileName)
         {
             var cloudBlob = await CloudBlockBlob(containerName, fileName);
-            var result = new ResultWithError<FileDataModel, Error>();
+            var result = new ResultWithError<FileDataModel, ErrorResult>();
             if (cloudBlob == null)
             {
-                result.Error = new Error
+                result.Error = new ErrorResult
                 {
-                    Message = FileNameMissing
+                    Key = FileNameMissing
                 };
                 return result;
             }
-
-            var memoryStream = new MemoryStream();
             var downloadStreaming = await cloudBlob.DownloadStreamingAsync();
-            memoryStream.Position = 0;
-
-            var fileDataModel = new FileDataModel { Stream = downloadStreaming.Value.Content };
-            if (fileDataModel.Stream.Length <= 0)
-            {
-                fileDataModel.Length = downloadStreaming.Value.Details.ContentLength;
-                fileDataModel.Name = fileName;
-            }
-
+            var fileDataModel = new FileDataModel { 
+                Stream = downloadStreaming.Value.Content, 
+                ContentType = downloadStreaming.Value.Details.ContentType,
+                Length = downloadStreaming.Value.Details.ContentLength,
+                Name = fileName
+            };
             result.Data = fileDataModel;
             return result;
         }
@@ -83,5 +78,6 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
         public string Name { get; set; }
         public Stream Stream { get; set; }
         public long Length { get; set; }
+        public string ContentType { get; set; }
     };
 }

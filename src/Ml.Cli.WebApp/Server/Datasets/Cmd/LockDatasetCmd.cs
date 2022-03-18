@@ -1,27 +1,26 @@
 ﻿using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
-using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
-public class GetFileCmd
+public class LockDatasetCmd
 {
     private readonly IUsersRepository _usersRepository;
     private readonly DatasetsRepository _datasetsRepository;
     
-    private const string UserNotInGroup = "UserNotInGroup";
-    private const string UserNotFound = "UserNotFound";
+    public const string UserNotInGroup = "UserNotInGroup";
+    public const string UserNotFound = "UserNotFound";
     public const string DatasetNotFound = "DatasetNotFound";
 
-    public GetFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public LockDatasetCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
     }
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> ExecuteAsync(string datasetId, string fileId, string nameIdentifier)
+    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string nameIdentifier)
     {
-        var commandResult = new ResultWithError<FileDataModel, ErrorResult>();
+        var commandResult = new ResultWithError<bool, ErrorResult>();
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
@@ -44,7 +43,7 @@ public class GetFileCmd
             };
             return commandResult;
         }
-        
+
         if (!user.GroupIds.Contains(datasetInfo.GroupId))
         {
             commandResult.Error = new ErrorResult
@@ -55,7 +54,11 @@ public class GetFileCmd
             return commandResult;
         }
 
-        return await _datasetsRepository.GetFileAsync(datasetId, fileId);
-    }
+        var locked = await _datasetsRepository.Lock(datasetId);
 
+        commandResult.Data = locked;
+
+        return commandResult;
+    }
+    
 }

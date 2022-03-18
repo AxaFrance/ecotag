@@ -19,13 +19,11 @@ public record UploadFileCmdInput
 
 public class UploadFileCmd
 {
-    private readonly IFileService _fileService;
     private readonly IUsersRepository _usersRepository;
     private readonly DatasetsRepository _datasetsRepository;
 
-    public UploadFileCmd(IFileService fileService, IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public UploadFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
-        _fileService = fileService;
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
     }
@@ -71,7 +69,7 @@ public class UploadFileCmd
             return commandResult;
         }
 
-        if (!user.GroupIds.Contains(datasetInfo.GroupId))
+        if (!user.GroupIds.Contains(datasetInfo.GroupId.ToString()))
         {
             commandResult.Error = new ErrorResult
             {
@@ -83,9 +81,9 @@ public class UploadFileCmd
 
         var fileName = uploadFileCmdInput.Name;
         var stream = uploadFileCmdInput.Stream;
-        await _fileService.UploadStreamAsync(datasetInfo.Name, fileName, uploadFileCmdInput.Stream);
+        
 
-        var fileId = await _datasetsRepository.CreateFileAsync(datasetId, fileName, uploadFileCmdInput.ContentType, stream.Length,
+        var fileId = await _datasetsRepository.CreateFileAsync(datasetId, stream, fileName, uploadFileCmdInput.ContentType,
             nameIdentifier);
 
         commandResult.Data = fileId;

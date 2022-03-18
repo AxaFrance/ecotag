@@ -45,7 +45,7 @@ export const Edit = ({fetch, state, setState, lock}) => <div className="edit-dat
     <ConfirmModal isOpen={state.openLockModal} onCancel={lock.onCancel} onSubmit={lock.onSubmit}/>
     <Title title={state.dataset.name} subtitle="Edition du dataset" goTo="/datasets" goTitle="Datasets" />
     <FileUpload fetch={fetch} state={state} setState={setState}/>
-    {state.files.filesSend.length === 0 ? null : <FileList state={state} setState={setState} />}
+    {state.files.filesSend.length === 0 ? null : <FileList fetch={fetch} state={state} setState={setState} />}
     <Lock state={state} onLockDataset={lock.onLockDataset} />
 </div>
 

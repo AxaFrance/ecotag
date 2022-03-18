@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
 
@@ -17,24 +18,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
     [ApiController]
     public class DatasetsController : Controller
     {
-        public static List<GetDataset> datasets;
-        public static List<EcotagFileWithBytes> files = new List<EcotagFileWithBytes>();
-
-        private GetDataset Find(string id)
-        {
-            return datasets.Find(currentDataset => currentDataset.Id.Equals(id));
-        }
-        
-        public DatasetsController()
-        {
-            if (datasets != null) return;
-            Console.WriteLine("Loading datasets...");
-            var datasetsAsString = System.IO.File.ReadAllText("./Server/Datasets/mocks/datasets.json");
-            var datasetsAsJsonFile = JsonDocument.Parse(datasetsAsString);
-            var datasetsAsJson = datasetsAsJsonFile.RootElement.GetProperty("datasets");
-            datasets = JsonConvert.DeserializeObject<List<GetDataset>>(datasetsAsJson.ToString());
-        }
-
         [HttpGet]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
@@ -103,15 +86,26 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpGet("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
-        public IActionResult GetDatasetFile(string datasetId, string id)
+        public async Task<IActionResult> GetDatasetFile([FromServices] GetFileCmd getFileCmd, string datasetId, string id)
         {
-            var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
-            if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await getFileCmd.ExecuteAsync(datasetId, id, nameIdentifier);
 
-            return NotFound();
+            if (!result.IsSuccess)
+            {
+                var errorKey = result.Error.Key;
+                return errorKey switch
+                {
+                    FileService.FileNameMissing => NotFound(),
+                    GetFileCmd.DatasetNotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+            var file = result.Data;
+            return File(file.Stream, file.ContentType, file.Name);
         }
         
-        [HttpDelete("{datasetId}/files/{id}")]
+     /*   [HttpDelete("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
         public IActionResult DeleteFile(string datasetId, string id)
@@ -121,17 +115,27 @@ namespace Ml.Cli.WebApp.Server.Datasets
             if (file != null) return NoContent();
 
             return NotFound();
-        }
+        }*/
         
         [HttpPost("{datasetId}/lock")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataScientist)]
-        public ActionResult<GetDataset> Lock(string datasetId)
+        public async Task<ActionResult> Lock([FromServices] LockDatasetCmd lockDatasetCmd, string datasetId)
         {
-            var dataset = Find(datasetId);
-            dataset.IsLocked = true;
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await lockDatasetCmd.ExecuteAsync(datasetId, nameIdentifier);
 
+            if (!result.IsSuccess)
+            {
+                var errorKey = result.Error.Key;
+                return errorKey switch
+                {
+                    LockDatasetCmd.DatasetNotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+            
             return NoContent();
         }
     }

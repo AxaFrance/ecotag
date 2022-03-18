@@ -21,8 +21,23 @@ const bytesToSize=(bytes) => {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
+const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event => {
+    event.preventDefault();
+    const response = await fetch(`datasets/${datasetId}/files/${fileId}`, {
+        method: 'GET'
+    });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();         
+};
 
-const  FileList = ({state, setState}) => {
+
+const FileList = ({state, setState, fetch}) => {
 
     const deleteFile = file => {
         const filesSend = [... state.files.filesSend];
@@ -91,7 +106,7 @@ const  FileList = ({state, setState}) => {
                             {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
-                                            {file.file.name}
+                                         <a href="#" alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
                                         <Table.Td>{bytesToSize(file.file.size)}</Table.Td>
