@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
@@ -6,17 +7,25 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 public class GetProjectCmd
 {
     private readonly IProjectsRepository _projectsRepository;
+    private readonly IUsersRepository _usersRepository;
     public const string ProjectNotFound = "ProjectNotFound";
 
-    public GetProjectCmd(IProjectsRepository projectsRepository)
+    public GetProjectCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository)
     {
         _projectsRepository = projectsRepository;
+        _usersRepository = usersRepository;
     }
 
-    public async Task<ResultWithError<ProjectDataModel, ErrorResult>> ExecuteAsync(string projectId)
+    public async Task<ResultWithError<ProjectDataModel, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<ProjectDataModel, ErrorResult>();
-        var projectInDatabase = await _projectsRepository.GetProjectAsync(projectId);
+        
+        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        if (user == null)
+        {
+            return commandResult;
+        }
+        var projectInDatabase = await _projectsRepository.GetProjectAsync(projectId, user.GroupIds);
         if (projectInDatabase == null)
         {
             commandResult.Error = new ErrorResult

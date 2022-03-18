@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
@@ -55,15 +56,20 @@ public class ProjectsRepository : IProjectsRepository
         return commandResult;
     }
 
-    public async Task<List<ProjectDataModel>> GetAllProjectsAsync()
+    public async Task<List<ProjectDataModel>> GetAllProjectsAsync(List<string> userGroupIds)
     {
-        var projectModelEnum = await _projectsContext.Projects.AsNoTracking().ToListAsync();
+        var projectModelEnum = await _projectsContext.Projects
+            .AsNoTracking()
+            .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
+            .ToListAsync();
         return projectModelEnum.ConvertAll(element => element.ToProjectDataModel());
     }
 
-    public async Task<ProjectDataModel> GetProjectAsync(string projectId)
+    public async Task<ProjectDataModel> GetProjectAsync(string projectId, List<string> userGroupIds)
     {
-        var projectModel = await _projectsContext.Projects.AsNoTracking()
+        var projectModel = await _projectsContext.Projects
+            .AsNoTracking()
+            .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
             .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
         return projectModel?.ToProjectDataModel();
     }

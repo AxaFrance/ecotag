@@ -62,7 +62,8 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAllProjects(
             [FromServices] GetAllProjectsCmd getAllProjectsCmd)
         {
-            var result = await getAllProjectsCmd.ExecuteAsync();
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
 
@@ -80,7 +81,8 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpGet("{id}", Name = "GetProjectById")]
         public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
-            var commandResult = await getProjectCmd.ExecuteAsync(id);
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
                 return BadRequest(commandResult.Error);
