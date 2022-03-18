@@ -30,8 +30,8 @@ public class GetProjectCmd
             };
             return commandResult;
         }
-        var projectInDatabase = await _projectsRepository.GetProjectAsync(projectId, user.GroupIds);
-        if (projectInDatabase == null)
+        commandResult = await _projectsRepository.GetProjectAsync(projectId, user.GroupIds);
+        if (commandResult.Data == null && commandResult.IsSuccess)
         {
             commandResult.Error = new ErrorResult
             {
@@ -39,8 +39,7 @@ public class GetProjectCmd
             };
             return commandResult;
         }
-
-        commandResult.Data = projectInDatabase;
+        
         return commandResult;
     }
 }

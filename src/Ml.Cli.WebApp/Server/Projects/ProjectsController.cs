@@ -85,7 +85,8 @@ namespace Ml.Cli.WebApp.Server.Projects
             var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
-                return BadRequest(commandResult.Error);
+                return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
+                    commandResult.Error);
             }
             return Ok(commandResult.Data);
         }

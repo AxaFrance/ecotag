@@ -12,6 +12,7 @@ public class ProjectsRepository : IProjectsRepository
 {
     private readonly ProjectContext _projectsContext;
     public const string AlreadyTakenName = "AlreadyTakenName";
+    public const string Forbidden = "Forbidden";
 
     public ProjectsRepository(ProjectContext projectsContext)
     {
@@ -65,12 +66,28 @@ public class ProjectsRepository : IProjectsRepository
         return projectModelEnum.ConvertAll(element => element.ToProjectDataModel());
     }
 
-    public async Task<ProjectDataModel> GetProjectAsync(string projectId, List<string> userGroupIds)
+    public async Task<ResultWithError<ProjectDataModel, ErrorResult>> GetProjectAsync(string projectId, List<string> userGroupIds)
     {
+        var commandResult = new ResultWithError<ProjectDataModel, ErrorResult>();
         var projectModel = await _projectsContext.Projects
             .AsNoTracking()
             .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
             .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
-        return projectModel?.ToProjectDataModel();
+        if(projectModel == null)
+        {
+            var isProjectPresent = (await _projectsContext.Projects.AsNoTracking()
+                .FirstOrDefaultAsync(project => project.Id == new Guid(projectId)) != null);
+            if (isProjectPresent)
+            {
+                commandResult.Error = new ErrorResult
+                {
+                    Key = Forbidden
+                };
+                return commandResult;
+            }
+        }
+
+        commandResult.Data = projectModel?.ToProjectDataModel();
+        return commandResult;
     }
 }

@@ -8,5 +8,5 @@ public interface IProjectsRepository
 {
     Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectWithUserInput projectName);
     Task<List<ProjectDataModel>> GetAllProjectsAsync(List<string> userGroupIds);
-    Task<ProjectDataModel> GetProjectAsync(string projectId, List<string> userGroupIds);
+    Task<ResultWithError<ProjectDataModel, ErrorResult>> GetProjectAsync(string projectId, List<string> userGroupIds);
 }
