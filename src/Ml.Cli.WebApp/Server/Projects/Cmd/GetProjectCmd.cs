@@ -8,6 +8,7 @@ public class GetProjectCmd
 {
     private readonly IProjectsRepository _projectsRepository;
     private readonly IUsersRepository _usersRepository;
+    public const string UserNotFound = "UserNotFound";
     public const string ProjectNotFound = "ProjectNotFound";
 
     public GetProjectCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository)
@@ -23,6 +24,10 @@ public class GetProjectCmd
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UserNotFound
+            };
             return commandResult;
         }
         var projectInDatabase = await _projectsRepository.GetProjectAsync(projectId, user.GroupIds);
