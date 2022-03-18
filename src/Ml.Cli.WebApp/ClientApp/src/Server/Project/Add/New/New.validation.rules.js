@@ -9,15 +9,13 @@ const rulesRequired = {
 
 const rulesMaxLength = max => ({
   maxLength: {
-    maxLength: max,
-    message: 'Veuillez saisir au plus ' + max + " caractères)",
+    maxLength: max
   },
 });
 
 const rulesMinLength = min => ({
   minLength: {
-    minLength: min,
-    message: 'Veuillez saisir au moins ' + min + " caractères)"
+    minLength: min
   }
 });
 

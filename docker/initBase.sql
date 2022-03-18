@@ -157,9 +157,9 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
     [PRJ_GroupId] uniqueidentifier NOT NULL,
     [PRJ_Name] [varchar](16) NOT NULL,
     [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
-    [PRJ_CreateDate] [bigint] NOT NULL,
-    [PRJ_AnnotationType] [varchar](MAX) NOT NULL,
-    [PRJ_LabelsJson] [nvarchar](MAX) NOT NULL,
+    [PRJ_CreateDate] BIGINT NOT NULL,
+    [PRJ_AnnotationType] int NOT NULL,
+    [PRJ_LabelsJson] [varchar](2048) NOT NULL,
     [PRJ_CreatorNameIdentifier] [varchar](32) NOT NULL,
     CONSTRAINT [PK_T_Project] UNIQUE([PRJ_Id])
     )
@@ -183,12 +183,6 @@ GO
 CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
 (
     [GRP_Name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-GO
-
-CREATE CLUSTERED INDEX [IND_ProjectName] ON [sch_ECOTAG].[T_Project]
-(
-    [PRJ_Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
@@ -232,7 +226,7 @@ INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newi
 INSERT INTO [sch_ECOTAG].[T_Project](
     [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_LabelsJson],[PRJ_CreatorNameIdentifier]
 ) VALUES (
-    newid(), newid(), @firstGroupId, "firstproject", 10, 1647129600, 'NER', '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]',"s666666"
+    newid(), newid(), @firstGroupId, "firstproject", 10, 1647129600, 0, '[{\"name\": \"Recto\", \"color\": \"#212121\", \"id\": \"0\"}, {\"name\": \"Verso\", \"color\": \"#ffbb00\", \"id\": \"1\"}, {\"name": \"Signature\", \"color\": \"#f20713\", \"id\": \"2\"}]',"s666666"
 )
 
 GO
