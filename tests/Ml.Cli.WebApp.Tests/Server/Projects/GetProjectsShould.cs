@@ -54,6 +54,7 @@ public class GetProjectsShould
 
     [Theory]
     [InlineData("s666666", 2)]
+    [InlineData("s666667", 0)]
     public async Task Should_Get_All_projects(string nameIdentifier, int expectedProjectsNumber)
     {
         var (group, usersRepository, groupsRepository, projectsRepository, projectsController, context) =
