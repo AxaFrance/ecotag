@@ -186,7 +186,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,
       groupId: state.fields[GROUP].value,
-      typeAnnotation: state.fields[TYPE].value,
+      annotationType: state.fields[TYPE].value,
       numberCrossAnnotation: state.fields[NUMBER_CROSS_ANNOTATION].value,
       labels: state.fields[LABELS].values,
     };
