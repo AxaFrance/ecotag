@@ -108,7 +108,7 @@ export const reducer = (state, action) => {
             }else if(DATASET === name) {
 
               const options = [{
-                    value: 'CROPPING',
+                    value: 'Cropping',
                     label: "Sélection de zone d'image",
                     type: "Image"
                   },
@@ -118,7 +118,7 @@ export const reducer = (state, action) => {
                     type: "Image"
                   },
                   {
-                    value: 'NAMED_ENTITY',
+                    value: 'NamedEntity',
                     label: 'Sélection de zone de texte',
                     type: "Text"
                   }];

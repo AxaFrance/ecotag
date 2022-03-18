@@ -29,7 +29,7 @@ public class ProjectModel
     public long CreateDate { get; set; }
     
     [Column("PRJ_AnnotationType")]
-    public string AnnotationType { get; set; }
+    public AnnotationTypeEnumeration AnnotationType { get; set; }
 
     [Column("PRJ_LabelsJson")]
     public string LabelsJson { get; set; }

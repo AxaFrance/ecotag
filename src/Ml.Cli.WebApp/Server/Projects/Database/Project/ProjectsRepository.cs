@@ -24,7 +24,7 @@ public class ProjectsRepository : IProjectsRepository
         var projectModel = new ProjectModel
         {
             Name = projectInput.Name,
-            AnnotationType = projectInput.AnnotationType,
+            AnnotationType = projectInput.AnnotationType.ToAnnotationType(),
             DatasetId = new Guid(projectInput.DatasetId),
             GroupId = new Guid(projectInput.GroupId),
             LabelsJson = JsonConvert.SerializeObject(projectInput.Labels),
