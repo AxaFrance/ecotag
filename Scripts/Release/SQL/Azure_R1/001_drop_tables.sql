@@ -17,6 +17,10 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_D
 DROP table [sch_ECOTAG].[T_Dataset]
 GO
 
-    IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_File]'))
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_File]'))
 DROP table [sch_ECOTAG].[T_File]
+    GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_Project]'))
+DROP table [sch_ECOTAG].[T_Project]
     GO

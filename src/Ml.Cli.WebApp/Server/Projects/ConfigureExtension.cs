@@ -13,7 +13,6 @@ public static class ConfigureExtension
     {
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-        services.AddScoped<ProjectContext, ProjectContext>();
         services.AddScoped<IProjectsRepository, ProjectsRepository>();
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
