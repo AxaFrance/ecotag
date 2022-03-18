@@ -57,7 +57,7 @@ const FileList = ({state, setState, fetch}) => {
         if (index > -1) {
             filesSend.splice(index, 1);
         }
-        setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.EMPTY});
+        setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.SUCCESS});
     };
 
     const onChangePaging = ({numberItems, page}) => {
