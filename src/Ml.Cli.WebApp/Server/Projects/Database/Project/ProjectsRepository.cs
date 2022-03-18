@@ -42,7 +42,15 @@ public class ProjectsRepository : IProjectsRepository
             return commandResult;
         }
 
-        await _projectsContext.SaveChangesAsync();
+        try
+        {
+            await _projectsContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            return commandResult;
+        }
         commandResult.Data = projectModel.Id.ToString();
         return commandResult;
     }
