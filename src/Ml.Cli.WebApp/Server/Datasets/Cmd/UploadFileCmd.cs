@@ -61,6 +61,16 @@ public class UploadFileCmd
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
 
+        if (datasetInfo.IsLocked)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = DatasetLocked,
+                Error = null
+            };
+            return commandResult;
+        }
+
         if (!user.GroupIds.Contains(datasetInfo.GroupId))
         {
             commandResult.Error = new ErrorResult
@@ -75,11 +85,14 @@ public class UploadFileCmd
         var stream = uploadFileCmdInput.Stream;
         await _fileService.UploadStreamAsync(datasetInfo.Name, fileName, uploadFileCmdInput.Stream);
 
-        await _datasetsRepository.CreateFileAsync(datasetId, fileName, uploadFileCmdInput.ContentType, stream.Length,
+        var fileId = await _datasetsRepository.CreateFileAsync(datasetId, fileName, uploadFileCmdInput.ContentType, stream.Length,
             nameIdentifier);
 
+        commandResult.Data = fileId;
         return commandResult;
     }
+
+    private const string DatasetLocked = "DatasetLocked";
 
     private const string UserNotInGroup = "UserNotInGroup";
 

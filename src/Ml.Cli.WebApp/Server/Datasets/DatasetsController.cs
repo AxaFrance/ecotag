@@ -80,9 +80,9 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.DataScientist)]
-        public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId)
+        public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId, List<IFormFile> files)
         {
-            var files = Request.Form.Files;
+           // var files = Request.Form.Files;
             var nameIdentifier = User.Identity.GetSubject();
             foreach (var formFile in files.Where(formFile => formFile.Length > 0))
             {

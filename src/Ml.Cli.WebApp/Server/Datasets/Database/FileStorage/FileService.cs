@@ -31,7 +31,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
                 return null;
             }
             var container = await CloudBlobContainer(containerName);
-            var blockBlob = container.GetBlobClient("containerName");
+            var blockBlob = container.GetBlobClient(fileName);
             return blockBlob;
         }
 
@@ -48,6 +48,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
             return await cloudBlob.DeleteIfExistsAsync();
         }
 
+        public const string FileNameMissing = "FileNameMissing";
         public async Task<ResultWithError<FileDataModel, Error>> DownloadAsync(string containerName, string fileName)
         {
             var cloudBlob = await CloudBlockBlob(containerName, fileName);
@@ -56,7 +57,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
             {
                 result.Error = new Error
                 {
-                    Message = "FILE_NAME_MISSING"
+                    Message = FileNameMissing
                 };
                 return result;
             }

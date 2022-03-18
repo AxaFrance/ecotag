@@ -9,7 +9,15 @@ export const FileUpload = ({fetch, setState, state}) => {
     const onChange = value => {
         const reader = new FileReader();
         reader.onloadend = () => {
-            setState({ ...state, files : { ...state.files, filesLoad: value }});
+            setState({ 
+                ...state, 
+                files : { 
+                    ...state.files, 
+                    filesLoad: value,
+                    fileData: reader.result,
+                }
+            }
+            );
         };
         reader.readAsDataURL(value.values[0].file);
     };
@@ -41,8 +49,8 @@ export const FileUpload = ({fetch, setState, state}) => {
                 }
                 const responsePromise = fetch(`datasets/${state.dataset.id}/files`, {
                     method: 'POST',
-                    header: {
-                        'content-type': 'multipart/form-data',
+                    headers: {
+                       // 'Content-Type': 'multipart/form-data',
                     },
                     body: formData,
                 });

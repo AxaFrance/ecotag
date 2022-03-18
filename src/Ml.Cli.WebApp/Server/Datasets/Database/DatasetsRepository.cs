@@ -82,19 +82,17 @@ public class DatasetsRepository {
     
     public async Task<string> CreateFileAsync(string datasetId, string fileName, string contentType, long size, string creatorNameIdentifier)
     {
-        var dataset = await _datasetsContext.Datasets
-            .Where(dataset => dataset.Id == new Guid(datasetId))
-            .FirstOrDefaultAsync();
-
         var file = new FileModel()
         {
             Name = fileName,
             ContentType = contentType,
             CreatorNameIdentifier = creatorNameIdentifier,
             CreateDate = DateTime.Now.Ticks,
-            Size = size
+            Size = size,
+            DatasetId = new Guid(datasetId)
         };
-        dataset.Files.Add(file);
+
+        _datasetsContext.Files.Add(file);
 
         await _datasetsContext.SaveChangesAsync();
         
