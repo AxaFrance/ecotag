@@ -27,7 +27,6 @@ public class LockDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotFound,
-                Error = null
             };
             return commandResult;
         }
@@ -39,7 +38,6 @@ public class LockDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = DatasetNotFound,
-                Error = null
             };
             return commandResult;
         }
@@ -49,7 +47,6 @@ public class LockDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotInGroup,
-                Error = null
             };
             return commandResult;
         }

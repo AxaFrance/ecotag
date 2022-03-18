@@ -1,27 +1,23 @@
 ﻿using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
-using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
-public class GetFileCmd
+public class DeleteFileCmd
 {
-    private readonly IUsersRepository _usersRepository;
     private readonly DatasetsRepository _datasetsRepository;
-    
-    private const string UserNotInGroup = "UserNotInGroup";
-    private const string UserNotFound = "UserNotFound";
-    public const string DatasetNotFound = "DatasetNotFound";
+    private readonly IUsersRepository _usersRepository;
 
-    public GetFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public DeleteFileCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
     {
-        _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
+        _usersRepository = usersRepository;
     }
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> ExecuteAsync(string datasetId, string fileId, string nameIdentifier)
+    
+    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string fileId, string nameIdentifier)
     {
-        var commandResult = new ResultWithError<FileDataModel, ErrorResult>();
+        var commandResult = new ResultWithError<bool, ErrorResult>();
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
@@ -51,7 +47,21 @@ public class GetFileCmd
             return commandResult;
         }
 
-        return await _datasetsRepository.GetFileAsync(datasetId, fileId);
+        var deleteResult = await _datasetsRepository.DeleteFileAsync(datasetId, fileId);
+
+        if (!deleteResult.IsSuccess)
+        {
+            commandResult.Error = deleteResult.Error;
+            return commandResult;
+        }
+
+        commandResult.Data = deleteResult.Data;
+        return commandResult;
     }
 
+    private const string UserNotInGroup = "UserNotInGroup";
+
+    public const string DatasetNotFound = "DatasetNotFound";
+
+    private const string UserNotFound = "UserNotFound";
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
 using Newtonsoft.Json;
@@ -108,17 +109,27 @@ namespace Ml.Cli.WebApp.Server.Datasets
             return File(file.Stream, file.ContentType, file.Name);
         }
         
-     /*   [HttpDelete("{datasetId}/files/{id}")]
+        [HttpDelete("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
-        public IActionResult DeleteFile(string datasetId, string id)
+        public async Task<IActionResult> DeleteFile([FromServices] DeleteFileCmd deleteFileCmd,string datasetId, string id)
         {
-            var file = files.FirstOrDefault(file => file.Id == id && file.DatasetId == datasetId);
-            files.Remove(file);
-            if (file != null) return NoContent();
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await deleteFileCmd.ExecuteAsync(datasetId, id, nameIdentifier);
 
-            return NotFound();
-        }*/
+            if (!result.IsSuccess)
+            {
+                var errorKey = result.Error.Key;
+                return errorKey switch
+                {
+                    DeleteFileCmd.DatasetNotFound => NotFound(),
+                    DatasetsRepository.FileNotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+            
+            return NoContent();
+        }
         
         [HttpPost("{datasetId}/lock")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

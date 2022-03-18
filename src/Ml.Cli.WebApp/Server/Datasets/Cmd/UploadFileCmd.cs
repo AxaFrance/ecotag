@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
-using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
@@ -50,7 +48,6 @@ public class UploadFileCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotFound,
-                Error = null
             };
             return commandResult;
         }
@@ -64,7 +61,6 @@ public class UploadFileCmd
             commandResult.Error = new ErrorResult
             {
                 Key = DatasetLocked,
-                Error = null
             };
             return commandResult;
         }
@@ -74,7 +70,6 @@ public class UploadFileCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotInGroup,
-                Error = null
             };
             return commandResult;
         }

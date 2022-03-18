@@ -13,6 +13,7 @@ import Tabs from "@axa-fr/react-toolkit-tabs/dist";
 import '@axa-fr/react-toolkit-tabs/dist/tabs.scss';
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 import {formatTimestampToString} from "../../date";
+import {resilienceStatus} from "../../shared/Resilience";
 
 const bytesToSize=(bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -39,13 +40,24 @@ const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event =>
 
 const FileList = ({state, setState, fetch}) => {
 
-    const deleteFile = file => {
-        const filesSend = [... state.files.filesSend];
+    const deleteFile = async file => {
+        setState({...state, status: resilienceStatus.POST});
+
+        const response = await fetch(`datasets/${state.dataset.id}/files/${file.file.id}`, {
+            method: 'DELETE'
+        });
+        
+        if(response.status >= 500){
+            setState({...state, status : resilienceStatus.ERROR });
+            return;
+        }
+
+        const filesSend = [...state.files.filesSend];
         const index = filesSend.indexOf(file);
         if (index > -1) {
             filesSend.splice(index, 1);
         }
-        setState({...state, files : { ...state.files, filesSend}});
+        setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.EMPTY});
     };
 
     const onChangePaging = ({numberItems, page}) => {

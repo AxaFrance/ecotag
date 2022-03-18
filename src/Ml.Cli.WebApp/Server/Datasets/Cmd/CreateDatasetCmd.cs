@@ -66,7 +66,6 @@ public class CreateDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = GroupNotFound,
-                Error = null
             };
             return commandResult;
         }
@@ -77,7 +76,6 @@ public class CreateDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotFound,
-                Error = null
             };
             return commandResult;
         }
@@ -87,7 +85,6 @@ public class CreateDatasetCmd
             commandResult.Error = new ErrorResult
             {
                 Key = UserNotInGroup,
-                Error = null
             };
             return commandResult;
         }

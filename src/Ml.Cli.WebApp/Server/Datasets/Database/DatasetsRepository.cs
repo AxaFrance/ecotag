@@ -122,8 +122,31 @@ public class DatasetsRepository {
         }
         return await _fileService.DownloadAsync(datasetId, file.Name);
     }
+    
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)
+    {
+        var result = new ResultWithError<bool, ErrorResult>();
+        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file => file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
+        if (file == null)
+        {
+            result.Error = new ErrorResult
+            {
+                Key = FileNotFound
+            };
+            return result;
+        }
 
-    private const string FileNotFound = "FileNotFound";
+        _datasetsContext.Files.Remove(file);
+        
+        var taskDeleteSql = _datasetsContext.SaveChangesAsync();
+        var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
+        Task.WaitAll(taskDeleteSql, taskDeleteBob);
+        result.Data = taskDeleteBob.Result;
+        return result;
+    }
+
+
+    public const string FileNotFound = "FileNotFound";
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream, string fileName, string contentType, string creatorNameIdentifier)
     {
@@ -145,9 +168,9 @@ public class DatasetsRepository {
         }
         try
         {
-            var taskSave = _datasetsContext.SaveChangesAsync();
-            var taskUpload = _fileService.UploadStreamAsync(datasetId, fileName, stream);
-            Task.WaitAll(taskSave, taskUpload);
+            var taskSaveSql = _datasetsContext.SaveChangesAsync();
+            var taskUploadBlob = _fileService.UploadStreamAsync(datasetId, fileName, stream);
+            Task.WaitAll(taskSaveSql, taskUploadBlob);
         }
         catch (DbUpdateException)
         {
