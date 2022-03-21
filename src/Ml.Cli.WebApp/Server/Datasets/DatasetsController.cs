@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,17 +8,17 @@ using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
-using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Datasets
 {
     [Route("api/server/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.DataScientist)]
     public class DatasetsController : Controller
     {
         [HttpGet]
         [ResponseCache(Duration = 1)]
-        [Authorize(Roles = Roles.DataScientist)]
+        
         public async Task<IList<ListDataset>> GetAllDatasets([FromServices] ListDatasetCmd listDatasetCmd,[FromQuery]bool? locked)
         {
             var nameIdentifier = User.Identity.GetSubject();
@@ -31,17 +27,27 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{id}", Name = "GetDatasetById")]
         [ResponseCache(Duration = 1)]
-        [Authorize(Roles = Roles.DataAnnoteur)]
         public async Task<ActionResult<GetDataset>> GetDataset([FromServices] GetDatasetCmd getDatasetCmd, string id)
         {
-            var getSataset = await getDatasetCmd.ExecuteAsync(id);
-            return Ok(getSataset);
+            var nameIdentifier = User.Identity.GetSubject();
+            var getDatasetResult = await getDatasetCmd.ExecuteAsync(id, nameIdentifier);
+
+            if (!getDatasetResult.IsSuccess)
+            {
+                var errorKey = getDatasetResult.Error.Key;
+                return errorKey switch
+                {
+                    GetDatasetCmd.DatasetNotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+            
+            return Ok(getDatasetResult.Data);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = Roles.DataScientist)]
         public async Task<ActionResult<string>> Create([FromServices] CreateDatasetCmd createDatasetCmd, DatasetInput datasetInput)
         {
             var nameIdentifier = User.Identity.GetSubject();
@@ -64,10 +70,8 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost("{datasetId}/files")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = Roles.DataScientist)]
         public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId, List<IFormFile> files)
         {
-           // var files = Request.Form.Files;
             var nameIdentifier = User.Identity.GetSubject();
             var results = new List<ResultWithError<string, ErrorResult>>();
             foreach (var formFile in files.Where(formFile => formFile.Length > 0))
@@ -89,7 +93,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
 
         [HttpGet("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
-        [Authorize(Roles = Roles.DataScientist)]
         public async Task<IActionResult> GetDatasetFile([FromServices] GetFileCmd getFileCmd, string datasetId, string id)
         {
             var nameIdentifier = User.Identity.GetSubject();
@@ -111,7 +114,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
         
         [HttpDelete("{datasetId}/files/{id}")]
         [ResponseCache(Duration = 1)]
-        [Authorize(Roles = Roles.DataScientist)]
         public async Task<IActionResult> DeleteFile([FromServices] DeleteFileCmd deleteFileCmd,string datasetId, string id)
         {
             var nameIdentifier = User.Identity.GetSubject();
@@ -134,7 +136,6 @@ namespace Ml.Cli.WebApp.Server.Datasets
         [HttpPost("{datasetId}/lock")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = Roles.DataScientist)]
         public async Task<ActionResult> Lock([FromServices] LockDatasetCmd lockDatasetCmd, string datasetId)
         {
             var nameIdentifier = User.Identity.GetSubject();

@@ -68,7 +68,7 @@ public class CreateDatasetShould
     private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name, string type, string nameIdentifier,
         string groupId)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context) = await InitMockAsync(nameIdentifier);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, datasetId) = await InitMockAsync(nameIdentifier);
 
         datasetsController.ControllerContext = new ControllerContext
         {
@@ -85,7 +85,7 @@ public class CreateDatasetShould
         return result;
     }
 
-    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context)> InitMockAsync(string nameIdentifier)
+    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context, string datasetId)> InitMockAsync(string nameIdentifier)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
@@ -105,7 +105,7 @@ public class CreateDatasetShould
         await groupContext.SaveChangesAsync();
 
         var datasetContext = GetInMemoryDatasetContext();
-        datasetContext.Datasets.Add(new DatasetModel
+        var dataset1 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
             Name = "dataset1",
@@ -114,7 +114,8 @@ public class CreateDatasetShould
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
             GroupId = group1.Id
-        });
+        };
+        datasetContext.Datasets.Add(dataset1);
         datasetContext.Datasets.Add(new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
@@ -126,6 +127,7 @@ public class CreateDatasetShould
             GroupId = group1.Id
         });
         await datasetContext.SaveChangesAsync();
+        var dataset1Id = dataset1.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
@@ -141,6 +143,6 @@ public class CreateDatasetShould
                 }
             ))
         };
-        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context);
+        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id.ToString());
     }
 }

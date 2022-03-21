@@ -32,7 +32,7 @@ public class ListDatasetShould
      [InlineData("s666668", true, 0)]
      public async Task ListDataset(string nameIdentifier, bool? locked, int numberResult)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, datasetId) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
          
          var listDatasetCmd = new ListDatasetCmd(datasetsRepository, usersRepository);
          datasetsController.ControllerContext = new ControllerContext
