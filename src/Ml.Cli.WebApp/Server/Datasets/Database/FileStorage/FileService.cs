@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
 {
+    [ExcludeFromCodeCoverage]
     public class FileService : IFileService
     {
         private readonly IOptions<StorageSettings> _azureStorageOptions;
