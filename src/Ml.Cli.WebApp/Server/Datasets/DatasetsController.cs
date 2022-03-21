@@ -73,22 +73,39 @@ namespace Ml.Cli.WebApp.Server.Datasets
         public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId, List<IFormFile> files)
         {
             var nameIdentifier = User.Identity.GetSubject();
-            var results = new List<ResultWithError<string, ErrorResult>>();
+            var uploadfiles = new List<UploadFile>();
             foreach (var formFile in files.Where(formFile => formFile.Length > 0))
             {
                 var stream = formFile.OpenReadStream();
-                var result = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput()
+                var uploadFile = new UploadFile()
                 {
                     Name = formFile.FileName,
                     Stream = stream,
                     ContentType = formFile.ContentType,
-                    DatasetId = datasetId,
-                    NameIdentifier = nameIdentifier
-                });
-                results.Add(result);
+                };
+                uploadfiles.Add(uploadFile);
+            }
+            
+            var uploadFileResults = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput()
+            {
+                Files = uploadfiles, 
+                DatasetId = datasetId,
+                NameIdentifier = nameIdentifier
+            });
+
+            if (!uploadFileResults.IsSuccess)
+            {
+                var errorKey = uploadFileResults.Error.Key;
+                return errorKey switch
+                {
+                    UploadFileCmd.DatasetLocked => BadRequest(uploadFileResults.Error),
+                    UploadFileCmd.InvalidModel => BadRequest(uploadFileResults.Error),
+                    UploadFileCmd.FileTooLarge => BadRequest(uploadFileResults.Error),
+                    _ => Forbid()
+                };
             }
 
-            return Ok(results);
+            return Ok(uploadFileResults.Data);
         }
 
         [HttpGet("{datasetId}/files/{id}")]

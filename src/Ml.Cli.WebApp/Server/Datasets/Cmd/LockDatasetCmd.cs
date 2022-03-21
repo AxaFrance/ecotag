@@ -51,7 +51,7 @@ public class LockDatasetCmd
             return commandResult;
         }
 
-        var locked = await _datasetsRepository.Lock(datasetId);
+        var locked = await _datasetsRepository.LockAsync(datasetId);
 
         commandResult.Data = locked;
 

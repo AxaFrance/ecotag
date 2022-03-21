@@ -11,6 +11,7 @@ using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Oidc;
@@ -68,7 +69,7 @@ public class CreateDatasetShould
     private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name, string type, string nameIdentifier,
         string groupId)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, datasetId) = await InitMockAsync(nameIdentifier);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await InitMockAsync(nameIdentifier);
 
         datasetsController.ControllerContext = new ControllerContext
         {
@@ -85,7 +86,7 @@ public class CreateDatasetShould
         return result;
     }
 
-    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context, string datasetId)> InitMockAsync(string nameIdentifier)
+    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context, string dataset1Id,string dataset2Id)> InitMockAsync(string nameIdentifier, IFileService fileService=null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
@@ -116,23 +117,25 @@ public class CreateDatasetShould
             GroupId = group1.Id
         };
         datasetContext.Datasets.Add(dataset1);
-        datasetContext.Datasets.Add(new DatasetModel
+        var dataset2 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
             Name = "dataset2",
-            Type = DatasetTypeEnumeration.Image,
+            Type = DatasetTypeEnumeration.Text,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id
-        });
+            GroupId = group1.Id,
+        };
+        datasetContext.Datasets.Add(dataset2);
         await datasetContext.SaveChangesAsync();
         var dataset1Id = dataset1.Id;
+        var dataset2Id = dataset2.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
-        var datasetsRepository = new DatasetsRepository(datasetContext, null, new MemoryCache(Options.Create(new MemoryCacheOptions())));
+        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, new MemoryCache(Options.Create(new MemoryCacheOptions())));
         var datasetsController = new DatasetsController();
 
         var context = new DefaultHttpContext()
@@ -143,6 +146,6 @@ public class CreateDatasetShould
                 }
             ))
         };
-        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id.ToString());
+        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id.ToString(), dataset2Id.ToString());
     }
 }

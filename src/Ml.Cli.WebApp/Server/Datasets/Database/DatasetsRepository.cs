@@ -87,6 +87,7 @@ public class DatasetsRepository {
                     Id = dataset.Id.ToString().ToLower(),
                     Name = dataset.Name,
                     GroupId = dataset.GroupId.ToString().ToLower(),
+                    Type = dataset.Type.ToString(),
                     IsLocked = dataset.IsLocked,
                 })
                 .FirstOrDefaultAsync();
@@ -98,7 +99,7 @@ public class DatasetsRepository {
         return dataset;
     }
 
-    public async Task<bool> Lock(string datasetId)
+    public async Task<bool> LockAsync(string datasetId)
     {
         var dataset = await _datasetsContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
         if (dataset == null || dataset.IsLocked) return false;
@@ -144,13 +145,13 @@ public class DatasetsRepository {
         result.Data = taskDeleteBob.Result;
         return result;
     }
-
-
+    
     public const string FileNotFound = "FileNotFound";
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream, string fileName, string contentType, string creatorNameIdentifier)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
+
         var fileModel = new FileModel()
         {
             Name = fileName,

@@ -13,7 +13,7 @@ public class GetDatasetShould
      [InlineData("s666666")]
      public async Task GetDataset(string nameIdentifier)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
          
          var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
          datasetsController.ControllerContext = new ControllerContext
@@ -33,7 +33,7 @@ public class GetDatasetShould
      [InlineData("S666667", GetDatasetCmd.UserNotInGroup)]
      public async Task ReturnForbidError_WhenGetDataset(string nameIdentifier, string errorKey)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
          
          var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
          datasetsController.ControllerContext = new ControllerContext
@@ -49,7 +49,7 @@ public class GetDatasetShould
      [InlineData("s666666", GetDatasetCmd.DatasetNotFound)]
      public async Task ReturnNotFOUnd_WhenGetDataset(string nameIdentifier, string errorKey)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
          
          var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
          datasetsController.ControllerContext = new ControllerContext
