@@ -13,14 +13,10 @@ public class GetDatasetShould
      [InlineData("s666666")]
      public async Task GetDataset(string nameIdentifier)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
          
-         var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
-         datasetsController.ControllerContext = new ControllerContext
-         {
-             HttpContext = context
-         };
-         var dataset = await datasetsController.GetDataset(getDatasetCmd, dataset1Id);
+         var getDatasetCmd = new GetDatasetCmd(mockResult.DatasetsRepository, mockResult.UsersRepository);
+         var dataset = await mockResult.DatasetsController.GetDataset(getDatasetCmd, mockResult.Dataset1Id);
 
 
          var okResult = dataset.Result as OkObjectResult;
@@ -33,14 +29,11 @@ public class GetDatasetShould
      [InlineData("S666667", GetDatasetCmd.UserNotInGroup)]
      public async Task ReturnForbidError_WhenGetDataset(string nameIdentifier, string errorKey)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
          
-         var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
-         datasetsController.ControllerContext = new ControllerContext
-         {
-             HttpContext = context
-         };
-         var result = await datasetsController.GetDataset(getDatasetCmd, dataset1Id);
+         var getDatasetCmd = new GetDatasetCmd(mockResult.DatasetsRepository, mockResult.UsersRepository);
+         
+         var result = await mockResult.DatasetsController.GetDataset(getDatasetCmd, mockResult.Dataset1Id);
          var resultWithError = result.Result as ForbidResult;
          Assert.NotNull(resultWithError);
      }
@@ -49,14 +42,11 @@ public class GetDatasetShould
      [InlineData("s666666", GetDatasetCmd.DatasetNotFound)]
      public async Task ReturnNotFOUnd_WhenGetDataset(string nameIdentifier, string errorKey)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
          
-         var getDatasetCmd = new GetDatasetCmd(datasetsRepository, usersRepository);
-         datasetsController.ControllerContext = new ControllerContext
-         {
-             HttpContext = context
-         };
-         var result = await datasetsController.GetDataset(getDatasetCmd, "10000000-0000-0000-0000-000000000000");
+         var getDatasetCmd = new GetDatasetCmd(mockResult.DatasetsRepository, mockResult.UsersRepository);
+
+         var result = await mockResult.DatasetsController.GetDataset(getDatasetCmd, "10000000-0000-0000-0000-000000000000");
          var resultWithError = result.Result as NotFoundResult;
          Assert.NotNull(resultWithError);
      }

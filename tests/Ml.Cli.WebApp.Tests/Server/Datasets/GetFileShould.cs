@@ -30,7 +30,7 @@ public class GetFileShould
     [InlineData("s666666")]
     public async Task GetFile(string nameIdentifier)
     {
-        var mockFileService = new Mock<IFileService>();
+     
         var content = "Hello World from a Fake File";
         var fileServiceResult = new ResultWithError<FileDataModel, ErrorResult>();
         var ms = new MemoryStream();
@@ -45,15 +45,13 @@ public class GetFileShould
             ContentType = "image/png",
             Stream = ms
         };
+        var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.DownloadAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(fileServiceResult);
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
-        var lockDatasetCmd = new GetFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.GetDatasetFile(lockDatasetCmd, dataset1Id, fileId1);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var lockDatasetCmd = new GetFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+      
+        var result = await mockResult.DatasetsController.GetDatasetFile(lockDatasetCmd, mockResult.Dataset1Id, mockResult.FileId1);
 
         var fileStreamResult = result as FileStreamResult;
         Assert.NotNull(fileStreamResult);
@@ -64,14 +62,10 @@ public class GetFileShould
     [InlineData("s666667", UploadFileCmd.UserNotInGroup)]
     public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var getFileCmd = new GetFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.GetDatasetFile(getFileCmd, dataset1Id, fileId1);
+        var getFileCmd = new GetFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        var result = await mockResult.DatasetsController.GetDatasetFile(getFileCmd, mockResult.Dataset1Id, mockResult.FileId1);
 
         var forbidResult = result as ForbidResult;
         Assert.NotNull(forbidResult);
@@ -82,14 +76,11 @@ public class GetFileShould
     [InlineData("s666666", null, "10000000-0000-0000-0000-000000000000", DatasetsRepository.FileNotFound)]
     public async Task ReturnNotFound(string nameIdentifier, string datasetId, string fileId, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var getFileCmd = new GetFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.GetDatasetFile(getFileCmd, datasetId??dataset1Id, fileId??fileId1);
+        var getFileCmd = new GetFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+
+        var result = await mockResult.DatasetsController.GetDatasetFile(getFileCmd, datasetId??mockResult.Dataset1Id, fileId??mockResult.FileId1);
 
         var notFoundResult = result as NotFoundResult;
         Assert.NotNull(notFoundResult);

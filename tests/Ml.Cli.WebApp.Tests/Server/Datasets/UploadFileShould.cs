@@ -21,15 +21,11 @@ public class UploadFileShould
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
 
-        var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
         var fileMock = IFromFileMock("test.png");
-        var result = await datasetsController.OnPostUploadAsync(getDatasetCmd, dataset1Id, new List<IFormFile>(){fileMock.Object});
+        var result = await mockResult.DatasetsController.OnPostUploadAsync(getDatasetCmd, mockResult.Dataset1Id, new List<IFormFile>(){fileMock.Object});
 
         var resultOk = result as OkObjectResult;
         Assert.NotNull(resultOk);
@@ -42,15 +38,12 @@ public class UploadFileShould
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
         
-        var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        
         var fileMock = IFromFileMock("test.png");
-        var result = await datasetsController.OnPostUploadAsync(getDatasetCmd, dataset1Id, new List<IFormFile>(){fileMock.Object});
+        var result = await mockResult.DatasetsController.OnPostUploadAsync(getDatasetCmd, mockResult.Dataset1Id, new List<IFormFile>(){fileMock.Object});
 
         var forbidResult = result as ForbidResult;
         Assert.NotNull(forbidResult);
@@ -65,16 +58,13 @@ public class UploadFileShould
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
         
-        var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+
         var fileMock = IFromFileMock(fileName, fileLength);
-        var datasets = new[] { dataset1Id, dataset2Id };
-        var result = await datasetsController.OnPostUploadAsync(getDatasetCmd, datasets[indexDataset], new List<IFormFile>(){fileMock.Object});
+        var datasets = new[] { mockResult.Dataset1Id, mockResult.Dataset2Id };
+        var result = await mockResult.DatasetsController.OnPostUploadAsync(getDatasetCmd, datasets[indexDataset], new List<IFormFile>(){fileMock.Object});
         
         var resultWithError = result as BadRequestObjectResult;
         Assert.NotNull(resultWithError);

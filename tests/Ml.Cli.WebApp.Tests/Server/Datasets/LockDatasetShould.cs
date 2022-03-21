@@ -27,14 +27,11 @@ public class LockDatasetShould
     [InlineData("s666666")]
     public async Task LockDataset(string nameIdentifier)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var lockDatasetCmd = new LockDatasetCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.Lock(lockDatasetCmd, dataset1Id);
+        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        
+        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, mockResult.Dataset1Id);
 
         var noContentResult = result as NoContentResult;
         Assert.NotNull(noContentResult);
@@ -45,14 +42,10 @@ public class LockDatasetShould
     [InlineData("s666667", UploadFileCmd.UserNotInGroup)]
     public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var lockDatasetCmd = new LockDatasetCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.Lock(lockDatasetCmd, dataset1Id);
+        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, mockResult.Dataset1Id);
 
         var forbidResult = result as ForbidResult;
         Assert.NotNull(forbidResult);
@@ -62,14 +55,11 @@ public class LockDatasetShould
     [InlineData("s666666", "10000000-0000-0000-0000-000000000000", UploadFileCmd.UserNotFound)]
     public async Task ReturnNotFound(string nameIdentifier, string datasetId, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var lockDatasetCmd = new LockDatasetCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.Lock(lockDatasetCmd, datasetId);
+        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+
+        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, datasetId);
 
         var notFoundResult = result as NotFoundResult;
         Assert.NotNull(notFoundResult);

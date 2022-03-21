@@ -32,13 +32,10 @@ public class DeleteFileShould
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.DeleteAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
-        var deleteFileCmd = new DeleteFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.DeleteFile(deleteFileCmd, dataset1Id, fileId1);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var deleteFileCmd = new DeleteFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+
+        var result = await mockResult.DatasetsController.DeleteFile(deleteFileCmd, mockResult.Dataset1Id, mockResult.FileId1);
 
         var noContentResult = result as NoContentResult;
         Assert.NotNull(noContentResult);
@@ -49,14 +46,10 @@ public class DeleteFileShould
     [InlineData("s666667", UploadFileCmd.UserNotInGroup)]
     public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var deleteFileCmd = new DeleteFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.DeleteFile(deleteFileCmd, dataset1Id, fileId1);
+        var deleteFileCmd = new DeleteFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        var result = await mockResult.DatasetsController.DeleteFile(deleteFileCmd, mockResult.Dataset1Id, mockResult.FileId1);
 
         var forbidResult = result as ForbidResult;
         Assert.NotNull(forbidResult);
@@ -67,14 +60,10 @@ public class DeleteFileShould
     [InlineData("s666666", null, "10000000-0000-0000-0000-000000000000", DatasetsRepository.FileNotFound)]
     public async Task ReturnNotFound(string nameIdentifier, string datasetId, string fileId, string errorKey)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         
-        var deleteFileCmd = new DeleteFileCmd(usersRepository, datasetsRepository);
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
-        var result = await datasetsController.DeleteFile(deleteFileCmd, datasetId ?? dataset1Id,  fileId ?? fileId1);
+        var deleteFileCmd = new DeleteFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
+        var result = await mockResult.DatasetsController.DeleteFile(deleteFileCmd, datasetId ?? mockResult.Dataset1Id,  fileId ?? mockResult.FileId1);
 
         var notFoundResult = result as NotFoundResult;
         Assert.NotNull(notFoundResult);

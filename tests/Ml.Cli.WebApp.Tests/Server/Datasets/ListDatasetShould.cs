@@ -32,14 +32,10 @@ public class ListDatasetShould
      [InlineData("s666668", true, 0)]
      public async Task ListDataset(string nameIdentifier, bool? locked, int numberResult)
      {
-         var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier);
+         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
          
-         var listDatasetCmd = new ListDatasetCmd(datasetsRepository, usersRepository);
-         datasetsController.ControllerContext = new ControllerContext
-         {
-             HttpContext = context
-         };
-         var datasets = await datasetsController.GetAllDatasets(listDatasetCmd, locked);
+         var listDatasetCmd = new ListDatasetCmd(mockResult.DatasetsRepository, mockResult.UsersRepository);
+         var datasets = await mockResult.DatasetsController.GetAllDatasets(listDatasetCmd, locked);
          
          Assert.Equal(numberResult, datasets.Count);
      }
