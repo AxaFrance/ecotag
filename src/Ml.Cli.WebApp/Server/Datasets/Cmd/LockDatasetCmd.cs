@@ -24,31 +24,19 @@ public class LockDatasetCmd
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = UserNotFound,
-            };
-            return commandResult;
+            return commandResult.ReturnError(UserNotFound);
         }
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
 
         if (datasetInfo == null)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = DatasetNotFound,
-            };
-            return commandResult;
+            return commandResult.ReturnError(DatasetNotFound);
         }
 
         if (!user.GroupIds.Contains(datasetInfo.GroupId))
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = UserNotInGroup,
-            };
-            return commandResult;
+            return commandResult.ReturnError(UserNotInGroup);
         }
 
         var locked = await _datasetsRepository.LockAsync(datasetId);

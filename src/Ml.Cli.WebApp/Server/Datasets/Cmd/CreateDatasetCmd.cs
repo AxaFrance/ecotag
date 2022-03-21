@@ -53,41 +53,24 @@ public class CreateDatasetCmd
         var validationResult = new Validation().Validate(createGroupInput);
         if (!validationResult.IsSuccess)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = InvalidModel,
-                Error = validationResult.Errors
-            };
-            return commandResult;
+            return commandResult.ReturnError(InvalidModel, validationResult.Errors);
         }
 
         var group = await _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
         if (group == null)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = GroupNotFound,
-            };
-            return commandResult;
+            return commandResult.ReturnError(GroupNotFound);
         }
 
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
         if (user == null)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = UserNotFound,
-            };
-            return commandResult;
+            return commandResult.ReturnError(UserNotFound);
         }
         
         if (!user.GroupIds.Contains(createGroupInput.GroupId))
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = UserNotInGroup,
-            };
-            return commandResult;
+            return commandResult.ReturnError(UserNotInGroup);
         }
 
         var createDatasetResult = await _datasetsRepository.CreateDatasetAsync(new CreateDataset()

@@ -22,11 +22,22 @@ public sealed class Result<T> : Result
     public T Data { get; set; }
 }
 
-public sealed class ResultWithError<T, TE> : IResult
+public sealed class ResultWithError<T, TE> : IResult where TE : ErrorResult, new()
 {
     public T Data { get; set; }
 
     public TE Error { get; set; }
 
     public bool IsSuccess => Error == null;
+    
+    public ResultWithError<T, TE> ReturnError(string key, object error = null)
+    {
+        Error = new TE
+        {
+            Key = key,
+            Error = error
+        };
+        return this;
+    }
+    
 }

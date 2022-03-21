@@ -57,23 +57,14 @@ public class UploadFileCmd
         var validationResult = new Validation().Validate(uploadFileCmdInput);
         if (!validationResult.IsSuccess)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = InvalidModel,
-                Error = validationResult.Errors
-            };
-            return commandResult;
+            return commandResult.ReturnError(InvalidModel, validationResult.Errors);
         }
         
         var nameIdentifier = uploadFileCmdInput.NameIdentifier;
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
-            commandResult.Error = new ErrorResult
-            {
-                Key = UserNotFound,
-            };
-            return commandResult;
+            return commandResult.ReturnError(UserNotFound);
         }
 
         var datasetId = uploadFileCmdInput.DatasetId;
@@ -84,12 +75,7 @@ public class UploadFileCmd
             var fileValidationResult = new Validation().Validate(file);
             if (!fileValidationResult.IsSuccess)
             {
-                commandResult.Error = new ErrorResult
-                {
-                    Key = InvalidModel,
-                    Error = validationResult.Errors
-                };
-                return commandResult;
+                return commandResult.ReturnError(InvalidModel, validationResult.Errors);
             }
 
             var extension = Path.GetExtension(file.Name)?.ToLower();
@@ -99,8 +85,7 @@ public class UploadFileCmd
                 var imageExtention = new List<string>() { ".png", ".jpg", ".jpeg", ".tif", ".tiff" };
                 if (!imageExtention.Contains(extension))
                 {
-                    commandResult.Error = new ErrorResult { Key = InvalidModel };
-                    return commandResult;
+                    return commandResult.ReturnError(InvalidModel);
                 }
             }
             else
@@ -108,14 +93,12 @@ public class UploadFileCmd
                 var imageExtention = new List<string>() { ".txt" };
                 if (!imageExtention.Contains(extension))
                 {
-                    commandResult.Error = new ErrorResult { Key = InvalidModel };
-                    return commandResult;
+                    return commandResult.ReturnError(InvalidModel);
                 }
             }
 
             if (file.Stream.Length < 32 * Mb) continue;
-            commandResult.Error = new ErrorResult { Key = FileTooLarge };
-            return commandResult;
+            return commandResult.ReturnError(FileTooLarge);
         }
         
         if (datasetInfo.IsLocked)
@@ -127,7 +110,7 @@ public class UploadFileCmd
             return commandResult;
         }
 
-        if (!user.GroupIds.Contains(datasetInfo.GroupId.ToString()))
+        if (!user.GroupIds.Contains(datasetInfo.GroupId))
         {
             commandResult.Error = new ErrorResult
             {
