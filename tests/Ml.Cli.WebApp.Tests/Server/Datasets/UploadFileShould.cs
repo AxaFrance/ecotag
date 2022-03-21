@@ -21,7 +21,7 @@ public class UploadFileShould
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
 
         var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
         datasetsController.ControllerContext = new ControllerContext
@@ -38,11 +38,11 @@ public class UploadFileShould
     [Theory]
     [InlineData("s666668", UploadFileCmd.UserNotFound)]
     [InlineData("s666667", UploadFileCmd.UserNotInGroup)]
-    public async Task ReturnIsForbidden_WhenUploadFile(string nameIdentifier, string errorKey)
+    public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
         
         var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
         datasetsController.ControllerContext = new ControllerContext
@@ -61,11 +61,11 @@ public class UploadFileShould
     [InlineData("s666666", "t", null, 0, UploadFileCmd.InvalidModel)]
     [InlineData("s666666", "test.txt", null, 1, UploadFileCmd.DatasetLocked)]
     [InlineData("s666666", "test.jpg", 33 * UploadFileCmd.Mb , 0, UploadFileCmd.FileTooLarge)]
-    public async Task ReturnBadRequest_WhenUploadFile(string nameIdentifier, string fileName, long? fileLength, int indexDataset, string errorKey)
+    public async Task ReturnBadRequest(string nameIdentifier, string fileName, long? fileLength, int indexDataset, string errorKey)
     {
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await CreateDatasetShould.InitMockAsync(nameIdentifier, mockFileService.Object);
         
         var getDatasetCmd = new UploadFileCmd(usersRepository, datasetsRepository);
         datasetsController.ControllerContext = new ControllerContext

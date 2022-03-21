@@ -122,6 +122,7 @@ namespace Ml.Cli.WebApp.Server.Datasets
                 {
                     FileService.FileNameMissing => NotFound(),
                     GetFileCmd.DatasetNotFound => NotFound(),
+                    DatasetsRepository.FileNotFound => NotFound(),
                     _ => Forbid()
                 };
             }

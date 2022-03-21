@@ -9,7 +9,7 @@ public class DeleteFileCmd
     private readonly DatasetsRepository _datasetsRepository;
     private readonly IUsersRepository _usersRepository;
 
-    public DeleteFileCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
+    public DeleteFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

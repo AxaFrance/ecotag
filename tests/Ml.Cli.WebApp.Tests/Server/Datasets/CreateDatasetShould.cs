@@ -69,7 +69,7 @@ public class CreateDatasetShould
     private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name, string type, string nameIdentifier,
         string groupId)
     {
-        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id) = await InitMockAsync(nameIdentifier);
+        var (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id, dataset2Id, fileId1) = await InitMockAsync(nameIdentifier);
 
         datasetsController.ControllerContext = new ControllerContext
         {
@@ -86,7 +86,7 @@ public class CreateDatasetShould
         return result;
     }
 
-    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context, string dataset1Id,string dataset2Id)> InitMockAsync(string nameIdentifier, IFileService fileService=null)
+    public static async Task<(GroupModel group1, UsersRepository usersRepository, GroupsRepository groupRepository, DatasetsRepository datasetsRepository, DatasetsController datasetsController, DefaultHttpContext context, string dataset1Id,string dataset2Id, string fileId1)> InitMockAsync(string nameIdentifier, IFileService fileService=null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
@@ -132,6 +132,19 @@ public class CreateDatasetShould
         var dataset1Id = dataset1.Id;
         var dataset2Id = dataset2.Id;
 
+        var fileModel = new FileModel()
+        {
+            DatasetId = dataset1Id,
+            ContentType = "MyContent",
+            CreateDate = DateTime.Now.Ticks,
+            Name = "demo.png",
+            Size = 20,
+            CreatorNameIdentifier = "S88888",
+        };
+        datasetContext.Files.Add(fileModel);
+        await datasetContext.SaveChangesAsync();
+        var fileId1 = fileModel.Id;
+
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
@@ -146,6 +159,6 @@ public class CreateDatasetShould
                 }
             ))
         };
-        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id.ToString(), dataset2Id.ToString());
+        return (group1, usersRepository, groupRepository, datasetsRepository, datasetsController, context, dataset1Id.ToString(), dataset2Id.ToString(), fileId1.ToString());
     }
 }
