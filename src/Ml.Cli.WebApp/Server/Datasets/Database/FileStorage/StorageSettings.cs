@@ -1,9 +1,7 @@
-﻿namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
+﻿namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+
+public class StorageSettings
 {
-    
-    public class StorageSettings
-    {
-        public string ConnectionString { get; set; }
-        public const string Storage = "FileStorage";
-    }
+    public const string Storage = "FileStorage";
+    public string ConnectionString { get; set; }
 }

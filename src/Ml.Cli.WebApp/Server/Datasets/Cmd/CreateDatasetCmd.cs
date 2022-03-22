@@ -12,20 +12,17 @@ public record CreateDatasetCmdInput
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
-    
-    [RegularExpression(@"Image|Text$")]
-    public string Type { get; set; }
-    
+
+    [RegularExpression(@"Image|Text$")] public string Type { get; set; }
+
     [RegularExpression(@"Public|Internal|Confidential|Critical$")]
     public string Classification { get; set; }
-    
+
     [Required]
     [RegularExpression("(?im)^[{(]?[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?$")]
     public string GroupId { get; set; }
-    
-    [MaxLength(32)]
-    [MinLength(1)]
-    public string CreatorNameIdentifier { get; set; }
+
+    [MaxLength(32)] [MinLength(1)] public string CreatorNameIdentifier { get; set; }
 }
 
 public class CreateDatasetCmd
@@ -34,46 +31,35 @@ public class CreateDatasetCmd
     public const string UserNotInGroup = "UserNotInGroup";
     public const string UserNotFound = "UserNotFound";
     public const string GroupNotFound = "GroupNotFound";
-    
-    private readonly IGroupsRepository _groupsRepository;
     private readonly DatasetsRepository _datasetsRepository;
+
+    private readonly IGroupsRepository _groupsRepository;
     private readonly IUsersRepository _usersRepository;
 
-    public CreateDatasetCmd(IGroupsRepository groupsRepository, DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
+    public CreateDatasetCmd(IGroupsRepository groupsRepository, DatasetsRepository datasetsRepository,
+        IUsersRepository usersRepository)
     {
         _groupsRepository = groupsRepository;
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;
     }
-    
+
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createGroupInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
         var validationResult = new Validation().Validate(createGroupInput);
-        if (!validationResult.IsSuccess)
-        {
-            return commandResult.ReturnError(InvalidModel, validationResult.Errors);
-        }
+        if (!validationResult.IsSuccess) return commandResult.ReturnError(InvalidModel, validationResult.Errors);
 
         var group = await _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
-        if (group == null)
-        {
-            return commandResult.ReturnError(GroupNotFound);
-        }
+        if (group == null) return commandResult.ReturnError(GroupNotFound);
 
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
-        if (user == null)
-        {
-            return commandResult.ReturnError(UserNotFound);
-        }
-        
-        if (!user.GroupIds.Contains(createGroupInput.GroupId))
-        {
-            return commandResult.ReturnError(UserNotInGroup);
-        }
+        if (user == null) return commandResult.ReturnError(UserNotFound);
 
-        var createDatasetResult = await _datasetsRepository.CreateDatasetAsync(new CreateDataset()
+        if (!user.GroupIds.Contains(createGroupInput.GroupId)) return commandResult.ReturnError(UserNotInGroup);
+
+        var createDatasetResult = await _datasetsRepository.CreateDatasetAsync(new CreateDataset
         {
             Classification = createGroupInput.Classification,
             Name = createGroupInput.Name,

@@ -10,11 +10,14 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetsRepository {
+public class DatasetsRepository
+{
+    public const string AlreadyTakenName = "AlreadyTakenName";
+
+    public const string FileNotFound = "FileNotFound";
+    private readonly IMemoryCache _cache;
     private readonly DatasetContext _datasetsContext;
     private readonly IFileService _fileService;
-    private readonly IMemoryCache _cache;
-    public const string AlreadyTakenName = "AlreadyTakenName";
 
     public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
     {
@@ -26,7 +29,7 @@ public class DatasetsRepository {
     public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
-        var groupModel = new DatasetModel()
+        var groupModel = new DatasetModel
         {
             Name = createDataset.Name,
             Classification = createDataset.Classification.ToDatasetClassification(),
@@ -35,12 +38,14 @@ public class DatasetsRepository {
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
         };
-        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Datasets, groupModel, group => group.Name == groupModel.Name);
+        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Datasets, groupModel,
+            group => group.Name == groupModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
+
         try
         {
             await _datasetsContext.SaveChangesAsync();
@@ -50,24 +55,25 @@ public class DatasetsRepository {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
+
         commandResult.Data = groupModel.Id.ToString();
         return commandResult;
     }
-    
+
     public async Task<IList<ListDataset>> ListDatasetAsync(bool? locked, IList<string> groupIds)
     {
         IList<DatasetModel> datasets;
         if (locked.HasValue)
-        {
-            datasets = await _datasetsContext.Datasets.AsNoTracking().Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files).ToListAsync();
-        }
+            datasets = await _datasetsContext.Datasets.AsNoTracking()
+                .Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString()))
+                .Include(dataset => dataset.Files).ToListAsync();
         else
-        {
-            datasets = await _datasetsContext.Datasets.AsNoTracking().Where(dataset => groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files).ToListAsync();
-        }
+            datasets = await _datasetsContext.Datasets.AsNoTracking()
+                .Where(dataset => groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files)
+                .ToListAsync();
         return datasets.Select(d => d.ToListDatasetResult()).ToList();
     }
-    
+
     public async Task<GetDataset> GetDatasetAsync(string datasetId)
     {
         var dataset = await _datasetsContext.Datasets.AsNoTracking()
@@ -76,7 +82,7 @@ public class DatasetsRepository {
             .FirstOrDefaultAsync();
         return dataset?.ToGetDataset();
     }
-    
+
     public async Task<GetDatasetInfo> GetDatasetInfoAsync(string datasetId)
     {
         var dataset = await _cache.GetOrCreateAsync($"GetDatasetInfoAsync({datasetId})", async entry =>
@@ -88,7 +94,7 @@ public class DatasetsRepository {
                     Name = dataset.Name,
                     GroupId = dataset.GroupId.ToString().ToLower(),
                     Type = dataset.Type.ToString(),
-                    IsLocked = dataset.IsLocked,
+                    IsLocked = dataset.IsLocked
                 })
                 .FirstOrDefaultAsync();
             entry.AbsoluteExpirationRelativeToNow =
@@ -108,11 +114,12 @@ public class DatasetsRepository {
         _cache.Remove($"GetDatasetInfoAsync({datasetId})");
         return true;
     }
-    
+
     public async Task<ResultWithError<FileDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<FileDataModel, ErrorResult>();
-        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file => file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
+        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
+            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
             result.Error = new ErrorResult
@@ -121,13 +128,15 @@ public class DatasetsRepository {
             };
             return result;
         }
+
         return await _fileService.DownloadAsync(datasetId, file.Name);
     }
-    
+
     public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<bool, ErrorResult>();
-        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file => file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
+        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
+            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
             result.Error = new ErrorResult
@@ -138,21 +147,20 @@ public class DatasetsRepository {
         }
 
         _datasetsContext.Files.Remove(file);
-        
+
         var taskDeleteSql = _datasetsContext.SaveChangesAsync();
         var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
         Task.WaitAll(taskDeleteSql, taskDeleteBob);
         result.Data = taskDeleteBob.Result;
         return result;
     }
-    
-    public const string FileNotFound = "FileNotFound";
 
-    public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream, string fileName, string contentType, string creatorNameIdentifier)
+    public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream,
+        string fileName, string contentType, string creatorNameIdentifier)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
-        var fileModel = new FileModel()
+        var fileModel = new FileModel
         {
             Name = fileName,
             ContentType = contentType,
@@ -161,12 +169,14 @@ public class DatasetsRepository {
             Size = stream.Length,
             DatasetId = new Guid(datasetId)
         };
-        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Files, fileModel, group => group.Name == fileName);
+        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Files, fileModel,
+            group => group.Name == fileName);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
+
         try
         {
             var taskSaveSql = _datasetsContext.SaveChangesAsync();
@@ -178,10 +188,10 @@ public class DatasetsRepository {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
+
         await stream.DisposeAsync();
-        
+
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
     }
-
 }

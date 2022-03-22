@@ -6,6 +6,11 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 public class DeleteFileCmd
 {
+    private const string UserNotInGroup = "UserNotInGroup";
+
+    public const string DatasetNotFound = "DatasetNotFound";
+
+    private const string UserNotFound = "UserNotFound";
     private readonly DatasetsRepository _datasetsRepository;
     private readonly IUsersRepository _usersRepository;
 
@@ -14,26 +19,18 @@ public class DeleteFileCmd
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;
     }
-    
-    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string fileId, string nameIdentifier)
+
+    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string fileId,
+        string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
-        if (user == null)
-        {
-            return commandResult.ReturnError(UserNotFound);
-        }
+        if (user == null) return commandResult.ReturnError(UserNotFound);
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
-        if (datasetInfo == null)
-        {
-            return commandResult.ReturnError(DatasetNotFound);
-        }
-        
-        if (!user.GroupIds.Contains(datasetInfo.GroupId))
-        {
-            return commandResult.ReturnError(UserNotInGroup);
-        }
+        if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
+
+        if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
         var deleteResult = await _datasetsRepository.DeleteFileAsync(datasetId, fileId);
 
@@ -46,10 +43,4 @@ public class DeleteFileCmd
         commandResult.Data = deleteResult.Data;
         return commandResult;
     }
-
-    private const string UserNotInGroup = "UserNotInGroup";
-
-    public const string DatasetNotFound = "DatasetNotFound";
-
-    private const string UserNotFound = "UserNotFound";
 }

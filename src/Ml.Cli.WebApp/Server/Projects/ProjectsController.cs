@@ -114,9 +114,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             
             var query = from datasetFiles in dataset.Files
                 join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
-                //join annotations in ProjectAnnotations.Annotations on datasetFiles.Id equals annotations.FileId into ano
                 from reservation in gj.DefaultIfEmpty()
-                //from annot in ano.DefaultIfEmpty()
                 orderby reservation?.TimeStamp ?? 0 ascending 
                 select new ReserveOutput { 
                     FileId=datasetFiles.Id, 

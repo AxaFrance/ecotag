@@ -2,6 +2,6 @@
 
 public enum DatasetTypeEnumeration
 {
-    Image=0,
-    Text=1
+    Image = 0,
+    Text = 1
 }

@@ -6,38 +6,29 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 public class LockDatasetCmd
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly DatasetsRepository _datasetsRepository;
-    
     public const string UserNotInGroup = "UserNotInGroup";
     public const string UserNotFound = "UserNotFound";
     public const string DatasetNotFound = "DatasetNotFound";
+    private readonly DatasetsRepository _datasetsRepository;
+    private readonly IUsersRepository _usersRepository;
 
     public LockDatasetCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
     }
+
     public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
-        if (user == null)
-        {
-            return commandResult.ReturnError(UserNotFound);
-        }
+        if (user == null) return commandResult.ReturnError(UserNotFound);
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
 
-        if (datasetInfo == null)
-        {
-            return commandResult.ReturnError(DatasetNotFound);
-        }
+        if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
 
-        if (!user.GroupIds.Contains(datasetInfo.GroupId))
-        {
-            return commandResult.ReturnError(UserNotInGroup);
-        }
+        if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
         var locked = await _datasetsRepository.LockAsync(datasetId);
 
@@ -45,5 +36,4 @@ public class LockDatasetCmd
 
         return commandResult;
     }
-    
 }

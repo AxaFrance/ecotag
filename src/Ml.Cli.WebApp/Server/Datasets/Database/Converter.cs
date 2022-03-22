@@ -30,7 +30,7 @@ public static class Converter
     {
         return (DatasetClassificationEnumeration)Enum.Parse(typeof(DatasetClassificationEnumeration), type);
     }
-    
+
     public static GetDataset ToGetDataset(this DatasetModel datasetModel)
     {
         return new GetDataset
@@ -42,16 +42,16 @@ public static class Converter
             CreateDate = datasetModel.CreateDate,
             GroupId = datasetModel.GroupId.ToString(),
             IsLocked = datasetModel.IsLocked,
-            Files = datasetModel.Files.Select(file => new GetDatasetFile()
+            Files = datasetModel.Files.Select(file => new GetDatasetFile
             {
                 Id = file.Id.ToString(),
                 ContentType = file.ContentType,
                 Size = file.Size,
-                FileName = file.Name,
+                FileName = file.Name
             }).ToList()
         };
     }
-    
+
     public static GetDatasetInfo ToGetDatasetInfo(this DatasetModel datasetModel)
     {
         return new GetDatasetInfo
@@ -59,8 +59,7 @@ public static class Converter
             Id = datasetModel.Id.ToString(),
             Name = datasetModel.Name,
             GroupId = datasetModel.GroupId.ToString(),
-            IsLocked = datasetModel.IsLocked,
+            IsLocked = datasetModel.IsLocked
         };
     }
-
 }
