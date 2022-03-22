@@ -1,7 +1,6 @@
 ﻿import React from 'react';
 import { File, FileTable } from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
-import cuid from 'cuid';
 import {resilienceStatus} from "../../shared/Resilience";
 
 export const FileUpload = ({fetch, setState, state}) => {

@@ -37,11 +37,11 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage
             return blockBlob;
         }
 
-        public async Task UploadStreamAsync(string containerName, string fileName, Stream fileBuffer)
+        public async Task UploadStreamAsync(string containerName, string fileName, Stream fileStream)
         {
-            fileBuffer.Position = 0;
+            fileStream.Position = 0;
             var cloudBlob = await CloudBlockBlob(containerName, fileName);
-            await cloudBlob.UploadAsync(fileBuffer);
+            await cloudBlob.UploadAsync(fileStream);
         }
         
         public async Task<bool> DeleteAsync(string containerName, string fileName)

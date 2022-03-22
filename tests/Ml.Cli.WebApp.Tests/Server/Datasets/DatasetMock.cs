@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Database.Users;
@@ -18,25 +19,25 @@ namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 
 public record MockResult
 {
-    public GroupModel Group1 { get; set; } 
-    public UsersRepository UsersRepository{ get; set; }  
-    public GroupsRepository GroupRepository{ get; set; } 
-    public DatasetsRepository DatasetsRepository{ get; set; } 
-    public DatasetsController DatasetsController{ get; set; } 
-    public string Dataset1Id { get; set; }  
-    public string Dataset2Id{ get; set; } 
-    public string FileId1{ get; set; } 
+    public GroupModel Group1 { get; set; }
+    public UsersRepository UsersRepository { get; set; }
+    public GroupsRepository GroupRepository { get; set; }
+    public DatasetsRepository DatasetsRepository { get; set; }
+    public DatasetsController DatasetsController { get; set; }
+    public string Dataset1Id { get; set; }
+    public string Dataset2Id { get; set; }
+    public string FileId1 { get; set; }
 }
 
-static internal class DatasetMock
+internal static class DatasetMock
 {
     public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
 
-        var group1 = new GroupModel() { Name = "group1" };
+        var group1 = new GroupModel { Name = "group1" };
         groupContext.Groups.Add(group1);
-        var group2 = new GroupModel() { Name = "group2" };
+        var group2 = new GroupModel { Name = "group2" };
         groupContext.Groups.Add(group2);
         await groupContext.SaveChangesAsync();
 
@@ -46,10 +47,10 @@ static internal class DatasetMock
         groupContext.Users.Add(user2);
         await groupContext.SaveChangesAsync();
 
-        groupContext.GroupUsers.Add(new GroupUsersModel() { GroupId = group1.Id, UserId = user1.Id });
+        groupContext.GroupUsers.Add(new GroupUsersModel { GroupId = group1.Id, UserId = user1.Id });
         await groupContext.SaveChangesAsync();
 
-        var datasetContext = CreateDatasetShould.GetInMemoryDatasetContext();
+        var datasetContext = GetInMemoryDatasetContext();
         var dataset1 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
@@ -69,21 +70,21 @@ static internal class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id,
+            GroupId = group1.Id
         };
         datasetContext.Datasets.Add(dataset2);
         await datasetContext.SaveChangesAsync();
         var dataset1Id = dataset1.Id;
         var dataset2Id = dataset2.Id;
 
-        var fileModel = new FileModel()
+        var fileModel = new FileModel
         {
             DatasetId = dataset1Id,
             ContentType = "MyContent",
             CreateDate = DateTime.Now.Ticks,
             Name = "demo.png",
             Size = 20,
-            CreatorNameIdentifier = "S88888",
+            CreatorNameIdentifier = "S88888"
         };
         datasetContext.Files.Add(fileModel);
         await datasetContext.SaveChangesAsync();
@@ -96,7 +97,7 @@ static internal class DatasetMock
             new MemoryCache(Options.Create(new MemoryCacheOptions())));
         var datasetsController = new DatasetsController();
 
-        var context = new DefaultHttpContext()
+        var context = new DefaultHttpContext
         {
             User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -108,7 +109,7 @@ static internal class DatasetMock
         {
             HttpContext = context
         };
-        return new MockResult()
+        return new MockResult
         {
             Group1 = group1,
             UsersRepository = usersRepository,
@@ -116,5 +117,18 @@ static internal class DatasetMock
             DatasetsController = datasetsController, Dataset1Id = dataset1Id.ToString(),
             Dataset2Id = dataset2Id.ToString(), FileId1 = fileId1.ToString()
         };
+    }
+
+    public static DatasetContext GetInMemoryDatasetContext()
+    {
+        var builder = new DbContextOptionsBuilder<DatasetContext>();
+        var databaseName = Guid.NewGuid().ToString();
+        builder.UseInMemoryDatabase(databaseName);
+
+        var options = builder.Options;
+        var groupContext = new DatasetContext(options);
+        groupContext.Database.EnsureCreated();
+        groupContext.Database.EnsureCreatedAsync();
+        return groupContext;
     }
 }
