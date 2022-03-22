@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check Project ItemsTable behaviour Chould render correctly and display deletion modal 1`] = `
+exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
 <DocumentFragment>
   <table
     class="af-table"
@@ -45,7 +45,7 @@ exports[`Check Project ItemsTable behaviour Chould render correctly and display 
               <span
                 class="af-btn__text"
               >
-                Classification
+                Groupe
               </span>
               <i
                 class="glyphicon glyphicon-sorting"
@@ -142,7 +142,7 @@ exports[`Check Project ItemsTable behaviour Chould render correctly and display 
         <td
           class="af-table__cell"
         >
-          Publique
+          groupName
         </td>
         <td
           class="af-table__cell"
@@ -151,10 +151,14 @@ exports[`Check Project ItemsTable behaviour Chould render correctly and display 
         </td>
         <td
           class="af-table__cell"
-        />
+        >
+          Image
+        </td>
         <td
           class="af-table__cell"
-        />
+        >
+          300
+        </td>
         <td
           class="af-table__cell"
         >
@@ -168,18 +172,6 @@ exports[`Check Project ItemsTable behaviour Chould render correctly and display 
           >
             <i
               class="glyphicon glyphicon-zoom-in"
-            />
-          </a>
-          <a
-            class="btn af-btn--circle"
-            href="#"
-            id="removeActionId"
-            role="button"
-            tabindex="0"
-            title="Supprimer"
-          >
-            <i
-              class="glyphicon glyphicon-remove"
             />
           </a>
         </td>

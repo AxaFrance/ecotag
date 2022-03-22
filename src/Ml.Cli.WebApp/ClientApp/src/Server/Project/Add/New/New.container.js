@@ -12,7 +12,7 @@ import {
   TYPE,
   MSG_REQUIRED,
   LABELS,
-  MSG_PROJECT_NAME_ALREADY_EXIST
+  MSG_PROJECT_NAME_ALREADY_EXIST, MSG_MIN_LENGTH, MSG_MAX_LENGTH, MSG_TEXT_REGEX, MSG_MAX_LABELS_LENGTH
 } from './constants';
 import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
@@ -69,7 +69,26 @@ export const reducer = (state, action) => {
       let newFields;
       switch (name) {
         case LABELS:
-          const message = newValues.length > 0 ? null : MSG_REQUIRED
+          let message = null;
+          if(newValues.length === 0){
+            message = MSG_REQUIRED
+          }
+          else if(newValues.length > 10){
+            message = MSG_MAX_LABELS_LENGTH
+          }
+          else{
+            newValues.forEach(function(value, index){
+              if(value.name.length < 3){
+                message = `Label numéro ${index + 1} : ${MSG_MIN_LENGTH}`
+              }
+              else if(value.name.length > 16){
+                message = `Label numéro ${index + 1} : ${MSG_MAX_LENGTH}`
+              }
+              else if(!value.name.match(/^[a-zA-Z-_]*$/)){
+                message = `Label numéro ${index + 1} : ${MSG_TEXT_REGEX}`
+              }
+            })
+          }
           newFields = {
             ...fields,
                 [name]: {
@@ -92,24 +111,24 @@ export const reducer = (state, action) => {
             }else if(DATASET === name) {
 
               const options = [{
-                    value: 'CROPPING',
-                    label: "Séléction de zone d'image",
+                    value: 'Cropping',
+                    label: "Sélection de zone d'image",
                     type: "Image"
                   },
                   {
                     value: 'ImageClassifier',
-                    label: 'Saisi de texte contenu dans une image',
+                    label: 'Saisie de texte contenu dans une image',
                     type: "Image"
                   },
                   {
-                    value: 'NAMED_ENTITY',
-                    label: 'Séléction de zone de texte',
+                    value: 'NamedEntity',
+                    label: 'Sélection de zone de texte',
                     type: "Text"
                   }];
               const datasetId = event.value
-              const datsetType = state.datasets.find(dataset => dataset.id === datasetId).type;
+              const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
               const reducer = (previousValue, currentValue) => {
-                if(currentValue.type === datsetType) {
+                if(currentValue.type === datasetType) {
                   previousValue.push({value:currentValue.value, label:currentValue.label});
                 }
                 return previousValue;
@@ -163,12 +182,11 @@ export const createProject = async (history, fetch, state, dispatch) => {
     return;
   }
   dispatch({ type: 'onSubmitStarted'});
-    const datasetId = state.fields[DATASET].value
     const newProject = {
       name: state.fields[NAME].value,
       dataSetId: state.fields[DATASET].value,
       groupId: state.fields[GROUP].value,
-      typeAnnotation: state.fields[TYPE].value,
+      annotationType: state.fields[TYPE].value,
       numberCrossAnnotation: state.fields[NUMBER_CROSS_ANNOTATION].value,
       labels: state.fields[LABELS].values,
     };

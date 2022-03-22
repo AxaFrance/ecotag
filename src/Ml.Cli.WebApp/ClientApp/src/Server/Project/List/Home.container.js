@@ -8,7 +8,7 @@ import { computeNumberPages, filterPaging, getItemsFiltered, getItemsSorted } fr
 const HomeWithResilience = withResilience(Home);
 
 export const HomeContainer = ({ fetch }) => {
-  const { state, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject } = useHome(fetch);
+  const { state, onChangePaging, onChangeFilter, onChangeSort } = useHome(fetch);
   let filtersState = state.filters;
   const itemsFiltered = getItemsFiltered(state.items, filtersState.filterValue);
   const itemsSorted = getItemsSorted(itemsFiltered, filtersState.columns);
@@ -32,7 +32,6 @@ export const HomeContainer = ({ fetch }) => {
       onChangePaging={onChangePaging}
       onChangeSort={onChangeSort}
       onChangeFilter={onChangeFilter}
-      onDeleteProject={onDeleteProject}
     />
   );
 };

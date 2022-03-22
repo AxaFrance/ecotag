@@ -26,7 +26,6 @@ describe('ActionBar', () => {
             "id": "0001",
             "name": "Relevé d'information",
             "dataSetId": "0004",
-            "classification": "Publique",
             "numberTagToDo": 10,
             "createDate": new Date("04-04-2011").getTime(),
             "typeAnnotation": "NER",
@@ -48,7 +47,6 @@ describe('ActionBar', () => {
             "id": "0001",
             "name": "Carte verte",
             "type": "Image",
-            "classification": "Publique",
             "numberFiles": 300,
             "createDate": new Date("10-30-2019").getTime()
         };

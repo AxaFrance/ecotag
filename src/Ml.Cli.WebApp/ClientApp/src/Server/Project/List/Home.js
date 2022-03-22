@@ -6,11 +6,11 @@ import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
 
-const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, onDeleteProject }) => {
+const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
       <>
-        <Title title="Page projets" subtitle="tagger un ensemble de donnée" />
+        <Title title="Page projets" subtitle="Tagger un ensemble de données" />
         <div className="af-home container">
           <Link className="btn af-btn af-btn--quote" to="/projects/new">
             <span className="af-btn__text">Nouveau projet</span>
@@ -46,7 +46,6 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, on
                 filters={filters}
                 onChangePaging={onChangePaging}
                 onChangeSort={onChangeSort}
-                onDeleteProject={onDeleteProject}
             />
           </EmptyArrayManager>
         </div>

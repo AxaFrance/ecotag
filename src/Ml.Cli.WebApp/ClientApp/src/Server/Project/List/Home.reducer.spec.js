@@ -7,7 +7,7 @@ describe('Home.reducer', () => {
       "id": "0001",
       "name": "Relevé d'information",
       "dataSetId": "0004",
-      "classification": "Publique",
+      "groupId": "0001",
       "numberTagToDo": 10,
       "createDate": new Date("04-04-2011").getTime(),
       "typeAnnotation": "NER",
@@ -25,20 +25,27 @@ describe('Home.reducer', () => {
           "email": "Gilles.Cruchon@axa.fr"}
       ]
     }];
+    const givenGroups = [{
+      id: "0001",
+      "name": "groupName"
+    }];
     it('should init state with groups after init action', () => {
       const givenState = {};
       const givenAction = {
         type: 'init',
         data : {
           items: givenProjects,
+          groups: givenGroups,
           status: resilienceStatus.LOADING
         }
-      }
-
+      };
+      const expectedProjects = [...givenProjects];
+      expectedProjects[0].groupName = "groupName";
+      
       const actualState = reducer(givenState, givenAction);
 
       expect(actualState).toMatchObject({
-        items: givenProjects,
+        items: expectedProjects,
         status: resilienceStatus.LOADING
       });
     });
@@ -141,7 +148,6 @@ describe('Home.reducer', () => {
         items: givenProjects,
         columns :{
           name : { value: "asc", timeLastUpdate : null},
-          classification: { value: null, timeLastUpdate : null},
           createDate: { value: null, timeLastUpdate : null},
           typeAnnotation: { value: null, timeLastUpdate : null},
           numberTagToDo: { value: null, timeLastUpdate : null}
@@ -170,7 +176,6 @@ describe('Home.reducer', () => {
         items: givenProjects,
         columns :{
           name : { value: "desc", timeLastUpdate : null},
-          classification: { value: null, timeLastUpdate : null},
           createDate: { value: null, timeLastUpdate : null},
           typeAnnotation: { value: null, timeLastUpdate : null},
           numberTagToDo: { value: null, timeLastUpdate : null}

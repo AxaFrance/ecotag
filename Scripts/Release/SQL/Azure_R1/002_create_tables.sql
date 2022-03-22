@@ -85,4 +85,21 @@ END
 
 GO
 
+/****** Object:  Table [sch_ECOTAG].[T_Project] ******/
+if not exists (select * from sysobjects where name='T_Project' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Project](
+    [PRJ_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [PRJ_DatasetId] uniqueidentifier NOT NULL,
+    [PRJ_GroupId] uniqueidentifier NOT NULL,
+    [PRJ_Name] [varchar](16) NOT NULL,
+    [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
+    [PRJ_CreateDate] BIGINT NOT NULL,
+    [PRJ_AnnotationType] int NOT NULL,
+    [PRJ_LabelsJson] [varchar](2048) NOT NULL,
+    [PRJ_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    CONSTRAINT [PK_T_Project] UNIQUE([PRJ_Id])
+    )
+END
 
+GO
