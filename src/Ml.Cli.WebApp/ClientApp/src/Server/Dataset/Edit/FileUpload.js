@@ -71,9 +71,10 @@ export const FileUpload = ({fetch, setState, state}) => {
             } else {
                 const filesSendError = [];
                 const newFilesSend = files.filesSend;
-                let currentChunk = 0;
+                //let currentChunk = 0;
+                let index = 0
                 for (const response of responses) {
-                    let index = responses.indexOf(response) + currentChunk * chunk;
+                   // let index = responses.indexOf(response) + currentChunk * chunk +(currentChunk>1?0:-1);
                     const filesResponse = await response.json();
                     filesResponse.forEach(file =>{
                         if(file.isSuccess)  {
@@ -86,7 +87,7 @@ export const FileUpload = ({fetch, setState, state}) => {
                         }
                         index++;
                     });
-                    currentChunk++;
+                   // currentChunk++;
                 }
                 setState({...state, files: {...files, filesLoad: [], filesSend: newFilesSend, filesSendError}});
             }

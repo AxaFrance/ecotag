@@ -171,7 +171,7 @@ public class DatasetsRepository
             DatasetId = new Guid(datasetId)
         };
         var result = _datasetsContext.Files.AddIfNotExists(fileModel,
-            group => group.Name == fileName);
+            file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
