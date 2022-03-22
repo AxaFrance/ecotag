@@ -13,13 +13,18 @@ public class ReserveCmd
     public const string DatasetNotFound = "DatasetNotFound";
     private readonly DatasetsRepository _datasetsRepository;
     private readonly IProjectsRepository _projectsRepository;
+    private readonly AnnotationRepository _annotationRepository;
     private readonly IUsersRepository _usersRepository;
 
-    public ReserveCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository, IProjectsRepository projectsRepository)
+    public ReserveCmd(IUsersRepository usersRepository, 
+        DatasetsRepository datasetsRepository, 
+        IProjectsRepository projectsRepository,
+        AnnotationRepository annotationRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
         _projectsRepository = projectsRepository;
+        _annotationRepository = annotationRepository;
     }
 
     public async Task<ResultWithError<IList<ReserveOutput>, ErrorResult>> ExecuteAsync(string projectId, string fileId,
@@ -38,7 +43,7 @@ public class ReserveCmd
         if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
-        var reservations  = await _datasetsRepository.ReserveAsync(projectId, datasetId, fileId);
+        var reservations  = await _annotationRepository.ReserveAsync(projectId, datasetId, fileId, project.NumberCrossAnnotation);
         commandResult.Data = reservations;
         return commandResult;
     }

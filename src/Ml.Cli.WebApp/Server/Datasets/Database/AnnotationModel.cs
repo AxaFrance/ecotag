@@ -22,8 +22,8 @@ public class AnnotationModel
     [Column("PRJ_ProjectId")]
     public Guid ProjectId { get; set; }
     
-    [Column("ANO_User")]
-    public Guid UserId { get; set; }
+    [Column("ANO_CreatorNameIdentifier")]
+    public string CreatorNameIdentifier { get; set; }
     
     [Column("ANO_ExpectedOutput")]
     public string ExpectedOutput { get; set; }

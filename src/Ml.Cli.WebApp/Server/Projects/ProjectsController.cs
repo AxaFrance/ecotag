@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -20,9 +19,6 @@ namespace Ml.Cli.WebApp.Server.Projects
     [Authorize(Roles = Roles.DataAnnoteur)]
     public class ProjectsController : Controller
     {
-        public static ProjectReservation ProjectReservation = new ProjectReservation();
-        public static ProjectAnnotations ProjectAnnotations = new ProjectAnnotations();
-        
         [HttpGet("{projectId}/files/{id}")]
         [ResponseCache(Duration = 1)]
         public async Task<IActionResult> GetProjectFile([FromServices] GetProjectFileCmd getProjectFileCmd, string projectId, string id)
@@ -113,12 +109,13 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
         {
             var id = Guid.NewGuid().ToString();
-
+            var creatorNameIdentifier = User.Identity.GetSubject();
             var annotation = new AnnotationModel()
             {
                 FileId = new Guid(fileId) , ProjectId = new Guid(projectId), 
                 ExpectedOutput = annotationInput.ExpectedOutput,
-                TimeStamp = DateTime.Now.Ticks
+                TimeStamp = DateTime.Now.Ticks,
+                CreatorNameIdentifier = creatorNameIdentifier
             };
             datasetContext.Annotations.Add(annotation);
             await datasetContext.SaveChangesAsync();
