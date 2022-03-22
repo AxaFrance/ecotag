@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
@@ -60,12 +61,14 @@ public class GroupsRepository : IGroupsRepository
         return group?.ToGroupDataModel();
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> CreateGroupAsync(string groupName)
+    public async Task<ResultWithError<string, ErrorResult>> CreateGroupAsync(CreateGroupInput group)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
         var groupModel = new GroupModel
         {
-            Name = groupName
+            Name = group.Name.ToLower(),
+            CreatorNameIdentifier = group.CreatorNameIdentifier,
+            CreateDate = DateTime.Now.Ticks
         };
         var result = _groupsContext.Groups.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
