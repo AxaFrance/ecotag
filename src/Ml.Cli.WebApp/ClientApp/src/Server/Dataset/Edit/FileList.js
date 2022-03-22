@@ -13,6 +13,7 @@ import Tabs from "@axa-fr/react-toolkit-tabs/dist";
 import '@axa-fr/react-toolkit-tabs/dist/tabs.scss';
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 import {formatTimestampToString} from "../../date";
+import {resilienceStatus} from "../../shared/Resilience";
 
 const bytesToSize=(bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -21,16 +22,42 @@ const bytesToSize=(bytes) => {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
+const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event => {
+    event.preventDefault();
+    const response = await fetch(`datasets/${datasetId}/files/${fileId}`, {
+        method: 'GET'
+    });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();         
+};
 
-const  FileList = ({state, setState}) => {
 
-    const deleteFile = file => {
-        const filesSend = [... state.files.filesSend];
+const FileList = ({state, setState, fetch}) => {
+
+    const deleteFile = async file => {
+        setState({...state, status: resilienceStatus.POST});
+
+        const response = await fetch(`datasets/${state.dataset.id}/files/${file.file.id}`, {
+            method: 'DELETE'
+        });
+        
+        if(response.status >= 500){
+            setState({...state, status : resilienceStatus.ERROR });
+            return;
+        }
+
+        const filesSend = [...state.files.filesSend];
         const index = filesSend.indexOf(file);
         if (index > -1) {
             filesSend.splice(index, 1);
         }
-        setState({...state, files : { ...state.files, filesSend}});
+        setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.SUCCESS});
     };
 
     const onChangePaging = ({numberItems, page}) => {
@@ -43,9 +70,9 @@ const  FileList = ({state, setState}) => {
     const files = state.files;
     const paging = files.paging;
     const itemByPages = paging.itemByPages
-    const currentPages = paging.currentPages
-    const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
     const numberPages = computeNumberPages(files.filesSend, itemByPages);
+    const currentPages = paging.currentPages > numberPages ? numberPages :  paging.currentPages
+    const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
 
     const reducer = (previousValue, currentValue) => previousValue + currentValue.file.size;
     const hasFiles = state.files.filesSend.length ===0;
@@ -65,15 +92,15 @@ const  FileList = ({state, setState}) => {
                                     <Restitution label="Type" value={state.dataset.type} />
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>
-                                    <Restitution label="nombre de fichier" value={state.files.filesSend.length} />
-                                    <Restitution label="poids total des fichiers" value={bytesToSize(fileSizeTotal)} />
-                                    <Restitution label="poids moyen des fichiers" value={bytesToSize(fileSizeAverage)} />
+                                    <Restitution label="Nombre de fichier" value={state.files.filesSend.length} />
+                                    <Restitution label="Poids total des fichiers" value={bytesToSize(fileSizeTotal)} />
+                                    <Restitution label="Poids moyen des fichiers" value={bytesToSize(fileSizeAverage)} />
                                 </SectionRestitutionColumn>
                             </SectionRestitutionRow>
                         </SectionRestitution>
                     </ArticleRestitution>
                 </Tabs.Tab>
-                <Tabs.Tab title="liste des fichiers">
+                <Tabs.Tab title="Liste des fichiers">
                     <Table>
                         <Table.Header>
                             <Table.Tr>
@@ -91,7 +118,7 @@ const  FileList = ({state, setState}) => {
                             {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
-                                            {file.file.name}
+                                         <a href={"#"+file.file.name} alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
                                         <Table.Td>{bytesToSize(file.file.size)}</Table.Td>

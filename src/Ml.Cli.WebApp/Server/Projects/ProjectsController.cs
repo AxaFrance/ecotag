@@ -42,11 +42,11 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ResponseCache(Duration = 1)]
         public IActionResult GetProjectFile(string projectId, string id)
         {
-            var project = Find(projectId);
+            /*var project = Find(projectId);
             var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
             var file = DatasetsController.files.FirstOrDefault(file => file.Id == id && file.DatasetId == dataset.Id);
             if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
-
+            */
             return NotFound();
         }
 
@@ -122,13 +122,11 @@ namespace Ml.Cli.WebApp.Server.Projects
 
             var numberToReserve = 6;
 
-            var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
+           /* var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
             
             var query = from datasetFiles in dataset.Files
                 join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
-                //join annotations in ProjectAnnotations.Annotations on datasetFiles.Id equals annotations.FileId into ano
                 from reservation in gj.DefaultIfEmpty()
-                //from annot in ano.DefaultIfEmpty()
                 orderby reservation?.TimeStamp ?? 0 ascending 
                 select new ReserveOutput { 
                     FileId=datasetFiles.Id, 
@@ -167,8 +165,9 @@ namespace Ml.Cli.WebApp.Server.Projects
                     reserve.TimeStamp = ticks;
                 }
             }
-            
-            return Ok(results);
+            return Ok(results);*/
+
+           return Ok();
         }
         
 

@@ -11,7 +11,7 @@ const Lock = ({state, onLockDataset}) => {
                 onClick={onLockDataset}
                 icon="lock"
                 disabled={buttonDisabled}>
-                <span className="af-btn__text">{state.dataset.isLock ? 'Dataset verrouiller' : "verrouiller"}</span>
+                <span className="af-btn__text">{state.dataset.isLock ? 'Dataset verrouillé' : "Verrouiller"}</span>
                 <i className=' edit-dataset__lock-button-icon glyphicon glyphicon-lock' />
             </Button>
         </div>

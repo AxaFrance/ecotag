@@ -1,7 +1,7 @@
 import Home from './Home';
 import React, { useEffect, useReducer } from 'react';
 import withCustomFetch from '../../withCustomFetch';
-import {computeNumberPages, filterPaging, getItemsFiltered} from '../../shared/Home/Home.filters';
+import {computeNumberPages, filterPaging, getItemsFiltered, getItemsSorted} from '../../shared/Home/Home.filters';
 import { resilienceStatus, withResilience } from '../../shared/Resilience';
 import fetchDatasets from "../Dataset.service";
 import {fetchGroups} from "../../Group/Group.service";
@@ -81,7 +81,7 @@ const initialState = {
       name: { value: null, timeLastUpdate: null },
       classification: { value: null, timeLastUpdate: null },
       numberFiles: { value: null, timeLastUpdate: null },
-      createDate: { value: null, timeLastUpdate: null },
+      createDate: { value: 'desc', timeLastUpdate: new Date() },
       type: { value: null, timeLastUpdate: null },
     } 
   },
@@ -101,19 +101,20 @@ const useHome = fetch => {
 
 export const HomeContainer = ({ fetch }) => {
   const { state, onChangePaging, onChangeFilter } = useHome(fetch);
-
-  const itemsFiltered = getItemsFiltered(state.items, state.filters.filterValue);
-  const numberPages = computeNumberPages(itemsFiltered, state.filters.paging.numberItemsByPage);
-  const currentPage = state.filters.paging.currentPage;
+  const filtersState = state.filters;
+  const itemsFiltered = getItemsFiltered(state.items, filtersState.filterValue);
+  const itemsSorted = getItemsSorted(itemsFiltered, filtersState.columns);
+  const numberPages = computeNumberPages(itemsSorted, filtersState.paging.numberItemsByPage);
+  const currentPage = filtersState.paging.currentPage;
   const filters = {
-    ...state.filters,
+    ...filtersState,
     paging: {
-      ...state.filters.paging,
+      ...filtersState.paging,
       numberPages,
       currentPage: currentPage > numberPages ? numberPages : currentPage,
     },
   };
-  const items = filterPaging(itemsFiltered, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
+  const items = filterPaging(itemsSorted, filtersState.paging.numberItemsByPage, filters.paging.currentPage);
 
   return <HomeWithResilience {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeFilter={onChangeFilter} />;
 };
