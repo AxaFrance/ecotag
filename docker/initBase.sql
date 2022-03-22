@@ -87,6 +87,8 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Name] [varchar](16) NOT NULL,
+    [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [GRP_CreateDate] BIGINT NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
     CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name]),
     )
@@ -186,9 +188,9 @@ INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@f
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdgroup")
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@firstGroupId, "firstgroup", "S111111", 637831187822285511)
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@secondGroupId, "secondgroup", "S111111", 637831187625235412)
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@thirdGroupId, "thirdgroup", "S222222", 637831187822285511)
 
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
