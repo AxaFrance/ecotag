@@ -47,7 +47,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
 
-        commandResult.Data = result.Data;
+      //  commandResult.Data = result.Data;
         return commandResult;
     }
 }
