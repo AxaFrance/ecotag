@@ -2,6 +2,6 @@
 {
     public class ReserveInput
     {
-        public string FileId{ get; set; }
+        public string FileId { get; set; }
     }
 }

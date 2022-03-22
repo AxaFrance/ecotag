@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
@@ -17,5 +18,8 @@ public static class ConfigureExtension
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
         services.AddScoped<GetProjectCmd, GetProjectCmd>();
+        services.AddScoped<GetProjectDatasetCmd, GetProjectDatasetCmd>();
+        services.AddScoped<GetProjectFileCmd, GetProjectFileCmd>();
+        services.AddScoped<ReserveCmd, ReserveCmd>();
     }
 }

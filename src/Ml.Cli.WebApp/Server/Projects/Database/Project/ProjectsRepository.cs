@@ -13,6 +13,7 @@ public class ProjectsRepository : IProjectsRepository
     private readonly ProjectContext _projectsContext;
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string Forbidden = "Forbidden";
+    public const string NotFound = "NotFound";
 
     public ProjectsRepository(ProjectContext projectsContext)
     {
@@ -71,22 +72,15 @@ public class ProjectsRepository : IProjectsRepository
         var commandResult = new ResultWithError<ProjectDataModel, ErrorResult>();
         var projectModel = await _projectsContext.Projects
             .AsNoTracking()
-            .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
             .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
-        if(projectModel == null)
+        if (projectModel == null)
         {
-            var isProjectPresent = (await _projectsContext.Projects.AsNoTracking()
-                .FirstOrDefaultAsync(project => project.Id == new Guid(projectId)) != null);
-            if (isProjectPresent)
-            {
-                commandResult.Error = new ErrorResult
-                {
-                    Key = Forbidden
-                };
-                return commandResult;
-            }
+            return commandResult.ReturnError(NotFound);
         }
-
+        if (!userGroupIds.Contains(projectModel.GroupId.ToString()))
+        {
+            return commandResult.ReturnError(Forbidden);
+        }
         commandResult.Data = projectModel?.ToProjectDataModel();
         return commandResult;
     }

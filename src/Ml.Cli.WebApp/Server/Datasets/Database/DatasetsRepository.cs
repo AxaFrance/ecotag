@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -193,4 +195,56 @@ public class DatasetsRepository
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
     }
+    
+    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string fileId=null, int numberToReserve=6)
+    {
+        var query =
+            _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId)).Select(file =>
+                new
+                {
+                    FileId = file.Id,
+                    FileName = file.Name,
+                    Reservation = file.Reservations.Where(r => r.ProjectId == new Guid(projectId))
+                        .Select(r => r).OrderByDescending(r => r.TimeStamp).SingleOrDefault(),
+                    Annotation = file.Annotations.Where(a => a.ProjectId == new Guid(projectId))
+                        .OrderByDescending(a => a.TimeStamp).Select(a => a).SingleOrDefault(),
+                }
+            ).OrderByDescending(a => a.Reservation.TimeStamp);
+             
+
+        var results = await query.Take(numberToReserve).ToListAsync();
+        if (fileId != null)
+        {
+            var currentFile = await query.Where(f=> f.FileId == new Guid(fileId)).FirstOrDefaultAsync();
+            results.Insert(0, currentFile);
+        }
+        
+        foreach (var result in results)
+        {
+            var reservation = result.Reservation;
+            var ticks = DateTime.Now.Ticks;
+            if (reservation == null)
+            {
+                _datasetsContext.Reservations.Add(new ReservationModel() { FileId = result.FileId, TimeStamp = ticks, ProjectId = new Guid(projectId) });
+            }
+            else
+            {
+                reservation.TimeStamp = ticks;
+            }
+        }
+
+        await _datasetsContext.SaveChangesAsync();
+        return results.Select(r => new ReserveOutput()
+        {
+            Annotation = r.Annotation == null ? null: new ReserveAnnotation()
+            {
+                Id = r.Annotation.Id.ToString(),
+                ExpectedOutputJson = r.Annotation.ExpectedOutput
+            },
+            FileId = r.FileId.ToString(),
+            FileName = r.FileName,
+            TimeStamp = r.Reservation?.TimeStamp ?? 0
+        }).ToList();
+    }
+    
 }

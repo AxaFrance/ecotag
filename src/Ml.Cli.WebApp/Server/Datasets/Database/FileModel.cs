@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -31,4 +34,7 @@ public class FileModel
     [Column("DTS_Id")] public Guid DatasetId { get; set; }
 
     public DatasetModel Dataset { get; set; }
+    
+    public IList<AnnotationModel> Annotations { get; set; }
+    public IList<ReservationModel> Reservations { get; set; }
 }

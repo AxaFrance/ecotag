@@ -30,7 +30,7 @@ namespace Ml.Cli.WebApp.Server.Projects
     {
         public string FileId { get; set; }
         public long TimeStamp { get; set; }
-        
+        public string ProjectId { get; set; }
     }
 
     public class ProjectAnnotations
