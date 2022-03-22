@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Newtonsoft.Json;
 using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
@@ -49,32 +52,41 @@ namespace Ml.Cli.WebApp.Server.Projects
 
         [HttpGet]
         [ResponseCache(Duration = 1)]
-        public ActionResult<IEnumerable<Project>> GetAllProjects()
+        public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAllProjects(
+            [FromServices] GetAllProjectsCmd getAllProjectsCmd)
         {
-            return Ok(projects);
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
+            return Ok(result);
         }
 
         [HttpGet("{id}", Name = "GetProjectById")]
-        public ActionResult<Project> GetProject(string id)
+        public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
-            var project = Find(id);
-            if (project == null)
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);
+            if (!commandResult.IsSuccess)
             {
-                return NotFound();
+                return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
+                    commandResult.Error);
             }
-            return Ok(project);
+            return Ok(commandResult.Data);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Project> Create(Project newProject)
+        public async Task<ActionResult<string>> Create([FromServices] CreateProjectCmd createProjectCmd,
+            CreateProjectInput createProjectInput)
         {
-            newProject.Id = Guid.NewGuid().ToString();
-            newProject.CreateDate = DateTime.Now.Ticks;
-            projects.Add(newProject);
-            
-            return Created(newProject.Id, Find(newProject.Id));
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await createProjectCmd.ExecuteAsync(new CreateProjectWithUserInput{CreateProjectInput = createProjectInput, CreatorNameIdentifier = creatorNameIdentifier});
+            if (!commandResult.IsSuccess)
+            {
+                return BadRequest(commandResult.Error);
+            }
+
+            return Created(commandResult.Data, commandResult.Data);
         }
         
         [HttpPost("{projectId}/annotations/{fileId}")]

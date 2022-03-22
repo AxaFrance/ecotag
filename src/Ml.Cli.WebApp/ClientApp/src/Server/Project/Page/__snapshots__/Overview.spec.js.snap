@@ -176,24 +176,6 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Classification
-                </span>
-              </dt>
-              <dd
-                class="af-restitution__listdef-value"
-              >
-                Publique
-              </dd>
-            </dl>
-            <dl
-              class="af-restitution__listdef"
-            >
-              <dt
-                class="af-restitution__listdef-item"
-              >
-                <span
-                  class="af-restitution__text"
-                >
                   Groupe annotateurs
                 </span>
               </dt>

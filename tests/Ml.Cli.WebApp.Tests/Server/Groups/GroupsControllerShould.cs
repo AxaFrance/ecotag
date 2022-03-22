@@ -50,69 +50,6 @@ public class GroupsControllerShould
         return serviceProvider;
     }
 
-    public class CreateGroupTests
-    {
-        private static async Task<GroupContext> GetGroupContext(List<string> groupNamesArray)
-        {
-            var groupContext = GetInMemoryGroupContext();
-            if (groupNamesArray != null)
-                groupNamesArray.ForEach(current =>
-                    groupContext.Groups.Add(new GroupModel { Id = Guid.NewGuid(), Name = current })
-                );
-            await groupContext.SaveChangesAsync();
-            return groupContext;
-        }
-        
-        [Theory]
-        [InlineData("[]", "abc")]
-        [InlineData("[]", "abcdefgh")]
-        [InlineData("[]", "Abcd-dad")]
-        [InlineData("[]", "abdd_O")]
-        public async Task Should_Create_New_Group(string groupNamesInDatabase, string newGroupName)
-        {
-            var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
-            var groupContext = await GetGroupContext(groupNamesArray);
-            var newGroup = new CreateGroupInput
-            {
-                Name = newGroupName
-            };
-            var serviceProvider = GetMockedServiceProvider(groupContext);
-            var repository = new GroupsRepository(groupContext, serviceProvider.Object);
-            var groupsController = new GroupsController();
-            var createGroupCmd = new CreateGroupCmd(repository);
-            var result = await groupsController.Create(createGroupCmd, newGroup);
-            var resultCreated = result.Result as CreatedResult;
-            Assert.NotNull(resultCreated);
-        }
-        
-        [Theory]
-        [InlineData("[\"abcd\"]", "abcD", GroupsRepository.AlreadyTakenName)]
-        [InlineData("[]", "ab", CreateGroupCmd.InvalidModel)]
-        [InlineData("[]", "daizidosqdhuzqijodzqoazdjskqldz", CreateGroupCmd.InvalidModel)]
-        [InlineData("[]", "abd$", CreateGroupCmd.InvalidModel)]
-        [InlineData("[]", "abcdefghzoiqsdzqosqodz^", CreateGroupCmd.InvalidModel)]
-        [InlineData("[]", "P$", CreateGroupCmd.InvalidModel)]
-        [InlineData("[]", "zqdsqd(", CreateGroupCmd.InvalidModel)]
-        public async Task Should_Return_Error_On_New_Group_Creation(string groupNamesInDatabase, string groupName, string errorType)
-        {
-            var groupNamesArray = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
-            var groupContext = await GetGroupContext(groupNamesArray);
-            var newGroup = new CreateGroupInput
-            {
-                Name = groupName
-            };
-            var serviceProvider = GetMockedServiceProvider(groupContext);
-            var repository = new GroupsRepository(groupContext, serviceProvider.Object);
-            var groupsController = new GroupsController();
-            var createGroupCmd = new CreateGroupCmd(repository);
-            var result = await groupsController.Create(createGroupCmd, newGroup);
-            var resultWithError = result.Result as BadRequestObjectResult;
-            Assert.NotNull(resultWithError);
-            var resultWithErrorValue = resultWithError.Value as ErrorResult;
-            Assert.Equal(errorType, resultWithErrorValue?.Key);
-        }
-    }
-
     [Theory]
     [InlineData("[\"firstGroupName\",\"secondGroupName\"]", "s666666")]
     [InlineData("[]", "s666667")]

@@ -14,7 +14,6 @@ export const fetch = async (url, config) => {
                     await sleep(1);
 
                     return {
-                        classification: "Publique",
                         createDate: "1977-04-22T06:00:00Z",
                         dataSetId: "0001",
                         groupId: "0002",

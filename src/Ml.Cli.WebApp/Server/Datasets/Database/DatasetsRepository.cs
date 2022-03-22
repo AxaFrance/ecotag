@@ -38,8 +38,7 @@ public class DatasetsRepository
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
         };
-        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Datasets, groupModel,
-            group => group.Name == groupModel.Name);
+        var result = _datasetsContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
@@ -169,7 +168,7 @@ public class DatasetsRepository
             Size = stream.Length,
             DatasetId = new Guid(datasetId)
         };
-        var result = Groups.Database.Group.DbSetExtension.AddIfNotExists(_datasetsContext.Files, fileModel,
+        var result = _datasetsContext.Files.AddIfNotExists(fileModel,
             group => group.Name == fileName);
         if (result == null)
         {

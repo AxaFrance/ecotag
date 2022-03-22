@@ -25,7 +25,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <small
         class="af-title-bar__subtitle"
       >
-        tagger un ensemble de donnée
+        Tagger un ensemble de données
       </small>
     </div>
   </div>
@@ -134,7 +134,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                 <span
                   class="af-btn__text"
                 >
-                  Classification
+                  Groupe
                 </span>
                 <i
                   class="glyphicon glyphicon-sorting"
@@ -231,7 +231,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           <td
             class="af-table__cell"
           >
-            Publique
+            groupName
           </td>
           <td
             class="af-table__cell"
@@ -240,9 +240,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           </td>
           <td
             class="af-table__cell"
-          >
-            NER
-          </td>
+          />
           <td
             class="af-table__cell"
           >
@@ -261,18 +259,6 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             >
               <i
                 class="glyphicon glyphicon-zoom-in"
-              />
-            </a>
-            <a
-              class="btn af-btn--circle"
-              href="#"
-              id="removeActionId"
-              role="button"
-              tabindex="0"
-              title="Supprimer"
-            >
-              <i
-                class="glyphicon glyphicon-remove"
               />
             </a>
           </td>

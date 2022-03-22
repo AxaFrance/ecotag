@@ -15,7 +15,6 @@ describe('Page.container', () => {
     "id": "0001",
     "name": "Carte verte",
     "type": "Image",
-    "classification": "Publique",
     "numberFiles": 300,
     "createDate": new Date("10-30-2019").getTime(),
     files: []
@@ -24,7 +23,6 @@ describe('Page.container', () => {
     "id": "0001",
     "name": "Relevé d'information",
     "dataSetId": "0004",
-    "classification": "Publique",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
     "typeAnnotation": "NER",
@@ -48,9 +46,9 @@ describe('Page.container', () => {
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
     const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={givenUser}/></Router>);
-    const messageEl = await waitFor(() => getByText('Publique'));
+    const messageEl = await waitFor(() => getByText('02/01/0001'));
     expect(messageEl).toHaveTextContent(
-        'Publique'
+        '02/01/0001'
     );
   });
 

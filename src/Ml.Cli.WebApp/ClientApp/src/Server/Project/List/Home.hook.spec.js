@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { deleteProject, init, useHome } from './Home.hook';
+import { init, useHome } from './Home.hook';
 import { initialState } from './Home.reducer';
 import {resilienceStatus} from "../../shared/Resilience";
 
@@ -15,8 +15,8 @@ describe('Home.hook for projects', () => {
   const givenProjects = [{
     "id": "0001",
     "name": "Relevé d'information",
+    "groupId": "0001",
     "dataSetId": "0004",
-    "classification": "Publique",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
     "typeAnnotation": "NER",
@@ -34,13 +34,20 @@ describe('Home.hook for projects', () => {
         "email": "Gille.Cruchont@axa.fr"}
     ]
   }];
+  
+  const givenGroups = [{
+    "id": "0001",
+    "name": "groupName"
+  }];
 
   function fail(message = "The fail function was called") {
     throw new Error(message);
   }
 
   beforeEach(() => {
-    givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProjects)}));
+    givenFetch = jest.fn()
+        .mockImplementationOnce(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProjects)}))
+        .mockImplementationOnce(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenGroups)}));
     givenDispatch = jest.fn();
     givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
   });
@@ -52,7 +59,7 @@ describe('Home.hook for projects', () => {
     it('should call fetchProjects and dispatch', async () => { 
       try {
         await init(givenFetch, givenDispatch)();
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { items: givenProjects, status: resilienceStatus.SUCCESS } } );
+        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data : { items: givenProjects, groups: givenGroups, status: resilienceStatus.SUCCESS } } );
       } catch (error) {
         fail(error);
       }
@@ -65,33 +72,6 @@ describe('Home.hook for projects', () => {
       } catch (error) {
         expect(givenFetchRejected).toHaveBeenCalled();
         expect(givenDispatch).toHaveBeenCalledTimes(0);
-      }
-    });
-  });
-
-  describe('.deleteProject()', () => {
-    const givenProjectId = "0001";
-    const DELETE_GROUP_ROUTE = `projects/${givenProjectId}`;
-    givenFetch = jest.fn(() => Promise.resolve({ok: true, status: 200, json: () => Promise.resolve()}));
-    it('should call fetchDeleteProject and dispatch', async () => { 
-      try {
-        await deleteProject(givenFetch, givenDispatch)(givenProjectId);
-        expect(givenFetch).toHaveBeenCalledWith(DELETE_GROUP_ROUTE, {
-          method:'DELETE'
-        });
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionProjectsLoading" });
-      } catch (error) {
-        fail(error);
-      }
-    });
-
-    it('should fail because of error during deleteGroup', async () => { 
-      try {
-        await deleteProject(givenFetchRejected, givenDispatch)(givenProjectId);
-        fail(error);
-      } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "onActionProjectsLoading" });
       }
     });
   });
@@ -115,15 +95,13 @@ describe('Home.hook for projects', () => {
           state: expect.any(Object),
           onChangePaging: expect.any(Function),
           onChangeFilter: expect.any(Function),
-          onChangeSort: expect.any(Function),
-          onDeleteProject: expect.any(Function),
+          onChangeSort: expect.any(Function)
         };
         expect(actualHook).toMatchObject(expectedHook);
         actualHook.onChangePaging({numberItems: 10, page: 1});
         actualHook.onChangeFilter('filterValue');
         actualHook.onChangeSort('name')();
-        actualHook.onDeleteProject('id');
-        expect(givenDispatch).toBeCalledTimes(4);
+        expect(givenDispatch).toBeCalledTimes(3);
       });
     });
   });

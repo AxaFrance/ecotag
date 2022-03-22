@@ -10,7 +10,6 @@ const data = {
         {
             "id": "0001",
             "name": "Relevé d'information",
-            "classification": "Publique",
             "numberTagToDo": 10,
             "createDate": "04/04/2011",
             "typeAnnotation": "NER",
@@ -31,7 +30,6 @@ const data = {
         {
             "id": "0002",
             "name": "Carte d'identité",
-            "classification": "Confidentiel",
             "numberTagToDo": 10,
             "createDate": "23/09/2014",
             "typeAnnotation": "OCR",

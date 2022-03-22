@@ -87,6 +87,8 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Name] [varchar](16) NOT NULL,
+    [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [GRP_CreateDate] BIGINT NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
     CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name]),
     )
@@ -147,6 +149,26 @@ END
 GO
 
 
+/****** Object:  Table [sch_ECOTAG].[T_Project] ******/
+if not exists (select * from sysobjects where name='T_Project' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Project](
+    [PRJ_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [PRJ_DatasetId] uniqueidentifier NOT NULL,
+    [PRJ_GroupId] uniqueidentifier NOT NULL,
+    [PRJ_Name] [varchar](16) NOT NULL,
+    [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
+    [PRJ_CreateDate] BIGINT NOT NULL,
+    [PRJ_AnnotationType] int NOT NULL,
+    [PRJ_LabelsJson] [varchar](2048) NOT NULL,
+    [PRJ_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    CONSTRAINT [PK_T_Project] UNIQUE([PRJ_Id])
+    )
+END
+
+GO
+
+
 CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 (
     [DTS_IsLocked] ASC
@@ -173,6 +195,10 @@ DECLARE @firstGroupId uniqueidentifier
 DECLARE @secondGroupId uniqueidentifier
 DECLARE @thirdGroupId uniqueidentifier
 
+DECLARE @firstProjectId uniqueidentifier
+DECLARE @secondProjectId uniqueidentifier
+DECLARE @thirdProjectId uniqueidentifier
+
 SET @firstUserId = newid()
 SET @secondUserId = newid()
 SET @thirdUserId = newid()
@@ -181,18 +207,28 @@ SET @firstGroupId = newid()
 SET @secondGroupId = newid()
 SET @thirdGroupId = newid()
 
+SET @firstProjectId = newid()
+SET @secondProjectId = newid()
+SET @thirdProjectId = newid()
+
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
 INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@firstGroupId, "firstgroup")
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@secondGroupId, "secondgroup")
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name]) VALUES (@thirdGroupId, "thirdgroup")
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@firstGroupId, "firstgroup", "S111111", 637831187822285511)
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@secondGroupId, "secondgroup", "S111111", 637831187625235412)
+INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE]) VALUES (@thirdGroupId, "thirdgroup", "S222222", 637831187822285511)
 
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
+
+INSERT INTO [sch_ECOTAG].[T_Project](
+    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_LabelsJson],[PRJ_CreatorNameIdentifier]
+) VALUES (
+    newid(), newid(), @firstGroupId, "firstproject", 10, 1647129600, 0, '[{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]',"s666666"
+)
 
 GO
 

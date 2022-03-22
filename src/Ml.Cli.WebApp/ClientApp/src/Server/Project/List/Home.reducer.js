@@ -3,35 +3,13 @@ import { resilienceStatus } from '../../shared/Resilience';
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { items, status } = action.data;
+      const { items, groups, status } = action.data;
       return {
         ...state,
         status,
-        items,
+        items: items.map( item => {return {...item, groupName: groups.find(g => g.id === item.groupId).name}}),
       };
     }
-    case 'onProjectDeleted':
-      const { status, id } = action.data;
-      if( status === resilienceStatus.ERROR) {
-        return {
-          ...state,
-          status,
-        };
-      }
-      const items = [...state.items];
-      const item = items.find(i => i.id === id);
-      if(item) {
-        const index = items.indexOf(item);
-        if (index > -1) {
-          items.splice(index, 1);
-        }
-      }
-
-      return {
-        ...state,
-        status,
-        items
-      };
     case 'onActionProjectsLoading': {
       return {
         ...state,
@@ -108,7 +86,7 @@ export const initialState = {
     filterValue: null,
     columns: {
       name: { value: null, timeLastUpdate: null },
-      classification: { value: null, timeLastUpdate: null },
+      groupName: {value: null, timeLastUpdate: null},
       createDate: { value: 'desc', timeLastUpdate: new Date() },
       typeAnnotation: { value: null, timeLastUpdate: null },
       numberCrossAnnotation: { value: null, timeLastUpdate: null },
