@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -109,13 +110,18 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpPost("{projectId}/annotations/{fileId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Annotation(string projectId, string fileId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
         {
             var id = Guid.NewGuid().ToString();
 
-            var annotation = new Annotation
-                {Id = id, FileId = fileId, ProjectId = projectId, ExpectedOutput = annotationInput.ExpectedOutput};
-            ProjectAnnotations.Annotations.Add(annotation);
+            var annotation = new AnnotationModel()
+            {
+                FileId = new Guid(fileId) , ProjectId = new Guid(projectId), 
+                ExpectedOutput = annotationInput.ExpectedOutput,
+                TimeStamp = DateTime.Now.Ticks
+            };
+            datasetContext.Annotations.Add(annotation);
+            await datasetContext.SaveChangesAsync();
             
             return Created($"{projectId}/annotations/{fileId}/{id}", annotation.Id);
         }
@@ -123,10 +129,11 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Annotation(string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
         {
-            var annotation = ProjectAnnotations.Annotations.FirstOrDefault(a => a.Id == annotationId);
+            var annotation =  await datasetContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(annotationId));
             annotation.ExpectedOutput = annotationInput.ExpectedOutput;
+            await datasetContext.SaveChangesAsync();
             return Ok();
         }
         
@@ -135,58 +142,10 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<ReserveOutput>>> Reserve([FromServices] ReserveCmd reserveCmd, string projectId, ReserveInput fileInput)
         {
-           // var project = Find(projectId);
-           var creatorNameIdentifier = User.Identity.GetSubject();
+            var creatorNameIdentifier = User.Identity.GetSubject();
            var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
 
            return Ok(reservations.Data);
-
-           /* var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
-            
-            var query = from datasetFiles in dataset.Files
-                join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
-                from reservation in gj.DefaultIfEmpty()
-                orderby reservation?.TimeStamp ?? 0 ascending 
-                select new ReserveOutput { 
-                    FileId=datasetFiles.Id, 
-                    FileName=datasetFiles.FileName, 
-                    TimeStamp = reservation?.TimeStamp ?? 0,
-                    Annotation = new ReserveAnnotation() { 
-                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
-                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
-                    }
-                };
-
-            var results = query.Take(numberToReserve).ToList();
-
-            if (fileInput.FileId != null)
-            {
-                var currentFile =  dataset.Files.Where(file => file.Id == fileInput.FileId).Select(file => new ReserveOutput()
-                {
-                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0, Annotation = new ReserveAnnotation() { 
-                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
-                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
-                    }
-                }).FirstOrDefault();
-                results.Insert(0, currentFile);
-            }
-            
-            foreach (var result in results)
-            {
-                var reserve = ProjectReservation.Reservations.FirstOrDefault(reserve => reserve.FileId == result.FileId);
-                var ticks = DateTime.Now.Ticks;
-                if (reserve == null)
-                {
-                    ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks });
-                }
-                else
-                {
-                    reserve.TimeStamp = ticks;
-                }
-            }
-            return Ok(results);*/
-
-           return Ok();
         }
         
     }
