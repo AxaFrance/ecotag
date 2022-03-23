@@ -67,7 +67,6 @@
     <_ContentIncludedByDefault Remove="ClientApp\build-local\environment.dev.json" />
     <_ContentIncludedByDefault Remove="ClientApp\build-local\environment.json" />
     <_ContentIncludedByDefault Remove="ClientApp\build-local\manifest.json" />
-    <_ContentIncludedByDefault Remove="Server\Projects\mocks\projects.json" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

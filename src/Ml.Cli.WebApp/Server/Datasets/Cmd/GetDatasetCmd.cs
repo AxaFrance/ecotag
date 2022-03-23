@@ -28,6 +28,7 @@ public class GetDatasetCmd
         if (user == null) return commandResult.ReturnError(UserNotFound);
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
         if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
+      
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
         commandResult.Data = await _datasetsRepository.GetDatasetAsync(datasetId);
