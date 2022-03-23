@@ -26,12 +26,12 @@ export const Confirm = ({ navBack, navViewProject }) => (
 
 export const ConfirmContainer = ({ history }) => {
   const location = useLocation();
-  const project = location.state.project;
+  const projectId = location.state.project;
   const navBack = () => {
     history.push('/projects');
   };
   const navViewProject = () => {
-    history.push(`${project}`);
+    history.push(`${projectId}`);
   };
   return <Confirm navBack={navBack} navViewProject={navViewProject} />;
 };
