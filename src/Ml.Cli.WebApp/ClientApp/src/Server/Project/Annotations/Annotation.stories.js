@@ -15,7 +15,7 @@ export const fetch = async (url, config) => {
 
                     return {
                         createDate: "1977-04-22T06:00:00Z",
-                        dataSetId: "0001",
+                        datasetId: "0001",
                         groupId: "0002",
                         id: "0005",
                         labels: [{name: "Recto", color: "#212121", id: "0"}, {
