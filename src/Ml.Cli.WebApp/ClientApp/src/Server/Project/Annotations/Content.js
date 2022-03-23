@@ -5,10 +5,10 @@ import Alert from '@axa-fr/react-toolkit-alert';
 import React from "react";
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 
-const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutput={} }) => {
+const AnnotationDispatch = ({ annotationType, labels, url, onSubmit,expectedOutput={} }) => {
     return <AnnotationSwitch
         url={url}
-        annotationType={typeAnnotation}
+        annotationType={annotationType}
         labels ={labels}
         expectedOutput={expectedOutput}
         onSubmit={onSubmit}
@@ -34,7 +34,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     onPrevious={onPrevious} isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext}
                                     text={currentItem.fileName}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}
-                                    typeAnnotation={project.typeAnnotation} labels={project.labels} onSubmit={onSubmit}
+                                    annotationType={project.annotationType} labels={project.labels} onSubmit={onSubmit}
                                     url={ apiUrl.replace('{path}', `projects/${project.id}/files/${currentItem.fileId}`)} />
             </> : null);
     }

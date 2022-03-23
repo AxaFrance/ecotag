@@ -25,7 +25,7 @@ export const fetch = async (url, config) => {
                         }, {name: "Signature", color: "#f20713", id: "2"}],
                         name: "Carte verte",
                         numberCrossAnnotation: 0,
-                        typeAnnotation: "OCR"
+                        annotationType: "OCR"
                     }
                 },
             };

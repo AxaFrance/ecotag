@@ -20,8 +20,8 @@ const filters = {
         columns: {
         name: { value: null, timeLastUpdate: null },
         groupName: {value: null, timeLastUpdate: null},
-        createDate: { value: 'desc', timeLastUpdate: new Date() },
-        typeAnnotation: { value: null, timeLastUpdate: null },
+        createDate: { value: 'desc', timeLastUpdate: new Date() }, 
+        annotationType: { value: null, timeLastUpdate: null },
         numberTagToDo: { value: null, timeLastUpdate: null },
         numberCrossAnnotation: {value: null}
     },

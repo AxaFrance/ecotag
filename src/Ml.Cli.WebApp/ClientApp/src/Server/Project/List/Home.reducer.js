@@ -88,7 +88,7 @@ export const initialState = {
       name: { value: null, timeLastUpdate: null },
       groupName: {value: null, timeLastUpdate: null},
       createDate: { value: 'desc', timeLastUpdate: new Date() },
-      typeAnnotation: { value: null, timeLastUpdate: null },
+      annotationType: { value: null, timeLastUpdate: null },
       numberCrossAnnotation: { value: null, timeLastUpdate: null },
     },
   },

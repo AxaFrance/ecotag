@@ -240,7 +240,9 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           </td>
           <td
             class="af-table__cell"
-          />
+          >
+            NER
+          </td>
           <td
             class="af-table__cell"
           >

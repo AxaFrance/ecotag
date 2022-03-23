@@ -10,7 +10,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public string GroupId { get; set; }
         public int NumberCrossAnnotation { get; set; }
         public long CreateDate { get; set; }
-        public string TypeAnnotation { get; set; }
+        public string AnnotationType { get; set; }
         public List<Label> Labels { get; set; }
         
         
