@@ -33,7 +33,7 @@ public class GetProjectsShould
     [InlineData("s111111",
         "11111111-0000-0000-0000-000000000000", GetProjectCmd.UserNotFound)]
     [InlineData("s666666",
-        "10000000-0000-0000-0000-000000000000", GetProjectCmd.ProjectNotFound)]
+        "10000000-0000-0000-0000-000000000000", ProjectsRepository.NotFound)]
     [InlineData("s666667",
         "11111111-0000-0000-0000-000000000000", ProjectsRepository.Forbidden)]
     public async Task Should_Return_Error_On_Get_Project(string nameIdentifier, string searchedId,
