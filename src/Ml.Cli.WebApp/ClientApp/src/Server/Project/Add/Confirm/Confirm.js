@@ -31,7 +31,7 @@ export const ConfirmContainer = ({ history }) => {
     history.push('/projects');
   };
   const navViewProject = () => {
-    history.push(`${project.id}`);
+    history.push(`${project}`);
   };
   return <Confirm navBack={navBack} navViewProject={navViewProject} />;
 };

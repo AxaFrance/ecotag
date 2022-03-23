@@ -7,7 +7,7 @@ import {reducer} from "./Annotation.reducer";
 const fetch = () => Promise.resolve({
   "id": "0001",
   "name": "Relevé d'information",
-  "dataSetId": "0004",
+  "datasetId": "0004",
   "numberTagToDo": 10,
   "createDate": "04/04/2011",
   "typeAnnotation": "NER",
@@ -38,7 +38,7 @@ describe('AnnotationDispatch.container', () => {
   const givenProject = {
     "id": "0001",
     "name": "Relevé d'information",
-    "dataSetId": "0004",
+    "datasetId": "0004",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
     "typeAnnotation": "NER",

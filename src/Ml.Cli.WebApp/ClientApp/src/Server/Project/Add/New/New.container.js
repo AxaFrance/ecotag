@@ -184,7 +184,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
   dispatch({ type: 'onSubmitStarted'});
     const newProject = {
       name: state.fields[NAME].value,
-      dataSetId: state.fields[DATASET].value,
+      datasetId: state.fields[DATASET].value,
       groupId: state.fields[GROUP].value,
       annotationType: state.fields[TYPE].value,
       numberCrossAnnotation: state.fields[NUMBER_CROSS_ANNOTATION].value,

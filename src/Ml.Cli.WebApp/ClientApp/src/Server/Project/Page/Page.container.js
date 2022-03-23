@@ -19,7 +19,7 @@ export const init = (fetch, dispatch) => async id => {
     return;
   }
   const project = await projectResponse.json();
-  const datasetPromise = fetchDataset(fetch)(project.dataSetId);
+  const datasetPromise = fetchDataset(fetch)(project.datasetId);
   const groupPromise = fetchGroup(fetch)(project.groupId);
   
   const [datasetResponse, groupResponse] = await Promise.all([datasetPromise, groupPromise]);

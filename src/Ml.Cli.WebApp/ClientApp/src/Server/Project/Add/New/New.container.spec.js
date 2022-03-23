@@ -22,7 +22,7 @@ const fetch = () => {
   return {ok: true, json: () => Promise.resolve({
       "id": "0001",
       "name": "Relevé d'information",
-      "dataSetId": "0004",
+      "datasetId": "0004",
       "numberTagToDo": 10,
       "createDate": new Date("04-04-2011").getTime(),
       "typeAnnotation": "NER",
