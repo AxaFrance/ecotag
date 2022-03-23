@@ -188,7 +188,7 @@ CREATE TABLE [sch_ECOTAG].[T_Annotation](
     [ANO_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [FLE_FileId] uniqueidentifier NOT NULL,
     [PRJ_ProjectId] uniqueidentifier NOT NULL,
-    [PRJ_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [ANO_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [ANO_TimeStamp] BIGINT NOT NULL,
     [ANO_ExpectedOutput] [varchar](4048) NOT NULL,
     CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
