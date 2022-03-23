@@ -57,10 +57,20 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         }
     } else {
         const annotations = await response.json();
+        
+        for(let i=0; i<annotations.length; i++){
+            const annotation = annotations[i];
+            const url = `projects/${projectId}/files/${annotation.fileId}`;
+            const response = await fetch(url, {method: 'GET'});
+            const blob = await response.blob();
+            annotation.blobUrl = window.URL.createObjectURL(blob);
+        }
+            
         data = {
             status: resilienceStatus.SUCCESS,
             items: [...annotations],
         }
+        
     }
     dispatch({type: 'reserve_annotation', data});
 
@@ -100,6 +110,7 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     }
     history.push(nextUrl);
 };
+
 export const usePage = (fetch) => {
     const {projectId, documentId} = useParams();
     const history = useHistory();

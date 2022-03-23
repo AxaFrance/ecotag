@@ -1,8 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useReducer } from 'react';
 import Page from './Page';
-import { fetchProject } from '../Project.service';
-import { fetchDataset } from '../../Dataset/Dataset.service.js';
+import { fetchProject, fetchDataset } from '../Project.service';
 import { fetchGroup } from '../../Group/Group.service.js';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
@@ -19,7 +18,7 @@ export const init = (fetch, dispatch) => async id => {
     return;
   }
   const project = await projectResponse.json();
-  const datasetPromise = fetchDataset(fetch)(project.datasetId);
+  const datasetPromise = fetchDataset(fetch)(project.id, project.datasetId);
   const groupPromise = fetchGroup(fetch)(project.groupId);
   
   const [datasetResponse, groupResponse] = await Promise.all([datasetPromise, groupPromise]);

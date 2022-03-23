@@ -20,12 +20,9 @@ export const fetchAnnotate = fetch => async (projectId, fileId, annotationId, da
     });
 }
 
-export const fetchCreateDataset = fetch => async newDataset =>
-    fetch('datasets', {
-        method: 'POST',
-        body: JSON.stringify(newDataset),
-    });
-
+export const fetchDataset = fetch => async (idProject , idDataset) =>{
+    return fetch(`projects/${idProject}/${idDataset}`);
+}
 
 export const fetchCreateProject = fetch => async newProject =>
     fetch('projects', {

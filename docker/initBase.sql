@@ -140,8 +140,7 @@ CREATE TABLE [sch_ECOTAG].[T_File](
     [FLE_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [FLE_CreateDate] BIGINT NOT NULL,
     [DTS_Id] uniqueidentifier NOT NULL,
-    CONSTRAINT [PK_T_File] UNIQUE([FLE_Id]),
-    CONSTRAINT [PK_T_File_Name_DTS_Id] UNIQUE([FLE_Name], [DTS_Id])
+    CONSTRAINT [PK_T_File] UNIQUE([FLE_Id])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
 END
@@ -168,6 +167,41 @@ END
 
 GO
 
+/****** Object:  Table [sch_ECOTAG].[T_Reservation] ******/
+if not exists (select * from sysobjects where name='T_Reservation' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Reservation](
+    [RSV_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FLE_FileId] uniqueidentifier NOT NULL,
+    [PRJ_ProjectId] uniqueidentifier NOT NULL,
+    [RSV_TimeStamp] BIGINT NOT NULL,
+    CONSTRAINT [PK_T_Reservation] UNIQUE([RSV_Id])
+    )
+END
+
+GO
+
+/****** Object:  Table [sch_ECOTAG].[T_Annotation] ******/
+if not exists (select * from sysobjects where name='T_Annotation' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Annotation](
+    [ANO_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FLE_FileId] uniqueidentifier NOT NULL,
+    [PRJ_ProjectId] uniqueidentifier NOT NULL,
+    [ANO_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [ANO_TimeStamp] BIGINT NOT NULL,
+    [ANO_ExpectedOutput] [varchar](4048) NOT NULL,
+    CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
+    )
+END
+
+GO
+
+CREATE UNIQUE INDEX [IND_FileName_DatasetId] ON [sch_ECOTAG].[T_File]
+(
+    [FLE_Name], [DTS_Id]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
 
 CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 (

@@ -19,8 +19,8 @@ export const reducer = (state, action) => {
                 if (!currentItem) {
 
                     const annotation = {
-                        expectedOutput: item.annotation.expectedOutputJson ? JSON.parse(item.annotation.expectedOutputJson) : null,
-                        id: item.annotation.id,
+                        expectedOutput: (item.annotation && item.annotation.expectedOutputJson) ? JSON.parse(item.annotation.expectedOutputJson) : null,
+                        id: item.annotation ? item.annotation.id: null,
                     }
 
                     const itemFormatted = {...item, annotation};

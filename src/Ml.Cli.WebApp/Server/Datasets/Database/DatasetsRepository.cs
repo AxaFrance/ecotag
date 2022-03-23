@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -169,7 +171,7 @@ public class DatasetsRepository
             DatasetId = new Guid(datasetId)
         };
         var result = _datasetsContext.Files.AddIfNotExists(fileModel,
-            group => group.Name == fileName);
+            file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };

@@ -6,6 +6,28 @@ export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetch = async (url, config) => {
     await sleep(1);
+    
+    
+    
+    if(url.includes("/files/")){
+        return {
+            status: 200,
+            blob: async () => {
+                await sleep(1);
+                const contentType = 'image/png';
+                const b64Data = 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
+                const byteCharacters = atob(b64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: contentType});
+                return blob;
+            },
+        };
+    }
+    
     switch (url){
         case 'projects/projects':
             return {

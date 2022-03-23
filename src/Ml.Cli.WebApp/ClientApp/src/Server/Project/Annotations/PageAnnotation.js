@@ -3,7 +3,7 @@ import {Content} from "./Content";
 import React from "react";
 import {withResilience} from "../../shared/Resilience";
 
-export const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, reservationStatus, documentId, annotationStatus, apiUrl}) => <>
+export const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, reservationStatus, documentId, annotationStatus}) => <>
     <Title title={project.name}
            subtitle={`Project de type ${project.typeAnnotation}`}
            goTo={`/projects/${project.id}`}/>
@@ -17,7 +17,7 @@ export const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevio
              hasPrevious={hasPrevious}
              hasNext={hasNext}
              documentId={documentId}
-             apiUrl={apiUrl}/>
+             />
 </>
 
 export const PageAnnotationWithResilience = withResilience(PageAnnotation);

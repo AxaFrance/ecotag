@@ -20,13 +20,27 @@ public class DatasetContext : DbContext
     public virtual DbSet<DatasetModel> Datasets { get; set; }
 
     public virtual DbSet<FileModel> Files { get; set; }
-
+    
+    public virtual DbSet<ReservationModel> Reservations { get; set; }
+    
+    public virtual DbSet<AnnotationModel> Annotations { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<FileModel>()
             .HasOne(gu => gu.Dataset)
             .WithMany(u => u.Files)
             .HasForeignKey(gu => gu.DatasetId);
+        
+        modelBuilder.Entity<AnnotationModel>()
+            .HasOne(gu => gu.File)
+            .WithMany(u => u.Annotations)
+            .HasForeignKey(gu => gu.FileId);
+
+        modelBuilder.Entity<ReservationModel>()
+            .HasOne(gu => gu.File)
+            .WithMany(u => u.Reservations)
+            .HasForeignKey(gu => gu.FileId);
     }
 
     public Task<int> SaveChangesAsync()

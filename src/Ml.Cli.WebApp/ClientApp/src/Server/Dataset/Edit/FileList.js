@@ -75,7 +75,7 @@ const FileList = ({state, setState, fetch}) => {
     const itemFiltered= filterPaging(files.filesSend, itemByPages, currentPages);
 
     const reducer = (previousValue, currentValue) => previousValue + currentValue.file.size;
-    const hasFiles = state.files.filesSend.length ===0;
+    const hasFiles = state.files.filesSend.length === 0;
     const fileSizeTotal =  hasFiles? 0 : state.files.filesSend.reduce(reducer, 0);
     const fileSizeAverage = hasFiles? 0 : fileSizeTotal / state.files.filesSend.length;
 

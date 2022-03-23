@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Ml.Cli.WebApp.Server.Datasets;
+using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
-using Newtonsoft.Json;
-using DatasetsController = Ml.Cli.WebApp.Server.Datasets.DatasetsController;
 
 namespace Ml.Cli.WebApp.Server.Projects
 {
@@ -19,35 +19,49 @@ namespace Ml.Cli.WebApp.Server.Projects
     [Authorize(Roles = Roles.DataAnnoteur)]
     public class ProjectsController : Controller
     {
-        public static List<Project> projects;
-        public static ProjectReservation ProjectReservation = new ProjectReservation();
-        public static ProjectAnnotations ProjectAnnotations = new ProjectAnnotations();
-
-        private Project Find(string id)
-        {
-            return projects.Find(currentProject => currentProject.Id.Equals(id));
-        }
-
-        public ProjectsController()
-        {
-            var projectsAsString = System.IO.File.ReadAllText("./Server/Projects/mocks/projects.json");
-            if (projects != null) return;
-            Console.WriteLine("Loading projects...");
-            var projectsAsJsonnFile = JsonDocument.Parse(projectsAsString);
-            var projectsAsJson = projectsAsJsonnFile.RootElement.GetProperty("projects");
-            projects = JsonConvert.DeserializeObject<List<Project>>(projectsAsJson.ToString());
-        }
-        
         [HttpGet("{projectId}/files/{id}")]
         [ResponseCache(Duration = 1)]
-        public IActionResult GetProjectFile(string projectId, string id)
+        public async Task<IActionResult> GetProjectFile([FromServices] GetProjectFileCmd getProjectFileCmd, string projectId, string id)
         {
-            /*var project = Find(projectId);
-            var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
-            var file = DatasetsController.files.FirstOrDefault(file => file.Id == id && file.DatasetId == dataset.Id);
-            if (file != null) return File(file.Bytes, file.ContentType, file.FileName);
-            */
-            return NotFound();
+            var nameIdentifier = User.Identity.GetSubject();
+            var result = await getProjectFileCmd.ExecuteAsync(projectId, id, nameIdentifier);
+
+            if (!result.IsSuccess)
+            {
+                var errorKey = result.Error.Key;
+                return errorKey switch
+                {
+                    FileService.FileNameMissing => NotFound(),
+                    GetProjectFileCmd.DatasetNotFound => NotFound(),
+                    DatasetsRepository.FileNotFound => NotFound(),
+                    ProjectsRepository.NotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+
+            var file = result.Data;
+            return File(file.Stream, file.ContentType, file.Name);
+        }
+        
+        [HttpGet("{id}/{datasetId}", Name = "GetProjectDatasetById")]
+        [ResponseCache(Duration = 1)]
+        public async Task<ActionResult<GetDataset>> GetDataset([FromServices] GetProjectDatasetCmd getprojectDatasetCmd, string id, string datasetId)
+        {
+            var nameIdentifier = User.Identity.GetSubject();
+            var getDatasetResult = await getprojectDatasetCmd.ExecuteAsync(datasetId, id, nameIdentifier);
+
+            if (!getDatasetResult.IsSuccess)
+            {
+                var errorKey = getDatasetResult.Error.Key;
+                return errorKey switch
+                {
+                    GetProjectDatasetCmd.DatasetNotFound => NotFound(),
+                    ProjectsRepository.NotFound => NotFound(),
+                    _ => Forbid()
+                };
+            }
+
+            return Ok(getDatasetResult.Data);
         }
 
         [HttpGet]
@@ -92,13 +106,19 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpPost("{projectId}/annotations/{fileId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Annotation(string projectId, string fileId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
         {
             var id = Guid.NewGuid().ToString();
-
-            var annotation = new Annotation
-                {Id = id, FileId = fileId, ProjectId = projectId, ExpectedOutput = annotationInput.ExpectedOutput};
-            ProjectAnnotations.Annotations.Add(annotation);
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var annotation = new AnnotationModel()
+            {
+                FileId = new Guid(fileId) , ProjectId = new Guid(projectId), 
+                ExpectedOutput = annotationInput.ExpectedOutput,
+                TimeStamp = DateTime.Now.Ticks,
+                CreatorNameIdentifier = creatorNameIdentifier
+            };
+            datasetContext.Annotations.Add(annotation);
+            await datasetContext.SaveChangesAsync();
             
             return Created($"{projectId}/annotations/{fileId}/{id}", annotation.Id);
         }
@@ -106,82 +126,24 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Annotation(string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
         {
-            var annotation = ProjectAnnotations.Annotations.FirstOrDefault(a => a.Id == annotationId);
+            var annotation =  await datasetContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(annotationId));
             annotation.ExpectedOutput = annotationInput.ExpectedOutput;
+            await datasetContext.SaveChangesAsync();
             return Ok();
         }
         
         [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IList<ReserveOutput>> Reserve(string projectId, ReserveInput fileInput)
+        public async Task<ActionResult<IList<ReserveOutput>>> Reserve([FromServices] ReserveCmd reserveCmd, string projectId, ReserveInput fileInput)
         {
-            var project = Find(projectId);
+            var creatorNameIdentifier = User.Identity.GetSubject();
+           var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
 
-            var numberToReserve = 6;
-
-           /* var dataset = DatasetsController.datasets.FirstOrDefault(dataset => dataset.Id == project.DataSetId);
-            
-            var query = from datasetFiles in dataset.Files
-                join reserve in ProjectReservation.Reservations on datasetFiles.Id equals reserve.FileId into gj
-                from reservation in gj.DefaultIfEmpty()
-                orderby reservation?.TimeStamp ?? 0 ascending 
-                select new ReserveOutput { 
-                    FileId=datasetFiles.Id, 
-                    FileName=datasetFiles.FileName, 
-                    TimeStamp = reservation?.TimeStamp ?? 0,
-                    Annotation = new ReserveAnnotation() { 
-                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
-                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == datasetFiles.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
-                    }
-                };
-
-            var results = query.Take(numberToReserve).ToList();
-
-            if (fileInput.FileId != null)
-            {
-                var currentFile =  dataset.Files.Where(file => file.Id == fileInput.FileId).Select(file => new ReserveOutput()
-                {
-                    FileId = file.Id, FileName = file.FileName, TimeStamp = 0, Annotation = new ReserveAnnotation() { 
-                        ExpectedOutputJson = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.ExpectedOutput,
-                        Id = ProjectAnnotations.Annotations.Where(annotation => annotation.FileId == file.Id && annotation.ProjectId == projectId).FirstOrDefault()?.Id
-                    }
-                }).FirstOrDefault();
-                results.Insert(0, currentFile);
-            }
-            
-            foreach (var result in results)
-            {
-                var reserve = ProjectReservation.Reservations.FirstOrDefault(reserve => reserve.FileId == result.FileId);
-                var ticks = DateTime.Now.Ticks;
-                if (reserve == null)
-                {
-                    ProjectReservation.Reservations.Add(new Reserve() { FileId = result.FileId, TimeStamp = ticks });
-                }
-                else
-                {
-                    reserve.TimeStamp = ticks;
-                }
-            }
-            return Ok(results);*/
-
-           return Ok();
+           return Ok(reservations.Data);
         }
         
-
-        [HttpDelete("{id}")]
-        public ActionResult<Project> Delete(string id)
-        {
-            var project = Find(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            projects.Remove(project);
-            return NoContent();
-        }
     }
 }
