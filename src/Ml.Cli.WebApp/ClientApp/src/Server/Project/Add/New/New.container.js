@@ -196,7 +196,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
     } else{
       history.push({
         pathname: '/projects/confirm',
-        state: { project : await response.json()},
+        state: { projectId : await response.json()},
       });  
     }
 };

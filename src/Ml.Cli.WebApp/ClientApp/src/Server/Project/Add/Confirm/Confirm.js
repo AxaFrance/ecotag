@@ -26,7 +26,7 @@ export const Confirm = ({ navBack, navViewProject }) => (
 
 export const ConfirmContainer = ({ history }) => {
   const location = useLocation();
-  const projectId = location.state.project;
+  const projectId = location.state.projectId;
   const navBack = () => {
     history.push('/projects');
   };
