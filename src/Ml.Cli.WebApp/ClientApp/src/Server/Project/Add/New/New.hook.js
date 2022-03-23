@@ -5,7 +5,7 @@ import {fetchProjects} from "../../Project.service";
 
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)(true);
-  const groupsPromise = fetchGroups(fetch)();
+  const groupsPromise = fetchGroups(fetch)(true);
   const projectsPromise = fetchProjects(fetch)();
   const [datasetsResponse, groupsResponse, projectsResponse] = await Promise.all([datasetsPromise, groupsPromise, projectsPromise]);
     
