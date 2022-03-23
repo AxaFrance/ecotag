@@ -6,7 +6,7 @@ import React, {useEffect, useReducer, useState} from "react";
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 
 const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutput={} }) => {
-    const [state, setState] = useState({blobUrl:null});
+   /* const [state, setState] = useState({blobUrl:null});
 
     useEffect(async () => {
         setState({blobUrl:null})
@@ -17,11 +17,11 @@ const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutp
     }, [url]);
 
     if(!state.blobUrl){ 
-        return null;
+        return <p>Chargement</p>;
     }
-    console.log(state.blobUrl)
+    console.log(state.blobUrl)*/
     return <AnnotationSwitch
-        url={state.blobUrl}
+        url={url}
         annotationType={typeAnnotation}
         labels ={labels}
         expectedOutput={expectedOutput}
@@ -29,7 +29,7 @@ const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutp
     />
 };
 
-export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus, annotationStatus, apiUrl}) => {
+export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, documentId, reservationStatus, annotationStatus}) => {
     switch (documentId) {
         case "end":
             return <div className="container"><Alert classModifier="info" title="Annotation">
@@ -49,7 +49,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     text={currentItem.fileName}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}
                                     typeAnnotation={project.annotationType} labels={project.labels} onSubmit={onSubmit}
-                                    url={ apiUrl.replace('{path}', `projects/${project.id}/files/${currentItem.fileId}`)} />
+                                    url={currentItem.blobUrl} />
             </> : null);
     }};
     

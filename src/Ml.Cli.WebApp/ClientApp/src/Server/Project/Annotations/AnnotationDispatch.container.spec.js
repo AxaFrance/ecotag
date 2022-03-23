@@ -60,14 +60,6 @@ describe('AnnotationDispatch.container', () => {
   function fail(message = "The fail function was called") {
     throw new Error(message);
   }
-  
-  /*it('AnnotationDispatchContainer render correctly', async () => {
-    const { getByText } = render(<Router><AnnotationDispatchContainer fetch={fetch} user={givenUser}/></Router>);
-    const messageEl = await waitFor(() => getByText('Soumettre l\'annotation'));
-    expect(messageEl).toHaveTextContent(
-        'Soumettre l\'annotation'
-    );
-  });*/
 
   describe('.reducer()', () => {
     it('should set the new fields with asked values after onChange action', () => {
