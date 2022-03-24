@@ -13,7 +13,7 @@ public class ValidateAnnotationOcrShould
     {
         var project = InitProjectData();
         var jsonAnnotationOcr =
-            "{\"width\": 100, \"height\": 200, \"type\": \"ocr\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
+            "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationOcr = JsonConvert.DeserializeObject<AnnotationOcr>(jsonAnnotationOcr);
         Assert.True(annotationOcr?.Validate(project));
     }
@@ -23,12 +23,12 @@ public class ValidateAnnotationOcrShould
     {
         var project = InitProjectData();
         var jsonAnnotationOcr =
-            "{\"width\": 100, \"height\": 200, \"type\": \"ocr\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
+            "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationOcr = JsonConvert.DeserializeObject<AnnotationOcr>(jsonAnnotationOcr);
         Assert.False(annotationOcr?.Validate(project));
     }
 
-    private ProjectDataModel InitProjectData()
+    public static ProjectDataModel InitProjectData()
     {
         var project = new ProjectDataModel()
         {
