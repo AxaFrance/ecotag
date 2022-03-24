@@ -117,6 +117,11 @@ export const reducer = (state, action) => {
                   },
                   {
                     value: 'ImageClassifier',
+                    label: 'Classification',
+                    type: "Image"
+                  },
+                  {
+                    value: 'Ocr',
                     label: 'Saisie de texte contenu dans une image',
                     type: "Image"
                   },
