@@ -6,12 +6,6 @@ using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
-public record AnnotationInput
-{
-    
-    public string ExpectedOutput { get; set; }
-}
-
 public record SaveAnnotationInput
 {
     public AnnotationInput AnnotationInput { get; set; }
@@ -28,6 +22,7 @@ public class SaveAnnotationCmd
     public const string InvalidModel = "InvalidModel";
     public const string UserNotFound = "UserNotFound";
     public const string FileNotFound = "FileNotFound";
+    public const string InvalidLabels = "InvalidLabels";
 
     private readonly IDatasetsRepository _datasetsRepository;
     private readonly IProjectsRepository _projectsRepository;
@@ -72,6 +67,17 @@ public class SaveAnnotationCmd
         if (!project.IsSuccess)
         {
             commandResult.Error = project.Error;
+            return commandResult;
+        }
+
+        var labelsValidationResult = AnnotationInput.ValidateExpectedOutput(project.Data.AnnotationType, saveAnnotationInput.AnnotationInput.ExpectedOutput);
+        if (!labelsValidationResult)
+        {
+            commandResult.Error = new ErrorResult()
+            {
+                Key = InvalidLabels,
+                Error = null
+            };
             return commandResult;
         }
         
