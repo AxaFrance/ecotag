@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -25,6 +26,15 @@ public class SaveAnnotationShould
         var resultValue = resultCreated.Value as string;
         Assert.NotNull(resultValue);
     }
+    
+    [Theory]
+    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "")]
+    public async Task SaveUpdateAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
+    {
+        var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
+        var resultCreated = result.Result as NoContentResult;
+        Assert.NotNull(resultCreated);
+    }
 
     public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
@@ -46,6 +56,17 @@ public class SaveAnnotationShould
         var (_, usersRepository, _, projectsRepository, projectsController, context) =
             await CreateProjectShould.InitMockAsync(nameIdentifier);
         var datasetContext = DatasetMock.GetInMemoryDatasetContext();
+        datasetContext.Annotations.Add(new AnnotationModel()
+        {
+            Id = new Guid("10000000-1111-0000-0000-000000000000"),
+            File = new FileModel(),
+            ExpectedOutput = "",
+            FileId = new Guid(),
+            ProjectId = new Guid("11111111-0000-0000-0000-000000000000"),
+            CreatorNameIdentifier = nameIdentifier,
+            TimeStamp = 10000000
+        });
+        await datasetContext.SaveChangesAsync();
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var datasetsRepository = new DatasetsRepository(datasetContext, null, memoryCache);
 
