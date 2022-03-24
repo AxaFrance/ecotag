@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
@@ -15,11 +16,13 @@ public static class ConfigureExtension
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<IProjectsRepository, ProjectsRepository>();
+        services.AddScoped<IDatasetsRepository, DatasetsRepository>();
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
         services.AddScoped<GetProjectCmd, GetProjectCmd>();
         services.AddScoped<GetProjectDatasetCmd, GetProjectDatasetCmd>();
         services.AddScoped<GetProjectFileCmd, GetProjectFileCmd>();
         services.AddScoped<ReserveCmd, ReserveCmd>();
+        services.AddScoped<SaveAnnotationCmd, SaveAnnotationCmd>();
     }
 }

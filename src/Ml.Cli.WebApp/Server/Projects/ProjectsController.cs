@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -103,7 +101,7 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(commandResult.Data, commandResult.Data);
         }
         
-        [HttpPost("{projectId}/annotations/{fileId}")]
+        /*[HttpPost("{projectId}/annotations/{fileId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
@@ -132,6 +130,33 @@ namespace Ml.Cli.WebApp.Server.Projects
             annotation.ExpectedOutput = annotationInput.ExpectedOutput;
             await datasetContext.SaveChangesAsync();
             return Ok();
+        }*/
+        
+        [HttpPost("{projectId}/annotations/{fileId}/{annotationId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        {
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
+            {
+                ProjectId = projectId,
+                FileId = fileId,
+                AnnotationId = annotationId == "null" ? null : annotationId,
+                AnnotationInput = annotationInput,
+                CreatorNameIdentifier = creatorNameIdentifier
+            });
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return annotationId == "null" ?
+                Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data) :
+                NoContent();
         }
         
         [HttpPost("{projectId}/reserve")]
