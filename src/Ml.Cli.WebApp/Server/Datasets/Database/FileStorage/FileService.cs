@@ -15,7 +15,7 @@ public class FileService : IFileService
 
     public FileService(IConfiguration  configuration)
     {
-        _connectionString = configuration["EcotagStorageConnection"];
+        _connectionString = configuration["ConnectionStrings--ecotagStorage"];
     }
 
     public async Task UploadStreamAsync(string containerName, string fileName, Stream fileStream)
