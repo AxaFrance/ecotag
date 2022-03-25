@@ -14,8 +14,6 @@ public record AnnotationInput
 
     public bool ValidateExpectedOutput(ProjectDataModel project)
     {
-        var validationResult = new Validation().Validate(ExpectedOutput);
-        if (!validationResult.IsSuccess) return false;
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
         var isValid = false;
@@ -40,7 +38,6 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.ImageClassifier:
                 //We only have the value, no need to deserialize as it already is a string
                 return AnnotationImageClassifier.Validate(ExpectedOutput, project);
-                break;
             case AnnotationTypeEnumeration.NamedEntity:
                 try
                 {
