@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,6 @@ using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Groups;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects;
@@ -42,7 +42,7 @@ public class CreateProjectShould
     public async Task CreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
         string nameIdentifier, string groupId)
     {
-        var labels = JsonConvert.DeserializeObject<List<CreateProjectLabelInput>>(labelsJson);
+        var labels = JsonSerializer.Deserialize<List<CreateProjectLabelInput>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
         var result =
             await InitMockAndExecuteAsync(name, numberCrossAnnotation, annotationType, labels, nameIdentifier, groupId);
 
@@ -63,7 +63,7 @@ public class CreateProjectShould
     public async Task ReturnError_WhenCreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
         string nameIdentifier, string errorKey, string groupId)
     {
-        var labels = JsonConvert.DeserializeObject<List<CreateProjectLabelInput>>(labelsJson);
+        var labels = JsonSerializer.Deserialize<List<CreateProjectLabelInput>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
         var result =
             await InitMockAndExecuteAsync(name, numberCrossAnnotation, annotationType, labels, nameIdentifier, groupId);
 
@@ -120,22 +120,22 @@ public class CreateProjectShould
             {
                 Id = new Guid("11111111-0000-0000-0000-000000000000"),
                 Name = "project1",
-                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
+                AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
-                LabelsJson = "",
-                DatasetId = new Guid(),
+                LabelsJson = "[{\"Name\":\"cat\", \"Color\": \"#008194\", \"Id\": \"#008194\"}]",
+                DatasetId = new Guid("10000000-1111-0000-0000-000000000000"),
                 GroupId = group.Id
             });
             projectContext.Projects.Add(new ProjectModel
             {
                 Name = "project2",
-                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
+                AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
-                LabelsJson = "",
+                LabelsJson = "[{\"Name\":\"cat\", \"Color\": \"#008194\", \"Id\": \"#008194\"}]",
                 DatasetId = new Guid(),
                 GroupId = group.Id
             });

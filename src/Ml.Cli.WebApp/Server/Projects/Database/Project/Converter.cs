@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
@@ -29,6 +29,6 @@ public static class Converter
 
     private static List<LabelDataModel> ToListLabelDataModel(this string labelsJson)
     {
-        return JsonConvert.DeserializeObject<List<LabelDataModel>>(labelsJson);
+        return JsonSerializer.Deserialize<List<LabelDataModel>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
     }
 }
