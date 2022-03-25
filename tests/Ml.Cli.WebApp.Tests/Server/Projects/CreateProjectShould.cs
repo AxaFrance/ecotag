@@ -125,7 +125,7 @@ public class CreateProjectShould
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
                 LabelsJson = "[{\"Name\":\"cat\", \"Color\": \"#008194\", \"Id\": \"#008194\"}]",
-                DatasetId = new Guid(),
+                DatasetId = new Guid("10000000-1111-0000-0000-000000000000"),
                 GroupId = group.Id
             });
             projectContext.Projects.Add(new ProjectModel

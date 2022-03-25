@@ -21,7 +21,6 @@ public class SaveAnnotationCmd
 {
     public const string InvalidModel = "InvalidModel";
     public const string UserNotFound = "UserNotFound";
-    public const string FileNotFound = "FileNotFound";
     public const string InvalidLabels = "InvalidLabels";
 
     private readonly IDatasetsRepository _datasetsRepository;
@@ -69,6 +68,13 @@ public class SaveAnnotationCmd
             commandResult.Error = project.Error;
             return commandResult;
         }
+
+        var file = await _datasetsRepository.GetFileAsync(project.Data.DatasetId, saveAnnotationInput.FileId);
+        if (!file.IsSuccess)
+        {
+            commandResult.Error = file.Error;
+            return commandResult;
+        }
         
         var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data);
         if (!labelsValidationResult)
@@ -80,18 +86,6 @@ public class SaveAnnotationCmd
             };
             return commandResult;
         }
-        
-        //TODO: vérifier l'id de file: manque le datasetId
-        /*var file = await _datasetsRepository.GetFileAsync(saveAnnotationInput.DatasetId, saveAnnotationInput.FileId);
-        if (file == null)
-        {
-            commandResult.Error = new ErrorResult
-            {
-                Key = FileNotFound,
-                Error = null
-            };
-            return commandResult;
-        }*/
 
         var annotation = await _datasetsRepository.CreateOrUpdateAnnotation(saveAnnotationInput);
         if (!annotation.IsSuccess)

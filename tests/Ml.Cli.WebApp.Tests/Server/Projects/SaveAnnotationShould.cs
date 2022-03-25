@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Projects;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
+using Moq;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects;
@@ -66,9 +69,34 @@ public class SaveAnnotationShould
             CreatorNameIdentifier = nameIdentifier,
             TimeStamp = 10000000
         });
+        datasetContext.Files.Add(new FileModel()
+        {
+            Id = new Guid("10000000-0000-0000-0000-000000000000"),
+            Name = "testFile.json",
+            Size = 1500,
+            ContentType = "application/json",
+            CreatorNameIdentifier = "s666666",
+            CreateDate = 10000000,
+            DatasetId = new Guid("10000000-1111-0000-0000-000000000000")
+        });
         await datasetContext.SaveChangesAsync();
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var datasetsRepository = new DatasetsRepository(datasetContext, null, memoryCache);
+        var mockedFileDataModel = new FileDataModel
+        {
+            Name = "testFile.json",
+            Length = 1000,
+            Stream = null,
+            ContentType = "application/json"
+        };
+        var mockedResult = new ResultWithError<FileDataModel, ErrorResult>
+        {
+            Data = mockedFileDataModel
+        };
+        var mockedFileService = new Mock<IFileService>();
+        mockedFileService
+            .Setup(foo => foo.DownloadAsync("10000000-1111-0000-0000-000000000000", "testFile.json"))
+            .ReturnsAsync(mockedResult);
+        var datasetsRepository = new DatasetsRepository(datasetContext, mockedFileService.Object, memoryCache);
 
         return (usersRepository, datasetsRepository, projectsRepository, projectsController, context);
     }
