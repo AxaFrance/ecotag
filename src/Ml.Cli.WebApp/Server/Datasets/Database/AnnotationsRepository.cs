@@ -7,11 +7,11 @@ using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class AnnotationRepository
+public class AnnotationsRepository
 {
     private readonly DatasetContext _datasetsContext;
 
-    public AnnotationRepository(DatasetContext datasetsContext)
+    public AnnotationsRepository(DatasetContext datasetsContext)
     {
         _datasetsContext = datasetsContext;
     }

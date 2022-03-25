@@ -147,7 +147,6 @@ namespace Ml.Cli.WebApp.Server.Projects
                 var errorKey = reservations.Error.Key;
                 return errorKey switch
                 {
-                    ReserveCmd.DatasetNotFound => BadRequest(reservations.Error),
                     ProjectsRepository.NotFound => BadRequest(reservations.Error),
                     _ => Forbid()
                 };

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -36,6 +37,9 @@ public record MockResult
     public string Dataset3Id { get; set; }
     public string Dataset3Project1Id { get; set; }
     public ProjectsController ProjectsController { get; set; }
+    public AnnotationsRepository AnnotationsRepository { get; set; }
+    public ProjectsRepository ProjectsRepository { get; set; }
+    public IList<string> fileIds { get; set; }
 }
 
 internal static class DatasetMock
@@ -109,8 +113,9 @@ internal static class DatasetMock
         };
         datasetContext.Files.Add(fileModel);
 
+        var files = new List<FileModel>();
         for (var i = 0; i < 40; i++)
-        { 
+        {
             var f = new FileModel
             {
                 DatasetId = dataset3Id,
@@ -120,6 +125,7 @@ internal static class DatasetMock
                 Size = 20,
                 CreatorNameIdentifier = "s666666"
             };
+            files.Add(f);
             datasetContext.Files.Add(f);
         }
         
@@ -131,7 +137,7 @@ internal static class DatasetMock
             AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
             CreateDate = DateTime.Now.Ticks,
             LabelsJson = JsonSerializer.Serialize(new List<CreateProjectLabelInput>()
-                { new CreateProjectLabelInput() { Color = "#00000", Id = "1", Name = "youhou" } }),
+                { new() { Color = "#00000", Id = "1", Name = "youhou" } }),
             DatasetId = dataset3Id,
             GroupId = group1.Id,
             CreatorNameIdentifier = "S666666",
@@ -149,8 +155,9 @@ internal static class DatasetMock
         var groupRepository = new GroupsRepository(groupContext, null);
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
             new MemoryCache(Options.Create(new MemoryCacheOptions())));
-       
-
+        var annotationRepository = new AnnotationsRepository(datasetContext);
+        var projectRepository = new ProjectsRepository(projectContext);
+        
         var context = new DefaultHttpContext
         {
             User = new ClaimsPrincipal(new ClaimsIdentity(new[]
@@ -178,7 +185,10 @@ internal static class DatasetMock
             Dataset2Id = dataset2Id.ToString(), FileId1 = fileId1.ToString(),
             Dataset3Id = dataset3Id.ToString(),
             Dataset3Project1Id = projectModel.Id.ToString(),
-            ProjectsController = projectsController
+            ProjectsController = projectsController,
+            AnnotationsRepository = annotationRepository,
+            ProjectsRepository = projectRepository,
+            fileIds = files.Select(f => f.Id.ToString()).ToList()
         };
     }
 

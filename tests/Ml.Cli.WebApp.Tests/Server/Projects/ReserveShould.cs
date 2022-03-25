@@ -1,6 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
+using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,15 +22,27 @@ public class ReserveShould
     }
     
     [Theory]
-    [InlineData("s666666")]
-    public async Task ReserveDataset(string nameIdentifier)
+    [InlineData("s666666", null)]
+    [InlineData("s666666", 0)]
+    public async Task ReserveDataset(string nameIdentifier, int? fileIdIndex)
     {
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
-        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
-        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, mockResult.Dataset1Id);
-
-        var noContentResult = result as NoContentResult;
-        Assert.NotNull(noContentResult);
+        var reserveCmd = new ReserveCmd(mockResult.UsersRepository, mockResult.DatasetsRepository, mockResult.ProjectsRepository, mockResult.AnnotationsRepository);
+        var result = await mockResult.ProjectsController.Reserve(reserveCmd, mockResult.Dataset3Project1Id, new ReserveInput{ FileId = fileIdIndex.HasValue ? mockResult.fileIds[fileIdIndex.Value] : null });
+       
+        var resultOk = result.Result as OkObjectResult;
+        Assert.NotNull(resultOk);
+        var resultValue = resultOk.Value as IList<ReserveOutput>;
+       
+        if (fileIdIndex.HasValue)
+        {
+            Assert.Equal(mockResult.fileIds[fileIdIndex.Value], resultValue[0].FileId);
+            Assert.Equal(7, resultValue.Count);
+        }
+        else
+        {
+            Assert.Equal(6, resultValue.Count);
+        }
     }
 
     [Theory]
@@ -34,26 +51,23 @@ public class ReserveShould
     public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
+        var reserveCmd = new ReserveCmd(mockResult.UsersRepository, mockResult.DatasetsRepository, mockResult.ProjectsRepository, mockResult.AnnotationsRepository);
+        var result = await mockResult.ProjectsController.Reserve(reserveCmd, mockResult.Dataset3Project1Id, new ReserveInput());
 
-        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
-        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, mockResult.Dataset1Id);
-
-        var forbidResult = result as ForbidResult;
+        var forbidResult = result.Result as ForbidResult;
         Assert.NotNull(forbidResult);
         _output.WriteLine($"type of error is {errorKey}");
     }
 
     [Theory]
-    [InlineData("s666666", "10000000-0000-0000-0000-000000000000", UploadFileCmd.UserNotFound)]
-    public async Task ReturnNotFound(string nameIdentifier, string datasetId, string errorKey)
+    [InlineData("s666666", "10000000-0000-0000-0000-000000000000", ProjectsRepository.NotFound)]
+    public async Task ReturnNotFound(string nameIdentifier, string projectId, string errorKey)
     {
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
+        var reserveCmd = new ReserveCmd(mockResult.UsersRepository, mockResult.DatasetsRepository, mockResult.ProjectsRepository, mockResult.AnnotationsRepository);
+        var result = await mockResult.ProjectsController.Reserve(reserveCmd, projectId, new ReserveInput());
 
-        var lockDatasetCmd = new LockDatasetCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
-
-        var result = await mockResult.DatasetsController.Lock(lockDatasetCmd, datasetId);
-
-        var notFoundResult = result as NotFoundResult;
+        var notFoundResult = result.Result as BadRequestObjectResult;
         Assert.NotNull(notFoundResult);
         _output.WriteLine($"type of error is {errorKey}");
     }

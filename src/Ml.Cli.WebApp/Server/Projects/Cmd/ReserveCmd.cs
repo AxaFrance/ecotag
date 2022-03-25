@@ -10,21 +10,20 @@ public class ReserveCmd
 {
     private const string UserNotInGroup = "UserNotInGroup";
     private const string UserNotFound = "UserNotFound";
-    public const string DatasetNotFound = "DatasetNotFound";
     private readonly DatasetsRepository _datasetsRepository;
     private readonly IProjectsRepository _projectsRepository;
-    private readonly AnnotationRepository _annotationRepository;
+    private readonly AnnotationsRepository _annotationsRepository;
     private readonly IUsersRepository _usersRepository;
 
     public ReserveCmd(IUsersRepository usersRepository, 
         DatasetsRepository datasetsRepository, 
         IProjectsRepository projectsRepository,
-        AnnotationRepository annotationRepository)
+        AnnotationsRepository annotationsRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
         _projectsRepository = projectsRepository;
-        _annotationRepository = annotationRepository;
+        _annotationsRepository = annotationsRepository;
     }
 
     public async Task<ResultWithError<IList<ReserveOutput>, ErrorResult>> ExecuteAsync(string projectId, string fileId,
@@ -40,10 +39,9 @@ public class ReserveCmd
         var project = projectResult.Data;
         var datasetId = project.DatasetId;
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
-        if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
-        var reservations  = await _annotationRepository.ReserveAsync(projectId, datasetId, fileId, project.NumberCrossAnnotation);
+        var reservations  = await _annotationsRepository.ReserveAsync(projectId, datasetId, fileId, project.NumberCrossAnnotation);
         commandResult.Data = reservations;
         return commandResult;
     }
