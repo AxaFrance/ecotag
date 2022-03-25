@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
-using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
@@ -19,12 +19,13 @@ public record AnnotationInput
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
         var isValid = false;
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         switch (enumType)
         {
             case AnnotationTypeEnumeration.Cropping:
                 try
                 {
-                    var croppingLabels = JsonConvert.DeserializeObject<AnnotationCropping>(ExpectedOutput);
+                    var croppingLabels = JsonSerializer.Deserialize<AnnotationCropping>(ExpectedOutput, jsonOptions);
                     if (croppingLabels != null)
                     {
                         isValid = croppingLabels.Validate(project);
@@ -43,7 +44,7 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.NamedEntity:
                 try
                 {
-                    var namedEntityLabels = JsonConvert.DeserializeObject<List<AnnotationNer>>(ExpectedOutput);
+                    var namedEntityLabels = JsonSerializer.Deserialize<List<AnnotationNer>>(ExpectedOutput, jsonOptions);
                     if (namedEntityLabels != null)
                     {
                         if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
@@ -68,7 +69,7 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.Ocr:
                 try
                 {
-                    var ocrLabels = JsonConvert.DeserializeObject<AnnotationOcr>(ExpectedOutput);
+                    var ocrLabels = JsonSerializer.Deserialize<AnnotationOcr>(ExpectedOutput, jsonOptions);
                     if (ocrLabels != null)
                     {
                         isValid = ocrLabels.Validate(project);

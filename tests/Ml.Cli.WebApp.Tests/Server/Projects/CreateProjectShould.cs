@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,6 @@ using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Groups;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects;
@@ -42,7 +42,7 @@ public class CreateProjectShould
     public async Task CreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
         string nameIdentifier, string groupId)
     {
-        var labels = JsonConvert.DeserializeObject<List<CreateProjectLabelInput>>(labelsJson);
+        var labels = JsonSerializer.Deserialize<List<CreateProjectLabelInput>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
         var result =
             await InitMockAndExecuteAsync(name, numberCrossAnnotation, annotationType, labels, nameIdentifier, groupId);
 
@@ -63,7 +63,7 @@ public class CreateProjectShould
     public async Task ReturnError_WhenCreateProject(string name, int numberCrossAnnotation, string annotationType, string labelsJson,
         string nameIdentifier, string errorKey, string groupId)
     {
-        var labels = JsonConvert.DeserializeObject<List<CreateProjectLabelInput>>(labelsJson);
+        var labels = JsonSerializer.Deserialize<List<CreateProjectLabelInput>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
         var result =
             await InitMockAndExecuteAsync(name, numberCrossAnnotation, annotationType, labels, nameIdentifier, groupId);
 
