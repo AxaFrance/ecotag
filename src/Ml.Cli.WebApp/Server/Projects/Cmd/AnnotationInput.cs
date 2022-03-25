@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Newtonsoft.Json;
@@ -9,10 +9,13 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
 public record AnnotationInput
 {
+    [Required]
     public string ExpectedOutput { get; set; }
 
     public bool ValidateExpectedOutput(ProjectDataModel project)
     {
+        var validationResult = new Validation().Validate(ExpectedOutput);
+        if (!validationResult.IsSuccess) return false;
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
         var isValid = false;
@@ -35,6 +38,7 @@ public record AnnotationInput
                 break;
             case AnnotationTypeEnumeration.ImageClassifier:
                 //We only have the value, no need to deserialize as it already is a string
+                return AnnotationImageClassifier.Validate(ExpectedOutput, project);
                 break;
             case AnnotationTypeEnumeration.NamedEntity:
                 try
