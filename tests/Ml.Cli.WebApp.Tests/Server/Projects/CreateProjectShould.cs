@@ -120,22 +120,22 @@ public class CreateProjectShould
             {
                 Id = new Guid("11111111-0000-0000-0000-000000000000"),
                 Name = "project1",
-                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
+                AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
-                LabelsJson = "",
+                LabelsJson = "[{\"Name\":\"cat\", \"Color\": \"#008194\", \"Id\": \"#008194\"}]",
                 DatasetId = new Guid(),
                 GroupId = group.Id
             });
             projectContext.Projects.Add(new ProjectModel
             {
                 Name = "project2",
-                AnnotationType = AnnotationTypeEnumeration.NamedEntity,
+                AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
                 CreateDate = DateTime.Now.Ticks,
                 CreatorNameIdentifier = "s666666",
                 NumberCrossAnnotation = 1,
-                LabelsJson = "",
+                LabelsJson = "[{\"Name\":\"cat\", \"Color\": \"#008194\", \"Id\": \"#008194\"}]",
                 DatasetId = new Guid(),
                 GroupId = group.Id
             });

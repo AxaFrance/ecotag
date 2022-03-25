@@ -17,7 +17,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Projects;
 public class SaveAnnotationShould
 {
     [Theory]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "")]
+    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "cat")]
     public async Task SaveNewAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
@@ -28,7 +28,7 @@ public class SaveAnnotationShould
     }
     
     [Theory]
-    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "")]
+    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "cat")]
     public async Task SaveUpdateAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
@@ -60,7 +60,7 @@ public class SaveAnnotationShould
         {
             Id = new Guid("10000000-1111-0000-0000-000000000000"),
             File = new FileModel(),
-            ExpectedOutput = "",
+            ExpectedOutput = "cat",
             FileId = new Guid(),
             ProjectId = new Guid("11111111-0000-0000-0000-000000000000"),
             CreatorNameIdentifier = nameIdentifier,
