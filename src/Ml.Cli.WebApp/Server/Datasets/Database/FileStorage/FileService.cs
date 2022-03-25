@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -10,11 +11,11 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 public class FileService : IFileService
 {
     public const string FileNameMissing = "FileNameMissing";
-    private readonly IOptions<StorageSettings> _azureStorageOptions;
+    private readonly string _connectionString;
 
-    public FileService(IOptions<StorageSettings> azureStorageOptions)
+    public FileService(IConfiguration  configuration)
     {
-        _azureStorageOptions = azureStorageOptions;
+        _connectionString = configuration["EcotagStorageConnection"];
     }
 
     public async Task UploadStreamAsync(string containerName, string fileName, Stream fileStream)
@@ -57,7 +58,7 @@ public class FileService : IFileService
 
     private async Task<BlobContainerClient> CloudBlobContainer(string containerName)
     {
-        var connectionString = _azureStorageOptions.Value.ConnectionString;
+        var connectionString = _connectionString;
         var container = new BlobContainerClient(connectionString, containerName);
         await container.CreateIfNotExistsAsync();
         await container.SetAccessPolicyAsync();
