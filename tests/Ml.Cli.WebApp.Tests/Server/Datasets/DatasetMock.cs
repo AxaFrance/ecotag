@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,11 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Groups;
+using Ml.Cli.WebApp.Tests.Server.Projects;
 
 namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 
@@ -27,6 +33,9 @@ public record MockResult
     public string Dataset1Id { get; set; }
     public string Dataset2Id { get; set; }
     public string FileId1 { get; set; }
+    public string Dataset3Id { get; set; }
+    public string Dataset3Project1Id { get; set; }
+    public ProjectsController ProjectsController { get; set; }
 }
 
 internal static class DatasetMock
@@ -73,9 +82,21 @@ internal static class DatasetMock
             GroupId = group1.Id
         };
         datasetContext.Datasets.Add(dataset2);
+        var dataset3 = new DatasetModel
+        {
+            Classification = DatasetClassificationEnumeration.Confidential,
+            Name = "dataset2",
+            Type = DatasetTypeEnumeration.Text,
+            CreateDate = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "S666666",
+            IsLocked = true,
+            GroupId = group1.Id
+        };
+        datasetContext.Datasets.Add(dataset3);
         await datasetContext.SaveChangesAsync();
         var dataset1Id = dataset1.Id;
         var dataset2Id = dataset2.Id;
+        var dataset3Id = dataset3.Id;
 
         var fileModel = new FileModel
         {
@@ -87,7 +108,40 @@ internal static class DatasetMock
             CreatorNameIdentifier = "S88888"
         };
         datasetContext.Files.Add(fileModel);
+
+        for (var i = 0; i < 40; i++)
+        { 
+            var f = new FileModel
+            {
+                DatasetId = dataset3Id,
+                ContentType = "MyContent",
+                CreateDate = DateTime.Now.Ticks,
+                Name = $"demo{i}.png",
+                Size = 20,
+                CreatorNameIdentifier = "s666666"
+            };
+            datasetContext.Files.Add(f);
+        }
+        
         await datasetContext.SaveChangesAsync();
+
+        var projectModel = new ProjectModel()
+        {
+            Name = "demo1",
+            AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
+            CreateDate = DateTime.Now.Ticks,
+            LabelsJson = JsonSerializer.Serialize(new List<CreateProjectLabelInput>()
+                { new CreateProjectLabelInput() { Color = "#00000", Id = "1", Name = "youhou" } }),
+            DatasetId = dataset3Id,
+            GroupId = group1.Id,
+            CreatorNameIdentifier = "S666666",
+            NumberCrossAnnotation = 1,
+        };
+
+        var projectContext = CreateProjectShould.GetInMemoryProjectContext();
+        projectContext.Projects.Add(projectModel);
+        await projectContext.SaveChangesAsync();
+        
         var fileId1 = fileModel.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
@@ -95,7 +149,7 @@ internal static class DatasetMock
         var groupRepository = new GroupsRepository(groupContext, null);
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
             new MemoryCache(Options.Create(new MemoryCacheOptions())));
-        var datasetsController = new DatasetsController();
+       
 
         var context = new DefaultHttpContext
         {
@@ -105,7 +159,13 @@ internal static class DatasetMock
                 }
             ))
         };
+        var datasetsController = new DatasetsController();
         datasetsController.ControllerContext = new ControllerContext
+        {
+            HttpContext = context
+        };
+        var projectsController = new ProjectsController();
+        projectsController.ControllerContext = new ControllerContext
         {
             HttpContext = context
         };
@@ -115,7 +175,10 @@ internal static class DatasetMock
             UsersRepository = usersRepository,
             GroupRepository = groupRepository, DatasetsRepository = datasetsRepository,
             DatasetsController = datasetsController, Dataset1Id = dataset1Id.ToString(),
-            Dataset2Id = dataset2Id.ToString(), FileId1 = fileId1.ToString()
+            Dataset2Id = dataset2Id.ToString(), FileId1 = fileId1.ToString(),
+            Dataset3Id = dataset3Id.ToString(),
+            Dataset3Project1Id = projectModel.Id.ToString(),
+            ProjectsController = projectsController
         };
     }
 

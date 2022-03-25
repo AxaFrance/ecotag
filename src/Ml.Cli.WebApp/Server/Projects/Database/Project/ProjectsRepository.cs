@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
@@ -30,7 +30,7 @@ public class ProjectsRepository : IProjectsRepository
             AnnotationType = projectInput.AnnotationType.ToAnnotationType(),
             DatasetId = new Guid(projectInput.DatasetId),
             GroupId = new Guid(projectInput.GroupId),
-            LabelsJson = JsonConvert.SerializeObject(projectInput.Labels),
+            LabelsJson = JsonSerializer.Serialize(projectInput.Labels),
             NumberCrossAnnotation = projectInput.NumberCrossAnnotation,
             CreateDate = new DateTime().Ticks,
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier

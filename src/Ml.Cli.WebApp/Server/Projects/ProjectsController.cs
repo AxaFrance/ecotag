@@ -138,11 +138,22 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<ReserveOutput>>> Reserve([FromServices] ReserveCmd reserveCmd, string projectId, ReserveInput fileInput)
-        {
+        { 
             var creatorNameIdentifier = User.Identity.GetSubject();
-           var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
-
-           return Ok(reservations.Data);
+            var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
+            
+            if (!reservations.IsSuccess)
+            {
+                var errorKey = reservations.Error.Key;
+                return errorKey switch
+                {
+                    ReserveCmd.DatasetNotFound => BadRequest(reservations.Error),
+                    ProjectsRepository.NotFound => BadRequest(reservations.Error),
+                    _ => Forbid()
+                };
+            }
+            
+            return Ok(reservations.Data);
         }
         
     }
