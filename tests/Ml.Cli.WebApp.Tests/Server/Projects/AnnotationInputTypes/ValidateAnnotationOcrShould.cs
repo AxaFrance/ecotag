@@ -11,7 +11,6 @@ public class ValidateAnnotationOcrShould
     public void ShouldValidateLabels()
     {
         var project = InitProjectData();
-        project.AnnotationType = "Ocr";
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
@@ -22,7 +21,6 @@ public class ValidateAnnotationOcrShould
     public void ShouldInvalidateLabels()
     {
         var project = InitProjectData();
-        project.AnnotationType = "Ocr";
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
@@ -33,6 +31,7 @@ public class ValidateAnnotationOcrShould
     {
         var project = new ProjectDataModel()
         {
+            AnnotationType = "Ocr",
             Labels = new List<LabelDataModel>()
             {
                 new()
