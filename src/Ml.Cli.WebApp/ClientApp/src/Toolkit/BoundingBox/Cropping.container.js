@@ -5,6 +5,7 @@ import Labels from './Labels';
 import stringToRGB from './color';
 import useImage from 'use-image';
 import './Cropping.container.scss';
+import cuid from "cuid";
 
 const fitImage = (image, croppingWidth, croppingHeight) => {
   let scaleHeight = 1;
@@ -45,7 +46,7 @@ const prevStateWithRatioImage = (previousShapes, newImage, previousImageWidth, p
   });
 };
 
-const CroppingContainer = ({ labels, url, onSubmit }) => {
+const CroppingContainer = ({ labels, url, onSubmit, expectedOutput = [] }) => {
   const labelsWithColor = labels.map((label, index) => {
     return {
       id: index.toString(),
@@ -90,6 +91,19 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
     }
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
+      const initialShapes = []; /* expectedOutput.map(e => {
+        const labelId = e.id;
+        return {
+          begin: { x: e.left, y: e.top },
+          end: { x: e.left + e.width, y: e.top + e.height },
+          id: cuid(),
+          labelId,
+          focus: false,
+          draggable: false,
+          transformable: false,
+          deletable: false,
+        };
+      });*/
       if (state.keepAnnotation) {
         setState({
           ...state,
@@ -101,7 +115,7 @@ const CroppingContainer = ({ labels, url, onSubmit }) => {
           ...state,
           ...fitImage(image, croppingWidth, croppingHeight),
           currentLabelId,
-          shapes: [],
+          shapes: initialShapes,
         });
       }
     }

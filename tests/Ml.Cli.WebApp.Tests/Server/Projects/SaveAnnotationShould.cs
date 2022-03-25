@@ -75,7 +75,7 @@ public class SaveAnnotationShould
             HttpContext = context
         };
         var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository);
-        var result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, annotationId, new AnnotationInput()
+        var result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
         {
             ExpectedOutput = expectedOutput
         });

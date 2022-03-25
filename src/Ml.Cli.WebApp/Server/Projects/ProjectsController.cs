@@ -101,18 +101,17 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(commandResult.Data, commandResult.Data);
         }
 
-        [HttpPost("{projectId}/annotations/{fileId}/{annotationId}")]
+        [HttpPost("{projectId}/annotations/{fileId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
         {
             var creatorNameIdentifier = User.Identity.GetSubject();
             var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
             {
                 ProjectId = projectId,
                 FileId = fileId,
-                AnnotationId = annotationId == "null" ? null : annotationId,
                 AnnotationInput = annotationInput,
                 CreatorNameIdentifier = creatorNameIdentifier
             });
@@ -123,9 +122,7 @@ namespace Ml.Cli.WebApp.Server.Projects
                     : BadRequest(commandResult.Error);
             }
 
-            return annotationId == "null" ?
-                Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data) :
-                NoContent();
+            return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
         }
         
         [HttpPost("{projectId}/reserve")]

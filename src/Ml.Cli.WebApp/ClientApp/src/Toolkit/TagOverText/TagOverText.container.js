@@ -262,19 +262,10 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
         };
       });
       const initialShapes = expectedOutput.map(e => {
-        const labelId = e.id;
         return {
           begin: { x: e.left, y: e.top },
           end: { x: e.left + e.width, y: e.top + e.height },
           id: cuid(),
-          labelId,
-          stroke: getStroke(labelId),
-          strokeWidth,
-          opacity,
-          focus: false,
-          draggable: false,
-          transformable: false,
-          deletable: false,
         };
       });
       setState({

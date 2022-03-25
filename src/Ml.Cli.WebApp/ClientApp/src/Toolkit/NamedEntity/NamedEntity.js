@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Label from './LabelV2Core';
 import { setLabelColor } from './labelColor.js';
 import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
 
-const NamedEntity = ({ text, labels, onSubmit, placeholder }) => {
+const initAsync = async (url, setState, state) => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const text = await blob.text();
+  setState({...state, text})
+}
+
+const NamedEntity = ({ text=null, labels, onSubmit, placeholder, url }) => {
   const [state, setState] = useState({
     label: setLabelColor(labels[0]),
     value: [],
+    text: null,
   });
+
+  useEffect(() => {
+    initAsync(url, setState, state);
+  }, [url]);
+
+  
 
   const selectLabel = label => {
     setState({ ...state, label });
@@ -33,7 +47,7 @@ const NamedEntity = ({ text, labels, onSubmit, placeholder }) => {
         <div className="tokenAnnotation-container">
           <TextAnnotation
             className="tokenAnnotator-component"
-            text={text}
+            text={text || state.text}
             value={state.value}
             onChange={handleChange}
             getSpan={span => ({

@@ -60,6 +60,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
             return  <CroppingLazy
                 labels={labels}
                 url={url}
+                expectedOutput={expectedOutput}
                 onSubmit={onDatasetSubmit}
             />
         case "Rotation":
@@ -83,9 +84,10 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
                 labels={labels}
             />
         case "NamedEntityRecognition":
+        case "NamedEntity":
         case 'NER':
             return  <NamedEntityLazy
-                text={"Hello, my name is Lilian Delouvy, and this is some sample text.  The NER is currently in a 'Work In Progress' state. And it will be awesome. bla bla . bla bla . bla bla . bla bla . bla bla "}
+                url={url}
                 labels={labels}
                 onSubmit={onDatasetSubmit}
                 placeholder="Submit Annotation"
