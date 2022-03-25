@@ -38,20 +38,12 @@ public record AnnotationNer
     public static bool ValidateNerLabelsNames(List<AnnotationNer> annotationNerList, ProjectDataModel project)
     {
         var namesList = new List<string>();
-        foreach (var annotation in annotationNerList)
+        foreach (var annotation in annotationNerList.Where(annotation => !namesList.Contains(annotation.Label.Name)))
         {
-            if (!namesList.Contains(annotation.Label.Name))
-            {
-                namesList.Add(annotation.Label.Name);
-            }
+            namesList.Add(annotation.Label.Name);
         }
 
-        foreach (var name in namesList)
-        {
-            if (project.Labels.All(element => element.Name != name)) return false;
-        }
-
-        return true;
+        return namesList.All(element => project.Labels.Any(projectLabel => projectLabel.Name == element));
     }
 }
 

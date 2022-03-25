@@ -37,7 +37,7 @@ public class ValidateAnnotationNerShould
     }
 
     [Fact]
-    public void ShouldInvalidateLabels_Label_End_Befor_Start()
+    public void ShouldInvalidateLabels_Label_End_Before_Start()
     {
         var project = InitProjectData();
         var jsonAnnotationNer =
