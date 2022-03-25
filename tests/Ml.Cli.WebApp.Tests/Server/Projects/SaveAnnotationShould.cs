@@ -39,6 +39,34 @@ public class SaveAnnotationShould
         Assert.NotNull(resultCreated);
     }
 
+    [Theory]
+    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
+        "", SaveAnnotationCmd.InvalidModel)]
+    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s111111",
+        "cat", SaveAnnotationCmd.UserNotFound)]
+    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
+        "invalidLabelName", SaveAnnotationCmd.InvalidLabels)]
+    [InlineData("11111111-1111-1111-1111-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
+        "cat", DatasetsRepository.AnnotationNotFound)]
+    public async Task ReturnError_WhenCreateOrUpdateAnnotation(string annotationId, string fileId, string projectId,
+        string nameIdentifier, string expectedOutput, string errorKey)
+    {
+        var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
+        if (errorKey == ProjectsRepository.Forbidden)
+        {
+            var resultForbidden = result.Result as ForbidResult;
+            Assert.NotNull(resultForbidden);
+        }
+        else
+        {
+            var resultBadRequest = result.Result as BadRequestObjectResult;
+            Assert.NotNull(resultBadRequest);
+            var resultBadRequestValue = resultBadRequest.Value as ErrorResult;
+            Assert.NotNull(resultBadRequestValue);
+            Assert.Equal(errorKey, resultBadRequestValue.Key);
+        }
+    }
+
     public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var (usersRepository, datasetsRepository, projectsRepository, projectsController, context) = await InitMockAsync(nameIdentifier);
