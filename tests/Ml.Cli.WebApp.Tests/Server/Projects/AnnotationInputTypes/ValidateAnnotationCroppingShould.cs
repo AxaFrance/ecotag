@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects.AnnotationInputTypes;
 
-public class ValidateAnnotatonCroppingShould
+public class ValidateAnnotationCroppingShould
 {
     [Fact]
     public void ShouldValidateLabels()
