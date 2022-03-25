@@ -17,18 +17,19 @@ public class AnnotationsRepository
     }
     
     
-    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string fileId=null, int numberAnnotation=1, int numberToReserve=6)
+    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=6)
     {
         var query =
-            _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) && f.Annotations.Count(a => a.ProjectId == new Guid(projectId)) < numberAnnotation).Select(file =>
+            _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) 
+                                              && f.Annotations.Count(a => a.ProjectId == new Guid(projectId)) < numberAnnotation
+                                              && f.Annotations.Count(a => a.ProjectId == new Guid(projectId) && a.CreatorNameIdentifier == creatorNameIdentifier) == 0
+                                              ).Select(file =>
                 new
                 {
                     FileId = file.Id,
                     FileName = file.Name,
-                    Reservation = file.Reservations.Where(r => r.ProjectId == new Guid(projectId))
-                        .Select(r => r).OrderBy(r => r.TimeStamp).SingleOrDefault(),
-                    Annotation = file.Annotations.Where(a => a.ProjectId == new Guid(projectId))
-                        .OrderBy(a => a.TimeStamp).Select(a => a).SingleOrDefault(),
+                    Reservation = file.Reservations.SingleOrDefault(r => r.ProjectId == new Guid(projectId)),
+                    Annotation = default(AnnotationModel),
                 }
             ).OrderBy(a => a.Reservation.TimeStamp);
              
@@ -36,7 +37,18 @@ public class AnnotationsRepository
         var results = await query.Take(numberToReserve).ToListAsync();
         if (fileId != null)
         {
-            var currentFile = await query.Where(f=> f.FileId == new Guid(fileId)).FirstOrDefaultAsync();
+            var querySingle = query =
+                _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) && f.Id == new Guid(fileId)).Select(file =>
+                    new
+                    {
+                        FileId = file.Id,
+                        FileName = file.Name,
+                        Reservation = file.Reservations.SingleOrDefault(r => r.ProjectId == new Guid(projectId)),
+                        Annotation = file.Annotations.Where(a => a.ProjectId == new Guid(projectId) && a.CreatorNameIdentifier == creatorNameIdentifier)
+                            .OrderBy(a => a.TimeStamp).Select(a => a).SingleOrDefault(),
+                    }
+                ).OrderBy(a => a.Reservation.TimeStamp);
+            var currentFile = await querySingle.FirstOrDefaultAsync();
             results.Insert(0, currentFile);
         }
         

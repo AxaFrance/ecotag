@@ -32,7 +32,7 @@ public class ProjectsRepository : IProjectsRepository
             GroupId = new Guid(projectInput.GroupId),
             LabelsJson = JsonSerializer.Serialize(projectInput.Labels),
             NumberCrossAnnotation = projectInput.NumberCrossAnnotation,
-            CreateDate = new DateTime().Ticks,
+            CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
         var result =  _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);

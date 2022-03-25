@@ -41,7 +41,7 @@ public class ReserveCmd
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
-        var reservations  = await _annotationsRepository.ReserveAsync(projectId, datasetId, fileId, project.NumberCrossAnnotation);
+        var reservations  = await _annotationsRepository.ReserveAsync(projectId, datasetId, nameIdentifier, fileId, project.NumberCrossAnnotation);
         commandResult.Data = reservations;
         return commandResult;
     }
