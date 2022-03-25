@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -102,36 +100,32 @@ namespace Ml.Cli.WebApp.Server.Projects
 
             return Created(commandResult.Data, commandResult.Data);
         }
-        
-        [HttpPost("{projectId}/annotations/{fileId}")]
+
+        [HttpPost("{projectId}/annotations/{fileId}/{annotationId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
         {
-            var id = Guid.NewGuid().ToString();
             var creatorNameIdentifier = User.Identity.GetSubject();
-            var annotation = new AnnotationModel()
+            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
             {
-                FileId = new Guid(fileId) , ProjectId = new Guid(projectId), 
-                ExpectedOutput = annotationInput.ExpectedOutput,
-                TimeStamp = DateTime.Now.Ticks,
+                ProjectId = projectId,
+                FileId = fileId,
+                AnnotationId = annotationId == "null" ? null : annotationId,
+                AnnotationInput = annotationInput,
                 CreatorNameIdentifier = creatorNameIdentifier
-            };
-            datasetContext.Annotations.Add(annotation);
-            await datasetContext.SaveChangesAsync();
-            
-            return Created($"{projectId}/annotations/{fileId}/{id}", annotation.Id);
-        }
-        
-        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
-        {
-            var annotation =  await datasetContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(annotationId));
-            annotation.ExpectedOutput = annotationInput.ExpectedOutput;
-            await datasetContext.SaveChangesAsync();
-            return Ok();
+            });
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return annotationId == "null" ?
+                Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data) :
+                NoContent();
         }
         
         [HttpPost("{projectId}/reserve")]

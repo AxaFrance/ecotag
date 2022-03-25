@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetsRepository
+public class DatasetsRepository : IDatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
-
+    public const string AnnotationNotFound = "AnnotationNotFound";
     public const string FileNotFound = "FileNotFound";
     private readonly IMemoryCache _cache;
     private readonly DatasetContext _datasetsContext;
@@ -193,6 +192,41 @@ public class DatasetsRepository
         await stream.DisposeAsync();
 
         commandResult.Data = fileModel.Id.ToString();
+        return commandResult;
+    }
+
+    public async Task<ResultWithError<string, ErrorResult>> CreateOrUpdateAnnotation(SaveAnnotationInput saveAnnotationInput)
+    {
+        var commandResult = new ResultWithError<string, ErrorResult>();
+        AnnotationModel annotation;
+        if (saveAnnotationInput.AnnotationId == null)
+        {
+            annotation = new AnnotationModel()
+            {
+                FileId = new Guid(saveAnnotationInput.FileId),
+                ProjectId = new Guid(saveAnnotationInput.ProjectId), 
+                ExpectedOutput = saveAnnotationInput.AnnotationInput.ExpectedOutput,
+                TimeStamp = DateTime.Now.Ticks,
+                CreatorNameIdentifier = saveAnnotationInput.CreatorNameIdentifier
+            };
+            _datasetsContext.Annotations.Add(annotation);
+        }
+        else
+        {
+            annotation =  await _datasetsContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(saveAnnotationInput.AnnotationId));
+            if (annotation == null)
+            {
+                commandResult.Error = new ErrorResult
+                {
+                    Key = AnnotationNotFound,
+                    Error = null
+                };
+                return commandResult;
+            }
+            annotation.ExpectedOutput = saveAnnotationInput.AnnotationInput.ExpectedOutput;
+        }
+        await _datasetsContext.SaveChangesAsync();
+        commandResult.Data = annotation.Id.ToString();
         return commandResult;
     }
 }
