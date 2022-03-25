@@ -69,8 +69,8 @@ public class SaveAnnotationCmd
             commandResult.Error = project.Error;
             return commandResult;
         }
-
-        var labelsValidationResult = AnnotationInput.ValidateExpectedOutput(project.Data, saveAnnotationInput.AnnotationInput.ExpectedOutput);
+        
+        var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data);
         if (!labelsValidationResult)
         {
             commandResult.Error = new ErrorResult()

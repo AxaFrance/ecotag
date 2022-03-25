@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Newtonsoft.Json;
@@ -10,7 +11,7 @@ public record AnnotationInput
 {
     public string ExpectedOutput { get; set; }
 
-    public static bool ValidateExpectedOutput(ProjectDataModel project, string expectedOutput)
+    public bool ValidateExpectedOutput(ProjectDataModel project)
     {
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
@@ -20,7 +21,7 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.Cropping:
                 try
                 {
-                    var croppingLabels = JsonConvert.DeserializeObject<AnnotationCropping>(expectedOutput);
+                    var croppingLabels = JsonConvert.DeserializeObject<AnnotationCropping>(ExpectedOutput);
                     if (croppingLabels != null)
                     {
                         isValid = croppingLabels.Validate(project);
@@ -36,12 +37,34 @@ public record AnnotationInput
                 //We only have the value, no need to deserialize as it already is a string
                 break;
             case AnnotationTypeEnumeration.NamedEntity:
-                var namedEntityLabels = JsonConvert.DeserializeObject<List<AnnotationNer>>(expectedOutput);
+                try
+                {
+                    var namedEntityLabels = JsonConvert.DeserializeObject<List<AnnotationNer>>(ExpectedOutput);
+                    if (namedEntityLabels != null)
+                    {
+                        if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
+                        if (!AnnotationNer.ValidateNerOverlap(namedEntityLabels)) return false;
+                        foreach (var label in namedEntityLabels)
+                        {
+                            if (!label.Validate(project))
+                            {
+                                return false;
+                            }
+                        }
+
+                        isValid = true;
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
                 break;
             case AnnotationTypeEnumeration.Ocr:
                 try
                 {
-                    var ocrLabels = JsonConvert.DeserializeObject<AnnotationOcr>(expectedOutput);
+                    var ocrLabels = JsonConvert.DeserializeObject<AnnotationOcr>(ExpectedOutput);
                     if (ocrLabels != null)
                     {
                         isValid = ocrLabels.Validate(project);
