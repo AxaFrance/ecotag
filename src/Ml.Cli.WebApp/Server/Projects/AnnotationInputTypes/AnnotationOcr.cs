@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
@@ -23,10 +22,5 @@ public record AnnotationOcr
         }
 
         return true;
-    }
-    
-    private static PropertyInfo[] GetProperties(object obj)
-    {
-        return obj.GetType().GetProperties();
     }
 };

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json;
-using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Xunit;
 
@@ -12,20 +11,22 @@ public class ValidateAnnotationOcrShould
     public void ShouldValidateLabels()
     {
         var project = InitProjectData();
+        project.AnnotationType = "Ocr";
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
-        var annotationOcr = JsonSerializer.Deserialize<AnnotationOcr>(jsonAnnotationOcr, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
-        Assert.True(annotationOcr?.Validate(project));
+        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
+        Assert.True(annotationInput.ValidateExpectedOutput(project));
     }
 
     [Fact]
     public void ShouldInvalidateLabels()
     {
         var project = InitProjectData();
+        project.AnnotationType = "Ocr";
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
-        var annotationOcr = JsonSerializer.Deserialize<AnnotationOcr>(jsonAnnotationOcr, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
-        Assert.False(annotationOcr?.Validate(project));
+        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
+        Assert.False(annotationInput.ValidateExpectedOutput(project));
     }
 
     public static ProjectDataModel InitProjectData()
@@ -34,11 +35,11 @@ public class ValidateAnnotationOcrShould
         {
             Labels = new List<LabelDataModel>()
             {
-                new LabelDataModel()
+                new()
                 {
                     Name = "someLabel"
                 },
-                new LabelDataModel()
+                new()
                 {
                     Name = "otherLabel"
                 }

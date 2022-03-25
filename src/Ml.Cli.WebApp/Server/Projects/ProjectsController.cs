@@ -100,38 +100,7 @@ namespace Ml.Cli.WebApp.Server.Projects
 
             return Created(commandResult.Data, commandResult.Data);
         }
-        
-        /*[HttpPost("{projectId}/annotations/{fileId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext,string projectId, string fileId, AnnotationInput annotationInput)
-        {
-            var id = Guid.NewGuid().ToString();
-            var creatorNameIdentifier = User.Identity.GetSubject();
-            var annotation = new AnnotationModel()
-            {
-                FileId = new Guid(fileId) , ProjectId = new Guid(projectId), 
-                ExpectedOutput = annotationInput.ExpectedOutput,
-                TimeStamp = DateTime.Now.Ticks,
-                CreatorNameIdentifier = creatorNameIdentifier
-            };
-            datasetContext.Annotations.Add(annotation);
-            await datasetContext.SaveChangesAsync();
-            
-            return Created($"{projectId}/annotations/{fileId}/{id}", annotation.Id);
-        }
-        
-        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]DatasetContext datasetContext, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
-        {
-            var annotation =  await datasetContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(annotationId));
-            annotation.ExpectedOutput = annotationInput.ExpectedOutput;
-            await datasetContext.SaveChangesAsync();
-            return Ok();
-        }*/
-        
+
         [HttpPost("{projectId}/annotations/{fileId}/{annotationId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

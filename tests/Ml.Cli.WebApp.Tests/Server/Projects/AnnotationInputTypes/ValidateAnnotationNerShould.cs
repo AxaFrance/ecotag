@@ -53,15 +53,15 @@ public class ValidateAnnotationNerShould
             AnnotationType = "NamedEntity",
             Labels = new List<LabelDataModel>()
             {
-                new LabelDataModel()
+                new()
                 {
                     Name = "lorem ipsum"
                 },
-                new LabelDataModel()
+                new()
                 {
                     Name = "amet"
                 },
-                new LabelDataModel()
+                new()
                 {
                     Name = "other"
                 }
