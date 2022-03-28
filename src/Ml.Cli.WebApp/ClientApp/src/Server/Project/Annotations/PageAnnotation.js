@@ -5,7 +5,7 @@ import {withResilience} from "../../shared/Resilience";
 
 export const PageAnnotation = ({project, currentItem, onSubmit, onNext, onPrevious, hasPrevious, hasNext, reservationStatus, documentId, annotationStatus}) => <>
     <Title title={project.name}
-           subtitle={`Project de type ${project.typeAnnotation}`}
+           subtitle={`Project de type ${project.annotationType}`}
            goTo={`/projects/${project.id}`}/>
     <Content reservationStatus={reservationStatus}
              annotationStatus={annotationStatus}

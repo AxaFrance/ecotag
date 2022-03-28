@@ -23,7 +23,7 @@ export const Overview = ({ project, dataset, group }) => {
           <SectionRestitutionRow >
             <SectionRestitutionColumn>
               <Restitution label="Nom" value={project.name} />
-              <Restitution label="Type d'annotation" value={project.typeAnnotation} />
+              <Restitution label="Type d'annotation" value={project.annotationType} />
               <Restitution label="Date de création" value={formatTimestampToString(project.createDate)} />
               <Restitution label="Nombre de fichier" value={dataset.files.length} />
               <Restitution label="Nombre annotation croisée" value={project.numberCrossAnnotation} />

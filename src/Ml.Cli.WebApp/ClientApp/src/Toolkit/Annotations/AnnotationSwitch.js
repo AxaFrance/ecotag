@@ -16,6 +16,7 @@ const setAnnotationObject = (annotationType, e) => {
         case "Ocr":
         case "OCR":
         case "Cropping":
+        case 'CROPPING':
             return {
                 "type": e.type,
                 "width": e.width,
@@ -31,6 +32,8 @@ const setAnnotationObject = (annotationType, e) => {
                 "image_anomaly": e.image_anomaly
             }
         case "NamedEntityRecognition":
+        case "NamedEntity":
+        case 'NER':
             return e;
         case "ImageClassifier":
             return {
@@ -89,6 +92,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
             return  <NamedEntityLazy
                 url={url}
                 labels={labels}
+                expectedOutput={expectedOutput}
                 onSubmit={onDatasetSubmit}
                 placeholder="Submit Annotation"
             />

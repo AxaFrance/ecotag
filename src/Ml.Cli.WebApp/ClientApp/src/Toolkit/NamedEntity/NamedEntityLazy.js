@@ -2,7 +2,7 @@
 
 const NamedEntity = React.lazy(() => import('./NamedEntity'));
 
-const NamedEntityLazy = ({text, labels, onSubmit, placeholder, url}) => {
+const NamedEntityLazy = ({text, labels, onSubmit, placeholder, url, expectedOutput}) => {
     return <Suspense fallback={<div>Loading...</div>}>
         <NamedEntity
             text={text}
@@ -10,6 +10,7 @@ const NamedEntityLazy = ({text, labels, onSubmit, placeholder, url}) => {
             labels={labels}
             onSubmit={onSubmit}
             placeholder={placeholder}
+            expectedOutput={expectedOutput}
         />
     </Suspense>
 };

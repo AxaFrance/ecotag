@@ -38,7 +38,6 @@ class Label extends Component {
   state = {
     selected: 0,
   };
-  hot_keys = {};
 
   selectLabelLocal = label => {
     const { selectLabel } = this.props;

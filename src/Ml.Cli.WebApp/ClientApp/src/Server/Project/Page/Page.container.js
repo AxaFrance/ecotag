@@ -58,7 +58,7 @@ export const initialState = {
     labels: [],
     numberCrossAnnotation: 0
   },
-  dataset: {name: "", type:"", files:[], typeAnnotation:""},
+  dataset: {name: "", type:"", files:[], annotationType:""},
   group: {},
   user: {},
 };

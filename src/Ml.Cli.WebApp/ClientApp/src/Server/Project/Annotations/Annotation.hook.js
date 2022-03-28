@@ -10,7 +10,7 @@ export const initialState = {
         labels: [],
         users: [],
         name: "-",
-        typeAnnotation: ""
+        annotationType: ""
     },
     annotations: {
         reservationStatus: resilienceStatus.SUCCESS,
