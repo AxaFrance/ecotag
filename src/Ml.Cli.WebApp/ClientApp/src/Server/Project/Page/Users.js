@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 
-export const User = ({ users = [] }) => {
+export const User = ({ group = {userIds :[]}, users = [] }) => {
   return (
     <div>
       <h2>Annotateurs</h2>
@@ -13,10 +13,10 @@ export const User = ({ users = [] }) => {
           </Table.Tr>
         </Table.Header>
         <Table.Body>
-          {users.map((user, index) => (
+          {group.userIds.map((userId, index) => (
             <Table.Tr key={index}>
-              <Table.Td>{user.email}</Table.Td>
-              <Table.Td>{user.annotationCounter}</Table.Td>
+              <Table.Td>{users.find(user => user.id === userId).email}</Table.Td>
+              <Table.Td>0</Table.Td>
             </Table.Tr>
           ))}
         </Table.Body>
