@@ -71,18 +71,19 @@ public class AnnotationsRepository
         var numberAnnotationsDone = taskAnnotations.Result.Sum(r => r.NumberAnnotations);
 
         var numberFiles = cacheEntry.Result;
-        double percentageNumberAnnotationsDone = ( Convert.ToDouble(numberAnnotationsDone) /  Convert.ToDouble(numberFiles)) * 100;
+        var numberAnnotationsToDo = numberFiles * numberAnnotation;
+        double percentageNumberAnnotationsDone = ( Convert.ToDouble(numberAnnotationsDone) /  Convert.ToDouble(numberAnnotationsToDo)) * 100;
         if (percentageNumberAnnotationsDone >= 100)
         {
             percentageNumberAnnotationsDone = 99;
         }
-        var isAnnotationClosed = taskNumberAnnotations.Result >= numberFiles;
+        var isAnnotationClosed = taskNumberAnnotations.Result >= numberAnnotationsToDo;
         var annotationStatus = new AnnotationStatus()
         {
             IsAnnotationClosed = isAnnotationClosed,
             NumberAnnotationsByUsers = taskAnnotations.Result,
             NumberAnnotationsDone = numberAnnotationsDone,
-            NumberAnnotationsToDo = numberFiles,
+            NumberAnnotationsToDo = numberAnnotationsToDo,
             PercentageNumberAnnotationsDone = isAnnotationClosed ? 100 : (int)percentageNumberAnnotationsDone,
         };
        
