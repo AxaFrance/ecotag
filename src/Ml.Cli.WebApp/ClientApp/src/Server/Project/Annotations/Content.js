@@ -37,4 +37,3 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     url={currentItem.blobUrl} />
             </> : null);
     }};
-    

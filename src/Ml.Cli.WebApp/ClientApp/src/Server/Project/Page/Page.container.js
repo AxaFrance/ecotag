@@ -75,7 +75,7 @@ const usePage = (fetch) => {
   return { state };
 };
 
-export const PageContainer = ({ fetch, user }) => {
+export const PageContainer = ({ fetch }) => {
   const { state } = usePage(fetch);
   return <PageWithResilience {...state} />;
 };
