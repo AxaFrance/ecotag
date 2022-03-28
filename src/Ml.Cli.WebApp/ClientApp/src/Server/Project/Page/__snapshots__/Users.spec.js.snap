@@ -29,36 +29,7 @@ exports[`Users Users render correctly 1`] = `
       </thead>
       <tbody
         class="af-table__body"
-      >
-        <tr
-          class="af-table__tr"
-        >
-          <td
-            class="af-table__cell"
-          >
-            titi
-          </td>
-          <td
-            class="af-table__cell"
-          >
-            10
-          </td>
-        </tr>
-        <tr
-          class="af-table__tr"
-        >
-          <td
-            class="af-table__cell"
-          >
-            toto
-          </td>
-          <td
-            class="af-table__cell"
-          >
-            0
-          </td>
-        </tr>
-      </tbody>
+      />
     </table>
   </div>
 </DocumentFragment>

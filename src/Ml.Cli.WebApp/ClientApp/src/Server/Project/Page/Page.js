@@ -14,9 +14,8 @@ const Page = ({ project, dataset, users, group }) => (
       <Overview project={project} dataset={dataset} group={group}  />
       <div className="ft-rowLabelDataset">
           <Label labels={project.labels && project.labels.length > 0 ? project.labels : []} />
-          <Users group={group} users={users} />
+          <Users group={group} users={users}  numberAnnotationsByUsers={project.annotationStatus.numberAnnotationsByUsers} />
       </div>
-      
     </div>
   </div>
 );

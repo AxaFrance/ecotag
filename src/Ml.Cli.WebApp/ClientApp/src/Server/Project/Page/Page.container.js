@@ -59,7 +59,14 @@ export const initialState = {
     createDate: new Date(),
     name: "",
     labels: [],
-    numberCrossAnnotation: 0
+    numberCrossAnnotation: 0,
+    annotationStatus: {
+      isAnnotationClosed: true,
+      numberAnnotationsByUsers: [],
+      numberAnnotationsDone: 0,
+      numberAnnotationsToDo:0,
+      percentageNumberAnnotationsDone:0
+    }
   },
   dataset: {name: "", type:"", files:[], annotationType:""},
   group: {userIds:[]},

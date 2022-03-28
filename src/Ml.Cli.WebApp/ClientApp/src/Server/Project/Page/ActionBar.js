@@ -12,13 +12,17 @@ export const ActionBar = ({ project }) => {
     const path = `/projects/${project.id}/annotations/start`;
     history.push(path);
   };
+  
+  if(!project){
+    return;
+  }
 
   return (
     <div className="ft-actionBar">
       <div>
-        <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
+        {(project.annotationStatus.isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
           <span className="af-btn-text">Start Tagging</span>
-        </Button>
+        </Button>}
       </div>
     </div>
   );

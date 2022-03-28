@@ -1,7 +1,31 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 
-export const User = ({ group = {userIds :[]}, users = [] }) => {
+const getNumberAnnotationsByUsers = (numberAnnotationsByUsers, nameIdentifier) =>{
+    
+    if(!numberAnnotationsByUsers){
+        return 0;
+    }
+    
+    const numberAnnotationsByUser = numberAnnotationsByUsers.find(n => n.nameIdentifier.toLowerCase() === nameIdentifier.toLowerCase());
+    if(numberAnnotationsByUser){
+        return numberAnnotationsByUser.numberAnnotations;
+    }
+    return 0;
+}
+
+
+const UserLine = ({user, numberAnnotationsByUsers}) =>{
+    if(!user){
+        return null;
+    }
+   return (<Table.Tr key={user.id}>
+        <Table.Td>{user.email}</Table.Td>
+        <Table.Td>{getNumberAnnotationsByUsers(numberAnnotationsByUsers, user.subject)}</Table.Td>
+    </Table.Tr>);
+}
+
+export const User = ({ group = {userIds :[]}, users = [], numberAnnotationsByUsers=[] }) => {
   return (
     <div>
       <h2>Annotateurs</h2>
@@ -14,10 +38,7 @@ export const User = ({ group = {userIds :[]}, users = [] }) => {
         </Table.Header>
         <Table.Body>
           {group.userIds.map((userId, index) => (
-            <Table.Tr key={index}>
-              <Table.Td>{users.find(user => user.id === userId).email}</Table.Td>
-              <Table.Td>0</Table.Td>
-            </Table.Tr>
+              <UserLine user={users.find(user => user.id === userId)} numberAnnotationsByUsers={numberAnnotationsByUsers} />
           ))}
         </Table.Body>
       </Table>

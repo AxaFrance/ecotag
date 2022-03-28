@@ -33,7 +33,7 @@ export const Overview = ({ project, dataset, group }) => {
               <Restitution label="Dataset" value={dataset.name} />
               <Restitution label="Type de dataset" value={dataset.type} />
               <Restitution label="Groupe annotateurs" value={group.name} />
-              <Restitution label="Pourcentage d&apos;avancement" value="100%" />
+              <Restitution label="Pourcentage d&apos;avancement" value={project.annotationStatus.percentageNumberAnnotationsDone} />
             </SectionRestitutionColumn>
           </SectionRestitutionRow>
         </SectionRestitution>

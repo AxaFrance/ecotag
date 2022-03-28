@@ -32,6 +32,7 @@ export const HomeContainer = ({ fetch }) => {
       onChangePaging={onChangePaging}
       onChangeSort={onChangeSort}
       onChangeFilter={onChangeFilter}
+      fetch={fetch}
     />
   );
 };
