@@ -17,3 +17,15 @@
 .af-popover__container--project-home{
   width: 100%;
 }
+
+.projects-af-popover__wrapper .af-popover__container .af-popover__arrow::before{
+  background: #939393;
+}
+
+.projects-af-popover__wrapper .af-popover__container-pop {
+  background: #939393;
+}
+
+.projects-af-popover__wrapper h3{
+  color: white;
+}

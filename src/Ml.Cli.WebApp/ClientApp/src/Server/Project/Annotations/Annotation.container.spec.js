@@ -3,7 +3,7 @@ import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {MemoryRouter, Route} from "react-router-dom";
 import {AnnotationContainer} from "./Annotation.container";
-import {fetch} from "./Annotation.stories";
+import {fetch} from './mock';
 
 describe('Annotation.container', () => {
     

@@ -267,7 +267,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                       En cours
                     </p>
                     <progress
-                      class="html5"
+                      class="node-js"
                       max="100"
                       value="88"
                     >

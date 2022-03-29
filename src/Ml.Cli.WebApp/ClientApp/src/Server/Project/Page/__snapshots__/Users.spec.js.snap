@@ -4,7 +4,7 @@ exports[`Users Users render correctly 1`] = `
 <DocumentFragment>
   <div>
     <h2>
-      Annotations réalisées
+      Annotations
     </h2>
     <table
       class="af-table"

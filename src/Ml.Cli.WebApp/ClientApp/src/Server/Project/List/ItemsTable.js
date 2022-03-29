@@ -9,8 +9,9 @@ import {resilienceStatus} from "../../shared/Resilience";
 import {
     Popover
 } from '@axa-fr/react-toolkit-all';
+import {ProgressBar} from "./ProgressBar";
 
-import "./ProgressBar.scss";
+
 
 const NumberTagToDo = ({state}) =>{
     const {ERROR, SUCCESS, LOADING} = resilienceStatus;
@@ -23,23 +24,27 @@ const NumberTagToDo = ({state}) =>{
         [SUCCESS]: <>
             <div className="projects-af-popover__wrapper">
                 <Popover
-                    placement="left"
+                    placement="top"
                     classModifier="project-home"
                 >
                     <Popover.Pop>
-                        <p>
-                            <span>Annotations réalisées : <b>{annotationsStatus.numberAnnotationsDone}</b></span><br/>
-                            <span>Annotations a faire : <b>{annotationsStatus.numberAnnotationsToDo}</b></span><br/>
-                            <span>Annotations restantes : <b>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</b></span><br/>
-                        </p>
+                        <h3>Annotations</h3>
+                        <table>
+                            <tr>
+                                <td>A faire</td>
+                                <td>Réalisées</td>
+                                <td>Restantes</td>
+                            </tr>
+                            <tr>
+                                <td>{annotationsStatus.numberAnnotationsToDo}</td>
+                                <td>{annotationsStatus.numberAnnotationsDone}</td>
+                                <td>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</td>
+                            </tr>
+                        </table>
                     </Popover.Pop>
                     <Popover.Over>
-                        <p data-value={annotationsStatus.percentageNumberAnnotationsDone}>{annotationsStatus.percentageNumberAnnotationsDone == 100 ? "Terminé" : "En cours"}</p>
-                        <progress max="100" value={annotationsStatus.percentageNumberAnnotationsDone} className="html5">
-                            <div className="progress-bar">
-                                <span style={{"width": `${annotationsStatus.percentageNumberAnnotationsDone}%`}}>{annotationsStatus.percentageNumberAnnotationsDone}%</span>
-                            </div>
-                        </progress>
+                        <ProgressBar percentage={annotationsStatus.percentageNumberAnnotationsDone} 
+                                     label={annotationsStatus.percentageNumberAnnotationsDone === 100 ? "Terminé" : "En cours"}/>
                     </Popover.Over>
                 </Popover>
             </div>

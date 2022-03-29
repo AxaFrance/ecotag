@@ -16,7 +16,7 @@ const UserLine = ({users, annotationUser}) =>{
 export const UserAnnotationsStatus = ({ users = [], numberAnnotationsByUsers=[] }) => {
   return (
     <div>
-      <h2>Annotations réalisées</h2>
+      <h2>Annotations</h2>
       <Table>
         <Table.Header>
           <Table.Tr>

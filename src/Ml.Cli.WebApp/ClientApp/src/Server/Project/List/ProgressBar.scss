@@ -107,6 +107,7 @@ progress[value]::-moz-progress-bar {
 }
 
 p[data-value] {
+
   position: relative;
 }
 
@@ -119,3 +120,109 @@ p[data-value]:after {
 
 
 
+
+
+.html5::-webkit-progress-value,
+.python::-webkit-progress-value  {
+  /* Gradient background with Stripes */
+  background-image:
+          -webkit-linear-gradient( 135deg,
+                  transparent,
+                  transparent 33%,
+                  rgba(0,0,0,.1) 33%,
+                  rgba(0,0,0,.1) 66%,
+                  transparent 66%),
+          -webkit-linear-gradient( top,
+                  rgba(255, 255, 255, .25),
+                  rgba(0,0,0,.2)),
+          -webkit-linear-gradient( left, #09c, #f44);
+}
+
+.css3::-webkit-progress-value,
+.php::-webkit-progress-value
+{
+  /* Gradient background with Stripes */
+  background-image:
+          -webkit-linear-gradient( 135deg,
+                  transparent,
+                  transparent 33%,
+                  rgba(0,0,0,.1) 33%,
+                  rgba(0,0,0,.1) 66%,
+                  transparent 66%),
+          -webkit-linear-gradient( top,
+                  rgba(255, 255, 255, .25),
+                  rgba(0,0,0,.2)),
+          -webkit-linear-gradient( left, #09c, #ff0);
+}
+
+.jquery::-webkit-progress-value,
+.node-js::-webkit-progress-value
+{
+  /* Gradient background with Stripes */
+  background-image:
+          -webkit-linear-gradient( 135deg,
+                  transparent,
+                  transparent 33%,
+                  rgba(0,0,0,.1) 33%,
+                  rgba(0,0,0,.1) 66%,
+                  transparent 66%),
+          -webkit-linear-gradient( top,
+                  rgba(255, 255, 255, .25),
+                  rgba(0,0,0,.2)),
+          -webkit-linear-gradient( left, #09c, #690);
+}
+
+/* Similarly, for Mozillaa. Unfortunately combining the styles for different browsers will break every other browser. Hence, we need a separate block. */
+
+.html5::-moz-progress-bar,
+.php::-moz-progress-bar {
+  /* Gradient background with Stripes */
+  background-image:
+          -moz-linear-gradient( 135deg,
+                  transparent,
+                  transparent 33%,
+                  rgba(0,0,0,.1) 33%,
+                  rgba(0,0,0,.1) 66%,
+                  transparent 66%),
+          -moz-linear-gradient( top,
+                  rgba(255, 255, 255, .25),
+                  rgba(0,0,0,.2)),
+          -moz-linear-gradient( left, #09c, #f44);
+}
+
+.css3::-moz-progress-bar,
+.php::-moz-progress-bar {
+  /* Gradient background with Stripes */
+  background-image:
+          -moz-linear-gradient( 135deg,
+                  transparent,
+                  transparent 33%,
+                  rgba(0,0,0,.1) 33%,
+                  rgba(0,0,0,.1) 66%,
+                  transparent 66%),
+          -moz-linear-gradient( top,
+                  rgba(255, 255, 255, .25),
+                  rgba(0,0,0,.2)),
+          -moz-linear-gradient( left, #09c, #ff0);
+}
+
+  .jquery::-moz-progress-bar,
+  .node-js::-moz-progress-bar {
+    /* Gradient background with Stripes */
+    background-image:
+            -moz-linear-gradient( 135deg,
+                    transparent,
+                    transparent 33%,
+                    rgba(0,0,0,.1) 33%,
+                    rgba(0,0,0,.1) 66%,
+                    transparent 66%),
+            -moz-linear-gradient( top,
+                    rgba(255, 255, 255, .25),
+                    rgba(0,0,0,.2)),
+            -moz-linear-gradient( left, #09c, #690);
+  }
+
+/* Now we are good to duplicate html code for other skills and then add the css code for the new skill based on data-skill */
+
+
+/* THE END */
