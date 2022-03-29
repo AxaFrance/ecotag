@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -8,21 +9,21 @@ using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects;
 
-public class GetProjectShould
+public class GetAnnotationsStatusShould
 {
     [Theory]
     [InlineData("s666666", "project1")]
-    public async Task Should_Get_Project(string nameIdentifier, string expectedProjectName)
+    public async Task ShouldGetInformation(string nameIdentifier, string expectedProjectName)
     {
         var mock = await DatasetMock.InitMockAsync(nameIdentifier);
 
-        var getProjectCmd =
-            new GetProjectCmd(mock.ProjectsRepository, mock.UsersRepository);
-        var result = await mock.ProjectsController.GetProject(getProjectCmd, mock.Dataset3Project1Id);
+        var getAnnotationsStatusCmd =
+            new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
+        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
         var resultOk = result.Result as OkObjectResult;
         Assert.NotNull(resultOk);
-        var resultValue = resultOk.Value as GetProjectCmdResult;
-        Assert.Equal(expectedProjectName, resultValue?.Name);
+        var resultValue = resultOk.Value as AnnotationStatus;
+        Assert.Equal(40, resultValue.NumberAnnotationsToDo);
     }
 
     [Theory]
@@ -35,11 +36,10 @@ public class GetProjectShould
     {
         var mock = await DatasetMock.InitMockAsync(nameIdentifier);
 
-        var getProjectCmd =
-            new GetProjectCmd(mock.ProjectsRepository, mock.UsersRepository);
-        var result = await mock.ProjectsController.GetProject(getProjectCmd, projectId ?? mock.Dataset3Project1Id);
-
-
+        var getAnnotationsStatusCmd =
+            new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
+        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, projectId ?? mock.Dataset3Project1Id);
+        
         var resultError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultError);
         var resultErrorValue = resultError.Value as ErrorResult;
@@ -52,9 +52,9 @@ public class GetProjectShould
     {
         var mock = await DatasetMock.InitMockAsync(nameIdentifier);
 
-        var getProjectCmd =
-            new GetProjectCmd(mock.ProjectsRepository, mock.UsersRepository);
-        var result = await mock.ProjectsController.GetProject(getProjectCmd, mock.Dataset3Project1Id);
+        var getAnnotationsStatusCmd =
+            new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
+        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
 
         var resultError = result.Result as ForbidResult;
         Assert.NotNull(resultError);

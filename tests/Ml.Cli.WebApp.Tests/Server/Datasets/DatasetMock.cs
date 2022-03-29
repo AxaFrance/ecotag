@@ -174,7 +174,7 @@ internal static class DatasetMock
 
         var serviceProvider = GetMockedServiceProvider(datasetContext);
         var annotationRepository = new AnnotationsRepository(datasetContext, serviceProvider.Object, memoryCache);
-        var projectRepository = new ProjectsRepository(projectContext);
+        var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
         var context = new DefaultHttpContext
         {

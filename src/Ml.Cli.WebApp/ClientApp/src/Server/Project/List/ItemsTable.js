@@ -4,22 +4,21 @@ import {useHistory} from "react-router-dom";
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import {formatTimestampToString} from "../../date";
-import {init} from "./Home.hook";
-import {fetchProject} from "../Project.service";
+import {fetchAnnotationsStatus} from "../Project.service";
 import {resilienceStatus} from "../../shared/Resilience";
 
 
 const NumberTagToDo = ({state}) =>{
     const {ERROR, SUCCESS, LOADING} = resilienceStatus;
-    const annotationStatus = state.project.annotationStatus;
+    const annotationsStatus = state.annotationsStatus;
     return <>{{
         [LOADING]: <span>Chargement...</span>,
         [ERROR]: (
             <span>Erreur...</span>
         ),
         [SUCCESS]: <>
-            <progress value={annotationStatus.percentageNumberAnnotationsDone} max="100"></progress>
-            <span>{annotationStatus.numberAnnotationsDone+ " / " + annotationStatus.numberAnnotationsToDo}</span>
+            <progress value={annotationsStatus.percentageNumberAnnotationsDone} max="100"/>
+            <span>{annotationsStatus.numberAnnotationsDone+ " / " + annotationsStatus.numberAnnotationsToDo}</span>
         </>
     }[state.status]
     }
@@ -35,33 +34,27 @@ const ProjectRow = ({ id, name, groupName, createDate, annotationType, fetch }) 
         history.push(path);
     };
     const [state, setState] = useState({
-        project: {
-            createDate: new Date(),
-            name: "",
-            labels: [],
-            numberCrossAnnotation: 0,
-            annotationStatus: {
+        annotationsStatus: {
                 isAnnotationClosed: true,
                 numberAnnotationsByUsers: [],
                 numberAnnotationsDone: 0,
                 numberAnnotationsToDo:0,
                 percentageNumberAnnotationsDone:0
-            }
         },
         status: resilienceStatus.LOADING
     })
     useEffect(async () => {
 
-        const projectResponse = await fetchProject(fetch)(id);
-        if (projectResponse.status >= 500) {
+        const annotationsStatusResponse = await fetchAnnotationsStatus(fetch)(id);
+        if (annotationsStatusResponse.status >= 500) {
             const data = {
                 ...state,
                 status: resilienceStatus.ERROR
             };
             setState(data);
         } else {
-            const project = await projectResponse.json();
-            const data = {project, status: resilienceStatus.SUCCESS};
+            const annotationsStatus = await annotationsStatusResponse.json();
+            const data = {annotationsStatus, status: resilienceStatus.SUCCESS};
             setState(data);
         }
 
@@ -82,7 +75,6 @@ const ProjectRow = ({ id, name, groupName, createDate, annotationType, fetch }) 
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
-    
     return(
         <>
             <Table>

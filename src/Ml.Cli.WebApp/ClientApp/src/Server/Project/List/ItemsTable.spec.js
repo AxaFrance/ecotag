@@ -31,7 +31,6 @@ export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetch = async (url, config) => {
     await sleep(1);
-    
             return {
                 status: 201,
                 json: async () => {

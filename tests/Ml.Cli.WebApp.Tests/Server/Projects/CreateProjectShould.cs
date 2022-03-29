@@ -143,7 +143,7 @@ public class CreateProjectShould
             await projectContext.SaveChangesAsync();
             
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-            var projectsRepository = new ProjectsRepository(projectContext);
+            var projectsRepository = new ProjectsRepository(projectContext, memoryCache);
             var groupsRepository = new GroupsRepository(groupContext, null);
             
             var usersRepository = new UsersRepository(groupContext, memoryCache);

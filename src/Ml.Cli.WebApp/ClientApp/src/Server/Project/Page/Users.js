@@ -40,7 +40,7 @@ export const User = ({ group = {userIds :[]}, users = [], numberAnnotationsByUse
           {group.userIds.map((userId, index) => (
               <UserLine user={users.find(user => user.id === userId)} numberAnnotationsByUsers={numberAnnotationsByUsers} />
           ))}
-        </Table.Body>
+        </Table.Body>u
       </Table>
     </div>
   );

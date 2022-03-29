@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
@@ -11,13 +12,15 @@ namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 public class ProjectsRepository : IProjectsRepository
 {
     private readonly ProjectContext _projectsContext;
+    private readonly IMemoryCache _cache;
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string Forbidden = "Forbidden";
     public const string NotFound = "NotFound";
 
-    public ProjectsRepository(ProjectContext projectsContext)
+    public ProjectsRepository(ProjectContext projectsContext, IMemoryCache cache)
     {
         _projectsContext = projectsContext;
+        _cache = cache;
     }
     
     public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectWithUserInput projectWithUserInput)
@@ -70,18 +73,23 @@ public class ProjectsRepository : IProjectsRepository
     public async Task<ResultWithError<ProjectDataModel, ErrorResult>> GetProjectAsync(string projectId, List<string> userGroupIds)
     {
         var commandResult = new ResultWithError<ProjectDataModel, ErrorResult>();
-        var projectModel = await _projectsContext.Projects
-            .AsNoTracking()
-            .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
-        if (projectModel == null)
+
+        var cacheEntry = await _cache.GetOrCreateAsync($"GetProjectAsync({projectId})", async entry =>
+        {
+            var projectModel = await _projectsContext.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
+            return projectModel;
+        });
+        if (cacheEntry == null)
         {
             return commandResult.ReturnError(NotFound);
         }
-        if (!userGroupIds.Contains(projectModel.GroupId.ToString()))
+        if (!userGroupIds.Contains(cacheEntry.GroupId.ToString()))
         {
             return commandResult.ReturnError(Forbidden);
         }
-        commandResult.Data = projectModel?.ToProjectDataModel();
+        commandResult.Data = cacheEntry?.ToProjectDataModel();
         return commandResult;
     }
 }

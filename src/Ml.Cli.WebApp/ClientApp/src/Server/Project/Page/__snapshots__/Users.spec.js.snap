@@ -31,6 +31,7 @@ exports[`Users Users render correctly 1`] = `
         class="af-table__body"
       />
     </table>
+    u
   </div>
 </DocumentFragment>
 `;

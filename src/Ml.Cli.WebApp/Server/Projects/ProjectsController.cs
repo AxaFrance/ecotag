@@ -71,8 +71,21 @@ namespace Ml.Cli.WebApp.Server.Projects
             var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
+        
+        [HttpGet("annotations/{projectId}")]
+        public async Task<ActionResult<GetProjectCmdResult>> GetAnnotationsStatus([FromServices] GetAnnotationsStatusCmd getAnnotationsStatusCmd, string projectId)
+        {
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await getAnnotationsStatusCmd.ExecuteAsync(projectId, nameIdentifier);
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
+                    commandResult.Error);
+            }
+            return Ok(commandResult.Data);
+        }
 
-        [HttpGet("{id}", Name = "GetProjectById")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<GetProjectCmdResult>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
             var nameIdentifier = User.Identity.GetSubject();
