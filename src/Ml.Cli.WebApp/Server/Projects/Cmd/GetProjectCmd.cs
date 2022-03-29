@@ -38,7 +38,7 @@ public class GetProjectCmd
 
         if (!projectResult.IsSuccess)
         {
-            return commandResult.ReturnError(ProjectNotFound);
+            return commandResult.ReturnError(projectResult.Error.Key);
         }
 
         var project = projectResult.Data;

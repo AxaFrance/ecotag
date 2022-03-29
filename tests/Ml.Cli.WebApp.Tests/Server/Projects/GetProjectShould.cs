@@ -47,7 +47,7 @@ public class GetProjectShould
 
     [Theory]
     [InlineData("s666667")]
-    public async Task Should_Return_Fobirdden(string nameIdentifier)
+    public async Task Should_Return_Forbidden(string nameIdentifier)
     {
         var mock = await DatasetMock.InitMockAsync(nameIdentifier);
 
