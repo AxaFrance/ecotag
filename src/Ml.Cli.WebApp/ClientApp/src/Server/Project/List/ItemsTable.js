@@ -6,7 +6,11 @@ import Action from '@axa-fr/react-toolkit-action';
 import {formatTimestampToString} from "../../date";
 import {fetchAnnotationsStatus} from "../Project.service";
 import {resilienceStatus} from "../../shared/Resilience";
+import {
+    Popover
+} from '@axa-fr/react-toolkit-all';
 
+import "./ProgressBar.scss";
 
 const NumberTagToDo = ({state}) =>{
     const {ERROR, SUCCESS, LOADING} = resilienceStatus;
@@ -17,8 +21,28 @@ const NumberTagToDo = ({state}) =>{
             <span>Erreur...</span>
         ),
         [SUCCESS]: <>
-            <progress value={annotationsStatus.percentageNumberAnnotationsDone} max="100"/>
-            <span>{annotationsStatus.numberAnnotationsDone+ " / " + annotationsStatus.numberAnnotationsToDo}</span>
+            <div className="projects-af-popover__wrapper">
+                <Popover
+                    placement="left"
+                    classModifier="project-home"
+                >
+                    <Popover.Pop>
+                        <p>
+                            <span>Annotations réalisées : <b>{annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                            <span>Annotations a faire : <b>{annotationsStatus.numberAnnotationsToDo}</b></span><br/>
+                            <span>Annotations restantes : <b>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                        </p>
+                    </Popover.Pop>
+                    <Popover.Over>
+                        <p data-value={annotationsStatus.percentageNumberAnnotationsDone}>{annotationsStatus.percentageNumberAnnotationsDone == 100 ? "Terminé" : "En cours"}</p>
+                        <progress max="100" value={annotationsStatus.percentageNumberAnnotationsDone} className="html5">
+                            <div className="progress-bar">
+                                <span style={{"width": `${annotationsStatus.percentageNumberAnnotationsDone}%`}}>{annotationsStatus.percentageNumberAnnotationsDone}%</span>
+                            </div>
+                        </progress>
+                    </Popover.Over>
+                </Popover>
+            </div>
         </>
     }[state.status]
     }
@@ -26,6 +50,23 @@ const NumberTagToDo = ({state}) =>{
     
 }
 
+
+const initAsync = (fetch) => async (state, setState, id) => {
+
+    const annotationsStatusResponse = await fetchAnnotationsStatus(fetch)(id);
+    if (annotationsStatusResponse.status >= 500) {
+        const data = {
+            ...state,
+            status: resilienceStatus.ERROR
+        };
+        setState(data);
+    } else {
+        const annotationsStatus = await annotationsStatusResponse.json();
+        const data = {annotationsStatus, status: resilienceStatus.SUCCESS};
+        setState(data);
+    }
+
+}
 
 const ProjectRow = ({ id, name, groupName, createDate, annotationType, fetch }) => {
     const history = useHistory();
@@ -44,20 +85,7 @@ const ProjectRow = ({ id, name, groupName, createDate, annotationType, fetch }) 
         status: resilienceStatus.LOADING
     })
     useEffect(async () => {
-
-        const annotationsStatusResponse = await fetchAnnotationsStatus(fetch)(id);
-        if (annotationsStatusResponse.status >= 500) {
-            const data = {
-                ...state,
-                status: resilienceStatus.ERROR
-            };
-            setState(data);
-        } else {
-            const annotationsStatus = await annotationsStatusResponse.json();
-            const data = {annotationsStatus, status: resilienceStatus.SUCCESS};
-            setState(data);
-        }
-
+        initAsync(fetch)(state, setState, id);
     }, []);
     
     return (
@@ -102,7 +130,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('numberTagToDo')}
-                            headerColumnName={'Tags restants'}
+                            headerColumnName={'Status'}
                             filterColumnValue={filters.columns.numberCrossAnnotation.value}
                         />
                         <Table.Th classModifier="sortable">

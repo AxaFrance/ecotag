@@ -36,5 +36,5 @@ export const HomeContainer = ({ fetch }) => {
     />
   );
 };
-
+ 
 export default withCustomFetch(fetch)(HomeContainer);

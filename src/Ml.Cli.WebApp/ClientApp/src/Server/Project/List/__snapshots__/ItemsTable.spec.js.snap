@@ -108,7 +108,7 @@ exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
               <span
                 class="af-btn__text"
               >
-                Tags restants
+                Status
               </span>
               <i
                 class="glyphicon glyphicon-sorting"

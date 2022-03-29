@@ -197,7 +197,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                 <span
                   class="af-btn__text"
                 >
-                  Tags restants
+                  Status
                 </span>
                 <i
                   class="glyphicon glyphicon-sorting"
@@ -246,13 +246,45 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           <td
             class="af-table__cell"
           >
-            <progress
-              max="100"
-              value="88"
-            />
-            <span>
-              40 / 2000
-            </span>
+            <div
+              class="projects-af-popover__wrapper"
+            >
+              <div
+                class="af-popover__wrapper"
+                role="button"
+                tabindex="0"
+              >
+                <div
+                  class="af-popover__container af-popover__container--project-home"
+                >
+                  <div
+                    class="af-popover__container-over"
+                    role="presentation"
+                  >
+                    <p
+                      data-value="88"
+                    >
+                      En cours
+                    </p>
+                    <progress
+                      class="html5"
+                      max="100"
+                      value="88"
+                    >
+                      <div
+                        class="progress-bar"
+                      >
+                        <span
+                          style="width: 88%;"
+                        >
+                          88%
+                        </span>
+                      </div>
+                    </progress>
+                  </div>
+                </div>
+              </div>
+            </div>
           </td>
           <td
             class="af-table__cell"
