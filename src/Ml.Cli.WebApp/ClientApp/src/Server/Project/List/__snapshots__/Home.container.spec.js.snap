@@ -236,7 +236,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
           <td
             class="af-table__cell"
           >
-            02/01/0001
+            31/03/0001
           </td>
           <td
             class="af-table__cell"
