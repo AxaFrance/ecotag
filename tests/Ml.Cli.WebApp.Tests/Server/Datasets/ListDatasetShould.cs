@@ -8,8 +8,8 @@ public class ListDatasetShould
 {
     [Theory]
     [InlineData("s666666", false, 1)]
-    [InlineData("s666666", null, 2)]
-    [InlineData("s666666", true, 1)]
+    [InlineData("s666666", null, 3)]
+    [InlineData("s666666", true, 2)]
     [InlineData("s666667", true, 0)]
     [InlineData("s666668", true, 0)]
     public async Task ListDataset(string nameIdentifier, bool? locked, int numberResult)

@@ -12,20 +12,10 @@ describe('Overview', () => {
             "datasetId": "0004",
             "numberTagToDo": 10,
             "createDate": new Date("04-04-2011").getTime(),
-            "typeAnnotation": "NER",
-            "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
-            "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-            "users": [
-                {"annotationCounter": 10,
-                    "annotationToBeVerified": 1,
-                    "email": "clement.trofleau.lbc@axa.fr"},
-                {"annotationCounter": 24,
-                    "annotationToBeVerified": 5,
-                    "email": "Guillaume.chervet@axa.fr"},
-                {"annotationCounter": 35,
-                    "annotationToBeVerified": 15,
-                    "email": "Gilles.Cruchon@axa.fr"}
-            ]
+            "annotationType": "NER",
+            annotationStatus:{
+                percentageNumberAnnotationsDone:10
+            }
         };
         const dataset = {
             "id": "0001",
@@ -35,8 +25,31 @@ describe('Overview', () => {
             "createDate": new Date("10-30-2019").getTime(),
             files: []
         };
-        const group = {name: "groupName"};
-        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project} group={group}/></Router>);
+        const group = {
+            "id": "0001",
+            "name": "developpeurs",
+            "userIds": ["0001", "0002"]
+        };
+        const users = [
+            {
+                id: "0001",
+                "email":"guillaume.chervet@axa.fr",
+                "nameIdentifier": "S000007"
+            },
+            {
+                id: "0002",
+                "email":"lilian.delouvy@axa.fr",
+                "nameIdentifier": "S000005"
+            }
+        ];
+        const annotationStatus= {
+            isAnnotationClosed: true,
+            numberAnnotationsByUsers: [{"nameIdentifier": "S000005", numberAnnotations: 15 }, {"nameIdentifier": "S000007", numberAnnotations: 35 }],
+            numberAnnotationsDone: 46,
+            numberAnnotationsToDo: 288,
+            percentageNumberAnnotationsDone:32
+        };
+        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project} group={group} annotationStatus={annotationStatus} users={users}/></Router>);
         const messageEl = await waitFor(() => getByText('Informations générales'));
         expect(messageEl).toHaveTextContent(
             'Informations générales'

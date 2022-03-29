@@ -2,27 +2,14 @@ import {ReservationStatus} from "./ReservationStatus";
 import {AnnotationStatus} from "./AnnotationStatus";
 import AnnotationsToolbar from "../../../Toolkit/Annotations/AnnotationsToolbar";
 import Alert from '@axa-fr/react-toolkit-alert';
-import React, {useEffect, useReducer, useState} from "react";
+import React from "react";
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
+import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 
-const AnnotationDispatch = ({ typeAnnotation, labels, url, onSubmit,expectedOutput={} }) => {
-   /* const [state, setState] = useState({blobUrl:null});
-
-    useEffect(async () => {
-        setState({blobUrl:null})
-        const response = await fetch(url, {method: 'GET'});
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        setState({blobUrl})
-    }, [url]);
-
-    if(!state.blobUrl){ 
-        return <p>Chargement</p>;
-    }
-    console.log(state.blobUrl)*/
+const AnnotationDispatch = ({ annotationType, labels, url, onSubmit,expectedOutput={} }) => {
     return <AnnotationSwitch
         url={url}
-        annotationType={typeAnnotation}
+        annotationType={annotationType}
         labels ={labels}
         expectedOutput={expectedOutput}
         onSubmit={onSubmit}
@@ -33,13 +20,11 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
     switch (documentId) {
         case "end":
             return <div className="container"><Alert classModifier="info" title="Annotation">
-                L'annotation de ce dataset est terminé.
+                Vous avez annoté tout ce que vous pouviez sur ce dataset.
                 Merci beaucoup !
             </Alert></div>;
         case "start":
-            return <div className="container"><Alert classModifier="success" title="Annotation">
-                Chargement en cours
-            </Alert></div>;
+           return  <Loader mode={LoaderModes.get} text={"Réservation d'élément d'annotation en cours"}/>;
         default:
             return (currentItem != null ? <>
                 <ReservationStatus status={reservationStatus}/>
@@ -48,8 +33,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     onPrevious={onPrevious} isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext}
                                     text={currentItem.fileName}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}
-                                    typeAnnotation={project.annotationType} labels={project.labels} onSubmit={onSubmit}
+                                    annotationType={project.annotationType} labels={project.labels} onSubmit={onSubmit}
                                     url={currentItem.blobUrl} />
             </> : null);
     }};
-    

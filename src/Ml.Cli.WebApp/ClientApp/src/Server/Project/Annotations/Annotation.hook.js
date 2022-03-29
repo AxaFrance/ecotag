@@ -10,7 +10,7 @@ export const initialState = {
         labels: [],
         users: [],
         name: "-",
-        typeAnnotation: ""
+        annotationType: ""
     },
     annotations: {
         reservationStatus: resilienceStatus.SUCCESS,
@@ -57,20 +57,17 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         }
     } else {
         const annotations = await response.json();
-        
-        for(let i=0; i<annotations.length; i++){
+        for (let i = 0; i < annotations.length; i++) {
             const annotation = annotations[i];
             const url = `projects/${projectId}/files/${annotation.fileId}`;
             const response = await fetch(url, {method: 'GET'});
             const blob = await response.blob();
             annotation.blobUrl = window.URL.createObjectURL(blob);
         }
-            
         data = {
             status: resilienceStatus.SUCCESS,
             items: [...annotations],
         }
-        
     }
     dispatch({type: 'reserve_annotation', data});
 
@@ -78,13 +75,17 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         return;
     }
 
-    if (fileId == null && currentItemsLength === 0 && data.items.length > 0) {
+    const numberItems = data.items.length;
+    if (currentItemsLength === 0 && numberItems === 0) {
+        const url = "end";
+        history.replace(url);
+    } else if (fileId == null && currentItemsLength === 0 && numberItems > 0) {
         const url = `${data.items[0].fileId}`;
         history.replace(url);
     }
 };
-export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl) => {
-    if (status === resilienceStatus.LOADING) {
+export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl, status) => {
+    if (status === resilienceStatus.LOADING ||status === resilienceStatus.POST) {
         return;
     }
     dispatch({type: 'annotate_start'});
@@ -119,13 +120,13 @@ export const usePage = (fetch) => {
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
-                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.status));
+                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus));
         } else {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
             if (currentIndex + 3 === items.length) {
-                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.status)
+                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
             }
         }
     }, [documentId]);
@@ -151,7 +152,7 @@ export const usePage = (fetch) => {
     }
 
     const onSubmit = (annotation) => {
-        annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, currentItem.annotation.id, nextUrl);
+        annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, currentItem.annotation.id, nextUrl, state.annotations.annotationStatus);
     };
     const onNext = () => {
         history.push(nextUrl);

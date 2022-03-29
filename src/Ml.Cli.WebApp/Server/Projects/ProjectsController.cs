@@ -71,9 +71,22 @@ namespace Ml.Cli.WebApp.Server.Projects
             var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
+        
+        [HttpGet("annotations/{projectId}")]
+        public async Task<ActionResult<GetProjectCmdResult>> GetAnnotationsStatus([FromServices] GetAnnotationsStatusCmd getAnnotationsStatusCmd, string projectId)
+        {
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await getAnnotationsStatusCmd.ExecuteAsync(projectId, nameIdentifier);
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
+                    commandResult.Error);
+            }
+            return Ok(commandResult.Data);
+        }
 
-        [HttpGet("{id}", Name = "GetProjectById")]
-        public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetProjectCmdResult>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
             var nameIdentifier = User.Identity.GetSubject();
             var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);
@@ -101,18 +114,17 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(commandResult.Data, commandResult.Data);
         }
 
-        [HttpPost("{projectId}/annotations/{fileId}/{annotationId}")]
+        [HttpPost("{projectId}/annotations/{fileId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
         {
             var creatorNameIdentifier = User.Identity.GetSubject();
             var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
             {
                 ProjectId = projectId,
                 FileId = fileId,
-                AnnotationId = annotationId == "null" ? null : annotationId,
                 AnnotationInput = annotationInput,
                 CreatorNameIdentifier = creatorNameIdentifier
             });
@@ -123,20 +135,28 @@ namespace Ml.Cli.WebApp.Server.Projects
                     : BadRequest(commandResult.Error);
             }
 
-            return annotationId == "null" ?
-                Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data) :
-                NoContent();
+            return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
         }
         
         [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<ReserveOutput>>> Reserve([FromServices] ReserveCmd reserveCmd, string projectId, ReserveInput fileInput)
-        {
+        { 
             var creatorNameIdentifier = User.Identity.GetSubject();
-           var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
-
-           return Ok(reservations.Data);
+            var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
+            
+            if (!reservations.IsSuccess)
+            {
+                var errorKey = reservations.Error.Key;
+                return errorKey switch
+                {
+                    ProjectsRepository.NotFound => BadRequest(reservations.Error),
+                    _ => Forbid()
+                };
+            }
+            
+            return Ok(reservations.Data);
         }
         
     }

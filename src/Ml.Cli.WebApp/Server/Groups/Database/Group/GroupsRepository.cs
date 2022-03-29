@@ -95,8 +95,8 @@ public class GroupsRepository : IGroupsRepository
 
         var groupsTask = _groupsContext.Groups.Where(group => group.Id == new Guid(groupId))
             .Include(group => group.GroupUsers).FirstOrDefaultAsync();
-        var scope = _serviceProvider.CreateScope();
-        var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
+        using var scope = _serviceProvider.CreateScope();
+        using var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
         
         var usersTask = groupContext2.Users.Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
             .ToListAsync();

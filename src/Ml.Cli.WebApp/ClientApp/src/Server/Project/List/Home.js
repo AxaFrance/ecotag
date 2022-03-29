@@ -6,7 +6,7 @@ import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
 
-const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort }) => {
+const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fetch }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
       <>
@@ -46,6 +46,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort }) 
                 filters={filters}
                 onChangePaging={onChangePaging}
                 onChangeSort={onChangeSort}
+                fetch={fetch}
             />
           </EmptyArrayManager>
         </div>

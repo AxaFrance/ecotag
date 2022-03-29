@@ -32,8 +32,9 @@ export const HomeContainer = ({ fetch }) => {
       onChangePaging={onChangePaging}
       onChangeSort={onChangeSort}
       onChangeFilter={onChangeFilter}
+      fetch={fetch}
     />
   );
 };
-
+ 
 export default withCustomFetch(fetch)(HomeContainer);

@@ -354,7 +354,5 @@ public class GroupsControllerShould
 
         var resultOk = result.Result as NoContentResult;
         Assert.NotNull(resultOk);
-        var updatedGroup = await groupsRepository.GetGroupAsync("10000000-0000-0000-0000-000000000000");
-        Assert.Empty(updatedGroup.UserIds);
     }
 }

@@ -104,3 +104,34 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
 END
 
 GO
+
+/****** Object:  Table [sch_ECOTAG].[T_Reservation] ******/
+if not exists (select * from sysobjects where name='T_Reservation' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Reservation](
+    [RSV_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FLE_FileId] uniqueidentifier NOT NULL,
+    [PRJ_ProjectId] uniqueidentifier NOT NULL,
+    [RSV_TimeStamp] BIGINT NOT NULL,
+    CONSTRAINT [PK_T_Reservation] UNIQUE([RSV_Id])
+    )
+END
+
+GO
+
+/****** Object:  Table [sch_ECOTAG].[T_Annotation] ******/
+if not exists (select * from sysobjects where name='T_Annotation' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Annotation](
+    [ANO_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FLE_FileId] uniqueidentifier NOT NULL,
+    [PRJ_ProjectId] uniqueidentifier NOT NULL,
+    [ANO_CreatorNameIdentifier] [varchar](32) NOT NULL,
+    [ANO_TimeStamp] BIGINT NOT NULL,
+    [ANO_ExpectedOutput] [varchar](4048) NOT NULL,
+    CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
+    )
+END
+
+GO
+

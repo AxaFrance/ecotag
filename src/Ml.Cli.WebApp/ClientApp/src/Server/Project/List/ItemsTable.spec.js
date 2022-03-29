@@ -27,11 +27,23 @@ const filters = {
     },
 };
 
+export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+export const fetch = async (url, config) => {
+    await sleep(1);
+            return {
+                status: 201,
+                json: async () => {
+                    await sleep(1);
+                    return {};
+                }
+            };
+};
+
 describe("Check Project ItemsTable behaviour", () => {
     
     test("Chould render correctly", async () => {
-        const {asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onChangeSort={() => {}}/>);
-
+        const {asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none} onChangePaging={() => {}} onChangeSort={() => {}} fetch={fetch}/>);
         expect(asFragment()).toMatchSnapshot();
     })
     

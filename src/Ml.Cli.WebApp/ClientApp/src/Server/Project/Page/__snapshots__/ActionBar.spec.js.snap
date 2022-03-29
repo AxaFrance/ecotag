@@ -7,21 +7,6 @@ exports[`ActionBar ActionBar render correctly 1`] = `
   >
     <div>
       <button
-        class="btn af-btn af-btn--success af-btn--hasiconRight"
-        tabindex="-1"
-      >
-        <span
-          class="af-btn__text"
-        >
-          Edit Project
-        </span>
-        <i
-          class="glyphicon glyphicon-pencil"
-        />
-      </button>
-    </div>
-    <div>
-      <button
         class="btn af-btn"
         id="startTagging"
         name="Start Tagging"

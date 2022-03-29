@@ -8,7 +8,7 @@ const HeaderColumnCell = ({ onChangeSort, headerColumnName, filterColumnValue })
   return (
     <Table.Th classModifier="sortable">
       <span className="af-table__th-content">
-        <Button className="af-btn" classModifier="table-sorting" onClick={() => onChangeSort()}>
+        <Button className="af-btn" classModifier="table-sorting" onClick={onChangeSort}>
           <span className="af-btn__text">{headerColumnName}</span>
           <i
             className={

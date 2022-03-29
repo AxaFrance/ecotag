@@ -10,7 +10,6 @@ function fail(message = "The fail function was called") {
 }
 
 describe('Page.container', () => {
-  const givenUser = {};
   const givenDataset = {
     "id": "0001",
     "name": "Carte verte",
@@ -25,27 +24,46 @@ describe('Page.container', () => {
     "datasetId": "0004",
     "numberTagToDo": 10,
     "createDate": new Date("04-04-2011").getTime(),
-    "typeAnnotation": "NER",
+    "annotationType": "NER",
     "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
     "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-    "users": [
-      {"annotationCounter": 10,
-        "annotationToBeVerified": 1,
-        "email": "clement.trofleau.lbc@axa.fr"},
-      {"annotationCounter": 24,
-        "annotationToBeVerified": 5,
-        "email": "Guillaume.chervet@axa.fr"},
-      {"annotationCounter": 35,
-        "annotationToBeVerified": 15,
-        "email": "Gilles.Cruchon@axa.fr"}
-    ]
+    "annotationStatus": {
+      numberAnnotationsByUsers:[]
+    }
+  };
+  
+  const group = {
+    "id": "0001",
+        "name": "developpeurs",
+        "userIds": ["0001", "0002"]
+  };
+  const users = [
+    {
+      id: "0001",
+      "email":"guillaume.chervet@axa.fr",
+      "nameIdentifier": "S000007"
+    },
+    {
+      id: "0002",
+      "email":"lilian.delouvy@axa.fr",
+      "nameIdentifier": "S000005"
+    }
+  ];
+  const annotationStatus= {
+    isAnnotationClosed: true,
+    numberAnnotationsByUsers: [{"nameIdentifier": "S000005", numberAnnotations: 15 }, {"nameIdentifier": "S000007", numberAnnotations: 35 }],
+    numberAnnotationsDone: 46,
+    numberAnnotationsToDo: 288,
+    percentageNumberAnnotationsDone:32
   };
   it('PageContainer render correctly', async () => {
     const givenFetch = jest.fn()
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
-        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
-    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={givenUser}/></Router>);
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(group)})
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(users)})
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(annotationStatus)})
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch}/></Router>);
     const messageEl = await waitFor(() => getByText('02/01/0001'));
     expect(messageEl).toHaveTextContent(
         '02/01/0001'
@@ -61,7 +79,8 @@ describe('Page.container', () => {
           project : givenProject,
           dataset: givenDataset,
           group: {},
-          status: resilienceStatus.LOADING
+          status: resilienceStatus.LOADING,
+          users: {}
         }
       }
 
@@ -71,7 +90,9 @@ describe('Page.container', () => {
         ...givenState,
         status: resilienceStatus.LOADING,
         project : givenProject,
-        dataset: givenDataset
+        dataset: givenDataset,
+        users: {},
+        group: {},
       });
     });
     it('should throw an error by default', (done) => {
@@ -89,41 +110,5 @@ describe('Page.container', () => {
     });
   });
 
-  describe('.init()', () => {
-    let givenFetch;
-    let givenDispatch;
-    let givenFetchRejected;
-    
-    beforeEach(() => {
-      givenFetch = jest.fn();
-      givenDispatch = jest.fn();
-      givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
-    });
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-    
-    it('should call init and dispatch', async () => {
-      givenFetch= jest.fn()
-          .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
-          .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
-          .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
-      try {
-        await init(givenFetch, givenDispatch)(givenProject.id);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject, dataset: givenDataset, group: {}, status: resilienceStatus.SUCCESS } });
-      } catch (error) {
-        fail(error);
-      }
-    });
-
-    it('should fail because of error during init', async () => {
-      try {
-        await init(givenFetch, givenDispatch);
-        fail(error);
-      } catch (error) {
-        expect(givenFetch).toHaveBeenCalledTimes(0);
-      }
-    });
-  });
 });
 

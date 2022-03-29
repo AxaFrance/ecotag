@@ -1,23 +1,32 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 
-export const User = ({ users = [] }) => {
+const UserLine = ({users, annotationUser}) =>{
+    const user = users.find(user => user.nameIdentifier.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())
+    if(!annotationUser || !user){
+        return null;
+    }
+   
+   return (<Table.Tr key={user.id}>
+        <Table.Td>{user.email}</Table.Td>
+        <Table.Td>{annotationUser.numberAnnotations}</Table.Td>
+    </Table.Tr>);
+}
+
+export const UserAnnotationsStatus = ({ users = [], numberAnnotationsByUsers=[] }) => {
   return (
     <div>
-      <h2>Annotateurs</h2>
+      <h2>Annotations réalisées</h2>
       <Table>
         <Table.Header>
           <Table.Tr>
-            <Table.Th>Adresse e-mail</Table.Th>
+            <Table.Th>Emails</Table.Th>
             <Table.Th>Nombre d&apos;annotations</Table.Th>
           </Table.Tr>
         </Table.Header>
         <Table.Body>
-          {users.map((user, index) => (
-            <Table.Tr key={index}>
-              <Table.Td>{user.email}</Table.Td>
-              <Table.Td>{user.annotationCounter}</Table.Td>
-            </Table.Tr>
+          {numberAnnotationsByUsers.map(annotationUser => (
+              <UserLine users={users} annotationUser={annotationUser}  />
           ))}
         </Table.Body>
       </Table>
@@ -25,4 +34,4 @@ export const User = ({ users = [] }) => {
   );
 };
 
-export default User;
+export default UserAnnotationsStatus;

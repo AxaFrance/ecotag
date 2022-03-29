@@ -1,23 +1,100 @@
 ﻿import HeaderColumnCell from "./ColumnHeader";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Table, { Paging } from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import {formatTimestampToString} from "../../date";
+import {fetchAnnotationsStatus} from "../Project.service";
+import {resilienceStatus} from "../../shared/Resilience";
+import {
+    Popover
+} from '@axa-fr/react-toolkit-all';
 
-const ProjectRow = ({ id, name, groupName, createDate, annotationType, numberTagToDo }) => {
+import "./ProgressBar.scss";
+
+const NumberTagToDo = ({state}) =>{
+    const {ERROR, SUCCESS, LOADING} = resilienceStatus;
+    const annotationsStatus = state.annotationsStatus;
+    return <>{{
+        [LOADING]: <span>Chargement...</span>,
+        [ERROR]: (
+            <span>Erreur...</span>
+        ),
+        [SUCCESS]: <>
+            <div className="projects-af-popover__wrapper">
+                <Popover
+                    placement="left"
+                    classModifier="project-home"
+                >
+                    <Popover.Pop>
+                        <p>
+                            <span>Annotations réalisées : <b>{annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                            <span>Annotations a faire : <b>{annotationsStatus.numberAnnotationsToDo}</b></span><br/>
+                            <span>Annotations restantes : <b>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                        </p>
+                    </Popover.Pop>
+                    <Popover.Over>
+                        <p data-value={annotationsStatus.percentageNumberAnnotationsDone}>{annotationsStatus.percentageNumberAnnotationsDone == 100 ? "Terminé" : "En cours"}</p>
+                        <progress max="100" value={annotationsStatus.percentageNumberAnnotationsDone} className="html5">
+                            <div className="progress-bar">
+                                <span style={{"width": `${annotationsStatus.percentageNumberAnnotationsDone}%`}}>{annotationsStatus.percentageNumberAnnotationsDone}%</span>
+                            </div>
+                        </progress>
+                    </Popover.Over>
+                </Popover>
+            </div>
+        </>
+    }[state.status]
+    }
+    </>
+    
+}
+
+
+const initAsync = (fetch) => async (state, setState, id) => {
+
+    const annotationsStatusResponse = await fetchAnnotationsStatus(fetch)(id);
+    if (annotationsStatusResponse.status >= 500) {
+        const data = {
+            ...state,
+            status: resilienceStatus.ERROR
+        };
+        setState(data);
+    } else {
+        const annotationsStatus = await annotationsStatusResponse.json();
+        const data = {annotationsStatus, status: resilienceStatus.SUCCESS};
+        setState(data);
+    }
+
+}
+
+const ProjectRow = ({ id, name, groupName, createDate, annotationType, fetch }) => {
     const history = useHistory();
     const projectPageButton = id => {
         const path = `/projects/${id}`;
         history.push(path);
     };
+    const [state, setState] = useState({
+        annotationsStatus: {
+                isAnnotationClosed: true,
+                numberAnnotationsByUsers: [],
+                numberAnnotationsDone: 0,
+                numberAnnotationsToDo:0,
+                percentageNumberAnnotationsDone:0
+        },
+        status: resilienceStatus.LOADING
+    })
+    useEffect(async () => {
+        initAsync(fetch)(state, setState, id);
+    }, []);
+    
     return (
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
             <Table.Td>{groupName}</Table.Td>
             <Table.Td>{createDate}</Table.Td>
             <Table.Td>{annotationType}</Table.Td>
-            <Table.Td>{numberTagToDo}</Table.Td>
+            <Table.Td><NumberTagToDo state={state}/></Table.Td>
             <Table.Td>
                 <Action id="id" icon="zoom-in" title="Editer" onClick={() => projectPageButton(id)} />
             </Table.Td>
@@ -25,8 +102,7 @@ const ProjectRow = ({ id, name, groupName, createDate, annotationType, numberTag
     );
 };
 
-const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
-    
+const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
     return(
         <>
             <Table>
@@ -54,7 +130,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('numberTagToDo')}
-                            headerColumnName={'Tags restants'}
+                            headerColumnName={'Status'}
                             filterColumnValue={filters.columns.numberCrossAnnotation.value}
                         />
                         <Table.Th classModifier="sortable">
@@ -72,6 +148,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort}) => {
                             createDate={formatTimestampToString(createDate)}
                             numberTagToDo={numberTagToDo}
                             annotationType={annotationType}
+                            fetch={fetch}
                         />
                     ))}
                 </Table.Body>
