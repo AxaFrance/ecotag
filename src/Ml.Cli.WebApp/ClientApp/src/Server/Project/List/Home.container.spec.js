@@ -10,9 +10,9 @@ import {fetch} from './mock';
 describe('Home.container', () => {
   it('HomeContainer render correctly', async () => {
     const { asFragment, getByText } = render(<Router><HomeContainer fetch={fetch} /></Router>);
-    const messageEl = await waitFor(() => getByText('02/01/0001'));
+    const messageEl = await waitFor(() => getByText('31/03/0001'));
     expect(messageEl).toHaveTextContent(
-      '02/01/0001'
+      '31/03/0001'
     );
     expect(asFragment()).toMatchSnapshot();
   });
