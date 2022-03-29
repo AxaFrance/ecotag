@@ -264,7 +264,11 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                     <p
                       data-value="88"
                     >
-                      En cours
+                      <a
+                        href="#"
+                      >
+                        En cours
+                      </a>
                     </p>
                     <progress
                       class="html5"

@@ -23,14 +23,15 @@ const NumberTagToDo = ({state}) =>{
         [SUCCESS]: <>
             <div className="projects-af-popover__wrapper">
                 <Popover
-                    placement="left"
+                    placement="top"
                     classModifier="project-home"
                 >
                     <Popover.Pop>
+                        <h2>Annotations</h2>
                         <p>
-                            <span>Annotations réalisées : <b>{annotationsStatus.numberAnnotationsDone}</b></span><br/>
-                            <span>Annotations a faire : <b>{annotationsStatus.numberAnnotationsToDo}</b></span><br/>
-                            <span>Annotations restantes : <b>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                            <span>Réalisées : <b>{annotationsStatus.numberAnnotationsDone}</b></span><br/>
+                            <span>A faire : <b>{annotationsStatus.numberAnnotationsToDo}</b></span><br/>
+                            <span>Restantes : <b>{annotationsStatus.numberAnnotationsToDo-annotationsStatus.numberAnnotationsDone}</b></span><br/>
                         </p>
                     </Popover.Pop>
                     <Popover.Over>
