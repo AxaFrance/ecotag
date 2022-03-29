@@ -1,6 +1,6 @@
 import { fetchProjects } from '../Project.service';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import { initialState, reducer } from './Home.reducer';
 import { resilienceStatus } from '../../shared/Resilience';
 import {fetchGroups} from "../../Group/Group.service";
@@ -27,7 +27,7 @@ export const init = (fetch, dispatch) => async () => {
 };
 
 export const useHome = fetch => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const onChangePaging = ({ numberItems, page }) => dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   const onChangeSort = propertyName => () => dispatch({ type: 'onChangeSort', data: { propertyName } });
   const onChangeFilter = value => dispatch({ type: 'onChangeFilter', data: { filterValue: value } });

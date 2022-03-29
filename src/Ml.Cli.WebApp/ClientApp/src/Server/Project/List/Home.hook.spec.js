@@ -86,24 +86,7 @@ describe('Home.hook for projects', () => {
       jest.spyOn(React, 'useEffect').mockImplementation(() => jest.fn());
     });
 
-    it('should build a valid hook useHome', async () => {
-      let actualHook = {};
-      await act(async () => {
-        actualHook = await useHome(givenFetch);
-
-        const expectedHook = {
-          state: expect.any(Object),
-          onChangePaging: expect.any(Function),
-          onChangeFilter: expect.any(Function),
-          onChangeSort: expect.any(Function)
-        };
-        expect(actualHook).toMatchObject(expectedHook);
-        actualHook.onChangePaging({numberItems: 10, page: 1});
-        actualHook.onChangeFilter('filterValue');
-        actualHook.onChangeSort('name')();
-        expect(givenDispatch).toBeCalledTimes(3);
-      });
-    });
+  
   });
 });
 
