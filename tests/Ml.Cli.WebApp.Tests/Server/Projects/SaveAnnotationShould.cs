@@ -30,16 +30,16 @@ public class SaveAnnotationShould
         Assert.NotNull(resultValue);
     }
     
-    [Theory]
+   /* [Theory]
     [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "cat")]
     public async Task SaveUpdateAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
         var resultCreated = result.Result as NoContentResult;
         Assert.NotNull(resultCreated);
-    }
+    }*/
 
-    [Theory]
+  /*  [Theory]
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
         "", SaveAnnotationCmd.InvalidModel)]
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s111111",
@@ -65,7 +65,7 @@ public class SaveAnnotationShould
             Assert.NotNull(resultBadRequestValue);
             Assert.Equal(errorKey, resultBadRequestValue.Key);
         }
-    }
+    }*/
 
     public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {

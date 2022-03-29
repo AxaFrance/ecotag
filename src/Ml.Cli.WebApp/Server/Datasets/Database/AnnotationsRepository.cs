@@ -58,21 +58,21 @@ public class AnnotationsRepository
         });
         
         using var scope = _serviceProvider.CreateScope();
-        using var datasetContext3 = scope.ServiceProvider.GetService<DatasetContext>();
+        using var datasetContext2 = scope.ServiceProvider.GetService<DatasetContext>();
         
         var taskAnnotations =  _datasetsContext.Annotations.AsNoTracking()
             .Where(a => a.ProjectId == new Guid(projectId))
             .Select(ux => new { FileId=ux.File.Id, ux.CreatorNameIdentifier}).GroupBy(g => g.CreatorNameIdentifier)
             .Select(t => new NumberAnnotationsByUsers { NameIdentifier = t.Key, NumberAnnotations= t.Select(o => o.FileId).Count()}).ToListAsync();
         
-        var taskNumberAnnotations = NumberAnnotationsAsync(datasetContext3, projectId, numberAnnotation);
+        var taskNumberAnnotations = NumberAnnotationsAsync(datasetContext2, projectId, numberAnnotation);
        
         Task.WaitAll( taskAnnotations, taskNumberAnnotations);
         var numberAnnotationsDone = taskAnnotations.Result.Sum(r => r.NumberAnnotations);
 
         var numberFiles = cacheEntry.Result;
         var numberAnnotationsToDo = numberFiles * numberAnnotation;
-        double percentageNumberAnnotationsDone = ( Convert.ToDouble(numberAnnotationsDone) /  Convert.ToDouble(numberAnnotationsToDo)) * 100;
+        double percentageNumberAnnotationsDone = Convert.ToDouble(numberAnnotationsDone) / Convert.ToDouble(numberAnnotationsToDo) * 100;
         if (percentageNumberAnnotationsDone >= 100)
         {
             percentageNumberAnnotationsDone = 99;

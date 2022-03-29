@@ -53,7 +53,7 @@ export const reducer = (state, action) => {
                 ...state,
                 annotations: {
                     ...state.annotations,
-                    annotationStatus: resilienceStatus.LOADING,
+                    annotationStatus: resilienceStatus.POST,
                 }
             };
         }

@@ -57,20 +57,17 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         }
     } else {
         const annotations = await response.json();
-        
-        for(let i=0; i<annotations.length; i++){
+        for (let i = 0; i < annotations.length; i++) {
             const annotation = annotations[i];
             const url = `projects/${projectId}/files/${annotation.fileId}`;
             const response = await fetch(url, {method: 'GET'});
             const blob = await response.blob();
             annotation.blobUrl = window.URL.createObjectURL(blob);
         }
-            
         data = {
             status: resilienceStatus.SUCCESS,
             items: [...annotations],
         }
-        
     }
     dispatch({type: 'reserve_annotation', data});
 
@@ -78,13 +75,17 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         return;
     }
 
-    if (fileId == null && currentItemsLength === 0 && data.items.length > 0) {
+    const numberItems = data.items.length;
+    if (currentItemsLength === 0 && numberItems === 0) {
+        const url = "end";
+        history.replace(url);
+    } else if (fileId == null && currentItemsLength === 0 && numberItems > 0) {
         const url = `${data.items[0].fileId}`;
         history.replace(url);
     }
 };
 export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl) => {
-    if (status === resilienceStatus.LOADING) {
+    if (status === resilienceStatus.LOADING ||status === resilienceStatus.POST) {
         return;
     }
     dispatch({type: 'annotate_start'});

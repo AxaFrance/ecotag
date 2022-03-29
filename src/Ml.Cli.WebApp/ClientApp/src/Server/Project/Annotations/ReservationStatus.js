@@ -9,7 +9,7 @@ export const ReservationStatus = ({status}) => {
         return null;
     }
     return (
-        <div className="reservation-status" style={{"backgroundColor": status === LOADING ? "blue" : "red"}}>
+        <div className="reservation-status" style={{"backgroundColor": (status === POST ||  status === LOADING) ? "blue" : "red"}}>
             {
                 {
                     [LOADING]: <span>Réservation éléments suivant en cours</span>,

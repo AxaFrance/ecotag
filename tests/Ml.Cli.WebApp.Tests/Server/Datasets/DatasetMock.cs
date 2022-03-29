@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Oidc;
@@ -21,6 +23,7 @@ using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Groups;
 using Ml.Cli.WebApp.Tests.Server.Projects;
+using Moq;
 
 namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 
@@ -44,6 +47,18 @@ public record MockResult
 
 internal static class DatasetMock
 {
+    
+    private static Mock<IServiceProvider> GetMockedServiceProvider(DatasetContext datasetContext)
+    {
+        var serviceProvider = new Mock<IServiceProvider>();
+        serviceProvider.Setup(foo => foo.GetService(typeof(DatasetContext))).Returns(datasetContext);
+        var serviceScope = new Mock<IServiceScope>();
+        serviceScope.Setup(foo => foo.ServiceProvider).Returns(serviceProvider.Object);
+        var serviceScopeFactory = new Mock<IServiceScopeFactory>();
+        serviceScopeFactory.Setup(foo => foo.CreateScope()).Returns(serviceScope.Object);
+        serviceProvider.Setup(foo => foo.GetService(typeof(IServiceScopeFactory))).Returns(serviceScopeFactory.Object);
+        return serviceProvider;
+    }
     public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
@@ -133,7 +148,7 @@ internal static class DatasetMock
 
         var projectModel = new ProjectModel()
         {
-            Name = "demo1",
+            Name = "project1",
             AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
             CreateDate = DateTime.Now.Ticks,
             LabelsJson = JsonSerializer.Serialize(new List<CreateProjectLabelInput>()
@@ -153,9 +168,12 @@ internal static class DatasetMock
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
+        
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
-            new MemoryCache(Options.Create(new MemoryCacheOptions())));
-        var annotationRepository = new AnnotationsRepository(datasetContext);
+            memoryCache);
+
+        var serviceProvider = GetMockedServiceProvider(datasetContext);
+        var annotationRepository = new AnnotationsRepository(datasetContext, serviceProvider.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext);
         
         var context = new DefaultHttpContext

@@ -73,7 +73,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         }
 
         [HttpGet("{id}", Name = "GetProjectById")]
-        public async Task<ActionResult<ProjectDataModel>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
+        public async Task<ActionResult<GetProjectCmdResult>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
             var nameIdentifier = User.Identity.GetSubject();
             var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);

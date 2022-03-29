@@ -20,7 +20,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
     switch (documentId) {
         case "end":
             return <div className="container"><Alert classModifier="info" title="Annotation">
-                L'annotation de ce dataset est terminé.
+                Vous avez annoté tout ce que vous pouviez sur ce dataset.
                 Merci beaucoup !
             </Alert></div>;
         case "start":
