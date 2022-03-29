@@ -9,21 +9,12 @@ const data = {
     "project": {
         "id": "0001",
         "name": "Relevé d'information",
-        "numberTagToDo": 10,
-        "createDate": "04/04/2011",
+        "createDate": 786698770770,
+        numberCrossAnnotation: 2,
         "annotationType": "NER",
-        "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
-        "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-        "users": [
-            {"annotationCounter": 10,
-            "annotationToBeVerified": 1,
-            "email": "clement.trofleau.lbc@axa.fr"},
-            {"annotationCounter": 24,
-            "annotationToBeVerified": 5,
-            "email": "Guillaume.chervet@axa.fr"},
-            {"annotationCounter": 35,
-            "annotationToBeVerified": 15,
-            "email": "Gille.Cruchont@axa.fr"}
+        labels:[
+            {name: "first", color : "#FFF878"},
+            {name: "second", color : "#878FFF"}
         ]
       },
     "dataset":{
@@ -31,26 +22,37 @@ const data = {
         "name": "Carte verte",
         "type": "Image",
         "numberFiles": 300,
-        "createDate": "30/10/2019",
+        "createDate": 787978778978,
         files: []
     },
     "group": {
         "id": "0001",
         "name": "developpeurs",
-        "users": [
-            { "email": "clement.trofleau.lbc@axa.fr" },
-            { "email": "gilles.cruchon@axa.fr" },
-            { "email": "francois.descamps@axa.fr" },
-            { "email": "guillaume.chervet@axa.fr" }
-        ]
+        "userIds": ["0001", "0002"]
     },
-    "user": {
-        role: "ADMIN"
+    users : [
+        {
+            id: "0001", 
+            "email":"guillaume.chervet@axa.fr",
+            "nameIdentifier": "S000007"
+        },
+        {
+            id: "0002",
+            "email":"lilian.delouvy@axa.fr",
+            "nameIdentifier": "S000005"
+        }
+    ],
+    annotationStatus: {
+        isAnnotationClosed: true,
+        numberAnnotationsByUsers: [{"nameIdentifier": "S000005", numberAnnotations: 15 }, {"nameIdentifier": "S000007", numberAnnotations: 35 }],
+        numberAnnotationsDone: 46,
+        numberAnnotationsToDo: 288,
+        percentageNumberAnnotationsDone:32
     }
 };
 
 export default { title: 'Project/Page' };
 
-export const withDefault = () => <Router><Page loaderMode={LoaderModes.none} user={data.user} group={data.group} users={data.users} dataset={data.dataset} project={data.project} onClick={action('onClick')} filters={initialState.filters} /></Router>;
+export const withDefault = () => <Router><Page loaderMode={LoaderModes.none} user={data.user} group={data.group} users={data.users} dataset={data.dataset} project={data.project} annotationStatus={data.annotationStatus} /></Router>;
 
 

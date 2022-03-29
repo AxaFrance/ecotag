@@ -4,7 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import { HomeContainer } from './Home.container';
 import {BrowserRouter as Router} from "react-router-dom";
 
-const fetch = async(url, config) => {
+export const fetch = async(url, config) => {
 
     if(url.includes("annotations/0001")){
         return{

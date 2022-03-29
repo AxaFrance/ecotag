@@ -9,10 +9,16 @@ import {
 } from '@axa-fr/react-toolkit-restitution';
 import {formatTimestampToString} from "../../date";
 
-export const Overview = ({ project, dataset, group }) => {
-  //const labels = project.labels && project.labels.length > 0 ? project.labels : [];
-  //const percentAdvancement = ((100 * (dataset.numberFiles - project.numberTagToDo)) / dataset.numberFiles).toFixed(2);
+export const Overview = ({ project, dataset, group, annotationStatus, users= [] }) => {
 
+  const groupEmails = group.userIds.map(userId => {
+    const user = users.find(user => user.id === userId);
+    if(user == null){
+      return "";
+    }
+    return user.email;
+  })
+  
   return (
     <>
       <ArticleRestitution>
@@ -27,13 +33,13 @@ export const Overview = ({ project, dataset, group }) => {
               <Restitution label="Date de création" value={formatTimestampToString(project.createDate)} />
               <Restitution label="Nombre de fichier" value={dataset.files.length} />
               <Restitution label="Nombre annotation croisée" value={project.numberCrossAnnotation} />
-              
+              <Restitution label="Pourcentage d&apos;avancement" value={annotationStatus ? annotationStatus.percentageNumberAnnotationsDone : 0} />
             </SectionRestitutionColumn>
             <SectionRestitutionColumn>
               <Restitution label="Dataset" value={dataset.name} />
               <Restitution label="Type de dataset" value={dataset.type} />
               <Restitution label="Groupe annotateurs" value={group.name} />
-              <Restitution label="Pourcentage d&apos;avancement" value={project.annotationStatus.percentageNumberAnnotationsDone} />
+              <Restitution label="Emails du groupe" values={groupEmails} />
             </SectionRestitutionColumn>
           </SectionRestitutionRow>
         </SectionRestitution>

@@ -110,7 +110,7 @@ public class AnnotationsRepository
         var results = await query.Take(numberToReserve).ToListAsync();
         if (fileId != null)
         {
-            var querySingle = query =
+            var querySingle =
                 _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) && f.Id == new Guid(fileId)).Select(file =>
                     new
                     {

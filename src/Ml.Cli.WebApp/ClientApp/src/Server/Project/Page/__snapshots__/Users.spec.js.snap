@@ -4,7 +4,7 @@ exports[`Users Users render correctly 1`] = `
 <DocumentFragment>
   <div>
     <h2>
-      Annotateurs
+      Annotations réalisées
     </h2>
     <table
       class="af-table"
@@ -18,7 +18,7 @@ exports[`Users Users render correctly 1`] = `
           <th
             class="af-table__th"
           >
-            Adresse e-mail
+            Emails
           </th>
           <th
             class="af-table__th"
@@ -31,7 +31,6 @@ exports[`Users Users render correctly 1`] = `
         class="af-table__body"
       />
     </table>
-    u
   </div>
 </DocumentFragment>
 `;

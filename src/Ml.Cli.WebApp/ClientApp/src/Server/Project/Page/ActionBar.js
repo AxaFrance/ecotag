@@ -5,22 +5,22 @@ import Button from '@axa-fr/react-toolkit-button';
 import './Page.scss';
 
 
-export const ActionBar = ({ project }) => {
+export const ActionBar = ({ projectId, isAnnotationClosed }) => {
   const history = useHistory();
 
   const startTaggingButton = () => {
-    const path = `/projects/${project.id}/annotations/start`;
+    const path = `/projects/${projectId}/annotations/start`;
     history.push(path);
   };
   
-  if(!project){
-    return;
+  if(!projectId){
+    return null;
   }
 
   return (
     <div className="ft-actionBar">
       <div>
-        {(project.annotationStatus.isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
+        {(isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
           <span className="af-btn-text">Start Tagging</span>
         </Button>}
       </div>

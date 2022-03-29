@@ -12,8 +12,8 @@ namespace Ml.Cli.WebApp.Tests.Server.Projects;
 public class GetAnnotationsStatusShould
 {
     [Theory]
-    [InlineData("s666666", "project1")]
-    public async Task ShouldGetInformation(string nameIdentifier, string expectedProjectName)
+    [InlineData("s666666")]
+    public async Task ShouldGetInformation(string nameIdentifier)
     {
         var mock = await DatasetMock.InitMockAsync(nameIdentifier);
 

@@ -127,6 +127,24 @@ exports[`Overview Overview render correctly 1`] = `
                 -
               </dd>
             </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Pourcentage d'avancement
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                32
+              </dd>
+            </dl>
           </div>
           <div
             class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
@@ -182,7 +200,7 @@ exports[`Overview Overview render correctly 1`] = `
               <dd
                 class="af-restitution__listdef-value"
               >
-                groupName
+                developpeurs
               </dd>
             </dl>
             <dl
@@ -194,13 +212,26 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Pourcentage d'avancement
+                  Emails du groupe
                 </span>
               </dt>
               <dd
                 class="af-restitution__listdef-value"
               >
-                10
+                <ul
+                  class="af-restitution__listul"
+                >
+                  <li
+                    class="af-restitution__listul-item"
+                  >
+                    guillaume.chervet@axa.fr
+                  </li>
+                  <li
+                    class="af-restitution__listul-item"
+                  >
+                    lilian.delouvy@axa.fr
+                  </li>
+                </ul>
               </dd>
             </dl>
           </div>
