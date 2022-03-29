@@ -84,7 +84,7 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         history.replace(url);
     }
 };
-export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl) => {
+export const annotate = (fetch, dispatch, history) => async (projectId, fileId, annotation, annotationId, nextUrl, status) => {
     if (status === resilienceStatus.LOADING ||status === resilienceStatus.POST) {
         return;
     }
@@ -120,13 +120,13 @@ export const usePage = (fetch) => {
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
-                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.status));
+                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus));
         } else {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
             if (currentIndex + 3 === items.length) {
-                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.status)
+                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
             }
         }
     }, [documentId]);
@@ -152,7 +152,7 @@ export const usePage = (fetch) => {
     }
 
     const onSubmit = (annotation) => {
-        annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, currentItem.annotation.id, nextUrl);
+        annotate(fetch, dispatch, history)(projectId, currentItem.fileId, annotation, currentItem.annotation.id, nextUrl, state.annotations.annotationStatus);
     };
     const onNext = () => {
         history.push(nextUrl);

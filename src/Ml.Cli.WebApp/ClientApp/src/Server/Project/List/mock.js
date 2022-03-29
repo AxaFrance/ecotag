@@ -16,7 +16,7 @@ export const fetch = async(url, config) => {
                 "name": "Relevé d'information",
                 "groupId": "0001",
                 "numberTagToDo": 10,
-                "createDate": new Date("04-04-2011").getTime(),
+                "createDate": 76979897879799,
                 "annotationType": "NER",
             }])
         }
