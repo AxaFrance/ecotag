@@ -6,12 +6,7 @@ import {AnnotationContainer} from "./Annotation.container";
 import {fetch} from "./Annotation.stories";
 
 describe('Annotation.container', () => {
-
-    /*it('should annotate from start until end', async() => {
-        
-        //to debug on friday
-    })*/
-
+    
     it('should annotate from start until end', async() => {
 
        const environment = {apiUrl: "/server/{path}"}
@@ -73,7 +68,7 @@ describe('Annotation.container', () => {
         );
     });
 
-    it('should annotate from defined idDocument', async() => {
+    /*it('should annotate from defined idDocument', async() => {
 
         const environment = {apiUrl: "/server/{path}"}
         const { getByText } = render(<MemoryRouter initialEntries={["/projects/0005/1"]}>
@@ -113,7 +108,7 @@ describe('Annotation.container', () => {
             'toto'
         );
        
-    });
+    });*/
 
 });
 
