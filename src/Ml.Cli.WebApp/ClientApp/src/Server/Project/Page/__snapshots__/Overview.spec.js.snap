@@ -200,7 +200,7 @@ exports[`Overview Overview render correctly 1`] = `
               <dd
                 class="af-restitution__listdef-value"
               >
-                100%
+                10
               </dd>
             </dl>
           </div>

@@ -28,23 +28,16 @@ describe('Page.container', () => {
     "annotationType": "NER",
     "text": "Enim ad ex voluptate culpa non cillum eu mollit nulla ex pariatur duis. Commodo officia deserunt elit sint officia consequat elit laboris tempor qui est ex. Laborum magna id deserunt ut fugiat aute nulla in Lorem pariatur. Nostrud elit consectetur exercitation exercitation incididunt consequat occaecat velit voluptate nostrud sunt. Consectetur velit eu amet minim quis sunt in.",
     "labels": [{"name": "Recto", "color": "#212121", "id": 0}, {"name": "Verso", "color": "#ffbb00", "id": 1}, {"name": "Signature", "color": "#f20713", "id": 2}],
-    "users": [
-      {"annotationCounter": 10,
-        "annotationToBeVerified": 1,
-        "email": "clement.trofleau.lbc@axa.fr"},
-      {"annotationCounter": 24,
-        "annotationToBeVerified": 5,
-        "email": "Guillaume.chervet@axa.fr"},
-      {"annotationCounter": 35,
-        "annotationToBeVerified": 15,
-        "email": "Gilles.Cruchon@axa.fr"}
-    ]
+    "annotationStatus": {
+      numberAnnotationsByUsers:[]
+    }
   };
   it('PageContainer render correctly', async () => {
     const givenFetch = jest.fn()
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
-        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({userIds:[]})})
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve([])})
     const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={givenUser}/></Router>);
     const messageEl = await waitFor(() => getByText('02/01/0001'));
     expect(messageEl).toHaveTextContent(
@@ -61,7 +54,8 @@ describe('Page.container', () => {
           project : givenProject,
           dataset: givenDataset,
           group: {},
-          status: resilienceStatus.LOADING
+          status: resilienceStatus.LOADING,
+          users: {}
         }
       }
 
@@ -71,7 +65,9 @@ describe('Page.container', () => {
         ...givenState,
         status: resilienceStatus.LOADING,
         project : givenProject,
-        dataset: givenDataset
+        dataset: givenDataset,
+        users: {},
+        group: {},
       });
     });
     it('should throw an error by default', (done) => {
@@ -108,9 +104,11 @@ describe('Page.container', () => {
           .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
           .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
           .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve({})})
+          .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve([])})
       try {
         await init(givenFetch, givenDispatch)(givenProject.id);
-        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject, dataset: givenDataset, group: {}, status: resilienceStatus.SUCCESS } });
+        expect(givenDispatch).toHaveBeenCalledWith( { type: "init", 
+          data: { project: givenProject, dataset: givenDataset, group: {}, users:[], status: resilienceStatus.SUCCESS } });
       } catch (error) {
         fail(error);
       }

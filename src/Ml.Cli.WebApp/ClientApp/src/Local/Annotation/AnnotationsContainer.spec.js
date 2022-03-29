@@ -9,7 +9,7 @@ const client = new QueryClient();
 
 const state = {
     datasetLocation: "datasetLocation",
-    annotationType: "NamedEntityRecognition",
+    annotationType: "ImageClassifier",
     items: [{
         filename: "filename.json",
         fileDirectory: "fileDirectory",
@@ -31,13 +31,11 @@ function sleep(ms) {
 
 describe("Should check AnnotationsContainer component behaviour", () => {
     test("Should display annotation", async () => {
-        const {container, asFragment} = render(<QueryClientProvider client={client}><AnnotationsContainer state={state} id={1} dataset="someDataset" url="someUrl" fetch={fetch}/></QueryClientProvider>);
+        const {container, asFragment, getByText} = render(<QueryClientProvider client={client}><AnnotationsContainer state={state} id={1} dataset="someDataset" url="someUrl" fetch={fetch}/></QueryClientProvider>);
         
         expect(asFragment()).toMatchSnapshot();
-        
-        //necessary to force a longer waitFor
-        await sleep(3000);
-        await waitFor(() => expect(container.querySelector(".tokenAnnotation-container")).not.toBeNull());
+        let label = await waitFor(() => getByText('Firstname'));
+        expect(label).not.toBeNull();
         
         expect(asFragment()).toMatchSnapshot();
     })
