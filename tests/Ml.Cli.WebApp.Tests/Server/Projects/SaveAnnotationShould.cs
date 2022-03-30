@@ -10,6 +10,7 @@ using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -75,7 +76,7 @@ public class SaveAnnotationShould
         {
             HttpContext = context
         };
-        var logger = Mock.Of<ILogger<AnnotationInput>>();
+        var logger = Mock.Of<ILogger<SaveAnnotationCmd>>();
         var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, logger);
         var result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
         {

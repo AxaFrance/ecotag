@@ -1,4 +1,4 @@
-﻿using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
+﻿using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects.AnnotationInputTypes;
@@ -10,7 +10,7 @@ public class ValidateAnnotationImageClassifierShould
     {
         var (project, _) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
         var expectedOutput = "someLabel";
-        Assert.True(AnnotationImageClassifier.Validate(expectedOutput, project));
+        Assert.True(AnnotationImageClassifierValidator.Validate(expectedOutput, project));
     }
 
     [Fact]
@@ -18,6 +18,6 @@ public class ValidateAnnotationImageClassifierShould
     {
         var (project, _) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
         var expectedOutput = "wrongLabelName";
-        Assert.False(AnnotationImageClassifier.Validate(expectedOutput, project));
+        Assert.False(AnnotationImageClassifierValidator.Validate(expectedOutput, project));
     }
 }

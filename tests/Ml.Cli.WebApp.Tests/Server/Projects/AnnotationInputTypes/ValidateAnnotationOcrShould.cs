@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Moq;
@@ -16,7 +17,7 @@ public class ValidateAnnotationOcrShould
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
-        Assert.True(annotationInput.ValidateExpectedOutput(project, logger));
+        Assert.True(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationOcr, project, logger));
     }
 
     [Fact]
@@ -26,12 +27,12 @@ public class ValidateAnnotationOcrShould
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
         var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
-        Assert.False(annotationInput.ValidateExpectedOutput(project, logger));
+        Assert.False(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationOcr, project, logger));
     }
 
-    public static (ProjectDataModel project, ILogger<AnnotationInput> logger) InitProjectDataWithLogger()
+    public static (ProjectDataModel project, ILogger<SaveAnnotationCmd> logger) InitProjectDataWithLogger()
     {
-        var logger = Mock.Of<ILogger<AnnotationInput>>();
+        var logger = Mock.Of<ILogger<SaveAnnotationCmd>>();
         var project = new ProjectDataModel()
         {
             AnnotationType = "Ocr",

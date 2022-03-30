@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd;
+namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 
 public record AnnotationInput
 {
     [Required]
     public string ExpectedOutput { get; set; }
+}
 
-    public bool ValidateExpectedOutput(ProjectDataModel project, ILogger<AnnotationInput> logger)
+public static class AnnotationInputValidator
+{
+    public static bool ValidateExpectedOutput(string expectedOutput, ProjectDataModel project, ILogger<SaveAnnotationCmd> logger)
     {
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
@@ -21,24 +24,24 @@ public record AnnotationInput
         switch (enumType)
         {
             case AnnotationTypeEnumeration.Cropping:
-                var annotationCropping = DeserializeAnnotation<AnnotationCropping>(ExpectedOutput, logger);
+                var annotationCropping = DeserializeAnnotation<AnnotationCropping>(expectedOutput, logger);
                 if (annotationCropping != null)
                 {
-                    isValid = AnnotationCropping.Validate(annotationCropping, project);
+                    isValid = AnnotationCroppingValidator.Validate(annotationCropping, project);
                 }
                 break;
             case AnnotationTypeEnumeration.ImageClassifier:
                 //We only have the value, no need to deserialize as it already is a string
-                return AnnotationImageClassifier.Validate(ExpectedOutput, project);
+                return AnnotationImageClassifierValidator.Validate(expectedOutput, project);
             case AnnotationTypeEnumeration.NamedEntity:
-                var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(ExpectedOutput, logger);
+                var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(expectedOutput, logger);
                 if (namedEntityLabels != null)
                 {
-                    if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
-                    if (!AnnotationNer.ValidateNerOverlap(namedEntityLabels)) return false;
+                    if (!AnnotationNerValidator.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
+                    if (!AnnotationNerValidator.ValidateNerOverlap(namedEntityLabels)) return false;
                     foreach (var label in namedEntityLabels)
                     {
-                        if (!AnnotationNer.Validate(label, project))
+                        if (!AnnotationNerValidator.Validate(label, project))
                         {
                             return false;
                         }
@@ -48,10 +51,10 @@ public record AnnotationInput
                 }
                 break;
             case AnnotationTypeEnumeration.Ocr:
-                var annotationOcr = DeserializeAnnotation<AnnotationOcr>(ExpectedOutput, logger);
+                var annotationOcr = DeserializeAnnotation<AnnotationOcr>(expectedOutput, logger);
                 if (annotationOcr != null)
                 {
-                    isValid = AnnotationOcr.Validate(annotationOcr.Labels, project);
+                    isValid = AnnotationOcrValidator.Validate(annotationOcr.Labels, project);
                 }
                 break;
         }
@@ -59,7 +62,7 @@ public record AnnotationInput
         return isValid;
     }
 
-    private static T DeserializeAnnotation<T>(string expectedOutput, ILogger<AnnotationInput> logger) where T : class
+    private static T DeserializeAnnotation<T>(string expectedOutput, ILogger<SaveAnnotationCmd> logger) where T : class
     {
         try
         {

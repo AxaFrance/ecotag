@@ -2,7 +2,14 @@
 using System.Linq;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
+namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
+
+public record AnnotationNerLabel
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Color { get; set; }
+}
 
 public record AnnotationNer
 {
@@ -10,7 +17,10 @@ public record AnnotationNer
     public int End { get; set; }
     public string Token { get; set; }
     public AnnotationNerLabel Label { get; set; }
+}
 
+public static class AnnotationNerValidator
+{
     public static bool Validate(AnnotationNer annotationNer, ProjectDataModel project)
     {
         if (annotationNer.Start >= annotationNer.End) return false;
@@ -40,11 +50,4 @@ public record AnnotationNer
         return annotationNerList.All(element =>
             project.Labels.Any(projectLabel => projectLabel.Name == element.Label.Name));
     }
-}
-
-public record AnnotationNerLabel
-{
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public string Color { get; set; }
 }

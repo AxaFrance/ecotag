@@ -1,4 +1,5 @@
-﻿using Ml.Cli.WebApp.Server.Projects.Cmd;
+﻿using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects.AnnotationInputTypes;
@@ -11,8 +12,7 @@ public class ValidateAnnotationCroppingShould
         var (project, logger) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
         project.AnnotationType = "Cropping";
         var jsonAnnotationCropping = "{\"width\": 4608, \"height\": 3456, \"type\": \"png\", \"labels\": {\"boundingBoxes\": [{\"label\":\"someLabel\",\"height\":1089,\"left\":1390,\"top\":485,\"width\":1613},{\"label\":\"otherLabel\",\"height\":695,\"left\":3148,\"top\":1928,\"width\":997}]}}";
-        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationCropping };
-        Assert.True(annotationInput.ValidateExpectedOutput(project, logger));
+        Assert.True(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationCropping, project, logger));
     }
     
     [Fact]
@@ -21,8 +21,7 @@ public class ValidateAnnotationCroppingShould
         var (project, logger) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
         project.AnnotationType = "Cropping";
         var jsonAnnotationCropping = "{\"width\": 4608, \"height\": 3456, \"type\": \"png\", \"labels\": {\"boundingBoxes\": [{\"label\":\"wrongLabelName\",\"height\":1089,\"left\":1390,\"top\":485,\"width\":1613},{\"label\":\"otherLabel\",\"height\":695,\"left\":3148,\"top\":1928,\"width\":997}]}}";
-        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationCropping };
-        Assert.False(annotationInput.ValidateExpectedOutput(project, logger));
+        Assert.False(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationCropping, project, logger));
     }
     
     [Fact]
@@ -31,7 +30,6 @@ public class ValidateAnnotationCroppingShould
         var (project, logger) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
         project.AnnotationType = "Cropping";
         var jsonAnnotationCropping = "{\"width\": 4608, \"height\": 3456, \"type\": \"png\", \"labels\": {\"boundingBoxes\": [{\"label\":\"wrongLabelName\",\"height\":1089,\"left\":1390,\"top\":485,\"width\":10000},{\"label\":\"otherLabel\",\"height\":695,\"left\":3148,\"top\":1928,\"width\":997}]}}";
-        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationCropping };
-        Assert.False(annotationInput.ValidateExpectedOutput(project, logger));
+        Assert.False(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationCropping, project, logger));
     }
 }

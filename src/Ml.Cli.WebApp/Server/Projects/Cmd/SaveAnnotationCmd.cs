@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
@@ -27,9 +28,9 @@ public class SaveAnnotationCmd
     private readonly DatasetsRepository _datasetsRepository;
     private readonly ProjectsRepository _projectsRepository;
     private readonly UsersRepository _usersRepository;
-    private readonly ILogger<AnnotationInput> _logger;
+    private readonly ILogger<SaveAnnotationCmd> _logger;
 
-    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository, ILogger<AnnotationInput> logger)
+    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository, ILogger<SaveAnnotationCmd> logger)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;
@@ -79,7 +80,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
         
-        var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data, _logger);
+        var labelsValidationResult = AnnotationInputValidator.ValidateExpectedOutput(saveAnnotationInput.AnnotationInput.ExpectedOutput, project.Data, _logger);
         if (!labelsValidationResult)
         {
             commandResult.Error = new ErrorResult()

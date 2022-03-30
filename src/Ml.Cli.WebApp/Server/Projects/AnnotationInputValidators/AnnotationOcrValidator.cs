@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
+namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 
 public record AnnotationOcr
 {
@@ -9,7 +9,10 @@ public record AnnotationOcr
     public int Height { get; set; }
     public string Type { get; set; }
     public IDictionary<string, string> Labels { get; set; }
+};
 
+public static class AnnotationOcrValidator
+{
     public static bool Validate(IDictionary<string, string> labels, ProjectDataModel project)
     {
         if (project.Labels.Count != labels.Count) return false;
@@ -23,4 +26,4 @@ public record AnnotationOcr
 
         return true;
     }
-};
+}
