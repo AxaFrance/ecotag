@@ -10,12 +10,12 @@ public record AnnotationOcr
     public string Type { get; set; }
     public IDictionary<string, string> Labels { get; set; }
 
-    public bool Validate(ProjectDataModel project)
+    public static bool Validate(IDictionary<string, string> labels, ProjectDataModel project)
     {
-        if (project.Labels.Count != Labels.Count) return false;
+        if (project.Labels.Count != labels.Count) return false;
         foreach (var label in project.Labels)
         {
-            if (!Labels.ContainsKey(label.Name))
+            if (!labels.ContainsKey(label.Name))
             {
                 return false;
             }

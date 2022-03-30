@@ -11,10 +11,10 @@ public record AnnotationNer
     public string Token { get; set; }
     public AnnotationNerLabel Label { get; set; }
 
-    public bool Validate(ProjectDataModel project)
+    public static bool Validate(AnnotationNer annotationNer, ProjectDataModel project)
     {
-        if (Start >= End) return false;
-        if (project.Labels.All(element => element.Name != Label.Name)) return false;
+        if (annotationNer.Start >= annotationNer.End) return false;
+        if (project.Labels.All(element => element.Name != annotationNer.Label.Name)) return false;
         return true;
     }
     

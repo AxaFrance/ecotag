@@ -14,15 +14,15 @@ public record AnnotationCropping
     public string Type { get; set; }
     public CroppingLabels Labels { get; set; }
 
-    public bool Validate(ProjectDataModel project)
+    public static bool Validate(AnnotationCropping annotationCropping, ProjectDataModel project)
     {
-        var validationResult = new Validation().Validate(this, true);
+        var validationResult = new Validation().Validate(annotationCropping, true);
         if (!validationResult.IsSuccess) return false;
-        var labelsList = Labels.BoundingBoxes;
+        var labelsList = annotationCropping.Labels.BoundingBoxes;
 
         foreach (var label in labelsList)
         {
-            if (project.Labels.All(element => element.Name != label.Label) || label.Left + label.Width > Width || label.Top + label.Height > Height)
+            if (project.Labels.All(element => element.Name != label.Label) || label.Left + label.Width > annotationCropping.Width || label.Top + label.Height > annotationCropping.Height)
             {
                 return false;
             }

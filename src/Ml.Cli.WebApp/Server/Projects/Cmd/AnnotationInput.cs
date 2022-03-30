@@ -23,10 +23,10 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.Cropping:
                 try
                 {
-                    var croppingLabels = JsonSerializer.Deserialize<AnnotationCropping>(ExpectedOutput, jsonOptions);
-                    if (croppingLabels != null)
+                    var annotationCropping = JsonSerializer.Deserialize<AnnotationCropping>(ExpectedOutput, jsonOptions);
+                    if (annotationCropping != null)
                     {
-                        isValid = croppingLabels.Validate(project);
+                        isValid = AnnotationCropping.Validate(annotationCropping, project);
                     }
                 }
                 catch
@@ -48,7 +48,7 @@ public record AnnotationInput
                         if (!AnnotationNer.ValidateNerOverlap(namedEntityLabels)) return false;
                         foreach (var label in namedEntityLabels)
                         {
-                            if (!label.Validate(project))
+                            if (!AnnotationNer.Validate(label, project))
                             {
                                 return false;
                             }
@@ -66,10 +66,10 @@ public record AnnotationInput
             case AnnotationTypeEnumeration.Ocr:
                 try
                 {
-                    var ocrLabels = JsonSerializer.Deserialize<AnnotationOcr>(ExpectedOutput, jsonOptions);
-                    if (ocrLabels != null)
+                    var annotationOcr = JsonSerializer.Deserialize<AnnotationOcr>(ExpectedOutput, jsonOptions);
+                    if (annotationOcr != null)
                     {
-                        isValid = ocrLabels.Validate(project);
+                        isValid = AnnotationOcr.Validate(annotationOcr.Labels, project);
                     }
                 }
                 catch
