@@ -17,68 +17,57 @@ public record AnnotationInput
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
         var isValid = false;
-        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         switch (enumType)
         {
             case AnnotationTypeEnumeration.Cropping:
-                try
+                var annotationCropping = DeserializeAnnotation<AnnotationCropping>(ExpectedOutput);
+                if (annotationCropping != null)
                 {
-                    var annotationCropping = JsonSerializer.Deserialize<AnnotationCropping>(ExpectedOutput, jsonOptions);
-                    if (annotationCropping != null)
-                    {
-                        isValid = AnnotationCropping.Validate(annotationCropping, project);
-                    }
+                    isValid = AnnotationCropping.Validate(annotationCropping, project);
                 }
-                catch
-                {
-                    // ignored
-                }
-
                 break;
             case AnnotationTypeEnumeration.ImageClassifier:
                 //We only have the value, no need to deserialize as it already is a string
                 return AnnotationImageClassifier.Validate(ExpectedOutput, project);
             case AnnotationTypeEnumeration.NamedEntity:
-                try
+                var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(ExpectedOutput);
+                if (namedEntityLabels != null)
                 {
-                    var namedEntityLabels = JsonSerializer.Deserialize<List<AnnotationNer>>(ExpectedOutput, jsonOptions);
-                    if (namedEntityLabels != null)
+                    if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
+                    if (!AnnotationNer.ValidateNerOverlap(namedEntityLabels)) return false;
+                    foreach (var label in namedEntityLabels)
                     {
-                        if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
-                        if (!AnnotationNer.ValidateNerOverlap(namedEntityLabels)) return false;
-                        foreach (var label in namedEntityLabels)
+                        if (!AnnotationNer.Validate(label, project))
                         {
-                            if (!AnnotationNer.Validate(label, project))
-                            {
-                                return false;
-                            }
+                            return false;
                         }
-
-                        isValid = true;
                     }
-                }
-                catch
-                {
-                    // ignored
-                }
 
+                    isValid = true;
+                }
                 break;
             case AnnotationTypeEnumeration.Ocr:
-                try
+                var annotationOcr = DeserializeAnnotation<AnnotationOcr>(ExpectedOutput);
+                if (annotationOcr != null)
                 {
-                    var annotationOcr = JsonSerializer.Deserialize<AnnotationOcr>(ExpectedOutput, jsonOptions);
-                    if (annotationOcr != null)
-                    {
-                        isValid = AnnotationOcr.Validate(annotationOcr.Labels, project);
-                    }
-                }
-                catch
-                {
-                    // ignored
+                    isValid = AnnotationOcr.Validate(annotationOcr.Labels, project);
                 }
                 break;
         }
 
         return isValid;
+    }
+
+    private static T DeserializeAnnotation<T>(string expectedOutput) where T : class
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<T>(expectedOutput,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 }
