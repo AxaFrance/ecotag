@@ -1,6 +1,8 @@
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const fetch = async (url, config) => {
+export const expectedOutputJsonOcr= "{\"type\":\"/api/server/projects/0005/files/572bb480-18e7-4914-839a-f669908fe93c\",\"width\":1488,\"height\":899,\"labels\":{\"Recto\":\"annotation1\",\"Verso\":\"annotation2\"}}";
+
+export const fetch = (annotationType, expectedOutputJson) => async (url, config) => {
     await sleep(1);
 
     if(url.includes("/files/")){
@@ -16,8 +18,7 @@ export const fetch = async (url, config) => {
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
                 }
                 const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], {type: contentType});
-                return blob;
+                return new Blob([byteArray], {type: contentType});
             },
         };
     }
@@ -40,8 +41,8 @@ export const fetch = async (url, config) => {
                             id: "1"
                         }, {name: "Signature", color: "#f20713", id: "2"}],
                         name: "Carte verte",
-                        numberCrossAnnotation: 0,
-                        annotationType: "OCR"
+                        numberCrossAnnotation: 1,
+                        annotationType
                     }
                 },
             };
@@ -85,7 +86,7 @@ export const fetch = async (url, config) => {
                     await sleep(1);
                     return [{
                         annotation: {
-                            expectedOutputJson: "{\"type\":\"/api/server/projects/0005/files/572bb480-18e7-4914-839a-f669908fe93c\",\"width\":1488,\"height\":899,\"labels\":{\"Recto\":\"annotation1\",\"Verso\":\"annotation2\"}}",
+                            expectedOutputJson,
                             id: "annot1",
                         },
                         fileId: "1",

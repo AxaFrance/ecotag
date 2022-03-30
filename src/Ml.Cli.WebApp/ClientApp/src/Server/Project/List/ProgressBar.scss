@@ -107,8 +107,11 @@ progress[value]::-moz-progress-bar {
 }
 
 p[data-value] {
-
   position: relative;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-bottom: 0.2rem;
 }
 
 /* The percentage will automatically fall in place as soon as we make the width fluid. Now making widths fluid. */
@@ -117,9 +120,6 @@ p[data-value]:after {
   content: attr(data-value) '%';
   position: absolute; right:0;
 }
-
-
-
 
 
 .html5::-webkit-progress-value,

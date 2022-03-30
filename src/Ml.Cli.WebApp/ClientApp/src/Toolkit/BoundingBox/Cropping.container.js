@@ -91,19 +91,17 @@ const CroppingContainer = ({ labels, url, onSubmit, expectedOutput = [] }) => {
     }
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
-      const initialShapes = []; /* expectedOutput.map(e => {
-        const labelId = e.id;
+      const initialShapes = expectedOutput ? expectedOutput.labels.boundingBoxes.map(e => {
+        const label = labels.find(l => l.name === e.label);
         return {
           begin: { x: e.left, y: e.top },
           end: { x: e.left + e.width, y: e.top + e.height },
           id: cuid(),
-          labelId,
+          labelId: label.id,
+          color: label.color,
           focus: false,
-          draggable: false,
-          transformable: false,
-          deletable: false,
         };
-      });*/
+      }) : [];
       if (state.keepAnnotation) {
         setState({
           ...state,

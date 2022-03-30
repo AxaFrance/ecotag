@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { AnnotationContainer } from './Annotation.container';
 import { MemoryRouter, Route} from "react-router-dom";
-import {fetch} from './mock';
+import {fetch, expectedOutputJsonOcr} from './mock';
 
 export default {
     title: 'Project/Annotations',
@@ -14,8 +14,14 @@ const Template = (args) => <MemoryRouter initialEntries={["/projects/0005/start"
     </Route>
 </MemoryRouter>;
 
-export const Container = Template.bind({});
-Container.args = {
-    fetch,
+export const Ocr = Template.bind({});
+Ocr.args = {
+    fetch:fetch("OCR", expectedOutputJsonOcr),
+    environment : {apiUrl: "/server/{path}"}
+}
+
+export const Cropping = Template.bind({});
+Cropping.args = {
+    fetch:fetch("Cropping", null),
     environment : {apiUrl: "/server/{path}"}
 }
