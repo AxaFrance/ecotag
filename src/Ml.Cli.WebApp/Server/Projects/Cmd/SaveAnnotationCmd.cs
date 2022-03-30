@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
@@ -26,12 +27,14 @@ public class SaveAnnotationCmd
     private readonly DatasetsRepository _datasetsRepository;
     private readonly ProjectsRepository _projectsRepository;
     private readonly UsersRepository _usersRepository;
+    private readonly ILogger<AnnotationInput> _logger;
 
-    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository, ILogger<AnnotationInput> logger)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
+        _logger = logger;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(SaveAnnotationInput saveAnnotationInput)
@@ -76,7 +79,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
         
-        var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data);
+        var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data, _logger);
         if (!labelsValidationResult)
         {
             commandResult.Error = new ErrorResult()

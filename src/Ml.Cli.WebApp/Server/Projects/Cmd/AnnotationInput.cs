@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Projects.AnnotationInputTypes;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
@@ -12,7 +13,7 @@ public record AnnotationInput
     [Required]
     public string ExpectedOutput { get; set; }
 
-    public bool ValidateExpectedOutput(ProjectDataModel project)
+    public bool ValidateExpectedOutput(ProjectDataModel project, ILogger<AnnotationInput> logger)
     {
         var parseResult = Enum.TryParse(project.AnnotationType, out AnnotationTypeEnumeration enumType);
         if (!parseResult) return false;
@@ -20,7 +21,7 @@ public record AnnotationInput
         switch (enumType)
         {
             case AnnotationTypeEnumeration.Cropping:
-                var annotationCropping = DeserializeAnnotation<AnnotationCropping>(ExpectedOutput);
+                var annotationCropping = DeserializeAnnotation<AnnotationCropping>(ExpectedOutput, logger);
                 if (annotationCropping != null)
                 {
                     isValid = AnnotationCropping.Validate(annotationCropping, project);
@@ -30,7 +31,7 @@ public record AnnotationInput
                 //We only have the value, no need to deserialize as it already is a string
                 return AnnotationImageClassifier.Validate(ExpectedOutput, project);
             case AnnotationTypeEnumeration.NamedEntity:
-                var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(ExpectedOutput);
+                var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(ExpectedOutput, logger);
                 if (namedEntityLabels != null)
                 {
                     if (!AnnotationNer.ValidateNerLabelsNames(namedEntityLabels, project)) return false;
@@ -47,7 +48,7 @@ public record AnnotationInput
                 }
                 break;
             case AnnotationTypeEnumeration.Ocr:
-                var annotationOcr = DeserializeAnnotation<AnnotationOcr>(ExpectedOutput);
+                var annotationOcr = DeserializeAnnotation<AnnotationOcr>(ExpectedOutput, logger);
                 if (annotationOcr != null)
                 {
                     isValid = AnnotationOcr.Validate(annotationOcr.Labels, project);
@@ -58,7 +59,7 @@ public record AnnotationInput
         return isValid;
     }
 
-    private static T DeserializeAnnotation<T>(string expectedOutput) where T : class
+    private static T DeserializeAnnotation<T>(string expectedOutput, ILogger<AnnotationInput> logger) where T : class
     {
         try
         {
@@ -67,6 +68,7 @@ public record AnnotationInput
         }
         catch (Exception e)
         {
+            logger.LogError("An error occured while deserializing annotation : " + e.Message);
             return null;
         }
     }

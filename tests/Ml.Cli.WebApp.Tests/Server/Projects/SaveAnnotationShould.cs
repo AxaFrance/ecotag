@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database;
@@ -74,7 +75,8 @@ public class SaveAnnotationShould
         {
             HttpContext = context
         };
-        var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository);
+        var logger = Mock.Of<ILogger<AnnotationInput>>();
+        var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, logger);
         var result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
         {
             ExpectedOutput = expectedOutput
