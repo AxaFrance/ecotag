@@ -10,6 +10,12 @@ export const fetchReserveAnnotations = fetch => async (projectId, fileId) =>
     });
 
 export const fetchAnnotate = fetch => async (projectId, fileId, annotationId, data) => {
+    if(annotationId){
+        return fetch(`projects/${projectId}/annotations/${fileId}/${annotationId}`, {
+            method: 'PUT',
+            body: JSON.stringify({expectedOutput : JSON.stringify(data)})
+        });
+    }
     return fetch(`projects/${projectId}/annotations/${fileId}`, {
         method: 'POST',
         body: JSON.stringify({expectedOutput : JSON.stringify(data)})

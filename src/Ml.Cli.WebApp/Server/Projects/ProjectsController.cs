@@ -138,6 +138,30 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
         }
         
+        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        {
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
+            {
+                ProjectId = projectId,
+                FileId = fileId,
+                AnnotationId = annotationId,
+                AnnotationInput = annotationInput,
+                CreatorNameIdentifier = creatorNameIdentifier
+            });
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return NoContent();
+        }
+        
         [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
