@@ -16,9 +16,9 @@ public class UpdateGroupCmd
 {
     public const string InvalidModel = "InvalidModel";
     public const string UserDuplicate = "UserDuplicate";
-    private readonly IGroupsRepository _groupsRepository;
+    private readonly GroupsRepository _groupsRepository;
     
-    public UpdateGroupCmd(IGroupsRepository groupsRepository)
+    public UpdateGroupCmd(GroupsRepository groupsRepository)
     {
         _groupsRepository = groupsRepository;
     }

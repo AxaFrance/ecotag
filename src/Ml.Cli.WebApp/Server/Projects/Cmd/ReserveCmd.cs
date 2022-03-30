@@ -11,13 +11,13 @@ public class ReserveCmd
     private const string UserNotInGroup = "UserNotInGroup";
     private const string UserNotFound = "UserNotFound";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IProjectsRepository _projectsRepository;
+    private readonly ProjectsRepository _projectsRepository;
     private readonly AnnotationsRepository _annotationsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public ReserveCmd(IUsersRepository usersRepository, 
+    public ReserveCmd(UsersRepository usersRepository, 
         DatasetsRepository datasetsRepository, 
-        IProjectsRepository projectsRepository,
+        ProjectsRepository projectsRepository,
         AnnotationsRepository annotationsRepository)
     {
         _usersRepository = usersRepository;

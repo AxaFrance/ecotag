@@ -58,11 +58,11 @@ public class CreateProjectCmd
     public const string UserNotFound = "UserNotFound";
     public const string UserNotInGroup = "UserNotInGroup";
     
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IGroupsRepository _groupsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly GroupsRepository _groupsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public CreateProjectCmd(IProjectsRepository projectsRepository, IGroupsRepository groupsRepository, IUsersRepository usersRepository)
+    public CreateProjectCmd(ProjectsRepository projectsRepository, GroupsRepository groupsRepository, UsersRepository usersRepository)
     {
         _projectsRepository = projectsRepository;
         _groupsRepository = groupsRepository;

@@ -6,9 +6,9 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 public class GetGroupCmd
 {
     public const string GroupNotFound = "GroupNotFound";
-    private readonly IGroupsRepository _groupsRepository;
+    private readonly GroupsRepository _groupsRepository;
 
-    public GetGroupCmd(IGroupsRepository groupsRepository)
+    public GetGroupCmd(GroupsRepository groupsRepository)
     {
         _groupsRepository = groupsRepository;
     }

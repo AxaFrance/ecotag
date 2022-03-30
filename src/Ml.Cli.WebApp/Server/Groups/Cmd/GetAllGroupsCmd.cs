@@ -7,10 +7,10 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
 public class GetAllGroupsCmd
 {
-    private readonly IGroupsRepository _groupsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly GroupsRepository _groupsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public GetAllGroupsCmd(IGroupsRepository groupsRepository, IUsersRepository usersRepository)
+    public GetAllGroupsCmd(GroupsRepository groupsRepository, UsersRepository usersRepository)
     {
         _groupsRepository = groupsRepository;
         _usersRepository = usersRepository;

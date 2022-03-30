@@ -9,7 +9,7 @@ using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 
-public class GroupsRepository : IGroupsRepository
+public class GroupsRepository
 {
     private readonly GroupContext _groupsContext;
     private readonly IServiceProvider _serviceProvider;

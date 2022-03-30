@@ -23,11 +23,11 @@ public class SaveAnnotationCmd
     public const string UserNotFound = "UserNotFound";
     public const string InvalidLabels = "InvalidLabels";
 
-    private readonly IDatasetsRepository _datasetsRepository;
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly DatasetsRepository _datasetsRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public SaveAnnotationCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository, IDatasetsRepository datasetsRepository)
+    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;

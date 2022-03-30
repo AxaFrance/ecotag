@@ -7,9 +7,9 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
 public class GetAllUsersCmd
 {
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public GetAllUsersCmd(IUsersRepository usersRepository)
+    public GetAllUsersCmd(UsersRepository usersRepository)
     {
         _usersRepository = usersRepository;
     }

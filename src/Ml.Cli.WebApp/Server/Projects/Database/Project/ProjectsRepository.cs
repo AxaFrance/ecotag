@@ -9,7 +9,7 @@ using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-public class ProjectsRepository : IProjectsRepository
+public class ProjectsRepository
 {
     private readonly ProjectContext _projectsContext;
     private readonly IMemoryCache _cache;
@@ -89,7 +89,7 @@ public class ProjectsRepository : IProjectsRepository
         {
             return commandResult.ReturnError(Forbidden);
         }
-        commandResult.Data = cacheEntry?.ToProjectDataModel();
+        commandResult.Data = cacheEntry.ToProjectDataModel();
         return commandResult;
     }
 }

@@ -12,9 +12,9 @@ public class GetDatasetCmd
 
     public const string UserNotFound = "UserNotFound";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public GetDatasetCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
+    public GetDatasetCmd(DatasetsRepository datasetsRepository, UsersRepository usersRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

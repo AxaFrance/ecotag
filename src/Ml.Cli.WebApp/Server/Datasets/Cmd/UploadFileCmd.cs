@@ -47,9 +47,9 @@ public class UploadFileCmd
 
     public const string InvalidModel = "InvalidModel";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public UploadFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public UploadFileCmd(UsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;

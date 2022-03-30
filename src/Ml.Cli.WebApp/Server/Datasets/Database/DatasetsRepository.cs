@@ -11,7 +11,7 @@ using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetsRepository : IDatasetsRepository
+public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string AnnotationNotFound = "AnnotationNotFound";
