@@ -19,10 +19,6 @@ public record AnnotationCropping
         var validationResult = new Validation().Validate(this, true);
         if (!validationResult.IsSuccess) return false;
         var labelsList = Labels.BoundingBoxes;
-        if (labelsList.Count != project.Labels.Count)
-        {
-            return false;
-        }
 
         foreach (var label in labelsList)
         {
