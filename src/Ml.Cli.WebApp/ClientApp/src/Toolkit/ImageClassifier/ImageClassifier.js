@@ -5,8 +5,7 @@ import '../BoundingBox/Labels.scss';
 import './ImageClassifier.scss';
 import '@axa-fr/react-toolkit-button/src/button.scss'
 
-const ImageClassifier = ({url, labels, onSubmit}) => {
-    
+const ImageClassifier = ({url, labels, onSubmit, state}) => {
     const coloredLabels = labels.map((label) => {
         return {
             "name": label.name,
@@ -26,7 +25,18 @@ const ImageClassifier = ({url, labels, onSubmit}) => {
                 })}
             </div>
             <div className="image-classifier__image-container">
-                <img src={url} className="image-classifier__image" alt="Classifier image"/>
+                <img
+                    src={url}
+                    id="currentImage"
+                    className="image-classifier__image"
+                    alt="Classifier image"
+                    style={{
+                        width: `${state.widthImage}%`,
+                        height: `${state.widthImage}%`,
+                        transform: `rotate(${state.rotate}deg)`,
+                        margin: `${state.initialRotate ? '' : state.marginRotate}`,
+                    }}
+                />
             </div>
         </div>
     );

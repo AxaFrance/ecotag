@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import ImageClassifier from "./ImageClassifier";
 import url from "./sample_image.png";
+import ImageClassifierContainer from "./ImageClassifier.container";
 
 const mockedFunction = () => {};
 
@@ -11,7 +12,7 @@ export default {
     component: ImageClassifier
 }
 
-const Template = (args) => <ImageClassifier {...args}/>;
+const Template = (args) => <ImageClassifierContainer {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
