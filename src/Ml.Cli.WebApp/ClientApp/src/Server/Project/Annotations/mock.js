@@ -2,7 +2,7 @@ export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const expectedOutputJsonOcr= "{\"type\":\"/api/server/projects/0005/files/572bb480-18e7-4914-839a-f669908fe93c\",\"width\":1488,\"height\":899,\"labels\":{\"Recto\":\"annotation1\",\"Verso\":\"annotation2\"}}";
 
-export const fetch = (annotationType, expectedOutputJson) => async (url, config) => {
+export const fetch = (annotationType, expectedOutputJson) => async (url) => {
     await sleep(1);
 
     if(url.includes("/files/")){
