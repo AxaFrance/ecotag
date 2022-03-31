@@ -1,7 +1,7 @@
 export const fetchProject = fetch => async id => fetch(`projects/${id}`);
 export const fetchProjects = fetch => async () => fetch(`projects`);
 
-export const fetchAnnotationsStatus = fetch => async id => fetch(`annotations/${id}`);
+export const fetchAnnotationsStatus = fetch => async id => fetch(`projects/annotations/${id}`);
 
 export const fetchReserveAnnotations = fetch => async (projectId, fileId) =>
     fetch(`projects/${projectId}/reserve`, {

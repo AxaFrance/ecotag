@@ -53,6 +53,6 @@ const data = {
 
 export default { title: 'Project/Page' };
 
-export const withDefault = () => <Router><Page loaderMode={LoaderModes.none} user={data.user} group={data.group} users={data.users} dataset={data.dataset} project={data.project} annotationStatus={data.annotationStatus} /></Router>;
+export const withDefault = () => <Router><Page loaderMode={LoaderModes.none} user={data.user} group={data.group} users={data.users} dataset={data.dataset} project={data.project} annotationsStatus={data.annotationStatus} /></Router>;
 
 
