@@ -1,34 +1,86 @@
 ﻿import React from "react";
-import Button from "@axa-fr/react-toolkit-button";
 import stringToRGB from "./color";
 import '../BoundingBox/Labels.scss';
 import './ImageClassifier.scss';
 import '@axa-fr/react-toolkit-button/src/button.scss'
+import classNames from "classnames";
+import { GlobalHotKeys } from 'react-hotkeys';
 
-const ImageClassifier = ({url, labels, onSubmit}) => {
-    
+const defaultClassName = 'image-classifier';
+const defaultClassNameButtonsContainer = 'image-classifier__buttons-container';
+const defaultClassNameButtonContainer = 'image-classifier__button-container';
+
+const generateKeyMap = (length) => {
+    let result = {};
+    for(let i = 1; i <= length; i ++){
+        result[`${i.toString(16)}`] = `${i.toString(16)}`;
+    }
+    return result;
+};
+
+const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
+    const className = classNames(defaultClassName, {
+        [`${defaultClassName}--inline-mode`]: state.inlineMode,
+    });
+    const classNameButtonsContainer = classNames(defaultClassNameButtonsContainer, {
+        [`${defaultClassNameButtonsContainer}--inline-mode`]: state.inlineMode,
+    });
+    const classNameButtonContainer = classNames(defaultClassNameButtonContainer, {
+        [`${defaultClassNameButtonContainer}--inline-mode`]: state.inlineMode,
+    });
     const coloredLabels = labels.map((label) => {
         return {
             "name": label.name,
             "color": `#${stringToRGB(label.name)}`
         };
     });
+
+    const generateHandler = () => {
+        let result = {};
+        for(let i = 1; i <= coloredLabels.length; i++){
+            result[`${i.toString(16)}`] = () => onSubmit(coloredLabels[i - 1].name);
+        }
+        return result;
+    }
+    
+    const keyMap = generateKeyMap(coloredLabels.length);
+    
+    const handlers = generateHandler();
     
     return(
-        <div className="image-classifier">
-            <div className="image-classifier__buttons-container">
-                {coloredLabels.map((label, index) => {
-                    return(
-                        <div key={index} className="image-classifier__button-container">
-                            <Button onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color, boxShadow: "none"}}>{label.name}</Button>
-                        </div>
-                    );
-                })}
-            </div>
-            <div className="image-classifier__image-container">
-                <img src={url} className="image-classifier__image" alt="Classifier image"/>
-            </div>
-        </div>
+        <>
+            <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
+                <div className={className}>
+                    <div className={classNameButtonsContainer}>
+                        {coloredLabels.map((label, index) => {
+                            let isSelected = false;
+                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label.name === label.name){
+                                isSelected = true;
+                            }
+                            return(
+                                <div key={index} className={classNameButtonContainer}>
+                                    <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit({
+                                        name: label.name
+                                    })} style={{backgroundColor: label.color}}>{label.name}</button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="image-classifier__image-container">
+                        <img
+                            src={url}
+                            id="currentImage"
+                            alt="Classifier image"
+                            style={{
+                                width: `${state.widthImage}%`,
+                                transform: `rotate(${state.rotate}deg)`,
+                                margin: `${state.initialRotate ? '' : state.marginRotate}`,
+                            }}
+                        />
+                    </div>
+                </div>
+            </GlobalHotKeys>
+        </>
     );
 };
 

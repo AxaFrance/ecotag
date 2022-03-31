@@ -2,10 +2,14 @@
   justify-content: center;
   text-align: center;
   width:100%;
+  &--inline-mode{
+    display: flex;
+  }
   &__image-container{
     display: flex;
     justify-content: center;
     width:100%;
+    align-items: center;
   }
   &__image{
     width: 80%;
@@ -15,9 +19,37 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     margin-bottom: 1em;
+    &--inline-mode{
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+    }
   }
   &__button-container{
     margin-top: 3em;
     flex: 1 0 21%;
+    &--inline-mode{
+      margin-top: 1em;
+      flex: none;
+    }
+  }
+}
+
+.image-classifier-btn{
+  bottom: 15px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 10px 25px;
+  cursor: pointer;
+  min-width: 150px;
+  &:hover {
+    opacity: 0.7;
+    transition-duration: 200ms;
+    transition: ease-in;
+  }
+  &--selected {
+    border: 4px dashed black;
   }
 }

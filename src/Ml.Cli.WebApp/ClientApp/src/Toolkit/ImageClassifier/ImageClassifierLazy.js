@@ -1,14 +1,15 @@
 ﻿import React, {Suspense} from "react";
 
-const ImageClassifier = React.lazy(() => import('./ImageClassifier'));
+const ImageClassifierContainer = React.lazy(() => import('./ImageClassifier.container'));
 
-const ImageClassifierLazy = ({url, labels, onSubmit}) => {
+const ImageClassifierLazy = ({url, labels, onSubmit, expectedOutput}) => {
     
     return <Suspense fallback={<div>Loading...</div>}>
-        <ImageClassifier
+        <ImageClassifierContainer
             url={url}
             labels={labels}
             onSubmit={onSubmit}
+            expectedOutput={expectedOutput}
         />
     </Suspense>
     
