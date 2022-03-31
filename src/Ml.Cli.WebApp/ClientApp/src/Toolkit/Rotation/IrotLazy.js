@@ -2,11 +2,11 @@
 
 const IrotContainer = React.lazy(() => import('./Irot.container'));
 
-const IrotLazy = ({expectedLabels, url, onSubmit}) => {
+const IrotLazy = ({expectedOutput, url, onSubmit}) => {
     
     return <Suspense fallback={<div>Loading...</div>}>
         <IrotContainer
-            expectedLabels={expectedLabels}
+            expectedOutput={expectedOutput}
             url={url}
             onSubmit={onSubmit}
         />

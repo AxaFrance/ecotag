@@ -3,7 +3,7 @@ import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {MemoryRouter, Route} from "react-router-dom";
 import {AnnotationContainer} from "./Annotation.container";
-import {fetch} from './mock';
+import {expectedOutputJsonOcr, fetch} from './mock';
 
 describe('Annotation.container', () => {
     
@@ -12,7 +12,7 @@ describe('Annotation.container', () => {
        const environment = {apiUrl: "/server/{path}"}
        const { getByText } = render(<MemoryRouter initialEntries={["/projects/0005/start"]}>
           <Route path="/:projectId/0005/:documentId">
-              <AnnotationContainer fetch={fetch} environment={environment} />
+              <AnnotationContainer fetch={fetch("OCR", expectedOutputJsonOcr)} environment={environment} />
           </Route>
           </MemoryRouter>);
         let imagefilename = await waitFor(() => getByText('1.PNG'));

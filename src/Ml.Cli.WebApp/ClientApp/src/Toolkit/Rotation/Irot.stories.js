@@ -7,8 +7,11 @@ const onSubmit = (e) => {
   console.log("submit", e);
 };
 
-const expectedLabels = {"angle": -30};
+const expectedOutput = {
+      labels: {"angle": -30},
+      image_anomaly : false
+    };
 
 storiesOf('Rotation', module).add('RotationContainer', () => (
-  <IrotContainer url={url} onSubmit={onSubmit} expectedLabels={expectedLabels} />
+  <IrotContainer url={url} onSubmit={onSubmit} expectedOutput={expectedOutput} />
 ));
