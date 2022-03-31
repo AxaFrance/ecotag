@@ -25,3 +25,21 @@ Cropping.args = {
     fetch:fetch("Cropping", null),
     environment : {apiUrl: "/server/{path}"}
 }
+
+export const ImageClassifier = Template.bind({});
+ImageClassifier.args = {
+    fetch:fetch("ImageClassifier", null),
+    environment : {apiUrl: "/server/{path}"}
+}
+
+export const Rotation = Template.bind({});
+Rotation.args = {
+    fetch:fetch("Rotation", null),
+    environment : {apiUrl: "/server/{path}"}
+}
+
+export const NamedEntity = Template.bind({});
+NamedEntity.args = {
+    fetch:fetch("NamedEntity", null),
+    environment : {apiUrl: "/server/{path}"}
+}
