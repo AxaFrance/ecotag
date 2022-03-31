@@ -84,8 +84,8 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
         class="image-classifier__button-container"
       >
         <button
-          class="btn af-btn"
-          style="background-color: rgb(107, 149, 27); box-shadow: none;"
+          class="image-classifier-btn"
+          style="background-color: rgb(107, 149, 27);"
         >
           Firstname
         </button>
@@ -96,9 +96,80 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
     >
       <img
         alt="Classifier image"
-        class="image-classifier__image"
+        id="currentImage"
         src=""
+        style="width: 80%; transform: rotate(0deg);"
       />
+    </div>
+  </div>
+  <div
+    class="toolbar"
+  >
+    <div
+      class="toolbar__button-container toolbar__button-container--progress-bar"
+    >
+      <div
+        class="toolbar__button-progress-item"
+      >
+        <input
+          class="toolbar__button-progress-item-input"
+          max="80"
+          min="1"
+          name="width"
+          type="range"
+          value="80"
+        />
+        <label
+          class="toolbar__button-progress-item-label"
+        >
+          Image Size
+        </label>
+      </div>
+      <div
+        class="toolbar__button-switch-item"
+      >
+        <input
+          class="toolbar__button-switch-item-input"
+          id="inlineMode"
+          type="checkbox"
+        />
+        <label
+          class="toolbar__button-switch-item-label"
+          for="inlineMode"
+        >
+          Inline mode
+        </label>
+      </div>
+    </div>
+    <div
+      class="toolbar__button-container"
+    >
+      <button
+        class="toolbar__button-item"
+        title="Raccourci : L"
+      >
+        <span
+          class="glyphicon glyphicon-reset"
+        />
+        <div
+          class="toolbar__button-item-label"
+        >
+          Rotate Left
+        </div>
+      </button>
+      <button
+        class="toolbar__button-item"
+        title="Raccourci : R"
+      >
+        <span
+          class="glyphicon glyphicon-repeat"
+        />
+        <div
+          class="toolbar__button-item-label"
+        >
+          Rotate Right
+        </div>
+      </button>
     </div>
   </div>
 </DocumentFragment>

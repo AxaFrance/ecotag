@@ -54,7 +54,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                     <div className={classNameButtonsContainer}>
                         {coloredLabels.map((label, index) => {
                             let isSelected = false;
-                            if(expectedOutput !== null && expectedOutput.label.name === label.name){
+                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label.name === label.name){
                                 isSelected = true;
                             }
                             return(
