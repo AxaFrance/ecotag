@@ -95,7 +95,8 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     if (response.status >= 500) {
         data = {
             status: resilienceStatus.ERROR,
-            items: [],
+            annotation,
+            fileId,
         }
     } else {
         const id = !annotationId ? await response.json() : annotationId;
