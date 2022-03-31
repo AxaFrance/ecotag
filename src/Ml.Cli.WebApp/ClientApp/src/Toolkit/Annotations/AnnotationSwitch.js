@@ -69,7 +69,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
         case "Rotation":
         case 'IROT':
             return <IrotLazy
-                expectedLabels={[]}
+                expectedOutput={expectedOutput}
                 url={url}
                 onSubmit={onDatasetSubmit}
             />

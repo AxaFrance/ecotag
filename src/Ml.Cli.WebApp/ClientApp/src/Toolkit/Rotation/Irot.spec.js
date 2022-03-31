@@ -12,13 +12,16 @@ const onSubmit = jest.fn(async data => {
     await sleep(20);
 });
 
-const expectedLabels = {"angle": -30};
+const expectedOutput = {
+    labels: {"angle": -30},
+    image_anomaly : false
+};
 
 const defaultImageDimensions={height:400, width:512};
 
 describe(`Annotation.Irot`, () => {
     test(`should return correct values`, async () => {
-        const { container, rerender } = render(<IrotContainer url={url1} onSubmit={onSubmit} expectedLabels={expectedLabels} defaultImageDimensions={defaultImageDimensions} />);
+        const { container, rerender } = render(<IrotContainer url={url1} onSubmit={onSubmit} expectedOutput={expectedOutput} defaultImageDimensions={defaultImageDimensions} />);
 
         await waitFor(() => {
             const input = container.querySelector('[id="angle"]');
@@ -79,7 +82,7 @@ describe(`Annotation.Irot`, () => {
             });
         });
 
-        rerender(<IrotContainer url={url2} onSubmit={onSubmit} expectedLabels={[]} defaultImageDimensions={defaultImageDimensions} />);
+        rerender(<IrotContainer url={url2} onSubmit={onSubmit} expectedOutput={null} defaultImageDimensions={defaultImageDimensions} />);
 
         await waitFor(() => {
             fireSumbit();
@@ -98,7 +101,7 @@ describe(`Annotation.Irot`, () => {
             });
         });
 
-        rerender(<IrotContainer url={url2} onSubmit={onSubmit} expectedLabels={[]} defaultImageDimensions={defaultImageDimensions} />);
+        rerender(<IrotContainer url={url2} onSubmit={onSubmit} expectedLabels={null} defaultImageDimensions={defaultImageDimensions} />);
 
         await waitFor(() => {
           fireAnomaly();
@@ -117,7 +120,7 @@ describe(`Annotation.Irot`, () => {
           type: 'jpg'
          },)
 
-        rerender(<IrotContainer url={url1} onSubmit={onSubmit} expectedLabels={[]} defaultImageDimensions={defaultImageDimensions} />);
+        rerender(<IrotContainer url={url1} onSubmit={onSubmit} expectedLabels={null} defaultImageDimensions={defaultImageDimensions} />);
         const checkboxAnomaly = document.getElementById("anomaly").checked;
         expect(checkboxAnomaly).toEqual(false);
     });

@@ -2,15 +2,24 @@ import React, { useEffect, useState } from 'react';
 import Irot from './Irot';
 import Toolbar from './Toolbar';
 
-const getExpectedAngle = expectedLabels => {
-  let expectedAngle = '0';
-  if (expectedLabels && expectedLabels.angle !== undefined && expectedLabels.angle != null) {
-    expectedAngle = expectedLabels.angle.toString();
+const formatExpectedOutput = expectedOutput => {
+  if (!expectedOutput) {
+    return {
+      rotate: '0',
+      imageAnomaly: false
+    };
   }
-  return expectedAngle;
-};
+  let expectedAngle = '0';
+  if (expectedOutput && expectedOutput.labels && expectedOutput.labels.angle) {
+    expectedAngle = expectedOutput.labels.angle.toString();
+  }
+  return {
+    rotate: expectedAngle,
+    imageAnomaly: expectedOutput.image_anomaly
+  };
+}
 
-const IrotContainer = ({ url, expectedLabels, onSubmit, defaultImageDimensions = { height: 0, width: 0 } }) => {
+const IrotContainer = ({ url, onSubmit, expectedOutput=null, defaultImageDimensions = { height: 0, width: 0 } }) => {
   const [state, setState] = useState({
     rotate: '0',
     widthImage: '100',
@@ -20,16 +29,15 @@ const IrotContainer = ({ url, expectedLabels, onSubmit, defaultImageDimensions =
     imageDimensions: defaultImageDimensions,
     imageAnomaly: false,
   });
-
-  const expectedAngle = getExpectedAngle(expectedLabels);
+  const formattedExpectedOutput = formatExpectedOutput(expectedOutput);
   useEffect(() => {
-    setState({ ...state, rotate: expectedAngle, imageAnomaly: false });
-  }, [url, expectedLabels]);
+    setState({ ...state, ...formattedExpectedOutput });
+  }, [url, expectedOutput]);
 
   return (
     <div className="rotation-container-adapter">
       <Irot state={state} setState={setState} url={url} />
-      <Toolbar url={url} state={state} setState={setState} onSubmit={onSubmit} expectedAngle={expectedAngle} />
+      <Toolbar url={url} state={state} setState={setState} onSubmit={onSubmit} expectedAngle={formattedExpectedOutput.rotate} />
     </div>
   );
 };
