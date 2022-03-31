@@ -49,4 +49,7 @@
     transition-duration: 200ms;
     transition: ease-in;
   }
+  &--selected {
+    border: 4px dashed black;
+  }
 }

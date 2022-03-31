@@ -18,7 +18,7 @@ const generateKeyMap = (length) => {
     return result;
 };
 
-const ImageClassifier = ({url, labels, onSubmit, state}) => {
+const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
     const className = classNames(defaultClassName, {
         [`${defaultClassName}--inline-mode`]: state.inlineMode,
     });
@@ -53,9 +53,15 @@ const ImageClassifier = ({url, labels, onSubmit, state}) => {
                 <div className={className}>
                     <div className={classNameButtonsContainer}>
                         {coloredLabels.map((label, index) => {
+                            let isSelected = false;
+                            if(expectedOutput !== null && expectedOutput.label.name === label.name){
+                                isSelected = true;
+                            }
                             return(
                                 <div key={index} className={classNameButtonContainer}>
-                                    <button className="image-classifier-btn" onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color}}>{label.name}</button>
+                                    <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit({
+                                        name: label.name
+                                    })} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );
                         })}

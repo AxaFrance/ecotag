@@ -101,6 +101,7 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
                 url={url}
                 labels={labels}
                 onSubmit={onDatasetSubmit}
+                expectedOutput={expectedOutput}
             />
         default:
             return <></>

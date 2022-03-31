@@ -3,7 +3,7 @@ import Toolbar from "./Toolbar.container";
 import '../Toolbar/Toolbar.scss';
 import ImageClassifier from "./ImageClassifier";
 
-const ImageClassifierContainer = ({url, labels, onSubmit}) => {
+const ImageClassifierContainer = ({url, labels, onSubmit, expectedOutput}) => {
     const [state, setState] = useState({
         labels,
         url,
@@ -25,7 +25,7 @@ const ImageClassifierContainer = ({url, labels, onSubmit}) => {
     
     return (
         <>
-            <ImageClassifier onSubmit={onSubmit} url={url} labels={labels} state={state}/>
+            <ImageClassifier onSubmit={onSubmit} url={url} labels={labels} state={state} expectedOutput={expectedOutput}/>
             <Toolbar state={state} setState={setState}/>
         </>
     )
