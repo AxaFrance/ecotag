@@ -38,8 +38,8 @@ const ImageClassifier = ({url, labels, onSubmit, state}) => {
 
     const generateHandler = () => {
         let result = {};
-        for(let i = 0; i <= coloredLabels.length; i++){
-            result[`${i.toString(16)}`] = () => console.log(coloredLabels[i - 1].name);
+        for(let i = 1; i <= coloredLabels.length; i++){
+            result[`${i.toString(16)}`] = () => onSubmit(coloredLabels[i - 1].name);
         }
         return result;
     }
