@@ -34,3 +34,19 @@
     }
   }
 }
+
+.image-classifier-btn{
+  bottom: 15px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 10px 25px;
+  cursor: pointer;
+  min-width: 150px;
+  &:hover {
+    opacity: 0.7;
+    transition-duration: 200ms;
+    transition: ease-in;
+  }
+}

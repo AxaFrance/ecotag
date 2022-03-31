@@ -1,5 +1,4 @@
 ﻿import React from "react";
-import Button from "@axa-fr/react-toolkit-button";
 import stringToRGB from "./color";
 import '../BoundingBox/Labels.scss';
 import './ImageClassifier.scss';
@@ -56,7 +55,7 @@ const ImageClassifier = ({url, labels, onSubmit, state}) => {
                         {coloredLabels.map((label, index) => {
                             return(
                                 <div key={index} className={classNameButtonContainer}>
-                                    <Button onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color, boxShadow: "none"}}>{label.name}</Button>
+                                    <button className="image-classifier-btn" onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );
                         })}
