@@ -26,7 +26,7 @@ const ImageClassifierContainer = ({url, labels, onSubmit}) => {
     return (
         <>
             <ImageClassifier onSubmit={onSubmit} url={url} labels={labels} state={state}/>
-            <Toolbar onSubmit={() => console.log("Do not submit here !")} state={state} setState={setState}/>
+            <Toolbar state={state} setState={setState}/>
         </>
     )
 };

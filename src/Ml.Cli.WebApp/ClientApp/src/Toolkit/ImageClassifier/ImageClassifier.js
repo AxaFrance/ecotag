@@ -4,8 +4,22 @@ import stringToRGB from "./color";
 import '../BoundingBox/Labels.scss';
 import './ImageClassifier.scss';
 import '@axa-fr/react-toolkit-button/src/button.scss'
+import classNames from "classnames";
+
+const defaultClassName = 'image-classifier';
+const defaultClassNameButtonsContainer = 'image-classifier__buttons-container';
+const defaultClassNameButtonContainer = 'image-classifier__button-container';
 
 const ImageClassifier = ({url, labels, onSubmit, state}) => {
+    const className = classNames(defaultClassName, {
+        [`${defaultClassName}--inline-mode`]: state.inlineMode,
+    });
+    const classNameButtonsContainer = classNames(defaultClassNameButtonsContainer, {
+        [`${defaultClassNameButtonsContainer}--inline-mode`]: state.inlineMode,
+    });
+    const classNameButtonContainer = classNames(defaultClassNameButtonContainer, {
+        [`${defaultClassNameButtonContainer}--inline-mode`]: state.inlineMode,
+    });
     const coloredLabels = labels.map((label) => {
         return {
             "name": label.name,
@@ -14,11 +28,11 @@ const ImageClassifier = ({url, labels, onSubmit, state}) => {
     });
     
     return(
-        <div className="image-classifier">
-            <div className="image-classifier__buttons-container">
+        <div className={className}>
+            <div className={classNameButtonsContainer}>
                 {coloredLabels.map((label, index) => {
                     return(
-                        <div key={index} className="image-classifier__button-container">
+                        <div key={index} className={classNameButtonContainer}>
                             <Button onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color, boxShadow: "none"}}>{label.name}</Button>
                         </div>
                     );
@@ -28,11 +42,9 @@ const ImageClassifier = ({url, labels, onSubmit, state}) => {
                 <img
                     src={url}
                     id="currentImage"
-                    className="image-classifier__image"
                     alt="Classifier image"
                     style={{
                         width: `${state.widthImage}%`,
-                        height: `${state.widthImage}%`,
                         transform: `rotate(${state.rotate}deg)`,
                         margin: `${state.initialRotate ? '' : state.marginRotate}`,
                     }}

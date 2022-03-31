@@ -1,13 +1,13 @@
 import React from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
-import Toolbar, { ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton, ToolbarProgressButton } from '../Toolbar';
+import {ToolbarButtonContainer, ToolbarButton, ToolbarProgressButton, ToolbarSwitchButton} from '../Toolbar';
 
 const getFileExtension = filename => {
   if (!filename) return '';
   return filename.split('.').pop().split('?')[0];
 };
 
-const ToolbarContainer = ({ state, setState, onSubmit }) => {
+const ToolbarContainer = ({ state, setState }) => {
   const getImageInfo = () => {
     const image = document.getElementById('currentImage');
     const imageWidth = image.width;
@@ -31,24 +31,6 @@ const ToolbarContainer = ({ state, setState, onSubmit }) => {
     });
   };
 
-  const submitAnnotation = () => {
-    const { imageWidth, imageHeight } = getImageInfo();
-    const data = {
-      width: imageWidth,
-      height: imageHeight,
-      type: getFileExtension(state.url),
-      labels: { ...state.userInput },
-    };
-    onSubmit(data);
-    setState({
-      ...state,
-      userInput: {},
-      rotate: 0,
-      marginRotate: 0,
-      initialRotate: true,
-    });
-  };
-
   const inlineMode = () => {
     setState({ ...state, inlineMode: !state.inlineMode });
   };
@@ -61,7 +43,6 @@ const ToolbarContainer = ({ state, setState, onSubmit }) => {
   };
 
   const handlers = {
-    Submit: submitAnnotation,
     RotateRight: () => rotateImage('right'),
     RotateLeft: rotateImage,
     InlineMode: inlineMode,
@@ -78,6 +59,7 @@ const ToolbarContainer = ({ state, setState, onSubmit }) => {
               min="1"
               max="80"
             />
+            <ToolbarSwitchButton id="inlineMode" checked={state.inlineMode} onChange={inlineMode} label="Inline mode" />
           </ToolbarButtonContainer>
           <ToolbarButtonContainer>
             <ToolbarButton title="Raccourci : L" onClick={rotateImage} icon="reset" label="Rotate Left" />
