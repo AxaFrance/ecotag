@@ -2,11 +2,6 @@ import React from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
 import {ToolbarButtonContainer, ToolbarButton, ToolbarProgressButton, ToolbarSwitchButton} from '../Toolbar';
 
-const getFileExtension = filename => {
-  if (!filename) return '';
-  return filename.split('.').pop().split('?')[0];
-};
-
 const ToolbarContainer = ({ state, setState }) => {
   const getImageInfo = () => {
     const image = document.getElementById('currentImage');
