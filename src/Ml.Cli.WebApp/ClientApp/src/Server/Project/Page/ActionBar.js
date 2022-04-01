@@ -30,12 +30,10 @@ export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport
   
   return (
     <div className="ft-actionBar">
-      <div>
-        {(isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
-          <span className="af-btn-text">Start Tagging</span>
-        </Button>}
-        <a onClick={exportAnnotations} href="">Exporter</a>
-      </div>
+      {(isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
+        <span className="af-btn-text">Start Tagging</span>
+      </Button>}
+      <a onClick={exportAnnotations} href="">Exporter</a>
     </div>
   );
 };
