@@ -31,8 +31,9 @@ public static class AnnotationInputValidator
                 }
                 break;
             case AnnotationTypeEnumeration.ImageClassifier:
-                //We only have the value, no need to deserialize as it already is a string
-                return AnnotationImageClassifierValidator.Validate(expectedOutput, project);
+                var annotationImageClassifier =
+                    DeserializeAnnotation<AnnotationImageClassifier>(expectedOutput, logger);
+                return AnnotationImageClassifierValidator.Validate(annotationImageClassifier, project);
             case AnnotationTypeEnumeration.NamedEntity:
                 var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(expectedOutput, logger);
                 if (namedEntityLabels != null)

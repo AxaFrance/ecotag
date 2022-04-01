@@ -38,7 +38,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
     const generateHandler = () => {
         let result = {};
         for(let i = 1; i <= coloredLabels.length; i++){
-            result[`${i.toString(16)}`] = () => onSubmit(coloredLabels[i - 1].name);
+            result[`${i.toString(16)}`] = () => onSubmit({label: coloredLabels[i - 1].name});
         }
         return result;
     }
@@ -54,13 +54,13 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                     <div className={classNameButtonsContainer}>
                         {coloredLabels.map((label, index) => {
                             let isSelected = false;
-                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label.name === label.name){
+                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label.label === label.name){
                                 isSelected = true;
                             }
                             return(
                                 <div key={index} className={classNameButtonContainer}>
                                     <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit({
-                                        name: label.name
+                                        label: label.name
                                     })} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );

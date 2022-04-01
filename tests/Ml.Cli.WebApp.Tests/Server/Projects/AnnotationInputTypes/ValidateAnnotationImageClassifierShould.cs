@@ -8,16 +8,18 @@ public class ValidateAnnotationImageClassifierShould
     [Fact]
     public void ShouldValidateLabel()
     {
-        var (project, _) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
-        var expectedOutput = "someLabel";
-        Assert.True(AnnotationImageClassifierValidator.Validate(expectedOutput, project));
+        var (project, logger) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
+        project.AnnotationType = "ImageClassifier";
+        var jsonAnnotationImageClassifier = "{\"label\": \"someLabel\"}";
+        Assert.True(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationImageClassifier, project, logger));
     }
 
     [Fact]
     public void ShouldInvalidateLabel()
     {
-        var (project, _) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
-        var expectedOutput = "wrongLabelName";
-        Assert.False(AnnotationImageClassifierValidator.Validate(expectedOutput, project));
+        var (project, logger) = ValidateAnnotationOcrShould.InitProjectDataWithLogger();
+        project.AnnotationType = "ImageClassifier";
+        var jsonAnnotationImageClassifier = "{\"label\": \"wrongLabelName\"}";
+        Assert.False(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationImageClassifier, project, logger));
     }
 }
