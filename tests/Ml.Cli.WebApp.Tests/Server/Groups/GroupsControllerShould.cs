@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -252,8 +253,9 @@ public class GroupsControllerShould
             var serviceProvider = GetMockedServiceProvider(groupContext);
         
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var queue = new Queue();
             var groupsController = new GroupsController();
-            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultOk = result.Result as NoContentResult;
             Assert.NotNull(resultOk);
@@ -292,7 +294,8 @@ public class GroupsControllerShould
         
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
             var groupsController = new GroupsController();
-            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            var queue = new Queue();
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
@@ -349,7 +352,7 @@ public class GroupsControllerShould
         
         var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
-        var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+        var updateGroupCmd = new UpdateGroupCmd(groupsRepository, new Queue());
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
 
         var resultOk = result.Result as NoContentResult;

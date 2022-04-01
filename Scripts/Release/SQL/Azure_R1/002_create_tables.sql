@@ -135,3 +135,18 @@ END
 
 GO
 
+/****** Object:  Table [sch_ECOTAG].[T_Audit] ******/
+if not exists (select * from sysobjects where name='T_Audit' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Audit](
+    [AUD_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [AUD_ElementId] uniqueidentifier NOT NULL,
+    [AUD_Type] [varchar](32) NOT NULL,
+    [AUD_NameIdentifier] [varchar](32) NOT NULL,
+    [AUD_CreateDate] BIGINT NOT NULL,
+    [AUD_Diff] [varchar](4048) NOT NULL,
+    CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
+    )
+END
+GO
+

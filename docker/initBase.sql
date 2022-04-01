@@ -197,6 +197,30 @@ END
 
 GO
 
+/****** Object:  Table [sch_ECOTAG].[T_Audit] ******/
+if not exists (select * from sysobjects where name='T_Audit' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Audit](
+    [AUD_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [AUD_ElementId] uniqueidentifier NOT NULL,
+    [AUD_Type] [varchar](32) NOT NULL,
+    [AUD_NameIdentifier] [varchar](32) NOT NULL,
+    [AUD_CreateDate] BIGINT NOT NULL,
+    [AUD_Diff] [varchar](4048) NOT NULL,
+    CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
+    )
+END
+
+GO
+
+CREATE CLUSTERED INDEX [IND_AuditElementIdTypeCreateDate] ON [sch_ECOTAG].[T_Audit]
+(
+    [AUD_ElementId] ASC,
+    [AUD_Type] ASC,
+    [AUD_CreateDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
 CREATE CLUSTERED INDEX [IND_AnnotationCreatorNameIdentifier] ON [sch_ECOTAG].[T_Annotation]
 (
     [ANO_CreatorNameIdentifier] ASC
