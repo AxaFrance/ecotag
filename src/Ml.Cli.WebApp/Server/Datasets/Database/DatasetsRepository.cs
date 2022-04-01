@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -229,5 +228,12 @@ public class DatasetsRepository
         await _datasetsContext.SaveChangesAsync();
         commandResult.Data = annotation.Id.ToString();
         return commandResult;
+    }
+
+    public async Task<IList<FileModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
+    {
+        return await _datasetsContext.Files.AsNoTracking()
+            .Where(file => file.DatasetId == new Guid(datasetId))
+            .Include(file => file.Annotations).ToListAsync();
     }
 }

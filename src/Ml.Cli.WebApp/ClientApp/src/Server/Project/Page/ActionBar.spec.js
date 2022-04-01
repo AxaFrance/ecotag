@@ -6,7 +6,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 
 describe('ActionBar', () => {
     it('ActionBar render correctly', async () => {
-        const { asFragment, getByText } = render(<Router><ActionBar projectId={"0001"} isAnnotationClosed={false}/></Router>);
+        const { asFragment, getByText } = render(<Router><ActionBar projectId={"0001"} projectName={"projectName"} isAnnotationClosed={false}/></Router>);
         const messageEl = await waitFor(() => getByText('Start Tagging'));
         expect(messageEl).toHaveTextContent(
             'Start Tagging'

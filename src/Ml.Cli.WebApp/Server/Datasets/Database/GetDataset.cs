@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ml.Cli.WebApp.Server.Datasets;
+namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
 public class DatasetInput
 {

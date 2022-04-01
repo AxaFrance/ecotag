@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Projects;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -19,7 +18,7 @@ public class ReserveShould
 
     public ReserveShould(ITestOutputHelper output)
     {
-        this._output = output;
+        _output = output;
     }
     
     [Theory]
