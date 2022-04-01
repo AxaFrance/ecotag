@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
-using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 public record SaveAnnotationInput
 {

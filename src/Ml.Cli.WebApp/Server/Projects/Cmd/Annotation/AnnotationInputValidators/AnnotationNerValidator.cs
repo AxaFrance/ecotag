@@ -2,7 +2,7 @@
 using System.Linq;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 
 public record AnnotationNerLabel
 {

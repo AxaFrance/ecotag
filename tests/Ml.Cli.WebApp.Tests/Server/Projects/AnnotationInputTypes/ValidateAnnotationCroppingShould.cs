@@ -1,5 +1,5 @@
-﻿using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
+﻿using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Projects.AnnotationInputTypes;

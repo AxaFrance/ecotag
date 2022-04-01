@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 
 public record AnnotationInput
 {
@@ -33,7 +32,11 @@ public static class AnnotationInputValidator
             case AnnotationTypeEnumeration.ImageClassifier:
                 var annotationImageClassifier =
                     DeserializeAnnotation<AnnotationImageClassifier>(expectedOutput, logger);
-                return AnnotationImageClassifierValidator.Validate(annotationImageClassifier, project);
+                if (annotationImageClassifier != null)
+                {
+                    isValid = AnnotationImageClassifierValidator.Validate(annotationImageClassifier, project);
+                }
+                break;
             case AnnotationTypeEnumeration.NamedEntity:
                 var namedEntityLabels = DeserializeAnnotation<List<AnnotationNer>>(expectedOutput, logger);
                 if (namedEntityLabels != null)

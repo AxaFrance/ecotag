@@ -27,6 +27,6 @@ describe("Check Image Classifier behaviour", () => {
        const selectedButton = getByText("Cat");
        fireEvent.click(selectedButton);
        
-       expect(selectedValue).toEqual({"name": "Cat"});
+       expect(selectedValue).toEqual("Cat");
    }) ;
 });

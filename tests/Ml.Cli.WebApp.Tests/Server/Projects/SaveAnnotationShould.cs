@@ -10,8 +10,9 @@ using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
-using Ml.Cli.WebApp.Server.Projects.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
@@ -22,7 +23,7 @@ namespace Ml.Cli.WebApp.Tests.Server.Projects;
 public class SaveAnnotationShould
 {
     [Theory]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "cat")]
+    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "{\"label\": \"cat\"}")]
     public async Task SaveNewAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
@@ -32,24 +33,24 @@ public class SaveAnnotationShould
         Assert.NotNull(resultValue);
     }
     
-   /* [Theory]
-    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "cat")]
+    [Theory]
+    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "{\"label\": \"cat\"}")]
     public async Task SaveUpdateAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
         var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
-        var resultCreated = result.Result as NoContentResult;
-        Assert.NotNull(resultCreated);
-    }*/
+        var resultNoContent = result.Result as NoContentResult;
+        Assert.NotNull(resultNoContent);
+    }
 
-  /*  [Theory]
+    [Theory]
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
         "", SaveAnnotationCmd.InvalidModel)]
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s111111",
-        "cat", SaveAnnotationCmd.UserNotFound)]
+        "{\"label\": \"cat\"}", SaveAnnotationCmd.UserNotFound)]
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
         "invalidLabelName", SaveAnnotationCmd.InvalidLabels)]
     [InlineData("11111111-1111-1111-1111-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
-        "cat", DatasetsRepository.AnnotationNotFound)]
+        "{\"label\": \"cat\"}", DatasetsRepository.AnnotationNotFound)]
     public async Task ReturnError_WhenCreateOrUpdateAnnotation(string annotationId, string fileId, string projectId,
         string nameIdentifier, string expectedOutput, string errorKey)
     {
@@ -67,7 +68,7 @@ public class SaveAnnotationShould
             Assert.NotNull(resultBadRequestValue);
             Assert.Equal(errorKey, resultBadRequestValue.Key);
         }
-    }*/
+    }
 
     public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
@@ -78,10 +79,21 @@ public class SaveAnnotationShould
         };
         var logger = Mock.Of<ILogger<SaveAnnotationCmd>>();
         var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, logger);
-        var result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
+        ActionResult result;
+        if (annotationId == "null")
         {
-            ExpectedOutput = expectedOutput
-        });
+            result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
+            {
+                ExpectedOutput = expectedOutput
+            });
+        }
+        else
+        {
+            result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, annotationId, new AnnotationInput()
+            {
+                ExpectedOutput = expectedOutput
+            });
+        }
         return result;
     }
 
