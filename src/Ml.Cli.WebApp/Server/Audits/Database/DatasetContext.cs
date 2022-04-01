@@ -10,7 +10,7 @@ public class AuditContext : DbContext
     {
     }
 
-    public AuditContext(DbContextOptions<DatasetContext> options) : base(options)
+    public AuditContext(DbContextOptions<AuditContext> options) : base(options)
     {
     }
 

@@ -51,10 +51,10 @@ public class Audit
         {
             var queue = serviceProvider.GetService<IQueue>();
             var auditsService = serviceProvider.GetService<AuditsService>();
-            queue.Subscribe(TypeKey, auditsService.Callback);
+            queue.Subscribe(TypeKey, auditsService.CallbackAsync);
         }
 
-        public async Task<bool> Callback(string type, string message)
+        public async Task<bool> CallbackAsync(string type, string message)
         {
             if (type != TypeKey) return false;
             var auditDataModel = JsonConvert.DeserializeObject<AuditDataModel>(message);
@@ -90,7 +90,7 @@ public class Audit
             }
         }
 
-        private async Task<string> GetDiff(
+        public async Task<string> GetDiff(
             AuditsRepository auditsRepository, string type, string id, string data)
         {
             var audits = await auditsRepository.FindByElementIdAsync(id, type);

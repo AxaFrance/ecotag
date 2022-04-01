@@ -49,10 +49,10 @@ public record MockResult
 internal static class DatasetMock
 {
     
-    private static Mock<IServiceProvider> GetMockedServiceProvider(DatasetContext datasetContext)
+    public static Mock<IServiceProvider> GetMockedServiceProvider<T>(T datasetContext)
     {
         var serviceProvider = new Mock<IServiceProvider>();
-        serviceProvider.Setup(foo => foo.GetService(typeof(DatasetContext))).Returns(datasetContext);
+        serviceProvider.Setup(foo => foo.GetService(typeof(T))).Returns(datasetContext);
         var serviceScope = new Mock<IServiceScope>();
         serviceScope.Setup(foo => foo.ServiceProvider).Returns(serviceProvider.Object);
         var serviceScopeFactory = new Mock<IServiceScopeFactory>();
