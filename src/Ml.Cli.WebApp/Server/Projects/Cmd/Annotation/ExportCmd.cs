@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -112,7 +113,7 @@ public class ExportCmd
                 FileName = fileModel.Name,
                 Email = annotator != null ? annotator.Email : "",
                 CreateDate = annotation.TimeStamp,
-                Annotation = annotation.ExpectedOutput
+                Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
             });
         }
 
