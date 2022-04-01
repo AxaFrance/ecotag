@@ -7,12 +7,12 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
 public class GetProjectCmd
 {
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
     public const string UserNotFound = "UserNotFound";
     public const string ProjectNotFound = "ProjectNotFound";
 
-    public GetProjectCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository)
+    public GetProjectCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;

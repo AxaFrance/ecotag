@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import {init, initialState, PageContainer, reducer} from './Page.container';
+import {initialState, PageContainer, reducer} from './Page.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {resilienceStatus} from "../../shared/Resilience";
 
@@ -41,12 +41,12 @@ describe('Page.container', () => {
     {
       id: "0001",
       "email":"guillaume.chervet@axa.fr",
-      "nameIdentifier": "S000007"
+      "subject": "S000007"
     },
     {
       id: "0002",
       "email":"lilian.delouvy@axa.fr",
-      "nameIdentifier": "S000005"
+      "subject": "S000005"
     }
   ];
   const annotationStatus= {
@@ -79,6 +79,7 @@ describe('Page.container', () => {
           project : givenProject,
           dataset: givenDataset,
           group: {},
+          annotationsStatus: {},
           status: resilienceStatus.LOADING,
           users: {}
         }
@@ -91,6 +92,7 @@ describe('Page.container', () => {
         status: resilienceStatus.LOADING,
         project : givenProject,
         dataset: givenDataset,
+        annotationsStatus: {},
         users: {},
         group: {},
       });

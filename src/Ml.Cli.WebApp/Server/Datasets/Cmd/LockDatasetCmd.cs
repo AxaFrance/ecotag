@@ -10,9 +10,9 @@ public class LockDatasetCmd
     public const string UserNotFound = "UserNotFound";
     public const string DatasetNotFound = "DatasetNotFound";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public LockDatasetCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public LockDatasetCmd(UsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;

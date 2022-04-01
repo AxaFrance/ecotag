@@ -40,12 +40,13 @@ export const init = (fetch, dispatch) => async id => {
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
-      const { project, dataset, group, users, status } = action.data;
+      const { project, dataset, group, users, status, annotationsStatus } = action.data;
       return {
         ...state,
         status,
         project,
         dataset,
+        annotationsStatus,
         users,
         group,
       };
@@ -67,7 +68,7 @@ export const initialState = {
   dataset: {name: "", type:"", files:[], annotationType:""},
   group: {userIds:[]},
   users: [],
-  annotationStatus: {
+  annotationsStatus: {
     isAnnotationClosed: true,
     numberAnnotationsByUsers: [],
     numberAnnotationsDone: 0,

@@ -4,17 +4,17 @@ using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 public class GetAnnotationsStatusCmd
 {
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
     private readonly AnnotationsRepository _annotationsRepository;
     public const string UserNotFound = "UserNotFound";
     public const string ProjectNotFound = "ProjectNotFound";
 
-    public GetAnnotationsStatusCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository, AnnotationsRepository annotationsRepository)
+    public GetAnnotationsStatusCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, AnnotationsRepository annotationsRepository)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;

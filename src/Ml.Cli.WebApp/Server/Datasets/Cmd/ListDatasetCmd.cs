@@ -8,9 +8,9 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 public class ListDatasetCmd
 {
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public ListDatasetCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository)
+    public ListDatasetCmd(DatasetsRepository datasetsRepository, UsersRepository usersRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

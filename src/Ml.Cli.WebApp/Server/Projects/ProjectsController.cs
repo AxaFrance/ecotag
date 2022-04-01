@@ -8,6 +8,8 @@ using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects
@@ -136,6 +138,30 @@ namespace Ml.Cli.WebApp.Server.Projects
             }
 
             return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
+        }
+        
+        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
+        {
+            var creatorNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
+            {
+                ProjectId = projectId,
+                FileId = fileId,
+                AnnotationId = annotationId,
+                AnnotationInput = annotationInput,
+                CreatorNameIdentifier = creatorNameIdentifier
+            });
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return NoContent();
         }
         
         [HttpPost("{projectId}/reserve")]

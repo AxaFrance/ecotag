@@ -16,8 +16,8 @@ public static class ConfigureExtension
     {
         services.AddDbContext<GroupContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-        services.AddScoped<IGroupsRepository, GroupsRepository>();
-        services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<GroupsRepository, GroupsRepository>();
+        services.AddScoped<UsersRepository, UsersRepository>();
         services.AddScoped<CreateGroupCmd, CreateGroupCmd>();
         services.AddScoped<GetAllGroupsCmd, GetAllGroupsCmd>();
         services.AddScoped<GetGroupCmd, GetGroupCmd>();

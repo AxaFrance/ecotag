@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Ml.Cli.WebApp.Server.Groups.Database;
-using Ml.Cli.WebApp.Server.Groups.Database.Group;
-using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Database.Users;
 
-namespace Ml.Cli.WebApp.Server.Database.Users;
+namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository
 {
     public const string SubjectAlreadyExist = "SubjectAlreadyExist";
     private readonly GroupContext _groupsContext;

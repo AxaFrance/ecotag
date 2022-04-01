@@ -54,14 +54,12 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                     <div className={classNameButtonsContainer}>
                         {coloredLabels.map((label, index) => {
                             let isSelected = false;
-                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label.name === label.name){
+                            if(expectedOutput !== null && expectedOutput !== undefined && expectedOutput.label === label.name){
                                 isSelected = true;
                             }
                             return(
                                 <div key={index} className={classNameButtonContainer}>
-                                    <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit({
-                                        name: label.name
-                                    })} style={{backgroundColor: label.color}}>{label.name}</button>
+                                    <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );
                         })}

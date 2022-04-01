@@ -33,11 +33,11 @@ public class CreateDatasetCmd
     public const string GroupNotFound = "GroupNotFound";
     private readonly DatasetsRepository _datasetsRepository;
 
-    private readonly IGroupsRepository _groupsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly GroupsRepository _groupsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public CreateDatasetCmd(IGroupsRepository groupsRepository, DatasetsRepository datasetsRepository,
-        IUsersRepository usersRepository)
+    public CreateDatasetCmd(GroupsRepository groupsRepository, DatasetsRepository datasetsRepository,
+        UsersRepository usersRepository)
     {
         _groupsRepository = groupsRepository;
         _datasetsRepository = datasetsRepository;

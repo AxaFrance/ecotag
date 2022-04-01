@@ -17,11 +17,11 @@ public record CreateUserInput
 
 public class CreateUserCmd
 {
-    private readonly IUsersRepository _userRepository;
+    private readonly UsersRepository _userRepository;
     private readonly IOidcUserInfoService _userInfoService;
     public const string InvalidModel = "InvalidModel";
 
-    public CreateUserCmd(IUsersRepository userRepository, IOidcUserInfoService userInfoService)
+    public CreateUserCmd(UsersRepository userRepository, IOidcUserInfoService userInfoService)
     {
         _userRepository = userRepository;
         _userInfoService = userInfoService;

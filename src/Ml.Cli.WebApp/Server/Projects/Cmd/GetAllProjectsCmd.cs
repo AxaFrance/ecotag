@@ -7,10 +7,10 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
 public class GetAllProjectsCmd
 {
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public GetAllProjectsCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository)
+    public GetAllProjectsCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;

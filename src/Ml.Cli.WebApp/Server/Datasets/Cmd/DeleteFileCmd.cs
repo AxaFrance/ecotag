@@ -12,9 +12,9 @@ public class DeleteFileCmd
 
     private const string UserNotFound = "UserNotFound";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public DeleteFileCmd(IUsersRepository usersRepository, DatasetsRepository datasetsRepository)
+    public DeleteFileCmd(UsersRepository usersRepository, DatasetsRepository datasetsRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

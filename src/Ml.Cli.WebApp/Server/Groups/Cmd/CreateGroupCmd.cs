@@ -35,10 +35,10 @@ public class CreateGroupCmd
     public const string InvalidModel = "InvalidModel";
     public const string UserNotFound = "UserNotFound";
     
-    private readonly IGroupsRepository _groupsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly GroupsRepository _groupsRepository;
+    private readonly UsersRepository _usersRepository;
 
-    public CreateGroupCmd(IGroupsRepository groupsRepository, IUsersRepository usersRepository)
+    public CreateGroupCmd(GroupsRepository groupsRepository, UsersRepository usersRepository)
     {
         _groupsRepository = groupsRepository;
         _usersRepository = usersRepository;

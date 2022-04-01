@@ -12,10 +12,10 @@ public class GetProjectDatasetCmd
 
     public const string UserNotFound = "UserNotFound";
     private readonly DatasetsRepository _datasetsRepository;
-    private readonly IUsersRepository _usersRepository;
-    private readonly IProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
+    private readonly ProjectsRepository _projectsRepository;
 
-    public GetProjectDatasetCmd(DatasetsRepository datasetsRepository, IUsersRepository usersRepository, IProjectsRepository projectsRepository)
+    public GetProjectDatasetCmd(DatasetsRepository datasetsRepository, UsersRepository usersRepository, ProjectsRepository projectsRepository)
     {
         _datasetsRepository = datasetsRepository;
         _usersRepository = usersRepository;

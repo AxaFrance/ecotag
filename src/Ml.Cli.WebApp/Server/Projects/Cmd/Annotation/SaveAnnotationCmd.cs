@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 public record SaveAnnotationInput
 {
@@ -23,15 +25,17 @@ public class SaveAnnotationCmd
     public const string UserNotFound = "UserNotFound";
     public const string InvalidLabels = "InvalidLabels";
 
-    private readonly IDatasetsRepository _datasetsRepository;
-    private readonly IProjectsRepository _projectsRepository;
-    private readonly IUsersRepository _usersRepository;
+    private readonly DatasetsRepository _datasetsRepository;
+    private readonly ProjectsRepository _projectsRepository;
+    private readonly UsersRepository _usersRepository;
+    private readonly ILogger<SaveAnnotationCmd> _logger;
 
-    public SaveAnnotationCmd(IProjectsRepository projectsRepository, IUsersRepository usersRepository, IDatasetsRepository datasetsRepository)
+    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository, ILogger<SaveAnnotationCmd> logger)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
+        _logger = logger;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(SaveAnnotationInput saveAnnotationInput)
@@ -76,7 +80,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
         
-        var labelsValidationResult = saveAnnotationInput.AnnotationInput.ValidateExpectedOutput(project.Data);
+        var labelsValidationResult = AnnotationInputValidator.ValidateExpectedOutput(saveAnnotationInput.AnnotationInput.ExpectedOutput, project.Data, _logger);
         if (!labelsValidationResult)
         {
             commandResult.Error = new ErrorResult()
