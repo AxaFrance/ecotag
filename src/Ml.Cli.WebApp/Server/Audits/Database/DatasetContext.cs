@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Ml.Cli.WebApp.Server.Audits.Database;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Ml.Cli.WebApp.Server.Datasets.Database;
+namespace Ml.Cli.WebApp.Server.Audits.Database;
 
 public class AuditContext : DbContext
 {

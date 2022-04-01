@@ -17,8 +17,25 @@ public class AuditsRepository
     }
     
     public async Task<IList<Audit>> FindByElementIdAsync(
-        string id, string type)
+        string id, string type=null)
     {
+        if (String.IsNullOrEmpty(type))
+        {
+            return await _auditContext.Audits
+                .Where(a => a.ElementId == new Guid(id))
+                .OrderByDescending(a => a.CreateDate)
+                .Select(a => new Audit()
+                {
+                    Author = a.NameIdentifier,
+                    Diff = a.Diff,
+                    Id = a.Id.ToString(),
+                    Type = a.Type,
+                    CreateDate = a.CreateDate,
+                    ElementId = a.ElementId.ToString()
+                }).ToListAsync();
+        }
+        
+        
        var audits = await _auditContext.Audits
             .Where(a => a.ElementId == new Guid(id) && a.Type == type)
             .OrderByDescending(a => a.CreateDate)

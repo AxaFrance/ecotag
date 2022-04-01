@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Audits.Database;
-using Ml.Cli.WebApp.Server.Datasets;
-using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
+using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Xunit;
 
-namespace Ml.Cli.WebApp.Tests.Server.Datasets;
+namespace Ml.Cli.WebApp.Tests.Server.Audit;
 
 public class CreateAuditShould
 {

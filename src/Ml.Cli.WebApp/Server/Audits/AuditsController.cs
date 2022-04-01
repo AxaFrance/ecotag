@@ -1,0 +1,29 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Ml.Cli.WebApp.Server.Audits.Database;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
+using Ml.Cli.WebApp.Server.Oidc;
+
+namespace Ml.Cli.WebApp.Server.Audits
+{
+    [Route("api/server/[controller]")]
+    [ApiController]
+    public class AuditsController : Controller
+    {
+        [HttpGet("{id}")]
+        [ResponseCache(Duration = 1)]
+        [Authorize(Roles = Roles.DataScientist)]
+        public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllGroups([FromServices] AuditsRepository auditsRepository, string id)
+        {
+            var audits = await auditsRepository.FindByElementIdAsync(id);
+            if (audits.Count == 0)
+            {
+                return NoContent();
+            }
+            return Ok(audits);
+        }
+        
+    }
+}
