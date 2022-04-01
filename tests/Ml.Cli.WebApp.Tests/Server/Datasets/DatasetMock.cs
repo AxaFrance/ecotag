@@ -182,7 +182,7 @@ internal static class DatasetMock
         var annotation1File2 = new AnnotationModel
         {
             ExpectedOutput = "{\"label\": \"Other\"}",
-            FileId = files[0].Id,
+            FileId = files[1].Id,
             TimeStamp = DateTime.Now.Ticks,
             CreatorNameIdentifier = "s666666",
             ProjectId = projectModel.Id
