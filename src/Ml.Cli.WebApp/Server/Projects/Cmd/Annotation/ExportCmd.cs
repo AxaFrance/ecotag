@@ -20,7 +20,7 @@ public record GetExportCmdResult{
 
 public record ExportAnnotation
 {
-    public string Email { get; set; }
+    public string Subject { get; set; }
     public long CreateDate { get; set; }
     public string FileName { get; set; }
     public object Annotation { get; set; }
@@ -80,7 +80,7 @@ public class ExportCmd
         var annotations = new List<ExportAnnotation>();
         foreach (var fileModel in projectFilesWithAnnotations)
         {
-            annotations.AddRange(await SetExportAnnotationsByFile(fileModel));
+            annotations.AddRange(SetExportAnnotationsByFile(fileModel));
         }
         var project = projectResult.Data;
 
@@ -102,16 +102,15 @@ public class ExportCmd
         return commandResult;
     }
 
-    private async Task<IList<ExportAnnotation>> SetExportAnnotationsByFile(FileModel fileModel)
+    private IList<ExportAnnotation> SetExportAnnotationsByFile(FileModel fileModel)
     {
         IList<ExportAnnotation> result = new List<ExportAnnotation>();
         foreach (var annotation in fileModel.Annotations)
         {
-            var annotator = await _usersRepository.GetUserBySubjectAsync(annotation.CreatorNameIdentifier);
             result.Add(new ExportAnnotation
             {
                 FileName = fileModel.Name,
-                Email = annotator != null ? annotator.Email : "",
+                Subject = annotation.CreatorNameIdentifier,
                 CreateDate = annotation.TimeStamp,
                 Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
             });
