@@ -18,6 +18,7 @@ using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -255,7 +256,9 @@ public class GroupsControllerShould
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
             var queue = new Queue();
             var groupsController = new GroupsController();
+            groupsController.ControllerContext = DatasetMock.ControllerContext("S777777");
             var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
+            
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultOk = result.Result as NoContentResult;
             Assert.NotNull(resultOk);
@@ -291,9 +294,12 @@ public class GroupsControllerShould
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
 
             var serviceProvider = GetMockedServiceProvider(groupContext);
-        
+
+            var controllerContext = DatasetMock.ControllerContext("s777777");
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
             var groupsController = new GroupsController();
+            groupsController.ControllerContext = controllerContext;
+            
             var queue = new Queue();
             var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
@@ -352,6 +358,7 @@ public class GroupsControllerShould
         
         var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
+        groupsController.ControllerContext = DatasetMock.ControllerContext("S777777");
         var updateGroupCmd = new UpdateGroupCmd(groupsRepository, new Queue());
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
 

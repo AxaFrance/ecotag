@@ -14,7 +14,6 @@ using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -177,24 +176,11 @@ internal static class DatasetMock
         var annotationRepository = new AnnotationsRepository(datasetContext, serviceProvider.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
-        var context = new DefaultHttpContext
-        {
-            User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
-                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
-                }
-            ))
-        };
+        var controllerContext = ControllerContext(nameIdentifier);
         var datasetsController = new DatasetsController();
-        datasetsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        datasetsController.ControllerContext = controllerContext; 
         var projectsController = new ProjectsController();
-        projectsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        projectsController.ControllerContext = controllerContext;
         return new MockResult
         {
             Group1 = group1,
@@ -209,6 +195,22 @@ internal static class DatasetMock
             ProjectsRepository = projectRepository,
             fileIds = files.Select(f => f.Id.ToString()).ToList()
         };
+    }
+
+    public static ControllerContext ControllerContext(string nameIdentifier)
+    {
+        var context = new DefaultHttpContext
+        {
+            User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, nameIdentifier)
+                }
+            ))
+        };
+        return new ControllerContext
+        {
+            HttpContext = context
+        };;
     }
 
     public static DatasetContext GetInMemoryDatasetContext()

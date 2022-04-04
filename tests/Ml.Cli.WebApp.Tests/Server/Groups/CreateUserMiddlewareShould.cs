@@ -41,7 +41,7 @@ public class CreateUserMiddlewareShould
         {
             var context = new DefaultHttpContext()
             {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
                     new Claim(IdentityExtensions.EcotagClaimTypes.NameIdentifier, subject),
                 }
