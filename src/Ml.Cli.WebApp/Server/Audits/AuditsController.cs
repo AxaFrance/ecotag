@@ -16,7 +16,7 @@ namespace Ml.Cli.WebApp.Server.Audits
         [HttpGet("{type}/{id}")]
         [ResponseCache(Duration = 1)]
         [Authorize(Roles = Roles.DataScientist)]
-        public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllAudits([FromServices] AuditsRepository auditsRepository, string id, string type)
+        public async Task<ActionResult<IList<Audit>>> GetAllAudits([FromServices] AuditsRepository auditsRepository, string id, string type)
         {
             var audits = await auditsRepository.FindByElementIdAsync(id);
             if (audits.Count == 0)
