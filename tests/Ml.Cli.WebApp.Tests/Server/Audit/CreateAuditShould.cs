@@ -81,13 +81,22 @@ public class CreateAuditShould
         await queue.PublishAsync(AuditsService.TypeKey, message2);
 
         var auditsController = new AuditsController();
-        var response = await auditsController.GetAllAudits(auditsRepository, id, typeGroupes);
+        var responseAudits = await auditsController.GetAllAudits(auditsRepository, id, typeGroupes);
 
-        var resultOk = response.Result as OkObjectResult;
+        var resultOk = responseAudits.Result as OkObjectResult;
         Assert.NotNull(resultOk);
         var resultValue = resultOk.Value as IList<WebApp.Server.Audits.Audit>;
         Assert.NotNull(resultValue);
         Assert.Equal(2, resultValue.Count);
+        
+        var responseAuditedData = await auditsController.GetAuditedData(auditsRepository, auditsService, id, typeGroupes, 1);
+        
+        var auditedDataResultOk = responseAuditedData.Result as OkObjectResult;
+        Assert.NotNull(auditedDataResultOk);
+        var auditedDataResultValue = auditedDataResultOk.Value as string;
+        Assert.NotNull(auditedDataResultValue);
+
+
     }
 
 }
