@@ -188,6 +188,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Roles = Roles.DataScientist)]
         public async Task<ActionResult<GetExportCmdResult>> Export([FromServices] ExportCmd exportCmd,
             string projectId)
         {

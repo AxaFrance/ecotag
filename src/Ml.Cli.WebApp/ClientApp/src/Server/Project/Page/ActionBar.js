@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '@axa-fr/react-toolkit-button';
 import './Page.scss';
+import ExportButton from "./ExportButton";
 
 export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport }) => {
   const history = useHistory();
@@ -10,19 +11,6 @@ export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport
     const path = `/projects/${projectId}/annotations/start`;
     history.push(path);
   };
-  
-  const exportAnnotations = async e => {
-    e.preventDefault();
-    const response = await onExport(projectId);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${projectName}-annotations.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
   
   if(!projectId){
     return null;
@@ -33,7 +21,7 @@ export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport
       {(isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
         <span className="af-btn-text">Start Tagging</span>
       </Button>}
-      <a className="ft-actionBar__link" onClick={exportAnnotations} href="">Exporter</a>
+      <ExportButton projectId={projectId} projectName={projectName} onExport={onExport}/>
     </div>
   );
 };
