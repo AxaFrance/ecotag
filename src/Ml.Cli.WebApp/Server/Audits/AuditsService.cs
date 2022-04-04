@@ -103,5 +103,23 @@ public class Audit
             var output = jdp.Diff(patch, data);
             return output;
         }
+        
+        public async Task<string> GetDataAsync(AuditsRepository auditsRepository, string type, string id, int index=0)
+        {
+            var audits = await auditsRepository.FindByElementIdAsync(id, type);
+            
+            if(audits.Count <= 0)
+            {
+                return String.Empty;
+            }
+            
+            var jdp = new JsonDiffPatch();
+            var patch = @"{}";
+            for (var i=0 ; i <= index; i++)
+            {
+                patch = jdp.Patch(patch, audits[i].Diff);
+            }
+            return patch;
+        }
 
     }

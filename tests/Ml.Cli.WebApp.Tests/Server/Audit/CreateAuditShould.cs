@@ -60,24 +60,23 @@ public class CreateAuditShould
         };
 
         var typeGroupes = "Groupes";
-
-        var message1 = JsonSerializer.Serialize(new AuditDataModel()
+        var message1 = new AuditDataModel()
         {
             Author = "s66666",
             Id = id,
             Type = typeGroupes,
             Data = JsonSerializer.Serialize(updateGroupInput)
-        });
+        };
         await queue.PublishAsync(AuditsService.TypeKey, message1);
         
         updateGroupInput.UserIds.Add("user3");
-        var message2 = JsonSerializer.Serialize(new AuditDataModel()
+        var message2 = new AuditDataModel()
         {
             Author = "s66667",
             Id = id,
             Type = typeGroupes,
             Data = JsonSerializer.Serialize(updateGroupInput)
-        });
+        };
         await queue.PublishAsync(AuditsService.TypeKey, message2);
 
         var audits = await auditsRepository.FindByElementIdAsync(id, typeGroupes);

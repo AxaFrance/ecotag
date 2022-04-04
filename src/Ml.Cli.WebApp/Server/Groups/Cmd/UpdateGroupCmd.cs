@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -56,17 +57,29 @@ public class UpdateGroupCmd
             }
         }
 
-        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.UserIds);
-        
-        
-        await _queue.PublishAsync(AuditsService.TypeKey, JsonSerializer.Serialize(new AuditDataModel()
+        var updateDate = DateTime.Now.Ticks;
+        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.UserIds, updateDate);
+
+        await _queue.PublishAsync(AuditsService.TypeKey, new AuditDataModel()
         {
             Author = nameIdentifier,
             Id = commandResult.Data,
             Type = "Groupes",
-            Data = JsonSerializer.Serialize(updateGroupInput)
-        }));
+            Data = JsonSerializer.Serialize(new GroupUpdateAudit()
+            {
+                Id = updateGroupInput.Id,
+                UpdateDate = updateDate,
+                UserIds = updateGroupInput.UserIds
+            })
+        });
         
         return commandResult;
     }
+}
+
+public record GroupUpdateAudit()
+{
+    public string Id { get; set; }
+    public List<string> UserIds { get; set; }
+    public long UpdateDate { get; set; }
 }

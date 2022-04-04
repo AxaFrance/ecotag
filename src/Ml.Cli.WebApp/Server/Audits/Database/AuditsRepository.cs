@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ml.Cli.WebApp.Server.Datasets.Database;
 
 namespace Ml.Cli.WebApp.Server.Audits.Database;
 
@@ -35,8 +34,7 @@ public class AuditsRepository
                 }).ToListAsync();
         }
         
-        
-       var audits = await _auditContext.Audits
+        var audits = await _auditContext.Audits
             .Where(a => a.ElementId == new Guid(id) && a.Type == type)
             .OrderByDescending(a => a.CreateDate)
             .Select(a => new Audit()
