@@ -89,6 +89,7 @@ CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Name] [varchar](16) NOT NULL,
     [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [GRP_CreateDate] BIGINT NOT NULL,
+    [GRP_UpdateDate] BIGINT NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
     CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name]),
     )
