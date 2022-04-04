@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
@@ -10,6 +11,7 @@ using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects;
 
+[ExcludeFromCodeCoverage]
 public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
