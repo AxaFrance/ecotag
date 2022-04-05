@@ -104,6 +104,9 @@ namespace Ml.Cli
             services.AddLogging(logging => logging.AddConsole());
             services.AddHttpClient("Default").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback = 
+                (httpRequestMessage, cert, cetChain, policyErrors) => true,
                 DefaultProxyCredentials = CredentialCache.DefaultCredentials
             });
     
