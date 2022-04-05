@@ -53,6 +53,10 @@ export const reducer = (state, action) => {
       const columns = { ...state.filters.columns };
       const property = columns[propertyName];
       const value = property.value;
+      for(let element in columns){
+        columns[element].value = null;
+        columns[element].timeLastUpdate = null;
+      }
       if (value === null) {
         property.value = 'desc';
         property.timeLastUpdate = new Date().getTime();
@@ -88,7 +92,7 @@ export const initialState = {
       name: { value: null, timeLastUpdate: null },
       groupName: {value: null, timeLastUpdate: null},
       createDate: { value: 'desc', timeLastUpdate: new Date() },
-      typeAnnotation: { value: null, timeLastUpdate: null },
+      annotationType: { value: null, timeLastUpdate: null },
       numberCrossAnnotation: { value: null, timeLastUpdate: null },
     },
   },
