@@ -23,7 +23,7 @@ if not exists (select * from sysobjects where name='T_Group' and xtype='U')
 BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Id] uniqueidentifier NOT NULL DEFAULT newid(),
-    [GRP_Name] [varchar](16) NOT NULL,
+    [GRP_Name] [varchar](48) NOT NULL,
     [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [GRP_CreateDate] BIGINT NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
@@ -52,7 +52,7 @@ if not exists (select * from sysobjects where name='T_Dataset' and xtype='U')
 BEGIN
 CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [DTS_Id] uniqueidentifier NOT NULL DEFAULT newid(),
-    [DTS_Name] [varchar](16) NOT NULL,
+    [DTS_Name] [varchar](48) NOT NULL,
     [DTS_Type] int NOT NULL,
     [DTS_Classification] int NOT NULL,
     [GRP_Id] uniqueidentifier NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
     [PRJ_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [PRJ_DatasetId] uniqueidentifier NOT NULL,
     [PRJ_GroupId] uniqueidentifier NOT NULL,
-    [PRJ_Name] [varchar](16) NOT NULL,
+    [PRJ_Name] [varchar](48) NOT NULL,
     [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
     [PRJ_CreateDate] BIGINT NOT NULL,
     [PRJ_AnnotationType] int NOT NULL,

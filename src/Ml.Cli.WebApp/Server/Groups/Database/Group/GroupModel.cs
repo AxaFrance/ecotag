@@ -15,7 +15,7 @@ public class GroupModel
     public Guid Id { get; set; }
     
     [Column("GRP_Name")]
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     public string Name { get; set; }
     
