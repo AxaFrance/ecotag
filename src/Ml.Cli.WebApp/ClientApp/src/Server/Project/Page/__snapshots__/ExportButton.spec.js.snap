@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExportButton Renders correctly 1`] = `
+<DocumentFragment>
+  <a
+    class="ft-actionBar__link"
+    href=""
+  >
+    Exporter
+  </a>
+</DocumentFragment>
+`;
