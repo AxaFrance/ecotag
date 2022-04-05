@@ -5,5 +5,6 @@ public enum AnnotationTypeEnumeration
     Cropping=0,
     ImageClassifier=1,
     NamedEntity=2,
-    Ocr=3
+    Ocr=3,
+    Rotation=4
 }
