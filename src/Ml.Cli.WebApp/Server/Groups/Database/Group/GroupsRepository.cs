@@ -51,24 +51,17 @@ public class GroupsRepository
             .FirstOrDefaultAsync(g => g.Id == new Guid(id));
         return group?.ToGroupDataModel();
     }
-
-    public async Task<GroupDataModel> GetGroupByNameAsync(string name)
-    {
-        var group = await _groupsContext.Groups
-            .Include(group => group.GroupUsers)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Name == name);
-        return group?.ToGroupDataModel();
-    }
-
+    
     public async Task<ResultWithError<string, ErrorResult>> CreateGroupAsync(CreateGroupInput group)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
+        var ticks = DateTime.Now.Ticks;
         var groupModel = new GroupModel
         {
             Name = group.Name.ToLower(),
             CreatorNameIdentifier = group.CreatorNameIdentifier,
-            CreateDate = DateTime.Now.Ticks
+            CreateDate = ticks,
+            UpdateDate = ticks
         };
         var result = _groupsContext.Groups.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
@@ -89,7 +82,7 @@ public class GroupsRepository
         return commandResult;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users)
+    public async Task<ResultWithError<string, ErrorResult>> UpdateGroupUsers(string groupId, List<string> users, long updateDate)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
@@ -98,7 +91,7 @@ public class GroupsRepository
         using var scope = _serviceProvider.CreateScope();
         using var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
         
-        var usersTask = groupContext2.Users.Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
+        var usersTask = groupContext2.Users.AsNoTracking().Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
             .ToListAsync();
         Task.WaitAll(groupsTask, usersTask);
         var groupModel = groupsTask.Result;
@@ -126,7 +119,10 @@ public class GroupsRepository
             }
         }
 
+        groupModel.UpdateDate = updateDate;
         await _groupsContext.SaveChangesAsync();
+
+        commandResult.Data = groupModel.Id.ToString();
 
         return commandResult;
     }

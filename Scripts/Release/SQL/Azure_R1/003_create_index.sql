@@ -1,6 +1,14 @@
 ﻿USE [ECOTAG]
 GO
 
+CREATE CLUSTERED INDEX [IND_AuditElementIdTypeCreateDate] ON [sch_ECOTAG].[T_Audit]
+(
+    [AUD_ElementId] ASC,
+    [AUD_Type] ASC,
+    [AUD_CreateDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
 CREATE CLUSTERED INDEX [IND_AnnotationCreatorNameIdentifier] ON [sch_ECOTAG].[T_Annotation]
 (
     [ANO_CreatorNameIdentifier] ASC

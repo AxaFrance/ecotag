@@ -38,9 +38,4 @@ public class GroupContext : DbContext
     
     public virtual DbSet<UserModel> Users { get; set; }
 
-    public Task<int> SaveChangesAsync()
-    {
-        return SaveChangesAsync(default);
-    }
-    
 }

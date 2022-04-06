@@ -42,9 +42,5 @@ public class DatasetContext : DbContext
             .WithMany(u => u.Reservations)
             .HasForeignKey(gu => gu.FileId);
     }
-
-    public Task<int> SaveChangesAsync()
-    {
-        return SaveChangesAsync(default);
-    }
+    
 }

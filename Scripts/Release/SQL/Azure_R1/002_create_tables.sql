@@ -26,6 +26,7 @@ CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_Name] [varchar](48) NOT NULL,
     [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [GRP_CreateDate] BIGINT NOT NULL,
+    [GRP_UpdateDate] BIGINT NOT NULL,
     CONSTRAINT [PK_T_Group] UNIQUE([GRP_Id]),
     CONSTRAINT [PK_T_Group_Name] UNIQUE([GRP_Name])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -135,3 +136,18 @@ END
 
 GO
 
+/****** Object:  Table [sch_ECOTAG].[T_Audit] ******/
+if not exists (select * from sysobjects where name='T_Audit' and xtype='U')
+BEGIN
+CREATE TABLE [sch_ECOTAG].[T_Audit](
+    [AUD_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [AUD_ElementId] uniqueidentifier NOT NULL,
+    [AUD_Type] [varchar](32) NOT NULL,
+    [AUD_NameIdentifier] [varchar](32) NOT NULL,
+    [AUD_CreateDate] BIGINT NOT NULL,
+    [AUD_Diff] [varchar](4048) NOT NULL,
+    CONSTRAINT [PK_T_Audit] UNIQUE([AUD_Id])
+    )
+END
+
+GO
