@@ -74,13 +74,13 @@ public class ExportCmd
             };
             return commandResult;
         }
-
+        
         var projectFilesWithAnnotations = await _datasetsRepository.GetFilesWithAnnotationsByDatasetIdAsync(dataset.Id);
 
         var annotations = new List<ExportAnnotation>();
         foreach (var fileDataModel in projectFilesWithAnnotations)
         {
-            annotations.AddRange(SetExportAnnotationsByFile(fileDataModel));
+            annotations.AddRange(SetExportAnnotationsByFile(fileDataModel, projectId));
         }
         var project = projectResult.Data;
 
@@ -102,18 +102,21 @@ public class ExportCmd
         return commandResult;
     }
 
-    private IList<ExportAnnotation> SetExportAnnotationsByFile(FileDataModel fileDataModel)
+    private IList<ExportAnnotation> SetExportAnnotationsByFile(FileDataModel fileDataModel, string projectId)
     {
         IList<ExportAnnotation> result = new List<ExportAnnotation>();
         foreach (var annotation in fileDataModel.Annotations)
         {
-            result.Add(new ExportAnnotation
+            if (annotation.ProjectId == projectId)
             {
-                FileName = fileDataModel.Name,
-                Subject = annotation.CreatorNameIdentifier,
-                CreateDate = annotation.TimeStamp,
-                Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
-            });
+                result.Add(new ExportAnnotation
+                {
+                    FileName = fileDataModel.Name,
+                    Subject = annotation.CreatorNameIdentifier,
+                    CreateDate = annotation.TimeStamp,
+                    Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
+                });
+            }
         }
 
         return result;
