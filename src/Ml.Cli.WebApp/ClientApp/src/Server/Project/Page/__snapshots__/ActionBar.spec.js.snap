@@ -17,6 +17,7 @@ exports[`ActionBar ActionBar render correctly 1`] = `
       </span>
     </button>
     <a
+      class="ft-actionBar__link"
       href=""
     >
       Exporter

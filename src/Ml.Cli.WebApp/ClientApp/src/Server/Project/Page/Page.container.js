@@ -87,9 +87,9 @@ const usePage = (fetch) => {
   return { state, onExport };
 };
 
-export const PageContainer = ({ fetch }) => {
+export const PageContainer = ({ fetch, user}) => {
   const { state, onExport } = usePage(fetch);
-  return <PageWithResilience {...state} onExport={onExport}/>;
+  return <PageWithResilience {...state} onExport={onExport} user={user} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

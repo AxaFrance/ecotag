@@ -4,6 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import {initialState, PageContainer, reducer} from './Page.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {resilienceStatus} from "../../shared/Resilience";
+import {DataScientist} from "../../withAuthentication";
 
 function fail(message = "The fail function was called") {
   throw new Error(message);
@@ -63,7 +64,7 @@ describe('Page.container', () => {
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(group)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(users)})
         .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(annotationStatus)})
-    const { getByText } = render(<Router><PageContainer fetch={givenFetch}/></Router>);
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
     const messageEl = await waitFor(() => getByText('02/01/0001'));
     expect(messageEl).toHaveTextContent(
         '02/01/0001'

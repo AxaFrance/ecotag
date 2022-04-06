@@ -26,5 +26,5 @@ const ExportButton = ({user: {roles = []}, onExport, projectId, projectName}) =>
     );
 };
 
-export default withAuthentication()(ExportButton);
+export default ExportButton;
 

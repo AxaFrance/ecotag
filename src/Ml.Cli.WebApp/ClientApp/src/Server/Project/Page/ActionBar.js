@@ -4,7 +4,7 @@ import Button from '@axa-fr/react-toolkit-button';
 import './Page.scss';
 import ExportButton from "./ExportButton";
 
-export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport }) => {
+export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport, user }) => {
   const history = useHistory();
 
   const startTaggingButton = () => {
@@ -21,7 +21,7 @@ export const ActionBar = ({ projectId, projectName, isAnnotationClosed, onExport
       {(isAnnotationClosed) ? null: <Button onClick={startTaggingButton} id="startTagging" name="Start Tagging">
         <span className="af-btn-text">Start Tagging</span>
       </Button>}
-      <ExportButton projectId={projectId} projectName={projectName} onExport={onExport}/>
+      <ExportButton user={user} projectId={projectId} projectName={projectName} onExport={onExport}/>
     </div>
   );
 };
