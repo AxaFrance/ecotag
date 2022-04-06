@@ -18,7 +18,7 @@ public class ProjectModel
     public Guid GroupId { get; set; }
 
     [Column("PRJ_Name")]
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     public string Name { get; set; }
 
