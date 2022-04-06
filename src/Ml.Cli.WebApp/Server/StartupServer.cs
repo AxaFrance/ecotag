@@ -16,11 +16,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Projects;
+using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -72,6 +74,7 @@ namespace Ml.Cli.WebApp.Server
             services.ConfigureGroups(Configuration);
             services.ConfigureDatasets(Configuration);
             services.ConfigureProjects(Configuration);
+            services.ConfigureServiceAudits(Configuration);
             
              services.AddAuthorization(options =>
                   {
@@ -174,10 +177,9 @@ namespace Ml.Cli.WebApp.Server
             return corsSettings;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,  IServiceProvider serviceProvider)
         {
-            //app.UseErrorLogging();
+            AuditsService.ConfigureAudits(serviceProvider);
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "sameorigin");

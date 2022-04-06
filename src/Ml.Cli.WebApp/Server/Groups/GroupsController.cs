@@ -64,7 +64,8 @@ namespace Ml.Cli.WebApp.Server.Groups
         [Authorize(Roles = Roles.DataAdministateur)]
         public async Task<ActionResult<string>> Update([FromServices] UpdateGroupCmd updateGroupCmd, UpdateGroupInput updateGroupInput)
         {
-            var commandResult = await updateGroupCmd.ExecuteAsync(updateGroupInput);
+            var nameIdentifier = User.Identity.GetSubject();
+            var commandResult = await updateGroupCmd.ExecuteAsync(updateGroupInput, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
                 return BadRequest(commandResult.Error);

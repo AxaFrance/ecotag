@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Database.Users;
@@ -10,6 +11,7 @@ using Ml.Cli.WebApp.Server.Groups.Oidc;
 
 namespace Ml.Cli.WebApp.Server.Groups;
 
+[ExcludeFromCodeCoverage]
 public static class ConfigureExtension
 {
     public static void ConfigureGroups(this IServiceCollection services, IConfiguration configuration)

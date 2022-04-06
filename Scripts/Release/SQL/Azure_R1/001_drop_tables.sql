@@ -19,8 +19,20 @@ GO
 
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_File]'))
 DROP table [sch_ECOTAG].[T_File]
-    GO
+GO
 
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_Project]'))
 DROP table [sch_ECOTAG].[T_Project]
-    GO
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_Reservation]'))
+DROP table [sch_ECOTAG].[T_Reservation]
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_Annotation]'))
+DROP table [sch_ECOTAG].[T_Annotation]
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[sch_ECOTAG].[T_Audit]'))
+DROP table [sch_ECOTAG].[T_Audit]
+GO

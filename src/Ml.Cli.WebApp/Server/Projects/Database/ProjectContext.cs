@@ -17,9 +17,5 @@ public class ProjectContext : DbContext
     }
 
     public virtual DbSet<ProjectModel> Projects { get; set; }
-
-    public Task<int> SaveChangesAsync()
-    {
-        return SaveChangesAsync(default);
-    }
+    
 }
