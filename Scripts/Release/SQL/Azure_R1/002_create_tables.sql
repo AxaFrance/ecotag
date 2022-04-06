@@ -146,8 +146,8 @@ CREATE TABLE [sch_ECOTAG].[T_Audit](
     [AUD_NameIdentifier] [varchar](32) NOT NULL,
     [AUD_CreateDate] BIGINT NOT NULL,
     [AUD_Diff] [varchar](4048) NOT NULL,
-    CONSTRAINT [PK_T_Annotation] UNIQUE([ANO_Id])
+    CONSTRAINT [PK_T_Audit] UNIQUE([AUD_Id])
     )
 END
-GO
 
+GO
