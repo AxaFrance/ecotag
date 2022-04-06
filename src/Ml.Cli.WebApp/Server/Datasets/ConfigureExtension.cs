@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
@@ -7,6 +8,7 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets;
 
+[ExcludeFromCodeCoverage]
 public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)

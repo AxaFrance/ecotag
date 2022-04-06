@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -17,6 +18,7 @@ using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Oidc;
+using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -252,8 +254,11 @@ public class GroupsControllerShould
             var serviceProvider = GetMockedServiceProvider(groupContext);
         
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
+            var queue = new Queue();
             var groupsController = new GroupsController();
-            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            groupsController.ControllerContext = DatasetMock.ControllerContext("S777777");
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
+            
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultOk = result.Result as NoContentResult;
             Assert.NotNull(resultOk);
@@ -289,10 +294,14 @@ public class GroupsControllerShould
             var groupContext = await GetGroupContext(groupDataModel, knownUsers);
 
             var serviceProvider = GetMockedServiceProvider(groupContext);
-        
+
+            var controllerContext = DatasetMock.ControllerContext("s777777");
             var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
             var groupsController = new GroupsController();
-            var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+            groupsController.ControllerContext = controllerContext;
+            
+            var queue = new Queue();
+            var updateGroupCmd = new UpdateGroupCmd(groupsRepository, queue);
             var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
             var resultWithError = result.Result as BadRequestObjectResult;
             Assert.NotNull(resultWithError);
@@ -349,7 +358,8 @@ public class GroupsControllerShould
         
         var groupsRepository = new GroupsRepository(groupContext, serviceProvider.Object);
         var groupsController = new GroupsController();
-        var updateGroupCmd = new UpdateGroupCmd(groupsRepository);
+        groupsController.ControllerContext = DatasetMock.ControllerContext("S777777");
+        var updateGroupCmd = new UpdateGroupCmd(groupsRepository, new Queue());
         var result = await groupsController.Update(updateGroupCmd, updateGroupInput);
 
         var resultOk = result.Result as NoContentResult;

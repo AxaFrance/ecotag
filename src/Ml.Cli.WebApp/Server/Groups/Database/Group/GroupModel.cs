@@ -27,5 +27,8 @@ public class GroupModel
     [Column("GRP_CreateDate")]
     public long CreateDate { get; set; }
     
+    [Column("GRP_UpdateDate")]
+    public long UpdateDate { get; set; }
+    
     public List<GroupUsersModel> GroupUsers { get; set; }
 }

@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;
@@ -17,13 +20,15 @@ public class UpdateGroupCmd
     public const string InvalidModel = "InvalidModel";
     public const string UserDuplicate = "UserDuplicate";
     private readonly GroupsRepository _groupsRepository;
-    
-    public UpdateGroupCmd(GroupsRepository groupsRepository)
+    private readonly IQueue _queue;
+
+    public UpdateGroupCmd(GroupsRepository groupsRepository, IQueue queue)
     {
         _groupsRepository = groupsRepository;
+        _queue = queue;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(UpdateGroupInput updateGroupInput)
+    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(UpdateGroupInput updateGroupInput, string nameIdentifier)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
@@ -52,7 +57,29 @@ public class UpdateGroupCmd
             }
         }
 
-        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.UserIds);
+        var updateDate = DateTime.Now.Ticks;
+        commandResult = await _groupsRepository.UpdateGroupUsers(updateGroupInput.Id, updateGroupInput.UserIds, updateDate);
+
+        await _queue.PublishAsync(AuditsService.TypeKey, new AuditDataModel()
+        {
+            Author = nameIdentifier,
+            Id = commandResult.Data,
+            Type = "Groupes",
+            Data = JsonSerializer.Serialize(new GroupUpdateAudit()
+            {
+                Id = updateGroupInput.Id,
+                UpdateDate = updateDate,
+                UserIds = updateGroupInput.UserIds
+            })
+        });
+        
         return commandResult;
     }
+}
+
+public record GroupUpdateAudit()
+{
+    public string Id { get; set; }
+    public List<string> UserIds { get; set; }
+    public long UpdateDate { get; set; }
 }
