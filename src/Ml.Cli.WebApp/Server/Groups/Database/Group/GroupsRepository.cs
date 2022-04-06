@@ -122,6 +122,8 @@ public class GroupsRepository
         groupModel.UpdateDate = updateDate;
         await _groupsContext.SaveChangesAsync();
 
+        commandResult.Data = groupModel.Id.ToString();
+
         return commandResult;
     }
 }
