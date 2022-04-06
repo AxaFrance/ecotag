@@ -115,9 +115,9 @@ public class DatasetsRepository
         return true;
     }
 
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
-        var result = new ResultWithError<FileDataModel, ErrorResult>();
+        var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
@@ -230,10 +230,11 @@ public class DatasetsRepository
         return commandResult;
     }
 
-    public async Task<IList<FileModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
+    public async Task<IList<FileDataModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
     {
-        return await _datasetsContext.Files.AsNoTracking()
+        var fileModels =  await _datasetsContext.Files.AsNoTracking()
             .Where(file => file.DatasetId == new Guid(datasetId))
             .Include(file => file.Annotations).ToListAsync();
+        return fileModels.Select(fileModel => fileModel.ToFileDataModel()).ToList();
     }
 }

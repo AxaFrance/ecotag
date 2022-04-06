@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 
@@ -60,6 +61,36 @@ public static class Converter
             Name = datasetModel.Name,
             GroupId = datasetModel.GroupId.ToString(),
             IsLocked = datasetModel.IsLocked
+        };
+    }
+
+    public static FileDataModel ToFileDataModel(this FileModel fileModel)
+    {
+        return new FileDataModel
+        {
+            Id = fileModel.Id.ToString(),
+            Name = fileModel.Name,
+            Size = fileModel.Size,
+            ContentType = fileModel.ContentType,
+            CreateDate = fileModel.CreateDate,
+            DatasetId = fileModel.DatasetId.ToString(),
+            CreatorNameIdentifier = fileModel.CreatorNameIdentifier,
+            Annotations = fileModel.Annotations == null ? new List<AnnotationDataModel>() : fileModel.Annotations.Select(annotation => new AnnotationDataModel
+            {
+                Id = annotation.Id.ToString(),
+                FileId = annotation.FileId.ToString(),
+                ProjectId = annotation.ProjectId.ToString(),
+                ExpectedOutput = annotation.ExpectedOutput,
+                TimeStamp = annotation.TimeStamp,
+                CreatorNameIdentifier = annotation.CreatorNameIdentifier
+            }).ToList(),
+            Reservations = fileModel.Reservations == null ? new List<ReservationDataModel>() : fileModel.Reservations.Select(reservation => new ReservationDataModel
+            {
+                Id = reservation.Id.ToString(),
+                FileId = reservation.FileId.ToString(),
+                ProjectId = reservation.ProjectId.ToString(),
+                TimeStamp = reservation.TimeStamp
+            }).ToList()
         };
     }
 }

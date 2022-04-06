@@ -124,14 +124,14 @@ public class SaveAnnotationShould
         });
         await datasetContext.SaveChangesAsync();
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var mockedFileDataModel = new FileDataModel
+        var mockedFileDataModel = new FileServiceDataModel
         {
             Name = "testFile.json",
             Length = 1000,
             Stream = null,
             ContentType = "application/json"
         };
-        var mockedResult = new ResultWithError<FileDataModel, ErrorResult>
+        var mockedResult = new ResultWithError<FileServiceDataModel, ErrorResult>
         {
             Data = mockedFileDataModel
         };

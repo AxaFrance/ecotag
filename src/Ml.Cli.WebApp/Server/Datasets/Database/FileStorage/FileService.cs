@@ -30,10 +30,10 @@ public class FileService : IFileService
         return await cloudBlob.DeleteIfExistsAsync();
     }
 
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> DownloadAsync(string containerName, string fileName)
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string containerName, string fileName)
     {
         var cloudBlob = await CloudBlockBlob(containerName, fileName);
-        var result = new ResultWithError<FileDataModel, ErrorResult>();
+        var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         if (cloudBlob == null)
         {
             result.Error = new ErrorResult
@@ -44,7 +44,7 @@ public class FileService : IFileService
         }
 
         var downloadStreaming = await cloudBlob.DownloadStreamingAsync();
-        var fileDataModel = new FileDataModel
+        var fileDataModel = new FileServiceDataModel
         {
             Stream = downloadStreaming.Value.Content,
             ContentType = downloadStreaming.Value.Details.ContentType,
@@ -73,7 +73,7 @@ public class FileService : IFileService
     }
 }
 
-public record FileDataModel
+public record FileServiceDataModel
 {
     public string Name { get; set; }
     public Stream Stream { get; set; }
