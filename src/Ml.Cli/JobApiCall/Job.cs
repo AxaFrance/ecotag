@@ -121,7 +121,7 @@ namespace Ml.Cli.JobApiCall
             request.Content = requestContent;
 
             var watch = Stopwatch.StartNew();
-
+            
             var result = await httpClient.SendAsync(request);
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

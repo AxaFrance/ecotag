@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using Ml.Cli.Extensions.Http.OAuth2ClientCredentials;
 using Ml.Cli.Extensions.OAuth2ClientCredentials;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,7 +69,13 @@ namespace Ml.Cli.JobApiCall
 
             if (!jObject.ContainsKey("Authorization"))
             {
-                services.AddHttpClient(taskId);
+                services.AddHttpClient(taskId).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ServerCertificateCustomValidationCallback = 
+                        (httpRequestMessage, cert, cetChain, policyErrors) => true,
+                    DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                });
             }
             else
             {
@@ -75,7 +83,14 @@ namespace Ml.Cli.JobApiCall
                 var oAuth2ClientCredentialsOptions =
                     JsonConvert.DeserializeObject<OAuth2ClientCredentialsOptions>(Authorization.ToString());
                 services.AddHttpClient(taskId)
-                    .AddOAuth2ClientCredentialsMessageHandler(oAuth2ClientCredentialsOptions);
+                    .AddOAuth2ClientCredentialsMessageHandler(oAuth2ClientCredentialsOptions)
+                    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                    {
+                        ClientCertificateOptions = ClientCertificateOption.Manual,
+                        ServerCertificateCustomValidationCallback = 
+                            (httpRequestMessage, cert, cetChain, policyErrors) => true,
+                        DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                    });
             }
 
             return new Callapi(
