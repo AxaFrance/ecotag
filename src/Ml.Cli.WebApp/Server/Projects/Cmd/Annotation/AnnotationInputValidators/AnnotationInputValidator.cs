@@ -61,6 +61,13 @@ public static class AnnotationInputValidator
                     isValid = AnnotationOcrValidator.Validate(annotationOcr.Labels, project);
                 }
                 break;
+            case AnnotationTypeEnumeration.Rotation:
+                var annotationRotation = DeserializeAnnotation<AnnotationRotation>(expectedOutput, logger);
+                if (annotationRotation != null)
+                {
+                    isValid = AnnotationRotationValidator.Validate(annotationRotation);
+                }
+                break;
         }
 
         return isValid;

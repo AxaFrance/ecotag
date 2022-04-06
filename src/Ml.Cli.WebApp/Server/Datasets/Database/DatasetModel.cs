@@ -11,7 +11,7 @@ public class DatasetModel
     [Key] [Column("DTS_Id")] public Guid Id { get; set; }
 
     [Column("DTS_Name")]
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     public string Name { get; set; }
 
