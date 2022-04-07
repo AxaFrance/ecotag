@@ -26,13 +26,13 @@ public record AnnotationStatus
 public class AnnotationsRepository
 {
     private readonly DatasetContext _datasetsContext;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IMemoryCache _cache;
 
-    public AnnotationsRepository(DatasetContext datasetsContext, IServiceProvider serviceProvider, IMemoryCache cache)
+    public AnnotationsRepository(DatasetContext datasetsContext, IServiceScopeFactory serviceScopeFactory, IMemoryCache cache)
     {
         _datasetsContext = datasetsContext;
-        _serviceProvider = serviceProvider;
+        _serviceScopeFactory = serviceScopeFactory;
         _cache = cache;
     }
     
@@ -54,8 +54,8 @@ public class AnnotationsRepository
             return fileCount;
         });
         
-        using var scope = _serviceProvider.CreateScope();
-        using var datasetContext2 = scope.ServiceProvider.GetService<DatasetContext>();
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var datasetContext2 = scope.ServiceProvider.GetService<DatasetContext>();
         
         var taskAnnotations =  _datasetsContext.Annotations.AsNoTracking()
             .Where(a => a.ProjectId == new Guid(projectId))
@@ -87,7 +87,7 @@ public class AnnotationsRepository
         return annotationStatus ;
     }
 
-    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=6)
+    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=10)
     {
         var query =
             _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) 

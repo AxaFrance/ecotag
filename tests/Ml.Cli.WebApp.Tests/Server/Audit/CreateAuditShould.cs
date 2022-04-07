@@ -35,22 +35,11 @@ public class CreateAuditShould
     {
         var auditContext = GetInMemoryAuditContext();
         var auditsRepository = new AuditsRepository(auditContext);
-        var serviceProvider = DatasetMock.GetMockedServiceProvider(auditContext);
-        serviceProvider.Setup(foo => foo.GetService(typeof(AuditsRepository))).Returns(auditsRepository);
+        var mockedService = DatasetMock.GetMockedServiceProvider(auditContext);
+        mockedService.ServiceProvider.Setup(foo => foo.GetService(typeof(AuditsRepository))).Returns(auditsRepository);
         
-        var serviceScope = new Mock<IServiceScope>();
-        serviceScope.Setup(x => x.ServiceProvider).Returns(serviceProvider.Object);
-        var serviceScopeFactory = new Mock<IServiceScopeFactory>();
-        serviceScopeFactory
-            .Setup(x => x.CreateScope())
-            .Returns(serviceScope.Object);
-
-        serviceProvider
-            .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
-            .Returns(serviceScopeFactory.Object);
-
         var queue = new Queue();
-        var auditsService = new AuditsService(serviceScopeFactory.Object);
+        var auditsService = new AuditsService(mockedService.ServiceScopeFactory.Object);
         queue.Subscribe(AuditsService.TypeKey, auditsService.CallbackAsync);
 
         var id = "10000000-0000-0000-0000-000000000000";

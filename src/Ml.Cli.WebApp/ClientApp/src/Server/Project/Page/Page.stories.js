@@ -34,12 +34,12 @@ const data = {
         {
             id: "0001", 
             "email":"guillaume.chervet@axa.fr",
-            "nameIdentifier": "S000007"
+            "subject": "S000007"
         },
         {
             id: "0002",
             "email":"lilian.delouvy@axa.fr",
-            "nameIdentifier": "S000005"
+            "subject": "S000005"
         }
     ],
     annotationStatus: {
@@ -48,7 +48,8 @@ const data = {
         numberAnnotationsDone: 46,
         numberAnnotationsToDo: 288,
         percentageNumberAnnotationsDone:32
-    }
+    },
+    user:{roles : [], subject :"S607718"}
 };
 
 export default { title: 'Project/Page' };

@@ -57,12 +57,25 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         }
     } else {
         const annotations = await response.json();
-        for (let i = 0; i < annotations.length; i++) {
+        const promises = []
+        const annotationLength = annotations.length;
+        for (let i = 0; i < annotationLength; i++) {
             const annotation = annotations[i];
             const url = `projects/${projectId}/files/${annotation.fileId}`;
-            const response = await fetch(url, {method: 'GET'});
-            const blob = await response.blob();
-            annotation.blobUrl = window.URL.createObjectURL(blob);
+            const responsePromise = fetch(url, {method: 'GET'});
+            promises.push(responsePromise);
+        }
+        const responses = await Promise.all(promises);
+        const blobPromises = []
+        for (let i = 0; i < annotationLength; i++) {
+            const response = responses[i];
+            const blobPromise =   await response.blob();
+            blobPromises.push(blobPromise);
+        }
+        const blobs = await Promise.all(blobPromises);
+        for (let i = 0; i < annotationLength; i++) {
+            const annotation = annotations[i];
+            annotation.blobUrl = window.URL.createObjectURL(blobs[i]);
         }
         data = {
             status: resilienceStatus.SUCCESS,
@@ -88,8 +101,8 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     if (status === resilienceStatus.LOADING ||status === resilienceStatus.POST) {
         return;
     }
+    history.push(nextUrl);
     dispatch({type: 'annotate_start'});
-
     const response = await fetchAnnotate(fetch)(projectId, fileId, annotationId, annotation);
     let data;
     if (response.status >= 500) {
@@ -110,7 +123,7 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     if (data.status === resilienceStatus.ERROR) {
         return;
     }
-    history.push(nextUrl);
+    
 };
 
 export const usePage = (fetch) => {
@@ -126,7 +139,7 @@ export const usePage = (fetch) => {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            if (currentIndex + 3 === items.length) {
+            if (currentIndex + 5 === items.length) {
                 reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
             }
         }

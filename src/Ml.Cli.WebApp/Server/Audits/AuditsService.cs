@@ -68,7 +68,7 @@ public class Audit
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var serviceProvider = scope.ServiceProvider;
-                var historyRepository = (AuditsRepository)serviceProvider.GetService(typeof(AuditsRepository));
+                var historyRepository = serviceProvider.GetService<AuditsRepository>();
                 await SaveAsync(auditDataModel, historyRepository);
             });
         }

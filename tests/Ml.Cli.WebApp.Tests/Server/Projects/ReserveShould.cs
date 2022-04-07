@@ -37,11 +37,11 @@ public class ReserveShould
         if (fileIdIndex.HasValue)
         {
             Assert.Equal(mockResult.fileIds[fileIdIndex.Value], resultValue[0].FileId);
-            Assert.Equal(7, resultValue.Count);
+            Assert.Equal(11, resultValue.Count);
         }
         else
         {
-            Assert.Equal(6, resultValue.Count);
+            Assert.Equal(10, resultValue.Count);
         }
     }
 

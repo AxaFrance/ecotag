@@ -45,19 +45,30 @@ public record MockResult
     public IList<string> fileIds { get; set; }
 }
 
+
+public record MockService
+{
+    public Mock<IServiceProvider> ServiceProvider  { get; set; }
+    public Mock<IServiceScopeFactory> ServiceScopeFactory{ get; set; }
+}
 internal static class DatasetMock
 {
     
-    public static Mock<IServiceProvider> GetMockedServiceProvider<T>(T datasetContext)
+    public static MockService GetMockedServiceProvider<T>(T datasetContext)
     {
         var serviceProvider = new Mock<IServiceProvider>();
         serviceProvider.Setup(foo => foo.GetService(typeof(T))).Returns(datasetContext);
         var serviceScope = new Mock<IServiceScope>();
         serviceScope.Setup(foo => foo.ServiceProvider).Returns(serviceProvider.Object);
-        var serviceScopeFactory = new Mock<IServiceScopeFactory>();
-        serviceScopeFactory.Setup(foo => foo.CreateScope()).Returns(serviceScope.Object);
-        serviceProvider.Setup(foo => foo.GetService(typeof(IServiceScopeFactory))).Returns(serviceScopeFactory.Object);
-        return serviceProvider;
+        serviceScope.Setup(x => x.ServiceProvider).Returns(serviceProvider.Object);
+      var serviceScopeFactory = new Mock<IServiceScopeFactory>();
+      serviceScopeFactory
+          .Setup(x => x.CreateScope())
+          .Returns(serviceScope.Object);
+      serviceProvider
+          .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
+          .Returns(serviceScopeFactory.Object);
+        return new MockService { ServiceProvider = serviceProvider, ServiceScopeFactory = serviceScopeFactory};
     }
     public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
     {
@@ -201,8 +212,8 @@ internal static class DatasetMock
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
             memoryCache);
 
-        var serviceProvider = GetMockedServiceProvider(datasetContext);
-        var annotationRepository = new AnnotationsRepository(datasetContext, serviceProvider.Object, memoryCache);
+        var mockedService  = GetMockedServiceProvider(datasetContext);
+        var annotationRepository = new AnnotationsRepository(datasetContext, mockedService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
         var controllerContext = ControllerContext(nameIdentifier);

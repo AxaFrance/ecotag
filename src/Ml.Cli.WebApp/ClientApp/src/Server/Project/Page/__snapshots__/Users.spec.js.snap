@@ -6,13 +6,6 @@ exports[`Users Users render correctly 1`] = `
     <h2>
       Annotations
     </h2>
-    <span
-      class="empty-array__error"
-    >
-      <b>
-        Il n'y a pas d'annotation sur ce projet pour l'instant.
-      </b>
-    </span>
     <table
       class="af-table"
     >
@@ -36,7 +29,36 @@ exports[`Users Users render correctly 1`] = `
       </thead>
       <tbody
         class="af-table__body"
-      />
+      >
+        <tr
+          class="af-table__tr"
+        >
+          <td
+            class="af-table__cell"
+          >
+            lilian.delouvy@axa.fr
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            15
+          </td>
+        </tr>
+        <tr
+          class="af-table__tr"
+        >
+          <td
+            class="af-table__cell"
+          >
+            guillaume.chervet@axa.fr
+          </td>
+          <td
+            class="af-table__cell"
+          >
+            35
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </DocumentFragment>

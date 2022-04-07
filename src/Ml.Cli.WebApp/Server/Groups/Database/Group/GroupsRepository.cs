@@ -12,15 +12,15 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 public class GroupsRepository
 {
     private readonly GroupContext _groupsContext;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     public const string GroupNotFound = "GroupNotFound";
     public const string UserNotFound = "UserNotFound";
     public const string AlreadyTakenName = "AlreadyTakenName";
 
-    public GroupsRepository(GroupContext groupsContext, IServiceProvider serviceProvider)
+    public GroupsRepository(GroupContext groupsContext, IServiceScopeFactory serviceScopeFactory)
     {
         _groupsContext = groupsContext;
-        _serviceProvider = serviceProvider;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     public async Task<List<GroupDataModel>> GetAllGroupsAsync(bool? mine, IList<string> groupIds)
@@ -88,8 +88,8 @@ public class GroupsRepository
 
         var groupsTask = _groupsContext.Groups.Where(group => group.Id == new Guid(groupId))
             .Include(group => group.GroupUsers).FirstOrDefaultAsync();
-        using var scope = _serviceProvider.CreateScope();
-        using var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
         
         var usersTask = groupContext2.Users.AsNoTracking().Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
             .ToListAsync();
