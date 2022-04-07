@@ -2,7 +2,7 @@
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class FileDataModel
+public record FileDataModel
 {
     public string Id { get; set; }
     public string Name { get; set; }

@@ -53,17 +53,6 @@ public static class Converter
         };
     }
 
-    public static GetDatasetInfo ToGetDatasetInfo(this DatasetModel datasetModel)
-    {
-        return new GetDatasetInfo
-        {
-            Id = datasetModel.Id.ToString(),
-            Name = datasetModel.Name,
-            GroupId = datasetModel.GroupId.ToString(),
-            IsLocked = datasetModel.IsLocked
-        };
-    }
-
     public static FileDataModel ToFileDataModel(this FileModel fileModel)
     {
         return new FileDataModel

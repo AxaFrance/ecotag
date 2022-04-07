@@ -12,7 +12,6 @@ public class GetAnnotationsStatusCmd
     private readonly UsersRepository _usersRepository;
     private readonly AnnotationsRepository _annotationsRepository;
     public const string UserNotFound = "UserNotFound";
-    public const string ProjectNotFound = "ProjectNotFound";
 
     public GetAnnotationsStatusCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, AnnotationsRepository annotationsRepository)
     {
