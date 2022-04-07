@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.WebApp.Server.Groups.Database;
-using Ml.Cli.WebApp.Server.Projects;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
-
 
 public record NumberAnnotationsByUsers
 {
@@ -118,7 +115,7 @@ public class AnnotationsRepository
                         FileName = file.Name,
                         Reservation = file.Reservations.SingleOrDefault(r => r.ProjectId == new Guid(projectId)),
                         Annotation = file.Annotations.Where(a => a.ProjectId == new Guid(projectId) && a.CreatorNameIdentifier == creatorNameIdentifier)
-                            .OrderBy(a => a.TimeStamp).Select(a => a).SingleOrDefault(),
+                            .OrderBy(a => a.TimeStamp).Select(a => a).FirstOrDefault(),
                     }
                 ).OrderBy(a => a.Reservation.TimeStamp);
             var currentFile = await querySingle.FirstOrDefaultAsync();

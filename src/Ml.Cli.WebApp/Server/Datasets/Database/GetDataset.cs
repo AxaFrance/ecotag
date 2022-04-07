@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Ml.Cli.WebApp.Server.Datasets;
+namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetInput
+public record DatasetInput
 {
     public string Name { get; set; }
     public string Type { get; set; }
@@ -10,7 +10,7 @@ public class DatasetInput
     public string GroupId { get; set; }
 }
 
-public class GetDataset
+public record GetDataset
 {
     public string Id { get; set; }
     public string GroupId { get; set; }
@@ -22,7 +22,7 @@ public class GetDataset
     public IList<GetDatasetFile> Files { get; set; } = new List<GetDatasetFile>();
 }
 
-public class GetDatasetInfo
+public record GetDatasetInfo
 {
     public string Id { get; set; }
     public string GroupId { get; set; }

@@ -129,9 +129,9 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                             filterColumnValue={filters.columns.createDate.value}
                         />
                         <HeaderColumnCell
-                            onChangeSort={onChangeSort('typeAnnotation')}
+                            onChangeSort={onChangeSort('annotationType')}
                             headerColumnName={"Type d'annotation"}
-                            filterColumnValue={filters.columns.typeAnnotation.value}
+                            filterColumnValue={filters.columns.annotationType.value}
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('numberTagToDo')}

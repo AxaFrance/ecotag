@@ -15,7 +15,7 @@ namespace Ml.Cli.WebApp.Server.Groups
     {
         [HttpGet]
         [ResponseCache(Duration = 1)]
-        [Authorize(Roles = Roles.DataScientist)]
+        [Authorize(Roles = Roles.DataAnnoteur)]
         public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllGroups([FromServices] GetAllGroupsCmd getAllGroupsCmd, [FromQuery]bool? mine=null)
         {
             var nameIdentifier = User.Identity.GetSubject();

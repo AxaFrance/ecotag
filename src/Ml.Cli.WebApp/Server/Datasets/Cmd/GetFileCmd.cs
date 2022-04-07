@@ -19,10 +19,10 @@ public class GetFileCmd
         _datasetsRepository = datasetsRepository;
     }
 
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> ExecuteAsync(string datasetId, string fileId,
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> ExecuteAsync(string datasetId, string fileId,
         string nameIdentifier)
     {
-        var commandResult = new ResultWithError<FileDataModel, ErrorResult>();
+        var commandResult = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 

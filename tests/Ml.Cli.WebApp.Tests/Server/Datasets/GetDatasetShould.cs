@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Xunit;
 using Xunit.Abstractions;
 

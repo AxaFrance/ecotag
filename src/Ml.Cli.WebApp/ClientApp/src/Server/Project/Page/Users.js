@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
+import EmptyArrayManager from "../../../EmptyArrayManager";
 
 const UserLine = ({users, annotationUser}) =>{
     const user = users.find(user => user.subject.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())
@@ -25,9 +26,11 @@ export const UserAnnotationsStatus = ({ users = [], numberAnnotationsByUsers=[] 
           </Table.Tr>
         </Table.Header>
         <Table.Body>
-          {numberAnnotationsByUsers.map(annotationUser => (
-              <UserLine users={users} annotationUser={annotationUser}  />
-          ))}
+            <EmptyArrayManager items={numberAnnotationsByUsers} emptyArrayMessage="Il n'y a pas d'annotation sur ce projet pour l'instant.">
+                {numberAnnotationsByUsers.map(annotationUser => (
+                    <UserLine users={users} annotationUser={annotationUser} />
+                ))}
+            </EmptyArrayManager>
         </Table.Body>
       </Table>
     </div>

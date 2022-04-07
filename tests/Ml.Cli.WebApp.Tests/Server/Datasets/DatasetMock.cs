@@ -143,7 +143,7 @@ internal static class DatasetMock
             files.Add(f);
             datasetContext.Files.Add(f);
         }
-        
+
         await datasetContext.SaveChangesAsync();
 
         var projectModel = new ProjectModel()
@@ -162,7 +162,36 @@ internal static class DatasetMock
         var projectContext = CreateProjectShould.GetInMemoryProjectContext();
         projectContext.Projects.Add(projectModel);
         await projectContext.SaveChangesAsync();
-        
+
+        var annotation1File1 = new AnnotationModel
+        {
+            ExpectedOutput = "{\"label\": \"Cat\"}",
+            FileId = files[0].Id,
+            TimeStamp = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "s666666",
+            ProjectId = projectModel.Id
+        };
+        var annotation2File1 = new AnnotationModel
+        {
+            ExpectedOutput = "{\"label\": \"Dog\"}",
+            FileId = files[0].Id,
+            TimeStamp = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "s888888",
+            ProjectId = projectModel.Id
+        };
+        var annotation1File2 = new AnnotationModel
+        {
+            ExpectedOutput = "{\"label\": \"Other\"}",
+            FileId = files[1].Id,
+            TimeStamp = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "s666666",
+            ProjectId = projectModel.Id
+        };
+        datasetContext.Annotations.Add(annotation1File1);
+        datasetContext.Annotations.Add(annotation1File2);
+        datasetContext.Annotations.Add(annotation2File1);
+        await datasetContext.SaveChangesAsync();
+
         var fileId1 = fileModel.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

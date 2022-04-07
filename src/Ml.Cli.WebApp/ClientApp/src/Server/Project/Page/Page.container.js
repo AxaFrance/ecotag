@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useReducer } from 'react';
 import Page from './Page';
-import {fetchProject, fetchDataset, fetchAnnotationsStatus} from '../Project.service';
+import {fetchProject, fetchDataset, fetchAnnotationsStatus, fetchExportAnnotations} from '../Project.service';
 import {fetchGroup, fetchUsers} from '../../Group/Group.service.js';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
@@ -80,15 +80,16 @@ export const initialState = {
 const usePage = (fetch) => {
   const { id } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const onExport = projectId => fetchExportAnnotations(fetch)(projectId);
   useEffect(() => {
     init(fetch, dispatch)(id);
   }, []);
-  return { state };
+  return { state, onExport };
 };
 
-export const PageContainer = ({ fetch }) => {
-  const { state } = usePage(fetch);
-  return <PageWithResilience {...state} />;
+export const PageContainer = ({ fetch, user}) => {
+  const { state, onExport } = usePage(fetch);
+  return <PageWithResilience {...state} onExport={onExport} user={user} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

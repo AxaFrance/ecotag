@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -116,9 +115,9 @@ public class DatasetsRepository
         return true;
     }
 
-    public async Task<ResultWithError<FileDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
-        var result = new ResultWithError<FileDataModel, ErrorResult>();
+        var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
@@ -229,5 +228,13 @@ public class DatasetsRepository
         await _datasetsContext.SaveChangesAsync();
         commandResult.Data = annotation.Id.ToString();
         return commandResult;
+    }
+
+    public async Task<IList<FileDataModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
+    {
+        var fileModels =  await _datasetsContext.Files.AsNoTracking()
+            .Where(file => file.DatasetId == new Guid(datasetId))
+            .Include(file => file.Annotations).ToListAsync();
+        return fileModels.Select(fileModel => fileModel.ToFileDataModel()).ToList();
     }
 }

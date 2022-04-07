@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Oidc;
@@ -184,6 +183,25 @@ namespace Ml.Cli.WebApp.Server.Projects
             
             return Ok(reservations.Data);
         }
-        
+
+        [HttpGet("{projectId}/export")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Roles = Roles.DataScientist)]
+        public async Task<ActionResult<GetExportCmdResult>> Export([FromServices] ExportCmd exportCmd,
+            string projectId)
+        {
+            var userNameIdentifier = User.Identity.GetSubject();
+            var commandResult = await exportCmd.ExecuteAsync(projectId, userNameIdentifier);
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return Ok(commandResult.Data);
+        }
     }
 }

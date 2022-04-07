@@ -5,19 +5,23 @@ exports[`ActionBar ActionBar render correctly 1`] = `
   <div
     class="ft-actionBar"
   >
-    <div>
-      <button
-        class="btn af-btn"
-        id="startTagging"
-        name="Start Tagging"
+    <button
+      class="btn af-btn"
+      id="startTagging"
+      name="Start Tagging"
+    >
+      <span
+        class="af-btn-text"
       >
-        <span
-          class="af-btn-text"
-        >
-          Start Tagging
-        </span>
-      </button>
-    </div>
+        Start Tagging
+      </span>
+    </button>
+    <a
+      class="ft-actionBar__link"
+      href=""
+    >
+      Exporter
+    </a>
   </div>
 </DocumentFragment>
 `;

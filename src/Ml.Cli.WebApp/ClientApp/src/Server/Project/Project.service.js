@@ -31,3 +31,5 @@ export const fetchCreateProject = fetch => async newProject =>
         method: 'POST',
         body: JSON.stringify(newProject),
     });
+
+export const fetchExportAnnotations = fetch => async projectId => fetch(`projects/${projectId}/export`);

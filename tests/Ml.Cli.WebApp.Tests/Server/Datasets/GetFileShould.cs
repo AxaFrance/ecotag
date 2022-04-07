@@ -25,13 +25,13 @@ public class GetFileShould
     public async Task GetFile(string nameIdentifier)
     {
         var content = "Hello World from a Fake File";
-        var fileServiceResult = new ResultWithError<FileDataModel, ErrorResult>();
+        var fileServiceResult = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var ms = new MemoryStream();
         var writer = new StreamWriter(ms);
         writer.Write(content);
         writer.Flush();
         ms.Position = 0;
-        fileServiceResult.Data = new FileDataModel
+        fileServiceResult.Data = new FileServiceDataModel
         {
             Name = "test.png",
             Length = ms.Length,
