@@ -136,13 +136,13 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Pourcentage d'avancement
+                  Avancement annotations
                 </span>
               </dt>
               <dd
                 class="af-restitution__listdef-value"
               >
-                32
+                32%
               </dd>
             </dl>
           </div>

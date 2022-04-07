@@ -9,7 +9,7 @@ import {
 } from '@axa-fr/react-toolkit-restitution';
 import {formatTimestampToString} from "../../date";
 
-export const Overview = ({ project, dataset, group, annotationStatus, users= [] }) => {
+export const Overview = ({ project, dataset, group, annotationsStatus, users= [] }) => {
 
   const groupEmails = group.userIds.map(userId => {
     const user = users.find(user => user.id === userId);
@@ -33,7 +33,7 @@ export const Overview = ({ project, dataset, group, annotationStatus, users= [] 
               <Restitution label="Date de création" value={formatTimestampToString(project.createDate)} />
               <Restitution label="Nombre de fichier" value={dataset.files.length} />
               <Restitution label="Nombre annotation croisée" value={project.numberCrossAnnotation} />
-              <Restitution label="Pourcentage d&apos;avancement" value={annotationStatus ? annotationStatus.percentageNumberAnnotationsDone : 0} />
+              <Restitution label="Avancement annotations" value={annotationsStatus ? `${annotationsStatus.percentageNumberAnnotationsDone}%` : '0%'} />
             </SectionRestitutionColumn>
             <SectionRestitutionColumn>
               <Restitution label="Dataset" value={dataset.name} />

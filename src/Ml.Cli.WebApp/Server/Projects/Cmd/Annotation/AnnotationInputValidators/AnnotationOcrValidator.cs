@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
@@ -15,10 +16,9 @@ public static class AnnotationOcrValidator
 {
     public static bool Validate(IDictionary<string, string> labels, ProjectDataModel project)
     {
-        if (project.Labels.Count != labels.Count) return false;
-        foreach (var label in project.Labels)
+        foreach (var labelName in labels)
         {
-            if (!labels.ContainsKey(label.Name))
+            if (project.Labels.Count(l => l.Name == labelName.Key) <= 0)
             {
                 return false;
             }

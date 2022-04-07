@@ -49,7 +49,7 @@ describe('Overview', () => {
             numberAnnotationsToDo: 288,
             percentageNumberAnnotationsDone:32
         };
-        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project} group={group} annotationStatus={annotationStatus} users={users}/></Router>);
+        const { asFragment, getByText } = render(<Router><Overview dataset={dataset} project={project} group={group} annotationsStatus={annotationStatus} users={users}/></Router>);
         const messageEl = await waitFor(() => getByText('Informations générales'));
         expect(messageEl).toHaveTextContent(
             'Informations générales'
