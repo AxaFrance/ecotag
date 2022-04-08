@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
+﻿namespace Ml.Cli.WebApp.Server.Projects.Database;
 
 public class LabelDataModel
 {

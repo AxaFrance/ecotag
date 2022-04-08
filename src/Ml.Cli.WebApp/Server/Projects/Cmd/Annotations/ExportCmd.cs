@@ -2,10 +2,11 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Database;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 
 public record GetExportCmdResult{
     public string ProjectName { get; set; }
@@ -75,7 +76,7 @@ public class ExportCmd
             return commandResult;
         }
         
-        var projectFilesWithAnnotations = await _datasetsRepository.GetFilesWithAnnotationsByDatasetIdAsync(dataset.Id);
+        var projectFilesWithAnnotations = await _annotationsRepository.GetFilesWithAnnotationsByDatasetIdAsync(dataset.Id);
 
         var annotations = new List<ExportAnnotation>();
         foreach (var fileDataModel in projectFilesWithAnnotations)

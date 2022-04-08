@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Server.Datasets.Database;
+﻿namespace Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 
 public class AnnotationDataModel
 {

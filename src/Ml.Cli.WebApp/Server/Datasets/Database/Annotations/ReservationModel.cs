@@ -2,13 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ml.Cli.WebApp.Server.Datasets.Database;
+namespace Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 
-[Table("T_Annotation", Schema = "sch_ECOTAG")]
-public class AnnotationModel
+[Table("T_Reservation", Schema = "sch_ECOTAG")]
+public class ReservationModel
 {
     [Key] 
-    [Column("ANO_Id")] 
+    [Column("RSV_Id")] 
     public Guid Id { get; set; }
     
     [Column("FLE_FileId")] 
@@ -16,15 +16,10 @@ public class AnnotationModel
     
     public FileModel File { get; set; }
     
-    [Column("ANO_TimeStamp")]
+    [Column("RSV_TimeStamp")]
     public long TimeStamp { get; set; }
     
     [Column("PRJ_ProjectId")]
     public Guid ProjectId { get; set; }
-    
-    [Column("ANO_CreatorNameIdentifier")]
-    public string CreatorNameIdentifier { get; set; }
-    
-    [Column("ANO_ExpectedOutput")]
-    public string ExpectedOutput { get; set; }
+
 }

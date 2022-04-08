@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Database;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
 
 public record AnnotationInput
 {

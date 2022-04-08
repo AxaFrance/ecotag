@@ -5,9 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
 
 namespace Ml.Cli.WebApp.Server.Projects;
 

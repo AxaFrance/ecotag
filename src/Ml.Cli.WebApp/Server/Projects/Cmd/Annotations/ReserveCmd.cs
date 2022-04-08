@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Database;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 
 public class ReserveCmd
 {

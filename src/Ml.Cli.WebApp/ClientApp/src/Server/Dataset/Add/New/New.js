@@ -80,7 +80,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
                           <span><b>Confidentiel</b>: Une information dont l'accès est limité à un auditoire spécifiquement</span>
                       </li>
                       <li>
-                          <span><b>Critique</b>: Une information dont l'accès est limité à un auditoire très restreint</span>
+                          <span><b>Critique</b>: Veillez contacter votre manageur.</span>
                       </li>
                   </ul>
               </HelpButton>

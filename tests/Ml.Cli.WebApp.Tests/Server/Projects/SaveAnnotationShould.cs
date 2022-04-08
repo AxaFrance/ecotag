@@ -7,13 +7,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Xunit;
@@ -50,7 +51,7 @@ public class SaveAnnotationShould
     [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
         "invalidLabelName", SaveAnnotationCmd.InvalidLabels)]
     [InlineData("11111111-1111-1111-1111-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
-        "{\"label\": \"cat\"}", DatasetsRepository.AnnotationNotFound)]
+        "{\"label\": \"cat\"}", AnnotationsRepository.AnnotationNotFound)]
     public async Task ReturnError_WhenCreateOrUpdateAnnotation(string annotationId, string fileId, string projectId,
         string nameIdentifier, string expectedOutput, string errorKey)
     {
@@ -72,13 +73,13 @@ public class SaveAnnotationShould
 
     public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
     {
-        var (usersRepository, datasetsRepository, projectsRepository, projectsController, context) = await InitMockAsync(nameIdentifier);
+        var (usersRepository, datasetsRepository, projectsRepository, projectsController, context, annotationsRepository) = await InitMockAsync(nameIdentifier);
         projectsController.ControllerContext = new ControllerContext
         {
             HttpContext = context
         };
         var logger = Mock.Of<ILogger<SaveAnnotationCmd>>();
-        var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, logger);
+        var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, annotationsRepository, logger);
         ActionResult result;
         if (annotationId == "null")
         {
@@ -97,7 +98,7 @@ public class SaveAnnotationShould
         return result;
     }
 
-    public static async Task<(UsersRepository usersRepository, DatasetsRepository datasetsRepository, ProjectsRepository projectsRepository, ProjectsController projectsController, DefaultHttpContext context)> InitMockAsync(string nameIdentifier)
+    public static async Task<(UsersRepository usersRepository, DatasetsRepository datasetsRepository, ProjectsRepository projectsRepository, ProjectsController projectsController, DefaultHttpContext context, AnnotationsRepository annotationsRepository)> InitMockAsync(string nameIdentifier)
     {
         var (_, usersRepository, _, projectsRepository, projectsController, context) =
             await CreateProjectShould.InitMockAsync(nameIdentifier);
@@ -140,7 +141,7 @@ public class SaveAnnotationShould
             .Setup(foo => foo.DownloadAsync("10000000-1111-0000-0000-000000000000", "testFile.json"))
             .ReturnsAsync(mockedResult);
         var datasetsRepository = new DatasetsRepository(datasetContext, mockedFileService.Object, memoryCache);
-
-        return (usersRepository, datasetsRepository, projectsRepository, projectsController, context);
+        AnnotationsRepository annotationsRepository = new AnnotationsRepository(datasetContext, null, memoryCache);
+        return (usersRepository, datasetsRepository, projectsRepository, projectsController, context, annotationsRepository);
     }
 }

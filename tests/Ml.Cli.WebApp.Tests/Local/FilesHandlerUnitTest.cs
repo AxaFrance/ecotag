@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.Paths;
 using Ml.Cli.PathManager;
+using Ml.Cli.WebApp.Local.Paths;
 using Moq;
 using Xunit;
 

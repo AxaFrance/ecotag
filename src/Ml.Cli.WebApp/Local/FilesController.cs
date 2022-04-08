@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.Paths;
+using Ml.Cli.WebApp.Local.Paths;
 
 namespace Ml.Cli.WebApp.Local
 {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
-using Ml.Cli.WebApp.Paths;
+using Ml.Cli.WebApp.Local.Paths;
 using Newtonsoft.Json;
 
 namespace Ml.Cli.WebApp.Local

@@ -7,23 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 
-namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
+namespace Ml.Cli.WebApp.Server.Projects.Database;
 
 public class ProjectsRepository
 {
-    private readonly ProjectContext _projectsContext;
-    private readonly IMemoryCache _cache;
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string Forbidden = "Forbidden";
     public const string NotFound = "NotFound";
+    private readonly IMemoryCache _cache;
+    private readonly ProjectContext _projectsContext;
 
     public ProjectsRepository(ProjectContext projectsContext, IMemoryCache cache)
     {
         _projectsContext = projectsContext;
         _cache = cache;
     }
-    
-    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(CreateProjectWithUserInput projectWithUserInput)
+
+    public async Task<ResultWithError<string, ErrorResult>> CreateProjectAsync(
+        CreateProjectWithUserInput projectWithUserInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
         var projectInput = projectWithUserInput.CreateProjectInput;
@@ -38,7 +39,8 @@ public class ProjectsRepository
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
-        var result =  _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
+        var result =
+            _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult
@@ -57,6 +59,7 @@ public class ProjectsRepository
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
+
         commandResult.Data = projectModel.Id.ToString();
         return commandResult;
     }
@@ -70,7 +73,8 @@ public class ProjectsRepository
         return projectModelEnum.ConvertAll(element => element.ToProjectDataModel());
     }
 
-    public async Task<ResultWithError<ProjectDataModel, ErrorResult>> GetProjectAsync(string projectId, List<string> userGroupIds)
+    public async Task<ResultWithError<ProjectDataModel, ErrorResult>> GetProjectAsync(string projectId,
+        List<string> userGroupIds)
     {
         var commandResult = new ResultWithError<ProjectDataModel, ErrorResult>();
 
@@ -81,14 +85,8 @@ public class ProjectsRepository
                 .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
             return projectModel;
         });
-        if (cacheEntry == null)
-        {
-            return commandResult.ReturnError(NotFound);
-        }
-        if (!userGroupIds.Contains(cacheEntry.GroupId.ToString()))
-        {
-            return commandResult.ReturnError(Forbidden);
-        }
+        if (cacheEntry == null) return commandResult.ReturnError(NotFound);
+        if (!userGroupIds.Contains(cacheEntry.GroupId.ToString())) return commandResult.ReturnError(Forbidden);
         commandResult.Data = cacheEntry.ToProjectDataModel();
         return commandResult;
     }

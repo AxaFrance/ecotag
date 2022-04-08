@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database;
 
 public class ProjectContext : DbContext
 {
-    public ProjectContext() { }
+    public ProjectContext()
+    {
+    }
 
     public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
     {
@@ -17,5 +17,4 @@ public class ProjectContext : DbContext
     }
 
     public virtual DbSet<ProjectModel> Projects { get; set; }
-    
 }
