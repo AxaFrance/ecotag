@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
+﻿namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
 public class ListDataset
 {

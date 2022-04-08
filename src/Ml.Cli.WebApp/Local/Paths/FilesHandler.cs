@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using Ml.Cli.FileLoader;
 using Ml.Cli.PathManager;
-using Ml.Cli.WebApp.Local;
 
-namespace Ml.Cli.WebApp.Paths
+namespace Ml.Cli.WebApp.Local.Paths
 {
     public static class FilesHandler
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Moq;
 using Xunit;
 
@@ -17,7 +17,6 @@ public class ValidateAnnotationOcrShould
         var (project, logger) = InitProjectDataWithLogger();
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"someLabel\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
-        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
         Assert.True(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationOcr, project, logger));
     }
 
@@ -27,7 +26,6 @@ public class ValidateAnnotationOcrShould
         var (project, logger) = InitProjectDataWithLogger();
         var jsonAnnotationOcr =
             "{\"width\": 100, \"height\": 200, \"type\": \"png\", \"labels\": {\"wrongLabelName\": \"dzkqzdqs\", \"otherLabel\": \"dzjqsd\"}}";
-        var annotationInput = new AnnotationInput() { ExpectedOutput = jsonAnnotationOcr };
         Assert.False(AnnotationInputValidator.ValidateExpectedOutput(jsonAnnotationOcr, project, logger));
     }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Groups.Cmd;

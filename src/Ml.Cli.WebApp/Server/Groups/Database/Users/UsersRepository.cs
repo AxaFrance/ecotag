@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Ml.Cli.WebApp.Server.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 

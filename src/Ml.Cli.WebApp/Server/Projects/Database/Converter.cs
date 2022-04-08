@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace Ml.Cli.WebApp.Server.Projects.Database.Project;
+namespace Ml.Cli.WebApp.Server.Projects.Database;
 
 public static class Converter
 {
@@ -29,6 +29,7 @@ public static class Converter
 
     private static List<LabelDataModel> ToListLabelDataModel(this string labelsJson)
     {
-        return JsonSerializer.Deserialize<List<LabelDataModel>>(labelsJson, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+        return JsonSerializer.Deserialize<List<LabelDataModel>>(labelsJson,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }

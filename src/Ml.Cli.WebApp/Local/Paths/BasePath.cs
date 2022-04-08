@@ -2,7 +2,7 @@
 using System.IO;
 using Ml.Cli.PathManager;
 
-namespace Ml.Cli.WebApp.Paths
+namespace Ml.Cli.WebApp.Local.Paths
 {
     public class BasePath
     {

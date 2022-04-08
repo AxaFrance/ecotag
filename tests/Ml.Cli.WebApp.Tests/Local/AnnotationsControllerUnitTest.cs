@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
 using Ml.Cli.WebApp.Local;
-using Ml.Cli.WebApp.Paths;
+using Ml.Cli.WebApp.Local.Paths;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;

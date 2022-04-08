@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
 
 public record AnnotationRotation
 {

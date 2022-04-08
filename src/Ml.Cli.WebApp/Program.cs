@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ml.Cli.PathManager;
 using Ml.Cli.WebApp.Local;
-using Ml.Cli.WebApp.Paths;
+using Ml.Cli.WebApp.Local.Paths;
 using Ml.Cli.WebApp.Server;
 using Serilog;
 

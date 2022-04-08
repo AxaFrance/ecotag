@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Moq;
 using Xunit;
 

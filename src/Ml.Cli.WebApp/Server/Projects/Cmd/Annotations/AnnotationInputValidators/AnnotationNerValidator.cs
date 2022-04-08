@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Database;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
 
 public record AnnotationNerLabel
 {

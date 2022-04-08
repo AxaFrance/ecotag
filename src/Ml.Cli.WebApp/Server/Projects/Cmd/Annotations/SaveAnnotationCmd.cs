@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation.AnnotationInputValidators;
-using Ml.Cli.WebApp.Server.Projects.Database.Project;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
+using Ml.Cli.WebApp.Server.Projects.Database;
 
-namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
+namespace Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 
 public record SaveAnnotationInput
 {
@@ -26,15 +27,21 @@ public class SaveAnnotationCmd
     public const string InvalidLabels = "InvalidLabels";
 
     private readonly DatasetsRepository _datasetsRepository;
+    private readonly AnnotationsRepository _annotationsRepository;
     private readonly ProjectsRepository _projectsRepository;
     private readonly UsersRepository _usersRepository;
     private readonly ILogger<SaveAnnotationCmd> _logger;
 
-    public SaveAnnotationCmd(ProjectsRepository projectsRepository, UsersRepository usersRepository, DatasetsRepository datasetsRepository, ILogger<SaveAnnotationCmd> logger)
+    public SaveAnnotationCmd(ProjectsRepository projectsRepository, 
+        UsersRepository usersRepository, 
+        DatasetsRepository datasetsRepository,
+        AnnotationsRepository annotationsRepository,
+        ILogger<SaveAnnotationCmd> logger)
     {
         _projectsRepository = projectsRepository;
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
+        _annotationsRepository = annotationsRepository;
         _logger = logger;
     }
 
@@ -91,7 +98,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
 
-        var annotation = await _datasetsRepository.CreateOrUpdateAnnotation(saveAnnotationInput);
+        var annotation = await _annotationsRepository.CreateOrUpdateAnnotation(saveAnnotationInput);
         if (!annotation.IsSuccess)
         {
             commandResult.Error = annotation.Error;

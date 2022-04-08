@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
-using Ml.Cli.WebApp.Server.Database.Users;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Ml.Cli.WebApp.Server.Groups.Database;

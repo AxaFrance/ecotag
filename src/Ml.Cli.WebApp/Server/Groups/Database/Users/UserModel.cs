@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 
-namespace Ml.Cli.WebApp.Server.Database.Users;
+namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 [Table("T_User", Schema = "sch_ECOTAG")]
 public class UserModel

@@ -7,14 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotation;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
 public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
-    public const string AnnotationNotFound = "AnnotationNotFound";
     public const string FileNotFound = "FileNotFound";
     private readonly IMemoryCache _cache;
     private readonly DatasetContext _datasetsContext;
@@ -118,7 +116,7 @@ public class DatasetsRepository
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
-        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
+        var file = await _datasetsContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
@@ -188,53 +186,13 @@ public class DatasetsRepository
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;
         }
-
-        await stream.DisposeAsync();
+        finally
+        {
+            await stream.DisposeAsync();    
+        }
 
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> CreateOrUpdateAnnotation(SaveAnnotationInput saveAnnotationInput)
-    {
-        var commandResult = new ResultWithError<string, ErrorResult>();
-        AnnotationModel annotation;
-        if (saveAnnotationInput.AnnotationId == null)
-        {
-            annotation = new AnnotationModel()
-            {
-                FileId = new Guid(saveAnnotationInput.FileId),
-                ProjectId = new Guid(saveAnnotationInput.ProjectId), 
-                ExpectedOutput = saveAnnotationInput.AnnotationInput.ExpectedOutput,
-                TimeStamp = DateTime.Now.Ticks,
-                CreatorNameIdentifier = saveAnnotationInput.CreatorNameIdentifier
-            };
-            _datasetsContext.Annotations.Add(annotation);
-        }
-        else
-        {
-            annotation =  await _datasetsContext.Annotations.FirstOrDefaultAsync(a => a.Id == new Guid(saveAnnotationInput.AnnotationId));
-            if (annotation == null)
-            {
-                commandResult.Error = new ErrorResult
-                {
-                    Key = AnnotationNotFound,
-                    Error = null
-                };
-                return commandResult;
-            }
-            annotation.ExpectedOutput = saveAnnotationInput.AnnotationInput.ExpectedOutput;
-        }
-        await _datasetsContext.SaveChangesAsync();
-        commandResult.Data = annotation.Id.ToString();
-        return commandResult;
-    }
-
-    public async Task<IList<FileDataModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
-    {
-        var fileModels =  await _datasetsContext.Files.AsNoTracking()
-            .Where(file => file.DatasetId == new Guid(datasetId))
-            .Include(file => file.Annotations).ToListAsync();
-        return fileModels.Select(fileModel => fileModel.ToFileDataModel()).ToList();
-    }
 }
