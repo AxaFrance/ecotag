@@ -9,30 +9,19 @@ It sends the service a list of files and receives json files in response. If the
 You can provide parameters when sending your files.
 To do this, please consider the following example :
 
-If you have a file named "filename.pdf" and if you send it, the resulting json will be
+If you have a file named "fileName.pdf" and you want to send parameters with it, you can define a "fileName.json" file in the same repository, with the following structure:
 ```
 {
-  "type": "Multipart Form",
-  "data": {
-    "file": "filename.pdf"
-  }
+	"type": "Multipart Form",
+	"data": [
+		{"key":"file", "value":"fileName.pdf", "type":"file"},
+		{"key":"someParameter", "value": "parameterValue", "type":"text"},
+	]
 }
 ```
+In the data parameter, you can provide as much parameters as you want. If they are of type "file", the CallApi task will search for the file in the "fileDirectory" repository and send it too.
 
-If you want to provide other parameters to this configuration, you can create a "filename.json" file in the same repository as "filename.pdf"
-
-In this json file, please provide your configuration (as a key-value pair, for example: "contractNumber": "1")
-
-The resulting configuration will be the following :
-```
-{
-  "type": "Multipart Form",
-  "data": {
-    "file": "filename.pdf",
-    "contractNumber": "1"
-  }
-}
-```
+If this configuration file is not found, the file will be sent "as is" to the URL of the CallApi task.
 
 # Samples
 
