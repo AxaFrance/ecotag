@@ -11,5 +11,10 @@
       "service_worker_relative_url":"/OidcServiceWorker.js",
       "service_worker_only": true
     }
+  },
+  "appInsights": {
+    "instrumentationKey": "",
+    "logLevel": "DEBUG",
+    "active": false
   }
 }

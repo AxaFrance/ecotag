@@ -8,7 +8,7 @@ import Footer from './shared/Footer';
 
 import Routes from './AppRoutes';
 import {Helmet} from "react-helmet";
-
+import Telemetry from './Telemetry';
 export const RoutesBase = ({ environment }) => (
   <Router basename={environment.baseUrl}>
       <Header />
@@ -20,9 +20,11 @@ export const RoutesBase = ({ environment }) => (
 const SecureRouteBase = withOidcSecure(RoutesBase);
 
 const Authentification = ({ environment }) => (
-  <OidcProvider configuration={environment.oidc.configuration} >
-    <SecureRouteBase environment={environment} />
-  </OidcProvider>
+    <Telemetry appInsights={environment.appInsights} >
+      <OidcProvider configuration={environment.oidc.configuration} >
+        <SecureRouteBase environment={environment} />
+      </OidcProvider>
+    </Telemetry>
 );
 
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
