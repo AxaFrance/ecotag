@@ -122,11 +122,9 @@ namespace Ml.Cli.JobApiCall
         private async Task<Program.HttpResult> CallHttpAsync(HttpClient httpClient, Callapi inputTask, string file, string targetFileName)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, inputTask.Url);
-
-            var streamContent = new StreamContent(_fileLoader.OpenRead(file));
+            
             var requestContent = new MultipartFormDataContent();
             var fileName = Path.GetFileName(file);
-            requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(file)}");
             var settingsPath = Path.Combine(Path.GetDirectoryName(file),
                 Path.GetFileNameWithoutExtension(file) + ".json");
             if (File.Exists(settingsPath))
@@ -143,6 +141,19 @@ namespace Ml.Cli.JobApiCall
                             {
                                 requestContent.Add(new StringContent(setting.Value), setting.Key);
                             }
+                            else
+                            {
+                                var settingFile = Path.Combine(inputTask.FileDirectory, setting.Value);
+                                if (_fileLoader.FileExists(settingFile))
+                                {
+                                    var streamContent = new StreamContent(_fileLoader.OpenRead(settingFile));
+                                    requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(settingFile)}");
+                                }
+                                else
+                                {
+                                    _logger.LogWarning($"Task Id: {inputTask.Id} - Error : file {settingFile} not found");
+                                }
+                            }
                         }
                     }
                 }
@@ -150,6 +161,11 @@ namespace Ml.Cli.JobApiCall
                 {
                     _logger.LogError("An error occured while deserializing options : " + e.Message);
                 }
+            }
+            else
+            {
+                var streamContent = new StreamContent(_fileLoader.OpenRead(file));
+                requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(file)}");
             }
             
             request.Content = requestContent;
