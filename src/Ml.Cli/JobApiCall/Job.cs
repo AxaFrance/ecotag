@@ -12,21 +12,21 @@ using Ml.Cli.FileLoader;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-public record CallApiSettings
-{
-    public string Type { get; set; }
-    public List<CallApiSetting> Data { get; set; }
-}
-
-public record CallApiSetting
-{
-    public string Key { get; set; }
-    public string Value { get; set; }
-    public string Type { get; set; }
-}
-
 namespace Ml.Cli.JobApiCall
 {
+    public record CallApiSettings
+    {
+        public string Type { get; set; }
+        public List<CallApiSetting> Data { get; set; }
+    }
+
+    public record CallApiSetting
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public string Type { get; set; }
+    }
+    
     public class TaskApiCall
     {
         private readonly IHttpClientFactory _httpClientFactory;
