@@ -22,6 +22,7 @@ using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
 using Ml.Cli.WebApp.Server.Projects;
+using Serilog;
 using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
@@ -179,6 +180,7 @@ namespace Ml.Cli.WebApp.Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,  IServiceProvider serviceProvider)
         {
+            app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
             app.Use(async (context, next) =>
             {
@@ -206,6 +208,7 @@ namespace Ml.Cli.WebApp.Server
                 app.UseCors("CorsPolicy");
             }
             app.UseAuthentication();
+            app.UseSerilogRequestLogging();
            
             app.UseSwagger();
             app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });

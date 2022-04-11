@@ -106,6 +106,7 @@ namespace Ml.Cli.WebApp
 
         private static IHostBuilder CreateHostBuilderServer(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog((context, logger) => { logger.ReadFrom.Configuration(context.Configuration); })
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
                     var env = builderContext.HostingEnvironment;
@@ -128,8 +129,6 @@ namespace Ml.Cli.WebApp
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                     webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<StartupServer>();
-                    webBuilder.UseSerilog(
-                                            (context, logger) => { logger.ReadFrom.Configuration(context.Configuration); });
                 });
 
         private static IHostBuilder CreateHostBuilderLocal(string[] args) =>
