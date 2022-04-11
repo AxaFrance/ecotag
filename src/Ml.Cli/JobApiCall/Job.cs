@@ -116,7 +116,7 @@ namespace Ml.Cli.JobApiCall
             var settingsPath = Path.Combine(Path.GetDirectoryName(file),
                 Path.GetFileNameWithoutExtension(file) + ".json");
             if (File.Exists(settingsPath))
-                requestContent.Add(new StreamContent(_fileLoader.OpenRead(settingsPath)), "settings", fileName);
+                requestContent.Add(new StreamContent(_fileLoader.OpenRead(settingsPath)));
 
             request.Content = requestContent;
 

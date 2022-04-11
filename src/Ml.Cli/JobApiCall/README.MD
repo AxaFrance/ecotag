@@ -4,6 +4,36 @@ Callapi calls a service via a user-defined url.
 
 It sends the service a list of files and receives json files in response. If the json files contain urls that points to images or other json files, these images and json files can also be recovered.
 
+# Settings
+
+You can provide parameters when sending your files.
+To do this, please consider the following example :
+
+If you have a file named "filename.pdf" and if you send it, the resulting json will be
+```
+{
+  "type": "Multipart Form",
+  "data": {
+    "file": "filename.pdf"
+  }
+}
+```
+
+If you want to provide other parameters to this configuration, you can create a "filename.json" file in the same repository as "filename.pdf"
+
+In this json file, please provide your configuration (as a key-value pair, for example: "contractNumber": "1")
+
+The resulting configuration will be the following :
+```
+{
+  "type": "Multipart Form",
+  "data": {
+    "file": "filename.pdf",
+    "contractNumber": "1"
+  }
+}
+```
+
 # Samples
 
 tasks.json 
