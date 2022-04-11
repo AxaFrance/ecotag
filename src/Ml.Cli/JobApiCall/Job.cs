@@ -4,12 +4,26 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
+public record CallApiSettings
+{
+    public string Type { get; set; }
+    public List<CallApiSetting> Data { get; set; }
+}
+
+public record CallApiSetting
+{
+    public string Key { get; set; }
+    public string Value { get; set; }
+    public string Type { get; set; }
+}
 
 namespace Ml.Cli.JobApiCall
 {
@@ -116,12 +130,32 @@ namespace Ml.Cli.JobApiCall
             var settingsPath = Path.Combine(Path.GetDirectoryName(file),
                 Path.GetFileNameWithoutExtension(file) + ".json");
             if (File.Exists(settingsPath))
-                requestContent.Add(new StreamContent(_fileLoader.OpenRead(settingsPath)));
-
+            {
+                var settingsContent = await _fileLoader.ReadAllTextInFileAsync(settingsPath);
+                try
+                {
+                    var callApiSettings = JsonSerializer.Deserialize<CallApiSettings>(settingsContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (callApiSettings != null && callApiSettings.Data.Count > 0)
+                    {
+                        foreach (var setting in callApiSettings.Data)
+                        {
+                            if (setting.Type != "file")
+                            {
+                                requestContent.Add(new StringContent(setting.Value), setting.Key);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("An error occured while deserializing options : " + e.Message);
+                }
+            }
+            
             request.Content = requestContent;
 
             var watch = Stopwatch.StartNew();
-            
+
             var result = await httpClient.SendAsync(request);
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
