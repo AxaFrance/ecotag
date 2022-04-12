@@ -127,7 +127,7 @@ namespace Ml.Cli.JobApiCall
             var fileName = Path.GetFileName(file);
             var settingsPath = Path.Combine(Path.GetDirectoryName(file),
                 Path.GetFileNameWithoutExtension(file) + ".json");
-            if (File.Exists(settingsPath))
+            if (_fileLoader.FileExists(settingsPath))
             {
                 var settingsContent = await _fileLoader.ReadAllTextInFileAsync(settingsPath);
                 try
