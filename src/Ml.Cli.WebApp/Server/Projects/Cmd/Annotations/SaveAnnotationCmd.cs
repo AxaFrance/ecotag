@@ -60,7 +60,7 @@ public class SaveAnnotationCmd
             return commandResult;
         }
 
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(saveAnnotationInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(saveAnnotationInput.CreatorNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult

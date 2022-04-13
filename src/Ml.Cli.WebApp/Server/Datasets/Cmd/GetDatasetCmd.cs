@@ -23,7 +23,7 @@ public class GetDatasetCmd
     public async Task<ResultWithError<GetDataset, ErrorResult>> ExecuteAsync(string datasetId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<GetDataset, ErrorResult>();
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
 
         if (user == null) return commandResult.ReturnError(UserNotFound);
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);

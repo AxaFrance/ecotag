@@ -21,7 +21,7 @@ public record GetExportCmdResult{
 
 public record ExportAnnotation
 {
-    public string Subject { get; set; }
+    public string NameIdentifier { get; set; }
     public long CreateDate { get; set; }
     public string FileName { get; set; }
     public object Annotation { get; set; }
@@ -50,7 +50,7 @@ public class ExportCmd
     {
         var commandResult = new ResultWithError<GetExportCmdResult, ErrorResult>();
 
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(userNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(userNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult
@@ -113,7 +113,7 @@ public class ExportCmd
                 result.Add(new ExportAnnotation
                 {
                     FileName = fileDataModel.Name,
-                    Subject = annotation.CreatorNameIdentifier,
+                    NameIdentifier = annotation.CreatorNameIdentifier,
                     CreateDate = annotation.TimeStamp,
                     Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
                 });

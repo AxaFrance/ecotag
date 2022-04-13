@@ -8,10 +8,10 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [USR_Email] [varchar](254) NOT NULL,
-    [USR_Subject] [varchar](16) NOT NULL,
+    [USR_NameIdentifier] [varchar](32) NOT NULL,
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]),
     CONSTRAINT [PK_T_User_Email] UNIQUE([USR_Email]),
-    CONSTRAINT [PK_T_User_Subject] UNIQUE([USR_Subject])
+    CONSTRAINT [PK_T_User_NameIdentifier] UNIQUE([USR_NameIdentifier])
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
 END

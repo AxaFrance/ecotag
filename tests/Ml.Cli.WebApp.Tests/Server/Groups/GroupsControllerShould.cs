@@ -53,9 +53,9 @@ public class GroupsControllerShould
         var groupContextFunc = GetInMemoryGroupContext();
         var groupContext = groupContextFunc();
 
-        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
+        var user1 = new UserModel { Email = "test1@gmail.com", NameIdentifier = "s666666" };
         groupContext.Users.Add(user1);
-        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        var user2 = new UserModel { Email = "test2@gmail.com", NameIdentifier = "s666667" };
         groupContext.Users.Add(user2);
         
         foreach (var groupName in groupsList)
@@ -116,7 +116,7 @@ public class GroupsControllerShould
             {
                 foreach (var userDataModel in usersList)
                 {
-                    groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email, Subject = "S666666" });
+                    groupContext.Users.Add(new UserModel { Id = new Guid(userDataModel.Id), Email = userDataModel.Email, NameIdentifier = "S666666" });
                 }
             }
 
@@ -211,7 +211,7 @@ public class GroupsControllerShould
             {
                 foreach (var newUser in knownUsers)
                 {
-                    groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), Subject = "S666666" });
+                    groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), NameIdentifier = "S666666" });
                 }
             }
 
@@ -324,7 +324,7 @@ public class GroupsControllerShould
         {
             foreach (var newUser in knownUsers)
             {
-                groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), Subject = "S666666"});
+                groupContext.Users.Add(new UserModel { Id = new Guid(newUser.Id), Email = newUser.Email.ToLower(), NameIdentifier = "S666666"});
             }
         }
 
