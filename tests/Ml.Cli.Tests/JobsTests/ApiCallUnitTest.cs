@@ -19,7 +19,6 @@ namespace Ml.Cli.Tests.JobsTests
 {
     public class ApiCallUnitTest
     {
-        
         [Fact]
         public async Task ApiCallShouldCallApi()
         {
@@ -70,6 +69,60 @@ namespace Ml.Cli.Tests.JobsTests
             
             
             fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputJsons/toto_pdf.json"), It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task ApiCallShouldCallApiWithConfiguration()
+        {
+            var handler = new Mock<HttpMessageHandler>();
+            var factory = handler.CreateClientFactory();
+            Mock.Get(factory).Setup(x => x.CreateClient("unique_id"))
+                .Returns(() =>
+                {
+                    var client = handler.CreateClient();
+                    handler.SetupAnyRequest()
+                        .ReturnsResponse("{\"response\":\"youhou\"}", "application/json");
+                    return client;
+                });
+            
+            var logger = Mock.Of<ILogger<TaskApiCall>>();
+            var fileLoader = new Mock<IFileLoader>();
+            fileLoader.Setup(mock => mock.CreateDirectory(It.IsAny<string>()));
+            fileLoader.SetupSequence(mock => mock.FileExists(It.IsAny<string>()))
+                .Returns(false)
+                .Returns(true)
+                .Returns(true);
+            fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(It.IsAny<string>())).ReturnsAsync("{\"type\":\"Multipart Form\",\"data\":[{\"key\":\"file\",\"type\":\"file\",\"value\":\"toto.pdf\"},{\"key\":\"someKey\",\"type\":\"text\",\"value\":\"someValue\"}]}");
+            fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"toto.json", "toto.pdf"});
+            fileLoader.Setup(mock => mock.OpenRead(It.IsAny<string>())).Returns(Mock.Of<Stream>());
+            var fileHandler = new Mock<IFileHandler>();
+            
+            var apiCallFiles = new ApiCallFiles(factory, fileLoader.Object, fileHandler.Object, logger);
+            var apiCall = new TaskApiCall(factory, apiCallFiles, fileLoader.Object, logger);
+            
+            var uri = new Uri("https://url");
+            
+            await apiCall.ApiCallAsync(new Callapi(
+                "callapi", 
+                "unique_id",
+                true,
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/input"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputJsons"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputImages"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputDirInputs"),
+                PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputDirInputs"),
+                "",
+                "",
+                false,
+                false,
+                false,
+                uri,
+                false,
+                1, 1));
+            
+            fileLoader.Verify(mock => mock.WriteAllTextInFileAsync(PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputJsons/toto_pdf.json"), It.IsAny<string>()), Times.Once());
+            fileLoader.Verify(mock => mock.FileExists(It.IsAny<string>()), Times.Exactly(3));
         }
 
         [Fact]
