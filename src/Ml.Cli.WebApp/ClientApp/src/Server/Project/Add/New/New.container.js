@@ -129,6 +129,11 @@ export const reducer = (state, action) => {
                     value: 'NamedEntity',
                     label: 'Sélection de zone de texte',
                     type: "Text"
+                  },
+                  {
+                    value: 'Rotation',
+                    label: 'Rotation',
+                    type: "Image"
                   }];
               const datasetId = event.value
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
