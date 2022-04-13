@@ -1,0 +1,7 @@
+﻿{
+  "type": "Multipart Form",
+  "data": [
+    {"key":"file", "value":"license-specimen-0.pdf", "type":"file"},
+    {"key":"contractNumber", "value": "contractNumberValue", "type":"text"}
+  ]
+}
