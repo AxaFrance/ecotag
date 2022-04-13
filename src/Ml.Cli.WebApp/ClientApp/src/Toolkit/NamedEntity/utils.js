@@ -3,7 +3,7 @@ import _ from 'lodash';
 const sortBy = _.sortBy;
 
 export const getSubToken = (text, start, end) => {
-  const reg2 = /[0-9]+|[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+|\s+|[^\s\w]+/g;
+  const reg2 = /[0-9]+|[A-Za-z_-\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+|\s+|[^\s\w]+/g;
 
   const rootTokens = text.match(reg2);
   const subText = text.slice(start, end);
@@ -41,7 +41,7 @@ export const generateTextToken = text => {
   const tokenIndexLast = [];
   const tokenData = [];
   const data = [];
-  const regex = /[0-9]+|[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+|\s+|([^\s\w]|[_])+/g;
+  const regex = /[0-9]+|[A-Za-z_-\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+|\s+|([^\s\w]|[_])+/g;
   let match;
   let index = 0;
   while ((match = regex.exec(text)) != null) {
