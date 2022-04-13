@@ -8,7 +8,8 @@ import Footer from './shared/Footer';
 
 import Routes from './AppRoutes';
 import {Helmet} from "react-helmet";
-import Telemetry from './Telemetry';
+import TelemetryProvider from './Telemetry';
+
 export const RoutesBase = ({ environment }) => (
   <Router basename={environment.baseUrl}>
       <Header />
@@ -20,11 +21,11 @@ export const RoutesBase = ({ environment }) => (
 const SecureRouteBase = withOidcSecure(RoutesBase);
 
 const Authentification = ({ environment }) => (
-    <Telemetry {...environment.telemetry} >
+    <TelemetryProvider {...environment.telemetry} >
       <OidcProvider configuration={environment.oidc.configuration} >
         <SecureRouteBase environment={environment} />
       </OidcProvider>
-    </Telemetry>
+    </TelemetryProvider>
 );
 
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
@@ -38,10 +39,10 @@ const App = () => (
                 content="Website part of the Ml Cli tool"
             />
         </Helmet>
-  <EnvironmentProvider>
-    <AuthentificationWithEnvironment />
-  </EnvironmentProvider>
-        </>
+          <EnvironmentProvider>
+            <AuthentificationWithEnvironment />
+          </EnvironmentProvider>
+    </>
 );
 
 export default App;

@@ -180,6 +180,7 @@ namespace Ml.Cli.WebApp.Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,  IServiceProvider serviceProvider)
         {
+            app.UseSerilogRequestLogging();
             app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
             app.Use(async (context, next) =>
@@ -208,8 +209,6 @@ namespace Ml.Cli.WebApp.Server
                 app.UseCors("CorsPolicy");
             }
             app.UseAuthentication();
-            app.UseSerilogRequestLogging();
-           
             app.UseSwagger();
             app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
             app.UseRouting();
