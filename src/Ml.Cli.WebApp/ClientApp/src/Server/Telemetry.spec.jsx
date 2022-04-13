@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import AppInsightsProvider, { buildLog, buildAppInsightsEvent, events } from './Telemetry';
+import TelemetryProvider, { buildLog, buildAppInsightsEvent, telemetryEvents } from './Telemetry';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -20,7 +20,7 @@ describe('Telemetry', () => {
         test('should build an app insight event', () => {
             // given
             // when
-            const actualEvent = buildAppInsightsEvent(givenProps)(events.CREATE_PROJECT);
+            const actualEvent = buildAppInsightsEvent(givenProps)(telemetryEvents.CREATE_PROJECT);
             // then
             expect(actualEvent).toMatchObject({
                 name: "CREATE_PROJECT",
@@ -61,13 +61,6 @@ describe('Telemetry', () => {
     });
 
     describe('.AppInsightsProvider()', () => {
-        beforeEach(() => {
-            jest.spyOn(React, 'useEffect').mockImplementation(() => jest.fn());
-        });
-        afterEach(() => {
-            jest.resetAllMocks();
-        })
-
         it('should render AppInsightsProvider', async () => {
             // given
             const givenAppInsights = {
@@ -80,7 +73,7 @@ describe('Telemetry', () => {
             // when
             const { container } = render(
                 <Router>
-                    <AppInsightsProvider appInsights={givenAppInsights} children={givenChildren}/>
+                    <TelemetryProvider {...givenAppInsights} children={givenChildren}/>
                 </Router>
             );
 

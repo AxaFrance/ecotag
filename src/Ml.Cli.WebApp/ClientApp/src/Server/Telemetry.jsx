@@ -3,17 +3,17 @@ import { useLocation } from 'react-router-dom';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { v4 as uuidv4 } from 'uuid';
 
-export const events = Object.freeze({
+export const telemetryEvents = Object.freeze({
     CREATE_PROJECT: Symbol("CREATE_PROJECT"),
     CREATE_DATASET: Symbol("CREATE_DATASET"),
     CREATE_GROUP: Symbol("CREATE_GROUP"),
 });
 
-class AppInsightsStore {
+class TelemetryStore {
     constructor(instrumentationKey){
-        if(!AppInsightsStore.instance){
+        if(!TelemetryStore.instance){
             const acceptAllLogs = () => true;
-            AppInsightsStore.instance = this;
+            TelemetryStore.instance = this;
             this.appInsights = new ApplicationInsights({
                 config: {
                     instrumentationKey,
@@ -35,7 +35,7 @@ class AppInsightsStore {
             this.appInsights.addTelemetryInitializer(acceptAllLogs);
         }
 
-        return AppInsightsStore.instance;
+        return TelemetryStore.instance;
     }
 }
 
@@ -58,22 +58,20 @@ export const buildAppInsightsEvent = props => log => ({
     properties: props
 });
 
-export const withAppInsightsProvider = Component => props => (
-    <AppInsightsConsumer>
+export const withTelemetry = Component => props => (
+    <TelemetryConsumer>
         {store => <Component {...props} {...store} />}
-    </AppInsightsConsumer>
+    </TelemetryConsumer>
 );
 
-export const AppInsightsContext = createContext("appInsights");
+export const TelemetryContext = createContext("telemetry");
 
-export const AppInsightsConsumer = AppInsightsContext.Consumer;
+export const TelemetryConsumer = TelemetryContext.Consumer;
 
-const AppInsightsProvider = ({ children, appInsights }) => {
-    const {
-        active,
-        logLevel,
-        instrumentationKey
-    } = appInsights;
+const TelemetryProvider = ({ children,  active,
+                               logLevel,
+                               instrumentationKey }) => {
+
     const location = useLocation();
     const [appInsightsLogger, setAppInsightsLogger] = useState(null);
 
@@ -89,7 +87,7 @@ const AppInsightsProvider = ({ children, appInsights }) => {
         hostname: window.location.href,
         machineName: window.navigator.userAgent,
     };
-    const instance = new AppInsightsStore(instrumentationKey);
+    const instance = new TelemetryStore(instrumentationKey);
     Object.freeze(instance);
     React.useEffect(() => {
         if (active === true) {
@@ -101,14 +99,18 @@ const AppInsightsProvider = ({ children, appInsights }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
+    
+    const telemetry ={
+        trackEvent: (eventName) => appInsightsLogger.trackEvent(buildAppInsightsEvent(logProps)(eventName))
+    }
 
     return (
         <>
-            <AppInsightsContext.Provider value={{logger: appInsightsLogger, buildEvent: buildAppInsightsEvent(logProps), events}}>
+            <TelemetryContext.Provider value={{telemetry}}>
                 {children}
-            </AppInsightsContext.Provider>
+            </TelemetryContext.Provider>
         </>
     );
 };
 
-export default AppInsightsProvider;
+export default TelemetryProvider;

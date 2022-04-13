@@ -13,9 +13,9 @@
       "service_worker_only": true
     }
   },
-  "appInsights": {
-    "instrumentationKey": "#{APPINSIGHTS_INSTRUMENTATIONKEY}#",
-    "logLevel": "#{APPINSIGHTS_LOG_LEVEL}#",
-    "active": #{ACTIVE_APPINSIGHTS}#
+  "telemetry": {
+    "instrumentationKey": "#{Spa:AppInsights:instrumentationKey}#",
+    "logLevel": "#{Spa:AppInsights:LogLevel}#",
+    "active": #{Spa:AppInsights:Active}#
   }
 }

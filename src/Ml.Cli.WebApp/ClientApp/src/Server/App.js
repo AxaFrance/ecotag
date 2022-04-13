@@ -20,7 +20,7 @@ export const RoutesBase = ({ environment }) => (
 const SecureRouteBase = withOidcSecure(RoutesBase);
 
 const Authentification = ({ environment }) => (
-    <Telemetry appInsights={environment.appInsights} >
+    <Telemetry {...environment.telemetry} >
       <OidcProvider configuration={environment.oidc.configuration} >
         <SecureRouteBase environment={environment} />
       </OidcProvider>
