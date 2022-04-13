@@ -107,20 +107,23 @@ Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo
 
 ## Getting started on Windows 10
 
+Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <CURRENT_VERSION> tag.
+Don't forget the "v" before the numbers !
+
 Run the following commands :
 ```cmd
 mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/win-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/win-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/win-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/win-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -148,20 +151,23 @@ pip install jupyter-server-proxy
 jupyter labextension install @jupyterlab/server-proxy
 ```
 
+Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <CURRENT_VERSION> tag.
+Don't forget the "v" before the numbers !
+
 Run the following commands :
 ```sh
 mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/linux-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/linux-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/linux-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/linux-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -185,20 +191,23 @@ chmod +x Ml.Cli.WebApp
 
 ## Getting started on macosx
 
+Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <CURRENT_VERSION> tag.
+Don't forget the "v" before the numbers !
+
 Run the following commands :
 ```sh
 mkdir ml-cli
 cd ml-cli
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/osx-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/osx-x64-ml-cli.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/osx-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/osx-x64-demo-api.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/v0.0.22/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/<CURRENT_VERSION>/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
