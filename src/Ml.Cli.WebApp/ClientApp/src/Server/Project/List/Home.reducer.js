@@ -62,6 +62,7 @@ export const reducer = (state, action) => {
         property.timeLastUpdate = new Date().getTime();
       } else if (value === 'desc') {
         property.value = 'asc';
+        property.timeLastUpdate = new Date().getTime();
       } else {
         property.value = null;
         property.timeLastUpdate = null;
@@ -92,8 +93,7 @@ export const initialState = {
       name: { value: null, timeLastUpdate: null },
       groupName: {value: null, timeLastUpdate: null},
       createDate: { value: 'desc', timeLastUpdate: new Date() },
-      annotationType: { value: null, timeLastUpdate: null },
-      numberCrossAnnotation: { value: null, timeLastUpdate: null },
+      annotationType: { value: null, timeLastUpdate: null }
     },
   },
 };

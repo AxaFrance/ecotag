@@ -110,9 +110,6 @@ exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
               >
                 Status
               </span>
-              <i
-                class="glyphicon glyphicon-sorting"
-              />
             </button>
           </span>
         </th>

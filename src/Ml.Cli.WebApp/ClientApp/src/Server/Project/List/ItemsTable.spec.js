@@ -22,8 +22,7 @@ const filters = {
         groupName: {value: null, timeLastUpdate: null},
         createDate: { value: 'desc', timeLastUpdate: new Date() },
         annotationType: { value: null, timeLastUpdate: null },
-        numberTagToDo: { value: null, timeLastUpdate: null },
-        numberCrossAnnotation: {value: null}
+        numberTagToDo: { value: null, timeLastUpdate: null }
     },
 };
 

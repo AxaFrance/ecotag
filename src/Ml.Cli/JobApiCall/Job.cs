@@ -4,15 +4,29 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
 using Newtonsoft.Json;
-
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Ml.Cli.JobApiCall
 {
+    public record CallApiSettings
+    {
+        public string Type { get; set; }
+        public List<CallApiSetting> Data { get; set; }
+    }
+
+    public record CallApiSetting
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public string Type { get; set; }
+    }
+    
     public class TaskApiCall
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -108,20 +122,56 @@ namespace Ml.Cli.JobApiCall
         private async Task<Program.HttpResult> CallHttpAsync(HttpClient httpClient, Callapi inputTask, string file, string targetFileName)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, inputTask.Url);
-
-            var streamContent = new StreamContent(_fileLoader.OpenRead(file));
+            
             var requestContent = new MultipartFormDataContent();
             var fileName = Path.GetFileName(file);
-            requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(file)}");
             var settingsPath = Path.Combine(Path.GetDirectoryName(file),
                 Path.GetFileNameWithoutExtension(file) + ".json");
-            if (File.Exists(settingsPath))
-                requestContent.Add(new StreamContent(_fileLoader.OpenRead(settingsPath)), "settings", fileName);
-
+            if (_fileLoader.FileExists(settingsPath))
+            {
+                var settingsContent = await _fileLoader.ReadAllTextInFileAsync(settingsPath);
+                try
+                {
+                    var callApiSettings = JsonSerializer.Deserialize<CallApiSettings>(settingsContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (callApiSettings != null && callApiSettings.Data.Count > 0)
+                    {
+                        foreach (var setting in callApiSettings.Data)
+                        {
+                            if (setting.Type != "file")
+                            {
+                                requestContent.Add(new StringContent(setting.Value), setting.Key);
+                            }
+                            else
+                            {
+                                var settingFile = Path.Combine(inputTask.FileDirectory, setting.Value);
+                                if (_fileLoader.FileExists(settingFile))
+                                {
+                                    var streamContent = new StreamContent(_fileLoader.OpenRead(settingFile));
+                                    requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(settingFile)}");
+                                }
+                                else
+                                {
+                                    _logger.LogWarning($"Task Id: {inputTask.Id} - Error : file {settingFile} not found");
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("An error occured while deserializing options : " + e.Message);
+                }
+            }
+            else
+            {
+                var streamContent = new StreamContent(_fileLoader.OpenRead(file));
+                requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(file)}");
+            }
+            
             request.Content = requestContent;
 
             var watch = Stopwatch.StartNew();
-            
+
             var result = await httpClient.SendAsync(request);
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
