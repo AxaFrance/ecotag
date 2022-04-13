@@ -11,19 +11,19 @@ describe('Telemetry', () => {
             date: new Date().toISOString(),
             correlationId: uuidv4(),
             featureId: uuidv4(),
-            featureName: "ADVALOREM:FRONT",
+            featureName: "ECOTAG:FRONT",
             logLevel: "debug",
-            appName: 'ADVALOREM',
+            appName: 'ECOTAG',
             hostname: window.location.href,
             machineName: window.navigator.userAgent,
         };
         test('should build an app insight event', () => {
             // given
             // when
-            const actualEvent = buildAppInsightsEvent(givenProps)(events.DOWNLOAD_CERTIFICATE);
+            const actualEvent = buildAppInsightsEvent(givenProps)(events.CREATE_PROJECT);
             // then
             expect(actualEvent).toMatchObject({
-                name: "DOWNLOAD_CERTIFICATE",
+                name: "CREATE_PROJECT",
                 properties: givenProps
             });
         });
@@ -48,7 +48,7 @@ describe('Telemetry', () => {
                 featureName: 'myFeature',
                 featureId: 'featureId',
                 logLevel: 'DEBUG',
-                appName: 'ADVALOREM',
+                appName: 'ECOTAG',
                 hostname: window.location.href,
                 machineName: window.navigator.userAgent,
             };

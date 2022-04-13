@@ -4,17 +4,9 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { v4 as uuidv4 } from 'uuid';
 
 export const events = Object.freeze({
-    DOWNLOAD_CERTIFICATE: Symbol("DOWNLOAD_CERTIFICATE"),
-    SAVE_QUOTE: Symbol("SAVE_QUOTE"),
-    SAVE_QUOTE_ERROR: Symbol("SAVE_QUOTE_ERROR"),
-    SUBSCRIBE_QUOTE_ERROR: Symbol("SUBSCRIBE_QUOTE_ERROR"),
-    QUOTE_ERROR: Symbol("QUOTE_ERROR"),
-    QUOTE_SUCCESS: Symbol("QUOTE_SUCCESS"),
-    QUOTE_ERROR_500: Symbol("QUOTE_ERROR_500"),
-    ORDER_SUCCESS_BY_SAVED_QUOTE: Symbol("ORDER_SUCCESS_BY_SAVED_QUOTE"),
-    ORDER_SUCCESS_BY_DIRECT_QUOTE: Symbol("ORDER_SUCCESS_BY_DIRECT_QUOTE"),
-    RATTACHMENT_DONE: Symbol("RATTACHMENT_DONE"),
-    MAIL_SENT: Symbol("MAIL_SENT"),
+    CREATE_PROJECT: Symbol("CREATE_PROJECT"),
+    CREATE_DATASET: Symbol("CREATE_DATASET"),
+    CREATE_GROUP: Symbol("CREATE_GROUP"),
 });
 
 class AppInsightsStore {
@@ -86,11 +78,11 @@ const AppInsightsProvider = ({ children, appInsights }) => {
     const [appInsightsLogger, setAppInsightsLogger] = useState(null);
 
     const featureId = uuidv4();
-    const featureName = "ADVALOREM:FRONT";
+    const featureName = "ECOTAG:FRONT";
     const logProps = {
         featureId,
         featureName,
-        appName: 'ADVALOREM',
+        appName: 'ECOTAG',
         correlationId: uuidv4(),
         logLevel: logLevel || '',
         date: new Date().toISOString(),
