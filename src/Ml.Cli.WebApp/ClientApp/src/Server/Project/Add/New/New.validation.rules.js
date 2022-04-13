@@ -34,7 +34,7 @@ const ruleNumber = {
 };
 
 export const rules = {
-  [NAME]: [rulesRequired, rulesMaxLength(16), rulesMinLength(3), ruleText],
+  [NAME]: [rulesRequired, rulesMaxLength(48), rulesMinLength(3), ruleText],
   [DATASET]: [rulesRequired],
   [TYPE]: [rulesRequired],
   [LABELS]: [],
