@@ -28,10 +28,11 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
     const classNameButtonContainer = classNames(defaultClassNameButtonContainer, {
         [`${defaultClassNameButtonContainer}--inline-mode`]: state.inlineMode,
     });
+    
     const coloredLabels = labels.map((label) => {
         return {
             "name": label.name,
-            "color": `#${stringToRGB(label.name)}`
+            "color": label.color ? label.color : `#${stringToRGB(label.name)}`
         };
     });
 
