@@ -18,6 +18,7 @@ import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
 import { init } from './New.hook';
 import {resilienceStatus, withResilience} from '../../../shared/Resilience';
+import {withTelemetry, telemetryEvents} from "../../../Telemetry";
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
@@ -185,7 +186,7 @@ export const reducer = (state, action) => {
   }
 };
 
-export const createProject = async (history, fetch, state, dispatch) => {
+export const createProject = async (history, fetch, state, dispatch, telemetry) => {
   const errors = errorList(state.fields);
   dispatch({ type: 'onSubmit' });
   if (errors.length) {
@@ -204,6 +205,7 @@ export const createProject = async (history, fetch, state, dispatch) => {
     if(response.status >= 500){
       dispatch({ type: 'onSubmitEnded'});
     } else{
+      telemetry.trackEvent(telemetryEvents.CREATE_PROJECT);
       history.push({
         pathname: '/projects/confirm',
         state: { projectId : await response.json()},
@@ -211,10 +213,10 @@ export const createProject = async (history, fetch, state, dispatch) => {
     }
 };
 
-const useNew = (fetch, history) => {
+const useNew = (fetch, history, telemetry) => {
   const [state, dispatch] = useReducer(reducer, initState);
   const onChange = event => dispatch({ type: 'onChange', event });
-  const onSubmit = () => createProject(history, fetch, state, dispatch);
+  const onSubmit = () => createProject(history, fetch, state, dispatch, telemetry);
   React.useEffect(() => {
     init(fetch, dispatch)();
   }, []);
@@ -223,13 +225,13 @@ const useNew = (fetch, history) => {
 
 const NewWithResilience = withResilience(New)
 
-export const NewContainer = ({ fetch, history }) => {
-  const { state, onChange, onSubmit } = useNew(fetch, history);
+export const NewContainer = ({ fetch, history, telemetry }) => {
+  const { state, onChange, onSubmit } = useNew(fetch, history, telemetry);
   return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit} />;
 };
 
 
-const enhance = compose(withCustomFetch(fetch), withRouter);
+const enhance = compose(withCustomFetch(fetch), withRouter, withTelemetry);
 const EnhancedNewContainer = enhance(NewContainer);
 
 export default EnhancedNewContainer;

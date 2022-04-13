@@ -12,5 +12,10 @@
       "service_worker_relative_url":"/OidcServiceWorker.js",
       "service_worker_only": true
     }
+  },
+  "telemetry": {
+    "instrumentationKey": "#{Spa:AppInsights:instrumentationKey}#",
+    "logLevel": "#{Spa:AppInsights:LogLevel}#",
+    "active": #{Spa:AppInsights:Active}#
   }
 }

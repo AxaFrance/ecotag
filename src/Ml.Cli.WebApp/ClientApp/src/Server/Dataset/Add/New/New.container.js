@@ -9,6 +9,7 @@ import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import withCustomFetch from "../../../withCustomFetch";
 import compose from "../../../compose";
 import {fetchGroups} from "../../../Group/Group.service";
+import {telemetryEvents, withTelemetry} from "../../../Telemetry";
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
@@ -92,7 +93,7 @@ export const init = (fetch, dispatch) => async () => {
   dispatch( {type: 'init', data});
 };
 
-const useNew = (history, fetch) => {
+const useNew = (history, fetch, telemetry) => {
   const [state, dispatch] = useReducer(reducer, initState);
   const onChange = event => dispatch({ type: 'onChange', event });
   const onSubmit = async () => {
@@ -111,6 +112,7 @@ const useNew = (history, fetch) => {
       if(response.status >= 500){
         data = {status: resilienceStatus.ERROR };
       } else {
+        telemetry.trackEvent(telemetryEvents.CREATE_DATASET);
         history.push('/datasets/confirm');
       }
     }
@@ -126,9 +128,9 @@ const useNew = (history, fetch) => {
 
 const NewWithResilience = withResilience(New);
 
-const NewContainer = ({ history, fetch }) => {
-  const { state, onChange, onSubmit } = useNew(history, fetch);
+const NewContainer = ({ history, fetch, telemetry }) => {
+  const { state, onChange, onSubmit } = useNew(history, fetch, telemetry);
    return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit}  />;
 };
-const enhance = compose(withCustomFetch(fetch), withRouter);
+const enhance = compose(withCustomFetch(fetch), withRouter, withTelemetry);
 export default  enhance(NewContainer);

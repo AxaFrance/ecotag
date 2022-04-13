@@ -5,6 +5,9 @@ import { computeNumberPages, filterPaging } from '../../shared/Home/Home.filters
 import { useHome } from './Home.hook';
 import {withResilience} from "../../shared/Resilience";
 import {NAME} from "./New/constants";
+import compose from "../../compose";
+import {withRouter} from "react-router-dom";
+import {withTelemetry} from "../../Telemetry";
 
 const HomeWithResilience = withResilience(Home);
 
@@ -21,9 +24,9 @@ const computeGroupUsers = (groupUsersIds = [], allEligibleUsers = []) => {
   return users;
 }
 
-export const HomeContainer = ({ fetch }) => {
+export const HomeContainer = ({ fetch, telemetry }) => {
   const { state, onChangePaging, onChangeCreateGroup, onSubmitCreateGroup, onUpdateUser } = useHome(
-    fetch
+    fetch, telemetry
   );
   const {groups, users} = state;
   const items = groups.map(group => {return { ...group, users: computeGroupUsers(group.userIds, users), eligibleUsers : computeEligibleUsers(group.userIds, users) }});
@@ -55,4 +58,6 @@ export const HomeContainer = ({ fetch }) => {
   );
 };
 
-export default withCustomFetch(fetch)(HomeContainer);
+const enhance = compose(withCustomFetch(fetch), withTelemetry);
+
+export default enhance(HomeContainer);

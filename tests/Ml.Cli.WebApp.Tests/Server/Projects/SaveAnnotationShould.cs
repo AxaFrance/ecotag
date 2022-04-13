@@ -141,7 +141,7 @@ public class SaveAnnotationShould
             .Setup(foo => foo.DownloadAsync("10000000-1111-0000-0000-000000000000", "testFile.json"))
             .ReturnsAsync(mockedResult);
         var datasetsRepository = new DatasetsRepository(datasetContext, mockedFileService.Object, memoryCache);
-        AnnotationsRepository annotationsRepository = new AnnotationsRepository(datasetContext, null, memoryCache);
+        var annotationsRepository = new AnnotationsRepository(datasetContext, null, memoryCache);
         return (usersRepository, datasetsRepository, projectsRepository, projectsController, context, annotationsRepository);
     }
 }
