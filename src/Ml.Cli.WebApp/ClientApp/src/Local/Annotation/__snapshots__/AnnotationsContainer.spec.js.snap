@@ -85,7 +85,7 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
       >
         <button
           class="image-classifier-btn"
-          style="background-color: rgb(107, 149, 27);"
+          style="background-color: rgb(0, 129, 148);"
         >
           Firstname
         </button>

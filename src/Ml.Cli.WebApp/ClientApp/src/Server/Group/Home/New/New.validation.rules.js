@@ -15,7 +15,7 @@ const rulesMinLength = {
 
 const rulesMaxLength = {
   maxLength: {
-    maxLength: 16,
+    maxLength: 48,
     message: MSG_MAX_LENGTH,
   },
 };

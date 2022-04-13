@@ -22,7 +22,7 @@ public record CreateProjectInput
     [Required]
     public int NumberCrossAnnotation { get; set; }
     [Required]
-    [RegularExpression(@"Cropping|ImageClassifier|NamedEntity|Ocr$")]
+    [RegularExpression(@"Cropping|ImageClassifier|NamedEntity|Ocr|Rotation$")]
     public string AnnotationType { get; set; }
     [Required]
     [MaxLength(10)]
