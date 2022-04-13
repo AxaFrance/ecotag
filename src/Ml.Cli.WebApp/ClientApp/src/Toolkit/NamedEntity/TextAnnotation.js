@@ -114,7 +114,6 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
 
   render() {
     const { tokenData, tokenIndex, tokenIndexLast, text, value } = this.props;
-
     const splits = splitTokensWithOffsets({ text, tokenData, tokenIndex, tokenIndexLast }, value);
 
     return (

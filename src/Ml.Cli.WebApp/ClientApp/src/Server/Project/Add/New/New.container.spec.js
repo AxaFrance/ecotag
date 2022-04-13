@@ -18,6 +18,8 @@ const givenGroups = [
   }
 ];
 
+const telemetry = { trackEvent : (eventName) => console.log(eventName) }
+
 const fetch = () => {
   return {ok: true, json: () => Promise.resolve({
       "id": "0001",
@@ -117,10 +119,6 @@ describe('New.container', () => {
         [LABELS]: { name: LABELS, values: [], message: null },
       }
     };
-    const givenProject = {
-      name: "toto"
-    };
-
     function fail(message = "The fail function was called") {
       throw new Error(message);
     }
@@ -137,7 +135,7 @@ describe('New.container', () => {
     
     it('should call createProject and dispatch', async () => {
       try {
-        await createProject(givenHistory, givenFetch, givenState, givenDispatch);
+        await createProject(givenHistory, givenFetch, givenState, givenDispatch, telemetry);
         expect(givenFetch).toHaveBeenCalledTimes(1);
         expect(givenDispatch).toHaveBeenCalledWith( { type: "onSubmit" });
       } catch (error) {
@@ -147,7 +145,7 @@ describe('New.container', () => {
 
     it('should fail because of error during createProject', async () => {
       try {
-        await createProject(givenHistory, givenFetch, givenState, givenDispatch);
+        await createProject(givenHistory, givenFetch, givenState, givenDispatch, telemetry);
         fail(error);
       } catch (error) {
         expect(givenFetch).toHaveBeenCalledTimes(1);

@@ -8,6 +8,7 @@ import {
 import { reducer, initState } from './Home.reducer';
 import { NAME } from './New/constants';
 import {resilienceStatus} from "../../shared/Resilience";
+import {telemetryEvents} from "../../Telemetry";
 
 export const initListOfGroups = (fetch, dispatch) => async () => {
   const [groupsResponse, usersResponse] = await Promise.all([fetchGroups(fetch)(), fetchUsers(fetch)()]);
@@ -21,7 +22,7 @@ export const initListOfGroups = (fetch, dispatch) => async () => {
   dispatch({type: 'init', data: data});
 }
 
-export const createGroup = (fetch, dispatch) => async fields => {
+export const createGroup = (fetch, dispatch, telemetry) => async fields => {
   dispatch({ type: 'onActionGroupLoading' });
   const newGroup = {
     name: fields[NAME].value.toLowerCase(),
@@ -32,7 +33,8 @@ export const createGroup = (fetch, dispatch) => async fields => {
   if(response.status >= 500 ){
     data = {status: resilienceStatus.ERROR, newGroup: {id: null, ...newGroup} };
   } else {
-    const groupId = await response.json()
+    const groupId = await response.json();
+    telemetry.trackEvent(telemetryEvents.CREATE_GROUP);
     data = {status: resilienceStatus.SUCCESS, newGroup: {id: groupId, ...newGroup} };
   }
   
@@ -60,13 +62,13 @@ export const updateUsersInGroup = async (fetch, dispatch, state, idGroup, users)
   dispatch({ type: 'changeUserEnded', data });
 };
 
-export const useHome = fetch => {
+export const useHome = (fetch, telemetry) => {
   const [state, dispatch] = React.useReducer(reducer, initState);
   const onChangePaging = ({ numberItems, page }) => {
     dispatch({ type: 'onChangePaging', data: { numberItems, page } });
   };
   const onChangeCreateGroup = event => dispatch({ type: 'onChangeCreateGroup', event });
-  const onSubmitCreateGroup = () => createGroup(fetch, dispatch)(state.fields);
+  const onSubmitCreateGroup = () => createGroup(fetch, dispatch, telemetry)(state.fields);
   const onUpdateUser = (idGroup, users) => updateUsersInGroup(fetch, dispatch, state, idGroup, users);
   React.useEffect(() => {
     initListOfGroups(fetch, dispatch)();
