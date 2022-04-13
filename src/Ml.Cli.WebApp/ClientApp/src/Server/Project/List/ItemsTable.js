@@ -11,8 +11,6 @@ import {
 } from '@axa-fr/react-toolkit-all';
 import {ProgressBar} from "./ProgressBar";
 
-
-
 const NumberTagToDo = ({state}) =>{
     const {ERROR, SUCCESS, LOADING} = resilienceStatus;
     const annotationsStatus = state.annotationsStatus;
@@ -134,9 +132,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                             filterColumnValue={filters.columns.annotationType.value}
                         />
                         <HeaderColumnCell
-                            onChangeSort={onChangeSort('numberTagToDo')}
                             headerColumnName={'Status'}
-                            filterColumnValue={filters.columns.numberCrossAnnotation.value}
                         />
                         <Table.Th classModifier="sortable">
                             <span className="af-table__th-content af-btn__text">Action</span>
