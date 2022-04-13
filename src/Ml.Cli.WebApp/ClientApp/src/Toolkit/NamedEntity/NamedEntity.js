@@ -31,7 +31,6 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
   }, [url, expectedOutput, text]);
 
   const selectLabel = label => {
-    console.log(label);
     setState({ ...state, label });
   };
 
@@ -73,7 +72,6 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
         <div className="sticky">
           <Label labels={labels} selectLabel={selectLabel} selectedLabel={state.label} />
         </div>
-        <div>Selected tag : {state.label.name}</div>
         <div className="tokenAnnotation-container">
           <TextAnnotation
             className="tokenAnnotator-component"
