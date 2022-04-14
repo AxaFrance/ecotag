@@ -54,10 +54,10 @@ public record MockService
 internal static class DatasetMock
 {
     
-    public static MockService GetMockedServiceProvider<T>(T datasetContext)
+    public static MockService GetMockedServiceProvider<T>(Func<T> datasetContextFunc)
     {
         var serviceProvider = new Mock<IServiceProvider>();
-        serviceProvider.Setup(foo => foo.GetService(typeof(T))).Returns(datasetContext);
+        serviceProvider.Setup(foo => foo.GetService(typeof(T))).Returns(datasetContextFunc);
         var serviceScope = new Mock<IServiceScope>();
         serviceScope.Setup(foo => foo.ServiceProvider).Returns(serviceProvider.Object);
         serviceScope.Setup(x => x.ServiceProvider).Returns(serviceProvider.Object);
@@ -72,7 +72,7 @@ internal static class DatasetMock
     }
     public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
     {
-        var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
+        var groupContext = GroupsControllerShould.GetInMemoryGroupContext()();
 
         var group1 = new GroupModel { Name = "group1" };
         groupContext.Groups.Add(group1);
@@ -89,7 +89,9 @@ internal static class DatasetMock
         groupContext.GroupUsers.Add(new GroupUsersModel { GroupId = group1.Id, UserId = user1.Id });
         await groupContext.SaveChangesAsync();
 
-        var datasetContext = GetInMemoryDatasetContext();
+        var datasetContextFunc = GetInMemoryDatasetContext();
+        var datasetContext = datasetContextFunc();
+            
         var dataset1 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
@@ -212,7 +214,7 @@ internal static class DatasetMock
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
             memoryCache);
 
-        var mockedService  = GetMockedServiceProvider(datasetContext);
+        var mockedService  = GetMockedServiceProvider(datasetContextFunc);
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
@@ -250,19 +252,22 @@ internal static class DatasetMock
         return new ControllerContext
         {
             HttpContext = context
-        };;
+        };
     }
-
-    public static DatasetContext GetInMemoryDatasetContext()
+    public static Func<DatasetContext> GetInMemoryDatasetContext()
     {
         var builder = new DbContextOptionsBuilder<DatasetContext>();
         var databaseName = Guid.NewGuid().ToString();
         builder.UseInMemoryDatabase(databaseName);
 
-        var options = builder.Options;
-        var groupContext = new DatasetContext(options);
-        groupContext.Database.EnsureCreated();
-        groupContext.Database.EnsureCreatedAsync();
-        return groupContext;
+        DatasetContext DatasetContext()
+        {
+            var options = builder.Options;
+            var datasetContext = new DatasetContext(options);
+            datasetContext.Database.EnsureCreated();
+            datasetContext.Database.EnsureCreatedAsync();
+            return datasetContext;
+        }
+        return DatasetContext;
     }
 }

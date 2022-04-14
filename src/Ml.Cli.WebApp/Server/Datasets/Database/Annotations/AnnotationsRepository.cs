@@ -38,8 +38,10 @@ public class AnnotationsRepository
         _cache = cache;
     }
     
-    private async Task<int> NumberAnnotationsAsync(DatasetContext datasetContext, string projectId, int numberAnnotation=1)
+    private async Task<int> NumberAnnotationsAsync(string projectId, int numberAnnotation=1)
     {
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var datasetContext = scope.ServiceProvider.GetService<DatasetContext>();
         var numberAnnotations = await datasetContext.Annotations.AsNoTracking()
             .Where(a => a.ProjectId == new Guid(projectId))
             .Select(ux => new { FileId=ux.File.Id, ux.CreatorNameIdentifier}).GroupBy(g => g.FileId)
@@ -56,15 +58,8 @@ public class AnnotationsRepository
             return fileCount;
         });
         
-        using var scope = _serviceScopeFactory.CreateScope();
-        await using var datasetContext2 = scope.ServiceProvider.GetService<DatasetContext>();
-        
-        var taskAnnotations =  _datasetsContext.Annotations.AsNoTracking()
-            .Where(a => a.ProjectId == new Guid(projectId))
-            .Select(ux => new { FileId=ux.File.Id, ux.CreatorNameIdentifier}).GroupBy(g => g.CreatorNameIdentifier)
-            .Select(t => new NumberAnnotationsByUsers { NameIdentifier = t.Key, NumberAnnotations= t.Select(o => o.FileId).Count()}).ToListAsync();
-        
-        var taskNumberAnnotations = NumberAnnotationsAsync(datasetContext2, projectId, numberAnnotation);
+        var taskAnnotations = GetAnnotationsAsync(projectId);
+        var taskNumberAnnotations = NumberAnnotationsAsync(projectId, numberAnnotation);
        
         Task.WaitAll( taskAnnotations, taskNumberAnnotations);
         var numberAnnotationsDone = taskAnnotations.Result.Sum(r => r.NumberAnnotations);
@@ -87,6 +82,18 @@ public class AnnotationsRepository
         };
        
         return annotationStatus ;
+    }
+
+    private async Task<List<NumberAnnotationsByUsers>> GetAnnotationsAsync(string projectId)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var datasetContext = scope.ServiceProvider.GetService<DatasetContext>();
+        var annotations = await _datasetsContext.Annotations.AsNoTracking()
+            .Where(a => a.ProjectId == new Guid(projectId))
+            .Select(ux => new { FileId = ux.File.Id, ux.CreatorNameIdentifier }).GroupBy(g => g.CreatorNameIdentifier)
+            .Select(t => new NumberAnnotationsByUsers
+                { NameIdentifier = t.Key, NumberAnnotations = t.Select(o => o.FileId).Count() }).ToListAsync();
+        return annotations;
     }
 
     public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=10)

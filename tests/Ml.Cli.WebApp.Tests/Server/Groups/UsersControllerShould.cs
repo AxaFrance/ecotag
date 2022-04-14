@@ -25,7 +25,7 @@ public class UsersControllerShould
         var usersList = JsonConvert.DeserializeObject<List<string>>(userEmailsInDatabase);
         Assert.NotNull(usersList);
 
-        var groupContext = GroupsControllerShould.GetInMemoryGroupContext();
+        var groupContext = GroupsControllerShould.GetInMemoryGroupContext()();
 
         foreach (var userEmail in usersList)
         {

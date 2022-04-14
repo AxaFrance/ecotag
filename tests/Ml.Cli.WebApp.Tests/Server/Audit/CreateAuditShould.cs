@@ -17,25 +17,30 @@ namespace Ml.Cli.WebApp.Tests.Server.Audit;
 
 public class CreateAuditShould
 {
-    public static AuditContext GetInMemoryAuditContext()
+    public static Func<AuditContext> GetInMemoryAuditContext()
     {
         var builder = new DbContextOptionsBuilder<AuditContext>();
         var databaseName = Guid.NewGuid().ToString();
         builder.UseInMemoryDatabase(databaseName);
 
-        var options = builder.Options;
-        var auditContext = new AuditContext(options);
-        auditContext.Database.EnsureCreated();
-        auditContext.Database.EnsureCreatedAsync();
-        return auditContext;
+        AuditContext AuditContext()
+        {
+            var options = builder.Options;
+            var auditContext = new AuditContext(options);
+            auditContext.Database.EnsureCreated();
+            auditContext.Database.EnsureCreatedAsync();
+            return auditContext;
+        }
+        return AuditContext;
     }
     
     [Fact]
     public async Task CreateAudit()
     {
-        var auditContext = GetInMemoryAuditContext();
+        var auditContextFunc = GetInMemoryAuditContext();
+        var auditContext = auditContextFunc();
         var auditsRepository = new AuditsRepository(auditContext);
-        var mockedService = DatasetMock.GetMockedServiceProvider(auditContext);
+        var mockedService = DatasetMock.GetMockedServiceProvider(auditContextFunc);
         mockedService.ServiceProvider.Setup(foo => foo.GetService(typeof(AuditsRepository))).Returns(auditsRepository);
         
         var queue = new Queue();

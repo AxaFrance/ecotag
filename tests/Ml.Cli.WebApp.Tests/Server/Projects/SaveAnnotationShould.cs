@@ -102,7 +102,8 @@ public class SaveAnnotationShould
     {
         var (_, usersRepository, _, projectsRepository, projectsController, context) =
             await CreateProjectShould.InitMockAsync(nameIdentifier);
-        var datasetContext = DatasetMock.GetInMemoryDatasetContext();
+        var datasetContextFunc = DatasetMock.GetInMemoryDatasetContext();
+        var datasetContext = datasetContextFunc();
         datasetContext.Annotations.Add(new AnnotationModel()
         {
             Id = new Guid("10000000-1111-0000-0000-000000000000"),
