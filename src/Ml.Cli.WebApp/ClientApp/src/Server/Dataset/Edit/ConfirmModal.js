@@ -17,7 +17,7 @@ const ConfirmModal = ({isOpen, onCancel, onSubmit}) => {
         >
             <p className="edit-dataset__modal-core-text">
                 Cette action est définitive. <br />
-                Toute modification (ajout, supression de fichier) sera impossible par la suite
+                Toute modification (ajout, supression de fichier) sera impossible par la suite.
             </p>
         </BooleanModal>
     );
