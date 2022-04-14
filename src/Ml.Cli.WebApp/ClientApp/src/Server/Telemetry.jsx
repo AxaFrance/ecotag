@@ -1,5 +1,4 @@
 import React, { createContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,12 +8,9 @@ export const telemetryEvents = Object.freeze({
     CREATE_GROUP: Symbol("CREATE_GROUP"),
 });
 
-class TelemetryStore {
-    constructor(instrumentationKey){
-        if(!TelemetryStore.instance){
+const  initAppInsights = (instrumentationKey) => {
             const acceptAllLogs = () => true;
-            TelemetryStore.instance = this;
-            this.appInsights = new ApplicationInsights({
+            const appInsights = new ApplicationInsights({
                 config: {
                     instrumentationKey,
                     loggingLevelConsole: 2,
@@ -23,21 +19,18 @@ class TelemetryStore {
                     enableAutoRouteTracking: true,
                     disableFetchTracking: false,
                     isRetryDisabled: true,
-                    enableCorsCorrelation: true,
+                    enableCorsCorrelation: false,
                     enableRequestHeaderTracking: true,
                     enableAjaxPerfTracking: true,
                     enableUnhandledPromiseRejectionTracking: true,
                 },
             });
 
-            this.appInsights.loadAppInsights();
-            this.appInsights.trackPageView();
-            this.appInsights.addTelemetryInitializer(acceptAllLogs);
-        }
-
-        return TelemetryStore.instance;
-    }
-}
+            appInsights.loadAppInsights();
+            appInsights.trackPageView();
+            appInsights.addTelemetryInitializer(acceptAllLogs);
+            return appInsights;
+        };
 
 export const buildLog = (
     pathname,
@@ -68,11 +61,13 @@ export const TelemetryContext = createContext("telemetry");
 
 export const TelemetryConsumer = TelemetryContext.Consumer;
 
+const correlationId = uuidv4();
+
 const TelemetryProvider = ({ children,  active,
                                logLevel,
                                instrumentationKey }) => {
 
-    const location = useLocation();
+    const locationPathname = window.location.pathname;
     const [appInsightsLogger, setAppInsightsLogger] = useState(null);
 
     const featureId = uuidv4();
@@ -81,26 +76,30 @@ const TelemetryProvider = ({ children,  active,
         featureId,
         featureName,
         appName: 'ECOTAG',
-        correlationId: uuidv4(),
+        correlationId,
         logLevel: logLevel || '',
         date: new Date().toISOString(),
         hostname: window.location.href,
         machineName: window.navigator.userAgent,
     };
-    const instance = new TelemetryStore(instrumentationKey);
-    Object.freeze(instance);
+    
     React.useEffect(() => {
         if (active === true) {
-            setAppInsightsLogger(instance.appInsights);
-            instance.appInsights.trackPageView({name: location.pathname});
-            instance.appInsights.trackTrace({
+            const appInsights = initAppInsights(instrumentationKey);
+            setAppInsightsLogger(appInsights);
+            appInsights.trackPageView({name: location.pathname});
+            appInsights.trackTrace({
                 message: buildLog(location.pathname, logProps),
             });
         }
-    }, [location.pathname]);
+    }, [locationPathname]);
     
     const telemetry ={
-        trackEvent: (eventName) => appInsightsLogger.trackEvent(buildAppInsightsEvent(logProps)(eventName))
+        trackEvent: (eventName) => {
+            if (active === true) {
+                appInsightsLogger.trackEvent(buildAppInsightsEvent(logProps)(eventName));
+            }
+        }
     }
 
     return (
