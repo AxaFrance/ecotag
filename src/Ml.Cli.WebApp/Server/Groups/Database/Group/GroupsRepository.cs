@@ -125,9 +125,7 @@ public class GroupsRepository
 
     private async Task<GroupModel?> GetGroupsAsync(string groupId)
     {
-        using var scope = _serviceScopeFactory.CreateScope();
-        await using var groupContext = scope.ServiceProvider.GetService<GroupContext>();
-        var groups = await groupContext.Groups.Where(group => @group.Id == new Guid(groupId))
+        var groups = await _groupsContext.Groups.Where(group => @group.Id == new Guid(groupId))
             .Include(group => @group.GroupUsers).FirstOrDefaultAsync();
         return groups;
     }
