@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Groups.Cmd;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database.Group;
 
@@ -86,13 +87,8 @@ public class GroupsRepository
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
-        var groupsTask = _groupsContext.Groups.Where(group => group.Id == new Guid(groupId))
-            .Include(group => group.GroupUsers).FirstOrDefaultAsync();
-        using var scope = _serviceScopeFactory.CreateScope();
-        await using var groupContext2 = scope.ServiceProvider.GetService<GroupContext>();
-        
-        var usersTask = groupContext2.Users.AsNoTracking().Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
-            .ToListAsync();
+        var groupsTask = GetGroupsAsync(groupId);
+        var usersTask = GetUsersAsync(users);
         Task.WaitAll(groupsTask, usersTask);
         var groupModel = groupsTask.Result;
         if (groupModel == null)
@@ -125,5 +121,24 @@ public class GroupsRepository
         commandResult.Data = groupModel.Id.ToString();
 
         return commandResult;
+    }
+
+    private async Task<GroupModel?> GetGroupsAsync(string groupId)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var groupContext = scope.ServiceProvider.GetService<GroupContext>();
+        var groups = await groupContext.Groups.Where(group => @group.Id == new Guid(groupId))
+            .Include(group => @group.GroupUsers).FirstOrDefaultAsync();
+        return groups;
+    }
+
+    private async Task<List<UserModel>> GetUsersAsync(List<string> users)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var groupContext = scope.ServiceProvider.GetService<GroupContext>();
+        var usersResult = await groupContext.Users.AsNoTracking()
+            .Where(user => users.Select(u => new Guid(u)).ToList().Contains(user.Id))
+            .ToListAsync();
+        return usersResult;
     }
 }

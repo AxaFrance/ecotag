@@ -14,7 +14,7 @@
     }
   },
   "telemetry": {
-    "instrumentationKey": "#{Spa:AppInsights:instrumentationKey}#",
+    "instrumentationKey": "#{Spa:AppInsights:InstrumentationKey}#",
     "logLevel": "#{Spa:AppInsights:LogLevel}#",
     "active": #{Spa:AppInsights:Active}#
   }

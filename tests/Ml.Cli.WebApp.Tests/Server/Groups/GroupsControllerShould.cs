@@ -26,17 +26,20 @@ namespace Ml.Cli.WebApp.Tests.Server.Groups;
 
 public class GroupsControllerShould
 {
-    public static GroupContext GetInMemoryGroupContext()
+    public static Func<GroupContext> GetInMemoryGroupContext()
     {
         var builder = new DbContextOptionsBuilder<GroupContext>();
         var databaseName = Guid.NewGuid().ToString();
         builder.UseInMemoryDatabase(databaseName);
-
-        var options = builder.Options;
-        var groupContext = new GroupContext(options);
-        groupContext.Database.EnsureCreated();
-        groupContext.Database.EnsureCreatedAsync();
-        return groupContext;
+        GroupContext GroupContext()
+        {
+            var options = builder.Options;
+            var groupContext = new GroupContext(options);
+            groupContext.Database.EnsureCreated();
+            groupContext.Database.EnsureCreatedAsync();
+            return groupContext;
+        }
+        return GroupContext;
     }
 
     [Theory]
@@ -47,7 +50,8 @@ public class GroupsControllerShould
     {
         var groupsList = JsonConvert.DeserializeObject<List<string>>(groupNamesInDatabase);
 
-        var groupContext = GetInMemoryGroupContext();
+        var groupContextFunc = GetInMemoryGroupContext();
+        var groupContext = groupContextFunc();
 
         var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
         groupContext.Users.Add(user1);
@@ -63,7 +67,7 @@ public class GroupsControllerShould
         
         await groupContext.SaveChangesAsync();
         
-        var mockedService = DatasetMock.GetMockedServiceProvider(groupContext);
+        var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
         var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
@@ -98,9 +102,10 @@ public class GroupsControllerShould
 
     public class GetGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModelWithGroups> usersList, List<string> usersInGroup)
+        private static async Task<Func<GroupContext>> GetGroupContext(List<GroupDataModel> groupsList, List<UserDataModelWithGroups> usersList, List<string> usersInGroup)
         {
-            var groupContext = GetInMemoryGroupContext();
+            var datasetContextFunc = GetInMemoryGroupContext();
+            var groupContext = datasetContextFunc();
             if (groupsList != null)
                 foreach (var group in groupsList)
                 {
@@ -128,7 +133,7 @@ public class GroupsControllerShould
             }
 
             await groupContext.SaveChangesAsync();
-            return groupContext;
+            return datasetContextFunc;
         }
         
         [Theory]
@@ -146,10 +151,10 @@ public class GroupsControllerShould
             var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
             var expectedGroupWithUsers = JsonConvert.DeserializeObject<GroupDataModel>(strExpectedGroupWithUsers);
-            var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
+            var groupContextFunc = await GetGroupContext(groupsList, usersList, usersInGroup);
 
-            var mockedService = DatasetMock.GetMockedServiceProvider(groupContext);
-            var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
+            var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
+            var groupsRepository = new GroupsRepository(groupContextFunc(), mockedService.ServiceScopeFactory.Object);
 
             var groupsController = new GroupsController();
             var getGroupCmd = new GetGroupCmd(groupsRepository);
@@ -177,10 +182,10 @@ public class GroupsControllerShould
             var groupsList = JsonConvert.DeserializeObject<List<GroupDataModel>>(groupsInDatabase);
             var usersList = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
-            var groupContext = await GetGroupContext(groupsList, usersList, usersInGroup);
+            var groupContextFunc = await GetGroupContext(groupsList, usersList, usersInGroup);
 
-            var mockedService = DatasetMock.GetMockedServiceProvider(groupContext);
-            var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
+            var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
+            var groupsRepository = new GroupsRepository(groupContextFunc(), mockedService.ServiceScopeFactory.Object);
 
             var groupsController = new GroupsController();
             var getGroupCmd = new GetGroupCmd(groupsRepository);
@@ -195,10 +200,11 @@ public class GroupsControllerShould
 
     public class UpdateGroupTests
     {
-        private static async Task<GroupContext> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModelWithGroups> knownUsers)
+        private static async Task<Func<GroupContext>> GetGroupContext(GroupDataModel groupDataModel, List<UserDataModelWithGroups> knownUsers)
         {
-            var groupContext = GetInMemoryGroupContext();
-
+            var groupContextFunc = GetInMemoryGroupContext();
+            var groupContext = groupContextFunc();
+            
             groupContext.Groups.Add(new GroupModel { Id = new Guid(groupDataModel.Id), Name = groupDataModel.Name });
 
             if (knownUsers != null)
@@ -210,7 +216,7 @@ public class GroupsControllerShould
             }
 
             await groupContext.SaveChangesAsync();
-            return groupContext;
+            return groupContextFunc;
         }
 
         [Theory]
@@ -235,12 +241,11 @@ public class GroupsControllerShould
             var groupDataModel = JsonConvert.DeserializeObject<GroupDataModel>(strGroupDataModel);
             var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
-
-            var groupContext = await GetGroupContext(groupDataModel, knownUsers);
-
-            var mockedService = DatasetMock.GetMockedServiceProvider(groupContext);
-        
-            var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
+            
+            var groupContextFunc = await GetGroupContext(groupDataModel, knownUsers);
+            var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
+            
+            var groupsRepository = new GroupsRepository(groupContextFunc(), mockedService.ServiceScopeFactory.Object);
             var queue = new Queue();
             var groupsController = new GroupsController();
             groupsController.ControllerContext = DatasetMock.ControllerContext("S777777");
@@ -278,12 +283,12 @@ public class GroupsControllerShould
             var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(usersInDatabase);
             var updateGroupInput = JsonConvert.DeserializeObject<UpdateGroupInput>(jsonUpdateGroupInput);
 
-            var groupContext = await GetGroupContext(groupDataModel, knownUsers);
+            var groupContextFunc = await GetGroupContext(groupDataModel, knownUsers);
 
-            var mockedService = DatasetMock.GetMockedServiceProvider(groupContext);
+            var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
 
             var controllerContext = DatasetMock.ControllerContext("s777777");
-            var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
+            var groupsRepository = new GroupsRepository(groupContextFunc(), mockedService.ServiceScopeFactory.Object);
             var groupsController = new GroupsController();
             groupsController.ControllerContext = controllerContext;
             
@@ -309,7 +314,8 @@ public class GroupsControllerShould
         var knownUsers = JsonConvert.DeserializeObject<List<UserDataModelWithGroups>>(userDataModels);
         var usersInGroup = JsonConvert.DeserializeObject<List<string>>(strUsersInGroup);
 
-        var groupContext = GetInMemoryGroupContext();
+        var groupContextFunc = GetInMemoryGroupContext();
+        var groupContext = groupContextFunc();
 
         groupContext.Groups.Add(new GroupModel
             { Id = new Guid("10000000-0000-0000-0000-000000000000"), Name = groupName });
@@ -341,7 +347,7 @@ public class GroupsControllerShould
 
         await groupContext.SaveChangesAsync();
 
-        var mockService = DatasetMock.GetMockedServiceProvider(groupContext);
+        var mockService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
         
         var groupsRepository = new GroupsRepository(groupContext, mockService.ServiceScopeFactory.Object);
         var groupsController = new GroupsController();
