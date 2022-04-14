@@ -89,7 +89,6 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
             {placeholder}
           </button>
         </div>
-        <pre>{JSON.stringify(state.value, null, 2)}</pre>
       </div>
     </GlobalHotKeys>
   );

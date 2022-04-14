@@ -13,7 +13,7 @@ const Label = ({labels, selectLabel, selectedLabel}) => {
                     <span key={id + index} onClick={() => selectLabel(label)}>
                       <label
                           className="label__element"
-                          style={selectedLabel.id === id ? {color: adaptTextColorToBackgroundColor('#4b4848'), backgroundColor: '#4b4848', border: '4px dashed red' } : {color: adaptTextColorToBackgroundColor(color), backgroundColor: color}}
+                          style={selectedLabel.id === id ? {color: adaptTextColorToBackgroundColor(color), backgroundColor: color, boxShadow: `0 0 0 2px ${color} inset, 0 0 0 4px ${adaptTextColorToBackgroundColor(color)} inset` } : {color: adaptTextColorToBackgroundColor(color), backgroundColor: color}}
                           htmlFor={name}>
                         {name}
                       </label>
