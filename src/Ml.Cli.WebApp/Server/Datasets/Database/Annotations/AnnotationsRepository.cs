@@ -81,14 +81,14 @@ public class AnnotationsRepository
             PercentageNumberAnnotationsDone = isAnnotationClosed ? 100 : (int)percentageNumberAnnotationsDone,
         };
        
-        return annotationStatus ;
+        return annotationStatus;
     }
 
     private async Task<List<NumberAnnotationsByUsers>> GetAnnotationsAsync(string projectId)
     {
         using var scope = _serviceScopeFactory.CreateScope();
         await using var datasetContext = scope.ServiceProvider.GetService<DatasetContext>();
-        var annotations = await _datasetsContext.Annotations.AsNoTracking()
+        var annotations = await datasetContext.Annotations.AsNoTracking()
             .Where(a => a.ProjectId == new Guid(projectId))
             .Select(ux => new { FileId = ux.File.Id, ux.CreatorNameIdentifier }).GroupBy(g => g.CreatorNameIdentifier)
             .Select(t => new NumberAnnotationsByUsers
