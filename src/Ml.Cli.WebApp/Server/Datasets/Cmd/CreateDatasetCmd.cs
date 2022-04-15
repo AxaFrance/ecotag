@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 public record CreateDatasetCmdInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }

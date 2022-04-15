@@ -48,7 +48,7 @@ public class CreateGroupShould
 
     [Theory]
     [InlineData("a", "s666666", CreateGroupCmd.InvalidModel)]
-    [InlineData("too_long_group_name", "s666666", CreateGroupCmd.InvalidModel)]
+    [InlineData("more_than_forty_eight_characters_group_name_aaaaa", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("abd$", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("abcdef(", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("group1", "s666666", GroupsRepository.AlreadyTakenName)]

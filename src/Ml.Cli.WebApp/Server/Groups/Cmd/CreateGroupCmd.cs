@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 
 public record GroupInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
@@ -18,7 +18,7 @@ public record GroupInput
 
 public record CreateGroupInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
