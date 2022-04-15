@@ -18,7 +18,7 @@ public class GetAllGroupsCmd
 
     public async Task<List<GroupDataModel>> ExecuteAsync(bool? mine, string nameIdentifier)
     {
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
 
         if (user == null)
         {

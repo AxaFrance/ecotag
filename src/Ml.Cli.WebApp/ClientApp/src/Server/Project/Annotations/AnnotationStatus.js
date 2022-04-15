@@ -14,9 +14,7 @@ export const AnnotationStatus = ({status}) => {
                 {
                     [LOADING]: <span>Chargement élément suivant en cours</span>,
                     [POST]: <span>Sauvegarde en cours</span>,
-                    [ERROR]: (
-                        <span>Erreur lors du chargement</span>
-                    ),
+                    [ERROR]: <span>Erreur lors de la sauvegarde</span>,
                     [SUCCESS]: null
                 }[status]
             }

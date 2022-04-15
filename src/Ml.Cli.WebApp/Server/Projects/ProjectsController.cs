@@ -23,7 +23,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ResponseCache(Duration = 1)]
         public async Task<IActionResult> GetProjectFile([FromServices] GetProjectFileCmd getProjectFileCmd, string projectId, string id)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var result = await getProjectFileCmd.ExecuteAsync(projectId, id, nameIdentifier);
 
             if (!result.IsSuccess)
@@ -47,7 +47,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ResponseCache(Duration = 1)]
         public async Task<ActionResult<GetDataset>> GetDataset([FromServices] GetProjectDatasetCmd getprojectDatasetCmd, string id, string datasetId)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var getDatasetResult = await getprojectDatasetCmd.ExecuteAsync(datasetId, id, nameIdentifier);
 
             if (!getDatasetResult.IsSuccess)
@@ -69,7 +69,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAllProjects(
             [FromServices] GetAllProjectsCmd getAllProjectsCmd)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
@@ -77,7 +77,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpGet("annotations/{projectId}")]
         public async Task<ActionResult<GetProjectCmdResult>> GetAnnotationsStatus([FromServices] GetAnnotationsStatusCmd getAnnotationsStatusCmd, string projectId)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await getAnnotationsStatusCmd.ExecuteAsync(projectId, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
@@ -90,7 +90,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpGet("{id}")]
         public async Task<ActionResult<GetProjectCmdResult>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await getProjectCmd.ExecuteAsync(id, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
@@ -106,7 +106,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult<string>> Create([FromServices] CreateProjectCmd createProjectCmd,
             CreateProjectInput createProjectInput)
         {
-            var creatorNameIdentifier = User.Identity.GetSubject();
+            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await createProjectCmd.ExecuteAsync(new CreateProjectWithUserInput{CreateProjectInput = createProjectInput, CreatorNameIdentifier = creatorNameIdentifier});
             if (!commandResult.IsSuccess)
             {
@@ -122,7 +122,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
         {
-            var creatorNameIdentifier = User.Identity.GetSubject();
+            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
             {
                 ProjectId = projectId,
@@ -145,7 +145,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
         {
-            var creatorNameIdentifier = User.Identity.GetSubject();
+            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
             {
                 ProjectId = projectId,
@@ -169,7 +169,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<ReserveOutput>>> Reserve([FromServices] ReserveCmd reserveCmd, string projectId, ReserveInput fileInput)
         { 
-            var creatorNameIdentifier = User.Identity.GetSubject();
+            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
             var reservations = await reserveCmd.ExecuteAsync(projectId, fileInput.FileId, creatorNameIdentifier);
             
             if (!reservations.IsSuccess)
@@ -193,7 +193,7 @@ namespace Ml.Cli.WebApp.Server.Projects
         public async Task<ActionResult<GetExportCmdResult>> Export([FromServices] ExportCmd exportCmd,
             string projectId)
         {
-            var userNameIdentifier = User.Identity.GetSubject();
+            var userNameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await exportCmd.ExecuteAsync(projectId, userNameIdentifier);
             if (!commandResult.IsSuccess)
             {

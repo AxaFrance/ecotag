@@ -59,7 +59,7 @@ public class CreateGroupCmd
             return commandResult;
         }
 
-        var user = await _usersRepository.GetUserBySubjectAsync(createGroupInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierAsync(createGroupInput.CreatorNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult

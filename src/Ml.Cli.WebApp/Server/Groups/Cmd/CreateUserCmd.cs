@@ -9,7 +9,7 @@ public record CreateUserInput
 {
     [Required]
     [MaxLength(16)]
-    public string Subject { get; set; }
+    public string NameIdentifier { get; set; }
     
     [Required]
     public string AccessToken { get; set; }
@@ -41,12 +41,12 @@ public class CreateUserCmd
             };
             return commandResult;
         }
-        var subject = createUserInput.Subject;
+        var nameIdentifier = createUserInput.NameIdentifier;
         var accessToken = createUserInput.AccessToken;
-        var userDataModel = await _userRepository.GetUserBySubjectAsync(subject);
+        var userDataModel = await _userRepository.GetUserByNameIdentifierAsync(nameIdentifier);
         if (userDataModel != null) return commandResult;
         var userEMail = await _userInfoService.GetUserEmailAsync(accessToken);
-        var result = await _userRepository.CreateUserAsync(userEMail.Email, subject);
+        var result = await _userRepository.CreateUserAsync(userEMail.Email, nameIdentifier);
         if (!result.IsSuccess)
         {
             commandResult.Error = result.Error;

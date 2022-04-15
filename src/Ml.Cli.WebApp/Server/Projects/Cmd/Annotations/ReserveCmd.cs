@@ -31,7 +31,7 @@ public class ReserveCmd
         string nameIdentifier)
     {
         var commandResult = new ResultWithError<IList<ReserveOutput>, ErrorResult>();
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
         
         var projectResult = await _projectsRepository.GetProjectAsync(projectId, user.GroupIds);

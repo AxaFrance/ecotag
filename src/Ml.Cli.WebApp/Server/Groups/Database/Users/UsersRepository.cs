@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 public class UsersRepository
 {
-    public const string SubjectAlreadyExist = "SubjectAlreadyExist";
+    public const string NameIdentifierAlreadyExists = "NameIdentifierAlreadyExists";
     private readonly GroupContext _groupsContext;
     private readonly IMemoryCache _cache;
 
@@ -29,17 +29,17 @@ public class UsersRepository
         return resultList;
     }
 
-    public async Task<UserDataModelWithGroups> GetUserBySubjectWithGroupIdsAsync(string nameIdentity)
+    public async Task<UserDataModelWithGroups> GetUserByNameIdentifierWithGroupIdsAsync(string nameIdentity)
     { 
-        var user = await _groupsContext.Users.AsNoTracking().Include(user => user.GroupUsers).FirstOrDefaultAsync(u => u.Subject == nameIdentity.ToLower());
+        var user = await _groupsContext.Users.AsNoTracking().Include(user => user.GroupUsers).FirstOrDefaultAsync(u => u.NameIdentifier == nameIdentity.ToLower());
         return user?.ToUserDataModelWithGroups();
     }
     
-    public async Task<UserDataModel> GetUserBySubjectAsync(string subject)
+    public async Task<UserDataModel> GetUserByNameIdentifierAsync(string nameIdentifier)
     {
-        var cacheEntry = await _cache.GetOrCreateAsync($"GetUserBySubjectAsync({subject})", async entry =>
+        var cacheEntry = await _cache.GetOrCreateAsync($"GetUserByNameIdentifierAsync({nameIdentifier})", async entry =>
         {
-            var user = await _groupsContext.Users.AsNoTracking().Include(user => user.GroupUsers).FirstOrDefaultAsync(u => u.Subject == subject.ToLower());
+            var user = await _groupsContext.Users.AsNoTracking().Include(user => user.GroupUsers).FirstOrDefaultAsync(u => u.NameIdentifier == nameIdentifier.ToLower());
             entry.AbsoluteExpirationRelativeToNow =
                 user == null ? TimeSpan.FromMilliseconds(1) : TimeSpan.FromHours(1);
             entry.SlidingExpiration = TimeSpan.FromMinutes(1);
@@ -49,14 +49,14 @@ public class UsersRepository
         return cacheEntry?.ToUserDataModel();
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string subject)
+    public async Task<ResultWithError<string, ErrorResult>> CreateUserAsync(string email, string nameIdentifier)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
-        var subjectLowerCase = subject.ToLower();
+        var nameIdentifierLowerCase = nameIdentifier.ToLower();
         var userModel = new UserModel
         {
             Email = email.ToLower(),
-            Subject = subjectLowerCase
+            NameIdentifier = nameIdentifierLowerCase
         };
         _groupsContext.Users.Add(userModel);
         try
@@ -65,7 +65,7 @@ public class UsersRepository
         }
         catch (DbUpdateException)
         {
-            commandResult.Error = new ErrorResult { Key = SubjectAlreadyExist };
+            commandResult.Error = new ErrorResult { Key = NameIdentifierAlreadyExists };
             return commandResult;
         }
         commandResult.Data = userModel.Id.ToString();

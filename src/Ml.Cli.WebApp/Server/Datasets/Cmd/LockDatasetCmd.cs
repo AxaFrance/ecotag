@@ -21,7 +21,7 @@ public class LockDatasetCmd
     public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string datasetId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);
