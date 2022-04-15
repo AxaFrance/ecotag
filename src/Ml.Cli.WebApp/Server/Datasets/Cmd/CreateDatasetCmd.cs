@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 
 public record CreateDatasetCmdInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
@@ -54,7 +54,7 @@ public class CreateDatasetCmd
         var group = await _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
         if (group == null) return commandResult.ReturnError(GroupNotFound);
 
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 
         if (!user.GroupIds.Contains(createGroupInput.GroupId)) return commandResult.ReturnError(UserNotInGroup);

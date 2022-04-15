@@ -7,7 +7,6 @@ import {
   generateTextToken,
   getSubToken,
 } from './utils';
-import Action from '@axa-fr/react-toolkit-action';
 import './TokenAnnotator.scss';
 
 const Token = props => {
@@ -23,35 +22,10 @@ const Token = props => {
   }
 };
 
-const TokenAnnotator = class TokenAnnotator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.rootRef = React.createRef();
-    this.state = {
-      fontSize: 14,
-    };
-  }
+const TokenAnnotator = ({text, fontSize, tokenIndex, tokenIndexLast, tokenData, getSpan, onChange, value, keepLabels}) => {
 
-  zoomText() {
-    const newValue = this.state.fontSize + 1;
-    this.setState({ fontSize: newValue });
-  }
-
-  deZoomText() {
-    const newValue = this.state.fontSize - 1;
-    this.setState({ fontSize: newValue });
-  }
-
-  componentDidMount() {
-    this.rootRef.current.addEventListener('mouseup', this.handleMouseUp);
-  }
-
-  componentWillUnmount() {
-    this.rootRef.current.removeEventListener('mouseup', this.handleMouseUp);
-  }
-
-  handleMouseUp = () => {
-    if (!this.props.onChange) {
+  const handleMouseUp = () => {
+    if (!onChange) {
       return;
     }
 
@@ -62,8 +36,8 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
     }
 
     if (
-      !selection.anchorNode.parentElement.hasAttribute('data-i') ||
-      !selection.focusNode.parentElement.hasAttribute('data-i')
+        !selection.anchorNode.parentElement.hasAttribute('data-i') ||
+        !selection.focusNode.parentElement.hasAttribute('data-i')
     ) {
       window.getSelection().empty();
       return false;
@@ -71,8 +45,6 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
 
     let startIndex = parseInt(selection.anchorNode.parentElement.getAttribute('data-i'), 10);
     let endIndex = parseInt(selection.focusNode.parentElement.getAttribute('data-i'), 10);
-
-    const { tokenIndex, tokenIndexLast, text } = this.props;
 
     if (selectionIsBackwards(selection)) {
       [startIndex, endIndex] = [endIndex, startIndex];
@@ -82,9 +54,9 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
     const end = tokenIndexLast[endIndex];
     const { subText: token } = getSubToken(text, start, end);
 
-    this.props.onChange([
-      ...this.props.value,
-      this.getSpan({
+    onChange([
+      ...value,
+      getLocalSpan({
         start,
         end,
         token,
@@ -94,9 +66,8 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
     window.getSelection().empty();
   };
 
-  handleSplitClick = handleParams => {
+  const handleSplitClick = handleParams => {
     const { start, end } = handleParams;
-    const { value, onChange } = this.props;
     // Find and remove the matching split.
     const splitIndex = value.findIndex(s => s.start === start && s.end === end);
 
@@ -105,37 +76,39 @@ const TokenAnnotator = class TokenAnnotator extends React.Component {
     }
   };
 
-  getSpan = span => {
-    if (this.props.getSpan) {
-      return this.props.getSpan(span);
+  const getLocalSpan = span => {
+    if (getSpan) {
+      return getSpan(span);
     }
     return span;
   };
-
-  render() {
-    const { tokenData, tokenIndex, tokenIndexLast, text, value } = this.props;
-    const splits = splitTokensWithOffsets({ text, tokenData, tokenIndex, tokenIndexLast }, value);
-
-    return (
+  
+  const splits = splitTokensWithOffsets({ text, tokenData, tokenIndex, tokenIndexLast }, value);
+  
+  return(
       <>
-        <div className="zoom-button-container">
-          <Action icon="zoom-out" onClick={() => this.deZoomText()} />
-          <Action icon="zoom-in" onClick={() => this.zoomText()} />
-        </div>
-        <div className="token-container" style={{ fontSize: this.state.fontSize }} ref={this.rootRef}>
+        <div className="token-container" style={{ fontSize: fontSize }} onMouseUp={handleMouseUp}>
           {splits.map((split, i) => (
-            <Token key={i} {...split} onClickHandler={this.handleSplitClick} />
+              <Token key={i} {...split} onClickHandler={handleSplitClick} keepLabels={keepLabels} />
           ))}
         </div>
       </>
-    );
-  }
-};
+  )
+}
 
-const TextAnnotation = props => {
-  const { text } = props;
+const TextAnnotation = ({text, fontSize, getSpan, onChange, value, keepLabels}) => {
   const { tokenData, tokenIndex, tokenIndexLast } = generateTextToken(text);
-  return <TokenAnnotator {...props} tokenData={tokenData} tokenIndex={tokenIndex} tokenIndexLast={tokenIndexLast} />;
+  return <TokenAnnotator
+      text={text}
+      fontSize={fontSize}
+      tokenData={tokenData}
+      tokenIndex={tokenIndex}
+      tokenIndexLast={tokenIndexLast}
+      getSpan={getSpan}
+      onChange={onChange}
+      value={value}
+      keepLabels={keepLabels}
+  />;
 };
 
 export default TextAnnotation;

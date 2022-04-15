@@ -27,6 +27,7 @@ public class CreateDatasetShould
     [InlineData("Public", "ds**", "Image", "S666666", CreateDatasetCmd.InvalidModel, null)]
     [InlineData("Public", "datasetgood", "Bad", "S607718", CreateDatasetCmd.InvalidModel, null)]
     [InlineData("Bad", "datasetgood", "Text", "S607718", CreateDatasetCmd.InvalidModel, null)]
+    [InlineData("Public", "more_than_forty_eight_characters_dataset_name_aaaaa", "Text", "s666666", CreateDatasetCmd.InvalidModel, null)]
     [InlineData("Public", "datasetgood", "Image", "S607718", CreateDatasetCmd.UserNotFound, null)]
     [InlineData("Public", "datasetgood", "Image", "S666667", CreateDatasetCmd.UserNotInGroup, null)]
     [InlineData("Public", "datasetgood", "Image", "S666667", CreateDatasetCmd.GroupNotFound,

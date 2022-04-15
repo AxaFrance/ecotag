@@ -8,12 +8,12 @@ const users = [
   {
     id: "0001",
     "email":"guillaume.chervet@axa.fr",
-    "subject": "S000007"
+    "nameIdentifier": "S000007"
   },
   {
     id: "0002",
     "email":"lilian.delouvy@axa.fr",
-    "subject": "S000005"
+    "nameIdentifier": "S000005"
   }
 ]
 

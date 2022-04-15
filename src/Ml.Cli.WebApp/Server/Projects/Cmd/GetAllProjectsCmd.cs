@@ -18,7 +18,7 @@ public class GetAllProjectsCmd
 
     public async Task<List<ProjectDataModel>> ExecuteAsync(string nameIdentifier)
     {
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
             return new List<ProjectDataModel>();

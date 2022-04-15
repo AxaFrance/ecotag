@@ -53,8 +53,8 @@ public class CreateUserMiddlewareShould
         
         [Theory]
         [InlineData("/api/toto", "S66666", "[]", 1, 200, "Bearer access_token")]
-        [InlineData("/api/toto", "S123456789abcdefghijkl", "[]", 0, 200, "Bearer access_token")]
-        [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"Subject\":\"s66666\"}]", 1, 200, "Bearer access_token")]
+        [InlineData("/api/toto", "S123456789abcdefghijklidzadkzodkazjido", "[]", 0, 200, "Bearer access_token")]
+        [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"NameIdentifier\":\"s66666\"}]", 1, 200, "Bearer access_token")]
         [InlineData("/api/toto","", "[]", 0, 403, "Bearer access_token")]
         [InlineData("/notapi","s66666", "[]", 0, 200, "Bearer access_token")]
         [InlineData("/api/toto","s66666", "[]", 0, 401, "")]
@@ -66,7 +66,7 @@ public class CreateUserMiddlewareShould
             foreach (var userDataModel in usersList)
             {
                 groupContext.Users.Add(new UserModel()
-                    { Email = userDataModel.Email, Subject = userDataModel.Subject });
+                    { Email = userDataModel.Email, NameIdentifier = userDataModel.NameIdentifier });
             }
             await groupContext.SaveChangesAsync();
             RequestDelegate nextMiddleware = (HttpContext) =>

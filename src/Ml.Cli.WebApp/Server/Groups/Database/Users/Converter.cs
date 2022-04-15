@@ -10,7 +10,7 @@ public static class Converter
         {
             Id = userModel.Id.ToString(),
             Email = userModel.Email,
-            Subject = userModel.Subject,
+            NameIdentifier = userModel.NameIdentifier,
         };
     }
     
@@ -20,7 +20,7 @@ public static class Converter
         {
             Id = userModel.Id.ToString(),
             Email = userModel.Email,
-            Subject = userModel.Subject,
+            NameIdentifier = userModel.NameIdentifier,
             GroupIds = userModel.GroupUsers.Select(groupUsers => groupUsers.GroupId.ToString()).ToList()
         };
     }
@@ -31,7 +31,7 @@ public static class Converter
         {
             Id = userModel.Id.ToString(),
             Email = userModel.Email,
-            Subject = userModel.Subject
+            NameIdentifier = userModel.NameIdentifier
         };
     }
 }

@@ -18,7 +18,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [Authorize(Roles = Roles.DataAnnoteur)]
         public async Task<ActionResult<IEnumerable<GroupDataModel>>> GetAllGroups([FromServices] GetAllGroupsCmd getAllGroupsCmd, [FromQuery]bool? mine=null)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var result = await getAllGroupsCmd.ExecuteAsync(mine, nameIdentifier);
             return Ok(result);
         }
@@ -43,7 +43,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [Authorize(Roles = Roles.DataAdministateur)]
         public async Task<ActionResult<string>> Create([FromServices]CreateGroupCmd createGroupCmd, GroupInput groupInput)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await createGroupCmd.ExecuteAsync(new CreateGroupInput()
             {
                 Name = groupInput.Name,
@@ -64,7 +64,7 @@ namespace Ml.Cli.WebApp.Server.Groups
         [Authorize(Roles = Roles.DataAdministateur)]
         public async Task<ActionResult<string>> Update([FromServices] UpdateGroupCmd updateGroupCmd, UpdateGroupInput updateGroupInput)
         {
-            var nameIdentifier = User.Identity.GetSubject();
+            var nameIdentifier = User.Identity.GetNameIdentifier();
             var commandResult = await updateGroupCmd.ExecuteAsync(updateGroupInput, nameIdentifier);
             if (!commandResult.IsSuccess)
             {

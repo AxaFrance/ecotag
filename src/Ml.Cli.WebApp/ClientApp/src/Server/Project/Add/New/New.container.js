@@ -74,7 +74,7 @@ export const reducer = (state, action) => {
           if(newValues.length === 0){
             message = MSG_REQUIRED
           }
-          else if(newValues.length > 10){
+          else if(newValues.length > 32){
             message = MSG_MAX_LABELS_LENGTH
           }
           else{
@@ -82,7 +82,7 @@ export const reducer = (state, action) => {
               if(value.name.length < 3){
                 message = `Label numéro ${index + 1} : ${MSG_MIN_LENGTH}`
               }
-              else if(value.name.length > 16){
+              else if(value.name.length > 48){
                 message = `Label numéro ${index + 1} : ${MSG_MAX_LENGTH}`
               }
               else if(!value.name.match(/^[a-zA-Z0-9-_]*$/)){

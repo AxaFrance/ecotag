@@ -64,7 +64,7 @@ public class UploadFileCmd
         if (!validationResult.IsSuccess) return commandResult.ReturnError(InvalidModel, validationResult.Errors);
 
         var nameIdentifier = uploadFileCmdInput.NameIdentifier;
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 
         var datasetId = uploadFileCmdInput.DatasetId;

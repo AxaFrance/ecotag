@@ -9,7 +9,7 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
 public record CreateProjectInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     [Required]
@@ -25,13 +25,13 @@ public record CreateProjectInput
     [RegularExpression(@"Cropping|ImageClassifier|NamedEntity|Ocr|Rotation$")]
     public string AnnotationType { get; set; }
     [Required]
-    [MaxLength(10)]
+    [MaxLength(32)]
     public List<CreateProjectLabelInput> Labels { get; set; }
 }
 
 public record CreateProjectLabelInput
 {
-    [MaxLength(16)]
+    [MaxLength(48)]
     [MinLength(3)]
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     [Required]
@@ -95,7 +95,7 @@ public class CreateProjectCmd
             return commandResult;
         }
 
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createProjectWithUserInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(createProjectWithUserInput.CreatorNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult

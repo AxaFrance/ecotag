@@ -48,7 +48,7 @@ public class CreateGroupShould
 
     [Theory]
     [InlineData("a", "s666666", CreateGroupCmd.InvalidModel)]
-    [InlineData("too_long_group_name", "s666666", CreateGroupCmd.InvalidModel)]
+    [InlineData("more_than_forty_eight_characters_group_name_aaaaa", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("abd$", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("abcdef(", "s666666", CreateGroupCmd.InvalidModel)]
     [InlineData("group1", "s666666", GroupsRepository.AlreadyTakenName)]
@@ -91,8 +91,8 @@ public class CreateGroupShould
         groupContext.Add(group2);
         await groupContext.SaveChangesAsync();
 
-        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
-        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        var user1 = new UserModel { Email = "test1@gmail.com", NameIdentifier = "s666666" };
+        var user2 = new UserModel { Email = "test2@gmail.com", NameIdentifier = "s666667" };
         groupContext.Users.Add(user1);
         groupContext.Users.Add(user2);
         await groupContext.SaveChangesAsync();

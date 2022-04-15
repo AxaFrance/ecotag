@@ -22,7 +22,7 @@ public class GetProjectCmd
     {
         var commandResult = new ResultWithError<GetProjectCmdResult, ErrorResult>();
         
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult
