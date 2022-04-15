@@ -29,14 +29,12 @@ const Mark = ({ content, start, end, onClick, label }) => {
           onClick={() => onClick({ start, end })}
           onMouseEnter={mouseEnter}
           onMouseLeave={mouseLeave}>
-            {state.displayCloseButton &&
-                <>
-                  <span className="token-mark__tag" style={{color: adaptTextColorToBackgroundColor(label.color)}}>
-                  {label.name}
-                  <span className="token-mark__close-button">×</span>
-                  </span>
-                </>
-            }
+            {label && (
+                <span className="token-mark__tag" style={{color: adaptTextColorToBackgroundColor(label.color)}}>
+                {label.name}
+                  {state.displayCloseButton && <span className="token-mark__close-button">×</span>}
+              </span>
+            )}
             {content.map((element, key) => (
                 <span key={key} className="token-mark__text">
                 {element}
