@@ -51,7 +51,7 @@ public class AnnotationsRepository
     
     public async Task<AnnotationStatus> AnnotationStatusAsync(string projectId, string datasetId, int numberAnnotation=1)
     {
-        var cacheEntry = await _cache.GetOrCreateAsync($"CountFiles({datasetId})", async entry =>
+        var taskCacheEntry = _cache.GetOrCreateAsync($"CountFiles({datasetId})", async entry =>
         {
             var fileCount = _datasetsContext.Files.AsNoTracking().Where(f => f.DatasetId == new Guid(datasetId))
                 .CountAsync();
@@ -59,19 +59,18 @@ public class AnnotationsRepository
         });
         
         var taskAnnotations = GetAnnotationsAsync(projectId);
-        var taskNumberAnnotations = NumberAnnotationsAsync(projectId, numberAnnotation);
-       
-        Task.WaitAll( taskAnnotations, taskNumberAnnotations);
+
+        Task.WaitAll( taskAnnotations, taskCacheEntry);
         var numberAnnotationsDone = taskAnnotations.Result.Sum(r => r.NumberAnnotations);
 
-        var numberFiles = cacheEntry.Result;
+        var numberFiles = taskCacheEntry.Result.Result;
         var numberAnnotationsToDo = numberFiles * numberAnnotation;
         double percentageNumberAnnotationsDone = Convert.ToDouble(numberAnnotationsDone) / Convert.ToDouble(numberAnnotationsToDo) * 100;
         if (percentageNumberAnnotationsDone >= 100)
         {
             percentageNumberAnnotationsDone = 99;
         }
-        var isAnnotationClosed = taskNumberAnnotations.Result >= numberAnnotationsToDo;
+        var isAnnotationClosed = numberAnnotationsDone >= numberAnnotationsToDo;
         var annotationStatus = new AnnotationStatus()
         {
             IsAnnotationClosed = isAnnotationClosed,
