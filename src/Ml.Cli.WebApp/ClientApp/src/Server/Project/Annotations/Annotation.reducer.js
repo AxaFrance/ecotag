@@ -1,5 +1,13 @@
 ﻿import {resilienceStatus} from "../../shared/Resilience";
 
+export const annotationItemStatus = {
+    NONE: 'NONE',
+    SAVED_PREVIOUS_SESSION: 'SAVED_PREVIOUS_SESSION',
+    SAVED: 'SAVED',
+    ERROR: 'ERROR'
+};
+
+
 export const reducer = (state, action) => {
     switch (action.type) {
         case 'init': {
@@ -21,6 +29,8 @@ export const reducer = (state, action) => {
                     const annotation = {
                         expectedOutput: (item.annotation && item.annotation.expectedOutputJson) ? JSON.parse(item.annotation.expectedOutputJson) : null,
                         id: item.annotation ? item.annotation.id: null,
+                        status: item.annotation && item.annotation.id ? annotationItemStatus.SAVED_PREVIOUS_SESSION: annotationItemStatus.NONE,
+                        statusDate: Date.now()
                     }
 
                     const itemFormatted = {...item, annotation};
@@ -61,7 +71,11 @@ export const reducer = (state, action) => {
             const {annotation, fileId, status} = action.data;
             const newItems = [...state.annotations.items];
             const currentItem = newItems.find((item) => item.fileId === fileId);
-            const newCurrentItem = {...currentItem, annotation};
+            const newCurrentItem = {...currentItem, 
+                annotation, 
+                status: status === resilienceStatus.ERROR ? annotationItemStatus.ERROR: annotationItemStatus.SAVED,
+                statusDate: Date.now()
+            };
 
             newItems.splice(newItems.indexOf(currentItem), 1, newCurrentItem);
             return {

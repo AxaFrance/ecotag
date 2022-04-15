@@ -55,45 +55,30 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
             status: resilienceStatus.ERROR,
             items: [],
         }
-    } else {
-        const annotations = await response.json();
-        const promises = []
-        const annotationLength = annotations.length;
-        for (let i = 0; i < annotationLength; i++) {
-            const annotation = annotations[i];
-            const url = `projects/${projectId}/files/${annotation.fileId}`;
-            const responsePromise = fetch(url, {method: 'GET'});
-            promises.push(responsePromise);
-        }
-        const responses = await Promise.all(promises);
-        const blobPromises = []
-        for (let i = 0; i < annotationLength; i++) {
-            const response = responses[i];
-            const blobPromise =   await response.blob();
-            blobPromises.push(blobPromise);
-        }
-        const blobs = await Promise.all(blobPromises);
-        for (let i = 0; i < annotationLength; i++) {
-            const annotation = annotations[i];
-            annotation.blobUrl = window.URL.createObjectURL(blobs[i]);
-        }
-        data = {
-            status: resilienceStatus.SUCCESS,
-            items: [...annotations],
-        }
-    }
-    dispatch({type: 'reserve_annotation', data});
-
-    if (data.status === resilienceStatus.ERROR) {
+        dispatch({type: 'reserve_annotation', data});
         return;
+    } 
+    
+    const annotations = await response.json();
+    const annotationLength = annotations.length;
+    for (let i = 0; i < annotationLength; i++) {
+        const annotation = annotations[i];
+        const url = `projects/${projectId}/files/${annotation.fileId}`;
+        const response = await fetch(url, {method: 'GET'});
+        const blob = await response.blob();
+        annotation.blobUrl = window.URL.createObjectURL(blob);
+        data = {
+            status: i+1 === annotationLength ? resilienceStatus.SUCCESS : resilienceStatus.LOADING,
+            items: [annotation],
+        }
+        dispatch({type: 'reserve_annotation', data});
     }
-
-    const numberItems = data.items.length;
-    if (currentItemsLength === 0 && numberItems === 0) {
+    
+    if (currentItemsLength === 0 && annotationLength === 0) {
         const url = "end";
         history.replace(url);
-    } else if (fileId == null && currentItemsLength === 0 && numberItems > 0) {
-        const url = `${data.items[0].fileId}`;
+    } else if (fileId == null && currentItemsLength === 0 && annotationLength > 0) {
+        const url = `${annotations[0].fileId}`;
         history.replace(url);
     }
 };
@@ -120,10 +105,6 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
         }
     }
     dispatch({type: 'annotate', data});
-    if (data.status === resilienceStatus.ERROR) {
-        return;
-    }
-    
 };
 
 export const usePage = (fetch) => {
