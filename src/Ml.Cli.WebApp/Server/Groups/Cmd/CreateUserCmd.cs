@@ -8,7 +8,7 @@ namespace Ml.Cli.WebApp.Server.Groups.Cmd;
 public record CreateUserInput
 {
     [Required]
-    [MaxLength(16)]
+    [MaxLength(32)]
     public string NameIdentifier { get; set; }
     
     [Required]
