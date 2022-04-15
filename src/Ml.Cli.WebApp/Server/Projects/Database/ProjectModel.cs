@@ -9,9 +9,9 @@ public class ProjectModel
 {
     [Key] [Column("PRJ_Id")] public Guid Id { get; set; }
 
-    [Column("PRJ_DatasetId")] public Guid DatasetId { get; set; }
+    [Column("DTS_Id")] public Guid DatasetId { get; set; }
 
-    [Column("PRJ_GroupId")] public Guid GroupId { get; set; }
+    [Column("GRP_Id")] public Guid GroupId { get; set; }
 
     [Column("PRJ_Name")]
     [MaxLength(48)]

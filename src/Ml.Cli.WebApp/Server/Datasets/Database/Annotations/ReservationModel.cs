@@ -11,7 +11,7 @@ public class ReservationModel
     [Column("RSV_Id")] 
     public Guid Id { get; set; }
     
-    [Column("FLE_FileId")] 
+    [Column("FLE_Id")] 
     public Guid FileId { get; set; }
     
     public FileModel File { get; set; }
@@ -19,7 +19,7 @@ public class ReservationModel
     [Column("RSV_TimeStamp")]
     public long TimeStamp { get; set; }
     
-    [Column("PRJ_ProjectId")]
+    [Column("PRJ_Id")]
     public Guid ProjectId { get; set; }
 
 }
