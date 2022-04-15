@@ -3,6 +3,7 @@ import Label from './Label';
 import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
 import {GlobalHotKeys} from "react-hotkeys";
+import Toolbar from './Toolbar.container';
 
 const initAsync = async (url, setState, state, expectedOutput) => {
   const response = await fetch(url);
@@ -16,11 +17,13 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
     label: labels[0],
     value: [],
     text: '',
+    fontSize: 14,
+    keepLabels: true
   }
+  
   const [state, setState] = useState(initialValue);
 
   useEffect(() => {
-    
     if(text){
       setState({...initialValue, text});
     } else{
@@ -74,9 +77,10 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
         </div>
         <div className="tokenAnnotation-container">
           <TextAnnotation
-            className="tokenAnnotator-component"
             text={state.text}
+            fontSize={state.fontSize}
             value={state.value}
+            keepLabels={state.keepLabels}
             onChange={handleChange}
             getSpan={span => ({
               ...span,
@@ -84,11 +88,11 @@ const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedO
             })}
           />
         </div>
-        <div className="annotationActionContainer">
-          <button className="buttonAnnotationAction" onClick={submitAnnotation}>
-            {placeholder}
-          </button>
-        </div>
+        <Toolbar
+            state={state}
+            setState={setState}
+            onSubmit={submitAnnotation}
+        />
       </div>
     </GlobalHotKeys>
   );
