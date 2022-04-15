@@ -40,7 +40,7 @@ namespace Ml.Cli.WebApp.Server.Groups;
                 return;
             }
             
-            var subject = context.User.Identity.GetSubject();
+            var nameIdentifier = context.User.Identity.GetNameIdentifier();
             var authorisation = context.Request.Headers[Authorization].ToString();
             var accessToken = String.IsNullOrEmpty(authorisation) ? String.Empty : authorisation.Replace("Bearer ", "");
 
@@ -49,9 +49,9 @@ namespace Ml.Cli.WebApp.Server.Groups;
                 await HttpCode(context, 401);
             }
             
-            if (!string.IsNullOrEmpty(subject))
+            if (!string.IsNullOrEmpty(nameIdentifier))
             {
-                await createUserCmd.ExecuteAsync(new CreateUserInput() { Subject = subject, AccessToken = accessToken });
+                await createUserCmd.ExecuteAsync(new CreateUserInput() { NameIdentifier = nameIdentifier, AccessToken = accessToken });
                 await _next.Invoke(context);
                 return;
             }

@@ -23,7 +23,7 @@ public class GetFileCmd
         string nameIdentifier)
     {
         var commandResult = new ResultWithError<FileServiceDataModel, ErrorResult>();
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 
         var datasetInfo = await _datasetsRepository.GetDatasetInfoAsync(datasetId);

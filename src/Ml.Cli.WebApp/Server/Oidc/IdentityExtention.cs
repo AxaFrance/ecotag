@@ -19,7 +19,7 @@ namespace Ml.Cli.WebApp.Server.Oidc
             public static readonly string NameIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
         }
         
-        public static string GetSubject(this IIdentity identity)
+        public static string GetNameIdentifier(this IIdentity identity)
         {
             if (identity == null)
             {

@@ -3,7 +3,7 @@ import Table from '@axa-fr/react-toolkit-table';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 
 const UserLine = ({users, annotationUser}) =>{
-    const user = users.find(user => user.subject.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())
+    const user = users.find(user => user.nameIdentifier.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())
     if(!annotationUser || !user){
         return null;
     }
