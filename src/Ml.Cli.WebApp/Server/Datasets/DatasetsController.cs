@@ -21,7 +21,7 @@ public class DatasetsController : Controller
     public async Task<IList<ListDataset>> GetAllDatasets([FromServices] ListDatasetCmd listDatasetCmd,
         [FromQuery] bool? locked)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         return await listDatasetCmd.ExecuteAsync(locked, nameIdentifier);
     }
 
@@ -29,7 +29,7 @@ public class DatasetsController : Controller
     [ResponseCache(Duration = 1)]
     public async Task<ActionResult<GetDataset>> GetDataset([FromServices] GetDatasetCmd getDatasetCmd, string id)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var getDatasetResult = await getDatasetCmd.ExecuteAsync(id, nameIdentifier);
 
         if (!getDatasetResult.IsSuccess)
@@ -51,7 +51,7 @@ public class DatasetsController : Controller
     public async Task<ActionResult<string>> Create([FromServices] CreateDatasetCmd createDatasetCmd,
         DatasetInput datasetInput)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var commandResult = await createDatasetCmd.ExecuteAsync(new CreateDatasetCmdInput
         {
             CreatorNameIdentifier = nameIdentifier,
@@ -71,7 +71,7 @@ public class DatasetsController : Controller
     public async Task<IActionResult> OnPostUploadAsync([FromServices] UploadFileCmd uploadFileCmd, string datasetId,
         List<IFormFile> files)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var uploadfiles = new List<UploadFile>();
         foreach (var formFile in files.Where(formFile => formFile.Length > 0))
         {
@@ -111,7 +111,7 @@ public class DatasetsController : Controller
     [ResponseCache(Duration = 1)]
     public async Task<IActionResult> GetDatasetFile([FromServices] GetFileCmd getFileCmd, string datasetId, string id)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var result = await getFileCmd.ExecuteAsync(datasetId, id, nameIdentifier);
 
         if (!result.IsSuccess)
@@ -134,7 +134,7 @@ public class DatasetsController : Controller
     [ResponseCache(Duration = 1)]
     public async Task<IActionResult> DeleteFile([FromServices] DeleteFileCmd deleteFileCmd, string datasetId, string id)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var result = await deleteFileCmd.ExecuteAsync(datasetId, id, nameIdentifier);
 
         if (!result.IsSuccess)
@@ -156,7 +156,7 @@ public class DatasetsController : Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Lock([FromServices] LockDatasetCmd lockDatasetCmd, string datasetId)
     {
-        var nameIdentifier = User.Identity.GetSubject();
+        var nameIdentifier = User.Identity.GetNameIdentifier();
         var result = await lockDatasetCmd.ExecuteAsync(datasetId, nameIdentifier);
 
         if (!result.IsSuccess)

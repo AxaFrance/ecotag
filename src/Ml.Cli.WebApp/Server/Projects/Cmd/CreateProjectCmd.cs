@@ -95,7 +95,7 @@ public class CreateProjectCmd
             return commandResult;
         }
 
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(createProjectWithUserInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(createProjectWithUserInput.CreatorNameIdentifier);
         if (user == null)
         {
             commandResult.Error = new ErrorResult

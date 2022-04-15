@@ -72,10 +72,10 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [USR_Email] [varchar](254) NOT NULL,
-    [USR_Subject] [varchar](16) NOT NULL,
+    [USR_NameIdentifier] [varchar](32) NOT NULL,
     CONSTRAINT [PK_T_User] UNIQUE([USR_Id]),
     CONSTRAINT [PK_T_User_Email] UNIQUE([USR_Email]),
-    CONSTRAINT [PK_T_User_Subject] UNIQUE([USR_Subject])
+    CONSTRAINT [PK_T_User_NameIdentifier] UNIQUE([USR_NameIdentifier])
     )
 END
 
@@ -253,9 +253,9 @@ CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
-CREATE CLUSTERED INDEX [IND_UserSubject] ON [sch_ECOTAG].[T_User]
+CREATE CLUSTERED INDEX [IND_UserNameIdentifier] ON [sch_ECOTAG].[T_User]
 (
-    [USR_Subject] ASC
+    [USR_NameIdentifier] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
@@ -289,9 +289,9 @@ SET @firstProjectId = newid()
 SET @secondProjectId = newid()
 SET @thirdProjectId = newid()
 
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@firstUserId,"first@gmail.com","S111111")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@secondUserId,"second@gmail.com","S222222")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@firstGroupId, "firstgroup", "S111111", 637831187822285511, 637831187822285511)
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@secondGroupId, "secondgroup", "S111111", 637831187625235412, 637831187822285511)

@@ -18,7 +18,7 @@ public class ListDatasetCmd
 
     public async Task<IList<ListDataset>> ExecuteAsync(bool? locked, string nameIdentifier)
     {
-        var user = await _usersRepository.GetUserBySubjectWithGroupIdsAsync(nameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
 
         if (user == null) return new List<ListDataset>();
 

@@ -80,9 +80,9 @@ internal static class DatasetMock
         groupContext.Groups.Add(group2);
         await groupContext.SaveChangesAsync();
 
-        var user1 = new UserModel { Email = "test1@gmail.com", Subject = "s666666" };
+        var user1 = new UserModel { Email = "test1@gmail.com", NameIdentifier = "s666666" };
         groupContext.Users.Add(user1);
-        var user2 = new UserModel { Email = "test2@gmail.com", Subject = "s666667" };
+        var user2 = new UserModel { Email = "test2@gmail.com", NameIdentifier = "s666667" };
         groupContext.Users.Add(user2);
         await groupContext.SaveChangesAsync();
 

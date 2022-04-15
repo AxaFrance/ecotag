@@ -29,7 +29,7 @@ public class UsersControllerShould
 
         foreach (var userEmail in usersList)
         {
-            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, Subject = "S666666" });
+            groupContext.Users.Add(new UserModel { Id = new Guid(), Email = userEmail, NameIdentifier = "S666666" });
         }
 
         await groupContext.SaveChangesAsync();
