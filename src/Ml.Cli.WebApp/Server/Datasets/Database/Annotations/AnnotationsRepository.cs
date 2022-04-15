@@ -37,18 +37,7 @@ public class AnnotationsRepository
         _serviceScopeFactory = serviceScopeFactory;
         _cache = cache;
     }
-    
-    private async Task<int> NumberAnnotationsAsync(string projectId, int numberAnnotation=1)
-    {
-        using var scope = _serviceScopeFactory.CreateScope();
-        await using var datasetContext = scope.ServiceProvider.GetService<DatasetContext>();
-        var numberAnnotations = await datasetContext.Annotations.AsNoTracking()
-            .Where(a => a.ProjectId == new Guid(projectId))
-            .Select(ux => new { FileId=ux.File.Id, ux.CreatorNameIdentifier}).GroupBy(g => g.FileId)
-            .Select(t => new {t.Key, Count= t.Select(o => o.CreatorNameIdentifier).Count()}). CountAsync(f => f.Count >= numberAnnotation);
-        return  numberAnnotations;
-    }
-    
+
     public async Task<AnnotationStatus> AnnotationStatusAsync(string projectId, string datasetId, int numberAnnotation=1)
     {
         var taskCacheEntry = _cache.GetOrCreateAsync($"CountFiles({datasetId})", async entry =>
