@@ -74,7 +74,7 @@ export const reducer = (state, action) => {
           if(newValues.length === 0){
             message = MSG_REQUIRED
           }
-          else if(newValues.length > 10){
+          else if(newValues.length > 32){
             message = MSG_MAX_LABELS_LENGTH
           }
           else{
