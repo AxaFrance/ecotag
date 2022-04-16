@@ -73,10 +73,9 @@ CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [USR_Email] [varchar](254) NOT NULL,
     [USR_NameIdentifier] [varchar](32) NOT NULL,
-    CONSTRAINT [PK_T_User] PRIMARY KEY([USR_Id]),
-    CONSTRAINT [PK_T_User_Email] UNIQUE([USR_Email]),
-    CONSTRAINT [PK_T_User_NameIdentifier] UNIQUE([USR_NameIdentifier])
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_User] PRIMARY KEY NONCLUSTERED ([USR_Id]),
+    CONSTRAINT [UK_T_User_Email] UNIQUE([USR_Email]),
+    CONSTRAINT [UK_T_User_NameIdentifier] UNIQUE([USR_NameIdentifier])
     ) ON [PRIMARY]
 END
 
@@ -91,9 +90,8 @@ CREATE TABLE [sch_ECOTAG].[T_Group](
     [GRP_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [GRP_CreateDate] BIGINT NOT NULL,
     [GRP_UpdateDate] BIGINT NOT NULL,
-    CONSTRAINT [PK_T_Group] PRIMARY KEY ([GRP_Id]),
-    CONSTRAINT [PK_T_Group_Name] UNIQUE ([GRP_Name]),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_Group] PRIMARY KEY NONCLUSTERED ([GRP_Id]),
+    CONSTRAINT [UK_T_Group_Name] UNIQUE ([GRP_Name])
     ) ON [PRIMARY]
 END
 
@@ -105,11 +103,10 @@ BEGIN
 CREATE TABLE [sch_ECOTAG].[T_GroupUsers](
     [GPU_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [GRP_Id] uniqueidentifier NOT NULL,
-    [USR_Id] uniqueidentifier NOT NULL
-    CONSTRAINT [PK_T_GroupUsers] PRIMARY KEY ([GPU_Id]),
-    CONSTRAINT [FK_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
-    CONSTRAINT [FK_USR_Id] FOREIGN KEY (USR_Id) REFERENCES [sch_ECOTAG].[T_User] (USR_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    [USR_Id] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_T_GroupUsers] PRIMARY KEY NONCLUSTERED ([GPU_Id]),
+    CONSTRAINT [FK_T_GroupUsers_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
+    CONSTRAINT [FK_T_GroupUsers_USR_Id] FOREIGN KEY (USR_Id) REFERENCES [sch_ECOTAG].[T_User] (USR_Id)
     ) ON [PRIMARY]
 END
 
@@ -127,10 +124,9 @@ CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [DTS_CreateDate] BIGINT NOT NULL,
     [DTS_IsLocked] bit NULL,
-    CONSTRAINT [PK_T_Dataset] PRIMARY KEY ([DTS_Id]),
+    CONSTRAINT [PK_T_Dataset] PRIMARY KEY NONCLUSTERED ([DTS_Id]),
     CONSTRAINT [UK_T_Dataset_Name] UNIQUE ([DTS_Name]),
-    CONSTRAINT [FK_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [FK_T_Dataset_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id)
     ) ON [PRIMARY]
 END
 
@@ -147,9 +143,8 @@ CREATE TABLE [sch_ECOTAG].[T_File](
     [FLE_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [FLE_CreateDate] BIGINT NOT NULL,
     [DTS_Id] uniqueidentifier NOT NULL,
-    CONSTRAINT [PK_T_File] PRIMARY KEY ([FLE_Id]),
-    CONSTRAINT [FK_DTS_Id] FOREIGN KEY (DTS_Id) REFERENCES [sch_ECOTAG].[T_Dataset] (DTS_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_File] PRIMARY KEY NONCLUSTERED ([FLE_Id]),
+    CONSTRAINT [FK_T_File_DTS_Id] FOREIGN KEY (DTS_Id) REFERENCES [sch_ECOTAG].[T_Dataset] (DTS_Id)
     ) ON [PRIMARY]
 END
 
@@ -169,10 +164,9 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
     [PRJ_AnnotationType] int NOT NULL,
     [PRJ_LabelsJson] [varchar](2048) NOT NULL,
     [PRJ_CreatorNameIdentifier] [varchar](32) NOT NULL,
-    CONSTRAINT [PK_T_Project] PRIMARY KEY ([PRJ_Id]),
-    CONSTRAINT [FK_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
-    CONSTRAINT [FK_DTS_Id] FOREIGN KEY (DTS_Id) REFERENCES [sch_ECOTAG].[T_Dataset] (DTS_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_Project] PRIMARY KEY NONCLUSTERED ([PRJ_Id]),
+    CONSTRAINT [FK_T_Project_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
+    CONSTRAINT [FK_T_Project_DTS_Id] FOREIGN KEY (DTS_Id) REFERENCES [sch_ECOTAG].[T_Dataset] (DTS_Id)
     )
 END
 
@@ -186,10 +180,9 @@ CREATE TABLE [sch_ECOTAG].[T_Reservation](
     [FLE_Id] uniqueidentifier NOT NULL,
     [PRJ_Id] uniqueidentifier NOT NULL,
     [RSV_TimeStamp] BIGINT NOT NULL,
-    CONSTRAINT [PK_T_Reservation] PRIMARY KEY ([RSV_Id]),
-    CONSTRAINT [FK_FLE_Id] FOREIGN KEY (FLE_Id) REFERENCES [sch_ECOTAG].[T_File] (FLE_Id),
-    CONSTRAINT [FK_PRJ_Id] FOREIGN KEY (PRJ_Id) REFERENCES [sch_ECOTAG].[T_Project] (PRJ_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_Reservation] PRIMARY KEY NONCLUSTERED ([RSV_Id]),
+    CONSTRAINT [FK_T_Reservation_FLE_Id] FOREIGN KEY (FLE_Id) REFERENCES [sch_ECOTAG].[T_File] (FLE_Id),
+    CONSTRAINT [FK_T_Reservation_PRJ_Id] FOREIGN KEY (PRJ_Id) REFERENCES [sch_ECOTAG].[T_Project] (PRJ_Id)
     )
 END
 
@@ -205,10 +198,9 @@ CREATE TABLE [sch_ECOTAG].[T_Annotation](
     [ANO_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [ANO_TimeStamp] BIGINT NOT NULL,
     [ANO_ExpectedOutput] [varchar](4048) NOT NULL,
-    CONSTRAINT [PK_T_Annotation] PRIMARY KEY ([ANO_Id]),
-    CONSTRAINT [FK_FLE_Id] FOREIGN KEY (FLE_Id) REFERENCES [sch_ECOTAG].[T_File] (FLE_Id),
-    CONSTRAINT [FK_PRJ_Id] FOREIGN KEY (PRJ_Id) REFERENCES [sch_ECOTAG].[T_Project] (PRJ_Id),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_Annotation] PRIMARY KEY NONCLUSTERED ([ANO_Id]),
+    CONSTRAINT [FK-T_Annotation_FLE_Id] FOREIGN KEY (FLE_Id) REFERENCES [sch_ECOTAG].[T_File] (FLE_Id),
+    CONSTRAINT [FK_T_Annotation_PRJ_Id] FOREIGN KEY (PRJ_Id) REFERENCES [sch_ECOTAG].[T_Project] (PRJ_Id)
     )
 END
 
@@ -224,8 +216,7 @@ CREATE TABLE [sch_ECOTAG].[T_Audit](
     [AUD_NameIdentifier] [varchar](32) NOT NULL,
     [AUD_CreateDate] BIGINT NOT NULL,
     [AUD_Diff] [varchar](4048) NOT NULL,
-    CONSTRAINT [PK_T_Audit] PRIMARY KEY ([AUD_Id]),
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    CONSTRAINT [PK_T_Audit] PRIMARY KEY NONCLUSTERED ([AUD_Id])
     )
 END
 
@@ -247,20 +238,21 @@ GO
 
 CREATE CLUSTERED INDEX [IND_AnnotationProjectId] ON [sch_ECOTAG].[T_Annotation]
 (
-    [PRJ_ProjectId] ASC
+    [PRJ_Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
 CREATE CLUSTERED INDEX [IND_ReservationProjectId] ON [sch_ECOTAG].[T_Reservation]
 (
-    [PRJ_ProjectId] ASC,
+    [PRJ_Id] ASC,
     [RSV_TimeStamp] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
 CREATE UNIQUE INDEX [IND_FileName_DatasetId] ON [sch_ECOTAG].[T_File]
 (
-    [FLE_Name], [DTS_Id]
+    [FLE_Name], 
+    [DTS_Id]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
@@ -270,9 +262,9 @@ CREATE CLUSTERED INDEX [IND_DatasetIsLocked] ON [sch_ECOTAG].[T_Dataset]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
-CREATE CLUSTERED INDEX [IND_UserSubject] ON [sch_ECOTAG].[T_User]
+CREATE CLUSTERED INDEX [IND_UserNameIdentifier] ON [sch_ECOTAG].[T_User]
 (
-    [USR_Subject] ASC
+    [USR_NameIdentifier] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
@@ -306,9 +298,9 @@ SET @firstProjectId = newid()
 SET @secondProjectId = newid()
 SET @thirdProjectId = newid()
 
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@firstUserId,"first@gmail.com","S111111")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@secondUserId,"second@gmail.com","S222222")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_Subject]) VALUES (@thirdUserId,"third@gmail.com","S333333")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@firstUserId,"first@gmail.com","S111111")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@secondUserId,"second@gmail.com","S222222")
+INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@thirdUserId,"third@gmail.com","S333333")
 
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@firstGroupId, "firstgroup", "S111111", 637831187822285511, 637831187822285511)
 INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@secondGroupId, "secondgroup", "S111111", 637831187625235412, 637831187822285511)
@@ -318,12 +310,6 @@ INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newi
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
 INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
-
-INSERT INTO [sch_ECOTAG].[T_Project](
-    [PRJ_Id],[PRJ_DatasetId],[PRJ_GroupId],[PRJ_Name],[PRJ_NumberCrossAnnotation],[PRJ_CreateDate],[PRJ_AnnotationType],[PRJ_LabelsJson],[PRJ_CreatorNameIdentifier]
-) VALUES (
-    newid(), newid(), @firstGroupId, "firstproject", 10, 1647129600, 0, '[{"name": "Recto", "color": "#212121", "id": "0"}, {"name": "Verso", "color": "#ffbb00", "id": "1"}, {"name": "Signature", "color": "#f20713", "id": "2"}]',"s666666"
-)
 
 GO
 
