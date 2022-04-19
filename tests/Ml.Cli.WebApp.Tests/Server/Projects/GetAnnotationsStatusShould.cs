@@ -24,7 +24,7 @@ public class GetAnnotationsStatusShould
         var resultOk = result.Result as OkObjectResult;
         Assert.NotNull(resultOk);
         var resultValue = resultOk.Value as AnnotationStatus;
-        Assert.Equal(40, resultValue.NumberAnnotationsToDo);
+        Assert.Equal(41, resultValue.NumberAnnotationsToDo);
     }
 
     [Theory]
