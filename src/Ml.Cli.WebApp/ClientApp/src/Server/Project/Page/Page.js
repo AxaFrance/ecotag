@@ -5,6 +5,7 @@ import Users from './Users';
 import Title from '../../../TitleBar';
 import ActionBar from './ActionBar';
 import './Page.scss';
+import Lock from "../../shared/Lock/Lock";
 
 const Page = ({ project, dataset, users, group, annotationsStatus, onExport, user }) => (
   <div className="ft-project-page">
@@ -17,6 +18,13 @@ const Page = ({ project, dataset, users, group, annotationsStatus, onExport, use
           <Users users={users} numberAnnotationsByUsers={annotationsStatus == null ? [] : annotationsStatus.numberAnnotationsByUsers} />
       </div>
     </div>
+    <Lock 
+        isLocked={isLocked}
+        onLockAction={onLockAction}
+        text="Clôturer"
+        lockedText="Projet fermé"
+        isDisabled={isDisabled}
+    />
   </div>
 );
 

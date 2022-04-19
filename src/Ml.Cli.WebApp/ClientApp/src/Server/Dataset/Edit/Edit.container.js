@@ -1,7 +1,6 @@
 ﻿import React, {useState} from 'react';
 import FileUpload from "./FileUpload";
 import FileList from "./FileList";
-import Lock from "./Lock";
 import ConfirmModal from "./ConfirmModal";
 import './Edit.scss';
 import Title from "../../../TitleBar";
@@ -10,6 +9,7 @@ import {fetchDataset, fetchLockDataset} from "../Dataset.service";
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import {useParams} from "react-router-dom";
 import withCustomFetch from "../../withCustomFetch";
+import Lock from "../../shared/Lock/Lock";
 
 export const init = (fetch, setState) => async (id, state) => {
     const response = await fetchDataset(fetch)(id);
@@ -41,13 +41,18 @@ const lockDataset = (fetch, setState) => async (state, idDataset) => {
     setState({...state, ...data, openLockModal: false, dataset: {...state.dataset, isLock:true }});
 };
 
-export const Edit = ({fetch, state, setState, lock}) => <div className="edit-dataset">
-    <ConfirmModal isOpen={state.openLockModal} onCancel={lock.onCancel} onSubmit={lock.onSubmit}/>
-    <Title title={state.dataset.name} subtitle="Edition du dataset" goTo="/datasets" goTitle="Datasets" />
-    <FileUpload fetch={fetch} state={state} setState={setState}/>
-    {state.files.filesSend.length === 0 ? null : <FileList fetch={fetch} state={state} setState={setState} />}
-    <Lock state={state} onLockDataset={lock.onLockDataset} />
-</div>
+export const Edit = ({fetch, state, setState, lock}) => {
+    const isDisabled = state.files.filesSend.length === 0;
+    return(
+        <div className="edit-dataset">
+            <ConfirmModal isOpen={state.openLockModal} onCancel={lock.onCancel} onSubmit={lock.onSubmit}/>
+            <Title title={state.dataset.name} subtitle="Edition du dataset" goTo="/datasets" goTitle="Datasets"/>
+            <FileUpload fetch={fetch} state={state} setState={setState}/>
+            {state.files.filesSend.length === 0 ? null : <FileList fetch={fetch} state={state} setState={setState}/>}
+            <Lock text="Verrouiller" lockedText="Dataset verrouillé" isDisabled={isDisabled} isLocked={state.dataset.isLock} onLockAction={lock.onLockDataset}/>
+        </div>
+    );
+}
 
 const PageWithResilience = withResilience(Edit);
 

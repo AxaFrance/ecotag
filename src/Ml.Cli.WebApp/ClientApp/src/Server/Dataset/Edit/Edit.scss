@@ -36,21 +36,6 @@
  &__file-list-container {
    margin-bottom: 50px;
  }
-
- &__lock-button-container {
-  display: flex;
-  justify-content: center;
- }
-
- &__lock-button-button {
-    &--disabled {
-      display: none;
-    }
- }
-
-  &__lock-button-icon {
-    margin-left: 5%;
-  }
 }
 .af-modal__header-title {
   letter-spacing: 1.2px;
