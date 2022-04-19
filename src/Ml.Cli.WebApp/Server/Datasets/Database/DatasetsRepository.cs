@@ -14,13 +14,13 @@ public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
+    public readonly DatasetContext DatasetsContext;
     private readonly IMemoryCache _cache;
-    private readonly DatasetContext _datasetsContext;
     private readonly IFileService _fileService;
 
     public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
     {
-        _datasetsContext = datasetsContext;
+        DatasetsContext = datasetsContext;
         _fileService = fileService;
         _cache = cache;
     }
@@ -37,7 +37,7 @@ public class DatasetsRepository
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
         };
-        var result = _datasetsContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
+        var result = DatasetsContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
@@ -46,7 +46,7 @@ public class DatasetsRepository
 
         try
         {
-            await _datasetsContext.SaveChangesAsync();
+            await DatasetsContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
@@ -62,11 +62,11 @@ public class DatasetsRepository
     {
         IList<DatasetModel> datasets;
         if (locked.HasValue)
-            datasets = await _datasetsContext.Datasets.AsNoTracking()
+            datasets = await DatasetsContext.Datasets.AsNoTracking()
                 .Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString()))
                 .Include(dataset => dataset.Files).ToListAsync();
         else
-            datasets = await _datasetsContext.Datasets.AsNoTracking()
+            datasets = await DatasetsContext.Datasets.AsNoTracking()
                 .Where(dataset => groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files)
                 .ToListAsync();
         return datasets.Select(d => d.ToListDatasetResult()).ToList();
@@ -74,7 +74,7 @@ public class DatasetsRepository
 
     public async Task<GetDataset> GetDatasetAsync(string datasetId)
     {
-        var dataset = await _datasetsContext.Datasets.AsNoTracking()
+        var dataset = await DatasetsContext.Datasets.AsNoTracking()
             .Where(dataset => dataset.Id == new Guid(datasetId))
             .Include(dataset => dataset.Files)
             .FirstOrDefaultAsync();
@@ -85,7 +85,7 @@ public class DatasetsRepository
     {
         var dataset = await _cache.GetOrCreateAsync($"GetDatasetInfoAsync({datasetId})", async entry =>
         {
-            var dataset = await _datasetsContext.Datasets.AsNoTracking()
+            var dataset = await DatasetsContext.Datasets.AsNoTracking()
                 .Where(dataset => dataset.Id == new Guid(datasetId)).Select(dataset => new GetDatasetInfo
                 {
                     Id = dataset.Id.ToString().ToLower(),
@@ -105,10 +105,10 @@ public class DatasetsRepository
 
     public async Task<bool> LockAsync(string datasetId)
     {
-        var dataset = await _datasetsContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
+        var dataset = await DatasetsContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
         if (dataset == null || dataset.IsLocked) return false;
         dataset.IsLocked = true;
-        await _datasetsContext.SaveChangesAsync();
+        await DatasetsContext.SaveChangesAsync();
         _cache.Remove($"GetDatasetInfoAsync({datasetId})");
         return true;
     }
@@ -116,7 +116,7 @@ public class DatasetsRepository
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
-        var file = await _datasetsContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
+        var file = await DatasetsContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
@@ -133,7 +133,7 @@ public class DatasetsRepository
     public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<bool, ErrorResult>();
-        var file = await _datasetsContext.Files.FirstOrDefaultAsync(file =>
+        var file = await DatasetsContext.Files.FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
@@ -144,9 +144,9 @@ public class DatasetsRepository
             return result;
         }
 
-        _datasetsContext.Files.Remove(file);
+        DatasetsContext.Files.Remove(file);
 
-        var taskDeleteSql = _datasetsContext.SaveChangesAsync();
+        var taskDeleteSql = DatasetsContext.SaveChangesAsync();
         var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
         Task.WaitAll(taskDeleteSql, taskDeleteBob);
         result.Data = taskDeleteBob.Result;
@@ -167,7 +167,7 @@ public class DatasetsRepository
             Size = stream.Length,
             DatasetId = new Guid(datasetId)
         };
-        var result = _datasetsContext.Files.AddIfNotExists(fileModel,
+        var result = DatasetsContext.Files.AddIfNotExists(fileModel,
             file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
         if (result == null)
         {
@@ -177,7 +177,7 @@ public class DatasetsRepository
 
         try
         {
-            var taskSaveSql = _datasetsContext.SaveChangesAsync();
+            var taskSaveSql = DatasetsContext.SaveChangesAsync();
             var taskUploadBlob = _fileService.UploadStreamAsync(datasetId, fileName, stream);
             Task.WaitAll(taskSaveSql, taskUploadBlob);
         }

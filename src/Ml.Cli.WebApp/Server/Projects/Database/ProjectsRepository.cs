@@ -15,11 +15,11 @@ public class ProjectsRepository
     public const string Forbidden = "Forbidden";
     public const string NotFound = "NotFound";
     private readonly IMemoryCache _cache;
-    private readonly ProjectContext _projectsContext;
+    public readonly ProjectContext ProjectsContext;
 
     public ProjectsRepository(ProjectContext projectsContext, IMemoryCache cache)
     {
-        _projectsContext = projectsContext;
+        ProjectsContext = projectsContext;
         _cache = cache;
     }
 
@@ -40,7 +40,7 @@ public class ProjectsRepository
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
         var result =
-            _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
+            ProjectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult
@@ -52,7 +52,7 @@ public class ProjectsRepository
 
         try
         {
-            await _projectsContext.SaveChangesAsync();
+            await ProjectsContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
@@ -64,9 +64,16 @@ public class ProjectsRepository
         return commandResult;
     }
 
+    public async Task<ResultWithError<string, ErrorResult>> DeleteProjectAsync(string projectId)
+    {
+        var commandResult = new ResultWithError<string, ErrorResult>();
+        
+        return commandResult;
+    }
+
     public async Task<List<ProjectDataModel>> GetAllProjectsAsync(List<string> userGroupIds)
     {
-        var projectModelEnum = await _projectsContext.Projects
+        var projectModelEnum = await ProjectsContext.Projects
             .AsNoTracking()
             .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
             .ToListAsync();
@@ -80,7 +87,7 @@ public class ProjectsRepository
 
         var cacheEntry = await _cache.GetOrCreateAsync($"GetProjectAsync({projectId})", async entry =>
         {
-            var projectModel = await _projectsContext.Projects
+            var projectModel = await ProjectsContext.Projects
                 .AsNoTracking()
                 .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
             return projectModel;

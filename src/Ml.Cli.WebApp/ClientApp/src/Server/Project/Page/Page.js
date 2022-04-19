@@ -19,11 +19,11 @@ const Page = ({ project, dataset, users, group, annotationsStatus, onExport, use
       </div>
     </div>
     <Lock 
-        isLocked={isLocked}
+        isLocked={false}
         onLockAction={onLockAction}
         text="Clôturer"
         lockedText="Projet fermé"
-        isDisabled={isDisabled}
+        isDisabled={false}
     />
   </div>
 );
