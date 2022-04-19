@@ -41,6 +41,7 @@ public record MockResult
     public string Dataset3Id { get; set; }
     public string Dataset3Project1Id { get; set; }
     public ProjectsController ProjectsController { get; set; }
+    public AnnotationsController AnnotationsController { get; set; }
     public AnnotationsRepository AnnotationsRepository { get; set; }
     public ProjectsRepository ProjectsRepository { get; set; }
     public DeleteRepository DeleteRepository { get; set; }
@@ -245,6 +246,8 @@ internal static class DatasetMock
         datasetsController.ControllerContext = controllerContext; 
         var projectsController = new ProjectsController();
         projectsController.ControllerContext = controllerContext;
+        var annotationsController = new AnnotationsController();
+        annotationsController.ControllerContext = controllerContext;
         return new MockResult
         {
             Group1 = group1,
@@ -255,6 +258,7 @@ internal static class DatasetMock
             Dataset3Id = dataset3Id.ToString(),
             Dataset3Project1Id = projectModel.Id.ToString(),
             ProjectsController = projectsController,
+            AnnotationsController = annotationsController,
             AnnotationsRepository = annotationRepository,
             ProjectsRepository = projectRepository,
             DeleteRepository = deleteRepository,
