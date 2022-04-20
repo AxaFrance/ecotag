@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -14,6 +13,7 @@ public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
+    public const string DatasetNotFound = "DatasetNotFound";
     public readonly DatasetContext DatasetsContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
@@ -193,6 +193,42 @@ public class DatasetsRepository
 
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
+    }
+
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteFilesAsync(string datasetId, IList<GetDatasetFile> files)
+    {
+        var result = new ResultWithError<bool, ErrorResult>();
+        foreach (var file in files)
+        {
+            var deletionResult = await DeleteFileAsync(datasetId, file.Id);
+            if (!deletionResult.IsSuccess)
+            {
+                return deletionResult;
+            }
+        }
+
+        result.Data = true;
+        return result;
+    }
+
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteDatasetAsync(string datasetId)
+    {
+        var result = new ResultWithError<bool, ErrorResult>();
+        var dataset = await DatasetsContext.Datasets
+            .FirstOrDefaultAsync(dataset => dataset.Id.ToString().Equals(datasetId));
+        if (dataset == null)
+        {
+            result.Error = new ErrorResult
+            {
+                Key = DatasetNotFound
+            };
+            return result;
+        }
+
+        DatasetsContext.Datasets.Remove(dataset);
+        await DatasetsContext.SaveChangesAsync();
+        result.Data = true;
+        return result;
     }
 
 }

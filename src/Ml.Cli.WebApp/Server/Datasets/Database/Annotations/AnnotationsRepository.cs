@@ -190,6 +190,18 @@ public class AnnotationsRepository
             .Include(file => file.Annotations).ToListAsync();
         return fileModels.Select(fileModel => fileModel.ToFileDataModel()).ToList();
     }
+
+    public async Task DeleteAnnotationsByProjectIdAsync(string projectId)
+    {
+        var annotations = await _datasetsContext.Annotations
+            .Where(annotation => annotation.ProjectId.ToString().Equals(projectId)).ToListAsync();
+        foreach (var annotation in annotations)
+        {
+            _datasetsContext.Annotations.Remove(annotation);
+        }
+
+        await _datasetsContext.SaveChangesAsync();
+    }
 }
 
 public class ReserveAnnotation

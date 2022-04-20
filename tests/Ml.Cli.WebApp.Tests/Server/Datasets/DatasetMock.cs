@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -258,7 +259,9 @@ internal static class DatasetMock
     {
         var builder = new DbContextOptionsBuilder<DatasetContext>();
         var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
+        builder
+            .UseInMemoryDatabase(databaseName)
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
 
         DatasetContext DatasetContext()
         {
