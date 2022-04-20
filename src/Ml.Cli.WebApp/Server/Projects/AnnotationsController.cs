@@ -12,7 +12,7 @@ namespace Ml.Cli.WebApp.Server.Projects;
 [ApiController]
 public class AnnotationsController : Controller
 {
-    [HttpGet("annotations/{projectId}")]
+    [HttpGet("{projectId}")]
     public async Task<ActionResult<GetProjectCmdResult>> GetAnnotationsStatus([FromServices] GetAnnotationsStatusCmd getAnnotationsStatusCmd, string projectId)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
@@ -25,31 +25,31 @@ public class AnnotationsController : Controller
         return Ok(commandResult.Data);
     }
     
-    [HttpPost("{projectId}/annotations/{fileId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
+    [HttpPost("{projectId}/{fileId}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
+    {
+        var creatorNameIdentifier = User.Identity.GetNameIdentifier();
+        var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
         {
-            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
-            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
-            {
-                ProjectId = projectId,
-                FileId = fileId,
-                AnnotationInput = annotationInput,
-                CreatorNameIdentifier = creatorNameIdentifier
-            });
-            if (!commandResult.IsSuccess)
-            {
-                return commandResult.Error.Key == ProjectsRepository.Forbidden
-                    ? Forbid()
-                    : BadRequest(commandResult.Error);
-            }
-
-            return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
+            ProjectId = projectId,
+            FileId = fileId,
+            AnnotationInput = annotationInput,
+            CreatorNameIdentifier = creatorNameIdentifier
+        });
+        if (!commandResult.IsSuccess)
+        {
+            return commandResult.Error.Key == ProjectsRepository.Forbidden
+                ? Forbid()
+                : BadRequest(commandResult.Error);
         }
+
+        return Created($"{projectId}/{fileId}/{commandResult.Data}", commandResult.Data);
+    }
         
-        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
+        [HttpPut("{projectId}/{fileId}/{annotationId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
