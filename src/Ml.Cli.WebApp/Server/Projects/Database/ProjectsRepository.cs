@@ -97,4 +97,10 @@ public class ProjectsRepository
         commandResult.Data = cacheEntry.ToProjectDataModel();
         return commandResult;
     }
+
+    public bool IsDatasetUsedByOtherProjects(string projectId, string datasetId)
+    {
+        return ProjectsContext.Projects.AsNoTracking().Any(project =>
+            !project.Id.ToString().Equals(projectId) && project.DatasetId.ToString().Equals(datasetId));
+    }
 }
