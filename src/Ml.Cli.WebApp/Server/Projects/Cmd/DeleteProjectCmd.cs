@@ -74,25 +74,18 @@ public class DeleteProjectCmd
         try
         {
             await _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
-            var isDatasetUsedByOtherProjects =
-                _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
-            if (!isDatasetUsedByOtherProjects)
-            {
-                var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
-                if (!deletedFilesResult.IsSuccess)
-                {
-                    throw new Exception();
-                }
-            }
             var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
             if (!deletedProjectResult.IsSuccess)
             {
                 throw new Exception();
             }
+            var isDatasetUsedByOtherProjects =
+                _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
             if (!isDatasetUsedByOtherProjects)
             {
+                var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
                 var deletedDatasetResult = await _datasetsRepository.DeleteDatasetAsync(datasetResult.Id);
-                if (!deletedDatasetResult.IsSuccess)
+                if (!deletedFilesResult.IsSuccess || !deletedDatasetResult.IsSuccess)
                 {
                     throw new Exception();
                 }
