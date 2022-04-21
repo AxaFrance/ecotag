@@ -3,17 +3,20 @@
         margin-bottom: 0;
         font-weight: 700;
     }
-}
-
-.ft-project-page__informationsContainer {
-    padding: 0 50px;
-    margin-top: 2rem;
-}
-
-.ft-project-page__type-annotation {
-    font-style: italic;
-    margin-left: 5%;
-    font-size: 0.7em;
+    &__modal-core-text {
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: 1.1px;
+    }
+    &__informationsContainer {
+        padding: 0 50px;
+        margin-top: 2rem;
+    }
+    &__type-annotation {
+        font-style: italic;
+        margin-left: 5%;
+        font-size: 0.7em;
+    }
 }
 
 .ft-labels {

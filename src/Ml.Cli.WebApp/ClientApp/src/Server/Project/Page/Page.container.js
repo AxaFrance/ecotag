@@ -1,7 +1,13 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useReducer } from 'react';
 import Page from './Page';
-import {fetchProject, fetchDataset, fetchAnnotationsStatus, fetchExportAnnotations} from '../Project.service';
+import {
+  fetchProject,
+  fetchDataset,
+  fetchAnnotationsStatus,
+  fetchExportAnnotations,
+  fetchLockProject
+} from '../Project.service';
 import {fetchGroup, fetchUsers} from '../../Group/Group.service.js';
 import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
@@ -51,6 +57,21 @@ export const reducer = (state, action) => {
         group,
       };
     }
+    case 'open_modal': {
+      const {isModalOpened} = action.data;
+      return {
+        ...state,
+        isModalOpened
+      };
+    }
+    case 'lock_project': {
+      const {status, isModalOpened} = action.data;
+      return {
+        ...state,
+        status,
+        isModalOpened
+      };
+    }
     default:
       throw new Error();
   }
@@ -74,22 +95,37 @@ export const initialState = {
     numberAnnotationsDone: 0,
     numberAnnotationsToDo:0,
     percentageNumberAnnotationsDone:0
-  }
+  },
+  isModalOpened: false
 };
 
 const usePage = (fetch) => {
   const { id } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const onExport = projectId => fetchExportAnnotations(fetch)(projectId);
+  const lock = {
+    onCancel: () => dispatch({type: 'open_modal', data: {isModalOpened: false}}),
+    onSubmit: async () => {
+      const response = await fetchLockProject(fetch)(id);
+      let data;
+      if (response.status >= 500) {
+        data = {status: resilienceStatus.ERROR, isModalOpened: false};
+      } else {
+        data = {status: resilienceStatus.SUCCESS, isModalOpened: false};
+      }
+      dispatch({data, type: 'lock_project'});
+    },
+    onLockAction: () => dispatch({type: 'open_modal', data: {isModalOpened: true}})
+  };
   useEffect(() => {
     init(fetch, dispatch)(id);
   }, []);
-  return { state, onExport };
+  return { state, onExport, lock };
 };
 
 export const PageContainer = ({ fetch, user}) => {
-  const { state, onExport } = usePage(fetch);
-  return <PageWithResilience {...state} onExport={onExport} user={user} />;
+  const { state, onExport, lock } = usePage(fetch);
+  return <PageWithResilience {...state} onExport={onExport} user={user} lock={lock} />;
 };
 
 const enhance = compose(withCustomFetch(fetch), withAuthentication());

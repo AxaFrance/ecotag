@@ -60,13 +60,13 @@ public class DeleteProjectCmd
             };
             return commandResult;
         }
-
-        var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
+        
+        /*var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
         if (!exportResult.IsSuccess)
         {
             commandResult.Error = exportResult.Error;
             return commandResult;
-        }
+        }*/
 
         await using var transactionDatasets = await _datasetsRepository.DatasetsContext.Database.BeginTransactionAsync();
         try

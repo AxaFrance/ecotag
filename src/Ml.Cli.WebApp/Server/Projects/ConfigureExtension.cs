@@ -17,6 +17,7 @@ public static class ConfigureExtension
     {
         services.Configure<BlobStorageSettings>(
             configuration.GetSection(BlobStorageSettings.Storage));
+        services.AddScoped<IBlobService, BlobService>();
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
@@ -30,5 +31,6 @@ public static class ConfigureExtension
         services.AddScoped<SaveAnnotationCmd, SaveAnnotationCmd>();
         services.AddScoped<GetAnnotationsStatusCmd, GetAnnotationsStatusCmd>();
         services.AddScoped<ExportCmd, ExportCmd>();
+        services.AddScoped<DeleteProjectCmd, DeleteProjectCmd>();
     }
 }
