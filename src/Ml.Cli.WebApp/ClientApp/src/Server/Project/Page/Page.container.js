@@ -108,7 +108,7 @@ const usePage = (fetch) => {
     onSubmit: async () => {
       const response = await fetchLockProject(fetch)(id);
       let data;
-      if (response.status >= 500) {
+      if (response.status >= 400) {
         data = {status: resilienceStatus.ERROR, isModalOpened: false};
       } else {
         data = {status: resilienceStatus.SUCCESS, isModalOpened: false};

@@ -64,10 +64,23 @@ public class ProjectsRepository
         return commandResult;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> DeleteProjectAsync(string projectId)
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteProjectAsync(string projectId)
     {
-        var commandResult = new ResultWithError<string, ErrorResult>();
-        
+        var commandResult = new ResultWithError<bool, ErrorResult>();
+        var project = await ProjectsContext.Projects
+            .FirstOrDefaultAsync(project => project.Id.ToString().Equals(projectId));
+        if (project == null)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = NotFound
+            };
+            return commandResult;
+        }
+
+        ProjectsContext.Projects.Remove(project);
+        await ProjectsContext.SaveChangesAsync();
+        commandResult.Data = true;
         return commandResult;
     }
 
