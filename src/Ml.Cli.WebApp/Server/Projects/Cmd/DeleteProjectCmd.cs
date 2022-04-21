@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Transactions;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -69,39 +70,45 @@ public class DeleteProjectCmd
             return commandResult;
         }*/
 
-        var transactionDatasets = await _datasetsRepository.DatasetsContext.Database.BeginTransactionAsync();
-        var transactionProjects = await _projectsRepository.ProjectsContext.Database.BeginTransactionAsync();
-        try
+        var transactionOptions = new TransactionOptions()
         {
-            await _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
-            var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
-            if (!deletedProjectResult.IsSuccess)
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.MaximumTimeout
+        };
+
+        using (var scope = new TransactionScope(TransactionScopeOption.Required, transactionOptions,
+                   TransactionScopeAsyncFlowOption.Enabled))
+        {
+            try
             {
-                throw new Exception();
-            }
-            var isDatasetUsedByOtherProjects =
-                _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
-            if (!isDatasetUsedByOtherProjects)
-            {
-                var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
-                var deletedDatasetResult = await _datasetsRepository.DeleteDatasetAsync(datasetResult.Id);
-                if (!deletedFilesResult.IsSuccess || !deletedDatasetResult.IsSuccess)
+                await _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
+                var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
+                if (!deletedProjectResult.IsSuccess)
                 {
                     throw new Exception();
                 }
+                var isDatasetUsedByOtherProjects =
+                    _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
+                if (!isDatasetUsedByOtherProjects)
+                {
+                    var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
+                    var deletedDatasetResult = await _datasetsRepository.DeleteDatasetAsync(datasetResult.Id);
+                    if (!deletedFilesResult.IsSuccess || !deletedDatasetResult.IsSuccess)
+                    {
+                        throw new Exception();
+                    }
+                }
+                scope.Complete();
             }
-            await transactionDatasets.CommitAsync();
-            await transactionProjects.CommitAsync();
-        }
-        catch (Exception)
-        {
-            await transactionDatasets.RollbackAsync();
-            await transactionProjects.RollbackAsync();
-            commandResult.Error = new ErrorResult
+            catch (Exception)
             {
-                Key = DeletionFailed
-            };
-            return commandResult;
+                scope.Dispose();
+                commandResult.Error = new ErrorResult
+                {
+                    Key = DeletionFailed
+                };
+                return commandResult;
+            }
         }
 
         commandResult.Data = true;
