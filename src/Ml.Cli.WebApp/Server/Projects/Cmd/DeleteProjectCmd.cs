@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
+using Ml.Cli.WebApp.Server.Projects.BlobStorage;
+using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
@@ -13,18 +17,21 @@ public class DeleteProjectCmd
     private readonly ProjectsRepository _projectsRepository;
     private readonly DatasetsRepository _datasetsRepository;
     private readonly AnnotationsRepository _annotationsRepository;
+    private readonly IBlobService _blobService;
     public const string UserNotFound = "UserNotFound";
     public const string DatasetNotFound = "DatasetNotFound";
+    public const string UploadError = "UploadError";
 
-    public DeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository)
+    public DeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, IBlobService blobService)
     {
         _usersRepository = usersRepository;
         _projectsRepository = projectsRepository;
         _datasetsRepository = datasetsRepository;
         _annotationsRepository = annotationsRepository;
+        _blobService = blobService;
     }
     
-    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
+    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(ExportCmd exportCmd, string projectId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
 
@@ -54,6 +61,13 @@ public class DeleteProjectCmd
             return commandResult;
         }
 
+        var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
+        if (!exportResult.IsSuccess)
+        {
+            commandResult.Error = exportResult.Error;
+            return commandResult;
+        }
+
         await using var transactionDatasets = await _datasetsRepository.DatasetsContext.Database.BeginTransactionAsync();
         try
         {
@@ -74,7 +88,6 @@ public class DeleteProjectCmd
                 throw new Exception();
             }
             
-
             await transactionDatasets.CommitAsync();
         }
         catch (Exception)
@@ -82,6 +95,40 @@ public class DeleteProjectCmd
             await transactionDatasets.RollbackAsync();
         }
 
+        commandResult.Data = true;
+        return commandResult;
+    }
+
+    private async Task<ResultWithError<bool, ErrorResult>> ExportProject(ExportCmd exportCmd, ProjectDataModel project,
+        string nameIdentifier)
+    {
+        var commandResult = new ResultWithError<bool, ErrorResult>();
+        var exportResult = await exportCmd.ExecuteAsync(project.Id, nameIdentifier);
+        if (!exportResult.IsSuccess)
+        {
+            commandResult.Error = exportResult.Error;
+            return commandResult;
+        }
+
+        var fileOutput = "/output/" + project.Name + "_" + DateTime.Now.Ticks + "/" + project.Name +
+                         "-annotations.json";
+        try
+        {
+            var serializedContent = JsonSerializer.Serialize(exportResult.Data);
+            var bytes = JsonSerializer.SerializeToUtf8Bytes(serializedContent);
+            var stream = new MemoryStream(bytes);
+            await _blobService.UploadStreamAsync(project.DatasetId, fileOutput, stream);
+        }
+        catch (Exception e)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = UploadError,
+                Error = e
+            };
+            return commandResult;
+        }
+        
         commandResult.Data = true;
         return commandResult;
     }

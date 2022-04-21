@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -15,6 +15,8 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<BlobStorageSettings>(
+            configuration.GetSection(BlobStorageSettings.Storage));
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
