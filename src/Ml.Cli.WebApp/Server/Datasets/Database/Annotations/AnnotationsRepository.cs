@@ -202,6 +202,18 @@ public class AnnotationsRepository
 
         await _datasetsContext.SaveChangesAsync();
     }
+
+    public async Task DeleteReservationsByProjectIdAsync(string projectId)
+    {
+        var reservations = await _datasetsContext.Reservations
+            .Where(reservation => reservation.ProjectId.ToString().Equals(projectId)).ToListAsync();
+        foreach (var reservation in reservations)
+        {
+            _datasetsContext.Reservations.Remove(reservation);
+        }
+
+        await _datasetsContext.SaveChangesAsync();
+    }
 }
 
 public class ReserveAnnotation

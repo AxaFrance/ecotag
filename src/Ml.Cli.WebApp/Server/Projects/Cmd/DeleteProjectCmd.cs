@@ -82,6 +82,7 @@ public class DeleteProjectCmd
             try
             {
                 await _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
+                await _annotationsRepository.DeleteReservationsByProjectIdAsync(projectId);
                 var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
                 if (!deletedProjectResult.IsSuccess)
                 {
