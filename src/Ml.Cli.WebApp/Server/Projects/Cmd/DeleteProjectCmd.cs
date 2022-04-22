@@ -124,19 +124,19 @@ public class DeleteProjectCmd
         return commandResult;
     }
 
-    private async Task<ResultWithError<bool, ErrorResult>> ExportProject(ExportCmd exportCmd, ProjectDataModel project,
+    private static async Task<ResultWithError<bool, ErrorResult>> ExportProject(ExportCmd exportCmd, ProjectDataModel project,
         string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
         var exportResult = await exportCmd.ExecuteAsync(project.Id, nameIdentifier);
         if (!exportResult.IsSuccess)
         {
-            commandResult.Error = exportResult.Error;
-            return commandResult;
+            return commandResult.ReturnError(exportResult.Error.Key);
         }
 
-        var fileOutput = "/output/" + project.Name + "_" + DateTime.Now.Ticks + "/" + project.Name +
-                         "-annotations.json";
+        var projectRepositoryName = project.Name + "_" + DateTime.Now.Ticks;
+        var projectFileName = project.Name + "-annotations.json";
+        var fileOutput = Path.Combine("output", projectRepositoryName, projectFileName);
         try
         {
             var serializedContent = JsonSerializer.Serialize(exportResult.Data);
