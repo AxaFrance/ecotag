@@ -86,6 +86,7 @@ public class DeleteProjectCmd
                 var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
                 if (!deletedProjectResult.IsSuccess)
                 {
+                    commandResult.Error = deletedProjectResult.Error;
                     throw new Exception();
                 }
                 var isDatasetUsedByOtherProjects =
@@ -93,9 +94,15 @@ public class DeleteProjectCmd
                 if (!isDatasetUsedByOtherProjects)
                 {
                     var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
-                    var deletedDatasetResult = await _datasetsRepository.DeleteDatasetAsync(datasetResult.Id);
-                    if (!deletedFilesResult.IsSuccess || !deletedDatasetResult.IsSuccess)
+                    if (!deletedFilesResult.IsSuccess)
                     {
+                        commandResult.Error = deletedFilesResult.Error;
+                        throw new Exception();
+                    }
+                    var deletedDatasetResult = await _datasetsRepository.DeleteDatasetAsync(datasetResult.Id);
+                    if (!deletedDatasetResult.IsSuccess)
+                    {
+                        commandResult.Error = deletedDatasetResult.Error;
                         throw new Exception();
                     }
                 }
@@ -104,10 +111,11 @@ public class DeleteProjectCmd
             catch (Exception)
             {
                 scope.Dispose();
-                commandResult.Error = new ErrorResult
-                {
-                    Key = DeletionFailed
-                };
+                if(commandResult.Error.Key == null)
+                    commandResult.Error = new ErrorResult
+                    {
+                        Key = DeletionFailed
+                    };
                 return commandResult;
             }
         }
