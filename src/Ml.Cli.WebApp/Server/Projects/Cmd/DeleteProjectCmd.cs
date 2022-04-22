@@ -63,12 +63,12 @@ public class DeleteProjectCmd
             return commandResult;
         }
         
-        /*var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
+        var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
         if (!exportResult.IsSuccess)
         {
             commandResult.Error = exportResult.Error;
             return commandResult;
-        }*/
+        }
 
         var transactionOptions = new TransactionOptions()
         {
@@ -142,7 +142,7 @@ public class DeleteProjectCmd
             var serializedContent = JsonSerializer.Serialize(exportResult.Data);
             var bytes = JsonSerializer.SerializeToUtf8Bytes(serializedContent);
             var stream = new MemoryStream(bytes);
-            await _blobService.UploadStreamAsync(project.DatasetId, fileOutput, stream);
+            //await _blobService.UploadStreamAsync(project.DatasetId, fileOutput, stream);
         }
         catch (Exception e)
         {
