@@ -111,7 +111,8 @@ public class DeleteProjectCmd
                     _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
                 if (!isDatasetUsedByOtherProjects)
                 {
-                    var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, new[] { datasetResult.Files.Select(file => file.Id).ToString() });
+                    var filesIds = datasetResult.Files.Select(file => file.Id.ToString()).ToList();
+                    var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, filesIds);
                     if (!deletedFilesResult.IsSuccess)
                     {
                         commandResult.Error = deletedFilesResult.Error;
