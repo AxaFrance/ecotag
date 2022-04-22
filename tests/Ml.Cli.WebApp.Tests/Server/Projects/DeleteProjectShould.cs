@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Xunit;
@@ -26,13 +28,14 @@ public class DeleteProjectShould
     }
 
     [Theory]
-    [InlineData("s111111", DeleteProjectCmd.UserNotFound)]
-    public async Task Should_Return_Error_On_Project_Deletion(string nameIdentifier, string errorKey)
+    [InlineData("s111111", true, DeleteProjectCmd.UserNotFound)]
+    [InlineData("s666666", false, ProjectsRepository.NotFound)]
+    public async Task Should_Return_Error_On_Project_Deletion(string nameIdentifier, bool isProjectKnown, string errorKey)
     {
         var (mockedFileService, mockedBlobService) = InitServices();
         var mockedResult = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService);
         var deleteProjectCmd = new DeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedBlobService);
-        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, mockedResult.Dataset3Project1Id);
+        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, isProjectKnown ? mockedResult.Dataset3Project1Id : new Guid().ToString());
         var resultKo = result as BadRequestObjectResult;
         Assert.NotNull(resultKo);
         var resultKoValue = resultKo.Value as ErrorResult;
