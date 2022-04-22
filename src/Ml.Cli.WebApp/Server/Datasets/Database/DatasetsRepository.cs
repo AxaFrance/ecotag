@@ -195,12 +195,12 @@ public class DatasetsRepository
         return commandResult;
     }
 
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteFilesAsync(string datasetId, IList<GetDatasetFile> files)
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteFilesAsync(string datasetId, IList<string> filesIds)
     {
         var result = new ResultWithError<bool, ErrorResult>();
-        foreach (var file in files)
+        foreach (var fileId in filesIds)
         {
-            var deletionResult = await DeleteFileAsync(datasetId, file.Id);
+            var deletionResult = await DeleteFileAsync(datasetId, fileId);
             if (!deletionResult.IsSuccess)
             {
                 return deletionResult;

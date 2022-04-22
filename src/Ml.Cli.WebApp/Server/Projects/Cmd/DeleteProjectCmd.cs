@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -110,7 +111,7 @@ public class DeleteProjectCmd
                     _projectsRepository.IsDatasetUsedByOtherProjects(projectId, datasetResult.Id);
                 if (!isDatasetUsedByOtherProjects)
                 {
-                    var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, datasetResult.Files);
+                    var deletedFilesResult = await _datasetsRepository.DeleteFilesAsync(datasetResult.Id, new[] { datasetResult.Files.Select(file => file.Id).ToString() });
                     if (!deletedFilesResult.IsSuccess)
                     {
                         commandResult.Error = deletedFilesResult.Error;
