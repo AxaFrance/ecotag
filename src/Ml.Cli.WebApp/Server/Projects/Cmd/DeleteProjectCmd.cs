@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ public class DeleteProjectCmd
         _blobService = blobService;
     }
     
-    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(ExportCmd exportCmd, string projectId, string nameIdentifier)
+    public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
 
@@ -62,13 +63,29 @@ public class DeleteProjectCmd
             };
             return commandResult;
         }
-        
-        var exportResult = await ExportProject(exportCmd, projectResult.Data, nameIdentifier);
-        if (!exportResult.IsSuccess)
+
+        var projectDataModel = projectResult.Data;
+        var projectFilesWithAnnotations = await _annotationsRepository.GetFilesWithAnnotationsByDatasetIdAsync(projectDataModel.DatasetId);
+
+        var annotations = new List<ExportAnnotation>();
+        foreach (var fileDataModel in projectFilesWithAnnotations)
         {
-            commandResult.Error = exportResult.Error;
-            return commandResult;
+            annotations.AddRange(ExportCmd.SetExportAnnotationsByFile(fileDataModel, projectDataModel.Id));
         }
+
+        var annotationsStatus =
+            await _annotationsRepository.AnnotationStatusAsync(projectDataModel.Id, projectDataModel.DatasetId, projectDataModel.NumberCrossAnnotation);
+        var exportCmdResult = new GetExportCmdResult
+        {
+            ProjectName = projectDataModel.Name,
+            ProjectType = projectDataModel.AnnotationType,
+            DatasetName = datasetResult.Name,
+            DatasetType = datasetResult.Type,
+            Classification = datasetResult.Classification,
+            Annotations = annotations,
+            NumberAnnotationsDone = annotationsStatus.NumberAnnotationsDone,
+            NumberAnnotationsToDo = annotationsStatus.NumberAnnotationsToDo
+        };
 
         var transactionOptions = new TransactionOptions()
         {
@@ -106,6 +123,13 @@ public class DeleteProjectCmd
                         throw new Exception();
                     }
                 }
+
+                var uploadedProjectResult = await UploadProject(exportCmdResult);
+                if (!uploadedProjectResult.IsSuccess)
+                {
+                    commandResult.Error = uploadedProjectResult.Error;
+                    throw new Exception();
+                }
                 scope.Complete();
             }
             catch (Exception)
@@ -124,36 +148,25 @@ public class DeleteProjectCmd
         return commandResult;
     }
 
-    private static async Task<ResultWithError<bool, ErrorResult>> ExportProject(ExportCmd exportCmd, ProjectDataModel project,
-        string nameIdentifier)
+    private async Task<ResultWithError<bool, ErrorResult>> UploadProject(GetExportCmdResult exportCmdResult)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
-        var exportResult = await exportCmd.ExecuteAsync(project.Id, nameIdentifier);
-        if (!exportResult.IsSuccess)
-        {
-            return commandResult.ReturnError(exportResult.Error.Key);
-        }
-
-        var projectRepositoryName = project.Name + "_" + DateTime.Now.Ticks;
-        var projectFileName = project.Name + "-annotations.json";
-        var fileOutput = Path.Combine("output", projectRepositoryName, projectFileName);
         try
         {
-            var serializedContent = JsonSerializer.Serialize(exportResult.Data);
+            var serializedContent = JsonSerializer.Serialize(exportCmdResult);
             var bytes = JsonSerializer.SerializeToUtf8Bytes(serializedContent);
             var stream = new MemoryStream(bytes);
             //await _blobService.UploadStreamAsync(project.DatasetId, fileOutput, stream);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             commandResult.Error = new ErrorResult
             {
-                Key = UploadError,
-                Error = e
+                Key = UploadError
             };
             return commandResult;
         }
-        
+
         commandResult.Data = true;
         return commandResult;
     }

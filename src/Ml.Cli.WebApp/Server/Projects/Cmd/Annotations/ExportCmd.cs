@@ -103,7 +103,7 @@ public class ExportCmd
         return commandResult;
     }
 
-    private IList<ExportAnnotation> SetExportAnnotationsByFile(FileDataModel fileDataModel, string projectId)
+    public static IList<ExportAnnotation> SetExportAnnotationsByFile(FileDataModel fileDataModel, string projectId)
     {
         IList<ExportAnnotation> result = new List<ExportAnnotation>();
         foreach (var annotation in fileDataModel.Annotations)

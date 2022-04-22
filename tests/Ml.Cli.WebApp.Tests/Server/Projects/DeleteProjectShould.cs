@@ -5,7 +5,6 @@ using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
-using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
 using Moq;
 using Xunit;
@@ -21,9 +20,7 @@ public class DeleteProjectShould
         var (mockedFileService, mockedBlobService) = InitServices();
         var mockedResult = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService);
         var deleteProjectCmd = new DeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedBlobService);
-        var exportCmd = new ExportCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository,
-            mockedResult.AnnotationsRepository, mockedResult.DatasetsRepository);
-        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, exportCmd, mockedResult.Dataset3Project1Id);
+        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, mockedResult.Dataset3Project1Id);
         var resultOk = result as OkResult;
         Assert.NotNull(resultOk);
     }
@@ -35,9 +32,7 @@ public class DeleteProjectShould
         var (mockedFileService, mockedBlobService) = InitServices();
         var mockedResult = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService);
         var deleteProjectCmd = new DeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedBlobService);
-        var exportCmd = new ExportCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository,
-            mockedResult.AnnotationsRepository, mockedResult.DatasetsRepository);
-        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, exportCmd, mockedResult.Dataset3Project1Id);
+        var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, mockedResult.Dataset3Project1Id);
         var resultKo = result as BadRequestObjectResult;
         Assert.NotNull(resultKo);
         var resultKoValue = resultKo.Value as ErrorResult;
