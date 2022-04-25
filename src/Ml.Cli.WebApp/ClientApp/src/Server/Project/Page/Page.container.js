@@ -6,7 +6,7 @@ import {
   fetchDataset,
   fetchAnnotationsStatus,
   fetchExportAnnotations,
-  fetchLockProject
+  fetchDeleteProject
 } from '../Project.service';
 import {fetchGroup, fetchUsers} from '../../Group/Group.service.js';
 import withCustomFetch from '../../withCustomFetch';
@@ -106,7 +106,7 @@ const usePage = (fetch) => {
   const lock = {
     onCancel: () => dispatch({type: 'open_modal', data: {isModalOpened: false}}),
     onSubmit: async () => {
-      const response = await fetchLockProject(fetch)(id);
+      const response = await fetchDeleteProject(fetch)(id);
       let data;
       if (response.status >= 400) {
         data = {status: resilienceStatus.ERROR, isModalOpened: false};
