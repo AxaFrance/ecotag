@@ -68,7 +68,7 @@ public class ProjectsRepository
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
         var project = await ProjectsContext.Projects
-            .FirstOrDefaultAsync(project => project.Id.ToString().Equals(projectId));
+            .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
         if (project == null)
         {
             commandResult.Error = new ErrorResult
@@ -114,6 +114,6 @@ public class ProjectsRepository
     public bool IsDatasetUsedByOtherProjects(string projectId, string datasetId)
     {
         return ProjectsContext.Projects.AsNoTracking().Any(project =>
-            !project.Id.ToString().Equals(projectId) && project.DatasetId.ToString().Equals(datasetId));
+            project.Id != new Guid(projectId) && project.DatasetId == new Guid(datasetId));
     }
 }

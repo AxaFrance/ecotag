@@ -215,7 +215,7 @@ public class DatasetsRepository
     {
         var result = new ResultWithError<bool, ErrorResult>();
         var dataset = await DatasetsContext.Datasets
-            .FirstOrDefaultAsync(dataset => dataset.Id.ToString().Equals(datasetId));
+            .FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
         if (dataset == null)
         {
             result.Error = new ErrorResult

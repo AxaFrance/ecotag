@@ -210,7 +210,7 @@ public class AnnotationsRepository
     public async Task DeleteAnnotationsByProjectIdAsync(string projectId)
     {
         var annotations = await _datasetsContext.Annotations
-            .Where(annotation => annotation.ProjectId.ToString().Equals(projectId)).ToListAsync();
+            .Where(annotation => annotation.ProjectId == new Guid(projectId)).ToListAsync();
         foreach (var annotation in annotations)
         {
             _datasetsContext.Annotations.Remove(annotation);
@@ -222,7 +222,7 @@ public class AnnotationsRepository
     public async Task DeleteReservationsByProjectIdAsync(string projectId)
     {
         var reservations = await _datasetsContext.Reservations
-            .Where(reservation => reservation.ProjectId.ToString().Equals(projectId)).ToListAsync();
+            .Where(reservation => reservation.ProjectId == new Guid(projectId)).ToListAsync();
         foreach (var reservation in reservations)
         {
             _datasetsContext.Reservations.Remove(reservation);
