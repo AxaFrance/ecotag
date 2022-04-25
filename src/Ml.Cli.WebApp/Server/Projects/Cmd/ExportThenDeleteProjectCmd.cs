@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -66,13 +65,7 @@ public class ExportThenDeleteProjectCmd
         }
 
         var projectDataModel = projectResult.Data;
-        var projectFilesWithAnnotations = await _annotationsRepository.GetFilesWithAnnotationsByDatasetIdAsync(projectDataModel.DatasetId);
-
-        var annotations = new List<ExportAnnotation>();
-        foreach (var fileDataModel in projectFilesWithAnnotations)
-        {
-            annotations.AddRange(ExportCmd.SetExportAnnotationsByFile(fileDataModel, projectDataModel.Id));
-        }
+        var annotations = await _annotationsRepository.GetAnnotationsByProjectIdAndDatasetIdAsync(projectId, projectDataModel.DatasetId);
 
         var annotationsStatus =
             await _annotationsRepository.AnnotationStatusAsync(projectDataModel.Id, projectDataModel.DatasetId, projectDataModel.NumberCrossAnnotation);

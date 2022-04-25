@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -183,12 +184,27 @@ public class AnnotationsRepository
         return commandResult;
     }
 
-    public async Task<IList<FileDataModel>> GetFilesWithAnnotationsByDatasetIdAsync(string datasetId)
+    public async Task<List<ExportAnnotation>> GetAnnotationsByProjectIdAndDatasetIdAsync(string projectId, string datasetId)
     {
-        var fileModels =  await _datasetsContext.Files.AsNoTracking()
+        var result = new List<ExportAnnotation>();
+        var fileDataModels =  await _datasetsContext.Files.AsNoTracking()
             .Where(file => file.DatasetId == new Guid(datasetId))
-            .Include(file => file.Annotations).ToListAsync();
-        return fileModels.Select(fileModel => fileModel.ToFileDataModel()).ToList();
+            .Include(file => file.Annotations).Select(file => file.ToFileDataModel()).ToListAsync();
+        foreach (var fileDataModel in fileDataModels)
+        {
+            var fileAnnotations = fileDataModel.Annotations
+                .Where(annotation => annotation.ProjectId == projectId)
+                .Select(annotation => new ExportAnnotation
+                {
+                    FileName = fileDataModel.Name,
+                    NameIdentifier = annotation.CreatorNameIdentifier,
+                    CreateDate = annotation.TimeStamp,
+                    Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
+                });
+            result.AddRange(fileAnnotations);
+        }
+
+        return result;
     }
 
     public async Task DeleteAnnotationsByProjectIdAsync(string projectId)
