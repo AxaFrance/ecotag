@@ -14,7 +14,7 @@ using Ml.Cli.WebApp.Server.Projects.Database;
 
 namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 
-public class DeleteProjectCmd
+public class ExportThenDeleteProjectCmd
 {
     private readonly UsersRepository _usersRepository;
     private readonly ProjectsRepository _projectsRepository;
@@ -26,7 +26,7 @@ public class DeleteProjectCmd
     public const string UploadError = "UploadError";
     public const string DeletionFailed = "DeletionFailed";
 
-    public DeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, IBlobService blobService)
+    public ExportThenDeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, IBlobService blobService)
     {
         _usersRepository = usersRepository;
         _projectsRepository = projectsRepository;

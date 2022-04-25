@@ -31,6 +31,6 @@ public static class ConfigureExtension
         services.AddScoped<SaveAnnotationCmd, SaveAnnotationCmd>();
         services.AddScoped<GetAnnotationsStatusCmd, GetAnnotationsStatusCmd>();
         services.AddScoped<ExportCmd, ExportCmd>();
-        services.AddScoped<DeleteProjectCmd, DeleteProjectCmd>();
+        services.AddScoped<ExportThenDeleteProjectCmd, ExportThenDeleteProjectCmd>();
     }
 }

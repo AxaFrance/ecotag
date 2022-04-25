@@ -120,10 +120,10 @@ namespace Ml.Cli.WebApp.Server.Projects
         [HttpPost("delete/{projectId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = Roles.DataScientist)]
-        public async Task<ActionResult> Delete([FromServices] DeleteProjectCmd deleteProjectCmd, string projectId)
+        public async Task<ActionResult> Delete([FromServices] ExportThenDeleteProjectCmd exportThenDeleteProjectCmd, string projectId)
         {
             var nameIdentifier = User.Identity.GetNameIdentifier();
-            var commandResult = await deleteProjectCmd.ExecuteAsync(projectId, nameIdentifier);
+            var commandResult = await exportThenDeleteProjectCmd.ExecuteAsync(projectId, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
                 return commandResult.Error.Key == ProjectsRepository.Forbidden
