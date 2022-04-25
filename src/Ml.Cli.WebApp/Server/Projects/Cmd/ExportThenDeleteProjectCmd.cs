@@ -92,8 +92,9 @@ public class ExportThenDeleteProjectCmd
         {
             try
             {
-                await _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
-                await _annotationsRepository.DeleteReservationsByProjectIdAsync(projectId);
+                var annotationsTask = _annotationsRepository.DeleteAnnotationsByProjectIdAsync(projectId);
+                var reservationsTask = _annotationsRepository.DeleteReservationsByProjectIdAsync(projectId);
+                Task.WaitAll(annotationsTask, reservationsTask);
                 var deletedProjectResult = await _projectsRepository.DeleteProjectAsync(projectId);
                 if (!deletedProjectResult.IsSuccess)
                 {
