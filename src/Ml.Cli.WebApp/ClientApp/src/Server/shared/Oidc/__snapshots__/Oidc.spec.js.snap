@@ -36,13 +36,23 @@ exports[`Oidc Render AuthenticatingError component 1`] = `
       <h1
         class="oidc-authenticating__title"
       >
-        Error authentication
+        Authentification erreur
       </h1>
       <p
         class="oidc-authenticating__content"
       >
         Une erreur s'est produite lors de l'authentification.
       </p>
+      <button
+        class="btn af-btn"
+        name="reauthenticate"
+      >
+        <span
+          class="af-btn-text"
+        >
+          Ré-authentifier
+        </span>
+      </button>
     </div>
   </div>
 </DocumentFragment>
@@ -138,5 +148,6 @@ exports[`Oidc Render SessionLost component 1`] = `
       </button>
     </div>
   </div>
+  <div />
 </DocumentFragment>
 `;
