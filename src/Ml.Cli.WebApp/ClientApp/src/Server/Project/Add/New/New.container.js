@@ -135,6 +135,11 @@ export const reducer = (state, action) => {
                     value: 'Rotation',
                     label: 'Rotation',
                     type: "Image"
+                  },
+                  {
+                    value: 'EmlClassifier',
+                    label: "Classification de mail",
+                    type: "Eml"
                   }];
               const datasetId = event.value
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;

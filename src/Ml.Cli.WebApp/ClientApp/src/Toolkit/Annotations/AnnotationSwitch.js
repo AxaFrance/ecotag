@@ -7,6 +7,7 @@ import IrotLazy from "../Rotation/IrotLazy";
 import NamedEntityLazy from "../NamedEntity/NamedEntityLazy";
 
 import ImageClassifierLazy from "../ImageClassifier/ImageClassifierLazy";
+import EmlClassifierLazy from "../EmlClassifier/EmlClassifierLazy";
 
 
 const setAnnotationObject = (annotationType, e) => {
@@ -36,6 +37,10 @@ const setAnnotationObject = (annotationType, e) => {
         case 'NER':
             return e;
         case "ImageClassifier":
+            return {
+                "label": e
+            };
+        case "EmlClassifier":
             return {
                 "label": e
             };
@@ -98,6 +103,13 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
             />
         case "ImageClassifier":
             return <ImageClassifierLazy
+                url={url}
+                labels={labels}
+                onSubmit={onDatasetSubmit}
+                expectedOutput={expectedOutput}
+            />
+        case "EmlClassifier":
+            return <EmlClassifierLazy
                 url={url}
                 labels={labels}
                 onSubmit={onDatasetSubmit}

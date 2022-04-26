@@ -3,6 +3,29 @@ import { File, FileTable } from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
 import {resilienceStatus} from "../../shared/Resilience";
 
+
+const typeDatasetExtention = (datasetType) =>  {
+    switch (datasetType){
+        case "Image":
+            return '.jpg, .jpeg, .png, .tiff';
+        case "Text":
+            return '.txt';
+        default:
+            return '.eml';
+    }
+}
+
+const typeMimeDatasetExtention = (datasetType) =>  {
+    switch (datasetType){
+        case "Image":
+            return 'image/jpeg, image/png, image/tiff';
+        case "Text":
+            return 'text/plain';
+        default:
+            return "message/rfc822,application/octet-stream";
+    }
+}
+
 export const FileUpload = ({fetch, setState, state}) => {
 
     const onChange = values => {
@@ -93,7 +116,7 @@ export const FileUpload = ({fetch, setState, state}) => {
     return (
         <>
             <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.isLock ? 'disabled' : ''}`}>
-                <h2 className="edit-dataset__file-upload-title">Upload des fichiers {state.dataset.type === "Image" ? '.jpg, .jpeg, .png, .tiff': '.txt'}</h2>
+                <h2 className="edit-dataset__file-upload-title">Upload des fichiers {typeDatasetExtention(state.dataset.type)}</h2>
                 <File
                     id='file'
                     name='datasetUploadFiles'
@@ -102,7 +125,7 @@ export const FileUpload = ({fetch, setState, state}) => {
                     isVisible={true}
                     readOnly={false}
                     disabled={false}
-                    accept={state.dataset.type === "Image" ? 'image/jpeg, image/png, image/tiff': 'text/plain'}
+                    accept={typeMimeDatasetExtention(state.dataset.type)}
                     label="Parcourir"
                     icon='open'
                 />

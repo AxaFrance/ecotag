@@ -46,7 +46,8 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
               onChange={onChange}
               options={[
                 { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
-                { value: 'Text', label: 'Text (.txt)' },
+                { value: 'Text', label: 'Text (.txt)' }, 
+                { value: 'Eml', label: 'Mail (.eml)' },
               ]}
               forceDisplayMessage={hasSubmit}
               messageType="error"
