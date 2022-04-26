@@ -49,9 +49,9 @@ const prevStateWithRatioImage = (previousShapes, newImage, previousImageWidth, p
 const CroppingContainer = ({ labels, url, onSubmit, expectedOutput = [] }) => {
   const labelsWithColor = labels.map((label, index) => {
     return {
-      id: index.toString(),
+      id: label.id || index.toString(),
       label: label.name,
-      color: '#' + stringToRGB(index + label.name),
+      color: label.color || '#' + stringToRGB(index + label.name),
     };
   });
 
@@ -92,7 +92,7 @@ const CroppingContainer = ({ labels, url, onSubmit, expectedOutput = [] }) => {
     const currentLabelId = labelsWithColor[0].id;
     if (image) {
       const initialShapes = expectedOutput ? expectedOutput.labels.boundingBoxes.map(e => {
-        const label = labels.find(l => l.name === e.label);
+        const label = labelsWithColor.find(l => l.label === e.label);
         return {
           begin: { x: e.left, y: e.top },
           end: { x: e.left + e.width, y: e.top + e.height },
