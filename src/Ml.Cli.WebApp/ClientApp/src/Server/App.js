@@ -9,6 +9,12 @@ import Footer from './shared/Footer';
 import Routes from './AppRoutes';
 import {Helmet} from "react-helmet";
 import TelemetryProvider from './Telemetry';
+import Loading from "./shared/Oidc/Loading.component";
+import AuthenticatingError from "./shared/Oidc/AuthenticateError.component";
+import Authenticating from "./shared/Oidc/Authenticating.component";
+import SessionLost from "./shared/Oidc/SessionLost.component";
+import ServiceWorkerNotSupported from "./shared/Oidc/ServiceWorkerNotSupported.component";
+import {CallBackSuccess} from "./shared/Oidc/Callback.component";
 
 export const RoutesBase = ({ environment }) => (
   <Router basename={environment.baseUrl}>
@@ -21,7 +27,13 @@ export const RoutesBase = ({ environment }) => (
 const SecureRouteBase = withOidcSecure(RoutesBase);
 
 const Authentification = ({ environment }) => (
-      <OidcProvider configuration={environment.oidc.configuration} >
+      <OidcProvider configuration={environment.oidc.configuration}
+                    loadingComponent={Loading}
+                    authenticatingErrorComponent={AuthenticatingError}
+                    authenticatingComponent={Authenticating}
+                    sessionLostComponent={SessionLost}
+                    serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
+                    callbackSuccessComponent={CallBackSuccess}>
           <TelemetryProvider {...environment.telemetry} >
               <SecureRouteBase environment={environment} />
           </TelemetryProvider>
