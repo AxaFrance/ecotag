@@ -110,7 +110,7 @@ exports[`Oidc Render ServiceWorkerNotSupported component 1`] = `
       <p
         class="oidc-serviceworker__content"
       >
-        Votre browser is not secure enough to make authentication work. Try updating your browser or use a newer browser.
+        Votre navigateur n’est pas assez sécurisé pour que l’authentification fonctionne. Essayez de mettre à jour votre navigateur ou d’utiliser un navigateur plus récent.
       </p>
     </div>
   </div>
