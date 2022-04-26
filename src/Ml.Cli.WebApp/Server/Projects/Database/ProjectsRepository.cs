@@ -15,11 +15,11 @@ public class ProjectsRepository
     public const string Forbidden = "Forbidden";
     public const string NotFound = "NotFound";
     private readonly IMemoryCache _cache;
-    public readonly ProjectContext ProjectsContext;
+    private readonly ProjectContext _projectsContext;
 
     public ProjectsRepository(ProjectContext projectsContext, IMemoryCache cache)
     {
-        ProjectsContext = projectsContext;
+        _projectsContext = projectsContext;
         _cache = cache;
     }
 
@@ -40,7 +40,7 @@ public class ProjectsRepository
             CreatorNameIdentifier = projectWithUserInput.CreatorNameIdentifier
         };
         var result =
-            ProjectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
+            _projectsContext.Projects.AddIfNotExists(projectModel, project => project.Name == projectModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult
@@ -52,7 +52,7 @@ public class ProjectsRepository
 
         try
         {
-            await ProjectsContext.SaveChangesAsync();
+            await _projectsContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
@@ -64,29 +64,9 @@ public class ProjectsRepository
         return commandResult;
     }
 
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteProjectAsync(string projectId)
-    {
-        var commandResult = new ResultWithError<bool, ErrorResult>();
-        var project = await ProjectsContext.Projects
-            .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
-        if (project == null)
-        {
-            commandResult.Error = new ErrorResult
-            {
-                Key = NotFound
-            };
-            return commandResult;
-        }
-
-        ProjectsContext.Projects.Remove(project);
-        await ProjectsContext.SaveChangesAsync();
-        commandResult.Data = true;
-        return commandResult;
-    }
-
     public async Task<List<ProjectDataModel>> GetAllProjectsAsync(List<string> userGroupIds)
     {
-        var projectModelEnum = await ProjectsContext.Projects
+        var projectModelEnum = await _projectsContext.Projects
             .AsNoTracking()
             .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
             .ToListAsync();
@@ -100,7 +80,7 @@ public class ProjectsRepository
 
         var cacheEntry = await _cache.GetOrCreateAsync($"GetProjectAsync({projectId})", async entry =>
         {
-            var projectModel = await ProjectsContext.Projects
+            var projectModel = await _projectsContext.Projects
                 .AsNoTracking()
                 .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
             return projectModel;
@@ -109,11 +89,5 @@ public class ProjectsRepository
         if (!userGroupIds.Contains(cacheEntry.GroupId.ToString())) return commandResult.ReturnError(Forbidden);
         commandResult.Data = cacheEntry.ToProjectDataModel();
         return commandResult;
-    }
-
-    public bool IsDatasetUsedByOtherProjects(string projectId, string datasetId)
-    {
-        return ProjectsContext.Projects.AsNoTracking().Any(project =>
-            project.Id != new Guid(projectId) && project.DatasetId == new Guid(datasetId));
     }
 }

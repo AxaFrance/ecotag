@@ -20,8 +20,11 @@ public static class ConfigureExtension
         services.AddScoped<IBlobService, BlobService>();
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        services.AddDbContext<DeleteContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
         services.AddScoped<DatasetsRepository, DatasetsRepository>();
+        services.AddScoped<DeleteRepository, DeleteRepository>();
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
         services.AddScoped<GetProjectCmd, GetProjectCmd>();

@@ -14,13 +14,13 @@ public class DatasetsRepository
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
     public const string DatasetNotFound = "DatasetNotFound";
-    public readonly DatasetContext DatasetsContext;
+    private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
 
     public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
     {
-        DatasetsContext = datasetsContext;
+        _datasetContext = datasetsContext;
         _fileService = fileService;
         _cache = cache;
     }
@@ -37,7 +37,7 @@ public class DatasetsRepository
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier
         };
-        var result = DatasetsContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
+        var result = _datasetContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
@@ -46,7 +46,7 @@ public class DatasetsRepository
 
         try
         {
-            await DatasetsContext.SaveChangesAsync();
+            await _datasetContext.SaveChangesAsync();
         }
         catch (DbUpdateException)
         {
@@ -62,11 +62,11 @@ public class DatasetsRepository
     {
         IList<DatasetModel> datasets;
         if (locked.HasValue)
-            datasets = await DatasetsContext.Datasets.AsNoTracking()
+            datasets = await _datasetContext.Datasets.AsNoTracking()
                 .Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString()))
                 .Include(dataset => dataset.Files).ToListAsync();
         else
-            datasets = await DatasetsContext.Datasets.AsNoTracking()
+            datasets = await _datasetContext.Datasets.AsNoTracking()
                 .Where(dataset => groupIds.Contains(dataset.GroupId.ToString())).Include(dataset => dataset.Files)
                 .ToListAsync();
         return datasets.Select(d => d.ToListDatasetResult()).ToList();
@@ -74,7 +74,7 @@ public class DatasetsRepository
 
     public async Task<GetDataset> GetDatasetAsync(string datasetId)
     {
-        var dataset = await DatasetsContext.Datasets.AsNoTracking()
+        var dataset = await _datasetContext.Datasets.AsNoTracking()
             .Where(dataset => dataset.Id == new Guid(datasetId))
             .Include(dataset => dataset.Files)
             .FirstOrDefaultAsync();
@@ -85,7 +85,7 @@ public class DatasetsRepository
     {
         var dataset = await _cache.GetOrCreateAsync($"GetDatasetInfoAsync({datasetId})", async entry =>
         {
-            var dataset = await DatasetsContext.Datasets.AsNoTracking()
+            var dataset = await _datasetContext.Datasets.AsNoTracking()
                 .Where(dataset => dataset.Id == new Guid(datasetId)).Select(dataset => new GetDatasetInfo
                 {
                     Id = dataset.Id.ToString().ToLower(),
@@ -105,10 +105,10 @@ public class DatasetsRepository
 
     public async Task<bool> LockAsync(string datasetId)
     {
-        var dataset = await DatasetsContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
+        var dataset = await _datasetContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
         if (dataset == null || dataset.IsLocked) return false;
         dataset.IsLocked = true;
-        await DatasetsContext.SaveChangesAsync();
+        await _datasetContext.SaveChangesAsync();
         _cache.Remove($"GetDatasetInfoAsync({datasetId})");
         return true;
     }
@@ -116,7 +116,7 @@ public class DatasetsRepository
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
-        var file = await DatasetsContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
+        var file = await _datasetContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
             file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
         if (file == null)
         {
@@ -128,29 +128,6 @@ public class DatasetsRepository
         }
 
         return await _fileService.DownloadAsync(datasetId, file.Name);
-    }
-
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)
-    {
-        var result = new ResultWithError<bool, ErrorResult>();
-        var file = await DatasetsContext.Files.FirstOrDefaultAsync(file =>
-            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
-        if (file == null)
-        {
-            result.Error = new ErrorResult
-            {
-                Key = FileNotFound
-            };
-            return result;
-        }
-
-        DatasetsContext.Files.Remove(file);
-
-        var taskDeleteSql = DatasetsContext.SaveChangesAsync();
-        var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
-        Task.WaitAll(taskDeleteSql, taskDeleteBob);
-        result.Data = taskDeleteBob.Result;
-        return result;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream,
@@ -167,7 +144,7 @@ public class DatasetsRepository
             Size = stream.Length,
             DatasetId = new Guid(datasetId)
         };
-        var result = DatasetsContext.Files.AddIfNotExists(fileModel,
+        var result = _datasetContext.Files.AddIfNotExists(fileModel,
             file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
         if (result == null)
         {
@@ -177,7 +154,7 @@ public class DatasetsRepository
 
         try
         {
-            var taskSaveSql = DatasetsContext.SaveChangesAsync();
+            var taskSaveSql = _datasetContext.SaveChangesAsync();
             var taskUploadBlob = _fileService.UploadStreamAsync(datasetId, fileName, stream);
             Task.WaitAll(taskSaveSql, taskUploadBlob);
         }
@@ -194,41 +171,27 @@ public class DatasetsRepository
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
     }
-
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteFilesAsync(string datasetId, IList<string> filesIds)
+    
+    public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<bool, ErrorResult>();
-        foreach (var fileId in filesIds)
-        {
-            var deletionResult = await DeleteFileAsync(datasetId, fileId);
-            if (!deletionResult.IsSuccess)
-            {
-                return deletionResult;
-            }
-        }
-
-        result.Data = true;
-        return result;
-    }
-
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteDatasetAsync(string datasetId)
-    {
-        var result = new ResultWithError<bool, ErrorResult>();
-        var dataset = await DatasetsContext.Datasets
-            .FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
-        if (dataset == null)
+        var file = await _datasetContext.Files.FirstOrDefaultAsync(file =>
+            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
+        if (file == null)
         {
             result.Error = new ErrorResult
             {
-                Key = DatasetNotFound
+                Key = FileNotFound
             };
             return result;
         }
 
-        DatasetsContext.Datasets.Remove(dataset);
-        await DatasetsContext.SaveChangesAsync();
-        result.Data = true;
+        _datasetContext.Files.Remove(file);
+
+        var taskDeleteSql = _datasetContext.SaveChangesAsync();
+        var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
+        Task.WaitAll(taskDeleteSql, taskDeleteBob);
+        result.Data = taskDeleteBob.Result;
         return result;
     }
-
 }

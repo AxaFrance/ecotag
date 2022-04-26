@@ -206,30 +206,6 @@ public class AnnotationsRepository
 
         return result;
     }
-
-    public async Task DeleteAnnotationsByProjectIdAsync(string projectId)
-    {
-        var annotations = await _datasetsContext.Annotations
-            .Where(annotation => annotation.ProjectId == new Guid(projectId)).ToListAsync();
-        foreach (var annotation in annotations)
-        {
-            _datasetsContext.Annotations.Remove(annotation);
-        }
-
-        await _datasetsContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteReservationsByProjectIdAsync(string projectId)
-    {
-        var reservations = await _datasetsContext.Reservations
-            .Where(reservation => reservation.ProjectId == new Guid(projectId)).ToListAsync();
-        foreach (var reservation in reservations)
-        {
-            _datasetsContext.Reservations.Remove(reservation);
-        }
-
-        await _datasetsContext.SaveChangesAsync();
-    }
 }
 
 public class ReserveAnnotation
