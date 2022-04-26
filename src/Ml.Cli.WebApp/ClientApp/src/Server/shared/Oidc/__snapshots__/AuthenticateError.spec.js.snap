@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Oidc.AuthenticatingError Render AuthenticatingError component 1`] = `
+<DocumentFragment>
+  <div
+    class="oidc-authenticating"
+    style="color: rgb(53, 110, 255); position: absolute; z-index: 1000; top: 0px; bottom: 0px; right: 0px; left: 0px;"
+  >
+    <div
+      class="oidc-authenticating__container"
+    >
+      <h1
+        class="oidc-authenticating__title"
+      >
+        Error authentication
+      </h1>
+      <p
+        class="oidc-authenticating__content"
+      >
+        Une erreur s'est produite lors de l'authentification.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
