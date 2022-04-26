@@ -11,7 +11,7 @@ const AuthenticatingError = () => {
         <div className="oidc-authenticating__container">
           <h1 className="oidc-authenticating__title">Authentification erreur</h1>
           <p className="oidc-authenticating__content">Une erreur s'est produite lors de l'authentification.</p>
-            <Button name="reauthenticate" onClick={() => login()}>
+            <Button name="reauthenticate" onClick={() => login("/")}>
                 <span className="af-btn-text">Ré-authentifier</span>
             </Button>
         </div>
