@@ -16,10 +16,12 @@ import {resilienceStatus, withResilience} from "../../shared/Resilience";
 
 const PageWithResilience = withResilience(Page);
 
+const statusCode500 = 500;
+
 export const init = (fetch, dispatch) => async id => {
   const projectResponse = await fetchProject(fetch)(id);
   
-  if(projectResponse.status >= 500){
+  if(projectResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
   }
@@ -31,7 +33,7 @@ export const init = (fetch, dispatch) => async id => {
   
   const [datasetResponse, groupResponse, usersResponse, annotationsStatusResponse] = await Promise.all([datasetPromise, groupPromise, usersPromise, annotationsStatusPromise]);
 
-  if(datasetResponse.status >= 500 || groupPromise.status >= 500 || usersResponse.status >= 500 || annotationsStatusResponse.status >= 500){
+  if(datasetResponse.status >= statusCode500 || groupPromise.status >= statusCode500 || usersResponse.status >= statusCode500 || annotationsStatusResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, annotationsStatus:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
   }
@@ -99,23 +101,27 @@ export const initialState = {
   isModalOpened: false
 };
 
+export const onLockSubmit = (fetch, dispatch) => async id => {
+  const lock_project = 'lock_project';
+  let data;
+  const response = await fetchDeleteProject(fetch)(id);
+  if (response.status >= statusCode500) {
+    data = {status: resilienceStatus.ERROR, isModalOpened: false};
+  } else {
+    data = {status: resilienceStatus.SUCCESS, isModalOpened: false};
+  }
+  dispatch({data, type: lock_project});
+}
+
 const usePage = (fetch) => {
   const { id } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const onExport = projectId => fetchExportAnnotations(fetch)(projectId);
+  const open_modal = 'open_modal';
   const lock = {
-    onCancel: () => dispatch({type: 'open_modal', data: {isModalOpened: false}}),
-    onSubmit: async () => {
-      const response = await fetchDeleteProject(fetch)(id);
-      let data;
-      if (response.status >= 500) {
-        data = {status: resilienceStatus.ERROR, isModalOpened: false};
-      } else {
-        data = {status: resilienceStatus.SUCCESS, isModalOpened: false};
-      }
-      dispatch({data, type: 'lock_project'});
-    },
-    onLockAction: () => dispatch({type: 'open_modal', data: {isModalOpened: true}})
+    onCancel: () => dispatch({type: open_modal, data: {isModalOpened: false}}),
+    onSubmit: () => onLockSubmit(fetch, dispatch)(id),
+    onLockAction: () => dispatch({type: open_modal, data: {isModalOpened: true}})
   };
   useEffect(() => {
     init(fetch, dispatch)(id);
