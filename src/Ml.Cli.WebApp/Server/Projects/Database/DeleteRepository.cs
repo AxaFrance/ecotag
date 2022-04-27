@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
@@ -13,11 +14,13 @@ public class DeleteRepository
     public const string DeletionFailed = "DeletionFailed";
     private readonly DeleteContext _deleteContext;
     private readonly IFileService _fileService;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public DeleteRepository(DeleteContext deleteContext, IFileService fileService)
+    public DeleteRepository(DeleteContext deleteContext, IFileService fileService, IServiceScopeFactory serviceScopeFactory)
     {
         _deleteContext = deleteContext;
         _fileService = fileService;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     private bool IsDatasetUsedByOtherProjects(string projectId, string datasetId)
@@ -38,11 +41,13 @@ public class DeleteRepository
 
     private async Task DeleteReservationsByProjectIdAsync(string projectId)
     {
-        var reservations = await _deleteContext.Reservations
+        using var scope = _serviceScopeFactory.CreateScope();
+        await using var deleteContext = scope.ServiceProvider.GetService<DeleteContext>();
+        var reservations = await deleteContext.Reservations
             .Where(reservation => reservation.ProjectId == new Guid(projectId)).ToListAsync();
         foreach (var reservation in reservations)
         {
-            _deleteContext.Reservations.Remove(reservation);
+            deleteContext.Reservations.Remove(reservation);
         }
     }
 
