@@ -9,9 +9,9 @@ namespace Ml.Cli.WebApp.Server.Projects.BlobStorage;
 [ExcludeFromCodeCoverage]
 public class BlobService : IBlobService
 {
-    private readonly IOptions<BlobStorageSettings> _azureBlobStorageOptions;
+    private readonly IOptions<TransferFileStorageSettings> _azureBlobStorageOptions;
 
-    public BlobService(IOptions<BlobStorageSettings> azureBlobStorageOptions)
+    public BlobService(IOptions<TransferFileStorageSettings> azureBlobStorageOptions)
     {
         _azureBlobStorageOptions = azureBlobStorageOptions;
     }

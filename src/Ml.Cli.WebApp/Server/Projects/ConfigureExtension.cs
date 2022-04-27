@@ -15,8 +15,8 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<BlobStorageSettings>(
-            configuration.GetSection(BlobStorageSettings.Storage));
+        services.Configure<TransferFileStorageSettings>(
+            configuration.GetSection(TransferFileStorageSettings.Storage));
         services.AddScoped<IBlobService, BlobService>();
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
