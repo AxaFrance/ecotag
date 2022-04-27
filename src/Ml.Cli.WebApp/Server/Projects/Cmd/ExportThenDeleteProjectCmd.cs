@@ -79,9 +79,7 @@ public class ExportThenDeleteProjectCmd
 
     private async Task UploadProject(GetExportCmdResult exportCmdResult)
     {
-        var serializedContent = JsonSerializer.Serialize(exportCmdResult);
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(serializedContent);
-
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(exportCmdResult);
         var containerName = "output";
         var fileName = exportCmdResult.ProjectName + "_" + DateTime.Now.Ticks.ToString() + "/" + exportCmdResult.ProjectName + "-annotations.json";
         var stream = new MemoryStream(bytes);
