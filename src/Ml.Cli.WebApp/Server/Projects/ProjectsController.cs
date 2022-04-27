@@ -126,9 +126,16 @@ namespace Ml.Cli.WebApp.Server.Projects
             var commandResult = await exportThenDeleteProjectCmd.ExecuteAsync(projectId, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
-                return commandResult.Error.Key == ProjectsRepository.Forbidden
-                    ? Forbid()
-                    : BadRequest(commandResult.Error);
+                switch (commandResult.Error.Key)
+                {
+                    case ProjectsRepository.Forbidden:
+                        return Forbid();
+                    case ExportThenDeleteProjectCmd.UploadError:
+                    case DeleteRepository.DeletionFailed:
+                        return StatusCode(500);
+                    default:
+                        return BadRequest(commandResult.Error);
+                }
             }
 
             return Ok();
