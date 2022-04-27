@@ -96,13 +96,9 @@ function DisplayPdf({blob}){
     }, []);
     
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
-        <form className="af-form ri__form-container" name="myform">
-            <div className="ri__form-content">
-                <div className="ri__form">
-                    {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"max-width": "100%"}} />)}
-                </div>
+            <div>
+                {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"max-width": "100%"}} />)}
             </div>
-        </form>
     </Loader>);
 }
 
@@ -113,7 +109,7 @@ const EmlClassifier = () => {
         "whiteSpace": mail.html ? "":"pre-line",
         "border": "2px solid grey",
         "padding": "4px",
-        "word-break": "break-all"
+        "word-break": "break-all",
     };
     
     const styleSummary = {
@@ -131,12 +127,17 @@ const EmlClassifier = () => {
         "display": "flex",
         "flexDirection": "row",
         marginBottom: "64px",
-        zoom: `${state.fontSize}%`
+       
     };
+
+    const styleImageContainer={
+        zoom: `${state.fontSize}%`
+    }
 
     const styleTitle = {
         "position": "sticky",
         "zIndex": 2,
+        with: "100%",
         "top": "0",
         "color": "white",
         "backgroundColor": "grey"
@@ -204,8 +205,7 @@ const EmlClassifier = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <hr/>
-        
+        <div>
                     {mail.attachments.map(attachment => {
                         switch (attachment.mimeType){
                             case "image/jpeg":
@@ -217,22 +217,25 @@ const EmlClassifier = () => {
                                 const url = URL.createObjectURL(attachment.blob);
                                 return <>
                                 <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                <div style={styleImageContainer}>
                                     <img src={url} alt={attachment.filename} style={{"max-width": "100%"}} /> <hr/>
+                                </div>
                                 </>
         
                             case "application/pdf":
-                                return <>
-                                    <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                <div style={styleImageContainer}>
+                                    
                                     <DisplayPdf blob={attachment.blob} />
-                                    <hr/>
-                                </>
+                                </div></>
                             case "application/octet-stream":
                                 if(attachment.filename.toLocaleLowerCase().endsWith(".pdf")){
-                                   return <>
-                                        <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                   return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                    <div style={styleImageContainer}>
+                                        
                                         <DisplayPdf blob={attachment.blob} />
-                                        <hr />
-                                    </>
+                                    </div>
+                                   </>
                                 }
                                 return null;
                             default:
@@ -243,10 +246,10 @@ const EmlClassifier = () => {
                                     <a target="_blank" href={urlAttachement} >{attachment.filename}</a>
                                     <hr />
                                 </>
-                                return null;
                         }
                     })
                     }
+        </div>
                 </div>
             </div>
         </div> : null}
