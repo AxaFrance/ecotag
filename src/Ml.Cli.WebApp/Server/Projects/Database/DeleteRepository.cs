@@ -10,7 +10,6 @@ namespace Ml.Cli.WebApp.Server.Projects.Database;
 
 public class DeleteRepository
 {
-    public const string DeletionFailed = "DeletionFailed";
     private readonly DeleteContext _deleteContext;
     private readonly IFileService _fileService;
 
@@ -87,35 +86,19 @@ public class DeleteRepository
         await _fileService.DeleteContainerAsync(datasetId);
     }
 
-    public async Task<ResultWithError<bool, ErrorResult>> DeleteProjectWithDatasetAsync(GetDataset dataset, string projectId)
+    public async Task DeleteProjectWithDatasetAsync(GetDataset dataset, string projectId)
     {
-        var commandResult = new ResultWithError<bool, ErrorResult>();
-        
-        try
+        await DeleteAnnotationsByProjectIdAsync(projectId);
+        await DeleteReservationsByProjectIdAsync(projectId);
+        await DeleteProjectAsync(projectId);
+        var isDatasetUsedByOtherProjects = IsDatasetUsedByOtherProjects(projectId, dataset.Id);
+        if (!isDatasetUsedByOtherProjects)
         {
-            await DeleteAnnotationsByProjectIdAsync(projectId);
-            await DeleteReservationsByProjectIdAsync(projectId);
-            await DeleteProjectAsync(projectId);
-            var isDatasetUsedByOtherProjects = IsDatasetUsedByOtherProjects(projectId, dataset.Id);
-            if (!isDatasetUsedByOtherProjects)
-            {
-                var filesIds = dataset.Files.Select(file => file.Id.ToString()).ToList();
-                await DeleteFilesAsync(dataset.Id, filesIds);
-                await DeleteDatasetAsync(dataset.Id);
-            }
-
-            await _deleteContext.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            commandResult.Error = new ErrorResult
-            {
-                Key = DeletionFailed
-            };
-            return commandResult;
+            var filesIds = dataset.Files.Select(file => file.Id.ToString()).ToList();
+            await DeleteFilesAsync(dataset.Id, filesIds);
+            await DeleteDatasetAsync(dataset.Id);
         }
 
-        commandResult.Data = true;
-        return commandResult;
+        await _deleteContext.SaveChangesAsync();
     }
 }
