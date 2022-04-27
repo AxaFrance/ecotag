@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -91,40 +90,29 @@ public class DeleteRepository
     public async Task<ResultWithError<bool, ErrorResult>> DeleteProjectWithDatasetAsync(GetDataset dataset, string projectId)
     {
         var commandResult = new ResultWithError<bool, ErrorResult>();
-
-        var transactionOptions = new TransactionOptions
+        
+        try
         {
-            IsolationLevel = IsolationLevel.ReadCommitted,
-            Timeout = TransactionManager.MaximumTimeout
-        };
-        using (var scope = new TransactionScope(TransactionScopeOption.Required, transactionOptions,
-                   TransactionScopeAsyncFlowOption.Enabled))
-        {
-            try
+            await DeleteAnnotationsByProjectIdAsync(projectId);
+            await DeleteReservationsByProjectIdAsync(projectId);
+            await DeleteProjectAsync(projectId);
+            var isDatasetUsedByOtherProjects = IsDatasetUsedByOtherProjects(projectId, dataset.Id);
+            if (!isDatasetUsedByOtherProjects)
             {
-                await DeleteAnnotationsByProjectIdAsync(projectId);
-                await DeleteReservationsByProjectIdAsync(projectId);
-                await _deleteContext.SaveChangesAsync();
-                await DeleteProjectAsync(projectId);
-                var isDatasetUsedByOtherProjects = IsDatasetUsedByOtherProjects(projectId, dataset.Id);
-                if (!isDatasetUsedByOtherProjects)
-                {
-                    var filesIds = dataset.Files.Select(file => file.Id.ToString()).ToList();
-                    await DeleteFilesAsync(dataset.Id, filesIds);
-                    await DeleteDatasetAsync(dataset.Id);
-                }
+                var filesIds = dataset.Files.Select(file => file.Id.ToString()).ToList();
+                await DeleteFilesAsync(dataset.Id, filesIds);
+                await DeleteDatasetAsync(dataset.Id);
+            }
 
-                await _deleteContext.SaveChangesAsync();
-                scope.Complete();
-            }
-            catch (Exception)
+            await _deleteContext.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            commandResult.Error = new ErrorResult
             {
-                commandResult.Error = new ErrorResult
-                {
-                    Key = DeletionFailed
-                };
-                return commandResult;
-            }
+                Key = DeletionFailed
+            };
+            return commandResult;
         }
 
         commandResult.Data = true;

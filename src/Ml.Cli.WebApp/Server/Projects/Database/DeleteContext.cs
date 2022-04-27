@@ -34,15 +34,30 @@ public class DeleteContext : DbContext
             .HasOne(gu => gu.Dataset)
             .WithMany(u => u.Files)
             .HasForeignKey(gu => gu.DatasetId);
-        
+
         modelBuilder.Entity<AnnotationModel>()
             .HasOne(gu => gu.File)
             .WithMany(u => u.Annotations)
             .HasForeignKey(gu => gu.FileId);
 
+        modelBuilder.Entity<AnnotationModel>()
+            .HasOne<ProjectModel>()
+            .WithMany()
+            .HasForeignKey(gu => gu.ProjectId);
+
         modelBuilder.Entity<ReservationModel>()
             .HasOne(gu => gu.File)
             .WithMany(u => u.Reservations)
             .HasForeignKey(gu => gu.FileId);
+
+        modelBuilder.Entity<ReservationModel>()
+            .HasOne<ProjectModel>()
+            .WithMany()
+            .HasForeignKey(gu => gu.ProjectId);
+
+        modelBuilder.Entity<ProjectModel>()
+            .HasOne<DatasetModel>()
+            .WithMany()
+            .HasForeignKey(gu => gu.DatasetId);
     }
 }
