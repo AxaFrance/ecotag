@@ -105,8 +105,11 @@ public class ExportThenDeleteProjectCmd
         {
             var serializedContent = JsonSerializer.Serialize(exportCmdResult);
             var bytes = JsonSerializer.SerializeToUtf8Bytes(serializedContent);
+
+            var containerName = "output";
+            var fileName = exportCmdResult.ProjectName + "_" + DateTime.Now.Ticks.ToString() + "/" + exportCmdResult.ProjectName + "-annotations.json";
             var stream = new MemoryStream(bytes);
-            //await _blobService.UploadStreamAsync(project.DatasetId, fileOutput, stream);
+            await _blobService.UploadStreamAsync(containerName, fileName, stream);
         }
         catch (Exception)
         {

@@ -94,8 +94,7 @@ internal static class DatasetMock
         var datasetContextFunc = GetInMemoryDatasetContext();
         var datasetContext = datasetContextFunc();
 
-        var deleteContextFunc = GetInMemoryDeleteContext();
-        var deleteContext = deleteContextFunc();
+        var deleteContext = GetInMemoryDeleteContext()();
             
         var dataset1 = new DatasetModel
         {
@@ -239,8 +238,7 @@ internal static class DatasetMock
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
-        var mockedDeleteService = GetMockedServiceProvider(deleteContextFunc);
-        var deleteRepository = new DeleteRepository(deleteContext, fileService, mockedDeleteService.ServiceScopeFactory.Object);
+        var deleteRepository = new DeleteRepository(deleteContext, fileService);
         
         var controllerContext = ControllerContext(nameIdentifier);
         var datasetsController = new DatasetsController();
