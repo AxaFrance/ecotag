@@ -1,13 +1,16 @@
 ﻿import PostalMime from 'postal-mime';
 import React, {useEffect, useState} from "react";
 import convertPdfToImagesAsync from "../Pdf/pdf";
-import {LoaderModes, Loader} from "@axa-fr/react-toolkit-all";
+import {LoaderModes, Loader, MultiSelect} from "@axa-fr/react-toolkit-all";
 import Toolbar from "./Toolbar.container";
 
 
 const handleFile = (setState) => async (e) => {
+
+    setState({ loaderMode:LoaderModes.get});
     const file = e.target.files[0];
 
+    
     const parser = new PostalMime();
     const email = await parser.parse(file);
 
@@ -50,7 +53,7 @@ const handleFile = (setState) => async (e) => {
         })
     }
     
-    setState({ displayMail:true, ...messageFormatted});
+    setState({ loaderMode:LoaderModes.none, ...messageFormatted});
 }
 
 const displayEmail = (email) => {
@@ -97,13 +100,15 @@ function DisplayPdf({blob}){
     
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
             <div>
-                {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"max-width": "100%"}} />)}
+                {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"maxWidth": "100%"}} />)}
             </div>
     </Loader>);
 }
 
+
+
 const EmlClassifier = () => {
-    const [mail, setMail] = useState({displayMail:false});
+    const [mail, setMail] = useState({loaderMode: LoaderModes.get});
     const [state, setState] = useState({fontSize:100});
     const style = {
         "whiteSpace": mail.html ? "":"pre-line",
@@ -142,6 +147,27 @@ const EmlClassifier = () => {
         "color": "white",
         "backgroundColor": "grey"
     };
+
+    const styleAnnotation= {
+        float: "right",
+        "position": "sticky",
+        "zIndex": 2,
+        "top": "0",
+        "right": "0",
+        width: "260px",
+        "backgroundColor": "grey",
+        padding: "4px"
+    };
+
+    const options = [
+        { value: 'fun', label: 'For fun', clearableValue: false },
+        { value: 'work', label: 'For work' },
+        { value: 'drink', label: 'For drink' },
+        { value: 'sleep', label: 'For sleep' },
+        { value: 'swim', label: 'For swim' },
+    ];
+    
+    
     
     return <div id="main">
         <div>
@@ -150,8 +176,12 @@ const EmlClassifier = () => {
                 <input type="file" id="mime" onChange={handleFile(setMail)} />
             </form>
         </div>
+
+
         
-        {mail.displayMail ? <div id="email-container">
+        {mail.loaderMode === LoaderModes.none ? <div id="email-container">
+            
+            
             <div style={styleContainer} >
                 <div>
                 <div id="email-summary" style={styleSummary} >
@@ -163,14 +193,21 @@ const EmlClassifier = () => {
                      </li>
                     
                  </ul>
-                    <h4>Pièces jointes</h4>
+                    {mail.attachments.length >0 ? <><h4>Pièces jointes</h4>
                     <ul>
                         {mail.attachments.map(attachment => {
                             return <li>
                                 <span><a href={`#${attachment.filename}`}>{attachment.filename}</a></span>
                             </li>
                         })}
-                    </ul>
+                    </ul></>: null}
+
+                    <h3>Annotation</h3>
+                    <MultiSelect
+                        name={"sss"}
+                        onChange={()=>{}}
+                        options={options}
+                    />
                                 </div>
             </div>
                 <div>
@@ -211,21 +248,23 @@ const EmlClassifier = () => {
                             case "image/jpeg":
                             case "image/png":
                             case "image/gif":
-                            case "image/tiff":
                             case "image/webp":
                             case "image/svg+xml":
                                 const url = URL.createObjectURL(attachment.blob);
                                 return <>
                                 <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                                 <div style={styleImageContainer}>
-                                    <img src={url} alt={attachment.filename} style={{"max-width": "100%"}} /> <hr/>
+                                    <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}} /> <hr/>
                                 </div>
                                 </>
-        
+                            case "image/tiff":
+                                return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                                    <div style={styleImageContainer}>
+                                        <DisplayTiff blob={attachment.blob} />
+                                    </div></>
                             case "application/pdf":
                                 return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                                 <div style={styleImageContainer}>
-                                    
                                     <DisplayPdf blob={attachment.blob} />
                                 </div></>
                             case "application/octet-stream":
@@ -237,6 +276,13 @@ const EmlClassifier = () => {
                                     </div>
                                    </>
                                 }
+                                console.log( + " " + attachment.filename);
+                                const urlAttachement1 = URL.createObjectURL(attachment.blob);
+                                return <>
+                                    <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
+                                    <a target="_blank" href={urlAttachement1} >{attachment.filename}</a>
+                                    <hr />
+                                </>
                                 return null;
                             default:
                                 console.log( + " " + attachment.filename);
@@ -252,6 +298,7 @@ const EmlClassifier = () => {
         </div>
                 </div>
             </div>
+
         </div> : null}
 
         <Toolbar

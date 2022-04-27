@@ -33,14 +33,14 @@ const _convertTiffToImagesAsync = (GeoTIFF, plot) => async (file) => {
             plot_.render();
             results.push(canvas.toDataURL('image/png'));
         } catch(error){
-            if(error.message && error.message.includes("No image")){
+           // if(error.message && error.message.includes("No image")){
                 console.error(error);
                 // la librairie ne permet pas de connaitre le nombre de page
                 isContinue = false;
-            }
-            else {
-                throw error;
-            }
+            //}
+            //else {
+             //   throw error;
+            //}
         }
     }
 

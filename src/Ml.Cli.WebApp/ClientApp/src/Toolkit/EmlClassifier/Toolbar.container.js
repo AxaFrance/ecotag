@@ -1,6 +1,9 @@
 ﻿import React from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
-import Toolbar, {ToolbarButtonContainer, ToolbarButton, ToolbarSwitchButton} from '../Toolbar';
+import Toolbar, {ToolbarButtonContainer, ToolbarButton} from '../Toolbar';
+import { MultiSelect } from '@axa-fr/react-toolkit-all';
+
+
 
 const ToolbarContainer = ({ setState, state, onSubmit }) => {
 
@@ -25,6 +28,8 @@ const ToolbarContainer = ({ setState, state, onSubmit }) => {
         ZoomIn: onZoomIn,
         ZoomOut: onZoomOut,
     };
+
+
 
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
