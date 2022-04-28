@@ -29,18 +29,29 @@ async function parseMessageAsync(file) {
     if (email.text) {
         messageFormatted.text = email.text;
     }
+    
     messageFormatted.attachments = [];
     if (email.attachments && email.attachments.length) {
-        messageFormatted.attachments = email.attachments.map((attachment) => {
+        messageFormatted.attachments = email.attachments.reduce((results,attachment) => {
+            if(email.html && attachment.contentId) {
+                const key = `cid:${attachment.contentId.replace("<", "").replace(">", "")}`;
+                if(messageFormatted.html.includes(key)) {
+                    const url = URL.createObjectURL(new Blob([attachment.content], {type: attachment.mimeType}));
+                    console.log("attachment.contentId " + attachment.contentId + " " + key);
+                    messageFormatted.html = messageFormatted.html.replace(key, url);
+                    return results;
+                }
+            }
             const blob = new Blob([attachment.content], {type: attachment.mimeType});
             const filename = attachment.filename || 'attachment';
             const mimeType = attachment.mimeType;
-            return {
+             results.push( {
                 blob,
                 filename,
                 mimeType
-            }
-        })
+            });
+            return results;
+        }, []);
     }
     return messageFormatted;
 }
@@ -141,7 +152,7 @@ const Mail = ({mail, id, title, styleTitle}) => {
             </tbody>
         </table>
         </>;
-            };
+};
 
 const MailAttachments = ({mail, styleTitle, styleImageContainer}) => {
     
@@ -217,7 +228,7 @@ const MailAttachment = ({styleTitle, styleImageContainer, blob=null}) => {
             }
         }, []);
         return <Loader mode={loaderMode} text={"Your browser is extracting the mail"}>
-            { mail != null && <div>
+            {mail != null && <div>
                 <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
                 <MailAttachments mail={mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} />
             </div>}
@@ -232,21 +243,22 @@ const initAsync = async (url, setState, state, expectedOutput) => {
     const response = await fetch(url);
     const blob = await response.blob();
     const message = await parseMessageAsync(blob);
-    setState({...state, loaderMode : LoaderModes.none, mail:message});
+    setState({...state, loaderMode : LoaderModes.none, mail:message, annotation: expectedOutput});
 }
 
 const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     const [state, setState] = useState({
         fontSize:100,
         loaderMode: LoaderModes.get,
-        mail:null
+        mail:null,
+        annotation: {classification: null},
     });
 
     useEffect(async () => {
         if (url) {
             await initAsync(url, setState, state, expectedOutput);
         }
-    }, [url]);
+    }, [url, expectedOutput, labels]);
     
     const styleSummary = {
         "border": "2px solid grey",
@@ -292,6 +304,16 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             };
         });
     }
+    
+    const onChange = (event) => {
+        const classification = event.value;
+        setState({...state, annotation : {classification}});
+    }
+    
+    const onSubmitWrapper= () => {
+        onSubmit(state.annotation);
+    }
+    
     const mail = state.mail;
     return <div id="main">
         {!url && <div>
@@ -300,7 +322,6 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 <input type="file" id="mime" onChange={onFileChange(state, setState)} />
             </form>
         </div>}
-        
         {mail != null && <div id="email-container">
             <div style={styleContainer} >
                 <div>
@@ -311,7 +332,8 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                          <span><a href="#Mail">Contenu du mail</a></span>
                          <MultiSelect
                              name={"MailAnnotation"}
-                             onChange={()=>{}}
+                             onChange={onChange}
+                             value={state.annotation.classification}
                              options={options}
                          />
                      </li>
@@ -324,20 +346,19 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                             </li>
                         })}
                     </ul></>: null}
-                                </div>
+             </div>
             </div>
                 <div>
                     <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
                     <MailAttachments mail={mail} styleImageContainer={styleImageContainer}  styleTitle={styleTitle} />
                 </div>
             </div>
-
         </div>}
 
         <Toolbar
             state={state}
             setState={setState}
-            onSubmit={onSubmit}
+            onSubmit={onSubmitWrapper}
         />
     </div>
 }

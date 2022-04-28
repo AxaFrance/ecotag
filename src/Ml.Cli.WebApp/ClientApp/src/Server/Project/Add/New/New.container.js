@@ -141,7 +141,7 @@ export const reducer = (state, action) => {
                     label: "Classification de mail",
                     type: "Eml"
                   }];
-              const datasetId = event.value
+              const datasetId = event.value;
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
               const reducer = (previousValue, currentValue) => {
                 if(currentValue.type === datasetType) {
