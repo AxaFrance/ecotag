@@ -6,7 +6,6 @@ const ConfirmModal = ({title, isOpen, onCancel, onSubmit, children}) => (
     <BooleanModal
         isOpen={isOpen}
         title={title}
-        id='modalId'
         onCancel={onCancel}
         onSubmit={onSubmit}
         submitTitle='Confirmer'
