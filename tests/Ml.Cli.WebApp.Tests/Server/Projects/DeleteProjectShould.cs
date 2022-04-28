@@ -43,7 +43,7 @@ public class DeleteProjectShould
         Assert.Equal(errorKey, resultKoValue.Key);
     }
 
-    private (IFileService, IBlobService) InitServices()
+    private static (IFileService, IBlobService) InitServices()
     {
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
