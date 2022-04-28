@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server.Oidc;
@@ -10,6 +11,7 @@ namespace Ml.Cli.WebApp.Server.Projects;
 
 [Route("api/server/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.DataAnnoteur)]
 public class AnnotationsController : Controller
 {
     [HttpGet("{projectId}")]
