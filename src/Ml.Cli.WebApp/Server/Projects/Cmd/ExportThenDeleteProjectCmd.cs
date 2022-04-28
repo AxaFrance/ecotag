@@ -51,7 +51,7 @@ public class ExportThenDeleteProjectCmd
             return commandResult.ReturnError(projectResult.Error.Key);
         }
 
-        var datasetResult = await _datasetsRepository.GetDatasetAsync(projectResult.Data.DatasetId);
+        var datasetResult = await _datasetsRepository.GetDatasetInfoAsync(projectResult.Data.DatasetId);
 
         var projectDataModel = projectResult.Data;
         var annotations = await _annotationsRepository.GetAnnotationsByProjectIdAndDatasetIdAsync(projectId, projectDataModel.DatasetId);
@@ -64,7 +64,7 @@ public class ExportThenDeleteProjectCmd
             ProjectType = projectDataModel.AnnotationType,
             DatasetName = datasetResult.Name,
             DatasetType = datasetResult.Type,
-            Classification = datasetResult.Classification,
+            Classification = datasetResult.Classification.ToString(),
             Annotations = annotations,
             NumberAnnotationsDone = annotationsStatus.NumberAnnotationsDone,
             NumberAnnotationsToDo = annotationsStatus.NumberAnnotationsToDo

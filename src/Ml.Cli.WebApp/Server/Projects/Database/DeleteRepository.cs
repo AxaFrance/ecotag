@@ -65,14 +65,14 @@ public class DeleteRepository
         if (dataset != null) _deleteContext.Datasets.Remove(dataset);
     }
 
-    private async Task DeleteFilesAsync(string datasetId, IList<string> filesIds)
+    private async Task DeleteFilesAsync(string datasetId)
     {
-        var files = await _deleteContext.Files.Where(file => filesIds.Contains(file.Id.ToString())).ToListAsync();
+        var files = await _deleteContext.Files.Where(file => new Guid(datasetId) == file.DatasetId).ToListAsync();
         _deleteContext.Files.RemoveRange(files);
         await _fileService.DeleteContainerAsync(datasetId);
     }
 
-    public async Task DeleteProjectWithDatasetAsync(GetDataset dataset, string projectId)
+    public async Task DeleteProjectWithDatasetAsync(GetDatasetInfo dataset, string projectId)
     {
         await DeleteAnnotationsByProjectIdAsync(projectId);
         await DeleteReservationsByProjectIdAsync(projectId);
@@ -80,8 +80,7 @@ public class DeleteRepository
         var isDatasetUsedByOtherProjects = IsDatasetUsedByOtherProjects(projectId, dataset.Id);
         if (!isDatasetUsedByOtherProjects)
         {
-            var filesIds = dataset.Files.Select(file => file.Id.ToString()).ToList();
-            await DeleteFilesAsync(dataset.Id, filesIds);
+            await DeleteFilesAsync(dataset.Id);
             await DeleteDatasetAsync(dataset.Id);
         }
 

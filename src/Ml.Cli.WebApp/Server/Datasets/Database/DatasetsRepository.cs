@@ -92,7 +92,8 @@ public class DatasetsRepository
                     Name = dataset.Name,
                     GroupId = dataset.GroupId.ToString().ToLower(),
                     Type = dataset.Type.ToString(),
-                    IsLocked = dataset.IsLocked
+                    IsLocked = dataset.IsLocked,
+                    Classification = dataset.Classification
                 })
                 .FirstOrDefaultAsync();
             entry.AbsoluteExpirationRelativeToNow =
