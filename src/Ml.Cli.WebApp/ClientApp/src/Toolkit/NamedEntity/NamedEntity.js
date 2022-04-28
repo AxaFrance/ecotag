@@ -12,7 +12,7 @@ const initAsync = async (url, setState, state, expectedOutput) => {
   setState({...state, text, value: Array.isArray(expectedOutput) ? expectedOutput : [] })
 }
 
-const NamedEntity = ({ text= null, labels, onSubmit, placeholder, url, expectedOutput = [] }) => {
+const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] }) => {
   const initialValue = {
     label: labels[0],
     value: [],

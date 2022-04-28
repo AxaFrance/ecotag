@@ -4,23 +4,16 @@ import convertPdfToImagesAsync from "../Pdf/pdf";
 import {LoaderModes, Loader, MultiSelect} from "@axa-fr/react-toolkit-all";
 import Toolbar from "./Toolbar.container";
 
-
-const handleFile = (setState) => async (e) => {
-
-    setState({ loaderMode:LoaderModes.get});
-    const file = e.target.files[0];
-
-    
+async function parseMessageAsync(file) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
-
     const messageFormatted = {types: []};
     messageFormatted.from = email.from;
     messageFormatted.to = email.to;
     messageFormatted.cc = email.cc;
     messageFormatted.bcc = email.bcc;
     messageFormatted.subject = email.subject
-    if(email.date) {
+    if (email.date) {
         let dateOptions = {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric',
@@ -30,18 +23,15 @@ const handleFile = (setState) => async (e) => {
     } else {
         messageFormatted.date = null;
     }
-
-    if(email.html) {
+    if (email.html) {
         messageFormatted.html = email.html;
     }
-    if(email.text) {
+    if (email.text) {
         messageFormatted.text = email.text;
     }
-
-    messageFormatted.attachments= [];
-    if(email.attachments && email.attachments.length){
-
-        messageFormatted.attachments = email.attachments.map((attachment) =>{
+    messageFormatted.attachments = [];
+    if (email.attachments && email.attachments.length) {
+        messageFormatted.attachments = email.attachments.map((attachment) => {
             const blob = new Blob([attachment.content], {type: attachment.mimeType});
             const filename = attachment.filename || 'attachment';
             const mimeType = attachment.mimeType;
@@ -52,8 +42,17 @@ const handleFile = (setState) => async (e) => {
             }
         })
     }
-    
-    setState({ loaderMode:LoaderModes.none, ...messageFormatted});
+    return messageFormatted;
+}
+
+const onFileChange = (state, setState) => async (e) => {
+    if(e.target.files.length === 0){
+        return;
+    }
+    setState({ ...state, loaderMode:LoaderModes.get, mail: null});
+    const file = e.target.files[0];
+    const messageFormatted = await parseMessageAsync(file);
+    setState({...state, loaderMode:LoaderModes.none, mail: messageFormatted });
 }
 
 const displayEmail = (email) => {
@@ -77,12 +76,10 @@ const DisplayEmails = (emails) => {
 }
 
 function DisplayPdf({blob}){
-
     const [state, setState] = useState({
         files: [],
         loaderMode: LoaderModes.none,
     });
-
     useEffect(() => {
         setState({
             ...state,
@@ -97,7 +94,6 @@ function DisplayPdf({blob}){
             });
         });
     }, []);
-    
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
             <div>
                 {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"maxWidth": "100%"}} />)}
@@ -105,17 +101,152 @@ function DisplayPdf({blob}){
     </Loader>);
 }
 
-
-
-const EmlClassifier = () => {
-    const [mail, setMail] = useState({loaderMode: LoaderModes.get});
-    const [state, setState] = useState({fontSize:100});
+const Mail = ({mail, id, title, styleTitle}) => {
     const style = {
         "whiteSpace": mail.html ? "":"pre-line",
         "border": "2px solid grey",
         "padding": "4px",
         "word-break": "break-all",
     };
+    return <>
+        <h2 style={styleTitle} id={id}>{title}</h2>
+        <table>
+            <tbody>
+            <tr>
+                <td><b>From:</b></td>
+                <td>{displayEmail(mail.from)}</td>
+            </tr>
+            <tr>
+                <td><b>To:</b></td>
+                <td>{DisplayEmails(mail.to)}</td>
+            </tr>
+            <tr>
+                <td><b>Cc:</b></td>
+                <td>{DisplayEmails(mail.cc)}</td>
+            </tr>
+            <tr>
+                <td><b>Bcc:</b></td>
+                <td>{DisplayEmails(mail.bcc)}</td>
+            </tr>
+            <tr>
+                <td><b>Subject:</b></td>
+                <td>{mail.subject}</td>
+            </tr>
+            <tr >
+                <td colSpan="2">
+                    <div style={style} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </>;
+            };
+
+const MailAttachments = ({mail, styleTitle, styleImageContainer}) => {
+    
+    return <div>
+        {mail.attachments.map(attachment => {
+            switch (attachment.mimeType){
+                case "message/rfc822":
+                    return <>
+                        <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                        <MailAttachment blob={attachment.blob} styleTitle={styleTitle} styleImageContainer={styleImageContainer}/>
+                    </>
+                case "image/jpeg":
+                case "image/png":
+                case "image/gif":
+                case "image/webp":
+                case "image/svg+xml":
+                    const url = URL.createObjectURL(attachment.blob);
+                    return <>
+                        <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                        <div style={styleImageContainer}>
+                            <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}} /> <hr/>
+                        </div>
+                    </>
+                case "application/pdf":
+                    return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                        <div style={styleImageContainer}>
+                            <DisplayPdf blob={attachment.blob} />
+                        </div></>
+                case "application/octet-stream":
+                    const filenameLowerCase = attachment.filename.toLocaleLowerCase();
+                    if(filenameLowerCase.endsWith(".pdf")){
+                        return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                            <div style={styleImageContainer}>
+                                <DisplayPdf blob={attachment.blob} />
+                            </div>
+                        </>
+                    }
+                    if(filenameLowerCase.endsWith(".eml")) {
+                        return <>
+                            <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
+                            <MailAttachment blob={attachment.blob} styleTitle={styleTitle} styleImageContainer={styleImageContainer}/>
+                        </>
+                    }
+                    console.log( + " " + attachment.filename);
+                    const urlAttachement1 = URL.createObjectURL(attachment.blob);
+                    return <>
+                        <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
+                        <a target="_blank" href={urlAttachement1} >{attachment.filename}</a>
+                        <hr />
+                    </>
+                default:
+                    console.log( + " " + attachment.filename);
+                    const urlAttachement = URL.createObjectURL(attachment.blob);
+                    return <>
+                        <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
+                        <a target="_blank" href={urlAttachement} >{attachment.filename}</a>
+                        <hr />
+                    </>
+            }
+        })
+        }
+    </div>
+}
+
+const MailAttachment = ({styleTitle, styleImageContainer, blob=null}) => {
+    const [mail, setMail] = useState(null);
+    const [loaderMode, setLoaderMode] = useState(LoaderModes.get);
+        useEffect(async () => {
+            if (blob) {
+                const message = await parseMessageAsync(blob);
+                setMail(message);
+                setLoaderMode(LoaderModes.none);
+            }
+        }, []);
+        return <Loader mode={loaderMode} text={"Your browser is extracting the mail"}>
+            { mail != null && <div>
+                <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
+                <MailAttachments mail={mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} />
+            </div>}
+        </Loader>
+}
+
+const initAsync = async (url, setState, state, expectedOutput) => {
+    if(!url){
+        return;
+    }
+    setState({...state, loaderMode : LoaderModes.get});
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const message = await parseMessageAsync(blob);
+    setState({...state, loaderMode : LoaderModes.none, mail:message});
+}
+
+const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
+    const [state, setState] = useState({
+        fontSize:100,
+        loaderMode: LoaderModes.get,
+        mail:null
+    });
+
+    useEffect(async () => {
+        if (url) {
+            await initAsync(url, setState, state, expectedOutput);
+        }
+    }, [url]);
     
     const styleSummary = {
         "border": "2px solid grey",
@@ -123,19 +254,16 @@ const EmlClassifier = () => {
         "width":"260px",
         "position": "sticky",
         "word-break": "break-all",
-       // "zIndex": 20,
         "top": "0",
-       // "backgroundColor": "yellow"
     };
 
     const styleContainer = {
         "display": "flex",
         "flexDirection": "row",
         marginBottom: "64px",
-       
     };
 
-    const styleImageContainer={
+    const styleImageContainer= {
         zoom: `${state.fontSize}%`
     }
 
@@ -148,40 +276,32 @@ const EmlClassifier = () => {
         "backgroundColor": "grey"
     };
 
-    const styleAnnotation= {
-        float: "right",
-        "position": "sticky",
-        "zIndex": 2,
-        "top": "0",
-        "right": "0",
-        width: "260px",
-        "backgroundColor": "grey",
-        padding: "4px"
-    };
-
-    const options = [
-        { value: 'fun', label: 'For fun', clearableValue: false },
+    let options = [
+        { value: 'fun', label: 'For fun' },
         { value: 'work', label: 'For work' },
         { value: 'drink', label: 'For drink' },
         { value: 'sleep', label: 'For sleep' },
         { value: 'swim', label: 'For swim' },
     ];
     
-    
-    
+    if(labels){
+        options = labels.map((label) => {
+            return {
+                "value": label.name,
+                "label": label.name
+            };
+        });
+    }
+    const mail = state.mail;
     return <div id="main">
-        <div>
+        {!url && <div>
             <h1>Front-end Email Parser Demo</h1>
             <form id="mimeform">
-                <input type="file" id="mime" onChange={handleFile(setMail)} />
+                <input type="file" id="mime" onChange={onFileChange(state, setState)} />
             </form>
-        </div>
-
-
+        </div>}
         
-        {mail.loaderMode === LoaderModes.none ? <div id="email-container">
-            
-            
+        {mail != null && <div id="email-container">
             <div style={styleContainer} >
                 <div>
                 <div id="email-summary" style={styleSummary} >
@@ -189,9 +309,12 @@ const EmlClassifier = () => {
                  <ul>
                      <li>
                          <span><a href="#Mail">Contenu du mail</a></span>
-                         
+                         <MultiSelect
+                             name={"MailAnnotation"}
+                             onChange={()=>{}}
+                             options={options}
+                         />
                      </li>
-                    
                  </ul>
                     {mail.attachments.length >0 ? <><h4>Pièces jointes</h4>
                     <ul>
@@ -201,110 +324,20 @@ const EmlClassifier = () => {
                             </li>
                         })}
                     </ul></>: null}
-
-                    <h3>Annotation</h3>
-                    <MultiSelect
-                        name={"sss"}
-                        onChange={()=>{}}
-                        options={options}
-                    />
                                 </div>
             </div>
                 <div>
-                    <h2 style={styleTitle} id="Mail">Contenu du mail</h2>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><b>From:</b></td>
-                                <td>{displayEmail(mail.from)}</td>
-                            </tr>
-                            <tr>
-                                <td><b>To:</b></td>
-                                <td>{DisplayEmails(mail.to)}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Cc:</b></td>
-                                <td>{DisplayEmails(mail.cc)}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Bcc:</b></td>
-                                <td>{DisplayEmails(mail.bcc)}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Subject:</b></td>
-                                <td>{mail.subject}</td>
-                            </tr>
-                            <tr >
-                                <td colSpan="2"> 
-                     
-                                    <div style={style} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
-                                </div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-        <div>
-                    {mail.attachments.map(attachment => {
-                        switch (attachment.mimeType){
-                            case "image/jpeg":
-                            case "image/png":
-                            case "image/gif":
-                            case "image/webp":
-                            case "image/svg+xml":
-                                const url = URL.createObjectURL(attachment.blob);
-                                return <>
-                                <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
-                                <div style={styleImageContainer}>
-                                    <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}} /> <hr/>
-                                </div>
-                                </>
-                            case "image/tiff":
-                                return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
-                                    <div style={styleImageContainer}>
-                                        <DisplayTiff blob={attachment.blob} />
-                                    </div></>
-                            case "application/pdf":
-                                return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
-                                <div style={styleImageContainer}>
-                                    <DisplayPdf blob={attachment.blob} />
-                                </div></>
-                            case "application/octet-stream":
-                                if(attachment.filename.toLocaleLowerCase().endsWith(".pdf")){
-                                   return <><h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
-                                    <div style={styleImageContainer}>
-                                        
-                                        <DisplayPdf blob={attachment.blob} />
-                                    </div>
-                                   </>
-                                }
-                                console.log( + " " + attachment.filename);
-                                const urlAttachement1 = URL.createObjectURL(attachment.blob);
-                                return <>
-                                    <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
-                                    <a target="_blank" href={urlAttachement1} >{attachment.filename}</a>
-                                    <hr />
-                                </>
-                                return null;
-                            default:
-                                console.log( + " " + attachment.filename);
-                                const urlAttachement = URL.createObjectURL(attachment.blob);
-                                return <>
-                                    <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
-                                    <a target="_blank" href={urlAttachement} >{attachment.filename}</a>
-                                    <hr />
-                                </>
-                        }
-                    })
-                    }
-        </div>
+                    <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
+                    <MailAttachments mail={mail} styleImageContainer={styleImageContainer}  styleTitle={styleTitle} />
                 </div>
             </div>
 
-        </div> : null}
+        </div>}
 
         <Toolbar
             state={state}
             setState={setState}
-            onSubmit={() => {}}
+            onSubmit={onSubmit}
         />
     </div>
 }

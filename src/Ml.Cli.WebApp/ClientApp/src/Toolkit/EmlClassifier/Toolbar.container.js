@@ -1,9 +1,6 @@
 ﻿import React from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
 import Toolbar, {ToolbarButtonContainer, ToolbarButton} from '../Toolbar';
-import { MultiSelect } from '@axa-fr/react-toolkit-all';
-
-
 
 const ToolbarContainer = ({ setState, state, onSubmit }) => {
 
@@ -28,12 +25,10 @@ const ToolbarContainer = ({ setState, state, onSubmit }) => {
         ZoomIn: onZoomIn,
         ZoomOut: onZoomOut,
     };
-
-
-
+    
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-            <Toolbar onSubmit={onSubmit}>
+            <Toolbar onSubmit={onSubmit} isSubmitDisabled={!state.mail}>
                 <ToolbarButtonContainer>
                     <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
                     <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />

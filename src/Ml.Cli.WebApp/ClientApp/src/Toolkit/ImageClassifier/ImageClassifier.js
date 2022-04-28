@@ -28,14 +28,12 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
     const classNameButtonContainer = classNames(defaultClassNameButtonContainer, {
         [`${defaultClassNameButtonContainer}--inline-mode`]: state.inlineMode,
     });
-    
     const coloredLabels = labels.map((label) => {
         return {
             "name": label.name,
             "color": label.color ? label.color : `#${stringToRGB(label.name)}`
         };
     });
-
     const generateHandler = () => {
         let result = {};
         for(let i = 1; i <= coloredLabels.length; i++){
@@ -43,11 +41,8 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
         }
         return result;
     }
-    
     const keyMap = generateKeyMap(coloredLabels.length);
-    
     const handlers = generateHandler();
-    
     return(
         <>
             <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
