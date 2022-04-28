@@ -60,7 +60,7 @@ const onFileChange = (state, setState) => async (e) => {
     if(e.target.files.length === 0){
         return;
     }
-    setState({ ...state, loaderMode:LoaderModes.get, mail: null});
+    setState({ ...state, loaderMode:LoaderModes.get, mail: null, annotation :{classification:null}});
     const file = e.target.files[0];
     const messageFormatted = await parseMessageAsync(file);
     setState({...state, loaderMode:LoaderModes.none, mail: messageFormatted });
@@ -155,9 +155,8 @@ const Mail = ({mail, id, title, styleTitle}) => {
 };
 
 const MailAttachments = ({mail, styleTitle, styleImageContainer}) => {
-    
     return <div>
-        {mail.attachments.map(attachment => {
+        {mail.attachments.map((attachment, index) => {
             switch (attachment.mimeType){
                 case "message/rfc822":
                     return <>
@@ -196,7 +195,7 @@ const MailAttachments = ({mail, styleTitle, styleImageContainer}) => {
                             <MailAttachment blob={attachment.blob} styleTitle={styleTitle} styleImageContainer={styleImageContainer}/>
                         </>
                     }
-                    console.log( + " " + attachment.filename);
+                    console.log(attachment.mimeType + " " + attachment.filename);
                     const urlAttachement1 = URL.createObjectURL(attachment.blob);
                     return <>
                         <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
@@ -204,7 +203,7 @@ const MailAttachments = ({mail, styleTitle, styleImageContainer}) => {
                         <hr />
                     </>
                 default:
-                    console.log( + " " + attachment.filename);
+                    console.log(attachment.mimeType + " " + attachment.filename);
                     const urlAttachement = URL.createObjectURL(attachment.blob);
                     return <>
                         <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename} {attachment.mimeType}</h2>
@@ -239,7 +238,7 @@ const initAsync = async (url, setState, state, expectedOutput) => {
     if(!url){
         return;
     }
-    setState({...state, loaderMode : LoaderModes.get});
+    setState({...state, loaderMode : LoaderModes.get, mail:null, annotation :{classification:null}});
     const response = await fetch(url);
     const blob = await response.blob();
     const message = await parseMessageAsync(blob);
@@ -322,39 +321,40 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 <input type="file" id="mime" onChange={onFileChange(state, setState)} />
             </form>
         </div>}
-        {mail != null && <div id="email-container">
-            <div style={styleContainer} >
-                <div>
-                <div id="email-summary" style={styleSummary} >
-                <h3>Mail</h3>
-                 <ul>
-                     <li>
-                         <span><a href="#Mail">Contenu du mail</a></span>
-                         <MultiSelect
-                             name={"MailAnnotation"}
-                             onChange={onChange}
-                             value={state.annotation.classification}
-                             options={options}
-                         />
-                     </li>
-                 </ul>
-                    {mail.attachments.length >0 ? <><h4>Pièces jointes</h4>
-                    <ul>
-                        {mail.attachments.map(attachment => {
-                            return <li>
-                                <span><a href={`#${attachment.filename}`}>{attachment.filename}</a></span>
-                            </li>
-                        })}
-                    </ul></>: null}
-             </div>
-            </div>
-                <div>
-                    <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
-                    <MailAttachments mail={mail} styleImageContainer={styleImageContainer}  styleTitle={styleTitle} />
+        <Loader mode={state.loaderMode} text={"Your browser is extracting the eml"}>
+            {mail != null && <div id="email-container">
+                <div style={styleContainer} >
+                    <div>
+                    <div id="email-summary" style={styleSummary} >
+                    <h3>Mail</h3>
+                     <ul>
+                         <li>
+                             <span><a href="#Mail">Contenu du mail</a></span>
+                             <MultiSelect
+                                 name={"MailAnnotation"}
+                                 onChange={onChange}
+                                 value={state.annotation.classification}
+                                 options={options}
+                             />
+                         </li>
+                     </ul>
+                        {mail.attachments.length >0 ? <><h4>Pièces jointes</h4>
+                        <ul>
+                            {mail.attachments.map((attachment,index) => {
+                                return <li id={index.toString()}>
+                                    <span><a href={`#${attachment.filename}`}>{attachment.filename}</a></span>
+                                </li>
+                            })}
+                        </ul></>: null}
+                 </div>
                 </div>
-            </div>
-        </div>}
-
+                    <div>
+                        <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
+                        <MailAttachments mail={mail} styleImageContainer={styleImageContainer}  styleTitle={styleTitle} />
+                    </div>
+                </div>
+            </div>}
+        </Loader>
         <Toolbar
             state={state}
             setState={setState}
