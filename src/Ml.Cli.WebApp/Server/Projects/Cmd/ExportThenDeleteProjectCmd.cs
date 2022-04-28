@@ -18,17 +18,17 @@ public class ExportThenDeleteProjectCmd
     private readonly DatasetsRepository _datasetsRepository;
     private readonly AnnotationsRepository _annotationsRepository;
     private readonly DeleteRepository _deleteRepository;
-    private readonly IBlobService _blobService;
+    private readonly ITransferService _transferService;
     public const string UserNotFound = "UserNotFound";
 
-    public ExportThenDeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, DeleteRepository deleteRepository, IBlobService blobService)
+    public ExportThenDeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, DeleteRepository deleteRepository, ITransferService transferService)
     {
         _usersRepository = usersRepository;
         _projectsRepository = projectsRepository;
         _datasetsRepository = datasetsRepository;
         _annotationsRepository = annotationsRepository;
         _deleteRepository = deleteRepository;
-        _blobService = blobService;
+        _transferService = transferService;
     }
     
     public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
@@ -84,6 +84,6 @@ public class ExportThenDeleteProjectCmd
         var fileName =
             $"{exportCmdResult.ProjectName}_{DateTime.Now.Ticks}/{exportCmdResult.ProjectName}-annotations.json";
         var stream = new MemoryStream(bytes);
-        await _blobService.UploadStreamAsync(containerName, fileName, stream);
+        await _transferService.UploadStreamAsync(containerName, fileName, stream);
     }
 }

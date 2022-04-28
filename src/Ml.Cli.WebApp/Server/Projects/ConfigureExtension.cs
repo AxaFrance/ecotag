@@ -17,7 +17,7 @@ public static class ConfigureExtension
     {
         services.Configure<TransferFileStorageSettings>(
             configuration.GetSection(TransferFileStorageSettings.Storage));
-        services.AddScoped<IBlobService, BlobService>();
+        services.AddScoped<ITransferService, TransferService>();
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddDbContext<DeleteContext>(options =>

@@ -6,11 +6,11 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 namespace Ml.Cli.WebApp.Server.Projects.BlobStorage;
 
 [ExcludeFromCodeCoverage]
-public class BlobService : IBlobService
+public class TransferService : ITransferService
 {
     private readonly IFileService _fileService;
 
-    public BlobService(IFileService fileService)
+    public TransferService(IFileService fileService)
     {
         _fileService = fileService;
     }

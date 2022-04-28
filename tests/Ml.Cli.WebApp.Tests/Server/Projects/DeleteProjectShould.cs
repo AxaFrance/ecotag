@@ -43,13 +43,13 @@ public class DeleteProjectShould
         Assert.Equal(errorKey, resultKoValue.Key);
     }
 
-    private static (IFileService, IBlobService) InitServices()
+    private static (IFileService, ITransferService) InitServices()
     {
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
             .Setup(foo => foo.DeleteAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(true);
-        var mockedBlobService = new Mock<IBlobService>();
+        var mockedBlobService = new Mock<ITransferService>();
         mockedBlobService
             .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
         return (mockedFileService.Object, mockedBlobService.Object);
