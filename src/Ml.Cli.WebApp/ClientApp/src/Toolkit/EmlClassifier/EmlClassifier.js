@@ -362,7 +362,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
         "padding": "4px",
         "width":"260px",
         "position": "sticky",
-        "word-break": "break-all",
+        "wordBreak": "break-all",
         "top": "0",
     };
 
