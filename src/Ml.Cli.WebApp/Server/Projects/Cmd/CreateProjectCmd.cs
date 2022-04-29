@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -75,6 +76,18 @@ public class CreateProjectCmd
 
         var validationResult = new Validation().Validate(createProjectWithUserInput, true);
         if (!validationResult.IsSuccess)
+        {
+            commandResult.Error = new ErrorResult
+            {
+                Key = InvalidModel,
+                Error = validationResult.Errors
+            };
+            return commandResult;
+        }
+
+        var labelsNamesArray = createProjectWithUserInput.CreateProjectInput.Labels.Select(label => label.Name).ToList();
+        var labelsNamesHaveDuplicates = labelsNamesArray.Count != labelsNamesArray.Distinct().Count();
+        if (labelsNamesHaveDuplicates)
         {
             commandResult.Error = new ErrorResult
             {

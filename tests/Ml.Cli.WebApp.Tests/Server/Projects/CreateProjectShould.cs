@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
-using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -59,6 +58,7 @@ public class CreateProjectShould
     [InlineData("a", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
     [InlineData("more_than_forty_eight_characters_group_name_aaaaa", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
     [InlineData("projectName", 1, "wrongAnnotationType", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
+    [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"},{\"Id\":\"10000000-0000-0000-0000-000000000001\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.InvalidModel, null)]
     [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666666", CreateProjectCmd.GroupNotFound, "6c5b0cdd-2ade-41c0-ba96-d8b17b8cfe78")]
     [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s777777", CreateProjectCmd.UserNotFound, null)]
     [InlineData("projectName", 1, "NamedEntity", "[{\"Id\":\"10000000-0000-0000-0000-000000000000\",\"Name\":\"LabelName\",\"Color\":\"#000000\"}]", "s666667", CreateProjectCmd.UserNotInGroup, null)]
