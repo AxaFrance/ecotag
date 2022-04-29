@@ -10,6 +10,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
     >
       <div
         class="image-classifier__button-container"
+        title="Raccourci : 1"
       >
         <button
           class="image-classifier-btn"
@@ -20,6 +21,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
       </div>
       <div
         class="image-classifier__button-container"
+        title="Raccourci : 2"
       >
         <button
           class="image-classifier-btn"
@@ -30,6 +32,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
       </div>
       <div
         class="image-classifier__button-container"
+        title="Raccourci : 3"
       >
         <button
           class="image-classifier-btn"
@@ -40,6 +43,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
       </div>
       <div
         class="image-classifier__button-container"
+        title="Raccourci : 4"
       >
         <button
           class="image-classifier-btn"

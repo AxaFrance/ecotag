@@ -12,7 +12,12 @@ import {
   TYPE,
   MSG_REQUIRED,
   LABELS,
-  MSG_PROJECT_NAME_ALREADY_EXIST, MSG_MIN_LENGTH, MSG_MAX_LENGTH, MSG_TEXT_REGEX, MSG_MAX_LABELS_LENGTH
+  MSG_PROJECT_NAME_ALREADY_EXIST,
+  MSG_MIN_LENGTH,
+  MSG_MAX_LENGTH,
+  MSG_TEXT_REGEX,
+  MSG_MAX_LABELS_LENGTH,
+  MSG_DUPLICATE_LABEL_NAME
 } from './constants';
 import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
@@ -23,6 +28,14 @@ import {withTelemetry, telemetryEvents} from "../../../Telemetry";
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
 const setErrorMessage = key => fields => fields[key].message !== null;
+
+const hasDuplicates = array => {
+  return (new Set(array)).size !== array.length;
+};
+
+const getLabelsNames = array => {
+  return array.map(label => label.name);
+}
 
 const preInitState = {
   groups: [],
@@ -76,6 +89,9 @@ export const reducer = (state, action) => {
           }
           else if(newValues.length > 32){
             message = MSG_MAX_LABELS_LENGTH
+          }
+          else if(hasDuplicates(getLabelsNames(newValues))){
+            message = MSG_DUPLICATE_LABEL_NAME;
           }
           else{
             newValues.forEach(function(value, index){

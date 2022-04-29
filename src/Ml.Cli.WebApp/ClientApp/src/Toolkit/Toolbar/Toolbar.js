@@ -75,7 +75,7 @@ const Toolbar = ({ isSubmitDisabled = false, onSubmit, onReset = undefined, chil
       {children}
       <ToolbarButtonContainer classModifier="submit">
         {onReset && (
-          <button className="toolbar__button-reset" onClick={onReset}>
+          <button title="Raccourci : Ctrl + Alt + Barre espace" className="toolbar__button-reset" onClick={onReset}>
             Reset
           </button>
         )}

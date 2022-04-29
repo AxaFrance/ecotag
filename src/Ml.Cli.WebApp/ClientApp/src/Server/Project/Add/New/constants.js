@@ -11,3 +11,4 @@ export const MSG_MIN_LENGTH = 'Le champ ne contient pas assez de caractères (3 
 export const MSG_MAX_LENGTH = 'Le champ contient trop de caractères (48 max)';
 export const MSG_TEXT_REGEX = "Veuillez respecter le bon format (Lettres, chiffres, '-' ou '_' uniquement)";
 export const MSG_PROJECT_NAME_ALREADY_EXIST = 'Un projet avec ce nom existe déjà';
+export const MSG_DUPLICATE_LABEL_NAME = 'Plusieurs labels ont le même nom';

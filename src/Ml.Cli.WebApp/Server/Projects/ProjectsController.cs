@@ -73,19 +73,6 @@ namespace Ml.Cli.WebApp.Server.Projects
             var result = await getAllProjectsCmd.ExecuteAsync(nameIdentifier);
             return Ok(result);
         }
-        
-        [HttpGet("annotations/{projectId}")]
-        public async Task<ActionResult<GetProjectCmdResult>> GetAnnotationsStatus([FromServices] GetAnnotationsStatusCmd getAnnotationsStatusCmd, string projectId)
-        {
-            var nameIdentifier = User.Identity.GetNameIdentifier();
-            var commandResult = await getAnnotationsStatusCmd.ExecuteAsync(projectId, nameIdentifier);
-            if (!commandResult.IsSuccess)
-            {
-                return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
-                    commandResult.Error);
-            }
-            return Ok(commandResult.Data);
-        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetProjectCmdResult>> GetProject([FromServices] GetProjectCmd getProjectCmd, string id)
@@ -97,6 +84,7 @@ namespace Ml.Cli.WebApp.Server.Projects
                 return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
                     commandResult.Error);
             }
+            
             return Ok(commandResult.Data);
         }
 
@@ -116,20 +104,13 @@ namespace Ml.Cli.WebApp.Server.Projects
             return Created(commandResult.Data, commandResult.Data);
         }
 
-        [HttpPost("{projectId}/annotations/{fileId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, AnnotationInput annotationInput)
+        [HttpPost("delete/{projectId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.DataScientist)]
+        public async Task<ActionResult> Delete([FromServices] ExportThenDeleteProjectCmd exportThenDeleteProjectCmd, string projectId)
         {
-            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
-            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
-            {
-                ProjectId = projectId,
-                FileId = fileId,
-                AnnotationInput = annotationInput,
-                CreatorNameIdentifier = creatorNameIdentifier
-            });
+            var nameIdentifier = User.Identity.GetNameIdentifier();
+            var commandResult = await exportThenDeleteProjectCmd.ExecuteAsync(projectId, nameIdentifier);
             if (!commandResult.IsSuccess)
             {
                 return commandResult.Error.Key == ProjectsRepository.Forbidden
@@ -137,33 +118,9 @@ namespace Ml.Cli.WebApp.Server.Projects
                     : BadRequest(commandResult.Error);
             }
 
-            return Created($"{projectId}/annotations/{fileId}/{commandResult.Data}", commandResult.Data);
+            return Ok();
         }
-        
-        [HttpPut("{projectId}/annotations/{fileId}/{annotationId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Annotation([FromServices]SaveAnnotationCmd saveAnnotationCmd, string projectId, string fileId, string annotationId, AnnotationInput annotationInput)
-        {
-            var creatorNameIdentifier = User.Identity.GetNameIdentifier();
-            var commandResult = await saveAnnotationCmd.ExecuteAsync(new SaveAnnotationInput()
-            {
-                ProjectId = projectId,
-                FileId = fileId,
-                AnnotationId = annotationId,
-                AnnotationInput = annotationInput,
-                CreatorNameIdentifier = creatorNameIdentifier
-            });
-            if (!commandResult.IsSuccess)
-            {
-                return commandResult.Error.Key == ProjectsRepository.Forbidden
-                    ? Forbid()
-                    : BadRequest(commandResult.Error);
-            }
 
-            return NoContent();
-        }
-        
         [HttpPost("{projectId}/reserve")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,0 +1,18 @@
+﻿.af-btn {
+  width: 25%
+}
+
+.lock{
+  &__button-container{
+    display: flex;
+    justify-content: center;
+  }
+  &__button {
+    &--disabled {
+      display: none;
+    }
+  }
+  &__button-icon{
+    margin-left: 5%;
+  }
+}

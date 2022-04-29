@@ -5,6 +5,7 @@ import './ImageClassifier.scss';
 import '@axa-fr/react-toolkit-button/src/button.scss'
 import classNames from "classnames";
 import { GlobalHotKeys } from 'react-hotkeys';
+import {generateLabelsKeyMap} from "../labels";
 
 const defaultClassName = 'image-classifier';
 const defaultClassNameButtonsContainer = 'image-classifier__buttons-container';
@@ -12,9 +13,7 @@ const defaultClassNameButtonContainer = 'image-classifier__button-container';
 
 const generateKeyMap = (length) => {
     let result = {};
-    for(let i = 1; i <= length; i ++){
-        result[`${i.toString(16)}`] = `${i.toString(16)}`;
-    }
+    generateLabelsKeyMap(result, length)
     return result;
 };
 
@@ -54,7 +53,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                                 isSelected = true;
                             }
                             return(
-                                <div key={index} className={classNameButtonContainer}>
+                                <div title={`Raccourci : ${keyMap[(index + 1).toString(16)]}`} key={index} className={classNameButtonContainer}>
                                     <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );

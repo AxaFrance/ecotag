@@ -40,15 +40,19 @@ const ToolbarContainer = ({ url, state, setState, onSubmit, expectedAngle }) => 
     };
     onSubmit(data);
   };
+  
+  const onReset = () => setState({ ...state, rotate: expectedAngle });
 
   const keyMap = {
     submit: 'ctrl+spacebar',
+    reset: 'ctrl+alt+spacebar',
     moveShapeLeft: 'ArrowLeft',
     moveShapeRight: 'ArrowRight',
   };
 
   const handlers = {
     submit: onSubmitOverride,
+    reset: onReset,
     moveShapeLeft: () => {
       if (state.rotate < 180) {
         setState({
@@ -72,7 +76,7 @@ const ToolbarContainer = ({ url, state, setState, onSubmit, expectedAngle }) => 
       <Toolbar
         isSubmitDisabled={isSubmitDisabled}
         onSubmit={onSubmitOverride}
-        onReset={() => setState({ ...state, rotate: expectedAngle })}
+        onReset={onReset}
       >
         <ToolbarButtonContainer classModifier="filters">
           <ToolbarProgressButton

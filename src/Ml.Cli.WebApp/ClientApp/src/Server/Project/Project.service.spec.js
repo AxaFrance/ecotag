@@ -1,4 +1,4 @@
-import {fetchProject, fetchCreateProject } from "./Project.service";
+import {fetchProject, fetchCreateProject, fetchDeleteProject} from "./Project.service";
 
 describe('Page.service', () => {
     describe('.fetchProject()', () => {
@@ -10,6 +10,14 @@ describe('Page.service', () => {
         });
     });
     
+    describe('.deleteProject', () => {
+        const givenId = "0001";
+        const givenFetch = jest.fn();
+        it('should call deleteProject', () => {
+            fetchDeleteProject(givenFetch)(givenId);
+            expect(givenFetch).toHaveBeenCalledWith(`projects/delete/${givenId}`, { method: 'POST'});
+        });
+    });
 });
 
 describe('Project/Add/New.service', () => {
