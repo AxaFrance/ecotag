@@ -28,7 +28,7 @@ const ToolbarContainer = ({ setState, state, onSubmit }) => {
     
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-            <Toolbar onSubmit={onSubmit} isSubmitDisabled={!state.mail && state.annotation.classification}>
+            <Toolbar onSubmit={onSubmit} isSubmitDisabled={!state.mail || state.annotation.label ===null}>
                 <ToolbarButtonContainer>
                     <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
                     <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />
