@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
@@ -76,13 +75,8 @@ public class ExportCmd
             return commandResult;
         }
         
-        var projectFilesWithAnnotations = await _annotationsRepository.GetFilesWithAnnotationsByDatasetIdAsync(dataset.Id);
-
-        var annotations = new List<ExportAnnotation>();
-        foreach (var fileDataModel in projectFilesWithAnnotations)
-        {
-            annotations.AddRange(SetExportAnnotationsByFile(fileDataModel, projectId));
-        }
+        var annotations = await _annotationsRepository.GetAnnotationsByProjectIdAndDatasetIdAsync(projectId, dataset.Id);
+        
         var project = projectResult.Data;
 
         var annotationsStatus =
@@ -101,25 +95,5 @@ public class ExportCmd
         };
         commandResult.Data = exportCmdResult;
         return commandResult;
-    }
-
-    private IList<ExportAnnotation> SetExportAnnotationsByFile(FileDataModel fileDataModel, string projectId)
-    {
-        IList<ExportAnnotation> result = new List<ExportAnnotation>();
-        foreach (var annotation in fileDataModel.Annotations)
-        {
-            if (annotation.ProjectId == projectId)
-            {
-                result.Add(new ExportAnnotation
-                {
-                    FileName = fileDataModel.Name,
-                    NameIdentifier = annotation.CreatorNameIdentifier,
-                    CreateDate = annotation.TimeStamp,
-                    Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
-                });
-            }
-        }
-
-        return result;
     }
 }

@@ -97,6 +97,7 @@ namespace Ml.Cli.WebApp.Server.Projects
                 return commandResult.Error.Key == ProjectsRepository.Forbidden ? Forbid() : BadRequest(
                     commandResult.Error);
             }
+            
             return Ok(commandResult.Data);
         }
 
@@ -114,6 +115,23 @@ namespace Ml.Cli.WebApp.Server.Projects
             }
 
             return Created(commandResult.Data, commandResult.Data);
+        }
+
+        [HttpPost("delete/{projectId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.DataScientist)]
+        public async Task<ActionResult> Delete([FromServices] ExportThenDeleteProjectCmd exportThenDeleteProjectCmd, string projectId)
+        {
+            var nameIdentifier = User.Identity.GetNameIdentifier();
+            var commandResult = await exportThenDeleteProjectCmd.ExecuteAsync(projectId, nameIdentifier);
+            if (!commandResult.IsSuccess)
+            {
+                return commandResult.Error.Key == ProjectsRepository.Forbidden
+                    ? Forbid()
+                    : BadRequest(commandResult.Error);
+            }
+
+            return Ok();
         }
 
         [HttpPost("{projectId}/annotations/{fileId}")]

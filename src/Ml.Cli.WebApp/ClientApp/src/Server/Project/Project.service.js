@@ -32,4 +32,9 @@ export const fetchCreateProject = fetch => async newProject =>
         body: JSON.stringify(newProject),
     });
 
+export const fetchDeleteProject = fetch => async (id) =>
+    fetch(`projects/delete/${id}`, {
+        method: 'POST'
+    });
+
 export const fetchExportAnnotations = fetch => async projectId => fetch(`projects/${projectId}/export`);

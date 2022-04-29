@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import {initialState, PageContainer, reducer} from './Page.container';
+import {initialState, onLockSubmit, PageContainer, reducer} from './Page.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {resilienceStatus} from "../../shared/Resilience";
 import {DataScientist} from "../../withAuthentication";
@@ -109,6 +109,14 @@ describe('Page.container', () => {
       }
     });
   });
-
+  
+  describe('.onLockSubmit', () => {
+    it('should fetch delete project method', async () => {
+      const givenFetch = jest.fn()
+          .mockResolvedValueOnce({ok: true, status: 200});
+      const givenDispatch = jest.fn();
+      await onLockSubmit(givenFetch, givenDispatch)("0001");
+      expect(givenDispatch).toHaveBeenCalledWith({data: {status: resilienceStatus.SUCCESS, isModalOpened: false}, type: 'lock_project'});
+    });
+  });
 });
-

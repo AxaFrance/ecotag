@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
@@ -28,7 +29,9 @@ public class CreateProjectShould
     {
         var builder = new DbContextOptionsBuilder<ProjectContext>();
         var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
+        builder
+            .UseInMemoryDatabase(databaseName)
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));;
 
         var options = builder.Options;
         var projectContext = new ProjectContext(options);
