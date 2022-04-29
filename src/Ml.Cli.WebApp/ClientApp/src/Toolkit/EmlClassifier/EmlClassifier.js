@@ -92,7 +92,7 @@ const DisplayEmails = (emails) => {
     })}</>
 }
 
-function DisplayPdf({blob}){
+function DisplayPdf({blob, id, onChange}){
     const [state, setState] = useState({
         files: [],
         loaderMode: LoaderModes.none,
@@ -103,12 +103,14 @@ function DisplayPdf({blob}){
             files: [],
             loaderMode: LoaderModes.get,
         });
+        onChange("loading", {id, loaderMode: LoaderModes.get});
         convertPdfToImagesAsync()(blob).then(files => {
             setState({
                 ...state,
                 files: files,
                 loaderMode: LoaderModes.none,
             });
+            onChange("loading", {id, loaderMode: LoaderModes.none});
         });
     }, []);
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
@@ -173,9 +175,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
         threshold: 0
     });
     useEffect(() => {
-        if(onChange) {
-            onChange("visibility", {id: attachment.id, isVisible: inView});
-        }
+        onChange("visibility", {id: attachment.id, isVisible: inView});
     }, [inView]);
     const id = attachment.id;
     switch (attachment.mimeType) {
@@ -202,7 +202,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
             return <div ref={ref} key={id}>
                 <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                 <div style={styleImageContainer}>
-                    <DisplayPdf blob={attachment.blob}/>
+                    <DisplayPdf blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
             </div>
         case "application/octet-stream":
@@ -211,7 +211,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
                 return <div ref={ref} key={id}>
                     <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                     <div style={styleImageContainer}>
-                        <DisplayPdf blob={attachment.blob}/>
+                        <DisplayPdf blob={attachment.blob} onChange={onChange}/>
                     </div>
                 </div>
             }
@@ -219,7 +219,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
                 return <div ref={ref} key={id}>
                     <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                     <MailAttachment attachment={attachment} styleTitle={styleTitle}
-                                    styleImageContainer={styleImageContainer}/>
+                                    styleImageContainer={styleImageContainer} onChange={onChange}/>
                 </div>
             }
             console.log(attachment.mimeType + " " + attachment.filename);
@@ -241,8 +241,6 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
 }
 
 const MailAttachments = ({mail, styleTitle, styleImageContainer, onChange}) => {
-    console.log("mail.attachments");
-    console.log(mail.attachments);
     return <div>
         {mail.attachments.map((attachment) => {
             return <Attachment key={attachment.id} attachment={attachment} styleTitle={styleTitle} styleImageContainer={styleImageContainer} onChange={onChange} />;
@@ -258,12 +256,12 @@ const MailAttachment = ({styleTitle, styleImageContainer, attachment, onChange})
             if (attachment.blob && !mail) {
                 const message = await parseMessageAsync(blob);
                 setMail(message);
+                onChange("loading", {id: attachment.id, loaderMode: LoaderModes.get});
                 setLoaderMode(LoaderModes.none);
             }
             if(blob && mail && mail.attachments.length > 0){
-                if(onChange){
-                    onChange("attachments", {id: attachment.id, attachments: mail.attachments});
-                }
+                onChange("attachments", {id: attachment.id, attachments: mail.attachments});
+                onChange("loading", {id: attachment.id, loaderMode: LoaderModes.none});
             }
         }, [mail]);
         
@@ -293,7 +291,7 @@ const SideAttachements = ({attachments, level=0}) =>{
     return <ul>
         {attachments.map((attachment) => {
             return <li style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} } key={`side_attachment_${attachment.id}`}>
-                <span><a href={`#${attachment.id}`}>{attachment.filename}</a></span>
+                <span><a href={`#${attachment.id}`}>{attachment.filename}{attachment.loaderMode === LoaderModes.get ? " (chargement)":""}</a></span>
                 <SideAttachements attachments={attachment.attachments} level={level+1} />
             </li>
         })}
@@ -405,6 +403,14 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             }   
                 break;
             case "loading":
+
+                const attachment = findAttachment(state.mail, id);
+                if (attachment) {
+                    const newAttachments = updateAttachments(state.mail.attachments, id,{loaderMode: data.loaderMode});
+                    const newMail = {...state.mail, attachments: newAttachments};
+                    setState({...state, mail: newMail});
+                }
+                
                 break;
             case "attachments": {
                 const attachment = findAttachment(state.mail, id);
@@ -444,7 +450,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     }
     
     const onSubmitWrapper= () => {
-        onSubmit(state.annotation);
+        onSubmit(state.annotation.classification);
     }
     
     const mail = state.mail;
