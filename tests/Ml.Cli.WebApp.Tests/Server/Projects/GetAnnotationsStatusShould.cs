@@ -20,11 +20,11 @@ public class GetAnnotationsStatusShould
 
         var getAnnotationsStatusCmd =
             new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
-        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
+        var result = await mock.AnnotationsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
         var resultOk = result.Result as OkObjectResult;
         Assert.NotNull(resultOk);
         var resultValue = resultOk.Value as AnnotationStatus;
-        Assert.Equal(40, resultValue.NumberAnnotationsToDo);
+        Assert.Equal(41, resultValue.NumberAnnotationsToDo);
     }
 
     [Theory]
@@ -39,7 +39,7 @@ public class GetAnnotationsStatusShould
 
         var getAnnotationsStatusCmd =
             new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
-        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, projectId ?? mock.Dataset3Project1Id);
+        var result = await mock.AnnotationsController.GetAnnotationsStatus(getAnnotationsStatusCmd, projectId ?? mock.Dataset3Project1Id);
         
         var resultError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultError);
@@ -55,7 +55,7 @@ public class GetAnnotationsStatusShould
 
         var getAnnotationsStatusCmd =
             new GetAnnotationsStatusCmd(mock.ProjectsRepository, mock.UsersRepository, mock.AnnotationsRepository);
-        var result = await mock.ProjectsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
+        var result = await mock.AnnotationsController.GetAnnotationsStatus(getAnnotationsStatusCmd, mock.Dataset3Project1Id);
 
         var resultError = result.Result as ForbidResult;
         Assert.NotNull(resultError);
