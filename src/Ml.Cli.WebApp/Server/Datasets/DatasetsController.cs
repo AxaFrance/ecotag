@@ -72,7 +72,7 @@ public class DatasetsController : Controller
         List<IFormFile> files)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
-        var uploadfiles = new List<UploadFile>();
+        var uploadFiles = new List<UploadFile>();
         foreach (var formFile in files.Where(formFile => formFile.Length > 0))
         {
             var stream = formFile.OpenReadStream();
@@ -82,12 +82,12 @@ public class DatasetsController : Controller
                 Stream = stream,
                 ContentType = formFile.ContentType
             };
-            uploadfiles.Add(uploadFile);
+            uploadFiles.Add(uploadFile);
         }
 
         var uploadFileResults = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput
         {
-            Files = uploadfiles,
+            Files = uploadFiles,
             DatasetId = datasetId,
             NameIdentifier = nameIdentifier
         });
@@ -128,6 +128,20 @@ public class DatasetsController : Controller
 
         var file = result.Data;
         return File(file.Stream, file.ContentType, file.Name);
+    }
+
+    [HttpGet("imported")]
+    [ResponseCache(Duration = 1)]
+    public async Task<ActionResult<IList<string>>> GetImportedDatasets([FromServices] GetImportedDatasetsCmd getImportedDatasetsCmd)
+    {
+        var nameIdentifier = User.Identity.GetNameIdentifier();
+        var result = await getImportedDatasetsCmd.ExecuteAsync(nameIdentifier);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Data);
     }
 
     [HttpDelete("{datasetId}/files/{id}")]

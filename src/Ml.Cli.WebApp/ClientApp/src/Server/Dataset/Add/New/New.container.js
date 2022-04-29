@@ -13,7 +13,7 @@ import {
   DATASET
 } from './constants';
 import React, { useReducer } from 'react';
-import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
+import {fetchCreateDataset, fetchDatasets, fetchImportedDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import withCustomFetch from "../../../withCustomFetch";
 import compose from "../../../compose";
@@ -29,6 +29,7 @@ const preInitState = {
   status: resilienceStatus.LOADING,
   groups : [],
   datasets : [],
+  importedDatasets : [],
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
     [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
@@ -48,12 +49,13 @@ export const initState = computeInitialStateErrorMessage(preInitState, rules);
 const reducer = (state, action) => {
   switch (action.type) {
     case 'init':{
-        const { datasets, groups, status } = action.data;
+        const { datasets, groups, importedDatasets, status } = action.data;
         return {
           ...state,
           status,
           datasets,
-          groups
+          groups,
+          importedDatasets
         };
       }
     case 'onChange': {
@@ -104,15 +106,17 @@ const reducer = (state, action) => {
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)();
   const groupsPromise = fetchGroups(fetch)(true);
+  const importedDatasetsPromise = fetchImportedDatasets(fetch)();
 
-  const [datasetsResponse, groupsResponse] = await Promise.all([datasetsPromise, groupsPromise]);
+  const [datasetsResponse, groupsResponse, importedDatasetsResponse] = await Promise.all([datasetsPromise, groupsPromise, importedDatasetsPromise]);
   let data;
-  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 ) {
-    data = { datasets: [], groups:[], status: resilienceStatus.ERROR };
+  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 || importedDatasetsResponse.status >= 500) {
+    data = { datasets: [], groups: [], importedDatasets: [], status: resilienceStatus.ERROR };
   } else {
-    const datasets = await datasetsResponse.json()
-    const groups = await groupsResponse.json()
-    data = { datasets, groups, status: resilienceStatus.SUCCESS };
+    const datasets = await datasetsResponse.json();
+    const groups = await groupsResponse.json();
+    const importedDatasets = await importedDatasetsResponse.json();
+    data = { datasets, groups, importedDatasets, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };

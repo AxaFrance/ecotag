@@ -38,11 +38,16 @@ public class TransferService : ITransferService
         if (string.IsNullOrEmpty(containerName)) return null;
         var connectionString = _azureStorageOptions.Value.ConnectionString;
         var container = new BlobContainerClient(connectionString, containerName);
-        await container.SetAccessPolicyAsync();
-        var blobsResponse = container.GetBlobsAsync();
-        await foreach (var blobItem in blobsResponse)
+        var containerExistsResponse = await container.ExistsAsync();
+        var containerExists = containerExistsResponse.Value;
+        if (containerExists)
         {
-            result.Add(blobItem.Name);
+            await container.SetAccessPolicyAsync();
+            var blobsResponse = container.GetBlobsAsync();
+            await foreach (var blobItem in blobsResponse)
+            {
+                result.Add(blobItem.Name);
+            }
         }
 
         return result;
