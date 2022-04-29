@@ -1,4 +1,4 @@
-﻿namespace Ml.Cli.WebApp.Server.Projects.BlobStorage;
+﻿namespace Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 
 public class TransferFileStorageSettings
 {
