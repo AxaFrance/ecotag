@@ -27,6 +27,7 @@ public static class ConfigureExtension
         services.AddScoped<GetFileCmd, GetFileCmd>();
         services.AddScoped<LockDatasetCmd, LockDatasetCmd>();
         services.AddScoped<DeleteFileCmd, DeleteFileCmd>();
+        services.AddScoped<GetImportedDatasetsCmd, GetImportedDatasetsCmd>();
         services.AddScoped<AnnotationsRepository, AnnotationsRepository>();
     }
 }

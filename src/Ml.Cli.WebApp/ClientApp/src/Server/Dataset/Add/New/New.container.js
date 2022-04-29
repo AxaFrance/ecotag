@@ -2,7 +2,16 @@ import New from './New';
 import { rules } from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
-import {NAME, TYPE, CLASSIFICATION, GROUP, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
+import {
+  NAME,
+  TYPE,
+  CLASSIFICATION,
+  GROUP,
+  DATASETS_IMPORT,
+  MSG_REQUIRED,
+  MSG_DATASET_NAME_ALREADY_EXIST,
+  DATASET
+} from './constants';
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
@@ -28,7 +37,9 @@ const preInitState = {
       name: CLASSIFICATION,
       value: '',
       message: MSG_REQUIRED,
-    }
+    },
+    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true},
+    [DATASET]: {name: DATASET, value: '', options: [], disabled: true}
   },
 };
 
@@ -48,7 +59,7 @@ const reducer = (state, action) => {
     case 'onChange': {
       const event = action.event;
       let newField = genericHandleChange(rules, state.fields, event);
-      const name = event.name
+      const name = event.name;
       if(NAME === name){
         if(state.datasets.find(dataset => dataset.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
           newField = {
@@ -58,6 +69,19 @@ const reducer = (state, action) => {
               message: MSG_DATASET_NAME_ALREADY_EXIST
             }};
         }
+      }
+      else if(DATASETS_IMPORT === name){
+        const isChecked = !state.fields[DATASETS_IMPORT].isChecked
+        newField = {
+          ...newField,
+          [DATASETS_IMPORT]: {
+            ...newField[DATASETS_IMPORT],
+            isChecked
+          },
+          [DATASET]: {
+            name: DATASET, value: '', options: [], disabled: !isChecked
+          }
+        };
       }
       return {
         ...state,

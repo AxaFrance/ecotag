@@ -13,7 +13,7 @@ export const Confirm = ({ navBack }) => (
       <span className="glyphicon glyphicon--ring glyphicon-ok" />
       <h2 className="af-confirm__message">Nouveau dataset ajouté !</h2>
       <Button classModifier="success hasiconLeft" id="return_datatset" name="return_datatset" onClick={navBack}>
-        <span className="af-btn-text">Retour liste datatsets</span>
+        <span className="af-btn-text">Retour liste datasets</span>
         <span className="icons-list__item-icon glyphicon glyphicon-list-alt" />
       </Button>
     </div>
