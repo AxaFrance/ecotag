@@ -58,7 +58,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                                 isSelected = true;
                             }
                             return(
-                                <div title={`Raccourci : ${keyMap[index + 1]}`} key={index} className={classNameButtonContainer}>
+                                <div title={`Raccourci : ${keyMap[(index + 1).toString(16)]}`} key={index} className={classNameButtonContainer}>
                                     <button className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`} onClick={() => onSubmit(label.name)} style={{backgroundColor: label.color}}>{label.name}</button>
                                 </div>
                             );

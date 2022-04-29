@@ -15,7 +15,7 @@ const Label = ({labels, selectLabel, selectedLabel}) => {
                 return (
                     <span key={id + index} onClick={() => selectLabel(label)}>
                       <label
-                          title={`Raccourci : ${keyMapArray[index + 1]}`}
+                          title={`Raccourci : ${keyMapArray[(index + 1).toString(16)]}`}
                           className="label__element"
                           style={selectedLabel.id === id ? {color: adaptTextColorToBackgroundColor(color), backgroundColor: color, boxShadow: `0 0 0 2px ${color} inset, 0 0 0 4px ${adaptTextColorToBackgroundColor(color)} inset` } : {color: adaptTextColorToBackgroundColor(color), backgroundColor: color}}
                           htmlFor={name}>
