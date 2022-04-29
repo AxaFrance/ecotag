@@ -118,15 +118,23 @@ function DisplayPdf({blob}){
     </Loader>);
 }
 
-const Mail = ({mail, id, title, styleTitle}) => {
+const Mail = ({mail, title, styleTitle, onChange}) => {
+    const { ref, inView } = useInView({
+        threshold: 0.5
+    });
+    useEffect(() => {
+        if(onChange) {
+            onChange("visibility", {id: mail.id, isVisible: inView});
+        }
+    }, [inView]);
     const style = {
         "whiteSpace": mail.html ? "":"pre-line",
         "border": "2px solid grey",
         "padding": "4px",
         "word-break": "break-all",
     };
-    return <>
-        <h2 style={styleTitle} id={id}>{title}</h2>
+    return <div ref={ref}>
+        <h2 style={styleTitle} id={mail.id}>{title}</h2>
         <table>
             <tbody>
             <tr>
@@ -157,23 +165,23 @@ const Mail = ({mail, id, title, styleTitle}) => {
             </tr>
             </tbody>
         </table>
-        </>;
+        </div>;
 };
 
-const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChange, isVisible }) => {
-
+const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) => {
     const { ref, inView } = useInView({
-        threshold: 0
+        threshold: 0.5
     });
     useEffect(() => {
         if(onChange) {
             onChange("visibility", {id: attachment.id, isVisible: inView});
         }
     }, [inView]);
-    
+    const id = attachment.id;
+    console.log("id:"+ id)
     switch (attachment.mimeType) {
         case "message/rfc822":
-            return <div  key={index.toString()}>
+            return <div key={id.toString()}>
                 <h2 ref={ref} style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                 <MailAttachment attachment={attachment} styleTitle={styleTitle}
                                 styleImageContainer={styleImageContainer} onChange={onChange}/>
@@ -184,7 +192,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
         case "image/webp":
         case "image/svg+xml":
             const url = URL.createObjectURL(attachment.blob);
-            return <div ref={ref} key={index.toString()}>
+            return <div ref={ref} key={id.toString()}>
                 <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                 <div style={styleImageContainer}>
                     <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}}/>
@@ -192,7 +200,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
                 </div>
             </div>
         case "application/pdf":
-            return <div ref={ref} key={index.toString()}>
+            return <div ref={ref} key={id.toString()}>
                 <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                 <div style={styleImageContainer}>
                     <DisplayPdf blob={attachment.blob}/>
@@ -201,7 +209,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
         case "application/octet-stream":
             const filenameLowerCase = attachment.filename.toLocaleLowerCase();
             if (filenameLowerCase.endsWith(".pdf")) {
-                return <div ref={ref} key={index.toString()}>
+                return <div ref={ref} key={id.toString()}>
                     <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                     <div style={styleImageContainer}>
                         <DisplayPdf blob={attachment.blob}/>
@@ -209,7 +217,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
                 </div>
             }
             if (filenameLowerCase.endsWith(".eml")) {
-                return <div ref={ref} key={index.toString()}>
+                return <div ref={ref} key={id.toString()}>
                     <h2 style={styleTitle} id={attachment.filename}>Pièce jointe: {attachment.filename}</h2>
                     <MailAttachment attachment={attachment} styleTitle={styleTitle}
                                     styleImageContainer={styleImageContainer}/>
@@ -217,7 +225,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
             }
             console.log(attachment.mimeType + " " + attachment.filename);
             const urlAttachement1 = URL.createObjectURL(attachment.blob);
-            return <div ref={ref} key={index.toString()}>
+            return <div ref={ref} key={id.toString()}>
                 <h2 style={styleTitle} id={attachment.filename}>Pièce
                     jointe: {attachment.filename} {attachment.mimeType}</h2>
                 <a target="_blank" href={urlAttachement1}>{attachment.filename}</a>
@@ -225,7 +233,7 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
         default:
             console.log(attachment.mimeType + " " + attachment.filename);
             const urlAttachement = URL.createObjectURL(attachment.blob);
-            return <div ref={ref} key={index.toString()} >
+            return <div ref={ref} key={id.toString()} >
                 <h2 style={styleTitle} id={attachment.filename}>Pièce
                     jointe: {attachment.filename} {attachment.mimeType}</h2>
                 <a target="_blank" href={urlAttachement}>{attachment.filename}</a>
@@ -235,8 +243,8 @@ const Attachment = ({attachment, index, styleTitle, styleImageContainer, onChang
 
 const MailAttachments = ({mail, styleTitle, styleImageContainer, onChange}) => {
     return <div>
-        {mail.attachments.map((attachment, index) => {
-            return <Attachment attachment={attachment} index={index} styleTitle={styleTitle} styleImageContainer={styleImageContainer} onChange={onChange} />;
+        {mail.attachments.map((attachment) => {
+            return <Attachment attachment={attachment} styleTitle={styleTitle} styleImageContainer={styleImageContainer} onChange={onChange} />;
         })}
     </div>
 }
@@ -281,8 +289,8 @@ const SideAttachements = ({attachments, level=0}) =>{
         return null;
     }
     return <ul>
-        {attachments.map((attachment,index) => {
-            return <li style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} } id={`side_attachment_${index.toString()}_${level.toString()}`}>
+        {attachments.map((attachment) => {
+            return <li style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} } id={`side_attachment_${attachment.id}`}>
                 <span><a href={`#${attachment.filename}`}>{attachment.filename}</a></span>
                 <SideAttachements attachments={attachment.attachments} level={level+1} />
             </li>
@@ -304,11 +312,32 @@ const findAttachment =(attachment, id, level=0) =>{
     for (let i=0; i< attachments.length ; i++){
         let a = findAttachment(attachments[i], id, level+1);
         if(a){
-            return { attachment: a.attachment, parent: a.parent ==null ? attachment: a.parent, level };
+            return { attachment: a.attachment, parent: a.parent == null ? attachment: a.parent, level };
         }
     }
     
     return null;
+}
+
+const updateAttachments =(attachments, id, dataToAdd) =>{
+    if(!attachments){
+        return null;
+    }
+    const newAttachments = [];
+    for (let i=0; i< attachments.length ; i++){
+        const attachment = attachments[i];
+        let newAttachment = {...attachment};
+        if(attachment.id === id){
+            newAttachment = {...attachment, ...dataToAdd};
+        }
+        
+        if(attachment.attachments){
+            newAttachment.attachments = updateAttachments(attachment.attachments, id, dataToAdd);
+        }
+        newAttachments.push(newAttachment);
+    }
+
+    return newAttachments;
 }
 
 
@@ -362,9 +391,14 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             case "visibility": {
                 const attachment = findAttachment(state.mail, id);
                 if (attachment) {
-                    const index = state.mail.attachments.indexOf(attachment.attachment);
-                    const newAttachments = [...state.mail.attachments];
-                    newAttachments.splice(index, 1, {...attachment.attachment, isVisibleScreen: data.isVisible});
+                    
+                    if(attachment.parent === null){
+                        const newMail = {...state.mail, isVisibleScreen: data.isVisible};
+                        setState({...state, mail: newMail});
+                        return;
+                    }
+                    
+                    const newAttachments = updateAttachments(state.mail.attachments, id,{isVisibleScreen: data.isVisible});
                     const newMail = {...state.mail, attachments: newAttachments};
                     setState({...state, mail: newMail});
                 }
@@ -375,9 +409,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             case "attachments": {
                 const attachment = findAttachment(state.mail, id);
                 if (attachment) {
-                    const index = state.mail.attachments.indexOf(attachment.attachment);
-                    const newAttachments = [...state.mail.attachments]
-                    newAttachments.splice(index, 1, {...attachment.attachment, attachments: data.attachments});
+                    const newAttachments = updateAttachments(state.mail.attachments, id,{attachments: data.attachments});
                     const newMail = {...state.mail, attachments: newAttachments};
                     console.log(newMail);
                     setState({...state, mail: newMail});
@@ -415,7 +447,10 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     const onSubmitWrapper= () => {
         onSubmit(state.annotation);
     }
-    
+    if(mail) {
+        console.log("mail")
+        console.log(mail)
+    }
     const mail = state.mail;
     return <div id="main">
         {!url && <div>
@@ -430,7 +465,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                     <div>
                     <div id="email-summary" style={styleSummary} >
                     <h3>Mail</h3>
-                     <ul>
+                     <ul style={{backgroundColor:mail.isVisibleScreen ? "#82b1ff6e": ""} }>
                          <li>
                              <span><a href="#Mail">Contenu du mail</a></span>
                              <MultiSelect
@@ -447,7 +482,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                  </div>
                 </div>
                     <div>
-                        <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" />
+                        <Mail mail={mail} styleTitle={styleTitle} id="Mail" title="Contenu du mail" onChange={onChange} />
                         <MailAttachments mail={mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
                     </div>
                 </div>
