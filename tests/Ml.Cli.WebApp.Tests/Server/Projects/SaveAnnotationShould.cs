@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
-using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations.AnnotationInputValidators;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -24,10 +20,10 @@ namespace Ml.Cli.WebApp.Tests.Server.Projects;
 public class SaveAnnotationShould
 {
     [Theory]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "{\"label\": \"cat\"}")]
-    public async Task SaveNewAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
+    [InlineData(true, "s666666", "{\"label\": \"Cat\"}")]
+    public async Task SaveNewAnnotation(bool isNewAnnotation, string nameIdentifier, string expectedOutput)
     {
-        var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
+        var result = await InitMockAndExecuteAsync(isNewAnnotation, nameIdentifier, expectedOutput);
         var resultCreated = result.Result as CreatedResult;
         Assert.NotNull(resultCreated);
         var resultValue = resultCreated.Value as string;
@@ -35,27 +31,23 @@ public class SaveAnnotationShould
     }
     
     [Theory]
-    [InlineData("10000000-1111-0000-0000-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666", "{\"label\": \"cat\"}")]
-    public async Task SaveUpdateAnnotation(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
+    [InlineData(false, "s666666", "{\"label\": \"Cat\"}")]
+    public async Task SaveUpdateAnnotation(bool isNewAnnotation, string nameIdentifier, string expectedOutput)
     {
-        var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
+        var result = await InitMockAndExecuteAsync(isNewAnnotation, nameIdentifier, expectedOutput);
         var resultNoContent = result.Result as NoContentResult;
         Assert.NotNull(resultNoContent);
     }
 
     [Theory]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
-        "", SaveAnnotationCmd.InvalidModel)]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s111111",
-        "{\"label\": \"cat\"}", SaveAnnotationCmd.UserNotFound)]
-    [InlineData("null", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
-        "invalidLabelName", SaveAnnotationCmd.InvalidLabels)]
-    [InlineData("11111111-1111-1111-1111-000000000000", "10000000-0000-0000-0000-000000000000", "11111111-0000-0000-0000-000000000000", "s666666",
-        "{\"label\": \"cat\"}", AnnotationsRepository.AnnotationNotFound)]
-    public async Task ReturnError_WhenCreateOrUpdateAnnotation(string annotationId, string fileId, string projectId,
-        string nameIdentifier, string expectedOutput, string errorKey)
+    [InlineData(true, "s666666", "", SaveAnnotationCmd.InvalidModel)]
+    [InlineData(true, "s111111", "{\"label\": \"cat\"}", SaveAnnotationCmd.UserNotFound)]
+    [InlineData(true, "s666666", "invalidLabelName", SaveAnnotationCmd.InvalidLabels)]
+    [InlineData(false, "s666666", "{\"label\": \"Cat\"}", AnnotationsRepository.AnnotationNotFound)]
+    public async Task ReturnError_WhenCreateOrUpdateAnnotation(bool isNewAnnotation, string nameIdentifier,
+        string expectedOutput, string errorKey)
     {
-        var result = await InitMockAndExecuteAsync(annotationId, fileId, projectId, nameIdentifier, expectedOutput);
+        var result = await InitMockAndExecuteAsync(isNewAnnotation, nameIdentifier, expectedOutput, errorKey);
         if (errorKey == ProjectsRepository.Forbidden)
         {
             var resultForbidden = result.Result as ForbidResult;
@@ -71,26 +63,26 @@ public class SaveAnnotationShould
         }
     }
 
-    public static async Task<ActionResult<string>> InitMockAndExecuteAsync(string annotationId, string fileId, string projectId, string nameIdentifier, string expectedOutput)
+    public static async Task<ActionResult<string>> InitMockAndExecuteAsync(bool isNewAnnotation, string nameIdentifier, string expectedOutput, string errorKey = null)
     {
-        var (usersRepository, datasetsRepository, projectsRepository, projectsController, context, annotationsRepository) = await InitMockAsync(nameIdentifier);
-        projectsController.ControllerContext = new ControllerContext
-        {
-            HttpContext = context
-        };
+        var (projectId, fileId, annotationId, usersRepository, datasetsRepository, projectsRepository, annotationsController, annotationsRepository) = await InitMockAsync(nameIdentifier);
         var logger = Mock.Of<ILogger<SaveAnnotationCmd>>();
         var saveAnnotationCmd = new SaveAnnotationCmd(projectsRepository, usersRepository, datasetsRepository, annotationsRepository, logger);
         ActionResult result;
-        if (annotationId == "null")
+        if (isNewAnnotation)
         {
-            result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, new AnnotationInput()
+            result = await annotationsController.Annotation(saveAnnotationCmd, projectId, fileId, new AnnotationInput()
             {
                 ExpectedOutput = expectedOutput
             });
         }
         else
         {
-            result = await projectsController.Annotation(saveAnnotationCmd,projectId, fileId, annotationId, new AnnotationInput()
+            if (errorKey is AnnotationsRepository.AnnotationNotFound)
+            {
+                annotationId = new Guid().ToString();
+            }
+            result = await annotationsController.Annotation(saveAnnotationCmd,projectId, fileId, annotationId, new AnnotationInput()
             {
                 ExpectedOutput = expectedOutput
             });
@@ -98,37 +90,11 @@ public class SaveAnnotationShould
         return result;
     }
 
-    public static async Task<(UsersRepository usersRepository, DatasetsRepository datasetsRepository, ProjectsRepository projectsRepository, ProjectsController projectsController, DefaultHttpContext context, AnnotationsRepository annotationsRepository)> InitMockAsync(string nameIdentifier)
+    public static async Task<(string projectId, string fileId, string annotationId, UsersRepository UsersRepository, DatasetsRepository DatasetsRepository, ProjectsRepository ProjectsRepository, AnnotationsController AnnotationsController, AnnotationsRepository AnnotationsRepository)> InitMockAsync(string nameIdentifier)
     {
-        var (_, usersRepository, _, projectsRepository, projectsController, context) =
-            await CreateProjectShould.InitMockAsync(nameIdentifier);
-        var datasetContextFunc = DatasetMock.GetInMemoryDatasetContext();
-        var datasetContext = datasetContextFunc();
-        datasetContext.Annotations.Add(new AnnotationModel()
-        {
-            Id = new Guid("10000000-1111-0000-0000-000000000000"),
-            File = new FileModel(),
-            ExpectedOutput = "cat",
-            FileId = new Guid(),
-            ProjectId = new Guid("11111111-0000-0000-0000-000000000000"),
-            CreatorNameIdentifier = nameIdentifier,
-            TimeStamp = 10000000
-        });
-        datasetContext.Files.Add(new FileModel()
-        {
-            Id = new Guid("10000000-0000-0000-0000-000000000000"),
-            Name = "testFile.json",
-            Size = 1500,
-            ContentType = "application/json",
-            CreatorNameIdentifier = "s666666",
-            CreateDate = 10000000,
-            DatasetId = new Guid("10000000-1111-0000-0000-000000000000")
-        });
-        await datasetContext.SaveChangesAsync();
-        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var mockedFileDataModel = new FileServiceDataModel
         {
-            Name = "testFile.json",
+            Name = "demo.png",
             Length = 1000,
             Stream = null,
             ContentType = "application/json"
@@ -139,10 +105,9 @@ public class SaveAnnotationShould
         };
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
-            .Setup(foo => foo.DownloadAsync("10000000-1111-0000-0000-000000000000", "testFile.json"))
+            .Setup(foo => foo.DownloadAsync(It.IsAny<string>(), "demo.png"))
             .ReturnsAsync(mockedResult);
-        var datasetsRepository = new DatasetsRepository(datasetContext, mockedFileService.Object, memoryCache);
-        var annotationsRepository = new AnnotationsRepository(datasetContext, null, memoryCache);
-        return (usersRepository, datasetsRepository, projectsRepository, projectsController, context, annotationsRepository);
+        var datasetMock = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService.Object);
+        return (datasetMock.Dataset3Project1Id, datasetMock.FileId2, datasetMock.Annotation1File1Id, datasetMock.UsersRepository, datasetMock.DatasetsRepository, datasetMock.ProjectsRepository, datasetMock.AnnotationsController, datasetMock.AnnotationsRepository);
     }
 }
