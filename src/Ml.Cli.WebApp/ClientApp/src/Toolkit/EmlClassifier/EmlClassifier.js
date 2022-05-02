@@ -110,7 +110,7 @@ function DisplayPdf({blob, id, onChange}){
             loaderMode: LoaderModes.get,
         });
         onChange("loading", {id, loaderMode: LoaderModes.get});
-        convertPdfToImagesAsync()(blob).then(files => {
+        convertPdfToImagesAsync([ window.location.origin+"/pdf.2.13.216.min.js"],  window.location.origin+"/pdf.2.13.216.worker.min.js")(blob).then(files => {
             setState({
                 ...state,
                 files: files,
