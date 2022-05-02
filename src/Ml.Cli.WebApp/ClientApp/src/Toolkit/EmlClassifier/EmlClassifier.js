@@ -34,7 +34,7 @@ async function parseMessageAsync(file, level=0) {
         messageFormatted.date = null;
     }
     if (email.html) {
-        messageFormatted.html = sanitizeHtml(email.html)    ;
+            messageFormatted.html = sanitizeHtml(email.html);
     }
     if (email.text) {
         messageFormatted.text = email.text;
@@ -92,9 +92,9 @@ const DisplayEmails = (emails) => {
     const length = emails.length;
     return <>{emails.map((mail, index) => {
         if(index === length-1){
-            return <>{displayEmail(mail)}</>
+            return displayEmail(mail)
         }
-        return <>{displayEmail(mail)}, </>
+        return displayEmail(mail)+ ", " 
     })}</>
 }
 
@@ -189,8 +189,8 @@ const downloadAsync = (blob, filename) => async event => {
 };
 
 
-const DownloadAttachment = ({blob, filename, ref})=> {
-    return <a  ref={ref}  target="_blank" href="#" onClick={downloadAsync(blob, filename)}>{filename}</a>
+const DownloadAttachment = ({blob, filename})=> {
+    return <a target="_blank" href="#" onClick={downloadAsync(blob, filename)}>{filename}</a>
 }
 
 const formatTitle =(level, filename) => {
@@ -259,15 +259,15 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
                 </div>
             }
             console.log(attachment.mimeType + " " + attachment.filename);
-            return <div key={id} id={id}>
+            return <div ref={ref} key={id} id={id}>
                 <h2 style={styleTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
-                <DownloadAttachment ref={ref} filename={attachment.filename} blob={attachment.blob} />
+                <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
         default:
             console.log(attachment.mimeType + " " + attachment.filename);
-            return <div key={id} id={id}>
+            return <div ref={ref} key={id} id={id}>
                 <h2 style={styleTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
-                <DownloadAttachment ref={ref} filename={attachment.filename} blob={attachment.blob} />
+                <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
     }
 }
@@ -447,10 +447,6 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 const attachment = findAttachment(state.mail, id);
                 if (attachment && attachment.level > 0) {
                     const newAttachments = updateAttachments(state.mail.attachments, id,{attachments: data.attachments, LoaderMode: LoaderModes.none});
-                    console.log(type);
-                    //console.log(data);
-                    //console.log(attachment)
-                    console.log(newAttachments);
                     const newMail = {...state.mail, attachments: newAttachments};
                     setState({...state, mail: newMail});
                 }
