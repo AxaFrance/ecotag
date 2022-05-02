@@ -494,7 +494,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             <form id="mimeform">
                 <input type="file" id="mime" onChange={onFileChange(state, setState)} />
             </form>
-        </div>}u
+        </div>}
         <Loader mode={state.loaderMode} text={"Your browser is extracting the eml"}>
             {mail != null && <div id="email-container">
                 <div style={styleContainer} >
