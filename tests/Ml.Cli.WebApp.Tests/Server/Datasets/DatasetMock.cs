@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -37,11 +38,15 @@ public record MockResult
     public string Dataset1Id { get; set; }
     public string Dataset2Id { get; set; }
     public string FileId1 { get; set; }
+    public string FileId2 { get; set; }
     public string Dataset3Id { get; set; }
     public string Dataset3Project1Id { get; set; }
+    public string Annotation1File1Id { get; set; }
     public ProjectsController ProjectsController { get; set; }
+    public AnnotationsController AnnotationsController { get; set; }
     public AnnotationsRepository AnnotationsRepository { get; set; }
     public ProjectsRepository ProjectsRepository { get; set; }
+    public DeleteRepository DeleteRepository { get; set; }
     public IList<string> fileIds { get; set; }
 }
 
@@ -91,6 +96,8 @@ internal static class DatasetMock
 
         var datasetContextFunc = GetInMemoryDatasetContext();
         var datasetContext = datasetContextFunc();
+
+        var deleteContext = GetInMemoryDeleteContext()();
             
         var dataset1 = new DatasetModel
         {
@@ -126,6 +133,12 @@ internal static class DatasetMock
         };
         datasetContext.Datasets.Add(dataset3);
         await datasetContext.SaveChangesAsync();
+
+        deleteContext.Datasets.Add(dataset1);
+        deleteContext.Datasets.Add(dataset2);
+        deleteContext.Datasets.Add(dataset3);
+        await deleteContext.SaveChangesAsync();
+        
         var dataset1Id = dataset1.Id;
         var dataset2Id = dataset2.Id;
         var dataset3Id = dataset3.Id;
@@ -139,7 +152,19 @@ internal static class DatasetMock
             Size = 20,
             CreatorNameIdentifier = "S88888"
         };
+        var fileModel2 = new FileModel
+        {
+            DatasetId = dataset3Id,
+            ContentType = "MyContent",
+            CreateDate = DateTime.Now.Ticks,
+            Name = "demo.png",
+            Size = 20,
+            CreatorNameIdentifier = "S888888"
+        };
         datasetContext.Files.Add(fileModel);
+        datasetContext.Files.Add(fileModel2);
+        deleteContext.Files.Add(fileModel);
+        deleteContext.Files.Add(fileModel2);
 
         var files = new List<FileModel>();
         for (var i = 0; i < 40; i++)
@@ -155,9 +180,11 @@ internal static class DatasetMock
             };
             files.Add(f);
             datasetContext.Files.Add(f);
+            deleteContext.Files.Add(f);
         }
 
         await datasetContext.SaveChangesAsync();
+        await deleteContext.SaveChangesAsync();
 
         var projectModel = new ProjectModel()
         {
@@ -165,7 +192,7 @@ internal static class DatasetMock
             AnnotationType = AnnotationTypeEnumeration.ImageClassifier,
             CreateDate = DateTime.Now.Ticks,
             LabelsJson = JsonSerializer.Serialize(new List<CreateProjectLabelInput>()
-                { new() { Color = "#00000", Id = "1", Name = "youhou" } }),
+                { new() { Color = "#00000", Id = "1", Name = "Cat" } }),
             DatasetId = dataset3Id,
             GroupId = group1.Id,
             CreatorNameIdentifier = "S666666",
@@ -174,7 +201,9 @@ internal static class DatasetMock
 
         var projectContext = CreateProjectShould.GetInMemoryProjectContext();
         projectContext.Projects.Add(projectModel);
+        deleteContext.Projects.Add(projectModel);
         await projectContext.SaveChangesAsync();
+        await deleteContext.SaveChangesAsync();
 
         var annotation1File1 = new AnnotationModel
         {
@@ -204,8 +233,14 @@ internal static class DatasetMock
         datasetContext.Annotations.Add(annotation1File2);
         datasetContext.Annotations.Add(annotation2File1);
         await datasetContext.SaveChangesAsync();
+        
+        deleteContext.Annotations.Add(annotation1File1);
+        deleteContext.Annotations.Add(annotation1File2);
+        deleteContext.Annotations.Add(annotation2File1);
+        await deleteContext.SaveChangesAsync();
 
         var fileId1 = fileModel.Id;
+        var fileId2 = fileModel2.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         var usersRepository = new UsersRepository(groupContext, memoryCache);
@@ -214,27 +249,36 @@ internal static class DatasetMock
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
             memoryCache);
 
-        var mockedService  = GetMockedServiceProvider(datasetContextFunc);
-        var annotationRepository = new AnnotationsRepository(datasetContext, mockedService.ServiceScopeFactory.Object, memoryCache);
+        var mockedAnnotationsService  = GetMockedServiceProvider(datasetContextFunc);
+        var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
+        
+        var deleteRepository = new DeleteRepository(deleteContext, fileService);
         
         var controllerContext = ControllerContext(nameIdentifier);
         var datasetsController = new DatasetsController();
         datasetsController.ControllerContext = controllerContext; 
         var projectsController = new ProjectsController();
         projectsController.ControllerContext = controllerContext;
+        var annotationsController = new AnnotationsController();
+        annotationsController.ControllerContext = controllerContext;
         return new MockResult
         {
             Group1 = group1,
             UsersRepository = usersRepository,
             GroupRepository = groupRepository, DatasetsRepository = datasetsRepository,
             DatasetsController = datasetsController, Dataset1Id = dataset1Id.ToString(),
-            Dataset2Id = dataset2Id.ToString(), FileId1 = fileId1.ToString(),
+            Dataset2Id = dataset2Id.ToString(),
+            FileId1 = fileId1.ToString(),
+            FileId2 = fileId2.ToString(),
             Dataset3Id = dataset3Id.ToString(),
             Dataset3Project1Id = projectModel.Id.ToString(),
+            Annotation1File1Id = annotation1File1.Id.ToString(),
             ProjectsController = projectsController,
+            AnnotationsController = annotationsController,
             AnnotationsRepository = annotationRepository,
             ProjectsRepository = projectRepository,
+            DeleteRepository = deleteRepository,
             fileIds = files.Select(f => f.Id.ToString()).ToList()
         };
     }
@@ -259,7 +303,9 @@ internal static class DatasetMock
         var builder = new DbContextOptionsBuilder<DatasetContext>();
         var databaseName = Guid.NewGuid().ToString();
         builder.UseInMemoryDatabase(databaseName);
-
+        builder
+            .UseInMemoryDatabase(databaseName)
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
         DatasetContext DatasetContext()
         {
             var options = builder.Options;
@@ -269,5 +315,21 @@ internal static class DatasetMock
             return datasetContext;
         }
         return DatasetContext;
+    }
+    
+    public static Func<DeleteContext> GetInMemoryDeleteContext()
+    {
+        var builder = new DbContextOptionsBuilder<DeleteContext>();
+        var databaseName = Guid.NewGuid().ToString();
+        builder.UseInMemoryDatabase(databaseName);
+        DeleteContext DeleteContext()
+        {
+            var options = builder.Options;
+            var deleteContext = new DeleteContext(options);
+            deleteContext.Database.EnsureCreated();
+            deleteContext.Database.EnsureCreatedAsync();
+            return deleteContext;
+        }
+        return DeleteContext;
     }
 }

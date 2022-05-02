@@ -70,7 +70,7 @@ const Labels = ({ setState, state, labels }) => {
             <button
               key={index}
               title={index + 1 <= shortcuts.length ? `Raccourci : alt + ${index + 1}` : 'Pas de raccourci'}
-              className={state.currentLabelId === index.toString() ? 'labels-button-current' : 'labels-button'}
+              className={state.currentLabelId === index.toString() || state.currentLabelId === label.id ? 'labels-button-current' : 'labels-button'}
               onClick={() => selectLabel(label)}>
               <div className="labels-color" style={{ backgroundColor: label.color }} />
               <span>{label.label}</span>

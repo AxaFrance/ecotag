@@ -30,6 +30,12 @@ public class FileService : IFileService
         return await cloudBlob.DeleteIfExistsAsync();
     }
 
+    public async Task<bool> DeleteContainerAsync(string containerName)
+    {
+        var container = await CloudBlobContainer(containerName);
+        return await container.DeleteIfExistsAsync();
+    }
+
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string containerName, string fileName)
     {
         var cloudBlob = await CloudBlockBlob(containerName, fileName);

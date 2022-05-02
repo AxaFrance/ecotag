@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Edit.container should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset"
+  >
+    <div
+      class="af-title-bar af-title-bar--backhome"
+    >
+      <div
+        class="container-fluid container af-title-bar__wrapper"
+      >
+        <a
+          class="btn af-btn--circle"
+          href="/datasets"
+          title="Datasets"
+        >
+          <i
+            class="glyphicon glyphicon-arrowthin-left"
+          />
+        </a>
+        <h1
+          class="af-title-bar__title"
+        >
+          datasetName
+        </h1>
+        <small
+          class="af-title-bar__subtitle"
+        >
+          Edition du dataset
+        </small>
+      </div>
+    </div>
+    <div
+      class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+    >
+      <h2
+        class="edit-dataset__file-upload-title"
+      >
+        Upload des fichiers .txt
+      </h2>
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file"
+          tabindex="0"
+        >
+          <input
+            accept="text/plain"
+            autocomplete="off"
+            multiple=""
+            name="datasetUploadFiles"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Glissez/déposez vos fichiers
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Parcourir
+        </button>
+      </div>
+      <div>
+        <button
+          class="btn af-btn af-btn--disabled"
+          disabled=""
+          id="sendFiles"
+          name="sendFiles"
+        >
+          <span
+            class="af-btn__text"
+          >
+            Envoyer
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="lock__button-container"
+    >
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        icon="lock"
+        id="lock-button"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Verrouiller
+        </span>
+        <i
+          class="lock__button-icon glyphicon glyphicon-lock"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

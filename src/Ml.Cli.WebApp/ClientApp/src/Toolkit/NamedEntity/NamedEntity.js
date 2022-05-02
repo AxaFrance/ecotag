@@ -4,6 +4,7 @@ import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
 import {GlobalHotKeys} from "react-hotkeys";
 import Toolbar from './Toolbar.container';
+import {generateLabelsKeyMap} from "../labels";
 
 const initAsync = async (url, setState, state, expectedOutput) => {
   const response = await fetch(url);
@@ -50,9 +51,7 @@ const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] })
     let result = {
       submit: 'ctrl+spacebar'
     };
-    for(let i = 1; i <= labels.length; i++){
-      result[`${i.toString(16)}`] = `${i.toString(16)}`;
-    }
+    generateLabelsKeyMap(result, labels.length);
     return result;
   };
   

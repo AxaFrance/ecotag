@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -16,10 +16,16 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<TransferFileStorageSettings>(
+            configuration.GetSection(TransferFileStorageSettings.Storage));
+        services.AddScoped<ITransferService, TransferService>();
         services.AddDbContext<ProjectContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        services.AddDbContext<DeleteContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
         services.AddScoped<DatasetsRepository, DatasetsRepository>();
+        services.AddScoped<DeleteRepository, DeleteRepository>();
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
         services.AddScoped<GetProjectCmd, GetProjectCmd>();
@@ -30,5 +36,6 @@ public static class ConfigureExtension
         services.AddScoped<GetAnnotationsStatusCmd, GetAnnotationsStatusCmd>();
         services.AddScoped<ExportCmd, ExportCmd>();
         services.AddScoped<GetEmlCmd, GetEmlCmd>();
+        services.AddScoped<ExportThenDeleteProjectCmd, ExportThenDeleteProjectCmd>();
     }
 }
