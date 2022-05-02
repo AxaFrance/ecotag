@@ -512,7 +512,8 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                              />
                          </li>
                      </ul>
-                        {mail.attachments.length >0 ? <><h4>Pièces jointes</h4>
+                        {mail.attachments.length >0 ? <>
+                            <h4>Pièces jointes</h4>
                             <SideAttachements attachments={mail.attachments} />
                         </>: null}
                  </div>
