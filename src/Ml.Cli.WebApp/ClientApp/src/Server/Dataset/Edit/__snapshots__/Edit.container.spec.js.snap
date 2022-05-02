@@ -38,7 +38,7 @@ exports[`Edit.container should render correctly 1`] = `
       <h2
         class="edit-dataset__file-upload-title"
       >
-        Upload des fichiers .txt
+        Upload des fichiers .eml
       </h2>
       <div
         class="af-form__file-input"
@@ -49,7 +49,7 @@ exports[`Edit.container should render correctly 1`] = `
           tabindex="0"
         >
           <input
-            accept="text/plain"
+            accept="message/rfc822,application/octet-stream"
             autocomplete="off"
             multiple=""
             name="datasetUploadFiles"
