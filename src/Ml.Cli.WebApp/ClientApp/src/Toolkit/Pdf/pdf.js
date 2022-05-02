@@ -1,14 +1,19 @@
 import cuid from 'cuid';
 import {loadScripts} from '../Script/useScript';
 
+let promiseCache = null;
+
 const convertPdfToImagesAsync = (sources=[ `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js`],workerSrc="") =>(file) => {
-  return loadScripts(sources).then(()=> {
-    return _convertPdfToImagesAsync(window.pdfjsLib, workerSrc, file);
-  });
+    if(promiseCache == null) {
+        promiseCache = loadScripts(sources).then(() => {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+        });
+    }
+    return promiseCache.then(() => _convertPdfToImagesAsync(window.pdfjsLib, workerSrc, file));
 }
 
 const _convertPdfToImagesAsync = (pdfjsLib, workerSrc, file, scale = 2) => {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+    
     return new Promise(resolve => {
       const fileReader = new FileReader();
       fileReader.onload = function(ev) {

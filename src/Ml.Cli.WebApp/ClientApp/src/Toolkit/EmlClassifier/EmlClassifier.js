@@ -13,11 +13,10 @@ const inViewThresholdDelay = 0;
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
+   
     const messageFormatted = {types: []};
     
-    messageFormatted.id = cuid();
-    messageFormatted.level=level;
-    messageFormatted.isVisibleScreen = false;
+
     messageFormatted.from = email.from;
     messageFormatted.to = email.to;
     messageFormatted.cc = email.cc;
@@ -40,14 +39,13 @@ async function parseMessageAsync(file, level=0) {
         messageFormatted.text = email.text;
     }
     
-    messageFormatted.attachments = [];
+    let attachments = [];
     if (email.attachments && email.attachments.length) {
-        messageFormatted.attachments = email.attachments.reduce((results,attachment) => {
+        attachments = email.attachments.reduce((results,attachment) => {
             if(email.html && attachment.contentId) {
                 const key = `cid:${attachment.contentId.replace("<", "").replace(">", "")}`;
                 if(messageFormatted.html.includes(key)) {
                     const url = URL.createObjectURL(new Blob([attachment.content], {type: attachment.mimeType}));
-                    console.log("attachment.contentId " + attachment.contentId + " " + key);
                     messageFormatted.html = messageFormatted.html.replace(key, url);
                     return results;
                 }
@@ -65,7 +63,26 @@ async function parseMessageAsync(file, level=0) {
             return results;
         }, []);
     }
-    return messageFormatted;
+    
+    let finalAttachments = [];
+    for(let i=0;i<attachments.length; i++) {
+        let attachment = attachments[i];
+        if (attachment.mimeType === "message/rfc822" || (attachment.mimeType === "application/octet-stream" && attachment.filename.toLocaleLowerCase().endsWith(".eml"))) {
+            const message = await parseMessageAsync(attachment.blob, attachment.level);
+            const newAttachment = {...attachment,...message};
+            finalAttachments.push(newAttachment);
+        } else{
+            finalAttachments.push(attachment);
+        }
+    }
+    messageFormatted.attachments = finalAttachments;
+    const mainAttachments = {
+        id : cuid(),
+        level,
+        isVisibleScreen: false,
+        mail: messageFormatted
+    }
+    return mainAttachments;
 }
 
 const onFileChange = (state, setState) => async (e) => {
@@ -254,7 +271,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
             if (filenameLowerCase.endsWith(".eml")) {
                 return <div key={id} id={id}>
                     <h2 style={styleTitle} >{formatTitle(level, attachment.filename)}</h2>
-                    <MailAttachment  ref={ref} attachment={attachment} styleTitle={styleTitle}
+                    <MailAttachment ref={ref} attachment={attachment} styleTitle={styleTitle}
                                     styleImageContainer={styleImageContainer} onChange={onChange}/>
                 </div>
             }
@@ -281,27 +298,14 @@ const MailAttachments = ({mail, styleTitle, styleImageContainer, onChange}) => {
 }
 
 const MailAttachment = ({styleTitle, styleImageContainer, attachment, onChange}) => {
-    const [mail, setMail] = useState(null);
-    const [loaderMode, setLoaderMode] = useState(LoaderModes.get);
-        useEffect(async () => {
-            const blob = attachment.blob;
-            if (attachment.blob && !mail) {
-                const message = await parseMessageAsync(blob, attachment.level);
-                setMail(message);
-                onChange("loading", {id: attachment.id, loaderMode: LoaderModes.get});
-                setLoaderMode(LoaderModes.none);
-            }
-            if(blob && mail && mail.attachments.length > 0){
-                onChange("attachments", {id: attachment.id, attachments: mail.attachments});
-            }
-        }, [mail]);
         const level = attachment.level ||0;
-        return <Loader mode={loaderMode} text={"Your browser is extracting the mail"}>
+        const mail = attachment;
+        return <>
             {mail != null && <div>
-                <Mail mail={mail} styleTitle={styleTitle} id="Mail" title={`${formatTitle(level, "mail attaché")}`} onChange={onChange} />
-                <MailAttachments mail={mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
+                <Mail mail={mail.mail} styleTitle={styleTitle} id="Mail" title={`${formatTitle(level, "mail attaché")}`} onChange={onChange} />
+                <MailAttachments mail={mail.mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
             </div>}
-        </Loader>
+        </>
 }
 
 const initAsync = async (url, setState, state, expectedOutput) => {
@@ -325,7 +329,7 @@ const SideAttachements = ({attachments, level=0}) =>{
         {attachments.map((attachment) => {
             return <li style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} } key={`side_attachment_${attachment.id}`}>
                 <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>{attachment.filename}{attachment.loaderMode === LoaderModes.get ? " (chargement)":""}</a></span>
-                <SideAttachements attachments={attachment.attachments} level={level+1} />
+                {attachment.mail && <SideAttachements attachments={attachment.mail.attachments} level={level+1} />}
             </li>
         })}
     </ul>
@@ -373,6 +377,59 @@ const updateAttachments =(attachments, id, dataToAdd) =>{
     return newAttachments;
 }
 
+const MailSummary = ({mail, state, setState, labels}) => {
+
+    let options = [
+        { value: 'fun', label: 'For fun' },
+        { value: 'work', label: 'For work' },
+        { value: 'drink', label: 'For drink' },
+        { value: 'sleep', label: 'For sleep' },
+        { value: 'swim', label: 'For swim' },
+    ];
+
+    if(labels){
+        options = labels.map((label) => {
+            return {
+                "value": label.name,
+                "label": label.name
+            };
+        });
+    }
+
+    const onChangeClassification = (event) => {
+        const label = event.value;
+        setState({...state, annotation : {label}});
+    }
+
+    const styleSummary = {
+        "border": "2px solid grey",
+        "padding": "4px",
+        "width":"260px",
+        "position": "sticky",
+        "wordBreak": "break-all",
+        "top": "0"
+    };
+    
+    return <div id="email-summary" style={styleSummary} >
+        <h3>Mail</h3>
+    <ul style={{backgroundColor:mail.isVisibleScreen ? "#82b1ff6e": ""} }>
+        <li>
+            <span><a href={`${window.location.toString().replace(location.hash,"")}#${mail.id}`}>Mail principale</a></span>
+            <MultiSelect
+                name={"MailAnnotation"}
+                onChange={onChangeClassification}
+                value={state.annotation.label}
+                options={options}
+            />
+        </li>
+    </ul>
+    {mail.attachments.length >0 ? <>
+        <h4>Pièces jointes</h4>
+        <SideAttachements attachments={mail.attachments} />
+    </>: null}
+</div>
+}
+
 const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     const [state, setState] = useState({
         fontSize:60,
@@ -387,14 +444,6 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
         }
     }, [url, expectedOutput, labels]);
     
-    const styleSummary = {
-        "border": "2px solid grey",
-        "padding": "4px",
-        "width":"260px",
-        "position": "sticky",
-        "wordBreak": "break-all",
-        "top": "0"
-    };
 
     const styleContainer = {
         "display": "flex",
@@ -416,7 +465,6 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     };
     
     const onChange = (type, data) =>{
-
         const id = data.id;
         switch (type){
             case "visibility": {
@@ -434,50 +482,17 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             }   
                 break;
             case "loading":
-
                 const attachment = findAttachment(state.mail, id);
                 if (attachment) {
                     const newAttachments = updateAttachments(state.mail.attachments, id,{});
                     const newMail = {...state.mail, attachments: newAttachments};
                     setState({...state, mail: newMail});
                 }
-                
-                break;
-            case "attachments": {
-                const attachment = findAttachment(state.mail, id);
-                if (attachment && attachment.level > 0) {
-                    const newAttachments = updateAttachments(state.mail.attachments, id,{attachments: data.attachments, LoaderMode: LoaderModes.none});
-                    const newMail = {...state.mail, attachments: newAttachments};
-                    setState({...state, mail: newMail});
-                }
-            }
                 break;
             default:
                 return;
         }
         
-    }
-
-    let options = [
-        { value: 'fun', label: 'For fun' },
-        { value: 'work', label: 'For work' },
-        { value: 'drink', label: 'For drink' },
-        { value: 'sleep', label: 'For sleep' },
-        { value: 'swim', label: 'For swim' },
-    ];
-    
-    if(labels){
-        options = labels.map((label) => {
-            return {
-                "value": label.name,
-                "label": label.name
-            };
-        });
-    }
-    
-    const onChangeClassification = (event) => {
-        const label = event.value;
-        setState({...state, annotation : {label}});
     }
     
     const onSubmitWrapper= () => {
@@ -496,28 +511,11 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             {mail != null && <div id="email-container">
                 <div style={styleContainer} >
                     <div>
-                    <div id="email-summary" style={styleSummary} >
-                    <h3>Mail</h3>
-                     <ul style={{backgroundColor:mail.isVisibleScreen ? "#82b1ff6e": ""} }>
-                         <li>
-                             <span><a href={`${window.location.toString().replace(location.hash,"")}#${mail.id}`}>Mail principale</a></span>
-                             <MultiSelect
-                                 name={"MailAnnotation"}
-                                 onChange={onChangeClassification}
-                                 value={state.annotation.label}
-                                 options={options}
-                             />
-                         </li>
-                     </ul>
-                        {mail.attachments.length >0 ? <>
-                            <h4>Pièces jointes</h4>
-                            <SideAttachements attachments={mail.attachments} />
-                        </>: null}
-                 </div>
-                </div>
+                        <MailSummary mail={mail.mail} setState={setState} state={state} labels={labels} />
+                    </div>
                     <div>
-                        <Mail mail={mail} styleTitle={styleTitle} title="Mail principale" onChange={onChange} />
-                        <MailAttachments mail={mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
+                        <Mail mail={mail.mail} styleTitle={styleTitle} title="Mail principale" onChange={onChange} />
+                        <MailAttachments mail={mail.mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
                     </div>
                 </div>
             </div>}
