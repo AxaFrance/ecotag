@@ -5,6 +5,7 @@ import {LoaderModes, Loader, MultiSelect} from "@axa-fr/react-toolkit-all";
 import Toolbar from "./Toolbar.container";
 import cuid from "cuid";
 import { useInView } from "react-intersection-observer";
+import sanitizeHtml from 'sanitize-html';
 
 const inViewThreshold=0.9;
 const inViewThresholdDelay = 0;
@@ -33,7 +34,7 @@ async function parseMessageAsync(file, level=0) {
         messageFormatted.date = null;
     }
     if (email.html) {
-        messageFormatted.html = email.html;
+        messageFormatted.html = sanitizeHtml(email.html)    ;
     }
     if (email.text) {
         messageFormatted.text = email.text;
