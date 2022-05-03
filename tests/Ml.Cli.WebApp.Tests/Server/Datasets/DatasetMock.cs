@@ -48,6 +48,8 @@ public record MockResult
     public ProjectsRepository ProjectsRepository { get; set; }
     public DeleteRepository DeleteRepository { get; set; }
     public IList<string> fileIds { get; set; }
+    public string DatasetEmlOpen { get; set; }
+    public string DatasetTxtOpen { get; set; }
 }
 
 
@@ -124,7 +126,7 @@ internal static class DatasetMock
         var dataset3 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
-            Name = "dataset2",
+            Name = "dataset3",
             Type = DatasetTypeEnumeration.Text,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
@@ -132,6 +134,28 @@ internal static class DatasetMock
             GroupId = group1.Id
         };
         datasetContext.Datasets.Add(dataset3);
+        var dataset4 = new DatasetModel
+        {
+            Classification = DatasetClassificationEnumeration.Confidential,
+            Name = "dataset4",
+            Type = DatasetTypeEnumeration.Eml,
+            CreateDate = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "S666666",
+            IsLocked = false,
+            GroupId = group1.Id
+        };
+        datasetContext.Datasets.Add(dataset4);
+        var dataset5 = new DatasetModel
+        {
+            Classification = DatasetClassificationEnumeration.Confidential,
+            Name = "dataset5",
+            Type = DatasetTypeEnumeration.Text,
+            CreateDate = DateTime.Now.Ticks,
+            CreatorNameIdentifier = "S666666",
+            IsLocked = false,
+            GroupId = group1.Id
+        };
+        datasetContext.Datasets.Add(dataset5);
         await datasetContext.SaveChangesAsync();
 
         deleteContext.Datasets.Add(dataset1);
@@ -272,6 +296,8 @@ internal static class DatasetMock
             FileId1 = fileId1.ToString(),
             FileId2 = fileId2.ToString(),
             Dataset3Id = dataset3Id.ToString(),
+            DatasetEmlOpen = dataset4.Id.ToString(), 
+            DatasetTxtOpen = dataset5.Id.ToString(), 
             Dataset3Project1Id = projectModel.Id.ToString(),
             Annotation1File1Id = annotation1File1.Id.ToString(),
             ProjectsController = projectsController,

@@ -148,6 +148,5 @@ exports[`Oidc Render SessionLost component 1`] = `
       </button>
     </div>
   </div>
-  <div />
 </DocumentFragment>
 `;

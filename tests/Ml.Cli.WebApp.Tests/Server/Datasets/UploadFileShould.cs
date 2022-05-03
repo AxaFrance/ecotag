@@ -65,6 +65,8 @@ public class UploadFileShould
     [InlineData("s666666", "test.toto", null, 0, UploadFileCmd.InvalidModel)]
     [InlineData("s666666", "t", null, 0, UploadFileCmd.InvalidModel)]
     [InlineData("s666666", "test.txt", null, 1, UploadFileCmd.DatasetLocked)]
+    [InlineData("s666666", "test.eml_badextention", null, 2, UploadFileCmd.InvalidModel)]
+    [InlineData("s666666", "test.txt_badextention", null, 3, UploadFileCmd.InvalidModel)]
     [InlineData("s666666", "test.jpg", 33 * UploadFileCmd.Mb, 0, UploadFileCmd.FileTooLarge)]
     public async Task ReturnBadRequest(string nameIdentifier, string fileName, long? fileLength, int indexDataset,
         string errorKey)
@@ -76,7 +78,7 @@ public class UploadFileShould
         var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
 
         var fileMock = FromFileMock(fileName, fileLength);
-        var datasets = new[] { mockResult.Dataset1Id, mockResult.Dataset2Id };
+        var datasets = new[] { mockResult.Dataset1Id, mockResult.Dataset2Id, mockResult.DatasetEmlOpen, mockResult.DatasetTxtOpen };
         var result = await mockResult.DatasetsController.OnPostUploadAsync(getDatasetCmd, datasets[indexDataset],
             new List<IFormFile> { fileMock.Object });
 
