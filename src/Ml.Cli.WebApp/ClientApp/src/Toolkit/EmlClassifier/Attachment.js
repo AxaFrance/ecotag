@@ -15,7 +15,7 @@ export const formatTitle =(level, filename) => {
     return `${levelString} Pièce jointe: ${filename}`;
 }
 
-const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) => {
+const Attachment = ({attachment, onChange, styleImageContainer }) => {
     const { ref, inView } = useInView({
         inViewThreshold: 0,
     });
@@ -24,11 +24,12 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
     }, [inView]);
     const id = attachment.id;
     const level = attachment.level || 0;
+    const classNameTitle = "eml__attachment-title";
     switch (attachment.mimeType) {
         case "message/rfc822":
             return <div id={id}>
-                <h2 ref={ref} style={styleTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
-                <MailWithAttachment attachment={attachment} styleTitle={styleTitle}
+                <h2 ref={ref} className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <MailWithAttachment attachment={attachment} 
                                 styleImageContainer={styleImageContainer} onChange={onChange}/>
             </div>
         case "image/jpeg":
@@ -38,14 +39,14 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
         case "image/svg+xml":
             const url = URL.createObjectURL(attachment.blob);
             return <div id={id}>
-                <h2 style={styleTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}}/>
                 </div>
             </div>
         case "application/pdf":
             return <div id={id}>
-                <h2 style={styleTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <PdfAttachment blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
@@ -54,7 +55,7 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
             const filenameLowerCase = attachment.filename.toLocaleLowerCase();
             if (filenameLowerCase.endsWith(".pdf")) {
                 return <div id={id}>
-                    <h2 style={styleTitle}>{formatTitle(level, attachment.filename)}</h2>
+                    <h2 className={classNameTitle}>{formatTitle(level, attachment.filename)}</h2>
                     <div ref={ref} style={styleImageContainer}>
                         <PdfAttachment blob={attachment.blob} onChange={onChange}/>
                     </div>
@@ -62,20 +63,20 @@ const Attachment = ({attachment, styleTitle, styleImageContainer, onChange }) =>
             }
             if (filenameLowerCase.endsWith(".eml")) {
                 return <div id={id}>
-                    <h2 style={styleTitle} >{formatTitle(level, attachment.filename)}</h2>
+                    <h2 className={classNameTitle} >{formatTitle(level, attachment.filename)}</h2>
                     <MailWithAttachment ref={ref} attachment={attachment} styleTitle={styleTitle}
                                     styleImageContainer={styleImageContainer} onChange={onChange}/>
                 </div>
             }
             console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
-                <h2 style={styleTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
+                <h2 className={classNameTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
         default:
             console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
-                <h2 style={styleTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
+                <h2 className={classNameTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
     }

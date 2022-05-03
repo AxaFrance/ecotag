@@ -24,7 +24,7 @@ const DisplayEmails = (emails) => {
     })}</>
 }
 
-export const Mail = ({attachment, title, styleTitle, onChange}) => {
+export const Mail = ({attachment, title, onChange}) => {
     const { ref, inView } = useInView({
         threshold: 0
     });
@@ -39,7 +39,7 @@ export const Mail = ({attachment, title, styleTitle, onChange}) => {
         "wordBreak": "break-all",
     };
     return <div id={attachment.id}>
-        <h2 style={styleTitle} >{title}</h2>
+        <h2 className="eml__attachment-title" >{title}</h2>
         <table ref={ref}>
             <tbody>
             <tr>
@@ -77,8 +77,7 @@ const MailWithAttachments = ({styleTitle, styleImageContainer, attachment, onCha
     const level = attachment.level ||0;
     return <>
         {<div>
-            <Mail attachment={attachment} styleTitle={styleTitle} id="Mail"
-                  title={`${formatTitle(level, "mail attaché")}`} onChange={onChange}/>
+            <Mail attachment={attachment} title={`${formatTitle(level, "mail")}`} onChange={onChange}/>
             <Attachments mail={attachment.mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle}
                              onChange={onChange}/>
         </div>}

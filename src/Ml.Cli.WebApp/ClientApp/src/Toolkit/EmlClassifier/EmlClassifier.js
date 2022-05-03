@@ -1,11 +1,14 @@
 ﻿import PostalMime from 'postal-mime';
 import React, {useEffect, useState} from "react";
-import {Loader, LoaderModes, MultiSelect} from "@axa-fr/react-toolkit-all";
+import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 import Toolbar from "./Toolbar.container";
 import cuid from "cuid";
 import sanitizeHtml from 'sanitize-html';
 import {Mail} from "./MailWithAttachment";
 import Attachments from "./Attachments";
+
+import "./EmlClassifier.scss";
+import MailSummary from "./MailSummary";
 
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
@@ -103,19 +106,7 @@ const initAsync = async (url, setState, state, expectedOutput) => {
     setState({...state, loaderMode : LoaderModes.none, mail:message, annotation});
 }
 
-const SideAttachements = ({attachments, level=0}) =>{
-    if(!attachments){
-        return null;
-    }
-    return <ul>
-        {attachments.map((attachment) => {
-            return <li style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} } key={`side_attachment_${attachment.id}`}>
-                <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>{attachment.filename}{attachment.loaderMode === LoaderModes.get ? " (chargement)":""}</a></span>
-                {attachment.mail && <SideAttachements attachments={attachment.mail.attachments} level={level+1} />}
-            </li>
-        })}
-    </ul>
-}
+
 
 const findAttachment =(attachment, id, level=0) =>{
     if(!attachment){
@@ -159,58 +150,6 @@ const updateAttachments =(attachments, id, dataToAdd) =>{
     return newAttachments;
 }
 
-const MailSummary = ({attachment, state, setState, labels}) => {
-
-    let options = [
-        { value: 'fun', label: 'For fun' },
-        { value: 'work', label: 'For work' },
-        { value: 'drink', label: 'For drink' },
-        { value: 'sleep', label: 'For sleep' },
-        { value: 'swim', label: 'For swim' },
-    ];
-
-    if(labels){
-        options = labels.map((label) => {
-            return {
-                "value": label.name,
-                "label": label.name
-            };
-        });
-    }
-
-    const onChangeClassification = (event) => {
-        const label = event.value;
-        setState({...state, annotation : {label}});
-    }
-
-    const styleSummary = {
-        "border": "2px solid grey",
-        "padding": "4px",
-        "width":"260px",
-        "position": "sticky",
-        "wordBreak": "break-all",
-        "top": "0"
-    };
-    const mail = attachment.mail;
-    return <div id="email-summary" style={styleSummary} >
-        <h3>Mail</h3>
-    <ul style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} }>
-        <li>
-            <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>Mail principale</a></span>
-            <MultiSelect
-                name={"MailAnnotation"}
-                onChange={onChangeClassification}
-                value={state.annotation.label}
-                options={options}
-            />
-        </li>
-    </ul>
-    {mail.attachments.length >0 ? <>
-        <h4>Pièces jointes</h4>
-        <SideAttachements attachments={mail.attachments} />
-    </>: null}
-</div>
-}
 
 const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     const [state, setState] = useState({
@@ -225,31 +164,13 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
             await initAsync(url, setState, state, expectedOutput);
         }
     }, [url, expectedOutput, labels]);
-    
-
-    const styleContainer = {
-        "display": "flex",
-        "flexDirection": "row",
-        marginBottom: "64px",
-    };
 
     const styleImageContainer= {
         zoom: `${state.fontSize}%`
     };
-
-    const styleTitle = {
-        "position": "sticky",
-        "zIndex": 2,
-        with: "100%",
-        "top": "0",
-        "color": "white",
-        "backgroundColor": "grey"
-    };
     
     const onChange = (type, data) =>{
         const id = data.id;
-        console.log(type)
-        console.log(data)
         switch (type){
             case "visibility": {
                 const attachment = findAttachment(state.mail, id);
@@ -266,14 +187,14 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 }
             }   
                 break;
-            /*case "loading":
+            case "loading":
                 const attachment = findAttachment(state.mail, id);
                 if (attachment) {
                     const newAttachments = updateAttachments(state.mail.attachments, id,{});
                     const newMail = {...state.mail, attachments: newAttachments};
                     setState({...state, mail: newMail});
                 }
-                break;*/
+                break;
             default:
                 return;
         }
@@ -288,19 +209,19 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     return <div id="main">
         {!url && <div>
             <h1>Front-end Email Parser Demo</h1>
-            <form id="mimeform">
-                <input type="file" id="mime" onChange={onFileChange(state, setState)} />
+            <form>
+                <input type="file" onChange={onFileChange(state, setState)} />
             </form>
         </div>}
         <Loader mode={state.loaderMode} text={"Your browser is extracting the eml"}>
             {mail != null && <div id="email-container">
-                <div style={styleContainer} >
+                <div className="eml__container" >
                     <div>
                         <MailSummary attachment={mail} setState={setState} state={state} labels={labels} />
                     </div>
                     <div>
-                        <Mail attachment={mail} styleTitle={styleTitle} title="Mail principale" onChange={onChange} />
-                        <Attachments mail={mail.mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle} onChange={onChange} />
+                        <Mail attachment={mail} title="Mail principale" onChange={onChange} />
+                        <Attachments mail={mail.mail} styleImageContainer={styleImageContainer} onChange={onChange} />
                     </div>
                 </div>
             </div>}
