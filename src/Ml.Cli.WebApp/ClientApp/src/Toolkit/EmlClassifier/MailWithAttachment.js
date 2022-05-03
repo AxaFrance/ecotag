@@ -38,7 +38,7 @@ export const Mail = ({attachment, title, styleTitle, onChange}) => {
         "padding": "4px",
         "wordBreak": "break-all",
     };
-    return <div id={mail.id}>
+    return <div id={attachment.id}>
         <h2 style={styleTitle} >{title}</h2>
         <table ref={ref}>
             <tbody>
