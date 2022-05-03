@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
@@ -46,7 +48,13 @@ public class TransferService : ITransferService
             var blobsResponse = container.GetBlobsAsync();
             await foreach (var blobItem in blobsResponse)
             {
-                result.Add(blobItem.Name);
+                if (blobItem.Name.Count(element => element.Equals('/')) <= 1) continue;
+                var index = blobItem.Name.LastIndexOf("/", StringComparison.Ordinal);
+                if (index >= 0)
+                {
+                    var folderName = blobItem.Name.Substring(0, index);
+                    if(!result.Contains(folderName)) result.Add(blobItem.Name.Substring(0, index));
+                }
             }
         }
 

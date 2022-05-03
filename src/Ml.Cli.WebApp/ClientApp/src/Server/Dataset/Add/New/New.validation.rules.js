@@ -11,7 +11,7 @@ import {
   DATASETS_IMPORT, DATASET
 } from './constants';
 
-const rulesRequired = {
+export const rulesRequired = {
   required: {
     message: MSG_REQUIRED,
   },

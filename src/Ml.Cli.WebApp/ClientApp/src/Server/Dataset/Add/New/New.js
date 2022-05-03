@@ -11,6 +11,8 @@ import {NAME, CLASSIFICATION, TYPE, GROUP, DATASETS_IMPORT, DATASET} from './con
 
 const groupsAsOptions = (groups) => groups && groups.length > 0 ? groups.map(group => ({ label: group.name, value: group.id })) : [];
 
+const datasetsAsOptions = (datasets) => datasets && datasets.length > 0 ? datasets.map(dataset => ({label: dataset.substring(dataset.indexOf('/') + 1), value: dataset})) : [];
+
 const datasetsImportOptions = [
     {
         key:"checkbox_areDatasetsImported",
@@ -21,7 +23,7 @@ const datasetsImportOptions = [
     }
 ];
 
-const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
+const New = ({ fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets }) => (
   <>
       <Title title=" Nouveau dataset" goTo="/datasets" goTitle="Datasets" />
     <Stepper title="Nouveau dataset" link="/datasets/new" />
@@ -48,7 +50,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
                 options={groupsAsOptions(groups)}
                 forceDisplayMessage={hasSubmit}
                 messageType="error"
-                  {...fields[GROUP]}/>
+                {...fields[GROUP]}/>
             <SelectInput
               label="Type"
               name={TYPE}
@@ -113,6 +115,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups }) => (
                 onChange={onChange}
                 forceDisplayMessage={hasSubmit}
                 messageType="error"
+                options={datasetsAsOptions(optionsDatasets)}
                 {...fields[DATASET]}
             />
           </section>

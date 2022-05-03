@@ -1,5 +1,5 @@
 import New from './New';
-import { rules } from './New.validation.rules';
+import {rules, rulesRequired} from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {
@@ -24,12 +24,19 @@ const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(ke
 
 const setErrorMessage = key => fields => fields[key].message !== null;
 
+const getImportedDatasetsByGroupId = (groups, groupId, importedDatasets) => {
+  const group = groups.find(element => element.id === groupId);
+  if(typeof group === 'undefined') return [];
+  return importedDatasets.filter(dts => dts.startsWith(group.name));
+}
+
 const preInitState = {
   hasSubmit: false,
   status: resilienceStatus.LOADING,
   groups : [],
   datasets : [],
   importedDatasets : [],
+  optionsDatasets : [],
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
     [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
@@ -40,7 +47,7 @@ const preInitState = {
       message: MSG_REQUIRED,
     },
     [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true},
-    [DATASET]: {name: DATASET, value: '', options: [], disabled: true}
+    [DATASET]: {name: DATASET, value: '', disabled: true}
   },
 };
 
@@ -61,6 +68,7 @@ const reducer = (state, action) => {
     case 'onChange': {
       const event = action.event;
       let newField = genericHandleChange(rules, state.fields, event);
+      let optionsDatasets = state.optionsDatasets;
       const name = event.name;
       if(NAME === name){
         if(state.datasets.find(dataset => dataset.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
@@ -73,7 +81,7 @@ const reducer = (state, action) => {
         }
       }
       else if(DATASETS_IMPORT === name){
-        const isChecked = !state.fields[DATASETS_IMPORT].isChecked
+        const isChecked = !state.fields[DATASETS_IMPORT].isChecked;
         newField = {
           ...newField,
           [DATASETS_IMPORT]: {
@@ -81,13 +89,27 @@ const reducer = (state, action) => {
             isChecked
           },
           [DATASET]: {
-            name: DATASET, value: '', options: [], disabled: !isChecked
+            name: DATASET,
+            value: '',
+            disabled: !(isChecked && state.fields.groupId.value !== "")
           }
         };
+        optionsDatasets = getImportedDatasetsByGroupId(state.groups, state.fields.groupId.value, state.importedDatasets);
+      }
+      else if(GROUP === name){
+        newField = {
+          ...newField,
+          [DATASET]: {
+            ...newField[DATASET],
+            disabled: !(state.fields[DATASETS_IMPORT].isChecked && event.value !== "")
+          }
+        }
+        optionsDatasets = getImportedDatasetsByGroupId(state.groups, event.value, state.importedDatasets);
       }
       return {
         ...state,
-        fields: newField,
+        optionsDatasets,
+        fields: newField
       };
     }
     case 'onSubmit': {
@@ -135,6 +157,9 @@ const useNew = (history, fetch, telemetry) => {
         [TYPE]: fields[TYPE].value,
         [GROUP]: fields[GROUP].value,
         [CLASSIFICATION]: fields[CLASSIFICATION].value
+      }
+      if(fields[DATASETS_IMPORT].isChecked){
+        newDataset[DATASET] = fields[DATASET].value
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
       if(response.status >= 500){
