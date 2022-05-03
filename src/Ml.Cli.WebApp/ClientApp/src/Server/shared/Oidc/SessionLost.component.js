@@ -1,7 +1,7 @@
 import React from 'react';
 import {style} from "./style"
 import Button from '@axa-fr/react-toolkit-button';
-import {useOidc} from "@axa-fr/react-oidc-context";
+import {useOidc} from "@axa-fr/react-oidc";
 
 export const SessionLost = ({configurationName}) => {
     const { login } = useOidc(configurationName);

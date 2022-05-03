@@ -1,6 +1,6 @@
 import compose from './compose';
 import { withEnvironment } from './EnvironmentProvider';
-import {withOidcFetch} from '@axa-fr/react-oidc-context';
+import {withOidcFetch} from '@axa-fr/react-oidc';
 import React from 'react';
 
 const FETCH_CONFIG = {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {style} from "./style";
-import {useOidc} from "@axa-fr/react-oidc-context";
+import {useOidc} from "@axa-fr/react-oidc";
 import Button from '@axa-fr/react-toolkit-button';
 
 const AuthenticatingError = () => {

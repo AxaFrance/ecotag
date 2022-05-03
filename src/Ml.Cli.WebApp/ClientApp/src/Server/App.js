@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { OidcProvider, withOidcSecure } from '@axa-fr/react-oidc-context';
+import { OidcProvider, withOidcSecure } from '@axa-fr/react-oidc';
 import EnvironmentProvider, { withEnvironment } from './EnvironmentProvider';
 import './App.scss';
 import Header from './shared/Header';

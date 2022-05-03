@@ -7,7 +7,6 @@ using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
-using Ml.Cli.WebApp.Server.Projects.Eml;
 
 namespace Ml.Cli.WebApp.Server.Projects;
 
@@ -35,7 +34,6 @@ public static class ConfigureExtension
         services.AddScoped<SaveAnnotationCmd, SaveAnnotationCmd>();
         services.AddScoped<GetAnnotationsStatusCmd, GetAnnotationsStatusCmd>();
         services.AddScoped<ExportCmd, ExportCmd>();
-        services.AddScoped<GetEmlCmd, GetEmlCmd>();
         services.AddScoped<ExportThenDeleteProjectCmd, ExportThenDeleteProjectCmd>();
     }
 }
