@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc-context": "5.4.2",
+    "@axa-fr/react-oidc-context": "5.6.0",
     "@axa-fr/react-toolkit-all": "1.4.1",
-    "@microsoft/applicationinsights-web": "^2.7.4",
+    "@microsoft/applicationinsights-web": "2.8.2",
     "@monaco-editor/react": "4.2.1",
     "classnames": "2.3.1",
     "cuid": "2.1.8",
@@ -63,23 +63,23 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "6.4.9",
-    "@storybook/addon-essentials": "6.4.9",
-    "@storybook/addon-links": "6.4.9",
-    "@storybook/builder-webpack5": "6.4.9",
-    "@storybook/manager-webpack5": "6.4.9",
-    "@storybook/node-logger": "6.4.9",
-    "@storybook/preset-create-react-app": "4.0.0",
-    "@storybook/react": "6.4.9",
+    "@storybook/addon-actions": "6.4.22",
+    "@storybook/addon-essentials": "6.4.22",
+    "@storybook/addon-links": "6.4.22",
+    "@storybook/builder-webpack5": "6.4.22",
+    "@storybook/manager-webpack5": "6.4.22",
+    "@storybook/node-logger": "6.4.22",
+    "@storybook/preset-create-react-app": "4.1.0",
+    "@storybook/react": "6.4.22",
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
     "copyfiles": "2.4.1",
     "jest-watch-typeahead": "0.6.5",
     "prop-types": "15.8.0",
-    "react-scripts": "5.0.0",
-    "typescript": "4.5.5",
-    "webpack": "5.65.0"
+    "react-scripts": " 5.0.1",
+    "typescript": "4.6.4",
+    "webpack": "5.72.0"
   },
   "eslintConfig": {
     "overrides": [
