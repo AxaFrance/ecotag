@@ -41,7 +41,7 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
             return <div id={id}>
                 <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
                 <div ref={ref} style={styleImageContainer}>
-                    <img src={url} alt={attachment.filename} style={{"maxWidth": "100%"}}/>
+                    <img src={url} alt={attachment.filename} className="eml__attachment-image"/>
                 </div>
             </div>
         case "application/pdf":
@@ -64,19 +64,19 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
             if (filenameLowerCase.endsWith(".eml")) {
                 return <div id={id}>
                     <h2 className={classNameTitle} >{formatTitle(level, attachment.filename)}</h2>
-                    <MailWithAttachment ref={ref} attachment={attachment} styleTitle={styleTitle}
+                    <MailWithAttachment ref={ref} attachment={attachment}
                                     styleImageContainer={styleImageContainer} onChange={onChange}/>
                 </div>
             }
             console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
-                <h2 className={classNameTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
+                <h2 className={classNameTitle} >{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
         default:
             console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
-                <h2 className={classNameTitle} >{formatTitle(level, attachment.filename + " " + attachment.mimeType)}</h2>
+                <h2 className={classNameTitle} >{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
     }

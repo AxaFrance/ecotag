@@ -25,7 +25,7 @@ function PdfAttachment({blob, id, onChange}){
     }, []);
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
             <div>
-                {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" style={{"maxWidth": "100%"}} />)}
+                {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" className="eml__attachment-image" />)}
             </div>
     </Loader>);
 }

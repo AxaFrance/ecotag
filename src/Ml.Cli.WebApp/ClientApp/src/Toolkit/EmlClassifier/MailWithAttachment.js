@@ -73,12 +73,12 @@ export const Mail = ({attachment, title, onChange}) => {
     </div>;
 };
 
-const MailWithAttachments = ({styleTitle, styleImageContainer, attachment, onChange}) => {
+const MailWithAttachments = ({styleImageContainer, attachment, onChange}) => {
     const level = attachment.level ||0;
     return <>
         {<div>
             <Mail attachment={attachment} title={`${formatTitle(level, "mail")}`} onChange={onChange}/>
-            <Attachments mail={attachment.mail} styleImageContainer={styleImageContainer} styleTitle={styleTitle}
+            <Attachments mail={attachment.mail} styleImageContainer={styleImageContainer} 
                              onChange={onChange}/>
         </div>}
     </>
