@@ -13,9 +13,7 @@ import MailSummary from "./MailSummary";
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
-   
     const messageFormatted = {types: []};
-    
     messageFormatted.from = email.from;
     messageFormatted.to = email.to;
     messageFormatted.cc = email.cc;
@@ -37,7 +35,6 @@ async function parseMessageAsync(file, level=0) {
     if (email.text) {
         messageFormatted.text = email.text;
     }
-    
     let attachments = [];
     if (email.attachments && email.attachments.length) {
         attachments = email.attachments.reduce((results,attachment) => {
@@ -93,20 +90,13 @@ const onFileChange = (state, setState) => async (e) => {
     setState({...state, loaderMode:LoaderModes.none, mail: messageFormatted });
 }
 
-const initAsync = async (url, setState, state, expectedOutput) => {
-    if(!url){
-        return;
-    }
-    setState({...state, loaderMode : LoaderModes.get, mail:null, annotation :{label:null}});
+const initAsync = async (url, expectedOutput) => {
     const response = await fetch(url);
     const blob = await response.blob();
     const message = await parseMessageAsync(blob);
-    
     let annotation = expectedOutput ? expectedOutput : {label:null};
-    setState({...state, loaderMode : LoaderModes.none, mail:message, annotation});
+    return {mail:message, annotation};
 }
-
-
 
 const findAttachment =(attachment, id, level=0) =>{
     if(!attachment){
@@ -159,10 +149,19 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
         annotation: {label: null},
     });
 
-    useEffect(async () => {
+    useEffect( () => {
+        let isMounted = true;
         if (url) {
-            await initAsync(url, setState, state, expectedOutput);
+            setState({...state, loaderMode : LoaderModes.get, mail:null, annotation :{label:null}});
+            initAsync(url, expectedOutput).then((data)=> {
+                if(isMounted) {
+                    setState({...state, loaderMode: LoaderModes.none, ...data});
+                }
+            })
         }
+        return () => {
+            isMounted = false;
+        };
     }, [url, expectedOutput, labels]);
 
     const styleImageContainer= {
@@ -182,7 +181,6 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                     }
                     const newAttachments = updateAttachments(state.mail.mail.attachments, id,{isVisibleScreen: data.isVisible});
                     const newMail = {...state.mail, mail:{...state.mail.mail, attachments: newAttachments} };
-                    console.log(newAttachments);
                     setState({...state, mail: newMail});
                 }
             }   

@@ -14,6 +14,7 @@ const SideAttachements = ({attachments, level=0}) =>{
         })}
     </ul>
 }
+
 const MailSummary = ({attachment, state, setState, labels}) => {
 
     let options = [
@@ -43,12 +44,13 @@ const MailSummary = ({attachment, state, setState, labels}) => {
         <h3>Mail</h3>
         <ul style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} }>
             <li>
-                <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>Mail principale</a></span>
+                <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>Mail principal</a></span>
                 <MultiSelect
                     name={"MailAnnotation"}
                     onChange={onChangeClassification}
                     value={state.annotation.label}
                     options={options}
+                    autoFocus={true}
                 />
             </li>
         </ul>
