@@ -1,5 +1,5 @@
 import New from './New';
-import {rules, rulesRequired} from './New.validation.rules';
+import {rules} from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
 import {
@@ -10,7 +10,7 @@ import {
   DATASETS_IMPORT,
   MSG_REQUIRED,
   MSG_DATASET_NAME_ALREADY_EXIST,
-  DATASET
+  IMPORTEDDATASETNAME
 } from './constants';
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets, fetchImportedDatasets} from "../../Dataset.service";
@@ -22,7 +22,7 @@ import {telemetryEvents, withTelemetry} from "../../../Telemetry";
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
-const setErrorMessage = key => fields => fields[key].message !== null;
+const setErrorMessage = key => fields => (fields[key].message && fields[key].message !== null);
 
 const getImportedDatasetsByGroupId = (groups, groupId, importedDatasets) => {
   const group = groups.find(element => element.id === groupId);
@@ -46,8 +46,8 @@ const preInitState = {
       value: '',
       message: MSG_REQUIRED,
     },
-    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true},
-    [DATASET]: {name: DATASET, value: '', disabled: true}
+    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: ""},
+    [IMPORTEDDATASETNAME]: {name: IMPORTEDDATASETNAME, value: '', disabled: true, message: ""}
   },
 };
 
@@ -88,8 +88,8 @@ const reducer = (state, action) => {
             ...newField[DATASETS_IMPORT],
             isChecked
           },
-          [DATASET]: {
-            name: DATASET,
+          [IMPORTEDDATASETNAME]: {
+            name: IMPORTEDDATASETNAME,
             value: '',
             disabled: !(isChecked && state.fields.groupId.value !== "")
           }
@@ -99,8 +99,8 @@ const reducer = (state, action) => {
       else if(GROUP === name){
         newField = {
           ...newField,
-          [DATASET]: {
-            ...newField[DATASET],
+          [IMPORTEDDATASETNAME]: {
+            ...newField[IMPORTEDDATASETNAME],
             disabled: !(state.fields[DATASETS_IMPORT].isChecked && event.value !== "")
           }
         }
@@ -159,7 +159,7 @@ const useNew = (history, fetch, telemetry) => {
         [CLASSIFICATION]: fields[CLASSIFICATION].value
       }
       if(fields[DATASETS_IMPORT].isChecked){
-        newDataset[DATASET] = fields[DATASET].value
+        newDataset[IMPORTEDDATASETNAME] = fields[IMPORTEDDATASETNAME].value
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
       if(response.status >= 500){

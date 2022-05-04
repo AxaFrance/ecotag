@@ -58,7 +58,8 @@ public class DatasetsController : Controller
             Classification = datasetInput.Classification,
             Name = datasetInput.Name,
             Type = datasetInput.Type,
-            GroupId = datasetInput.GroupId
+            GroupId = datasetInput.GroupId,
+            ImportedDatasetName = datasetInput.ImportedDatasetName
         });
         if (!commandResult.IsSuccess) return BadRequest(commandResult.Error);
 

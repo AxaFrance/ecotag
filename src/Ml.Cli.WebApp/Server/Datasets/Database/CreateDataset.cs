@@ -11,4 +11,6 @@ public record CreateDataset
     public string GroupId { get; set; }
 
     public string CreatorNameIdentifier { get; set; }
+    
+    public string ImportedDatasetName { get; set; }
 }

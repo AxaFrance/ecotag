@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
@@ -59,5 +60,32 @@ public class TransferService : ITransferService
         }
 
         return result;
+    }
+
+    public async Task<ResultWithError<string, ErrorResult>> DownloadDatasetAsync(string containerName, string datasetName, string datasetId)
+    {
+        var commandResult = new ResultWithError<string, ErrorResult>();
+        var connectionString = _azureStorageOptions.Value.ConnectionString;
+        var container = new BlobContainerClient(connectionString, containerName);
+        var containerExistsResponse = await container.ExistsAsync();
+        var containerExists = containerExistsResponse.Value;
+        if (containerExists)
+        {
+            await container.SetAccessPolicyAsync();
+            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName); 
+            await foreach (var fileBlob in filesBlobs)
+            {
+                var blobClient = container.GetBlobClient(fileBlob.Name);
+                var streamingResult = await blobClient.DownloadStreamingAsync();
+                var test = new MemoryStream();
+                await streamingResult.Value.Content.CopyToAsync(test);
+                var fileNameIndex = fileBlob.Name.LastIndexOf('/');
+                await UploadStreamAsync(datasetId, fileBlob.Name.Substring(fileNameIndex + 1),
+                    test);
+            }
+        }
+
+        commandResult.Data = datasetId;
+        return commandResult;
     }
 }

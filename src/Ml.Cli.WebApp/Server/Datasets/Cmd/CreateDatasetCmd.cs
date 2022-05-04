@@ -23,6 +23,8 @@ public record CreateDatasetCmdInput
     public string GroupId { get; set; }
 
     [MaxLength(32)] [MinLength(1)] public string CreatorNameIdentifier { get; set; }
+    
+    public string ImportedDatasetName { get; set; }
 }
 
 public class CreateDatasetCmd
@@ -44,28 +46,29 @@ public class CreateDatasetCmd
         _usersRepository = usersRepository;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createGroupInput)
+    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createDatasetInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
 
-        var validationResult = new Validation().Validate(createGroupInput);
+        var validationResult = new Validation().Validate(createDatasetInput);
         if (!validationResult.IsSuccess) return commandResult.ReturnError(InvalidModel, validationResult.Errors);
 
-        var group = await _groupsRepository.GetGroupAsync(createGroupInput.GroupId);
+        var group = await _groupsRepository.GetGroupAsync(createDatasetInput.GroupId);
         if (group == null) return commandResult.ReturnError(GroupNotFound);
 
-        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(createGroupInput.CreatorNameIdentifier);
+        var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(createDatasetInput.CreatorNameIdentifier);
         if (user == null) return commandResult.ReturnError(UserNotFound);
 
-        if (!user.GroupIds.Contains(createGroupInput.GroupId)) return commandResult.ReturnError(UserNotInGroup);
+        if (!user.GroupIds.Contains(createDatasetInput.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
         var createDatasetResult = await _datasetsRepository.CreateDatasetAsync(new CreateDataset
         {
-            Classification = createGroupInput.Classification,
-            Name = createGroupInput.Name,
-            Type = createGroupInput.Type,
-            GroupId = createGroupInput.GroupId,
-            CreatorNameIdentifier = createGroupInput.CreatorNameIdentifier
+            Classification = createDatasetInput.Classification,
+            Name = createDatasetInput.Name,
+            Type = createDatasetInput.Type,
+            GroupId = createDatasetInput.GroupId,
+            CreatorNameIdentifier = createDatasetInput.CreatorNameIdentifier,
+            ImportedDatasetName = createDatasetInput.ImportedDatasetName
         });
 
         if (!createDatasetResult.IsSuccess)

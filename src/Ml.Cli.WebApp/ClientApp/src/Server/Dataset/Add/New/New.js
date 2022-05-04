@@ -7,7 +7,7 @@ import HelpButton from '@axa-fr/react-toolkit-help';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
-import {NAME, CLASSIFICATION, TYPE, GROUP, DATASETS_IMPORT, DATASET} from './constants';
+import {NAME, CLASSIFICATION, TYPE, GROUP, DATASETS_IMPORT, IMPORTEDDATASETNAME} from './constants';
 
 const groupsAsOptions = (groups) => groups && groups.length > 0 ? groups.map(group => ({ label: group.name, value: group.id })) : [];
 
@@ -110,13 +110,13 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets })
             />
             <SelectInput
                 label="Dataset à importer : "
-                name={DATASET}
-                id={DATASET}
+                name={IMPORTEDDATASETNAME}
+                id={IMPORTEDDATASETNAME}
                 onChange={onChange}
                 forceDisplayMessage={hasSubmit}
                 messageType="error"
                 options={datasetsAsOptions(optionsDatasets)}
-                {...fields[DATASET]}
+                {...fields[IMPORTEDDATASETNAME]}
             />
           </section>
         </article>

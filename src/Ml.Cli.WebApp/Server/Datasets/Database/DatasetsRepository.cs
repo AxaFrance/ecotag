@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -17,27 +18,30 @@ public class DatasetsRepository
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
+    private readonly ITransferService _transferService;
 
-    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
+    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, ITransferService transferService, IMemoryCache cache)
     {
         _datasetContext = datasetsContext;
         _fileService = fileService;
+        _transferService = transferService;
         _cache = cache;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
-        var groupModel = new DatasetModel
+        var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,
             Classification = createDataset.Classification.ToDatasetClassification(),
             Type = createDataset.Type.ToDatasetType(),
             CreateDate = DateTime.Now.Ticks,
             GroupId = Guid.Parse(createDataset.GroupId),
-            CreatorNameIdentifier = createDataset.CreatorNameIdentifier
+            CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
+            IsLocked = createDataset.ImportedDatasetName != null
         };
-        var result = _datasetContext.Datasets.AddIfNotExists(groupModel, group => group.Name == groupModel.Name);
+        var result = _datasetContext.Datasets.AddIfNotExists(datasetModel, group => group.Name == datasetModel.Name);
         if (result == null)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
@@ -47,6 +51,10 @@ public class DatasetsRepository
         try
         {
             await _datasetContext.SaveChangesAsync();
+            if (createDataset.ImportedDatasetName != null)
+            {
+                await _transferService.DownloadDatasetAsync("input", createDataset.ImportedDatasetName, datasetModel.Id.ToString());
+            }
         }
         catch (DbUpdateException)
         {
@@ -54,7 +62,7 @@ public class DatasetsRepository
             return commandResult;
         }
 
-        commandResult.Data = groupModel.Id.ToString();
+        commandResult.Data = datasetModel.Id.ToString();
         return commandResult;
     }
 

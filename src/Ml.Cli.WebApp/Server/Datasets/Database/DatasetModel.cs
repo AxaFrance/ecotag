@@ -28,7 +28,7 @@ public class DatasetModel
 
     [Column("DTS_CreateDate")] public long CreateDate { get; set; }
 
-    [Column("DTS_IsLocked")] public bool IsLocked { get; set; } = false;
+    [Column("DTS_IsLocked")] public bool IsLocked { get; set; }
 
     public List<FileModel> Files { get; set; }
     
