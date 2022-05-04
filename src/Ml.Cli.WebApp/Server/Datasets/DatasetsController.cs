@@ -133,16 +133,10 @@ public class DatasetsController : Controller
 
     [HttpGet("imported")]
     [ResponseCache(Duration = 1)]
-    public async Task<ActionResult<IList<string>>> GetImportedDatasets([FromServices] GetImportedDatasetsCmd getImportedDatasetsCmd)
+    public async Task<IList<string>> GetImportedDatasets([FromServices] GetImportedDatasetsCmd getImportedDatasetsCmd)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
-        var result = await getImportedDatasetsCmd.ExecuteAsync(nameIdentifier);
-        if (!result.IsSuccess)
-        {
-            return BadRequest(result.Error);
-        }
-
-        return Ok(result.Data);
+        return await getImportedDatasetsCmd.ExecuteAsync(nameIdentifier);
     }
 
     [HttpDelete("{datasetId}/files/{id}")]
