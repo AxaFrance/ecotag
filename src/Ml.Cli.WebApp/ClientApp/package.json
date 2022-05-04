@@ -37,7 +37,7 @@
     "use-image": "1.0.7"
   },
   "scripts": {
-    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcKeepAliveServiceWorker.json ./public",
+    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc/dist/OidcTrustedDomains.js ./public",
     "start:local": "env-cmd -f .env.local react-scripts start",
     "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",

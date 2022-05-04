@@ -35,6 +35,7 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\public\environment.dev-custom.json" />
     <Content Include="ClientApp\public\environment.dev.json" />
     <Content Include="ClientApp\public\environment.json" />
     <Content Include="ClientApp\src\Toolkit\TagOverTextLabel\expectedOutput.json" />
