@@ -2,6 +2,7 @@
 import {useInView} from "react-intersection-observer";
 import {formatTitle} from "./Attachment";
 import Attachments from "./Attachments";
+import classNames from "classnames";
 
 
 const displayEmail = (email) => {
@@ -32,9 +33,12 @@ export const Mail = ({attachment, title, onChange}) => {
         onChange("visibility", {id: attachment.id, isVisible: inView});
     }, [inView]);
     const mail = attachment.mail;
-    const style = {
-        "whiteSpace": mail.html ? "":"pre-line"
-    };
+    const name = "eml__container-mail";
+    const isHtml = mail.html || false;
+    const className = classNames(name, {
+        [`${name}--html`]: isHtml,
+        [`${name}--text`]: !isHtml,
+    });
     return <div id={attachment.id}>
         <h2 className="eml__attachment-title" >{title}</h2>
         <table ref={ref}>
@@ -61,7 +65,7 @@ export const Mail = ({attachment, title, onChange}) => {
             </tr>
             <tr >
                 <td colSpan="2">
-                    <div className="eml__container-mail-html" style={style} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
+                    <div className={className} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
                     </div>
                 </td>
             </tr>

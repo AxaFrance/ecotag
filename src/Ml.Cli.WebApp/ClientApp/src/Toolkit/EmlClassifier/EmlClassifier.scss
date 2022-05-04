@@ -16,10 +16,16 @@
     margin-bottom:64px;
   }
 
-  &__mail-html {
+  &__container-mail {
     border: 2px solid grey;
     padding: 4px;
     word-break: break-all;
+    &--text{
+      white-space: pre-line;
+    }
+    &--html{
+      white-space: normal;
+    }
   }
   
   &__summary{

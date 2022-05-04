@@ -13,9 +13,7 @@ import MailSummary from "./MailSummary";
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
-   
     const messageFormatted = {types: []};
-    
     messageFormatted.from = email.from;
     messageFormatted.to = email.to;
     messageFormatted.cc = email.cc;
@@ -37,7 +35,6 @@ async function parseMessageAsync(file, level=0) {
     if (email.text) {
         messageFormatted.text = email.text;
     }
-    
     let attachments = [];
     if (email.attachments && email.attachments.length) {
         attachments = email.attachments.reduce((results,attachment) => {
@@ -100,8 +97,6 @@ const initAsync = async (url, expectedOutput) => {
     let annotation = expectedOutput ? expectedOutput : {label:null};
     return {mail:message, annotation};
 }
-
-
 
 const findAttachment =(attachment, id, level=0) =>{
     if(!attachment){
