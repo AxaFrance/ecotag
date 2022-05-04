@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Moq;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -10,15 +12,22 @@ namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 public class CreateDatasetShould
 {
     [Theory]
-    [InlineData("Public", "datasetgood", "Image", "s666666")]
-    public async Task CreateDataset(string classification, string name, string type, string nameIdentifier)
+    [InlineData("Public", "datasetgood", "Image", null, "s666666")]
+    [InlineData("Public", "datasetgood", "Image", "groupName/datasetName", "s666666")]
+    public async Task CreateDataset(string classification, string name, string type, string importedDatasetName, string nameIdentifier)
     {
-        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, null);
+        var transferService = new Mock<ITransferService>();
+        transferService.Setup(foo => foo.DownloadDatasetAsync("input", "groupName/datasetName", It.IsAny<string>()));
+        var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, transferService.Object);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
         var resultValue = resultOk.Value as string;
         Assert.NotNull(resultValue);
+        if (importedDatasetName != null)
+        {
+            transferService.Verify(foo => foo.DownloadDatasetAsync("input", "groupName/datasetName", It.IsAny<string>()), Times.Once);
+        }
     }
 
     [Theory]
@@ -35,7 +44,7 @@ public class CreateDatasetShould
     public async Task ReturnError_WhenCreateDataset(string classification, string name, string type,
         string nameIdentifier, string errorKey, string groupId)
     {
-        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, groupId);
+        var result = await InitMockAndExecuteAsync(classification, name, type, null, nameIdentifier, groupId, null);
 
         var resultWithError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultWithError);
@@ -44,10 +53,10 @@ public class CreateDatasetShould
     }
 
     private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name,
-        string type, string nameIdentifier,
-        string groupId)
+        string type, string importedDatasetName, string nameIdentifier,
+        string groupId, ITransferService transferServiceObject)
     {
-        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, null, transferServiceObject);
         var datasetsController = mockResult.DatasetsController;
 
         var createDatasetCmd = new CreateDatasetCmd(mockResult.GroupRepository, mockResult.DatasetsRepository,
@@ -57,6 +66,7 @@ public class CreateDatasetShould
             Classification = classification,
             Name = name,
             Type = type,
+            ImportedDatasetName = importedDatasetName,
             GroupId = groupId ?? mockResult.Group1.Id.ToString()
         });
         return result;

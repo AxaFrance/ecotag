@@ -10,5 +10,5 @@ public interface ITransferService
 
     Task<IList<string>> GetImportedDatasetsNamesAsync(string containerName);
 
-    Task<ResultWithError<string, ErrorResult>> DownloadDatasetAsync(string containerName, string datasetName, string datasetId);
+    Task DownloadDatasetAsync(string containerName, string datasetName, string datasetId);
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
@@ -56,7 +57,7 @@ public class DatasetsRepository
                 await _transferService.DownloadDatasetAsync("input", createDataset.ImportedDatasetName, datasetModel.Id.ToString());
             }
         }
-        catch (DbUpdateException)
+        catch (Exception)
         {
             commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
             return commandResult;

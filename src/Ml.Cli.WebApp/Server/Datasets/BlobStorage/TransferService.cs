@@ -62,9 +62,8 @@ public class TransferService : ITransferService
         return result;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> DownloadDatasetAsync(string containerName, string datasetName, string datasetId)
+    public async Task DownloadDatasetAsync(string containerName, string datasetName, string datasetId)
     {
-        var commandResult = new ResultWithError<string, ErrorResult>();
         var connectionString = _azureStorageOptions.Value.ConnectionString;
         var container = new BlobContainerClient(connectionString, containerName);
         var containerExistsResponse = await container.ExistsAsync();
@@ -84,8 +83,5 @@ public class TransferService : ITransferService
                     test);
             }
         }
-
-        commandResult.Data = datasetId;
-        return commandResult;
     }
 }
