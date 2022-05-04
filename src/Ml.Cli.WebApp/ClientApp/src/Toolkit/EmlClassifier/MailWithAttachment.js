@@ -33,10 +33,7 @@ export const Mail = ({attachment, title, onChange}) => {
     }, [inView]);
     const mail = attachment.mail;
     const style = {
-        "whiteSpace": mail.html ? "":"pre-line",
-        "border": "2px solid grey",
-        "padding": "4px",
-        "wordBreak": "break-all",
+        "whiteSpace": mail.html ? "":"pre-line"
     };
     return <div id={attachment.id}>
         <h2 className="eml__attachment-title" >{title}</h2>
@@ -64,7 +61,7 @@ export const Mail = ({attachment, title, onChange}) => {
             </tr>
             <tr >
                 <td colSpan="2">
-                    <div style={style} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
+                    <div className="eml__container-mail-html" style={style} dangerouslySetInnerHTML={{__html:mail.html || mail.text}}>
                     </div>
                 </td>
             </tr>

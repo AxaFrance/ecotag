@@ -15,6 +15,12 @@
     flex-direction:row;
     margin-bottom:64px;
   }
+
+  &__mail-html {
+    border: 2px solid grey;
+    padding: 4px;
+    word-break: break-all;
+  }
   
   &__summary{
     border: 2px solid grey;

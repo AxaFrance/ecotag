@@ -68,13 +68,11 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
                                     styleImageContainer={styleImageContainer} onChange={onChange}/>
                 </div>
             }
-            console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
                 <h2 className={classNameTitle} >{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
         default:
-            console.log(attachment.mimeType + " " + attachment.filename);
             return <div ref={ref} id={id}>
                 <h2 className={classNameTitle} >{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
