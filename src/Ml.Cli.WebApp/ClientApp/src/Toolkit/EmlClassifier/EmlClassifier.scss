@@ -1,0 +1,30 @@
+﻿
+
+.eml {
+  &__attachment-title {
+    position: sticky;
+    z-index:2;
+    width:100%;
+    top: 0;
+    color:white;
+    background-color:grey;
+  }
+
+  &__container {
+    display:flex;
+    flex-direction:row;
+    margin-bottom:64px;
+  }
+  
+  &__summary{
+    border: 2px solid grey;
+    padding: 4px;
+    width:260px;
+    position: sticky;
+    word-break: break-all;
+    top: 0;
+  }
+  &__attachment-image{
+    max-width: 100%;
+  }
+}

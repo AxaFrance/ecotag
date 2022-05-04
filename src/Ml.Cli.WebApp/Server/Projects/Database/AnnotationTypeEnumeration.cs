@@ -6,5 +6,6 @@ public enum AnnotationTypeEnumeration
     ImageClassifier = 1,
     NamedEntity = 2,
     Ocr = 3,
-    Rotation = 4
+    Rotation = 4,
+    EmlClassifier = 5
 }

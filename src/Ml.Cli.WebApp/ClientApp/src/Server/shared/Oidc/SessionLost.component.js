@@ -1,12 +1,11 @@
 import React from 'react';
 import {style} from "./style"
 import Button from '@axa-fr/react-toolkit-button';
-import {useOidc} from "@axa-fr/react-oidc-context";
+import {useOidc} from "@axa-fr/react-oidc";
 
-export const SessionLost = ({configurationName, children}) => {
+export const SessionLost = ({configurationName}) => {
     const { login } = useOidc(configurationName);
     return (
-        <>
       <div className="oidc-session-lost" style={style}>
         <div className="oidc-session-lost__container">
           <h1 className="oidc-session-lost__title">Session expirée</h1>
@@ -18,10 +17,6 @@ export const SessionLost = ({configurationName, children}) => {
             </Button>
         </div>
       </div>
-            <div>
-                {children}
-            </div>
-        </>
     )
 };
 

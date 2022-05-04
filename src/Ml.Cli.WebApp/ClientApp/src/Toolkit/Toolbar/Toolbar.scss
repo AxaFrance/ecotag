@@ -5,9 +5,10 @@
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 20;
   width: 100%;
   padding: 10px 50px;
-  background: linear-gradient(15deg, #c6d7e4 50%, #d2dbe3 50%, #d2dbe3);
+  background: linear-gradient(15deg, #c6d7e4c2 50%, #d2dbe3c2 50%, #d2dbe3c2);
   -webkit-box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);
   -moz-box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);
   box-shadow: -1px -1px 9px 0px rgba(0,0,0,0.62);

@@ -7,8 +7,8 @@ namespace Ml.Cli.WebApp.Tests.Server.Datasets;
 public class ListDatasetShould
 {
     [Theory]
-    [InlineData("s666666", false, 1)]
-    [InlineData("s666666", null, 3)]
+    [InlineData("s666666", false, 3)]
+    [InlineData("s666666", null, 5)]
     [InlineData("s666666", true, 2)]
     [InlineData("s666667", true, 0)]
     [InlineData("s666668", true, 0)]

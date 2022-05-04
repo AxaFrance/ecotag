@@ -1,5 +1,5 @@
 import React from 'react';
-import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc-context';
+import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc';
 
 const NON_CONNECTE = 'Non Connecté';
 

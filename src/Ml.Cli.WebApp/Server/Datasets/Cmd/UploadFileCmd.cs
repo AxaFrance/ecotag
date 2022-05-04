@@ -40,12 +40,10 @@ public class UploadFileCmd
     public const int Mb = 1048576;
 
     public const string DatasetLocked = "DatasetLocked";
-
     public const string UserNotInGroup = "UserNotInGroup";
-
     public const string UserNotFound = "UserNotFound";
-
     public const string InvalidModel = "InvalidModel";
+    
     private readonly DatasetsRepository _datasetsRepository;
     private readonly UsersRepository _usersRepository;
 
@@ -83,10 +81,15 @@ public class UploadFileCmd
                 var imageExtention = new List<string> { ".png", ".jpg", ".jpeg", ".tif", ".tiff" };
                 if (!imageExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
             }
+            else if (datasetInfo.Type == DatasetTypeEnumeration.Eml.ToString())
+            {
+                var emlExtention = new List<string> { ".eml" };
+                if (!emlExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
+            }
             else
             {
-                var imageExtention = new List<string> { ".txt" };
-                if (!imageExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
+                var textExtention = new List<string> { ".txt" };
+                if (!textExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
             }
 
             if (file.Stream.Length < 32 * Mb) continue;

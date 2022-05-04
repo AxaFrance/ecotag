@@ -87,7 +87,7 @@ export const reducer = (state, action) => {
           if(newValues.length === 0){
             message = MSG_REQUIRED
           }
-          else if(newValues.length > 32){
+          else if(newValues.length > 90){
             message = MSG_MAX_LABELS_LENGTH
           }
           else if(hasDuplicates(getLabelsNames(newValues))){
@@ -151,8 +151,13 @@ export const reducer = (state, action) => {
                     value: 'Rotation',
                     label: 'Rotation',
                     type: "Image"
+                  },
+                  {
+                    value: 'EmlClassifier',
+                    label: "Classification de mail",
+                    type: "Eml"
                   }];
-              const datasetId = event.value
+              const datasetId = event.value;
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
               const reducer = (previousValue, currentValue) => {
                 if(currentValue.type === datasetType) {

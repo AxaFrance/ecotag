@@ -11,7 +11,6 @@ function Demo(){
     loaderMode: LoaderModes.none,
   });
 
-
   const onChange = value => {
     
     if(value.values.length <= 0){

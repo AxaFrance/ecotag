@@ -29,6 +29,7 @@ public static class AnnotationInputValidator
                     isValid = AnnotationCroppingValidator.Validate(annotationCropping, project);
                 }
                 break;
+            case AnnotationTypeEnumeration.EmlClassifier:
             case AnnotationTypeEnumeration.ImageClassifier:
                 var annotationImageClassifier =
                     DeserializeAnnotation<AnnotationImageClassifier>(expectedOutput, logger);

@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileUpload given "Eml" should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+  >
+    <h2
+      class="edit-dataset__file-upload-title"
+    >
+      Upload des fichiers .eml
+    </h2>
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="file"
+        tabindex="0"
+      >
+        <input
+          accept="message/rfc822,application/octet-stream"
+          autocomplete="off"
+          multiple=""
+          name="datasetUploadFiles"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Glissez/déposez vos fichiers
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasIconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Parcourir
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        id="sendFiles"
+        name="sendFiles"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Envoyer
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FileUpload given "Image" should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+  >
+    <h2
+      class="edit-dataset__file-upload-title"
+    >
+      Upload des fichiers .jpg, .jpeg, .png, .tiff
+    </h2>
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="file"
+        tabindex="0"
+      >
+        <input
+          accept="image/jpeg, image/png, image/tiff"
+          autocomplete="off"
+          multiple=""
+          name="datasetUploadFiles"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Glissez/déposez vos fichiers
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasIconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Parcourir
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        id="sendFiles"
+        name="sendFiles"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Envoyer
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FileUpload given "Text" should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+  >
+    <h2
+      class="edit-dataset__file-upload-title"
+    >
+      Upload des fichiers .txt
+    </h2>
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="file"
+        tabindex="0"
+      >
+        <input
+          accept="text/plain"
+          autocomplete="off"
+          multiple=""
+          name="datasetUploadFiles"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Glissez/déposez vos fichiers
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasIconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Parcourir
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        id="sendFiles"
+        name="sendFiles"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Envoyer
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
