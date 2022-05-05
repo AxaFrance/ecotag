@@ -30,7 +30,7 @@ const getImportedDatasetsByGroupId = (groups, groupId, importedDatasets) => {
   return importedDatasets.filter(dts => dts.startsWith(group.name));
 }
 
-const preInitState = {
+export const preInitState = {
   hasSubmit: false,
   status: resilienceStatus.LOADING,
   groups : [],
@@ -47,13 +47,13 @@ const preInitState = {
       message: MSG_REQUIRED,
     },
     [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: ""},
-    [IMPORTEDDATASETNAME]: {name: IMPORTEDDATASETNAME, value: '', disabled: true, message: ""}
+    [IMPORTEDDATASETNAME]: {name: IMPORTEDDATASETNAME, value: '', disabled: true, message: MSG_REQUIRED}
   },
 };
 
 export const initState = computeInitialStateErrorMessage(preInitState, rules);
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case 'init':{
         const { datasets, groups, importedDatasets, status } = action.data;
@@ -81,7 +81,8 @@ const reducer = (state, action) => {
         }
       }
       else if(DATASETS_IMPORT === name){
-        const isChecked = !state.fields[DATASETS_IMPORT].isChecked;
+        const fields = state.fields;
+        const isChecked = !fields[DATASETS_IMPORT].isChecked;
         newField = {
           ...newField,
           [DATASETS_IMPORT]: {
@@ -91,16 +92,19 @@ const reducer = (state, action) => {
           [IMPORTEDDATASETNAME]: {
             name: IMPORTEDDATASETNAME,
             value: '',
-            disabled: !(isChecked && state.fields.groupId.value !== "")
+            message: isChecked ? MSG_REQUIRED : "",
+            disabled: !(isChecked && fields.groupId.value !== "")
           }
         };
-        optionsDatasets = getImportedDatasetsByGroupId(state.groups, state.fields.groupId.value, state.importedDatasets);
+        optionsDatasets = getImportedDatasetsByGroupId(state.groups, fields.groupId.value, state.importedDatasets);
       }
       else if(GROUP === name){
         newField = {
           ...newField,
           [IMPORTEDDATASETNAME]: {
             ...newField[IMPORTEDDATASETNAME],
+            value: '',
+            message: state.fields[DATASETS_IMPORT].isChecked ? MSG_REQUIRED : "",
             disabled: !(state.fields[DATASETS_IMPORT].isChecked && event.value !== "")
           }
         }
@@ -181,9 +185,9 @@ const useNew = (history, fetch, telemetry) => {
 
 const NewWithResilience = withResilience(New);
 
-const NewContainer = ({ history, fetch, telemetry }) => {
+export const NewContainer = ({ history, fetch, telemetry }) => {
   const { state, onChange, onSubmit } = useNew(history, fetch, telemetry);
    return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit}  />;
 };
 const enhance = compose(withCustomFetch(fetch), withRouter, withTelemetry);
-export default  enhance(NewContainer);
+export default enhance(NewContainer);

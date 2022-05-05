@@ -5,20 +5,7 @@ import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
 
-const givenGroups = [
-  {
-    "id": "0001",
-    "name": "developpeurs",
-    "users": [
-      { "email": "clement.trofleau.lbc@axa.fr" },
-      { "email": "gilles.cruchon@axa.fr" },
-      { "email": "francois.descamps@axa.fr" },
-      { "email": "guillaume.chervet@axa.fr" }
-    ]
-  }
-];
-
-const telemetry = { trackEvent : (eventName) => console.log(eventName) }
+const telemetry = { trackEvent : (eventName) => console.log(eventName) };
 
 const fetch = () => {
   return {ok: true, json: () => Promise.resolve({
@@ -46,7 +33,7 @@ const fetch = () => {
 
 describe('New.container', () => {
   it('NewContainer render correctly', async () => {
-    const { container, getAllByText } = render(<Router><NewContainer groups={givenGroups} fetch={fetch} /></Router>);
+    const { container, getAllByText } = render(<Router><NewContainer fetch={fetch} /></Router>);
     await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
     await waitFor(() => getAllByText(/Nouveau projet d'annotation/i));
   });
