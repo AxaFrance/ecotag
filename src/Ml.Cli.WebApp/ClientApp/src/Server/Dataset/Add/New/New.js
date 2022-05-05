@@ -116,6 +116,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets })
                 forceDisplayMessage={hasSubmit}
                 messageType="error"
                 options={datasetsAsOptions(optionsDatasets)}
+                forceDisplayPlaceholder={true}
                 {...fields[IMPORTEDDATASETNAME]}
             />
           </section>
