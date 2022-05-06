@@ -5,16 +5,17 @@ import './Home.scss';
 import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
+import {DataScientist} from "../../withAuthentication";
 
-const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fetch }) => {
+const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fetch, user }) => {
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
       <>
         <Title title="Page projets" subtitle="Tagger un ensemble de données" />
         <div className="af-home container">
-          <Link className="btn af-btn af-btn--quote" to="/projects/new">
+          {user.roles.includes(DataScientist) && <Link className="btn af-btn af-btn--quote" to="/projects/new">
             <span className="af-btn__text">Nouveau projet</span>
-          </Link>
+          </Link>}
           <h1 className="af-title--content">{`Vos projets en cours (${numberItemsTotal})`}</h1>
           <div className="row row--projects-filters">
             <div className="col">

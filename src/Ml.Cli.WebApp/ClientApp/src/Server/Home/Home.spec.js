@@ -3,32 +3,33 @@ import '@testing-library/jest-dom';
 import {render, waitFor} from '@testing-library/react';
 import {Home} from "./Home";
 import {BrowserRouter as Router} from "react-router-dom";
+import {Administateur, Annotateur, DataScientist} from "../withAuthentication";
 
 
 describe.each([
-    ["ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR"],
-    ["ECOTAG_ANNOTATEUR"],
-    ["ECOTAG_ADMINISTRATEUR,ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR"],
+    [`${DataScientist},${Annotateur}`],
+    [Annotateur],
+    [`${DataScientist},${Annotateur},${Administateur}`],
     [""]
-])('Home (%i)', (roles) => {
+])('Home %p', (roles) => {
     test('Render home page', async () => {
         const user = {
             roles:roles ? roles.split(","): [],
             name: 'Guillaume Chervet'
         }
-        const { container } = render(<Router basename="/"><Home user={user} /></Router>);
+        const { container, asFragment } = render(<Router basename="/"><Home user={user} /></Router>);
 
-        if(roles.includes("ECOTAG_ANNOTATEUR")) {
+        if(roles.includes(Annotateur)) {
             await waitFor(() => expect(container.querySelector('.home__link-container--projects')).not.toBeNull());
         }
-        if(roles.includes("ECOTAG_DATA_SCIENTIST")) {
+        if(roles.includes(DataScientist)) {
             await waitFor(() => expect(container.querySelector('.home__link-container--datasets')).not.toBeNull());
         }
-        if(roles.includes("ECOTAG_ADMINISTRATEUR")) {
+        if(roles.includes(Administateur)) {
             await waitFor(() => expect(container.querySelector('.home__link-container--groups')).not.toBeNull());
         }
         
         
-       // expect(asFragment()).toMatchSnapshot();
+       expect(asFragment()).toMatchSnapshot();
     });
 });
