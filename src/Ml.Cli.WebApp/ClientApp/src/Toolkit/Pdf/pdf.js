@@ -3,18 +3,17 @@ import {loadScripts} from '../Script/useScript';
 
 let promiseCache = null;
 
-const convertPdfToImagesAsync = (sources=[ `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js`],workerSrc="") =>(file) => {
+const convertPdfToImagesAsync = (sources=[ `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js`],workerSrc="") =>(file, scale=2) => {
     if(promiseCache == null) {
         promiseCache = loadScripts(sources).then(() => {
             pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
         });
     }
-    return promiseCache.then(() => _convertPdfToImagesAsync(window.pdfjsLib, workerSrc, file));
+    return promiseCache.then(() => _convertPdfToImagesAsync(window.pdfjsLib, workerSrc, file, scale));
 }
 
 const _convertPdfToImagesAsync = (pdfjsLib, workerSrc, file, scale = 2) => {
-    
-    return new Promise(resolve => {
+      return new Promise(resolve => {
       const fileReader = new FileReader();
       fileReader.onload = function(ev) {
           const iDiv = document.createElement('div');
@@ -28,7 +27,7 @@ const _convertPdfToImagesAsync = (pdfjsLib, workerSrc, file, scale = 2) => {
               const tasks = [];
               for(let i=1; i<=numPages; i++) {
                 const promise = pdf.getPage(i).then(function(page) {
-                    const viewport = page.getViewport({scale: scale,});
+                    const viewport = page.getViewport({scale: scale});
                     const innerDiv = document.createElement('canvas');
 
                     iDiv.appendChild(innerDiv);

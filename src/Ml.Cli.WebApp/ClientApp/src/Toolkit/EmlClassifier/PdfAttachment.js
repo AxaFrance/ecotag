@@ -8,6 +8,7 @@ function PdfAttachment({blob, id, onChange}){
         loaderMode: LoaderModes.none,
     });
     useEffect(() => {
+        let isMounted = true;
         setState({
             ...state,
             files: [],
@@ -15,14 +16,19 @@ function PdfAttachment({blob, id, onChange}){
         });
         onChange("loading", {id, loaderMode: LoaderModes.get});
         convertPdfToImagesAsync([ window.location.origin+"/pdf.2.13.216.min.js"],  window.location.origin+"/pdf.2.13.216.worker.min.js")(blob).then(files => {
-            setState({
-                ...state,
-                files: files,
-                loaderMode: LoaderModes.none,
-            });
-            onChange("loading", {id, loaderMode: LoaderModes.none});
+            if(isMounted) {
+                setState({
+                    ...state,
+                    files: files,
+                    loaderMode: LoaderModes.none,
+                });
+                onChange("loading", {id, loaderMode: LoaderModes.none});
+            }
         });
-    }, []);
+        return () => {
+            isMounted = false;
+        };
+    }, [id]);
     return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
             <div>
                 {state.files.map((file, index) => <img key={index} src={file}  alt="pdf page" className="eml__attachment-image" />)}
