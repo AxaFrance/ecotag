@@ -5,11 +5,16 @@ import { HomeContainer } from './Home.container';
 import {BrowserRouter as Router} from "react-router-dom";
 
 import {fetch} from './mock';
+import {Annotateur, DataScientist} from "../../withAuthentication";
 
 
-describe('Home.container', () => {
+describe.each([
+  [`${DataScientist},${Annotateur}`],
+  [Annotateur],
+])('Home.container %p', (roles) => {
   it('HomeContainer render correctly', async () => {
-    const { asFragment, getByText } = render(<Router><HomeContainer fetch={fetch} /></Router>);
+    const user = {roles}
+    const { asFragment, getByText } = render(<Router><HomeContainer fetch={fetch} user={user} /></Router>);
     const messageEl = await waitFor(() => getByText('31/03/0001'));
     expect(messageEl).toHaveTextContent(
       '31/03/0001'
