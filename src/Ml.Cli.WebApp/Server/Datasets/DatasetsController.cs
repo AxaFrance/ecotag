@@ -48,7 +48,7 @@ public class DatasetsController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<string>> Create([FromServices] CreateDatasetCmd createDatasetCmd,
+    public async Task<ActionResult<Dictionary<string, string>>> Create([FromServices] CreateDatasetCmd createDatasetCmd,
         DatasetInput datasetInput)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
@@ -63,7 +63,7 @@ public class DatasetsController : Controller
         });
         if (!commandResult.IsSuccess) return BadRequest(commandResult.Error);
 
-        return Created(commandResult.Data, commandResult.Data);
+        return Created(commandResult.Data.DatasetId, commandResult.Data.FilesResult);
     }
 
     [HttpPost("{datasetId}/files")]

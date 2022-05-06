@@ -46,9 +46,9 @@ public class CreateDatasetCmd
         _usersRepository = usersRepository;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createDatasetInput)
+    public async Task<ResultWithError<DatasetCreationResult, ErrorResult>> ExecuteAsync(CreateDatasetCmdInput createDatasetInput)
     {
-        var commandResult = new ResultWithError<string, ErrorResult>();
+        var commandResult = new ResultWithError<DatasetCreationResult, ErrorResult>();
 
         var validationResult = new Validation().Validate(createDatasetInput);
         if (!validationResult.IsSuccess) return commandResult.ReturnError(InvalidModel, validationResult.Errors);

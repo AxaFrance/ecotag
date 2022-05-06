@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
+using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
+
+public class DatasetCreationResult
+{
+    public string DatasetId { get; set; }
+    public Dictionary<string, string> FilesResult { get; set; }
+}
 
 public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
+    public const string FileTooLarge = "FileTooLarge";
     public const string DatasetNotFound = "DatasetNotFound";
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
@@ -29,9 +36,10 @@ public class DatasetsRepository
         _cache = cache;
     }
 
-    public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
+    public async Task<ResultWithError<DatasetCreationResult, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
     {
-        var commandResult = new ResultWithError<string, ErrorResult>();
+        var commandResult = new ResultWithError<DatasetCreationResult, ErrorResult>();
+        var filesDict = new Dictionary<string, string>();
         var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,
@@ -54,7 +62,29 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
-                await _transferService.DownloadDatasetAsync("input", createDataset.ImportedDatasetName, datasetModel.Id.ToString());
+                var filesResult = await _transferService.DownloadDatasetFilesAsync("input", createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type.ToString());
+                await using var memoryStream = new MemoryStream();
+                foreach (var resultWithError in filesResult)
+                {
+                    var fileName = resultWithError.Key;
+                    if (resultWithError.Value.IsSuccess)
+                    {
+                        var fileServiceDataModel = resultWithError.Value.Data;
+                        await fileServiceDataModel.Stream.CopyToAsync(memoryStream);
+                        if (memoryStream.Length >= 32 * UploadFileCmd.Mb)
+                        {
+                            filesDict.Add(fileName, FileTooLarge);
+                        }
+
+                        var createFileResult = await CreateFileAsync(datasetModel.Id.ToString(), memoryStream, fileName,
+                            fileServiceDataModel.ContentType, createDataset.CreatorNameIdentifier);
+                        filesDict.Add(fileName, !createFileResult.IsSuccess ? createFileResult.Error.Key : null);
+                    }
+                    else
+                    {
+                        filesDict.Add(fileName, resultWithError.Value.Error.Key);
+                    }
+                }
             }
         }
         catch (Exception)
@@ -63,7 +93,11 @@ public class DatasetsRepository
             return commandResult;
         }
 
-        commandResult.Data = datasetModel.Id.ToString();
+        commandResult.Data = new DatasetCreationResult
+        {
+            DatasetId = datasetModel.Id.ToString(),
+            FilesResult = filesDict
+        };
         return commandResult;
     }
 

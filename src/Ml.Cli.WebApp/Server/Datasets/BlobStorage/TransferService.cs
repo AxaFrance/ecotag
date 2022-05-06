@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
+using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.BlobStorage;
@@ -14,6 +15,8 @@ namespace Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 [ExcludeFromCodeCoverage]
 public class TransferService : ITransferService
 {
+    public const string FileNameAlreadyExists = "FileNameAlreadyExists";
+    public const string InvalidFileExtension = "InvalidFileExtension";
     private readonly IFileService _fileService;
     private readonly IOptions<TransferFileStorageSettings> _azureStorageOptions;
 
@@ -71,7 +74,7 @@ public class TransferService : ITransferService
         if (containerExists)
         {
             await container.SetAccessPolicyAsync();
-            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName); 
+            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
             await foreach (var fileBlob in filesBlobs)
             {
                 var blobClient = container.GetBlobClient(fileBlob.Name);
@@ -83,5 +86,35 @@ public class TransferService : ITransferService
                     test);
             }
         }
+    }
+    
+    public async Task<Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>> DownloadDatasetFilesAsync(string containerName, string datasetName, string datasetId, string datasetType){
+        var filesResult = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>();
+        var connectionString = _azureStorageOptions.Value.ConnectionString;
+        var container = new BlobContainerClient(connectionString, containerName);
+        var containerExistsResponse = await container.ExistsAsync();
+        var containerExists = containerExistsResponse.Value;
+        if (containerExists)
+        {
+            await container.SetAccessPolicyAsync();
+            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
+            await foreach (var fileBlob in filesBlobs)
+            {
+                if (filesResult.ContainsKey(fileBlob.Name))
+                {
+                    filesResult.Add(fileBlob.Name, new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileNameAlreadyExists}});
+                    continue;
+                }
+                if (!UploadFileCmd.IsFileExtensionValid(fileBlob.Name, datasetType))
+                {
+                    filesResult.Add(fileBlob.Name, new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = InvalidFileExtension}});
+                    continue;
+                }
+                var fileResult = await _fileService.DownloadAsync("input", fileBlob.Name);
+                filesResult.Add(fileBlob.Name, fileResult);
+            }
+        }
+
+        return filesResult;
     }
 }

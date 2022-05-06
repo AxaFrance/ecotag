@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Moq;
 using Xunit;
 
@@ -17,16 +19,18 @@ public class CreateDatasetShould
     public async Task CreateDataset(string classification, string name, string type, string importedDatasetName, string nameIdentifier)
     {
         var transferService = new Mock<ITransferService>();
-        transferService.Setup(foo => foo.DownloadDatasetAsync("input", "groupName/datasetName", It.IsAny<string>()));
+        transferService
+            .Setup(foo => foo.DownloadDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>());
         var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, transferService.Object);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
-        var resultValue = resultOk.Value as string;
+        var resultValue = resultOk.Value as Dictionary<string, string>;
         Assert.NotNull(resultValue);
         if (importedDatasetName != null)
         {
-            transferService.Verify(foo => foo.DownloadDatasetAsync("input", "groupName/datasetName", It.IsAny<string>()), Times.Once);
+            transferService.Verify(foo => foo.DownloadDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 
@@ -52,7 +56,7 @@ public class CreateDatasetShould
         Assert.Equal(errorKey, resultWithErrorValue?.Key);
     }
 
-    private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name,
+    private static async Task<ActionResult<Dictionary<string, string>>> InitMockAndExecuteAsync(string classification, string name,
         string type, string importedDatasetName, string nameIdentifier,
         string groupId, ITransferService transferServiceObject)
     {
