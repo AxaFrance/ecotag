@@ -15,8 +15,8 @@ namespace Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 [ExcludeFromCodeCoverage]
 public class TransferService : ITransferService
 {
-    public const string FileNameAlreadyExists = "FileNameAlreadyExists";
-    public const string InvalidFileExtension = "InvalidFileExtension";
+    private const string FileNameAlreadyExists = "FileNameAlreadyExists";
+    private const string InvalidFileExtension = "InvalidFileExtension";
     private readonly IFileService _fileService;
     private readonly IOptions<TransferFileStorageSettings> _azureStorageOptions;
 
@@ -65,29 +65,6 @@ public class TransferService : ITransferService
         return result;
     }
 
-    public async Task DownloadDatasetAsync(string containerName, string datasetName, string datasetId)
-    {
-        var connectionString = _azureStorageOptions.Value.ConnectionString;
-        var container = new BlobContainerClient(connectionString, containerName);
-        var containerExistsResponse = await container.ExistsAsync();
-        var containerExists = containerExistsResponse.Value;
-        if (containerExists)
-        {
-            await container.SetAccessPolicyAsync();
-            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
-            await foreach (var fileBlob in filesBlobs)
-            {
-                var blobClient = container.GetBlobClient(fileBlob.Name);
-                var streamingResult = await blobClient.DownloadStreamingAsync();
-                var test = new MemoryStream();
-                await streamingResult.Value.Content.CopyToAsync(test);
-                var fileNameIndex = fileBlob.Name.LastIndexOf('/');
-                await UploadStreamAsync(datasetId, fileBlob.Name.Substring(fileNameIndex + 1),
-                    test);
-            }
-        }
-    }
-    
     public async Task<Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>> DownloadDatasetFilesAsync(string containerName, string datasetName, string datasetId, string datasetType){
         var filesResult = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>();
         var connectionString = _azureStorageOptions.Value.ConnectionString;
@@ -105,7 +82,7 @@ public class TransferService : ITransferService
                     filesResult.Add(fileBlob.Name, new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileNameAlreadyExists}});
                     continue;
                 }
-                if (!UploadFileCmd.IsFileExtensionValid(fileBlob.Name, datasetType))
+                if (!FileValidator.IsFileExtensionValid(fileBlob.Name, datasetType))
                 {
                     filesResult.Add(fileBlob.Name, new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = InvalidFileExtension}});
                     continue;

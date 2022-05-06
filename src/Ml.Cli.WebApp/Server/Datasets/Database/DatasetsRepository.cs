@@ -71,7 +71,7 @@ public class DatasetsRepository
                     {
                         var fileServiceDataModel = resultWithError.Value.Data;
                         await fileServiceDataModel.Stream.CopyToAsync(memoryStream);
-                        if (memoryStream.Length >= 32 * UploadFileCmd.Mb)
+                        if (!FileValidator.IsFileSizeValid(memoryStream))
                         {
                             filesDict.Add(fileName, FileTooLarge);
                         }
