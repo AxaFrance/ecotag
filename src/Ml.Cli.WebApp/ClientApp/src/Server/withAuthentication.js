@@ -32,9 +32,8 @@ export const extractRoles = oidcUser => {
           roles.push(DataScientist);
           roles.push(Annotateur);
       }
-      
-   return roles;  
   }
+  return roles;
 }
 
 const extractDataFromOAuthToken = (idTokenPayload, oidcUser) => ({
