@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Confirm Should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/datasets"
+        title="Datasets"
+      >
+        <i
+          class="glyphicon glyphicon-arrowthin-left"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Confirmation
+      </h1>
+    </div>
+  </div>
+  <div
+    class="af-steps-new af-steps-new--devis"
+  >
+    <ol
+      class="af-steps-list"
+    >
+      <li
+        class="past af-steps-list-step number"
+        title="Nouveau dataset"
+      >
+        <a
+          class="af-steps-list-stepLabel"
+          href="/datasets/new"
+        >
+          <div
+            class="af-steps-list-stepNumber"
+          >
+            1
+          </div>
+          <div
+            class="af-steps-list-stepTitle"
+          >
+            Nouveau dataset
+          </div>
+        </a>
+      </li>
+      <li
+        class="af-steps-list-step af-steps-list-step--success"
+        title="Confirmation"
+      >
+        <div
+          class="af-steps-list-stepLabel"
+        >
+          <span
+            class="af-steps-list-stepTitle"
+          >
+            Confirmation
+          </span>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <div
+    class="af-confirm"
+  >
+    <span
+      class="glyphicon glyphicon--ring glyphicon-ok"
+    />
+    <h2
+      class="af-confirm__message"
+    >
+      Nouveau dataset ajouté !
+    </h2>
+    <div
+      class="af-danger"
+    >
+      <h4>
+        Certains fichiers n'ont pas été ajoutés au dataset :
+      </h4>
+      <div>
+        <span
+          class="af-danger__message"
+        >
+          firstFile - InvalidFileExtension
+        </span>
+      </div>
+      <div>
+        <span
+          class="af-danger__message"
+        >
+          thirdFile - InvalidFileExtension
+        </span>
+      </div>
+    </div>
+    <button
+      class="btn af-btn af-btn--success af-btn--hasiconLeft"
+      id="return_datatset"
+      name="return_datatset"
+    >
+      <span
+        class="af-btn-text"
+      >
+        Retour liste datasets
+      </span>
+      <span
+        class="icons-list__item-icon glyphicon glyphicon-list-alt"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;

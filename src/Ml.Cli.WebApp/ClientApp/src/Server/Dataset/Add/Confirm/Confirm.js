@@ -24,8 +24,8 @@ export const Confirm = ({ navBack }) => {
                         <h4>
                             Certains fichiers n'ont pas été ajoutés au dataset :
                         </h4>
-                        {koFilesArray.map(koFileName => (
-                            <div>
+                        {koFilesArray.map((koFileName, index) => (
+                            <div key={index}>
                                 <span className="af-danger__message">{koFileName} - {filesResult[koFileName]}</span>
                             </div>
                         ))}
