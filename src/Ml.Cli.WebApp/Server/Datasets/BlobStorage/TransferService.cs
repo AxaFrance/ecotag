@@ -16,7 +16,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 public class TransferService : ITransferService
 {
     private const string FileNameAlreadyExists = "FileNameAlreadyExists";
-    private const string InvalidFileExtension = "InvalidFileExtension";
+    public const string InvalidFileExtension = "InvalidFileExtension";
     private readonly IFileService _fileService;
     private readonly IOptions<TransferFileStorageSettings> _azureStorageOptions;
 
