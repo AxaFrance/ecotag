@@ -15,24 +15,21 @@ export const formatTitle =(level, filename) => {
     return `${levelString} Pièce jointe: ${filename}`;
 }
 
+const mappingExtension = {
+    "pdf":"application/pdf",
+    "eml":"message/rfc822",
+    "jpg":"image/jpeg",
+    "jpeg":"image/jpeg",
+    "gif":"image/gif",
+    "webp":"image/webp",
+}
+
 const adaptTypeMime=(mimeType, filename) =>{
     if(mimeType === "application/octet-stream"){
         const filenameLowerCase = filename.toLocaleLowerCase();
         const extension = filenameLowerCase.split('.').pop();
-        switch (extension){
-            case "pdf":
-                return "application/pdf";
-            case "eml":
-                return "message/rfc822";
-            case "jpg":
-            case "jpeg":
-                return "image/jpeg";
-            case "png":
-                return "image/png";
-            case "gif":
-                return "image/gif";
-            case "webp":
-                return "image/webp";
+        if(mappingExtension.hasOwnProperty(extension)){
+            return mappingExtension[extension];
         }
     }
     return mimeType;
