@@ -221,15 +221,16 @@ public class DatasetsRepository
         var filteredChunk = new List<KeyValuePair<string, ResultWithError<FileServiceDataModel, ErrorResult>>>();
         foreach (var element in chunk)
         {
+            var fileName = element.Key.Substring(element.Key.LastIndexOf("/", StringComparison.Ordinal) + 1);
             var addResult = _datasetContext.Files.AddIfNotExists(new FileModel
             {
-                Name = element.Key.Substring(element.Key.LastIndexOf("/", StringComparison.Ordinal) + 1),
+                Name = fileName,
                 ContentType = element.Value.Data.ContentType,
                 CreatorNameIdentifier = creatorNameIdentifier,
                 CreateDate = DateTime.Now.Ticks,
                 Size = element.Value.Data.Length,
                 DatasetId = new Guid(datasetId)
-            });
+            }, file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
             if (addResult != null)
             {
                 filteredChunk.Add(element);
@@ -250,6 +251,7 @@ public class DatasetsRepository
                         return;
                     }
                     await _fileService.UploadStreamAsync(datasetId, endpointFileName, memoryStream);
+                    resultsDict.Add(element.Key, null);
                 });
             await _datasetContext.SaveChangesAsync();
         }
