@@ -250,8 +250,8 @@ public class DatasetsRepository
                         resultsDict.Add(element.Key, FileTooLarge);
                         return;
                     }
-                    await _fileService.UploadStreamAsync(datasetId, endpointFileName, memoryStream);
                     resultsDict.Add(element.Key, null);
+                    await _fileService.UploadStreamAsync(datasetId, endpointFileName, memoryStream);
                 });
             await _datasetContext.SaveChangesAsync();
         }
