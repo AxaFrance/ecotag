@@ -21,10 +21,23 @@ public class CreateDatasetShould
     {
         var fileService = new Mock<IFileService>();
         var transferService = new Mock<ITransferService>();
-        var downloadResultDict = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>();
-        downloadResultDict.Add("firstFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = TransferService.InvalidFileExtension}});
-        downloadResultDict.Add("secondFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Data = new FileServiceDataModel{Name = "secondFile.txt", Length = 10, ContentType = "image", Stream = new MemoryStream()}});
-        downloadResultDict.Add("thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = TransferService.InvalidFileExtension}});
+        var downloadResultDict = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>
+        {
+            {
+                "firstFile.txt",
+                new ResultWithError<FileServiceDataModel, ErrorResult>
+                    { Error = new ErrorResult { Key = TransferService.InvalidFileExtension } }
+            },
+            {
+                "secondFile.txt",
+                new ResultWithError<FileServiceDataModel, ErrorResult>
+                {
+                    Data = new FileServiceDataModel
+                        { Name = "secondFile.txt", Length = 10, ContentType = "image", Stream = new MemoryStream() }
+                }
+            },
+            { "thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = TransferService.InvalidFileExtension}} }
+        };
         transferService
             .Setup(foo => foo.DownloadDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(downloadResultDict);

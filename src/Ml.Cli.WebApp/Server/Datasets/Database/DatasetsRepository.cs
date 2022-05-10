@@ -257,12 +257,9 @@ public class DatasetsRepository
         }
         catch (Exception)
         {
-            foreach (var file in chunk)
+            foreach (var file in chunk.Where(element => !resultsDict.ContainsKey(element.Key)))
             {
-                if (!resultsDict.ContainsKey(file.Key))
-                {
-                    resultsDict.Add(file.Key, UploadError);
-                }
+                resultsDict.Add(file.Key, UploadError);
             }
         }
 
