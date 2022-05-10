@@ -157,7 +157,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 if(isMounted) {
                     setState({...state, loaderMode: LoaderModes.none, ...data});
                 }
-            })
+            });
         }
         return () => {
             isMounted = false;

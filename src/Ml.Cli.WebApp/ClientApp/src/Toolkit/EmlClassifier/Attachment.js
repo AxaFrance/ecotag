@@ -15,6 +15,29 @@ export const formatTitle =(level, filename) => {
     return `${levelString} Pièce jointe: ${filename}`;
 }
 
+const adaptTypeMime=(mimeType, filename) =>{
+    if(mimeType === "application/octet-stream"){
+        const filenameLowerCase = filename.toLocaleLowerCase();
+        const extension = filenameLowerCase.split('.').pop();
+        switch (extension){
+            case "pdf":
+                return "application/pdf";
+            case "eml":
+                return "message/rfc822";
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            case "png":
+                return "image/png";
+            case "gif":
+                return "image/gif";
+            case "webp":
+                return "image/webp";
+        }
+    }
+    return mimeType;
+}
+
 const Attachment = ({attachment, onChange, styleImageContainer }) => {
     const { ref, inView } = useInView({
         inViewThreshold: 0,
@@ -25,12 +48,15 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
     const id = attachment.id;
     const level = attachment.level || 0;
     const classNameTitle = "eml__attachment-title";
-    switch (attachment.mimeType) {
+
+    let mimeType = adaptTypeMime(attachment.mimeType, attachment.filename);
+
+    switch (mimeType) {
         case "message/rfc822":
             return <div id={id}>
                 <h2 ref={ref} className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
-                <MailWithAttachment attachment={attachment} 
-                                styleImageContainer={styleImageContainer} onChange={onChange}/>
+                <MailWithAttachment attachment={attachment}
+                                    styleImageContainer={styleImageContainer} onChange={onChange}/>
             </div>
         case "image/jpeg":
         case "image/png":
@@ -50,27 +76,6 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
                 <div ref={ref} style={styleImageContainer}>
                     <PdfAttachment blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
-            </div>
-        case "application/octet-stream":
-            const filenameLowerCase = attachment.filename.toLocaleLowerCase();
-            if (filenameLowerCase.endsWith(".pdf")) {
-                return <div id={id}>
-                    <h2 className={classNameTitle}>{formatTitle(level, attachment.filename)}</h2>
-                    <div ref={ref} style={styleImageContainer}>
-                        <PdfAttachment blob={attachment.blob} onChange={onChange}/>
-                    </div>
-                </div>
-            }
-            if (filenameLowerCase.endsWith(".eml")) {
-                return <div id={id}>
-                    <h2 className={classNameTitle} >{formatTitle(level, attachment.filename)}</h2>
-                    <MailWithAttachment ref={ref} attachment={attachment}
-                                    styleImageContainer={styleImageContainer} onChange={onChange}/>
-                </div>
-            }
-            return <div ref={ref} id={id}>
-                <h2 className={classNameTitle} >{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
-                <DownloadAttachment filename={attachment.filename} blob={attachment.blob} />
             </div>
         default:
             return <div ref={ref} id={id}>
