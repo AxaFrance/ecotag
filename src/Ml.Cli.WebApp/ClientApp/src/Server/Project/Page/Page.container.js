@@ -13,6 +13,7 @@ import withCustomFetch from '../../withCustomFetch';
 import compose from '../../compose';
 import withAuthentication from '../../withAuthentication';
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
+import {useHistory} from "react-router";
 
 const PageWithResilience = withResilience(Page);
 
@@ -44,7 +45,8 @@ export const init = (fetch, dispatch) => async id => {
   
   dispatch({ type: 'init', data: { project, dataset, group, users, annotationsStatus, status: resilienceStatus.SUCCESS } });
 };
-
+const lock_project = 'lock_project';
+const lock_project_start = 'lock_project_start';
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'init': {
@@ -66,12 +68,18 @@ export const reducer = (state, action) => {
         isModalOpened
       };
     }
-    case 'lock_project': {
-      const {status, isModalOpened} = action.data;
+    case lock_project_start: {
       return {
         ...state,
-        status,
-        isModalOpened
+        status:resilienceStatus.POST,
+        isModalOpened: false
+      };
+    }
+    case lock_project: {
+      const {status} = action.data;
+      return {
+        ...state,
+        status
       };
     }
     default:
@@ -101,26 +109,29 @@ export const initialState = {
   isModalOpened: false
 };
 
-export const onLockSubmit = (fetch, dispatch) => async id => {
-  const lock_project = 'lock_project';
+export const onLockSubmit = (fetch, dispatch, history) => async id => {
+  dispatch({type: lock_project_start});
   let data;
   const response = await fetchDeleteProject(fetch)(id);
   if (response.status >= statusCode500) {
-    data = {status: resilienceStatus.ERROR, isModalOpened: false};
+    data = {status: resilienceStatus.ERROR};
+    dispatch({data, type: lock_project});
   } else {
-    data = {status: resilienceStatus.SUCCESS, isModalOpened: false};
+    data = {status: resilienceStatus.SUCCESS};
+    dispatch({data, type: lock_project});
+    history.push("/projects");
   }
-  dispatch({data, type: lock_project});
 }
 
 const usePage = (fetch) => {
   const { id } = useParams();
+  const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
   const onExport = projectId => fetchExportAnnotations(fetch)(projectId);
   const open_modal = 'open_modal';
   const lock = {
     onCancel: () => dispatch({type: open_modal, data: {isModalOpened: false}}),
-    onSubmit: () => onLockSubmit(fetch, dispatch)(id),
+    onSubmit: () => onLockSubmit(fetch, dispatch, history)(id),
     onLockAction: () => dispatch({type: open_modal, data: {isModalOpened: true}})
   };
   useEffect(() => {
