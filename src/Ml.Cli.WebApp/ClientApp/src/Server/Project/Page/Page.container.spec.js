@@ -119,7 +119,7 @@ describe('Page.container', () => {
       await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
       expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
       expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'lock_project', data: {status: resilienceStatus.SUCCESS}});
-      expect(givenHistory).toHaveBeenCalledWith("/projects");
+      expect(givenHistory.push).toHaveBeenCalledWith("/projects");
     });
   });
 });
