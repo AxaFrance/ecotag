@@ -115,8 +115,11 @@ describe('Page.container', () => {
       const givenFetch = jest.fn()
           .mockResolvedValueOnce({ok: true, status: 200});
       const givenDispatch = jest.fn();
-      await onLockSubmit(givenFetch, givenDispatch)("0001");
-      expect(givenDispatch).toHaveBeenCalledWith({data: {status: resilienceStatus.SUCCESS, isModalOpened: false}, type: 'lock_project'});
+      const givenHistory = {push:jest.fn()}
+      await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
+      expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
+      expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'lock_project', data: {status: resilienceStatus.SUCCESS}});
+      expect(givenHistory.push).toHaveBeenCalledWith("/projects");
     });
   });
 });
