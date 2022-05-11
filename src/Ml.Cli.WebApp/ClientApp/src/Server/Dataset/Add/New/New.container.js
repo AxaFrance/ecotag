@@ -170,8 +170,7 @@ const useNew = (history, fetch, telemetry) => {
         data = {status: resilienceStatus.ERROR };
       } else {
         telemetry.trackEvent(telemetryEvents.CREATE_DATASET);
-        const responseJson = await response.json();
-        history.push({pathname: '/datasets/confirm', state: {filesResult: responseJson}});
+        history.push('/datasets/confirm');
       }
     }
     dispatch({type: 'onSubmit', data});

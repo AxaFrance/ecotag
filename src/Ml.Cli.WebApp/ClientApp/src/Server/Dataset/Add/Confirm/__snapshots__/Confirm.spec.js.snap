@@ -77,27 +77,11 @@ exports[`Confirm Should render correctly 1`] = `
     >
       Nouveau dataset ajouté !
     </h2>
-    <div
-      class="af-danger"
+    <h4
+      class="af-confirm__message"
     >
-      <h4>
-        Certains fichiers n'ont pas été ajoutés au dataset :
-      </h4>
-      <div>
-        <span
-          class="af-danger__message"
-        >
-          firstFile - InvalidFileExtension
-        </span>
-      </div>
-      <div>
-        <span
-          class="af-danger__message"
-        >
-          thirdFile - InvalidFileExtension
-        </span>
-      </div>
-    </div>
+      Si vous avez importé un dataset, le processus d'ajout des fichiers peut prendre un moment.
+    </h4>
     <button
       class="btn af-btn af-btn--success af-btn--hasiconLeft"
       id="return_datatset"
