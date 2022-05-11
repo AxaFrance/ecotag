@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -19,13 +18,13 @@ public class CreateDatasetShould
     [InlineData("Public", "datasetgood", "Image", "groupName/datasetName", "s666666")]
     public async Task CreateDataset(string classification, string name, string type, string importedDatasetName, string nameIdentifier)
     {
-        var transferService = new Mock<ITransferService>();
+        var fileService = new Mock<IFileService>();
         var downloadResultDict = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>
         {
             {
                 "firstFile.txt",
                 new ResultWithError<FileServiceDataModel, ErrorResult>
-                    { Error = new ErrorResult { Key = TransferService.InvalidFileExtension } }
+                    { Error = new ErrorResult { Key = FileService.InvalidFileExtension } }
             },
             {
                 "secondFile.txt",
@@ -35,13 +34,13 @@ public class CreateDatasetShould
                         { Name = "secondFile.txt", Length = 10, ContentType = "image", Stream = new MemoryStream() }
                 }
             },
-            { "thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = TransferService.InvalidFileExtension}} }
+            { "thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileService.InvalidFileExtension}} }
         };
-        transferService
+        fileService
             .Setup(foo =>
-                foo.TransferDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()))
+                foo.GetInputDatasetFilesAsync("TransferFileStorage", "input", "groupName/datasetName", It.IsAny<string>()))
             .ReturnsAsync(downloadResultDict);
-        var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, null, transferService.Object);
+        var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, fileService.Object);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
@@ -49,11 +48,11 @@ public class CreateDatasetShould
         Assert.NotNull(resultValue);
         if (importedDatasetName != null)
         {
-            transferService.Verify(foo => foo.TransferDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            fileService.Verify(foo => foo.GetInputDatasetFilesAsync("TransferFileStorage", "input", "groupName/datasetName", It.IsAny<string>()), Times.Once);
             Assert.Equal(3, resultValue.Count);
-            Assert.Equal(TransferService.InvalidFileExtension, resultValue["firstFile.txt"]);
+            Assert.Equal(FileService.InvalidFileExtension, resultValue["firstFile.txt"]);
             Assert.Null(resultValue["secondFile.txt"]);
-            Assert.Equal(TransferService.InvalidFileExtension, resultValue["thirdFile.txt"]);
+            Assert.Equal(FileService.InvalidFileExtension, resultValue["thirdFile.txt"]);
         }
     }
 
@@ -71,7 +70,7 @@ public class CreateDatasetShould
     public async Task ReturnError_WhenCreateDataset(string classification, string name, string type,
         string nameIdentifier, string errorKey, string groupId)
     {
-        var result = await InitMockAndExecuteAsync(classification, name, type, null, nameIdentifier, groupId, null, null);
+        var result = await InitMockAndExecuteAsync(classification, name, type, null, nameIdentifier, groupId, null);
 
         var resultWithError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultWithError);
@@ -82,9 +81,9 @@ public class CreateDatasetShould
     private static async Task<ActionResult<Dictionary<string, string>>> InitMockAndExecuteAsync(string classification,
         string name,
         string type, string importedDatasetName, string nameIdentifier,
-        string groupId, IFileService fileServiceObject, ITransferService transferServiceObject)
+        string groupId, IFileService fileServiceObject)
     {
-        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, fileServiceObject, transferServiceObject);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, fileServiceObject);
         var datasetsController = mockResult.DatasetsController;
 
         var createDatasetCmd = new CreateDatasetCmd(mockResult.GroupRepository, mockResult.DatasetsRepository,

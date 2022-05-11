@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
@@ -15,9 +14,6 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<TransferFileStorageSettings>(
-            configuration.GetSection(TransferFileStorageSettings.Storage));
-        services.AddScoped<ITransferService, TransferService>();
         services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         services.AddDbContext<DeleteContext>(options =>

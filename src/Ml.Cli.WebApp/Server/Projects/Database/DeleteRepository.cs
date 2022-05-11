@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +68,7 @@ public class DeleteRepository
     {
         var files = await _deleteContext.Files.Where(file => new Guid(datasetId) == file.DatasetId).ToListAsync();
         _deleteContext.Files.RemoveRange(files);
-        await _fileService.DeleteContainerAsync(datasetId);
+        await _fileService.DeleteContainerAsync("FileStorage", datasetId);
     }
 
     public async Task DeleteProjectWithDatasetAsync(GetDatasetInfo dataset, string projectId)

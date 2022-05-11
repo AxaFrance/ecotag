@@ -12,7 +12,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Datasets;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -78,7 +77,7 @@ internal static class DatasetMock
           .Returns(serviceScopeFactory.Object);
         return new MockService { ServiceProvider = serviceProvider, ServiceScopeFactory = serviceScopeFactory};
     }
-    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null, ITransferService transferService = null)
+    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext()();
 
@@ -271,8 +270,7 @@ internal static class DatasetMock
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
         
-        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, transferService,
-            memoryCache);
+        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, memoryCache);
 
         var mockedAnnotationsService  = GetMockedServiceProvider(datasetContextFunc);
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);

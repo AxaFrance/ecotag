@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -18,17 +18,17 @@ public class ExportThenDeleteProjectCmd
     private readonly DatasetsRepository _datasetsRepository;
     private readonly AnnotationsRepository _annotationsRepository;
     private readonly DeleteRepository _deleteRepository;
-    private readonly ITransferService _transferService;
+    private readonly IFileService _fileService;
     public const string UserNotFound = "UserNotFound";
 
-    public ExportThenDeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, DeleteRepository deleteRepository, ITransferService transferService)
+    public ExportThenDeleteProjectCmd(UsersRepository usersRepository, ProjectsRepository projectsRepository, DatasetsRepository datasetsRepository, AnnotationsRepository annotationsRepository, DeleteRepository deleteRepository, IFileService fileService)
     {
         _usersRepository = usersRepository;
         _projectsRepository = projectsRepository;
         _datasetsRepository = datasetsRepository;
         _annotationsRepository = annotationsRepository;
         _deleteRepository = deleteRepository;
-        _transferService = transferService;
+        _fileService = fileService;
     }
     
     public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
@@ -84,6 +84,6 @@ public class ExportThenDeleteProjectCmd
         var fileName =
             $"{exportCmdResult.ProjectName}_{DateTime.Now.Ticks}/{exportCmdResult.ProjectName}-annotations.json";
         var stream = new MemoryStream(bytes);
-        await _transferService.UploadStreamAsync(containerName, fileName, stream);
+        await _fileService.UploadStreamAsync("TransferFileStorage", containerName, fileName, stream);
     }
 }

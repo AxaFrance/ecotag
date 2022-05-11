@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
@@ -8,12 +8,12 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 public class GetImportedDatasetsCmd
 {
     private readonly UsersRepository _usersRepository;
-    private readonly ITransferService _transferService;
+    private readonly IFileService _fileService;
 
-    public GetImportedDatasetsCmd(UsersRepository usersRepository, ITransferService transferService)
+    public GetImportedDatasetsCmd(UsersRepository usersRepository, IFileService fileService)
     {
         _usersRepository = usersRepository;
-        _transferService = transferService;
+        _fileService = fileService;
     }
 
     public async Task<IList<string>> ExecuteAsync(string nameIdentifier)
@@ -24,7 +24,7 @@ public class GetImportedDatasetsCmd
             return new List<string>();
         }
 
-        var datasetsNames = await _transferService.GetImportedDatasetsNamesAsync("input");
+        var datasetsNames = await _fileService.GetImportedDatasetsNamesAsync("TransferFileStorage", "input");
         return datasetsNames;
     }
 }

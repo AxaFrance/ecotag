@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Ml.Cli.WebApp.Server.Datasets.BlobStorage;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -21,16 +20,15 @@ public class DatasetsRepository
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
     public const string SaveError = "SaveError";
+    public const string DownloadError = "DownloadError";
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
-    private readonly ITransferService _transferService;
 
-    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, ITransferService transferService, IMemoryCache cache)
+    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
     {
         _datasetContext = datasetsContext;
         _fileService = fileService;
-        _transferService = transferService;
         _cache = cache;
     }
 
@@ -60,8 +58,9 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
-                var filesResult = await _transferService.TransferDatasetFilesAsync("input",
-                    createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type.ToString());
+                //TODO -> Task.Run
+                var filesResult = await _fileService.GetInputDatasetFilesAsync("TransferFileStorage", "input",
+                    createDataset.ImportedDatasetName, datasetModel.Type.ToString());
                 var errorFiles = filesResult.Where(x => !x.Value.IsSuccess);
                 foreach (var errorFile in errorFiles)
                 {
@@ -72,7 +71,7 @@ public class DatasetsRepository
                     .Where(x => x.Value.IsSuccess).ToList();
                 _datasetContext.Files.AddRange(successFiles.Select(x => new FileModel
                 {
-                    Name = x.Key.Substring(x.Key.LastIndexOf("/", StringComparison.Ordinal) + 1),
+                    Name = x.Value.Data.Name,
                     ContentType = x.Value.Data.ContentType,
                     CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
                     CreateDate = DateTime.Now.Ticks,
@@ -82,6 +81,10 @@ public class DatasetsRepository
                 try
                 {
                     await _datasetContext.SaveChangesAsync();
+                    foreach (var successFile in successFiles)
+                    {
+                        filesDict.Add(successFile.Key, null);
+                    }
                 }
                 catch (Exception)
                 {
@@ -94,7 +97,7 @@ public class DatasetsRepository
         }
         catch (Exception)
         {
-            commandResult.Error = new ErrorResult { Key = AlreadyTakenName };
+            commandResult.Error = new ErrorResult { Key = DownloadError };
             return commandResult;
         }
 
@@ -176,7 +179,10 @@ public class DatasetsRepository
             return result;
         }
 
-        return await _fileService.DownloadAsync(datasetId, file.Name);
+        var isFileStoredInInputBlobStorage = file.Name.Contains("/");
+        var blobStorageName = isFileStoredInInputBlobStorage ? "TransferFileStorage" : "FileStorage";
+        var containerName = isFileStoredInInputBlobStorage ? "input" : datasetId;
+        return await _fileService.DownloadAsync(blobStorageName, containerName, file.Name);
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream,
@@ -204,7 +210,7 @@ public class DatasetsRepository
         try
         {
             var taskSaveSql = _datasetContext.SaveChangesAsync();
-            var taskUploadBlob = _fileService.UploadStreamAsync(datasetId, fileName, stream);
+            var taskUploadBlob = _fileService.UploadStreamAsync("FileStorage", datasetId, fileName, stream);
             Task.WaitAll(taskSaveSql, taskUploadBlob);
         }
         catch (DbUpdateException)
@@ -238,7 +244,7 @@ public class DatasetsRepository
         _datasetContext.Files.Remove(file);
 
         var taskDeleteSql = _datasetContext.SaveChangesAsync();
-        var taskDeleteBob = _fileService.DeleteAsync(datasetId, file.Name);
+        var taskDeleteBob = _fileService.DeleteAsync("FileStorage", datasetId, file.Name);
         Task.WaitAll(taskDeleteSql, taskDeleteBob);
         result.Data = taskDeleteBob.Result;
         return result;

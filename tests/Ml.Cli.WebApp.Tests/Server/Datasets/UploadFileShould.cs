@@ -29,7 +29,7 @@ public class UploadFileShould
     public async Task CreateDataset(string nameIdentifier)
     {
         var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
+        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
 
         var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
@@ -47,7 +47,7 @@ public class UploadFileShould
     public async Task ReturnIsForbidden(string nameIdentifier, string errorKey)
     {
         var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
+        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
 
         var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
@@ -72,7 +72,7 @@ public class UploadFileShould
         string errorKey)
     {
         var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
+        mockFileService.Setup(_ => _.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
 
         var getDatasetCmd = new UploadFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
