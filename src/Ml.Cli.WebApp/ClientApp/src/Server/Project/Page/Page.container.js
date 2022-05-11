@@ -79,7 +79,8 @@ export const reducer = (state, action) => {
       const {status} = action.data;
       return {
         ...state,
-        status
+        status,
+        isModalOpened: false
       };
     }
     default:
