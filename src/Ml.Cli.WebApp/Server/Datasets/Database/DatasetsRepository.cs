@@ -24,12 +24,14 @@ public class DatasetsRepository
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
+    private readonly ImportDatasetFilesService _importDatasetFilesService;
 
-    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache)
+    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache, ImportDatasetFilesService importDatasetFilesService)
     {
         _datasetContext = datasetsContext;
         _fileService = fileService;
         _cache = cache;
+        _importDatasetFilesService = importDatasetFilesService;
     }
 
     public async Task<ResultWithError<DatasetCreationResult, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
@@ -58,41 +60,7 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
-                //TODO -> Task.Run
-                var filesResult = await _fileService.GetInputDatasetFilesAsync("TransferFileStorage", "input",
-                    createDataset.ImportedDatasetName, datasetModel.Type.ToString());
-                var errorFiles = filesResult.Where(x => !x.Value.IsSuccess);
-                foreach (var errorFile in errorFiles)
-                {
-                    filesDict.Add(errorFile.Key, errorFile.Value.Error.Key);
-                }
-
-                var successFiles = filesResult
-                    .Where(x => x.Value.IsSuccess).ToList();
-                _datasetContext.Files.AddRange(successFiles.Select(x => new FileModel
-                {
-                    Name = x.Value.Data.Name,
-                    ContentType = x.Value.Data.ContentType,
-                    CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
-                    CreateDate = DateTime.Now.Ticks,
-                    Size = x.Value.Data.Length,
-                    DatasetId = datasetModel.Id
-                }));
-                try
-                {
-                    await _datasetContext.SaveChangesAsync();
-                    foreach (var successFile in successFiles)
-                    {
-                        filesDict.Add(successFile.Key, null);
-                    }
-                }
-                catch (Exception)
-                {
-                    foreach (var successFile in successFiles)
-                    {
-                        filesDict.Add(successFile.Key, SaveError);
-                    }
-                }
+                _importDatasetFilesService.ImportFiles(createDataset, datasetModel);
             }
         }
         catch (Exception)
