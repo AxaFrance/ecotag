@@ -4,6 +4,7 @@ import { Input, InputConstants as Constants, withInput, omit } from '@axa-fr/rea
 import cuid from 'cuid';
 import stringToRGB from './stringToRgb';
 import './Label.scss';
+import {adaptTextColorToBackgroundColor} from "../../../Toolkit/colors";
 
 const LabelContainer = ({ values, onChange, name, id, ...otherProps }) => {
   const [inputValue, setInputValue] = useState('');
@@ -84,7 +85,7 @@ const LabelOrEditForm = ({label, setLabels, labels, setShowEditForm, showEditFor
             onClick={() => {
               setShowEditForm(label.id);
             }}>
-          {label.name}
+          <div style={{color: adaptTextColorToBackgroundColor(label.color)}}>{label.name}</div>
         </button>
     );
   }
