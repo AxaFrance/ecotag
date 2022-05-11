@@ -20,9 +20,7 @@ public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
-    public const string FileTooLarge = "FileTooLarge";
-    public const string UploadError = "UploadError";
-    private const int ChunkSize = 20;
+    public const string SaveError = "SaveError";
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
@@ -62,25 +60,34 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
-                var filesResult = await _transferService.DownloadDatasetFilesAsync("input", createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type.ToString());
-                var koFiles = filesResult.Where(file => !file.Value.IsSuccess).ToList();
-                var okFiles = filesResult.Where(file => file.Value.IsSuccess).ToList();
-                
-                foreach (var file in koFiles)
+                var filesResult = await _transferService.TransferDatasetFilesAsync("input",
+                    createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type.ToString());
+                var errorFiles = filesResult.Where(x => !x.Value.IsSuccess);
+                foreach (var errorFile in errorFiles)
                 {
-                    filesDict.Add(file.Key, file.Value.Error.Key);
+                    filesDict.Add(errorFile.Key, errorFile.Value.Error.Key);
                 }
 
-                if (okFiles.Any())
+                var successFiles = filesResult
+                    .Where(x => x.Value.IsSuccess).ToList();
+                _datasetContext.Files.AddRange(successFiles.Select(x => new FileModel
                 {
-                    var chunkList = okFiles.Chunk(ChunkSize);
-                    foreach (var chunk in chunkList)
+                    Name = x.Key.Substring(x.Key.LastIndexOf("/", StringComparison.Ordinal) + 1),
+                    ContentType = x.Value.Data.ContentType,
+                    CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
+                    CreateDate = DateTime.Now.Ticks,
+                    Size = x.Value.Data.Length,
+                    DatasetId = datasetModel.Id
+                }));
+                try
+                {
+                    await _datasetContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    foreach (var successFile in successFiles)
                     {
-                        var chunkResults = await CreateFilesAsync(chunk, datasetModel.Id.ToString(), datasetModel.CreatorNameIdentifier);
-                        foreach (var chunkResult in chunkResults)
-                        {
-                            filesDict.Add(chunkResult.Key, chunkResult.Value);
-                        }
+                        filesDict.Add(successFile.Key, SaveError);
                     }
                 }
             }
@@ -212,58 +219,6 @@ public class DatasetsRepository
 
         commandResult.Data = fileModel.Id.ToString();
         return commandResult;
-    }
-
-    private async Task<Dictionary<string, string>> CreateFilesAsync(
-        IList<KeyValuePair<string, ResultWithError<FileServiceDataModel, ErrorResult>>> chunk, string datasetId, string creatorNameIdentifier)
-    {
-        var resultsDict = new Dictionary<string, string>();
-        var filteredChunk = new List<KeyValuePair<string, ResultWithError<FileServiceDataModel, ErrorResult>>>();
-        foreach (var element in chunk)
-        {
-            var fileName = element.Key.Substring(element.Key.LastIndexOf("/", StringComparison.Ordinal) + 1);
-            var addResult = _datasetContext.Files.AddIfNotExists(new FileModel
-            {
-                Name = fileName,
-                ContentType = element.Value.Data.ContentType,
-                CreatorNameIdentifier = creatorNameIdentifier,
-                CreateDate = DateTime.Now.Ticks,
-                Size = element.Value.Data.Length,
-                DatasetId = new Guid(datasetId)
-            }, file => file.Name == fileName && file.DatasetId == new Guid(datasetId));
-            if (addResult != null)
-            {
-                filteredChunk.Add(element);
-            }
-        }
-        try
-        {
-            Parallel.ForEach(filteredChunk,
-                async element =>
-                {
-                    var fileServiceDataModel = element.Value.Data;
-                    var endpointFileName = element.Key.Substring(element.Key.LastIndexOf("/", StringComparison.Ordinal) + 1);
-                    var memoryStream = new MemoryStream();
-                    await fileServiceDataModel.Stream.CopyToAsync(memoryStream);
-                    if (!FileValidator.IsFileSizeValid(memoryStream))
-                    {
-                        resultsDict.Add(element.Key, FileTooLarge);
-                        return;
-                    }
-                    resultsDict.Add(element.Key, null);
-                    await _fileService.UploadStreamAsync(datasetId, endpointFileName, memoryStream);
-                });
-            await _datasetContext.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            foreach (var file in chunk.Where(element => !resultsDict.ContainsKey(element.Key)))
-            {
-                resultsDict.Add(file.Key, UploadError);
-            }
-        }
-
-        return resultsDict;
     }
 
     public async Task<ResultWithError<bool, ErrorResult>> DeleteFileAsync(string datasetId, string fileId)

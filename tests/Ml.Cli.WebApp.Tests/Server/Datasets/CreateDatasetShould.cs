@@ -19,7 +19,6 @@ public class CreateDatasetShould
     [InlineData("Public", "datasetgood", "Image", "groupName/datasetName", "s666666")]
     public async Task CreateDataset(string classification, string name, string type, string importedDatasetName, string nameIdentifier)
     {
-        var fileService = new Mock<IFileService>();
         var transferService = new Mock<ITransferService>();
         var downloadResultDict = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>
         {
@@ -39,11 +38,10 @@ public class CreateDatasetShould
             { "thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = TransferService.InvalidFileExtension}} }
         };
         transferService
-            .Setup(foo => foo.DownloadDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()))
+            .Setup(foo =>
+                foo.TransferDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(downloadResultDict);
-        fileService
-            .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
-        var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, fileService.Object, transferService.Object);
+        var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, null, transferService.Object);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
@@ -51,7 +49,7 @@ public class CreateDatasetShould
         Assert.NotNull(resultValue);
         if (importedDatasetName != null)
         {
-            transferService.Verify(foo => foo.DownloadDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            transferService.Verify(foo => foo.TransferDatasetFilesAsync("input", "groupName/datasetName", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             Assert.Equal(3, resultValue.Count);
             Assert.Equal(TransferService.InvalidFileExtension, resultValue["firstFile.txt"]);
             Assert.Null(resultValue["secondFile.txt"]);

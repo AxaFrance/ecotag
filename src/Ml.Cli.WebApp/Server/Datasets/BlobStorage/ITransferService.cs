@@ -10,7 +10,6 @@ public interface ITransferService
     Task UploadStreamAsync(string containerName, string fileName, Stream fileStream);
 
     Task<IList<string>> GetImportedDatasetsNamesAsync(string containerName);
-
-    Task<Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>> DownloadDatasetFilesAsync(
-        string containerName, string datasetName, string datasetId, string datasetType);
+    
+    Task<IDictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>> TransferDatasetFilesAsync(string containerName, string datasetName, string datasetId, string datasetType);
 }
