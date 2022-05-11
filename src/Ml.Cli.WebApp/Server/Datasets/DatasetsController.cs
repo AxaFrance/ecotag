@@ -63,7 +63,7 @@ public class DatasetsController : Controller
         });
         if (!commandResult.IsSuccess) return BadRequest(commandResult.Error);
 
-        return Created(commandResult.Data.DatasetId, commandResult.Data.FilesResult);
+        return Created(commandResult.Data, commandResult.Data);
     }
 
     [HttpPost("{datasetId}/files")]

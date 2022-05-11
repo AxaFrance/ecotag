@@ -27,7 +27,7 @@ public class ImportDatasetFilesService
         });
     }
 
-    private async Task ImportDatasetFiles(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
+    public async Task ImportDatasetFiles(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
     {
         var filesResult = await fileService.GetInputDatasetFilesAsync("TransferFileStorage", "input",
             createDataset.ImportedDatasetName, datasetModel.Type.ToString());

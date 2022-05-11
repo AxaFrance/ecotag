@@ -9,17 +9,10 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetCreationResult
-{
-    public string DatasetId { get; set; }
-    public Dictionary<string, string> FilesResult { get; set; }
-}
-
 public class DatasetsRepository
 {
     public const string AlreadyTakenName = "AlreadyTakenName";
     public const string FileNotFound = "FileNotFound";
-    public const string SaveError = "SaveError";
     public const string DownloadError = "DownloadError";
     private readonly DatasetContext _datasetContext;
     private readonly IMemoryCache _cache;
@@ -34,10 +27,9 @@ public class DatasetsRepository
         _importDatasetFilesService = importDatasetFilesService;
     }
 
-    public async Task<ResultWithError<DatasetCreationResult, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
+    public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
     {
-        var commandResult = new ResultWithError<DatasetCreationResult, ErrorResult>();
-        var filesDict = new Dictionary<string, string>();
+        var commandResult = new ResultWithError<string, ErrorResult>();
         var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,
@@ -69,11 +61,7 @@ public class DatasetsRepository
             return commandResult;
         }
 
-        commandResult.Data = new DatasetCreationResult
-        {
-            DatasetId = datasetModel.Id.ToString(),
-            FilesResult = filesDict
-        };
+        commandResult.Data = datasetModel.Id.ToString();
         return commandResult;
     }
 

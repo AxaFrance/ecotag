@@ -77,7 +77,7 @@ internal static class DatasetMock
           .Returns(serviceScopeFactory.Object);
         return new MockService { ServiceProvider = serviceProvider, ServiceScopeFactory = serviceScopeFactory};
     }
-    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
+    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null, ImportDatasetFilesService importDatasetFilesService = null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext()();
 
@@ -270,7 +270,7 @@ internal static class DatasetMock
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
         
-        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, memoryCache);
+        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, memoryCache, importDatasetFilesService);
 
         var mockedAnnotationsService  = GetMockedServiceProvider(datasetContextFunc);
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);
