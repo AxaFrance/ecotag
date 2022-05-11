@@ -68,6 +68,31 @@ public class FileService : IFileService
         return result;
     }
 
+    private async Task<ResultWithError<FileInfoServiceDataModel, ErrorResult>> GetPropertiesAsync(string blobStorageName,
+        string containerName, string fileName)
+    {
+        var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
+        var result = new ResultWithError<FileInfoServiceDataModel, ErrorResult>();
+        if (cloudBlob == null)
+        {
+            result.Error = new ErrorResult
+            {
+                Key = FileNameMissing
+            };
+            return result;
+        }
+
+        var downloadStreaming = await cloudBlob.GetPropertiesAsync();
+        var fileDataModel = new FileInfoServiceDataModel
+        {
+            ContentType = downloadStreaming.Value.ContentType,
+            Length = downloadStreaming.Value.ContentLength,
+            Name = fileName
+        };
+        result.Data = fileDataModel;
+        return result;
+    }
+
     private async Task<BlobContainerClient> CloudBlobContainer(string blobStorageName, string containerName)
     {
         var connectionString = _configuration[$"{blobStorageName}:ConnectionString"];
@@ -112,10 +137,30 @@ public class FileService : IFileService
         return result;
     }
 
-    public async Task<IDictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(string blobStorageName, string containerName, string datasetName,
+    private async Task<(string Name, ResultWithError<FileInfoServiceDataModel, ErrorResult> GetPropertiesResult)> GetFileProperties(BlobItem fileBlob, string blobStorageName, string datasetType)
+    {
+        if (!FileValidator.IsFileExtensionValid(fileBlob.Name, datasetType))
+        {
+            return (fileBlob.Name,
+                new ResultWithError<FileInfoServiceDataModel, ErrorResult>
+                    { Error = new ErrorResult { Key = InvalidFileExtension } });
+        }
+
+        var getPropertiesResult = await GetPropertiesAsync(blobStorageName, "input", fileBlob.Name);
+        if (!getPropertiesResult.IsSuccess)
+        {
+            return (fileBlob.Name,
+                new ResultWithError<FileInfoServiceDataModel, ErrorResult>
+                    { Error = new ErrorResult { Key = DownloadError } });
+        }
+
+        return (fileBlob.Name, getPropertiesResult);
+    }
+    
+    public async Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(string blobStorageName, string containerName, string datasetName,
         string datasetType)
     {
-        var filesResult = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>();
+        var filesResult = new Dictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>();
         var connectionString = _configuration[$"{blobStorageName}:ConnectionString"];
         var container = new BlobContainerClient(connectionString, containerName);
         var containerExistsResponse = await container.ExistsAsync();
@@ -126,26 +171,13 @@ public class FileService : IFileService
             var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
             await foreach (var fileBlobPage in filesBlobs.AsPages(null, ChunkSize))
             {
-                await Parallel.ForEachAsync(fileBlobPage.Values, async (fileBlob, token) =>
+                var tasksList = (from file in fileBlobPage.Values
+                    select GetFileProperties(file, blobStorageName, datasetType));
+                Task.WaitAll(tasksList.ToArray());
+                foreach (var task in tasksList)
                 {
-                    if (!FileValidator.IsFileExtensionValid(fileBlob.Name, datasetType))
-                    {
-                        filesResult.Add(fileBlob.Name,
-                            new ResultWithError<FileServiceDataModel, ErrorResult>
-                                { Error = new ErrorResult { Key = InvalidFileExtension } });
-                        return;
-                    }
-
-                    var downloadResult = await DownloadAsync(blobStorageName, "input", fileBlob.Name);
-                    if (!downloadResult.IsSuccess)
-                    {
-                        filesResult.Add(fileBlob.Name,
-                            new ResultWithError<FileServiceDataModel, ErrorResult>
-                                { Error = new ErrorResult { Key = DownloadError } });
-                    }
-
-                    filesResult.Add(fileBlob.Name, downloadResult);
-                });
+                    filesResult.Add(task.Result.Name, task.Result.GetPropertiesResult);
+                }
             }
         }
 
