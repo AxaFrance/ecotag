@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
@@ -19,27 +18,27 @@ public class CreateDatasetShould
     public async Task CreateDataset(string classification, string name, string type, string importedDatasetName, string nameIdentifier)
     {
         var fileService = new Mock<IFileService>();
-        var downloadResultDict = new Dictionary<string, ResultWithError<FileServiceDataModel, ErrorResult>>
+        var filesDict = new Dictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>
         {
             {
                 "firstFile.txt",
-                new ResultWithError<FileServiceDataModel, ErrorResult>
+                new ResultWithError<FileInfoServiceDataModel, ErrorResult>
                     { Error = new ErrorResult { Key = FileService.InvalidFileExtension } }
             },
             {
                 "secondFile.txt",
-                new ResultWithError<FileServiceDataModel, ErrorResult>
+                new ResultWithError<FileInfoServiceDataModel, ErrorResult>
                 {
-                    Data = new FileServiceDataModel
-                        { Name = "secondFile.txt", Length = 10, ContentType = "image", Stream = new MemoryStream() }
+                    Data = new FileInfoServiceDataModel
+                        { Name = "secondFile.txt", Length = 10, ContentType = "image" }
                 }
             },
-            { "thirdFile.txt", new ResultWithError<FileServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileService.InvalidFileExtension}} }
+            { "thirdFile.txt", new ResultWithError<FileInfoServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileService.InvalidFileExtension}} }
         };
         fileService
             .Setup(foo =>
                 foo.GetInputDatasetFilesAsync("TransferFileStorage", "input", "groupName/datasetName", It.IsAny<string>()))
-            .ReturnsAsync(downloadResultDict);
+            .ReturnsAsync(filesDict);
         var result = await InitMockAndExecuteAsync(classification, name, type, importedDatasetName, nameIdentifier, null, fileService.Object);
 
         var resultOk = result.Result as CreatedResult;
