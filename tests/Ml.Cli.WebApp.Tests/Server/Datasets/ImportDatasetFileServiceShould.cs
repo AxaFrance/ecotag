@@ -15,12 +15,12 @@ public class ImportDatasetFileServiceShould
     [Fact]
     public async Task Should_Import_Files()
     {
-        var (fileService, datasetContext, createDataset, datasetModel, importDatasetFileService) = await InitMockAsync();
+        var (fileService, datasetContext, createDataset, datasetModel, importDatasetFileService) = InitMockAsync();
         await importDatasetFileService.ImportDatasetFiles(fileService, datasetContext, createDataset, datasetModel);
         Assert.Equal(1, datasetContext.Files.Count());
     }
 
-    private static async Task<(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel, ImportDatasetFilesService importDatasetFileService)> InitMockAsync()
+    private static (IFileService Object, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel, ImportDatasetFilesService importDatasetFileService) InitMockAsync()
     {
         var filesDict = new Dictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>
         {

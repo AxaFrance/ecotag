@@ -135,7 +135,7 @@ public class DatasetsRepository
             return result;
         }
 
-        var isFileStoredInInputBlobStorage = file.Name.Contains("/");
+        var isFileStoredInInputBlobStorage = file.Name.Contains('/');
         var blobStorageName = isFileStoredInInputBlobStorage ? "TransferFileStorage" : "FileStorage";
         var containerName = isFileStoredInInputBlobStorage ? "input" : datasetId;
         return await _fileService.DownloadAsync(blobStorageName, containerName, file.Name);

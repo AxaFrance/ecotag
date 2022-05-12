@@ -171,12 +171,12 @@ public class FileService : IFileService
             var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
             await foreach (var fileBlobPage in filesBlobs.AsPages(null, ChunkSize))
             {
-                var tasksList = (from file in fileBlobPage.Values
-                    select GetFileProperties(file, blobStorageName, datasetType));
+                var tasksList = from file in fileBlobPage.Values
+                    select GetFileProperties(file, blobStorageName, datasetType);
                 Task.WaitAll(tasksList.ToArray());
-                foreach (var task in tasksList)
+                foreach (var taskResult in tasksList.Select(element => element.Result))
                 {
-                    filesResult.Add(task.Result.Name, task.Result.GetPropertiesResult);
+                    filesResult.Add(taskResult.Name, taskResult.GetPropertiesResult);
                 }
             }
         }
