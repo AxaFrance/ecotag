@@ -18,10 +18,15 @@ import {useHistory} from "react-router";
 const PageWithResilience = withResilience(Page);
 
 const statusCode500 = 500;
+const statusCodeForbidden = 403;
 
 export const init = (fetch, dispatch) => async id => {
   const projectResponse = await fetchProject(fetch)(id);
   
+  if(projectResponse.status === statusCodeForbidden){
+    dispatch({ type: 'init', data: { project:null, dataset:null, group:null, users: [], status: resilienceStatus.FORBIDDEN } });
+    return;
+  }
   if(projectResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
@@ -34,6 +39,10 @@ export const init = (fetch, dispatch) => async id => {
   
   const [datasetResponse, groupResponse, usersResponse, annotationsStatusResponse] = await Promise.all([datasetPromise, groupPromise, usersPromise, annotationsStatusPromise]);
 
+  if(datasetResponse.status === statusCodeForbidden || annotationsStatusResponse.status === statusCodeForbidden){
+    dispatch({ type: 'init', data: { project:null, dataset:null, annotationsStatus:null, group:null, users: [], status: resilienceStatus.FORBIDDEN } });
+    return;
+  }
   if(datasetResponse.status >= statusCode500 || groupPromise.status >= statusCode500 || usersResponse.status >= statusCode500 || annotationsStatusResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, annotationsStatus:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
@@ -114,8 +123,8 @@ export const onLockSubmit = (fetch, dispatch, history) => async id => {
   dispatch({type: lock_project_start});
   let data;
   const response = await fetchDeleteProject(fetch)(id);
-  if (response.status >= statusCode500) {
-    data = {status: resilienceStatus.ERROR};
+  if (response.status === statusCodeForbidden || response.status >= statusCode500) {
+    data = {status: response.status === statusCodeForbidden ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR};
     dispatch({data, type: lock_project});
   } else {
     data = {status: resilienceStatus.SUCCESS};

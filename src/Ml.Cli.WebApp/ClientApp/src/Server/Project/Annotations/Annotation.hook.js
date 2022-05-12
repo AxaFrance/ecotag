@@ -22,7 +22,13 @@ export const initialState = {
 export const init = (fetch, dispatch) => async projectId => {
     const response = await fetchProject(fetch)(projectId);
     let data;
-    if (response.status >= 500) {
+    if(response.status === 403){
+        data = {
+            project: null,
+            status: resilienceStatus.FORBIDDEN
+        };
+    }
+     else if (response.status >= 500) {
         data = {
             project: null,
             status: resilienceStatus.ERROR
@@ -50,9 +56,9 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
 
     const response = await fetchReserveAnnotations(fetch)(projectId, fileId);
     let data;
-    if (response.status >= 500) {
+    if (response.status === 403 || response.status >= 500) {
         data = {
-            status: resilienceStatus.ERROR,
+            status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR,
             items: [],
         }
         dispatch({type: 'reserve_annotation', data});
@@ -90,9 +96,9 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     dispatch({type: 'annotate_start'});
     const response = await fetchAnnotate(fetch)(projectId, fileId, annotationId, annotation);
     let data;
-    if (response.status >= 500) {
+    if (response.status >= 500 || response.status === 403) {
         data = {
-            status: resilienceStatus.ERROR,
+            status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR,
             annotation,
             fileId,
         }
