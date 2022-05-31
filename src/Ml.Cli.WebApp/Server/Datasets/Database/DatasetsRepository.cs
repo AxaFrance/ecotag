@@ -52,7 +52,7 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
-                _importDatasetFilesService.ImportFiles(createDataset, datasetModel);
+                _importDatasetFilesService.ImportFilesAsync(createDataset, datasetModel);
             }
         }
         catch (Exception)

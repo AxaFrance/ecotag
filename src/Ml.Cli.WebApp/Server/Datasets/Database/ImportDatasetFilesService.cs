@@ -15,7 +15,7 @@ public class ImportDatasetFilesService
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public async Task ImportFiles(CreateDataset createDataset, DatasetModel datasetModel)
+    public async Task ImportFilesAsync(CreateDataset createDataset, DatasetModel datasetModel)
     {
         await Task.Run(async () =>
         {
@@ -23,11 +23,11 @@ public class ImportDatasetFilesService
             var serviceProvider = scope.ServiceProvider;
             var fileService = (IFileService)serviceProvider.GetService(typeof(IFileService));
             var datasetContext = (DatasetContext)serviceProvider.GetService(typeof(DatasetContext));
-            await ImportDatasetFiles(fileService, datasetContext, createDataset, datasetModel);
+            await ImportDatasetFilesAsync(fileService, datasetContext, createDataset, datasetModel);
         });
     }
 
-    public async Task ImportDatasetFiles(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
+    private static async Task ImportDatasetFilesAsync(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
     {
         var filesResult = await fileService.GetInputDatasetFilesAsync("TransferFileStorage", "input",
             createDataset.ImportedDatasetName, datasetModel.Type.ToString());
@@ -42,13 +42,6 @@ public class ImportDatasetFilesService
             Size = x.Value.Data.Length,
             DatasetId = datasetModel.Id
         }));
-        try
-        {
-            await datasetContext.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            // ignored
-        }
+        await datasetContext.SaveChangesAsync();
     }
 }

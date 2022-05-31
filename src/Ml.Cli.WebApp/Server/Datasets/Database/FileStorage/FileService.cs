@@ -118,20 +118,16 @@ public class FileService : IFileService
         var container = new BlobContainerClient(connectionString, containerName);
         var containerExistsResponse = await container.ExistsAsync();
         var containerExists = containerExistsResponse.Value;
-        if (containerExists)
+        if (!containerExists) return result;
+        await container.SetAccessPolicyAsync();
+        var blobsResponse = container.GetBlobsAsync();
+        await foreach (var blobItem in blobsResponse)
         {
-            await container.SetAccessPolicyAsync();
-            var blobsResponse = container.GetBlobsAsync();
-            await foreach (var blobItem in blobsResponse)
-            {
-                if (blobItem.Name.Count(element => element.Equals('/')) <= 1) continue;
-                var index = blobItem.Name.LastIndexOf("/", StringComparison.Ordinal);
-                if (index >= 0)
-                {
-                    var folderName = blobItem.Name.Substring(0, index);
-                    if(!result.Contains(folderName)) result.Add(blobItem.Name.Substring(0, index));
-                }
-            }
+            if (blobItem.Name.Count(element => element.Equals('/')) <= 1) continue;
+            var index = blobItem.Name.LastIndexOf("/", StringComparison.Ordinal);
+            if (index < 0) continue;
+            var folderName = blobItem.Name.Substring(0, index);
+            if(!result.Contains(folderName)) result.Add(blobItem.Name.Substring(0, index));
         }
 
         return result;
@@ -165,19 +161,17 @@ public class FileService : IFileService
         var container = new BlobContainerClient(connectionString, containerName);
         var containerExistsResponse = await container.ExistsAsync();
         var containerExists = containerExistsResponse.Value;
-        if (containerExists)
+        if (!containerExists) return filesResult;
+        await container.SetAccessPolicyAsync();
+        var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
+        await foreach (var fileBlobPage in filesBlobs.AsPages(null, ChunkSize))
         {
-            await container.SetAccessPolicyAsync();
-            var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
-            await foreach (var fileBlobPage in filesBlobs.AsPages(null, ChunkSize))
+            var tasksList = from file in fileBlobPage.Values
+                select GetFileProperties(file, blobStorageName, datasetType);
+            Task.WaitAll(tasksList.ToArray());
+            foreach (var taskResult in tasksList.Select(element => element.Result))
             {
-                var tasksList = from file in fileBlobPage.Values
-                    select GetFileProperties(file, blobStorageName, datasetType);
-                Task.WaitAll(tasksList.ToArray());
-                foreach (var taskResult in tasksList.Select(element => element.Result))
-                {
-                    filesResult.Add(taskResult.Name, taskResult.GetPropertiesResult);
-                }
+                filesResult.Add(taskResult.Name, taskResult.GetPropertiesResult);
             }
         }
 
