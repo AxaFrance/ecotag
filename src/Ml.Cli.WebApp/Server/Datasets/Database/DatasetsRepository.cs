@@ -30,15 +30,18 @@ public class DatasetsRepository
     public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
+        var isImported = createDataset.ImportedDatasetName != null;
         var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,
+            BlobSource = isImported ? "TransferFileStorage" : "FileStorage",
+            BlobName = isImported ? "input/" + createDataset.ImportedDatasetName : "",
             Classification = createDataset.Classification.ToDatasetClassification(),
             Type = createDataset.Type.ToDatasetType(),
             CreateDate = DateTime.Now.Ticks,
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
-            IsLocked = createDataset.ImportedDatasetName != null
+            IsLocked = isImported
         };
         var result = _datasetContext.Datasets.AddIfNotExists(datasetModel, group => group.Name == datasetModel.Name);
         if (result == null)
