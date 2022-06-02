@@ -89,6 +89,29 @@ describe('Page.container', () => {
         'investigation'
     );
   });
+  it('should display forbidden message when trying to get unauthorized datasets or annotations status', async () => {
+    const givenFetch = jest.fn()
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
+        .mockResolvedValueOnce({ok: false, status: 403});
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/droit/i));
+    expect(messageEl).toHaveTextContent(
+        'droit'
+    );
+  });
+  it('should display error message when calling datasets or annotations status incorrectly', async () => {
+    const givenFetch = jest.fn()
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500});
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/investigation/i));
+    expect(messageEl).toHaveTextContent(
+        'investigation'
+    );
+  });
 
   describe('.reducer()', () => {
     it('should set the new fields with asked values after onChange action', () => {
