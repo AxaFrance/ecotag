@@ -95,6 +95,49 @@ describe('Page.container', () => {
         group: {},
       });
     });
+    it('should open modal', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'open_modal',
+        data: {isModalOpened: true}
+      };
+      
+      const actualState = reducer(givenState, givenAction);
+      
+      expect(actualState).toMatchObject({
+        ...givenState,
+        isModalOpened: true
+      });
+    });
+    it('should lock project and start', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'lock_project_start'
+      };
+      
+      const actualState = reducer(givenState, givenAction);
+      
+      expect(actualState).toMatchObject({
+        ...givenState,
+        status: resilienceStatus.POST,
+        isModalOpened: false
+      });
+    });
+    it('should lock project', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'lock_project',
+        data: {status: resilienceStatus.SUCCESS}
+      };
+
+      const actualState = reducer(givenState, givenAction);
+
+      expect(actualState).toMatchObject({
+        ...givenState,
+        status: resilienceStatus.SUCCESS,
+        isModalOpened: false
+      });
+    })
     it('should throw an error by default', (done) => {
       const givenState = {};
       const givenAction = {
