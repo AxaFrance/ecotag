@@ -67,6 +67,28 @@ describe('Page.container', () => {
         '02/01/0001'
     );
   });
+  it('should display forbidden message when trying to get unauthorized projects', async () => {
+    const givenFetch = () => {
+      return {
+        status: 403
+    }};
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/droit/i));
+    expect(messageEl).toHaveTextContent(
+        'droit'
+    );
+  });
+  it('should display error message when calling projects incorrectly', async () => {
+    const givenFetch = () => {
+      return {
+        status: 500
+      }};
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/investigation/i));
+    expect(messageEl).toHaveTextContent(
+        'investigation'
+    );
+  });
 
   describe('.reducer()', () => {
     it('should set the new fields with asked values after onChange action', () => {
