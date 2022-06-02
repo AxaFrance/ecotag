@@ -16,7 +16,7 @@ public class DatasetModel
     public string Name { get; set; }
     
     [Column("DTS_BlobUri")]
-    [MaxLength(256)]
+    [MaxLength(512)]
     [MinLength(1)]
     
     public string BlobUri { get; set; }
