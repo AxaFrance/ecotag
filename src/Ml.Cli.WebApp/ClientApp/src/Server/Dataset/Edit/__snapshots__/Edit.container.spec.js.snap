@@ -109,7 +109,7 @@ exports[`Edit should render correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Edit.container should init correctly 1`] = `
+exports[`Edit.container init should init correctly 1`] = `
 <DocumentFragment>
   <div
     class="edit-dataset"
@@ -220,7 +220,7 @@ exports[`Edit.container should init correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Edit.container should init with error message 1`] = `
+exports[`Edit.container init should init with error message 1`] = `
 <DocumentFragment>
   <div
     class="resilience"
@@ -240,7 +240,7 @@ exports[`Edit.container should init with error message 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Edit.container should init with forbidden message 1`] = `
+exports[`Edit.container init should init with forbidden message 1`] = `
 <DocumentFragment>
   <div
     class="resilience"
