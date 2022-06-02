@@ -16,11 +16,12 @@ public class GetImportedDatasetShould
     {
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         var mockedTransferService = new Mock<IFileService>();
-        mockedTransferService.Setup(foo => foo.GetImportedDatasetsNamesAsync("TransferFileStorage", "input"))
+        mockedTransferService.Setup(foo => foo.GetImportedDatasetsNamesAsync("azureblob://TransferFileStorage/input"))
             .ReturnsAsync(new List<string> { "test1", "test2" });
         
+        
         var getImportedDatasetsCmd =
-            new GetImportedDatasetsCmd(mockResult.UsersRepository, mockedTransferService.Object);
+            new GetImportedDatasetsCmd(mockResult.UsersRepository, mockedTransferService.Object, mockResult.DatasetsRepository);
         var datasets = await mockResult.DatasetsController.GetImportedDatasets(getImportedDatasetsCmd);
         
         Assert.Equal(nbDatasets, datasets.Count);

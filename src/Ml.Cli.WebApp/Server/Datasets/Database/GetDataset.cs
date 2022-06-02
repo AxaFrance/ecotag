@@ -33,4 +33,5 @@ public record GetDatasetInfo
     public string Type { get; set; }
     public bool IsLocked { get; set; } = false;
     public DatasetClassificationEnumeration Classification { get; set; }
+    public string BlobUri { get; set; }
 }

@@ -6,13 +6,12 @@ namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 public interface IFileService
 {
-    Task UploadStreamAsync(string blobStorageName, string containerName, string fileName, Stream fileStream);
-    Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string blobStorageName, string containerName,
-        string fileName);
-    Task<bool> DeleteAsync(string blobStorageName, string containerName, string fileName);
-    Task<bool> DeleteContainerAsync(string blobStorageName, string containerName);
-    Task<IList<string>> GetImportedDatasetsNamesAsync(string blobStorageName, string containerName);
+    Task UploadStreamAsync(string blobFileUri, Stream fileStream);
+    Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string blobFileUri);
+    Task<bool> DeleteAsync(string blobFileUri);
+    Task<bool> DeleteDirectoryAsync(string blobDirectoryUri);
+    Task<IList<string>> GetImportedDatasetsNamesAsync(string blobUri);
     Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(
-        string blobStorageName, string containerName, string datasetName,
+        string blobUri,
         string datasetType);
 }

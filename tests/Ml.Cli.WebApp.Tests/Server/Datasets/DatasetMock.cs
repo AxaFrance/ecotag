@@ -109,7 +109,9 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
+            
         };
         datasetContext.Datasets.Add(dataset1);
         var dataset2 = new DatasetModel
@@ -120,7 +122,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset2);
         var dataset3 = new DatasetModel
@@ -131,7 +134,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset3);
         var dataset4 = new DatasetModel
@@ -142,7 +146,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset4);
         var dataset5 = new DatasetModel
@@ -153,7 +158,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset5);
         await datasetContext.SaveChangesAsync();

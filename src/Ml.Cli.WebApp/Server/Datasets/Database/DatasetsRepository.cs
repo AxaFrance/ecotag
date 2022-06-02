@@ -31,11 +31,12 @@ public class DatasetsRepository
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
         var isImported = createDataset.ImportedDatasetName != null;
+        var blobSource = isImported ? "TransferFileStorage" : "FileStorage";
+        var blobName = isImported ? "input/" + createDataset.ImportedDatasetName : new Guid().ToString();
         var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,
-            BlobSource = isImported ? "TransferFileStorage" : "FileStorage",
-            BlobName = isImported ? "input/" + createDataset.ImportedDatasetName : "",
+            BlobUri = $"azureblob://{blobSource}/{blobName}", 
             Classification = createDataset.Classification.ToDatasetClassification(),
             Type = createDataset.Type.ToDatasetType(),
             CreateDate = DateTime.Now.Ticks,
@@ -55,6 +56,7 @@ public class DatasetsRepository
             await _datasetContext.SaveChangesAsync();
             if (createDataset.ImportedDatasetName != null)
             {
+                // Fire and Forget
                 _importDatasetFilesService.ImportFilesAsync(createDataset, datasetModel);
             }
         }
@@ -103,7 +105,8 @@ public class DatasetsRepository
                     GroupId = dataset.GroupId.ToString().ToLower(),
                     Type = dataset.Type.ToString(),
                     IsLocked = dataset.IsLocked,
-                    Classification = dataset.Classification
+                    Classification = dataset.Classification,
+                    BlobUri = dataset.BlobUri,
                 })
                 .FirstOrDefaultAsync();
             entry.AbsoluteExpirationRelativeToNow =
@@ -127,8 +130,8 @@ public class DatasetsRepository
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
-        var file = await _datasetContext.Files.AsNoTracking().FirstOrDefaultAsync(file =>
-            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId));
+        var file = await _datasetContext.Files.Include(f => f.Dataset).AsNoTracking().Where(file =>
+            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId)).Select(f => new {Filename = f.Name, BlobDirectoryUri = f.Dataset.BlobUri}).FirstOrDefaultAsync();
         if (file == null)
         {
             result.Error = new ErrorResult
@@ -137,11 +140,8 @@ public class DatasetsRepository
             };
             return result;
         }
-
-        var isFileStoredInInputBlobStorage = file.Name.Contains('/');
-        var blobStorageName = isFileStoredInInputBlobStorage ? "TransferFileStorage" : "FileStorage";
-        var containerName = isFileStoredInInputBlobStorage ? "input" : datasetId;
-        return await _fileService.DownloadAsync(blobStorageName, containerName, file.Name);
+        
+        return await _fileService.DownloadAsync($"{file.BlobDirectoryUri}/{file.Filename}");
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream,
@@ -169,7 +169,8 @@ public class DatasetsRepository
         try
         {
             var taskSaveSql = _datasetContext.SaveChangesAsync();
-            var taskUploadBlob = _fileService.UploadStreamAsync("FileStorage", datasetId, fileName, stream);
+            var datasetInfo = await GetDatasetInfoAsync(datasetId);
+            var taskUploadBlob = _fileService.UploadStreamAsync($"{datasetInfo.BlobUri}/{fileName}", stream);
             Task.WaitAll(taskSaveSql, taskUploadBlob);
         }
         catch (DbUpdateException)
@@ -202,8 +203,9 @@ public class DatasetsRepository
 
         _datasetContext.Files.Remove(file);
 
+        var datasetInfo = await this.GetDatasetInfoAsync(datasetId);
         var taskDeleteSql = _datasetContext.SaveChangesAsync();
-        var taskDeleteBob = _fileService.DeleteAsync("FileStorage", datasetId, file.Name);
+        var taskDeleteBob = _fileService.DeleteAsync($"{datasetInfo.BlobUri}/{file.Name}");
         Task.WaitAll(taskDeleteSql, taskDeleteBob);
         result.Data = taskDeleteBob.Result;
         return result;

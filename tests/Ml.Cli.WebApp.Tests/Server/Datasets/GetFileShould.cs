@@ -39,7 +39,7 @@ public class GetFileShould
             Stream = ms
         };
         var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(_ => _.DownloadAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+        mockFileService.Setup(_ => _.DownloadAsync(It.IsAny<string>()))
             .ReturnsAsync(fileServiceResult);
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
         var lockDatasetCmd = new GetFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);

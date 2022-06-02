@@ -29,13 +29,13 @@ public class ImportDatasetFilesService
 
     private static async Task ImportDatasetFilesAsync(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
     {
-        var filesResult = await fileService.GetInputDatasetFilesAsync("TransferFileStorage", "input",
-            createDataset.ImportedDatasetName, datasetModel.Type.ToString());
+        var filesResult = await fileService.GetInputDatasetFilesAsync(
+            $"azureblob://TransferFileStorage/input/{createDataset.ImportedDatasetName}", datasetModel.Type.ToString());
         var successFiles = filesResult
             .Where(x => x.Value.IsSuccess).ToList();
         datasetContext.Files.AddRange(successFiles.Select(x => new FileModel
         {
-            Name = x.Value.Data.Name,
+            Name = x.Key,
             ContentType = x.Value.Data.ContentType,
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
             CreateDate = DateTime.Now.Ticks,

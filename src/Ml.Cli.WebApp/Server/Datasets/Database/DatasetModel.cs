@@ -15,9 +15,11 @@ public class DatasetModel
     [MinLength(3)]
     public string Name { get; set; }
     
-    public string BlobSource { get; set; }
+    [Column("DTS_BlobUri")]
+    [MaxLength(256)]
+    [MinLength(1)]
     
-    public string BlobName { get; set; }
+    public string BlobUri { get; set; }
 
     [Column("DTS_Type")] public DatasetTypeEnumeration Type { get; set; }
 

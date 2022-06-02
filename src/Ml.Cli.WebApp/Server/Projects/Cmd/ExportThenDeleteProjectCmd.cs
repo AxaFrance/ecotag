@@ -80,10 +80,10 @@ public class ExportThenDeleteProjectCmd
     private async Task UploadProject(GetExportCmdResult exportCmdResult)
     {
         var bytes = JsonSerializer.SerializeToUtf8Bytes(exportCmdResult);
-        var containerName = "output";
+        const string containerName = "output";
         var fileName =
             $"{exportCmdResult.ProjectName}_{DateTime.Now.Ticks}/{exportCmdResult.ProjectName}-annotations.json";
         var stream = new MemoryStream(bytes);
-        await _fileService.UploadStreamAsync("TransferFileStorage", containerName, fileName, stream);
+        await _fileService.UploadStreamAsync($"azureblob://TransferFileStorage/{containerName}/{fileName}", stream);
     }
 }

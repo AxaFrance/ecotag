@@ -46,11 +46,11 @@ public class DeleteProjectShould
     {
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
-            .Setup(foo => foo.DeleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .Setup(foo => foo.DeleteAsync(It.IsAny<string>()))
             .ReturnsAsync(true);
         var mockedBlobService = new Mock<IFileService>();
         mockedBlobService
-            .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
+            .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<Stream>()));
         return (mockedFileService.Object, mockedBlobService.Object);
     }
 }

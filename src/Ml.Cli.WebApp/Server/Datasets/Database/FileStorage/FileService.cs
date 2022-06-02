@@ -16,6 +16,7 @@ public class FileService : IFileService
     private readonly IConfiguration _configuration;
     public const string FileNameMissing = "FileNameMissing";
     public const string InvalidFileExtension = "InvalidFileExtension";
+    public const string SubDirectoryNotAllowed = "SubDirectoryNotAllowed";
     public const string DownloadError = "DownloadError";
     private const int ChunkSize = 500;
 
@@ -24,27 +25,90 @@ public class FileService : IFileService
         _configuration = configuration;
     }
 
-    public async Task UploadStreamAsync(string blobStorageName, string containerName, string fileName, Stream fileStream)
+    public async Task UploadStreamAsync(string blobFileUri, Stream fileStream)
     {
+        var blobStorageName = GetBlobStorageName(blobFileUri);
+        var containerName = GetContainerName(blobFileUri);
+        var fileName = GetPathEnd(blobFileUri);
         fileStream.Position = 0;
         var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
         await cloudBlob.UploadAsync(fileStream);
     }
 
-    public async Task<bool> DeleteAsync(string blobStorageName, string containerName, string fileName)
+    public async Task<bool> DeleteAsync(string blobFileUri)
     {
+        var blobStorageName = GetBlobStorageName(blobFileUri);
+        var containerName = GetContainerName(blobFileUri);
+        var fileName = GetPathEnd(blobFileUri);
         var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
         return await cloudBlob.DeleteIfExistsAsync();
     }
 
-    public async Task<bool> DeleteContainerAsync(string blobStorageName, string containerName)
+    public async Task<bool>  DeleteDirectoryAsync(string blobDirectoryUri)
     {
+        var blobStorageName = GetBlobStorageName(blobDirectoryUri);
+        var containerName = GetContainerName(blobDirectoryUri);
+        var pathEnd = GetPathEnd(blobDirectoryUri);
         var container = await CloudBlobContainer(blobStorageName, containerName);
-        return await container.DeleteIfExistsAsync();
+
+        if (string.IsNullOrEmpty(pathEnd))
+        {
+            return await container.DeleteIfExistsAsync();
+        }
+
+        var resultSegment = container.GetBlobsByHierarchyAsync(prefix:pathEnd+"/", delimiter:"/")
+            .AsPages(default, 500);
+        await foreach (var blobPage in resultSegment)
+        {
+            foreach (var blobhierarchyItem in blobPage.Values)
+            {
+                if (blobhierarchyItem.IsPrefix) continue;
+
+                await container.DeleteBlobIfExistsAsync(blobhierarchyItem.Blob.Name);
+            }
+        }
+
+        return true;
+    }
+    
+    public static string GetPathEnd(string blobFileUri)
+    {
+        var paths = blobFileUri.Replace("azureblob://", "").Split("/");
+        var path = "";
+        var pathsLength = paths.Length;
+        for (var i = 2; i < pathsLength; i++)
+        {
+            if (i != pathsLength - 1)
+            {
+                path += paths[i] + "/";
+            }
+            else
+            {
+                path += paths[i];
+            }
+
+        }
+
+        return path;
+    }
+    
+    private string GetContainerName(string blobFileUri)
+    {
+        var paths = blobFileUri.Replace("azureblob://", "").Split("/");
+        return paths[1];
+    }
+    
+    private string GetBlobStorageName(string blobFileUri)
+    {
+        var paths = blobFileUri.Replace("azureblob://", "").Split("/");
+        return paths[0];
     }
 
-    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string blobStorageName, string containerName, string fileName)
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string blobFileUri)
     {
+        var blobStorageName = GetBlobStorageName(blobFileUri);
+        var containerName = GetContainerName(blobFileUri);
+        var fileName = GetPathEnd(blobFileUri);
         var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         if (cloudBlob == null)
@@ -110,8 +174,32 @@ public class FileService : IFileService
         return blockBlob;
     }
     
-    public async Task<IList<string>> GetImportedDatasetsNamesAsync(string blobStorageName, string containerName)
+    private static async Task<IList<string>> ListBlobsHierarchicalListing(BlobContainerClient container, 
+        string prefix, 
+        int? segmentSize, int maxLevel =2, int level=0)
     {
+        var resultSegment = container.GetBlobsByHierarchyAsync(prefix:prefix, delimiter:"/")
+                .AsPages(default, segmentSize);
+            var directories = new List<string>();
+            await foreach (var blobPage in resultSegment)
+            {
+                foreach (var blobhierarchyItem in blobPage.Values)
+                {
+                    if (!blobhierarchyItem.IsPrefix) continue;
+                    directories.Add(blobhierarchyItem.Prefix.Substring(0, blobhierarchyItem.Prefix.Length-1));
+                    if (level >= maxLevel) continue;
+                    var result =await ListBlobsHierarchicalListing(container, blobhierarchyItem.Prefix, null, maxLevel, level+1);
+                    directories.AddRange(result);
+                }
+            }
+
+            return directories;
+    }
+    
+    public async Task<IList<string>> GetImportedDatasetsNamesAsync(string blobDirectoryUri)
+    {
+        var blobStorageName = GetBlobStorageName(blobDirectoryUri);
+        var containerName = GetContainerName(blobDirectoryUri);
         var result = new List<string>();
         if (string.IsNullOrEmpty(containerName)) return null;
         var connectionString = _configuration[$"{blobStorageName}:ConnectionString"];
@@ -120,21 +208,21 @@ public class FileService : IFileService
         var containerExists = containerExistsResponse.Value;
         if (!containerExists) return result;
         await container.SetAccessPolicyAsync();
-        var blobsResponse = container.GetBlobsAsync();
-        await foreach (var blobItem in blobsResponse)
-        {
-            if (blobItem.Name.Count(element => element.Equals('/')) <= 1) continue;
-            var index = blobItem.Name.LastIndexOf("/", StringComparison.Ordinal);
-            if (index < 0) continue;
-            var folderName = blobItem.Name.Substring(0, index);
-            if(!result.Contains(folderName)) result.Add(blobItem.Name.Substring(0, index));
-        }
-
-        return result;
+        var directories = await ListBlobsHierarchicalListing(container, null, null, 1);
+        return directories.Where(d=> d.Split("/").Length==2).ToList();
     }
 
-    private async Task<(string Name, ResultWithError<FileInfoServiceDataModel, ErrorResult> GetPropertiesResult)> GetFileProperties(BlobItem fileBlob, string blobStorageName, string datasetType)
+
+    private async Task<(string Name, ResultWithError<FileInfoServiceDataModel, ErrorResult> GetPropertiesResult)> GetFilePropertiesAsync(BlobItem fileBlob, string blobStorageName, string folderName, string datasetType)
     {
+        var filename = fileBlob.Name.Replace(folderName + "/", "");
+        if (filename.Contains("/"))
+        {
+            return (fileBlob.Name,
+                new ResultWithError<FileInfoServiceDataModel, ErrorResult>
+                    { Error = new ErrorResult { Key = SubDirectoryNotAllowed } });
+        };
+        
         if (!FileValidator.IsFileExtensionValid(fileBlob.Name, datasetType))
         {
             return (fileBlob.Name,
@@ -153,9 +241,12 @@ public class FileService : IFileService
         return (fileBlob.Name, getPropertiesResult);
     }
     
-    public async Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(string blobStorageName, string containerName, string datasetName,
+    public async Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(string blobUri,
         string datasetType)
     {
+        var blobStorageName = GetBlobStorageName(blobUri);
+        var containerName = GetContainerName(blobUri);
+        var folderName = GetPathEnd(blobUri);
         var filesResult = new Dictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>();
         var connectionString = _configuration[$"{blobStorageName}:ConnectionString"];
         var container = new BlobContainerClient(connectionString, containerName);
@@ -163,15 +254,17 @@ public class FileService : IFileService
         var containerExists = containerExistsResponse.Value;
         if (!containerExists) return filesResult;
         await container.SetAccessPolicyAsync();
-        var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, datasetName);
+        var filesBlobs = container.GetBlobsAsync(BlobTraits.None, BlobStates.None, folderName);
         await foreach (var fileBlobPage in filesBlobs.AsPages(null, ChunkSize))
         {
             var tasksList = from file in fileBlobPage.Values
-                select GetFileProperties(file, blobStorageName, datasetType);
+                select GetFilePropertiesAsync(file, blobStorageName, folderName, datasetType);
             Task.WaitAll(tasksList.ToArray());
             foreach (var taskResult in tasksList.Select(element => element.Result))
             {
-                filesResult.Add(taskResult.Name, taskResult.GetPropertiesResult);
+                var filename = taskResult.Name.Replace(folderName + "/", "");
+                if (filename.Contains("/")) continue;
+                filesResult.Add(filename, taskResult.GetPropertiesResult);
             }
         }
 

@@ -43,7 +43,7 @@ public class ImportDatasetFileServiceShould
         var fileService = new Mock<IFileService>();
         fileService
             .Setup(foo =>
-                foo.GetInputDatasetFilesAsync("TransferFileStorage", "input", "groupName/datasetName", It.IsAny<string>()))
+                foo.GetInputDatasetFilesAsync("azureblob://TransferFileStorage/input/groupName/datasetName", It.IsAny<string>()))
             .ReturnsAsync(filesDict);
         var datasetContext = DatasetMock.GetInMemoryDatasetContext()();
 

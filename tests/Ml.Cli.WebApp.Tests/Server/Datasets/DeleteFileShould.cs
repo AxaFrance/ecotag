@@ -23,7 +23,7 @@ public class DeleteFileShould
     public async Task DeleteFile(string nameIdentifier)
     {
         var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(_ => _.DeleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+        mockFileService.Setup(_ => _.DeleteAsync(It.IsAny<string>())).ReturnsAsync(true);
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, mockFileService.Object);
         var deleteFileCmd = new DeleteFileCmd(mockResult.UsersRepository, mockResult.DatasetsRepository);
 
