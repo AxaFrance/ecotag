@@ -17,7 +17,7 @@ public class GetImportedDatasetShould
         var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
         var mockedTransferService = new Mock<IFileService>();
         mockedTransferService.Setup(foo => foo.GetImportedDatasetsNamesAsync("azureblob://TransferFileStorage/input"))
-            .ReturnsAsync(new List<string> { "test1", "test2" });
+            .ReturnsAsync(new List<string> { "group2/test1", "group2/test2", "group1/demo" });
         
         
         var getImportedDatasetsCmd =

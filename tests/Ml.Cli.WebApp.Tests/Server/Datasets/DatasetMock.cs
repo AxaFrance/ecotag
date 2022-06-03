@@ -123,7 +123,7 @@ internal static class DatasetMock
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
             GroupId = group1.Id,
-            BlobUri = "input/demo"
+            BlobUri = "azureblolb://source/input/group1/demo"
         };
         datasetContext.Datasets.Add(dataset2);
         var dataset3 = new DatasetModel

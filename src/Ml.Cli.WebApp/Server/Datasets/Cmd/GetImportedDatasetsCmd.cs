@@ -35,14 +35,6 @@ public class GetImportedDatasetsCmd
             return datasetsNames;
         }
 
-        var filteredDatasetNames = new List<string>();
-        foreach (var datasetsName in datasetsNames)
-        {
-            if(datasets.Count(d => d.BlobUri.Contains($"/input/{datasetsName}/")) == 0)
-            {
-                filteredDatasetNames.Append(datasetsName);
-            }
-        }
-        return filteredDatasetNames;
+        return datasetsNames.Where(datasetsName => datasets.Count(d => d.BlobUri.EndsWith($"/{datasetsName}")) == 0).ToList();
     }
 }
