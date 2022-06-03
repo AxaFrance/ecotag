@@ -34,8 +34,15 @@ public class GetImportedDatasetsCmd
         {
             return datasetsNames;
         }
-        var filteredDatasetNames = datasetsNames.Where(dn =>
-            datasets.FirstOrDefault(d => d.BlobUri.Contains($"/input/{dn}/")) == null).ToList();
+
+        var filteredDatasetNames = new List<string>();
+        foreach (var datasetsName in datasetsNames)
+        {
+            if(datasets.Count(d => d.BlobUri.Contains($"/input/{datasetsName}/")) == 0)
+            {
+                filteredDatasetNames.Append(datasetsName);
+            }
+        }
         return filteredDatasetNames;
     }
 }

@@ -63,12 +63,11 @@ public class FileService : IFileService
             foreach (var blobhierarchyItem in blobPage.Values)
             {
                 if (blobhierarchyItem.IsPrefix) continue;
-
                 await container.DeleteBlobIfExistsAsync(blobhierarchyItem.Blob.Name);
             }
         }
-
-        return true;
+        
+        return await container.DeleteBlobIfExistsAsync(pathEnd);;
     }
     
     public static string GetPathEnd(string blobFileUri)
