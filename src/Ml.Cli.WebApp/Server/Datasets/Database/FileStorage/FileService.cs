@@ -182,17 +182,17 @@ public class FileService : IFileService
             var directories = new List<string>();
             await foreach (var blobPage in resultSegment)
             {
-                foreach (var blobhierarchyItem in blobPage.Values)
+                foreach (var blobHierarchyItem in blobPage.Values)
                 {
-                    if (!blobhierarchyItem.IsPrefix) continue;
-                    directories.Add(blobhierarchyItem.Prefix.Substring(0, blobhierarchyItem.Prefix.Length-1));
+                    if (!blobHierarchyItem.IsPrefix) continue;
+                    directories.Add(blobHierarchyItem.Prefix.Substring(0, blobHierarchyItem.Prefix.Length-1));
                     if (level >= maxLevel) continue;
-                    var result =await ListBlobsHierarchicalListing(container, blobhierarchyItem.Prefix, null, maxLevel, level+1);
+                    var result =await ListBlobsHierarchicalListing(container, blobHierarchyItem.Prefix, null, maxLevel, level+1);
                     directories.AddRange(result);
                 }
             }
 
-            return directories;
+            return directories.Distinct().ToList();
     }
     
     public async Task<IList<string>> GetImportedDatasetsNamesAsync(string blobUri)
