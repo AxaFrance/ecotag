@@ -10,7 +10,7 @@ import {
     NAME,
     TYPE
 } from "./constants";
-import {DATASETS_IMPORT, IMPORTEDDATASETNAME} from "./constants";
+import {DATASETS_IMPORT, IMPORTED_DATASET_NAME} from "./constants";
 
 const fetch = () => {
     return {
@@ -80,8 +80,8 @@ describe('New.container', () => {
                 fields: {
                     ...givenState.fields,
                     [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: false, message: null},
-                    [IMPORTEDDATASETNAME]: {
-                        name: IMPORTEDDATASETNAME,
+                    [IMPORTED_DATASET_NAME]: {
+                        name: IMPORTED_DATASET_NAME,
                         value: '',
                         message: "",
                         disabled: true
@@ -109,8 +109,8 @@ describe('New.container', () => {
                         value: 'someGroupName',
                         message: null
                     },
-                    [IMPORTEDDATASETNAME]: {
-                        name: IMPORTEDDATASETNAME,
+                    [IMPORTED_DATASET_NAME]: {
+                        name: IMPORTED_DATASET_NAME,
                         value: '',
                         message: MSG_REQUIRED,
                         disabled: false

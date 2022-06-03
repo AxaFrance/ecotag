@@ -11,7 +11,7 @@ public class GetImportedDatasetsCmd
 {
     private readonly UsersRepository _usersRepository;
     private readonly IFileService _fileService;
-    private DatasetsRepository _datasetsRepository;
+    private readonly DatasetsRepository _datasetsRepository;
 
     public GetImportedDatasetsCmd(UsersRepository usersRepository, IFileService fileService, DatasetsRepository datasetsRepository)
     {

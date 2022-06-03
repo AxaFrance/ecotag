@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
@@ -18,12 +19,20 @@ public class ImportDatasetFilesService
     public async Task ImportFilesAsync(CreateDataset createDataset, DatasetModel datasetModel)
     {
         await Task.Run(async () =>
-        {
+        {   
             using var scope = _serviceScopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
             var fileService = (IFileService)serviceProvider.GetService(typeof(IFileService));
             var datasetContext = (DatasetContext)serviceProvider.GetService(typeof(DatasetContext));
-            await ImportDatasetFilesAsync(fileService, datasetContext, createDataset, datasetModel);
+            var logger = (ILogger<ImportDatasetFilesService>)serviceProvider.GetService(typeof(ILogger<ImportDatasetFilesService>));
+            try
+            {
+                await ImportDatasetFilesAsync(fileService, datasetContext, createDataset, datasetModel);
+            }
+            catch (Exception exception)
+            {
+                logger?.LogError(exception, "Error while importing dataset from blob");
+            }
         });
     }
 

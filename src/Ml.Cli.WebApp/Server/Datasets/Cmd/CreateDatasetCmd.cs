@@ -24,6 +24,9 @@ public record CreateDatasetCmdInput
 
     [MaxLength(32)] [MinLength(1)] public string CreatorNameIdentifier { get; set; }
     
+    [MaxLength(256)]
+    [MinLength(3)]
+    [RegularExpression(@"^[a-zA-Z0-9-_/]*$")]
     public string ImportedDatasetName { get; set; }
 }
 

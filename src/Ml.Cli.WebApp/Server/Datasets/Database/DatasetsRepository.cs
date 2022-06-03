@@ -32,7 +32,7 @@ public class DatasetsRepository
         var commandResult = new ResultWithError<string, ErrorResult>();
         var isImported = createDataset.ImportedDatasetName != null;
         var blobSource = isImported ? "TransferFileStorage" : "FileStorage";
-        var blobName = isImported ? "input/" + createDataset.ImportedDatasetName : new Guid().ToString();
+        var blobName = isImported ? "input/" + createDataset.ImportedDatasetName : Guid.NewGuid().ToString();
         var datasetModel = new DatasetModel
         {
             Name = createDataset.Name,

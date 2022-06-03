@@ -92,13 +92,13 @@ public class FileService : IFileService
         return path;
     }
     
-    private string GetContainerName(string blobFileUri)
+    private static string GetContainerName(string blobFileUri)
     {
         var paths = blobFileUri.Replace("azureblob://", "").Split("/");
         return paths[1];
     }
     
-    private string GetBlobStorageName(string blobFileUri)
+    private static string GetBlobStorageName(string blobFileUri)
     {
         var paths = blobFileUri.Replace("azureblob://", "").Split("/");
         return paths[0];
@@ -196,10 +196,10 @@ public class FileService : IFileService
             return directories;
     }
     
-    public async Task<IList<string>> GetImportedDatasetsNamesAsync(string blobDirectoryUri)
+    public async Task<IList<string>> GetImportedDatasetsNamesAsync(string blobUri)
     {
-        var blobStorageName = GetBlobStorageName(blobDirectoryUri);
-        var containerName = GetContainerName(blobDirectoryUri);
+        var blobStorageName = GetBlobStorageName(blobUri);
+        var containerName = GetContainerName(blobUri);
         var result = new List<string>();
         if (string.IsNullOrEmpty(containerName)) return null;
         var connectionString = _configuration[$"{blobStorageName}:ConnectionString"];
@@ -216,12 +216,12 @@ public class FileService : IFileService
     private async Task<(string Name, ResultWithError<FileInfoServiceDataModel, ErrorResult> GetPropertiesResult)> GetFilePropertiesAsync(BlobItem fileBlob, string blobStorageName, string folderName, string datasetType)
     {
         var filename = fileBlob.Name.Replace(folderName + "/", "");
-        if (filename.Contains("/"))
+        if (filename.Contains('/'))
         {
             return (fileBlob.Name,
                 new ResultWithError<FileInfoServiceDataModel, ErrorResult>
                     { Error = new ErrorResult { Key = SubDirectoryNotAllowed } });
-        };
+        }
         
         if (!FileValidator.IsFileExtensionValid(fileBlob.Name, datasetType))
         {
@@ -262,8 +262,8 @@ public class FileService : IFileService
             Task.WaitAll(tasksList.ToArray());
             foreach (var taskResult in tasksList.Select(element => element.Result))
             {
-                var filename = taskResult.Name.Replace(folderName + "/", "");
-                if (filename.Contains("/")) continue;
+                var filename = taskResult.Name.Replace($"{folderName}/", "");
+                if (filename.Contains('/')) continue;
                 filesResult.Add(filename, taskResult.GetPropertiesResult);
             }
         }

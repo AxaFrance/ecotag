@@ -10,7 +10,7 @@ import {
   DATASETS_IMPORT,
   MSG_REQUIRED,
   MSG_DATASET_NAME_ALREADY_EXIST,
-  IMPORTEDDATASETNAME
+  IMPORTED_DATASET_NAME
 } from './constants';
 import React, { useReducer } from 'react';
 import {fetchCreateDataset, fetchDatasets, fetchImportedDatasets} from "../../Dataset.service";
@@ -47,7 +47,7 @@ export const preInitState = {
       message: MSG_REQUIRED,
     },
     [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: ""},
-    [IMPORTEDDATASETNAME]: {name: IMPORTEDDATASETNAME, value: '', disabled: true, message: MSG_REQUIRED}
+    [IMPORTED_DATASET_NAME]: {name: IMPORTED_DATASET_NAME, value: '', disabled: true, message: MSG_REQUIRED}
   },
 };
 
@@ -89,8 +89,8 @@ export const reducer = (state, action) => {
             ...newField[DATASETS_IMPORT],
             isChecked
           },
-          [IMPORTEDDATASETNAME]: {
-            name: IMPORTEDDATASETNAME,
+          [IMPORTED_DATASET_NAME]: {
+            name: IMPORTED_DATASET_NAME,
             value: '',
             message: isChecked ? MSG_REQUIRED : "",
             disabled: !(isChecked && fields.groupId.value !== "")
@@ -99,13 +99,14 @@ export const reducer = (state, action) => {
         optionsDatasets = getImportedDatasetsByGroupId(state.groups, fields.groupId.value, state.importedDatasets);
       }
       else if(GROUP === name){
+        const datasetImport = state.fields[DATASETS_IMPORT];
         newField = {
           ...newField,
-          [IMPORTEDDATASETNAME]: {
-            ...newField[IMPORTEDDATASETNAME],
+          [IMPORTED_DATASET_NAME]: {
+            ...newField[IMPORTED_DATASET_NAME],
             value: '',
-            message: state.fields[DATASETS_IMPORT].isChecked ? MSG_REQUIRED : "",
-            disabled: !(state.fields[DATASETS_IMPORT].isChecked && event.value !== "")
+            message: datasetImport.isChecked ? MSG_REQUIRED : "",
+            disabled: !(datasetImport.isChecked && event.value !== "")
           }
         }
         optionsDatasets = getImportedDatasetsByGroupId(state.groups, event.value, state.importedDatasets);
@@ -163,7 +164,7 @@ const useNew = (history, fetch, telemetry) => {
         [CLASSIFICATION]: fields[CLASSIFICATION].value
       }
       if(fields[DATASETS_IMPORT].isChecked){
-        newDataset[IMPORTEDDATASETNAME] = fields[IMPORTEDDATASETNAME].value
+        newDataset[IMPORTED_DATASET_NAME] = fields[IMPORTED_DATASET_NAME].value
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
       if(response.status >= 500){

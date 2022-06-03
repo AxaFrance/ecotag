@@ -8,7 +8,7 @@ import {
   MSG_MAX_LENGTH,
   MSG_MIN_LENGTH,
   MSG_DATASET_NAME_FORMAT,
-  DATASETS_IMPORT, IMPORTEDDATASETNAME
+  DATASETS_IMPORT, IMPORTED_DATASET_NAME
 } from './constants';
 
 export const rulesRequired = {
@@ -44,5 +44,5 @@ export const rules = {
   [TYPE]: [rulesRequired],
   [CLASSIFICATION]: [rulesRequired],
   [DATASETS_IMPORT]: [],
-  [IMPORTEDDATASETNAME]: []
+  [IMPORTED_DATASET_NAME]: []
 };
