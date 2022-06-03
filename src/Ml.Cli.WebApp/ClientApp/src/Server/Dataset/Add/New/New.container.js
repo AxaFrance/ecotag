@@ -1,10 +1,19 @@
 import New from './New';
-import { rules } from './New.validation.rules';
+import {rules} from './New.validation.rules';
 import { withRouter } from 'react-router-dom';
 import { computeInitialStateErrorMessage, genericHandleChange } from '../../../validation.generic';
-import {NAME, TYPE, CLASSIFICATION, GROUP, MSG_REQUIRED, MSG_DATASET_NAME_ALREADY_EXIST} from './constants';
+import {
+  NAME,
+  TYPE,
+  CLASSIFICATION,
+  GROUP,
+  DATASETS_IMPORT,
+  MSG_REQUIRED,
+  MSG_DATASET_NAME_ALREADY_EXIST,
+  IMPORTED_DATASET_NAME
+} from './constants';
 import React, { useReducer } from 'react';
-import {fetchCreateDataset, fetchDatasets} from "../../Dataset.service";
+import {fetchCreateDataset, fetchDatasets, fetchImportedDatasets} from "../../Dataset.service";
 import {resilienceStatus, withResilience} from "../../../shared/Resilience";
 import withCustomFetch from "../../../withCustomFetch";
 import compose from "../../../compose";
@@ -13,13 +22,21 @@ import {telemetryEvents, withTelemetry} from "../../../Telemetry";
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
-const setErrorMessage = key => fields => fields[key].message !== null;
+const setErrorMessage = key => fields => (fields[key].message && fields[key].message !== null);
 
-const preInitState = {
+const getImportedDatasetsByGroupId = (groups, groupId, importedDatasets) => {
+  const group = groups.find(element => element.id === groupId);
+  if(typeof group === 'undefined') return [];
+  return importedDatasets.filter(dts => dts.startsWith(group.name));
+}
+
+export const preInitState = {
   hasSubmit: false,
   status: resilienceStatus.LOADING,
   groups : [],
   datasets : [],
+  importedDatasets : [],
+  optionsDatasets : [],
   fields: {
     [NAME]: { name: NAME, value: '', message: MSG_REQUIRED },
     [GROUP]: { name: GROUP, value: '', message: MSG_REQUIRED },
@@ -28,27 +45,31 @@ const preInitState = {
       name: CLASSIFICATION,
       value: '',
       message: MSG_REQUIRED,
-    }
+    },
+    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: ""},
+    [IMPORTED_DATASET_NAME]: {name: IMPORTED_DATASET_NAME, value: '', disabled: true, message: MSG_REQUIRED}
   },
 };
 
 export const initState = computeInitialStateErrorMessage(preInitState, rules);
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case 'init':{
-        const { datasets, groups, status } = action.data;
+        const { datasets, groups, importedDatasets, status } = action.data;
         return {
           ...state,
           status,
           datasets,
-          groups
+          groups,
+          importedDatasets
         };
       }
     case 'onChange': {
       const event = action.event;
       let newField = genericHandleChange(rules, state.fields, event);
-      const name = event.name
+      let optionsDatasets = state.optionsDatasets;
+      const name = event.name;
       if(NAME === name){
         if(state.datasets.find(dataset => dataset.name.toLocaleLowerCase() === event.value.toLocaleLowerCase())) {
           newField = {
@@ -59,9 +80,41 @@ const reducer = (state, action) => {
             }};
         }
       }
+      else if(DATASETS_IMPORT === name){
+        const fields = state.fields;
+        const isChecked = !fields[DATASETS_IMPORT].isChecked;
+        newField = {
+          ...newField,
+          [DATASETS_IMPORT]: {
+            ...newField[DATASETS_IMPORT],
+            isChecked
+          },
+          [IMPORTED_DATASET_NAME]: {
+            name: IMPORTED_DATASET_NAME,
+            value: '',
+            message: isChecked ? MSG_REQUIRED : "",
+            disabled: !(isChecked && fields.groupId.value !== "")
+          }
+        };
+        optionsDatasets = getImportedDatasetsByGroupId(state.groups, fields.groupId.value, state.importedDatasets);
+      }
+      else if(GROUP === name){
+        const datasetImport = state.fields[DATASETS_IMPORT];
+        newField = {
+          ...newField,
+          [IMPORTED_DATASET_NAME]: {
+            ...newField[IMPORTED_DATASET_NAME],
+            value: '',
+            message: datasetImport.isChecked ? MSG_REQUIRED : "",
+            disabled: !(datasetImport.isChecked && event.value !== "")
+          }
+        }
+        optionsDatasets = getImportedDatasetsByGroupId(state.groups, event.value, state.importedDatasets);
+      }
       return {
         ...state,
-        fields: newField,
+        optionsDatasets,
+        fields: newField
       };
     }
     case 'onSubmit': {
@@ -80,15 +133,17 @@ const reducer = (state, action) => {
 export const init = (fetch, dispatch) => async () => {
   const datasetsPromise = fetchDatasets(fetch)();
   const groupsPromise = fetchGroups(fetch)(true);
+  const importedDatasetsPromise = fetchImportedDatasets(fetch)();
 
-  const [datasetsResponse, groupsResponse] = await Promise.all([datasetsPromise, groupsPromise]);
+  const [datasetsResponse, groupsResponse, importedDatasetsResponse] = await Promise.all([datasetsPromise, groupsPromise, importedDatasetsPromise]);
   let data;
-  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 ) {
-    data = { datasets: [], groups:[], status: resilienceStatus.ERROR };
+  if(datasetsResponse.status >= 500 || groupsResponse.status >= 500 || importedDatasetsResponse.status >= 500) {
+    data = { datasets: [], groups: [], importedDatasets: [], status: resilienceStatus.ERROR };
   } else {
-    const datasets = await datasetsResponse.json()
-    const groups = await groupsResponse.json()
-    data = { datasets, groups, status: resilienceStatus.SUCCESS };
+    const datasets = await datasetsResponse.json();
+    const groups = await groupsResponse.json();
+    const importedDatasets = await importedDatasetsResponse.json();
+    data = { datasets, groups, importedDatasets, status: resilienceStatus.SUCCESS };
   }
   dispatch( {type: 'init', data});
 };
@@ -107,6 +162,9 @@ const useNew = (history, fetch, telemetry) => {
         [TYPE]: fields[TYPE].value,
         [GROUP]: fields[GROUP].value,
         [CLASSIFICATION]: fields[CLASSIFICATION].value
+      }
+      if(fields[DATASETS_IMPORT].isChecked){
+        newDataset[IMPORTED_DATASET_NAME] = fields[IMPORTED_DATASET_NAME].value
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
       if(response.status >= 500){
@@ -128,9 +186,9 @@ const useNew = (history, fetch, telemetry) => {
 
 const NewWithResilience = withResilience(New);
 
-const NewContainer = ({ history, fetch, telemetry }) => {
+export const NewContainer = ({ history, fetch, telemetry }) => {
   const { state, onChange, onSubmit } = useNew(history, fetch, telemetry);
    return <NewWithResilience {...state} onChange={onChange} onSubmit={onSubmit}  />;
 };
 const enhance = compose(withCustomFetch(fetch), withRouter, withTelemetry);
-export default  enhance(NewContainer);
+export default enhance(NewContainer);

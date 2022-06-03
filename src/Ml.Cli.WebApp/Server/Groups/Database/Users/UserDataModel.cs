@@ -7,5 +7,4 @@ public class UserDataModel
     public string Id { get; set; }
     public string Email { get; set; }
     public string NameIdentifier { get; set; }
-    public List<string> GroupIds { get; set; }
 }

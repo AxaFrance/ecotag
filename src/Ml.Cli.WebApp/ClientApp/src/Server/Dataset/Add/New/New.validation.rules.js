@@ -1,7 +1,17 @@
 
-import { NAME, TYPE, GROUP, CLASSIFICATION, MSG_REQUIRED, MSG_MAX_LENGTH, MSG_MIN_LENGTH, MSG_DATASET_NAME_FORMAT } from './constants';
+import {
+  NAME,
+  TYPE,
+  GROUP,
+  CLASSIFICATION,
+  MSG_REQUIRED,
+  MSG_MAX_LENGTH,
+  MSG_MIN_LENGTH,
+  MSG_DATASET_NAME_FORMAT,
+  DATASETS_IMPORT, IMPORTED_DATASET_NAME
+} from './constants';
 
-const rulesRequired = {
+export const rulesRequired = {
   required: {
     message: MSG_REQUIRED,
   },
@@ -33,4 +43,6 @@ export const rules = {
   [GROUP]: [rulesRequired],
   [TYPE]: [rulesRequired],
   [CLASSIFICATION]: [rulesRequired],
+  [DATASETS_IMPORT]: [],
+  [IMPORTED_DATASET_NAME]: []
 };

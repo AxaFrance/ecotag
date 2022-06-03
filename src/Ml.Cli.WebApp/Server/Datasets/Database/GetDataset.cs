@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -8,6 +9,7 @@ public record DatasetInput
     public string Type { get; set; }
     public string Classification { get; set; }
     public string GroupId { get; set; }
+    public string ImportedDatasetName { get; set; }
 }
 
 public record GetDataset
@@ -31,4 +33,5 @@ public record GetDatasetInfo
     public string Type { get; set; }
     public bool IsLocked { get; set; } = false;
     public DatasetClassificationEnumeration Classification { get; set; }
+    public string BlobUri { get; set; }
 }

@@ -48,7 +48,7 @@ public class DatasetsController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<string>> Create([FromServices] CreateDatasetCmd createDatasetCmd,
+    public async Task<ActionResult<Dictionary<string, string>>> Create([FromServices] CreateDatasetCmd createDatasetCmd,
         DatasetInput datasetInput)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
@@ -58,7 +58,8 @@ public class DatasetsController : Controller
             Classification = datasetInput.Classification,
             Name = datasetInput.Name,
             Type = datasetInput.Type,
-            GroupId = datasetInput.GroupId
+            GroupId = datasetInput.GroupId,
+            ImportedDatasetName = datasetInput.ImportedDatasetName
         });
         if (!commandResult.IsSuccess) return BadRequest(commandResult.Error);
 
@@ -72,7 +73,7 @@ public class DatasetsController : Controller
         List<IFormFile> files)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
-        var uploadfiles = new List<UploadFile>();
+        var uploadFiles = new List<UploadFile>();
         foreach (var formFile in files.Where(formFile => formFile.Length > 0))
         {
             var stream = formFile.OpenReadStream();
@@ -82,12 +83,12 @@ public class DatasetsController : Controller
                 Stream = stream,
                 ContentType = formFile.ContentType
             };
-            uploadfiles.Add(uploadFile);
+            uploadFiles.Add(uploadFile);
         }
 
         var uploadFileResults = await uploadFileCmd.ExecuteAsync(new UploadFileCmdInput
         {
-            Files = uploadfiles,
+            Files = uploadFiles,
             DatasetId = datasetId,
             NameIdentifier = nameIdentifier
         });
@@ -128,6 +129,14 @@ public class DatasetsController : Controller
 
         var file = result.Data;
         return File(file.Stream, file.ContentType, file.Name);
+    }
+
+    [HttpGet("imported")]
+    [ResponseCache(Duration = 1)]
+    public async Task<IList<string>> GetImportedDatasets([FromServices] GetImportedDatasetsCmd getImportedDatasetsCmd)
+    {
+        var nameIdentifier = User.Identity.GetNameIdentifier();
+        return await getImportedDatasetsCmd.ExecuteAsync(nameIdentifier);
     }
 
     [HttpDelete("{datasetId}/files/{id}")]

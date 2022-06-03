@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
-using Ml.Cli.WebApp.Server.Projects.BlobStorage;
 using Ml.Cli.WebApp.Server.Projects.Cmd;
 using Ml.Cli.WebApp.Server.Projects.Database;
 using Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -43,15 +42,15 @@ public class DeleteProjectShould
         Assert.Equal(errorKey, resultKoValue.Key);
     }
 
-    private static (IFileService, ITransferService) InitServices()
+    private static (IFileService, IFileService) InitServices()
     {
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
-            .Setup(foo => foo.DeleteAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .Setup(foo => foo.DeleteAsync(It.IsAny<string>()))
             .ReturnsAsync(true);
-        var mockedBlobService = new Mock<ITransferService>();
+        var mockedBlobService = new Mock<IFileService>();
         mockedBlobService
-            .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()));
+            .Setup(foo => foo.UploadStreamAsync(It.IsAny<string>(), It.IsAny<Stream>()));
         return (mockedFileService.Object, mockedBlobService.Object);
     }
 }

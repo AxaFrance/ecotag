@@ -105,7 +105,7 @@ public class SaveAnnotationShould
         };
         var mockedFileService = new Mock<IFileService>();
         mockedFileService
-            .Setup(foo => foo.DownloadAsync(It.IsAny<string>(), "demo.png"))
+            .Setup(foo => foo.DownloadAsync(It.IsAny<string>()))
             .ReturnsAsync(mockedResult);
         var datasetMock = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService.Object);
         return (datasetMock.Dataset3Project1Id, datasetMock.FileId2, datasetMock.Annotation1File1Id, datasetMock.UsersRepository, datasetMock.DatasetsRepository, datasetMock.ProjectsRepository, datasetMock.AnnotationsController, datasetMock.AnnotationsRepository);

@@ -124,6 +124,7 @@ CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [DTS_CreateDate] BIGINT NOT NULL,
     [DTS_IsLocked] bit NULL,
+    [DTS_BlobUri] [varchar](512) NOT NULL,
     CONSTRAINT [PK_T_Dataset] PRIMARY KEY NONCLUSTERED ([DTS_Id]),
     CONSTRAINT [UK_T_Dataset_Name] UNIQUE ([DTS_Name]),
     CONSTRAINT [FK_T_Dataset_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id)

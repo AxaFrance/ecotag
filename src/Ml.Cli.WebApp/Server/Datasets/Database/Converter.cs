@@ -19,7 +19,8 @@ public static class Converter
             CreateDate = groupModel.CreateDate,
             GroupId = groupModel.GroupId.ToString(),
             IsLocked = groupModel.IsLocked,
-            NumberFiles = groupModel.Files.Count
+            NumberFiles = groupModel.Files.Count,
+            BlobUri = groupModel.BlobUri
         };
     }
 

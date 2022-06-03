@@ -74,25 +74,9 @@ public class UploadFileCmd
             if (!fileValidationResult.IsSuccess)
                 return commandResult.ReturnError(InvalidModel, validationResult.Errors);
 
-            var extension = Path.GetExtension(file.Name)?.ToLower();
+            if (!FileValidator.IsFileExtensionValid(file.Name, datasetInfo.Type)) return commandResult.ReturnError(InvalidModel);
 
-            if (datasetInfo.Type == DatasetTypeEnumeration.Image.ToString())
-            {
-                var imageExtention = new List<string> { ".png", ".jpg", ".jpeg", ".tif", ".tiff" };
-                if (!imageExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
-            }
-            else if (datasetInfo.Type == DatasetTypeEnumeration.Eml.ToString())
-            {
-                var emlExtention = new List<string> { ".eml" };
-                if (!emlExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
-            }
-            else
-            {
-                var textExtention = new List<string> { ".txt" };
-                if (!textExtention.Contains(extension)) return commandResult.ReturnError(InvalidModel);
-            }
-
-            if (file.Stream.Length < 32 * Mb) continue;
+            if (FileValidator.IsFileSizeValid(file.Stream)) continue;
             return commandResult.ReturnError(FileTooLarge);
         }
 

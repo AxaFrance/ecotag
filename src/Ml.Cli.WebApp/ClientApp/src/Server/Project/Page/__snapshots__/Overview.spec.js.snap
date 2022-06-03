@@ -100,7 +100,7 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Nombre de fichier
+                  Nombre de fichiers
                 </span>
               </dt>
               <dd
@@ -118,7 +118,7 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Nombre annotation croisée
+                  Nombre d'annotations croisées
                 </span>
               </dt>
               <dd
@@ -194,7 +194,7 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Groupe annotateurs
+                  Groupe d'annotateurs
                 </span>
               </dt>
               <dd

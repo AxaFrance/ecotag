@@ -77,7 +77,7 @@ internal static class DatasetMock
           .Returns(serviceScopeFactory.Object);
         return new MockService { ServiceProvider = serviceProvider, ServiceScopeFactory = serviceScopeFactory};
     }
-    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null)
+    public static async Task<MockResult> InitMockAsync(string nameIdentifier, IFileService fileService = null, ImportDatasetFilesService importDatasetFilesService = null)
     {
         var groupContext = GroupsControllerShould.GetInMemoryGroupContext()();
 
@@ -109,7 +109,9 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
+            
         };
         datasetContext.Datasets.Add(dataset1);
         var dataset2 = new DatasetModel
@@ -120,7 +122,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "azureblolb://source/input/group1/demo"
         };
         datasetContext.Datasets.Add(dataset2);
         var dataset3 = new DatasetModel
@@ -131,7 +134,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = true,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset3);
         var dataset4 = new DatasetModel
@@ -142,7 +146,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset4);
         var dataset5 = new DatasetModel
@@ -153,7 +158,8 @@ internal static class DatasetMock
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
             IsLocked = false,
-            GroupId = group1.Id
+            GroupId = group1.Id,
+            BlobUri = "input/demo"
         };
         datasetContext.Datasets.Add(dataset5);
         await datasetContext.SaveChangesAsync();
@@ -270,8 +276,7 @@ internal static class DatasetMock
         var usersRepository = new UsersRepository(groupContext, memoryCache);
         var groupRepository = new GroupsRepository(groupContext, null);
         
-        var datasetsRepository = new DatasetsRepository(datasetContext, fileService,
-            memoryCache);
+        var datasetsRepository = new DatasetsRepository(datasetContext, fileService, memoryCache, importDatasetFilesService);
 
         var mockedAnnotationsService  = GetMockedServiceProvider(datasetContextFunc);
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);

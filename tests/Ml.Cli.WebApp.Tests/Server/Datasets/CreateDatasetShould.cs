@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
+using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Xunit;
 
 namespace Ml.Cli.WebApp.Tests.Server.Datasets;
@@ -13,7 +15,7 @@ public class CreateDatasetShould
     [InlineData("Public", "datasetgood", "Image", "s666666")]
     public async Task CreateDataset(string classification, string name, string type, string nameIdentifier)
     {
-        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, null);
+        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, null, null);
 
         var resultOk = result.Result as CreatedResult;
         Assert.NotNull(resultOk);
@@ -35,7 +37,7 @@ public class CreateDatasetShould
     public async Task ReturnError_WhenCreateDataset(string classification, string name, string type,
         string nameIdentifier, string errorKey, string groupId)
     {
-        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, groupId);
+        var result = await InitMockAndExecuteAsync(classification, name, type, nameIdentifier, groupId, null);
 
         var resultWithError = result.Result as BadRequestObjectResult;
         Assert.NotNull(resultWithError);
@@ -43,11 +45,12 @@ public class CreateDatasetShould
         Assert.Equal(errorKey, resultWithErrorValue?.Key);
     }
 
-    private static async Task<ActionResult<string>> InitMockAndExecuteAsync(string classification, string name,
+    private static async Task<ActionResult<Dictionary<string, string>>> InitMockAndExecuteAsync(string classification,
+        string name,
         string type, string nameIdentifier,
-        string groupId)
+        string groupId, IFileService fileServiceObject)
     {
-        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier);
+        var mockResult = await DatasetMock.InitMockAsync(nameIdentifier, fileServiceObject);
         var datasetsController = mockResult.DatasetsController;
 
         var createDatasetCmd = new CreateDatasetCmd(mockResult.GroupRepository, mockResult.DatasetsRepository,

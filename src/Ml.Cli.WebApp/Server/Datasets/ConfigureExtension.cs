@@ -14,8 +14,6 @@ public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<StorageSettings>(
-            configuration.GetSection(StorageSettings.Storage));
         services.AddScoped<IFileService, FileService>();
         services.AddDbContext<DatasetContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
@@ -27,6 +25,8 @@ public static class ConfigureExtension
         services.AddScoped<GetFileCmd, GetFileCmd>();
         services.AddScoped<LockDatasetCmd, LockDatasetCmd>();
         services.AddScoped<DeleteFileCmd, DeleteFileCmd>();
+        services.AddScoped<GetImportedDatasetsCmd, GetImportedDatasetsCmd>();
         services.AddScoped<AnnotationsRepository, AnnotationsRepository>();
+        services.AddScoped<ImportDatasetFilesService, ImportDatasetFilesService>();
     }
 }
