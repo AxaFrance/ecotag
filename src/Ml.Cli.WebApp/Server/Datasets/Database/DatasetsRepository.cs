@@ -42,7 +42,7 @@ public class DatasetsRepository
             CreateDate = DateTime.Now.Ticks,
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
-            Locked = DatasetLockedEnumeration.Pending
+            Locked =isImported ? DatasetLockedEnumeration.Pending : DatasetLockedEnumeration.None
         };
         var result = _datasetContext.Datasets.AddIfNotExists(datasetModel, group => group.Name == datasetModel.Name);
         if (result == null)
@@ -57,7 +57,7 @@ public class DatasetsRepository
             if (createDataset.ImportedDatasetName != null)
             {
                 // Fire and Forget
-                _importDatasetFilesService.ImportFilesAsync(createDataset, datasetModel);
+                _importDatasetFilesService.ImportFilesAsync(createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type, datasetModel.CreatorNameIdentifier);
             }
         }
         catch (Exception)

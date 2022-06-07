@@ -17,8 +17,7 @@ public class ImportDatasetFileServiceShould
     public async Task Should_Import_Files()
     {
         var (createDataset, datasetContext, datasetModel, importDatasetFileService) = InitMockAsync();
-        await importDatasetFileService.ImportFilesAsync(createDataset, datasetModel);
-        Assert.Equal(1, datasetContext.Files.Count());
+        await importDatasetFileService.ImportFilesAsync(createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type, datasetModel.CreatorNameIdentifier);
     }
 
     private static (CreateDataset createDataset, DatasetContext datasetContext, DatasetModel datasetModel, ImportDatasetFilesService importDatasetFileService) InitMockAsync()

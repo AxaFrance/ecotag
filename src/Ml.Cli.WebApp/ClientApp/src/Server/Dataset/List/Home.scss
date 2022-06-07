@@ -7,6 +7,12 @@
   &--locked {
     background-color: green;
   }
+  &--pending {
+    background-color: orange;
+  }
+  &--none {
+    background-color: #2a87d0;
+  }
 }
 
 .row--datasets-filters {

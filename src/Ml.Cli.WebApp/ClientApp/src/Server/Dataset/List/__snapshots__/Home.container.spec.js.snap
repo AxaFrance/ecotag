@@ -110,7 +110,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               <span
                 class="af-table__th-content"
               >
-                Verrouiller
+                Verrouillage
               </span>
             </th>
             <th
@@ -188,15 +188,14 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               class="af-table__cell"
             >
               <a
-                class="btn af-btn--circle"
+                class=""
                 href="#"
                 id="lock"
                 role="button"
                 tabindex="0"
-                title="dévérouillée"
               >
                 <i
-                  class="glyphicon glyphicon-unlock"
+                  class="glyphicon glyphicon-undefined"
                 />
               </a>
             </td>

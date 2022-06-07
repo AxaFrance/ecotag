@@ -12,9 +12,9 @@ const getIconClassname = (locked) =>{
         case Locked.Locked:
             return 'btn af-btn--circle af-btn--locked';
         case Locked.Pending:
-            return 'btn af-btn--circle af-btn--locked';
+            return 'btn af-btn--circle af-btn--pending';
         case Locked.None:
-            return 'btn af-btn--circle';
+            return 'btn af-btn--circle af-btn--none';
             
     }
 }
@@ -58,7 +58,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                     <Table.Header>
                         <Table.Tr>
                             <Table.Th>
-                                <span className="af-table__th-content">Verrouiller</span>
+                                <span className="af-table__th-content">Verrouillage</span>
                             </Table.Th>
                             <Table.Th>
                                 <span className="af-table__th-content">Nom</span>

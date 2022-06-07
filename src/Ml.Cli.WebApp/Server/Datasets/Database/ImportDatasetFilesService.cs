@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -16,7 +17,7 @@ public class ImportDatasetFilesService
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public async Task ImportFilesAsync(CreateDataset createDataset, DatasetModel datasetModel)
+    public async Task ImportFilesAsync(string importedDatasetName,  string datasetId, DatasetTypeEnumeration datasetType, string creatorNameIdentifier)
     {
         await Task.Run(async () =>
         {   
@@ -27,7 +28,7 @@ public class ImportDatasetFilesService
             var logger = (ILogger<ImportDatasetFilesService>)serviceProvider.GetService(typeof(ILogger<ImportDatasetFilesService>));
             try
             {
-                await ImportDatasetFilesAsync(fileService, datasetContext, createDataset, datasetModel);
+                await ImportDatasetFilesAsync(fileService, datasetContext,importedDatasetName ,datasetId, datasetType, creatorNameIdentifier);
             }
             catch (Exception exception)
             {
@@ -36,21 +37,23 @@ public class ImportDatasetFilesService
         });
     }
 
-    private static async Task ImportDatasetFilesAsync(IFileService fileService, DatasetContext datasetContext, CreateDataset createDataset, DatasetModel datasetModel)
+    private static async Task ImportDatasetFilesAsync(IFileService fileService, DatasetContext datasetContext, string importedDatasetName, string datasetId, DatasetTypeEnumeration datasetType, string creatorNameIdentifier)
     {
         var filesResult = await fileService.GetInputDatasetFilesAsync(
-            $"azureblob://TransferFileStorage/input/{createDataset.ImportedDatasetName}", datasetModel.Type.ToString());
+            $"azureblob://TransferFileStorage/input/{importedDatasetName}", datasetType.ToString());
         var successFiles = filesResult
             .Where(x => x.Value.IsSuccess).ToList();
-        datasetContext.Files.AddRange(successFiles.Select(x => new FileModel
+        await datasetContext.Files.AddRangeAsync(successFiles.Select(x => new FileModel
         {
             Name = x.Key,
             ContentType = x.Value.Data.ContentType,
-            CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
+            CreatorNameIdentifier = creatorNameIdentifier,
             CreateDate = DateTime.Now.Ticks,
             Size = x.Value.Data.Length,
-            DatasetId = datasetModel.Id
+            DatasetId = Guid.Parse(datasetId)
         }));
+        var datsetModel = await datasetContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).FirstAsync();
+        datsetModel.Locked = DatasetLockedEnumeration.Locked;
         await datasetContext.SaveChangesAsync();
     }
 }
