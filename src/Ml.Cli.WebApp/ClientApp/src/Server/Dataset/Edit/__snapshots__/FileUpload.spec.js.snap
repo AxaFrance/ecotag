@@ -3,7 +3,7 @@
 exports[`FileUpload given "Eml" should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
   >
     <h2
       class="edit-dataset__file-upload-title"
@@ -62,7 +62,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
 exports[`FileUpload given "Image" should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
   >
     <h2
       class="edit-dataset__file-upload-title"
@@ -121,7 +121,7 @@ exports[`FileUpload given "Image" should render correctly 1`] = `
 exports[`FileUpload given "Text" should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
   >
     <h2
       class="edit-dataset__file-upload-title"
