@@ -29,7 +29,7 @@ public class GetImportedDatasetsCmd
         }
 
         var datasetsNames = await _fileService.GetImportedDatasetsNamesAsync("azureblob://TransferFileStorage/input");
-        var datasets = await _datasetsRepository.ListDatasetAsync(true, user.GroupIds);
+        var datasets = await _datasetsRepository.ListDatasetAsync(null, user.GroupIds);
         if (datasets == null)
         {
             return datasetsNames;

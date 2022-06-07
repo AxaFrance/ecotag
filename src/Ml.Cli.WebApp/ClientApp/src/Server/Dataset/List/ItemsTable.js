@@ -5,6 +5,43 @@ import HeaderColumnCell from "../../Project/List/ColumnHeader";
 import Action from "@axa-fr/react-toolkit-action";
 import {useHistory} from "react-router-dom";
 import {formatTimestampToString} from "../../date";
+import {Locked} from "../Dataset.service";
+
+const getIconClassname = (locked) =>{
+    switch (locked) {
+        case Locked.Locked:
+            return 'btn af-btn--circle af-btn--locked';
+        case Locked.Pending:
+            return 'btn af-btn--circle af-btn--locked';
+        case Locked.None:
+            return 'btn af-btn--circle';
+            
+    }
+}
+
+const getIcon = (locked) =>{
+    switch (locked) {
+        case Locked.Locked:
+            return 'lock';
+        case Locked.Pending:
+            return 'refresh';
+        case Locked.None:
+            return 'unlock';
+
+    }
+}
+
+const getTitle = (locked) =>{
+    switch (locked) {
+        case Locked.Locked:
+            return 'vérouillée';
+        case Locked.Pending:
+            return 'en cours';
+        case Locked.None:
+            return 'dévérouillée';
+
+    }
+}
 
 const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
 
@@ -46,12 +83,12 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                     </Table.Header>
                     <Table.Body>
                         {items.map(
-                            ({id, name, type, groupName, classification, numberFiles, createDate, isLocked}) => (
+                            ({id, name, type, groupName, classification, numberFiles, createDate, locked}) => (
                                 <Table.Tr key={id}>
                                     <Table.Td>
-                                        <Action className={isLocked ? 'btn af-btn--circle af-btn--locked' : 'btn af-btn--circle'}
-                                                id="lock" icon={isLocked ? "lock" : "unlock"}
-                                                title={isLocked ? "vérouillée" : "dévérouillée"}
+                                        <Action className={getIconClassname(locked)}
+                                                id="lock" icon={getIcon(locked)}
+                                                title={getTitle(locked)}
                                                 onClick={() => {}} />
                                     </Table.Td>
                                     <Table.Td>{name}</Table.Td>
@@ -59,7 +96,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                     <Table.Td>{classification}</Table.Td>
                                     <Table.Td>{numberFiles}</Table.Td>
                                     <Table.Td>{type}</Table.Td>
-                                    <Table.Td>{formatTimestampToString(createDate )}</Table.Td>
+                                    <Table.Td>{formatTimestampToString(createDate)}</Table.Td>
                                     <Table.Td>
                                         <Action id="id" icon="edit" title="Editer" onClick={() => {editDatasetButton(id)}} />
                                     </Table.Td>

@@ -19,7 +19,7 @@ public class DatasetsController : Controller
     [HttpGet]
     [ResponseCache(Duration = 1)]
     public async Task<IList<ListDataset>> GetAllDatasets([FromServices] ListDatasetCmd listDatasetCmd,
-        [FromQuery] bool? locked)
+        [FromQuery] DatasetLockedEnumeration? locked)
     {
         var nameIdentifier = User.Identity.GetNameIdentifier();
         return await listDatasetCmd.ExecuteAsync(locked, nameIdentifier);

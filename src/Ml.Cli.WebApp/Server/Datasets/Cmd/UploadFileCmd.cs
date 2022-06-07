@@ -80,7 +80,7 @@ public class UploadFileCmd
             return commandResult.ReturnError(FileTooLarge);
         }
 
-        if (datasetInfo.IsLocked)
+        if (datasetInfo.Locked != DatasetLockedEnumeration.None)
         {
             commandResult.Error = new ErrorResult
             {

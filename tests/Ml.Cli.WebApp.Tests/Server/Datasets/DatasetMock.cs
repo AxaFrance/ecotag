@@ -108,7 +108,7 @@ internal static class DatasetMock
             Type = DatasetTypeEnumeration.Image,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
-            IsLocked = false,
+            Locked = DatasetLockedEnumeration.None,
             GroupId = group1.Id,
             BlobUri = "input/demo"
             
@@ -121,7 +121,7 @@ internal static class DatasetMock
             Type = DatasetTypeEnumeration.Text,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
-            IsLocked = true,
+            Locked = DatasetLockedEnumeration.Locked,
             GroupId = group1.Id,
             BlobUri = "azureblolb://source/input/group1/demo"
         };
@@ -133,7 +133,7 @@ internal static class DatasetMock
             Type = DatasetTypeEnumeration.Text,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
-            IsLocked = true,
+            Locked = DatasetLockedEnumeration.Locked,
             GroupId = group1.Id,
             BlobUri = "input/demo"
         };
@@ -145,7 +145,7 @@ internal static class DatasetMock
             Type = DatasetTypeEnumeration.Eml,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
-            IsLocked = false,
+            Locked = DatasetLockedEnumeration.None,
             GroupId = group1.Id,
             BlobUri = "input/demo"
         };
@@ -157,7 +157,7 @@ internal static class DatasetMock
             Type = DatasetTypeEnumeration.Text,
             CreateDate = DateTime.Now.Ticks,
             CreatorNameIdentifier = "S666666",
-            IsLocked = false,
+            Locked = DatasetLockedEnumeration.None,
             GroupId = group1.Id,
             BlobUri = "input/demo"
         };

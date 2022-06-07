@@ -123,7 +123,7 @@ CREATE TABLE [sch_ECOTAG].[T_Dataset](
     [GRP_Id] uniqueidentifier NOT NULL,
     [DTS_CreatorNameIdentifier] [varchar](32) NOT NULL,
     [DTS_CreateDate] BIGINT NOT NULL,
-    [DTS_IsLocked] bit NULL,
+    [DTS_Locked] int NULL,
     [DTS_BlobUri] [varchar](512) NOT NULL,
     CONSTRAINT [PK_T_Dataset] PRIMARY KEY NONCLUSTERED ([DTS_Id]),
     CONSTRAINT [UK_T_Dataset_Name] UNIQUE ([DTS_Name]),

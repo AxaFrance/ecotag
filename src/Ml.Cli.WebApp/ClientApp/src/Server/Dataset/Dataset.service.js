@@ -14,11 +14,17 @@ export const fetchLockDataset = fetch => async (id) =>
         body: "",
     });
 
-export const fetchDatasets = fetch => async (isLocked = null) =>{
-    if(isLocked == null){
+export const Locked = {
+    None:0,
+    Pending:1,
+    Locked:2,
+}
+
+export const fetchDatasets = fetch => async (locked = null) =>{
+    if(locked == null){
         return fetch('datasets');
     }
-    return fetch('datasets?locked=' + isLocked);
+    return fetch(`datasets?locked=${locked.toLocaleString()}`);
 };
 
 export default fetchDatasets;
