@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
@@ -17,8 +19,7 @@ public class ImportDatasetFileServiceShould
     public async Task Should_Import_Files()
     {
         var (createDataset, datasetContext, datasetModel, importDatasetFileService) = InitMockAsync();
-        await importDatasetFileService.ImportFilesAsync(createDataset, datasetModel);
-        Assert.Equal(1, datasetContext.Files.Count());
+        await importDatasetFileService.ImportFilesAsync(createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type, datasetModel.CreatorNameIdentifier);
     }
 
     private static (CreateDataset createDataset, DatasetContext datasetContext, DatasetModel datasetModel, ImportDatasetFilesService importDatasetFileService) InitMockAsync()
@@ -73,7 +74,8 @@ public class ImportDatasetFileServiceShould
             Id = new Guid(),
             Type = DatasetTypeEnumeration.Image,
         };
-        var importDatasetFileService = new ImportDatasetFilesService(serviceScopeFactory.Object);
+        var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+        var importDatasetFileService = new ImportDatasetFilesService(serviceScopeFactory.Object, memoryCache);
         return (createDataset, datasetContext, datasetModel, importDatasetFileService);
     }
 }

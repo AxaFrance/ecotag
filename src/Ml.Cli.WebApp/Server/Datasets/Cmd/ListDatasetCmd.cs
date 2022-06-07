@@ -16,7 +16,7 @@ public class ListDatasetCmd
         _usersRepository = usersRepository;
     }
 
-    public async Task<IList<ListDataset>> ExecuteAsync(bool? locked, string nameIdentifier)
+    public async Task<IList<ListDataset>> ExecuteAsync(DatasetLockedEnumeration? locked, string nameIdentifier)
     {
         var user = await _usersRepository.GetUserByNameIdentifierWithGroupIdsAsync(nameIdentifier);
 

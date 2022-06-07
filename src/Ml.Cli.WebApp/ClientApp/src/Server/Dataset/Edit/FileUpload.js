@@ -2,6 +2,7 @@
 import { File, FileTable } from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
 import {resilienceStatus} from "../../shared/Resilience";
+import {Locked} from "../Dataset.service";
 
 
 const typeDatasetExtention = (datasetType) =>  {
@@ -115,7 +116,7 @@ export const FileUpload = ({fetch, setState, state}) => {
 
     return (
         <>
-            <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.isLock ? 'disabled' : ''}`}>
+            <div className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.locked !== Locked.None ? 'disabled' : ''}`}>
                 <h2 className="edit-dataset__file-upload-title">Upload des fichiers {typeDatasetExtention(state.dataset.type)}</h2>
                 <File
                     id='file'

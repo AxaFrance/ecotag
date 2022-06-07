@@ -42,7 +42,7 @@ public class DatasetsRepository
             CreateDate = DateTime.Now.Ticks,
             GroupId = Guid.Parse(createDataset.GroupId),
             CreatorNameIdentifier = createDataset.CreatorNameIdentifier,
-            IsLocked = isImported
+            Locked =isImported ? DatasetLockedEnumeration.Pending : DatasetLockedEnumeration.None
         };
         var result = _datasetContext.Datasets.AddIfNotExists(datasetModel, group => group.Name == datasetModel.Name);
         if (result == null)
@@ -57,7 +57,7 @@ public class DatasetsRepository
             if (createDataset.ImportedDatasetName != null)
             {
                 // Fire and Forget
-                _importDatasetFilesService.ImportFilesAsync(createDataset, datasetModel);
+                _importDatasetFilesService.ImportFilesAsync(createDataset.ImportedDatasetName, datasetModel.Id.ToString(), datasetModel.Type, datasetModel.CreatorNameIdentifier);
             }
         }
         catch (Exception)
@@ -70,12 +70,12 @@ public class DatasetsRepository
         return commandResult;
     }
 
-    public async Task<IList<ListDataset>> ListDatasetAsync(bool? locked, IList<string> groupIds)
+    public async Task<IList<ListDataset>> ListDatasetAsync(DatasetLockedEnumeration? locked, IList<string> groupIds)
     {
         IList<DatasetModel> datasets;
         if (locked.HasValue)
             datasets = await _datasetContext.Datasets.AsNoTracking()
-                .Where(dataset => dataset.IsLocked == locked && groupIds.Contains(dataset.GroupId.ToString()))
+                .Where(dataset => dataset.Locked == locked && groupIds.Contains(dataset.GroupId.ToString()))
                 .Include(dataset => dataset.Files).ToListAsync();
         else
             datasets = await _datasetContext.Datasets.AsNoTracking()
@@ -104,7 +104,7 @@ public class DatasetsRepository
                     Name = dataset.Name,
                     GroupId = dataset.GroupId.ToString().ToLower(),
                     Type = dataset.Type.ToString(),
-                    IsLocked = dataset.IsLocked,
+                    Locked = dataset.Locked,
                     Classification = dataset.Classification,
                     BlobUri = dataset.BlobUri,
                 })
@@ -120,8 +120,8 @@ public class DatasetsRepository
     public async Task<bool> LockAsync(string datasetId)
     {
         var dataset = await _datasetContext.Datasets.FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
-        if (dataset == null || dataset.IsLocked) return false;
-        dataset.IsLocked = true;
+        if (dataset == null || dataset.Locked == DatasetLockedEnumeration.Locked) return false;
+        dataset.Locked = DatasetLockedEnumeration.Locked;
         await _datasetContext.SaveChangesAsync();
         _cache.Remove($"GetDatasetInfoAsync({datasetId})");
         return true;

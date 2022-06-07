@@ -14,6 +14,7 @@ import '@axa-fr/react-toolkit-tabs/dist/tabs.scss';
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 import {formatTimestampToString} from "../../date";
 import {resilienceStatus} from "../../shared/Resilience";
+import {Locked} from "../Dataset.service";
 
 const bytesToSize=(bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -67,6 +68,7 @@ const FileList = ({state, setState, fetch}) => {
                 currentPages: page,
         }}});
     };
+    
     const files = state.files;
     const paging = files.paging;
     const itemByPages = paging.itemByPages
@@ -111,18 +113,18 @@ const FileList = ({state, setState, fetch}) => {
                                     <span className="af-table__th-content ">Type</span>
                                 </Table.Th>
                                 <Table.Th>Size</Table.Th>
-                                {state.dataset.isLock ? null :<Table.Th>Action</Table.Th>}
+                                {state.dataset.locked !== Locked.None ? null :<Table.Th>Action</Table.Th>}
                             </Table.Tr>
                         </Table.Header>
                         <Table.Body>
                             {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
-                                         <a href={"#"+file.file.name} alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
+                                         <a href={`#${file.file.name}`} alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
                                         <Table.Td>{bytesToSize(file.file.size)}</Table.Td>
-                                        {state.dataset.isLock ? null :<Table.Td> <Action
+                                        {state.dataset.locked !== Locked.None ? null :<Table.Td> <Action
                                             id="deleteButton"
                                             icon="trash"
                                             title="Supprimer"

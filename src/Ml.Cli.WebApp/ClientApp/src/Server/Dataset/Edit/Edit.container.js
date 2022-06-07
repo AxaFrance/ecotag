@@ -4,7 +4,7 @@ import FileList from "./FileList";
 import './Edit.scss';
 import Title from "../../../TitleBar";
 import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
-import {fetchDataset, fetchLockDataset} from "../Dataset.service";
+import {fetchDataset, fetchLockDataset, Locked} from "../Dataset.service";
 import {resilienceStatus, withResilience} from "../../shared/Resilience";
 import {useParams} from "react-router-dom";
 import withCustomFetch from "../../withCustomFetch";
@@ -21,7 +21,7 @@ export const init = (fetch, setState) => async (id, state) => {
         const datasetData = { name: dataset.name, 
             id: dataset.id, 
             createDate: dataset.createDate,
-            isLock: dataset.isLocked,
+            locked: dataset.locked,
             type: dataset.type
         };
         const filesSend= dataset.files.map( f => { return  { file: { id: f.id, type: f.contentType, size: f.size, name: f.fileName } }})
@@ -38,8 +38,17 @@ const lockDataset = (fetch, setState) => async (state, idDataset) => {
     } else {
         data = {status: resilienceStatus.SUCCESS};
     }
-    setState({...state, ...data, openLockModal: false, dataset: {...state.dataset, isLock:true }});
+    setState({...state, ...data, openLockModal: false, dataset: {...state.dataset, locked: Locked.Locked }});
 };
+
+const lockedText= (locked) =>{
+    switch (locked){
+        case Locked.Locked:
+            return "Dataset verrouillé"
+        default:
+            return "Dataset en cours d'import"
+    }
+}
 
 export const Edit = ({fetch, state, setState, lock}) => {
     const isDisabled = state.files.filesSend.length === 0;
@@ -54,7 +63,7 @@ export const Edit = ({fetch, state, setState, lock}) => {
             <Title title={state.dataset.name} subtitle="Edition du dataset" goTo="/datasets" goTitle="Datasets"/>
             <FileUpload fetch={fetch} state={state} setState={setState}/>
             {state.files.filesSend.length === 0 ? null : <FileList fetch={fetch} state={state} setState={setState}/>}
-            <Lock text="Verrouiller" lockedText="Dataset verrouillé" isDisabled={isDisabled} isLocked={state.dataset.isLock} onLockAction={lock.onLockDataset}/>
+            <Lock text="Verrouiller" lockedText={lockedText(state.dataset.locked)} isDisabled={isDisabled} isLocked={state.dataset.locked !== Locked.None} onLockAction={lock.onLockDataset}/>
         </div>
     );
 }
@@ -64,7 +73,7 @@ const PageWithResilience = withResilience(Edit);
 export const EditContainer = ({fetch}) => {
     const { id } = useParams();
     const [state, setState] = useState({
-        dataset: { name: "", id: "", createDate:null, isLock:false },
+        dataset: { name: "", id: "", createDate:null, locked: Locked.None },
         status: resilienceStatus.LOADING,
         files:{
             filesLoad: { values : [] },
@@ -84,7 +93,7 @@ export const EditContainer = ({fetch}) => {
     
     const lock = {
         onLockDataset: () =>{
-            if(state.dataset.isLock){
+            if(state.dataset.locked !== Locked.None){
                 return;
             }
             setState({...state, openLockModal: true});

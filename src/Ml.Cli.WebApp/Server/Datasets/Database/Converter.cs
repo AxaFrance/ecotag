@@ -18,7 +18,7 @@ public static class Converter
             Type = groupModel.Type.ToString(),
             CreateDate = groupModel.CreateDate,
             GroupId = groupModel.GroupId.ToString(),
-            IsLocked = groupModel.IsLocked,
+            Locked = groupModel.Locked,
             NumberFiles = groupModel.Files.Count,
             BlobUri = groupModel.BlobUri
         };
@@ -44,7 +44,7 @@ public static class Converter
             Type = datasetModel.Type.ToString(),
             CreateDate = datasetModel.CreateDate,
             GroupId = datasetModel.GroupId.ToString(),
-            IsLocked = datasetModel.IsLocked,
+            Locked = datasetModel.Locked,
             Files = datasetModel.Files.Select(file => new GetDatasetFile
             {
                 Id = file.Id.ToString(),

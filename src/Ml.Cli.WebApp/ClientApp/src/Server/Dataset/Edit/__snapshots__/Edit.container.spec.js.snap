@@ -33,7 +33,7 @@ exports[`Edit.container should render correctly 1`] = `
       </div>
     </div>
     <div
-      class="edit-dataset__file-upload-container edit-dataset__file-upload-container--"
+      class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
     >
       <h2
         class="edit-dataset__file-upload-title"
@@ -98,7 +98,7 @@ exports[`Edit.container should render correctly 1`] = `
         <span
           class="af-btn__text"
         >
-          Verrouiller
+          Dataset en cours d'import
         </span>
         <i
           class="lock__button-icon glyphicon glyphicon-lock"
