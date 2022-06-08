@@ -92,7 +92,11 @@ export const FileUpload = ({fetch, setState, state}) => {
         const responses = await Promise.all(promises);
             if(responses.find(response => response.status >= 500)){
                 setState({...state, status : resilienceStatus.ERROR });
-            } else {
+            }
+            else if (responses.find(response => response.status === 403)){
+                setState({...state, status : resilienceStatus.FORBIDDEN});
+            }
+            else {
                 const filesSendError = [];
                 const newFilesSend = files.filesSend;
                 let index = 0

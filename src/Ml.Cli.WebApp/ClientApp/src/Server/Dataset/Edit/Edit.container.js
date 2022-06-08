@@ -33,8 +33,8 @@ export const init = (fetch, setState) => async (id, state) => {
 const lockDataset = (fetch, setState) => async (state, idDataset) => {
     const response = await fetchLockDataset(fetch)(idDataset);
     let data;
-    if (response.status >= 500) {
-        data = {status: resilienceStatus.ERROR};
+    if (response.status >= 500 || response.status === 403) {
+        data = {status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR};
     } else {
         data = {status: resilienceStatus.SUCCESS};
     }

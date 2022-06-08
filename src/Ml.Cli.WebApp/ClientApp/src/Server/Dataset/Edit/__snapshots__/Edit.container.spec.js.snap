@@ -209,7 +209,7 @@ exports[`Edit.container init should init correctly 1`] = `
         <span
           class="af-btn__text"
         >
-          Dataset verrouillé
+          Dataset en cours d'import
         </span>
         <i
           class="lock__button-icon glyphicon glyphicon-lock"

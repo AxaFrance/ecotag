@@ -23,22 +23,6 @@ const bytesToSize=(bytes) => {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
-const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event => {
-    event.preventDefault();
-    const response = await fetch(`datasets/${datasetId}/files/${fileId}`, {
-        method: 'GET'
-    });
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();         
-};
-
-
 const FileList = ({state, setState, fetch}) => {
 
     const deleteFile = async file => {
@@ -48,8 +32,8 @@ const FileList = ({state, setState, fetch}) => {
             method: 'DELETE'
         });
         
-        if(response.status >= 500){
-            setState({...state, status : resilienceStatus.ERROR });
+        if(response.status >= 500 || response.status === 403){
+            setState({...state, status : response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR });
             return;
         }
 
@@ -59,6 +43,25 @@ const FileList = ({state, setState, fetch}) => {
             filesSend.splice(index, 1);
         }
         setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.SUCCESS});
+    };
+
+    const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event => {
+        event.preventDefault();
+        const response = await fetch(`datasets/${datasetId}/files/${fileId}`, {
+            method: 'GET'
+        });
+        if(response.status === 403 || response.status >= 500){
+            setState({...state, status : response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR });
+            return;
+        }
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     };
 
     const onChangePaging = ({numberItems, page}) => {
