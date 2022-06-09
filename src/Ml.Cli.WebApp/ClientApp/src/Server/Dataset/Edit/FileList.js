@@ -45,7 +45,7 @@ const FileList = ({state, setState, fetch}) => {
         setState({...state, files: {...state.files, filesSend}, status: resilienceStatus.SUCCESS});
     };
 
-    const downloadAsync = (fetch) => (datasetId, fileId, fileName) => async event => {
+    const downloadAsync = (datasetId, fileId, fileName) => async event => {
         event.preventDefault();
         const response = await fetch(`datasets/${datasetId}/files/${fileId}`, {
             method: 'GET'
@@ -123,7 +123,7 @@ const FileList = ({state, setState, fetch}) => {
                             {itemFiltered.map(file => (
                                     <Table.Tr key={cuid()}>
                                         <Table.Td>
-                                         <a href={`#${file.file.name}`} alt={file.file.name} onClick={downloadAsync(fetch)(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
+                                         <a href={`#${file.file.name}`} alt={file.file.name} onClick={downloadAsync(state.dataset.id, file.file.id, file.file.name)}>{file.file.name}</a> 
                                         </Table.Td>
                                         <Table.Td>{file.file.type}</Table.Td>
                                         <Table.Td>{bytesToSize(file.file.size)}</Table.Td>
