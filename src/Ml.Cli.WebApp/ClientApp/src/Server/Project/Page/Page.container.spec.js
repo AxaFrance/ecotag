@@ -168,10 +168,10 @@ describe('Page.container', () => {
         isModalOpened: false
       });
     });
-    it('should lock project', () => {
+    it('should update status', () => {
       const givenState = {...initialState};
       const givenAction = {
-        type: 'lock_project',
+        type: 'update_status',
         data: {status: resilienceStatus.SUCCESS}
       };
 
@@ -206,7 +206,7 @@ describe('Page.container', () => {
       const givenHistory = {push:jest.fn()}
       await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
       expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
-      expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'lock_project', data: {status: resilienceStatus.SUCCESS}});
+      expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'update_status', data: {status: resilienceStatus.SUCCESS}});
       expect(givenHistory.push).toHaveBeenCalledWith("/projects");
     });
   });
