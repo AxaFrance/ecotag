@@ -68,4 +68,28 @@ describe('FileList', () => {
             }
         );
     });
+    
+    describe('downloadAsync', () => {
+        const testCases = [
+            [403, resilienceStatus.FORBIDDEN],
+            [500, resilienceStatus.ERROR]
+        ];
+        
+        test.each(testCases)(
+            "given %p response, returns related resilience status",
+            async (returnedStatus, expectedStatus) => {
+                const givenFetch = jest.fn()
+                    .mockResolvedValueOnce({status: returnedStatus});
+                const givenSetState = jest.fn();
+                const {getByText} = render(<FileList fetch={givenFetch} state={givenState} setState={givenSetState}/>);
+                const tabButton = getByText(/Liste des fichiers/i);
+                fireEvent.click(tabButton);
+                await waitFor(() => expect(getByText(/testFile.png/i)).not.toBeNull());
+                const downloadButton = getByText(/testFile.png/i);
+                fireEvent.click(downloadButton);
+                await waitFor(() => expect(givenSetState).toHaveBeenCalled());
+                expect(givenSetState).toHaveBeenCalledWith({...givenState, status: expectedStatus});
+            }
+        );
+    });
 })
