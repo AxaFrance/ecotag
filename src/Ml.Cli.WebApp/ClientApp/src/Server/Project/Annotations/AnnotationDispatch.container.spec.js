@@ -97,18 +97,16 @@ describe('AnnotationDispatch.container', () => {
   describe('.init()', () => {
     let givenFetch;
     let givenDispatch;
-    let givenFetchRejected;
     
     beforeEach(() => {
-      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProject)}));
       givenDispatch = jest.fn();
-      givenFetchRejected = jest.fn(() => Promise.reject("ERROR"));
     });
     afterEach(() => {
       jest.clearAllMocks();
     });
     
     it('should call init and dispatch', async () => {
+      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProject)}));
       try {
         await init(givenFetch, givenDispatch)(givenProject.id);
         expect(givenDispatch).toHaveBeenCalledWith( { type: "init", data: { project: givenProject, status: resilienceStatus.SUCCESS } });
@@ -118,12 +116,33 @@ describe('AnnotationDispatch.container', () => {
     });
 
     it('should fail because of error during init', async () => {
+      givenFetch = jest.fn(() => Promise.resolve({ok: true, json: () => Promise.resolve(givenProject)}));
       try {
         await init(givenFetch, givenDispatch);
         fail(error);
       } catch (error) {
         expect(givenFetch).toHaveBeenCalledTimes(0);
       }
+    });
+    
+    describe('resilience fail', () => {
+      const testCases = [
+        [403, resilienceStatus.FORBIDDEN],
+        [500, resilienceStatus.ERROR]
+      ];
+      
+      test.each(testCases)(
+          "given %p fetch project response, should return related resilience status",
+          async (fetchStatus, expectedStatus) => {
+            givenFetch = jest.fn(() => Promise.resolve({status: fetchStatus}));
+            try{
+              await init(givenFetch, givenDispatch)(givenProject.id);
+              expect(givenDispatch).toHaveBeenCalledWith({type: 'init', data: {project: null, status: expectedStatus}});
+            } catch(error){
+              fail(error);
+            }
+          }
+      )
     });
   });
 });

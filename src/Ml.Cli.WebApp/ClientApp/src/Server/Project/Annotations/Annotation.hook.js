@@ -22,16 +22,10 @@ export const initialState = {
 export const init = (fetch, dispatch) => async projectId => {
     const response = await fetchProject(fetch)(projectId);
     let data;
-    if(response.status === 403){
+    if(response.status === 403 || response.status >= 500){
         data = {
             project: null,
-            status: resilienceStatus.FORBIDDEN
-        };
-    }
-     else if (response.status >= 500) {
-        data = {
-            project: null,
-            status: resilienceStatus.ERROR
+            status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR
         };
     } else {
         const project = await response.json();

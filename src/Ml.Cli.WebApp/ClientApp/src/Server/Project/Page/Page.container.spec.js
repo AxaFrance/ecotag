@@ -199,6 +199,12 @@ describe('Page.container', () => {
   });
   
   describe('.onLockSubmit', () => {
+    
+    const testCases = [
+      [403, resilienceStatus.FORBIDDEN],
+      [500, resilienceStatus.ERROR]
+    ];
+    
     it('should fetch delete project method', async () => {
       const givenFetch = jest.fn()
           .mockResolvedValueOnce({ok: true, status: 200});
@@ -209,5 +215,18 @@ describe('Page.container', () => {
       expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'update_status', data: {status: resilienceStatus.SUCCESS}});
       expect(givenHistory.push).toHaveBeenCalledWith("/projects");
     });
+    
+    test.each(testCases)(
+        "given %p response on deletion fetch, should return related resilience status",
+        async (fetchStatus, expectedStatus) => {
+          const givenFetch = jest.fn()
+              .mockResolvedValueOnce({status: fetchStatus});
+          const givenDispatch = jest.fn();
+          const givenHistory = {push: jest.fn()};
+          await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
+          expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
+          expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'update_status', data: {status: expectedStatus}});
+        }
+    );
   });
 });
