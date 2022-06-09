@@ -71,6 +71,7 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
         const annotation = annotations[i];
         const url = `projects/${projectId}/files/${annotation.fileId}`;
         const response = await fetch(url, {method: 'GET'});
+        if(response.status === 403 || response.status >= 500) continue;
         const blob = await response.blob();
         annotation.blobUrl = window.URL.createObjectURL(blob);
         data = {
