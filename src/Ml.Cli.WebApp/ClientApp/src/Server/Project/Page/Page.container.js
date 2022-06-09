@@ -139,7 +139,6 @@ const usePage = (fetch) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const onExport = projectId => {
     const response = fetchExportAnnotations(fetch)(projectId);
-    response.status = 403;
     if(response.status === 403 || response.status >= 500){
       dispatch({type: update_status, data: {status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR}});
       return;
