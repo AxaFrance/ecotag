@@ -122,9 +122,9 @@ namespace Ml.Cli.WebApp.Server
                             {
                                 var usersRepository = context.HttpContext.RequestServices.GetRequiredService<UsersRepository>();
                                 var nameIdentifier = context.Principal.Identity.GetNameIdentifier();
-                                var userTask = usersRepository.GetUserByNameIdentifierAsync(nameIdentifier);
-                                userTask.Wait();
-                                var role = userTask.Result.Role;
+                                //var userTask = usersRepository.GetUserByNameIdentifierAsync(nameIdentifier);
+                                //userTask.Wait();
+                                var role = "";//userTask.Result.Role;
                                 var roles = new List<string>();
                                 if (role == Roles.DataScientist)
                                 {
@@ -149,8 +149,8 @@ namespace Ml.Cli.WebApp.Server
                             }
                         }
                     };
-                    
-                    if (!String.IsNullOrEmpty(oidcUserSettings.RequireAudience))
+                    var validateAudience = !String.IsNullOrEmpty(oidcUserSettings.RequireAudience);
+                    if (validateAudience)
                     {
                         options.Audience = oidcUserSettings.RequireAudience;
                     }
@@ -173,7 +173,7 @@ namespace Ml.Cli.WebApp.Server
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         RequireSignedTokens = true
                     };
@@ -244,6 +244,7 @@ namespace Ml.Cli.WebApp.Server
             {
                 app.UseCors("CorsPolicy");
             }
+            
             app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });

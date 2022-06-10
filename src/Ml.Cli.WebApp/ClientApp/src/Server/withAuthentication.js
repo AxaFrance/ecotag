@@ -1,12 +1,20 @@
 import React from 'react';
-import {useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc';
+import {useOidcAccessToken, useOidcIdToken, useOidcUser} from '@axa-fr/react-oidc';
 import { EnvironmentConsumer } from './EnvironmentProvider';
 
 const NON_CONNECTE = 'Non Connecté';
 
-const getAuthName = oidcUser => oidcUser ? oidcUser.name : NON_CONNECTE;
+const getAuthName = (dataArray, propertyName= "name", defaultResult=NON_CONNECTE) => {
 
-const getAuthEmail = oidcUser => oidcUser? oidcUser.email : '';
+    for(let i=0; i<dataArray.length;i++) {
+        const item= dataArray[i];
+        if (item && item[propertyName]) {
+            return item[propertyName];
+        }
+    }
+
+    return defaultResult;
+}
 
 export const DataScientist = "ECOTAG_DATA_SCIENTIST";
 export const Annotateur = "ECOTAG_ANNOTATEUR";
@@ -37,21 +45,22 @@ export const extractRoles = (oidcUser, oidcMode) => {
     }else{
         roles.push(Annotateur);
         roles.push(DataScientist);
-        roles.push(Annotateur);
+        roles.push(Administateur);
     }
   return roles;
 }
 
-const extractDataFromOAuthToken = (idTokenPayload, oidcUser, environment) => ({
-  name: getAuthName(idTokenPayload),
-  email: getAuthEmail(oidcUser),
+const extractDataFromOAuthToken = (idTokenPayload, accessTokenPayload, oidcUser, environment) => ({
+  name: getAuthName([idTokenPayload, accessTokenPayload]),
+  email: getAuthName([oidcUser, accessTokenPayload], 'email', ''),
   roles: extractRoles(oidcUser, environment.oidc.mode)
 });
 
 const withAuthentication = () => Component => props => {
   const { idTokenPayload } = useOidcIdToken();
+  const { accessTokenPayload } = useOidcAccessToken();
   const{ oidcUser, oidcUserLoadingState } = useOidcUser();
-  return <EnvironmentConsumer>{store =><Component {...props} user={extractDataFromOAuthToken(idTokenPayload, oidcUser, store.environment)} UserLoadingState={oidcUserLoadingState} />}</EnvironmentConsumer>;
+  return <EnvironmentConsumer>{store =><Component {...props} user={extractDataFromOAuthToken(idTokenPayload, accessTokenPayload, oidcUser, store.environment)} UserLoadingState={oidcUserLoadingState} />}</EnvironmentConsumer>;
 };
 
 export default withAuthentication;
