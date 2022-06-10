@@ -15,7 +15,7 @@ export const Home = ({ user: { roles = [] } }) => (
                 <div className="home__link-container home__link-container--datasets">Datasets</div>
             </Link>}
             { roles.includes(Administateur) && <Link className="home__link" to="/groups">
-                <div className="home__link-container home__link-container--groups">Groupes</div>
+                <div className="home__link-container home__link-container--groups">Equipe</div>
             </Link>}
         </div>
         {(!roles.includes(Annotateur) && !roles.includes(DataScientist) && !roles.includes(Administateur)) && <p>Vous n'avez aucun rôle attribué à votre profile.</p>}

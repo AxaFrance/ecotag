@@ -43,7 +43,7 @@ describe("Check Group ItemsTable behaviour", () => {
         
         fireEvent.click(manageUserButton);
         
-        await waitFor(() => expect(getAllByText(/Ajouter\/Supprimer des utilisateurs à ce groupe/i)).not.toBeNull());
+        await waitFor(() => expect(getAllByText(/Ajouter\/Supprimer des utilisateurs de cette équipe/i)).not.toBeNull());
         
         const quitModalButton = getByText(/Annuler/i);
         

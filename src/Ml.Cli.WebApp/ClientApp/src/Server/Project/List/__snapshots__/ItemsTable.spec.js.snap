@@ -45,7 +45,7 @@ exports[`Check Project ItemsTable behaviour Chould render correctly 1`] = `
               <span
                 class="af-btn__text"
               >
-                Groupe
+                Equipe
               </span>
               <i
                 class="glyphicon glyphicon-sorting"

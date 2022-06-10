@@ -124,7 +124,7 @@ exports[`Home.container "ECOTAG_ANNOTATEUR" HomeContainer render correctly 1`] =
                 <span
                   class="af-btn__text"
                 >
-                  Groupe
+                  Equipe
                 </span>
                 <i
                   class="glyphicon glyphicon-sorting"
@@ -552,7 +552,7 @@ exports[`Home.container "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR" HomeContainer 
                 <span
                   class="af-btn__text"
                 >
-                  Groupe
+                  Equipe
                 </span>
                 <i
                   class="glyphicon glyphicon-sorting"

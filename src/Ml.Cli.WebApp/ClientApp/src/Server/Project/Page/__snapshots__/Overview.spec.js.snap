@@ -194,7 +194,7 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Groupe d'annotateurs
+                  Equipe d'annotateurs
                 </span>
               </dt>
               <dd
@@ -212,7 +212,7 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Emails du groupe
+                  Emails de l'équipe
                 </span>
               </dt>
               <dd

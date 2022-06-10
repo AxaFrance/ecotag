@@ -38,8 +38,8 @@ export const Overview = ({ project, dataset, group, annotationsStatus, users= []
             <SectionRestitutionColumn>
               <Restitution label="Dataset" value={dataset.name} />
               <Restitution label="Type de dataset" value={dataset.type} />
-              <Restitution label="Groupe d'annotateurs" value={group.name} />
-              <Restitution label="Emails du groupe" values={groupEmails} />
+              <Restitution label="Equipe d'annotateurs" value={group.name} />
+              <Restitution label="Emails de l'équipe" values={groupEmails} />
             </SectionRestitutionColumn>
           </SectionRestitutionRow>
         </SectionRestitution>

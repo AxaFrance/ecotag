@@ -54,7 +54,7 @@ public class CreateAuditShould
             UserIds = new List<string>() { "user1", "user2" }
         };
 
-        var typeGroupes = "Groupes";
+        var typeGroupes = "Teams";
         var message1 = new AuditDataModel()
         {
             Author = "s66666",

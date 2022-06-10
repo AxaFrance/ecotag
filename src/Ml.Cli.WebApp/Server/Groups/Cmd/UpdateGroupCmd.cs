@@ -64,7 +64,7 @@ public class UpdateGroupCmd
         {
             Author = nameIdentifier,
             Id = commandResult.Data,
-            Type = "Groupes",
+            Type = "Teams",
             Data = JsonSerializer.Serialize(new GroupUpdateAudit()
             {
                 Id = updateGroupInput.Id,
