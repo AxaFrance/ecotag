@@ -57,10 +57,10 @@ const NumberTagToDo = ({state}) =>{
 const initAsync = (fetch) => async (state, setState, id) => {
 
     const annotationsStatusResponse = await fetchAnnotationsStatus(fetch)(id);
-    if (annotationsStatusResponse.status >= 500) {
+    if (annotationsStatusResponse.status >= 500 || annotationsStatusResponse.status === 403) {
         const data = {
             ...state,
-            status: resilienceStatus.ERROR
+            status: annotationsStatusResponse.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR
         };
         setState(data);
     } else {

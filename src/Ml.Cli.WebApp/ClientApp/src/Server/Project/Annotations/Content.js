@@ -57,7 +57,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                 Merci beaucoup !
             </Alert></div>;
         case "start":
-           return  <Loader mode={LoaderModes.get} text={"Réservation d'élément d'annotation en cours"}/>;
+           return  <Loader mode={LoaderModes.get} text={"Réservation d'éléments d'annotation en cours"}/>;
         default:
             return (currentItem != null ? <>
                 <ReservationStatus status={reservationStatus}/>

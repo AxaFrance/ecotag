@@ -5,7 +5,7 @@ import Loader, { LoaderModes } from '@axa-fr/react-toolkit-loader';
 import './withResilience.scss';
 
 export const withResilience = Component => ({ status, loaderText=null, ...otherProps }) => {
-    const { ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
+    const { ERROR, SUCCESS, LOADING, POST, FORBIDDEN } = resilienceStatus;
     return (
         <>
             {
@@ -18,6 +18,13 @@ export const withResilience = Component => ({ status, loaderText=null, ...otherP
                                 <p>Une erreur serveur est survenue.</p>
                                 <br />
                                 <p>Nous sommes au courant du problème. Une investigation est en cours...</p>
+                            </div>
+                        </div>
+                    ),
+                    [FORBIDDEN]: (
+                        <div className="resilience">
+                            <div className="resilicience__error-message">
+                                <p>Vous n'avez pas le droit d'accéder à cette ressource.</p>
                             </div>
                         </div>
                     ),

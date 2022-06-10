@@ -67,6 +67,51 @@ describe('Page.container', () => {
         '02/01/0001'
     );
   });
+  it('should display forbidden message when trying to get unauthorized projects', async () => {
+    const givenFetch = () => {
+      return {
+        status: 403
+    }};
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/droit/i));
+    expect(messageEl).toHaveTextContent(
+        'droit'
+    );
+  });
+  it('should display error message when calling projects incorrectly', async () => {
+    const givenFetch = () => {
+      return {
+        status: 500
+      }};
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/investigation/i));
+    expect(messageEl).toHaveTextContent(
+        'investigation'
+    );
+  });
+  it('should display forbidden message when trying to get unauthorized datasets or annotations status', async () => {
+    const givenFetch = jest.fn()
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
+        .mockResolvedValueOnce({ok: false, status: 403});
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/droit/i));
+    expect(messageEl).toHaveTextContent(
+        'droit'
+    );
+  });
+  it('should display error message when calling datasets or annotations status incorrectly', async () => {
+    const givenFetch = jest.fn()
+        .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500})
+        .mockResolvedValueOnce({ok: false, status: 500});
+    const { getByText } = render(<Router><PageContainer fetch={givenFetch} user={{roles: [DataScientist]}}/></Router>);
+    const messageEl = await waitFor(() => getByText(/investigation/i));
+    expect(messageEl).toHaveTextContent(
+        'investigation'
+    );
+  });
 
   describe('.reducer()', () => {
     it('should set the new fields with asked values after onChange action', () => {
@@ -95,6 +140,49 @@ describe('Page.container', () => {
         group: {},
       });
     });
+    it('should open modal', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'open_modal',
+        data: {isModalOpened: true}
+      };
+      
+      const actualState = reducer(givenState, givenAction);
+      
+      expect(actualState).toMatchObject({
+        ...givenState,
+        isModalOpened: true
+      });
+    });
+    it('should lock project and start', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'lock_project_start'
+      };
+      
+      const actualState = reducer(givenState, givenAction);
+      
+      expect(actualState).toMatchObject({
+        ...givenState,
+        status: resilienceStatus.POST,
+        isModalOpened: false
+      });
+    });
+    it('should update status', () => {
+      const givenState = {...initialState};
+      const givenAction = {
+        type: 'update_status',
+        data: {status: resilienceStatus.SUCCESS}
+      };
+
+      const actualState = reducer(givenState, givenAction);
+
+      expect(actualState).toMatchObject({
+        ...givenState,
+        status: resilienceStatus.SUCCESS,
+        isModalOpened: false
+      });
+    })
     it('should throw an error by default', (done) => {
       const givenState = {};
       const givenAction = {
@@ -111,6 +199,12 @@ describe('Page.container', () => {
   });
   
   describe('.onLockSubmit', () => {
+    
+    const testCases = [
+      [403, resilienceStatus.FORBIDDEN],
+      [500, resilienceStatus.ERROR]
+    ];
+    
     it('should fetch delete project method', async () => {
       const givenFetch = jest.fn()
           .mockResolvedValueOnce({ok: true, status: 200});
@@ -118,8 +212,21 @@ describe('Page.container', () => {
       const givenHistory = {push:jest.fn()}
       await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
       expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
-      expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'lock_project', data: {status: resilienceStatus.SUCCESS}});
+      expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'update_status', data: {status: resilienceStatus.SUCCESS}});
       expect(givenHistory.push).toHaveBeenCalledWith("/projects");
     });
+    
+    test.each(testCases)(
+        "given %p response on deletion fetch, should return related resilience status",
+        async (fetchStatus, expectedStatus) => {
+          const givenFetch = jest.fn()
+              .mockResolvedValueOnce({status: fetchStatus});
+          const givenDispatch = jest.fn();
+          const givenHistory = {push: jest.fn()};
+          await onLockSubmit(givenFetch, givenDispatch, givenHistory)("0001");
+          expect(givenDispatch).toHaveBeenNthCalledWith(1, { type: 'lock_project_start'});
+          expect(givenDispatch).toHaveBeenNthCalledWith(2, {type: 'update_status', data: {status: expectedStatus}});
+        }
+    );
   });
 });

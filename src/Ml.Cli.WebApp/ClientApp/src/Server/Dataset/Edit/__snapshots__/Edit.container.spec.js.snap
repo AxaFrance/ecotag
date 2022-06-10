@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edit.container should render correctly 1`] = `
+exports[`Edit should render correctly 1`] = `
 <DocumentFragment>
   <div
     class="edit-dataset"
@@ -104,6 +104,153 @@ exports[`Edit.container should render correctly 1`] = `
           class="lock__button-icon glyphicon glyphicon-lock"
         />
       </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Edit.container init should init correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset"
+  >
+    <div
+      class="af-title-bar af-title-bar--backhome"
+    >
+      <div
+        class="container-fluid container af-title-bar__wrapper"
+      >
+        <a
+          class="btn af-btn--circle"
+          href="/datasets"
+          title="Datasets"
+        >
+          <i
+            class="glyphicon glyphicon-arrowthin-left"
+          />
+        </a>
+        <h1
+          class="af-title-bar__title"
+        >
+          testName
+        </h1>
+        <small
+          class="af-title-bar__subtitle"
+        >
+          Edition du dataset
+        </small>
+      </div>
+    </div>
+    <div
+      class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
+    >
+      <h2
+        class="edit-dataset__file-upload-title"
+      >
+        Upload des fichiers .eml
+      </h2>
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file"
+          tabindex="0"
+        >
+          <input
+            accept="message/rfc822,application/octet-stream"
+            autocomplete="off"
+            multiple=""
+            name="datasetUploadFiles"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Glissez/déposez vos fichiers
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Parcourir
+        </button>
+      </div>
+      <div
+        class="custom-table-file af-file-table"
+      />
+      <div>
+        <button
+          class="btn af-btn"
+          id="sendFiles"
+          name="sendFiles"
+        >
+          <span
+            class="af-btn__text"
+          >
+            Envoyer
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="lock__button-container"
+    >
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        icon="lock"
+        id="lock-button"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Dataset en cours d'import
+        </span>
+        <i
+          class="lock__button-icon glyphicon glyphicon-lock"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Edit.container init should init with error message 1`] = `
+<DocumentFragment>
+  <div
+    class="resilience"
+  >
+    <div
+      class="resilicience__error-message"
+    >
+      <p>
+        Une erreur serveur est survenue.
+      </p>
+      <br />
+      <p>
+        Nous sommes au courant du problème. Une investigation est en cours...
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Edit.container init should init with forbidden message 1`] = `
+<DocumentFragment>
+  <div
+    class="resilience"
+  >
+    <div
+      class="resilicience__error-message"
+    >
+      <p>
+        Vous n'avez pas le droit d'accéder à cette ressource.
+      </p>
     </div>
   </div>
 </DocumentFragment>
