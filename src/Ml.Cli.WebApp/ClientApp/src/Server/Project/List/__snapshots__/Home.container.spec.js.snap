@@ -20,7 +20,7 @@ exports[`Home.container "ECOTAG_ANNOTATEUR" HomeContainer render correctly 1`] =
       <h1
         class="af-title-bar__title"
       >
-        Page projets
+        Projets
       </h1>
       <small
         class="af-title-bar__subtitle"
@@ -438,7 +438,7 @@ exports[`Home.container "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR" HomeContainer 
       <h1
         class="af-title-bar__title"
       >
-        Page projets
+        Projets
       </h1>
       <small
         class="af-title-bar__subtitle"

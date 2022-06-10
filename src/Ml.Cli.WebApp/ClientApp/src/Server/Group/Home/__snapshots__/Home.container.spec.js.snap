@@ -20,7 +20,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
       <h1
         class="af-title-bar__title"
       >
-        Page Equipes
+        Equipes
       </h1>
       <small
         class="af-title-bar__subtitle"
@@ -100,7 +100,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
     <h1
       class="af-title--content"
     >
-      Affichage - il y a actuellement (1) équipes
+      Il y a (1) équipes
     </h1>
     <table
       class="af-table"

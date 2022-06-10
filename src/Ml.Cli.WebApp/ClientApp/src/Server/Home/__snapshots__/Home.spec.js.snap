@@ -153,12 +153,12 @@ exports[`Home "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR,ECOTAG_ADMINISTRATEUR" Re
       </a>
       <a
         class="home__link"
-        href="/groups"
+        href="/teams"
       >
         <div
           class="home__link-container home__link-container--groups"
         >
-          Equipe
+          Equipes
         </div>
       </a>
     </div>

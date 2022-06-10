@@ -44,8 +44,8 @@ const extractDataFromOAuthToken = (idTokenPayload, oidcUser) => ({
 
 const withAuthentication = () => Component => props => {
   const { idTokenPayload } = useOidcIdToken();
-  const{ oidcUser } = useOidcUser();
-  return <Component {...props} user={extractDataFromOAuthToken(idTokenPayload, oidcUser)} />;
+  const{ oidcUser, oidcUserLoadingState } = useOidcUser();
+  return <Component {...props} user={extractDataFromOAuthToken(idTokenPayload, oidcUser)} UserLoadingState={oidcUserLoadingState} />;
 };
 
 export default withAuthentication;

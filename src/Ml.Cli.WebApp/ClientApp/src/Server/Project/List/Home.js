@@ -11,7 +11,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fe
   const numberItemsTotal = items && items.length ? items.length : 0;
   return (
       <>
-        <Title title="Page projets" subtitle="Tagger un ensemble de données" />
+        <Title title="Projets" subtitle="Tagger un ensemble de données" />
         <div className="af-home container">
           {user.roles.includes(DataScientist) && <Link className="btn af-btn af-btn--quote" to="/projects/new">
             <span className="af-btn__text">Nouveau projet</span>

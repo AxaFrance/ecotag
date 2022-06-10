@@ -4,6 +4,7 @@ import {render, waitFor} from '@testing-library/react';
 import {Home} from "./Home";
 import {BrowserRouter as Router} from "react-router-dom";
 import {Administateur, Annotateur, DataScientist} from "../withAuthentication";
+import {OidcUserStatus} from "@axa-fr/react-oidc";
 
 
 describe.each([
@@ -17,7 +18,7 @@ describe.each([
             roles:roles ? roles.split(","): [],
             name: 'Guillaume Chervet'
         }
-        const { container, asFragment } = render(<Router basename="/"><Home user={user} /></Router>);
+        const { container, asFragment } = render(<Router basename="/"><Home user={user} userLoadingState={OidcUserStatus.Loaded} /></Router>);
 
         if(roles.includes(Annotateur)) {
             await waitFor(() => expect(container.querySelector('.home__link-container--projects')).not.toBeNull());
