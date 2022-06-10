@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -21,6 +22,7 @@ using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
 using Serilog;
 using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
@@ -100,17 +102,51 @@ namespace Ml.Cli.WebApp.Server
             services
                 .AddControllersWithViews();
             
+            var oidcMode = Configuration[$"OidcMode"];
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
                 {
                     options.Events = new JwtBearerEvents
                     {
-                        OnTokenValidated = ctx =>
+                        OnTokenValidated = context =>
                         {
-                            var profiles = ctx.Principal.Identity.GetProfiles();
-                            var claims = profiles.Select(profile => new Claim(ClaimTypes.Role, profile));
-                            ((ClaimsIdentity)ctx.Principal.Identity).AddClaims(claims);
-                            return Task.CompletedTask;
+                            if (oidcMode == "AXA_FRANCE")
+                            {
+                                var profiles = context.Principal.Identity.GetProfiles();
+                                var claims = profiles.Select(profile => new Claim(ClaimTypes.Role, profile));
+                                ((ClaimsIdentity)context.Principal.Identity).AddClaims(claims);
+                                return Task.CompletedTask;
+                            }
+                            else
+                            {
+                                var usersRepository = context.HttpContext.RequestServices.GetRequiredService<UsersRepository>();
+                                var nameIdentifier = context.Principal.Identity.GetNameIdentifier();
+                                var userTask = usersRepository.GetUserByNameIdentifierAsync(nameIdentifier);
+                                userTask.Wait();
+                                var role = userTask.Result.Role;
+                                var roles = new List<string>();
+                                if (role == Roles.DataScientist)
+                                {
+                                    roles.Add(Roles.DataAnnoteur);
+                                    roles.Add(Roles.DataScientist);
+                                }
+                                else if (role == Roles.DataAdministateur)
+                                {
+                                    roles.Add(Roles.DataScientist);
+                                    roles.Add(Roles.DataAnnoteur);
+                                    roles.Add(Roles.DataAdministateur);
+                                }
+                                roles.Add(Roles.DataScientist);
+                                roles.Add(Roles.DataAnnoteur);
+                                roles.Add(Roles.DataAdministateur);
+                            
+                                var claims = roles.Select(profile => new Claim(ClaimTypes.Role, profile));
+                                ((ClaimsIdentity)context.Principal.Identity).AddClaims(claims);
+                            
+                                // If your authentication logic is based on users then add your logic here
+                                return Task.CompletedTask;
+                            }
                         }
                     };
                     

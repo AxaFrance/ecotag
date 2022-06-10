@@ -73,6 +73,7 @@ CREATE TABLE [sch_ECOTAG].[T_User](
     [USR_Id] uniqueidentifier NOT NULL DEFAULT newid(),
     [USR_Email] [varchar](254) NOT NULL,
     [USR_NameIdentifier] [varchar](32) NOT NULL,
+    [USR_Role] [varchar](128) NULL,
     CONSTRAINT [PK_T_User] PRIMARY KEY NONCLUSTERED ([USR_Id]),
     CONSTRAINT [UK_T_User_Email] UNIQUE([USR_Email]),
     CONSTRAINT [UK_T_User_NameIdentifier] UNIQUE([USR_NameIdentifier])
