@@ -75,6 +75,7 @@ export const FileUpload = ({fetch, setState, state}) => {
         let files = state.files;
         const filesList = files.filesLoad.values;
             const promises = [];
+            const promisesChunck = [];
             for (i = 0,j = filesList.length; i < j; i += chunk) {
                 temporary = filesList.slice(i, i + chunk);
                 const formData = new FormData();
@@ -86,7 +87,12 @@ export const FileUpload = ({fetch, setState, state}) => {
                     headers: {}, // This is necessary to override the default headers content-type: json
                     body: formData,
                 });
-                promises.push(responsePromise)
+                promises.push(responsePromise);
+                promisesChunck.push(responsePromise);
+                if(promisesChunck.length >= 10){
+                    await Promise.all(promisesChunck);
+                    promisesChunck.length = 0;
+                }
             }
 
         const responses = await Promise.all(promises);
