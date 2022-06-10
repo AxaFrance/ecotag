@@ -18,10 +18,15 @@ import {useHistory} from "react-router";
 const PageWithResilience = withResilience(Page);
 
 const statusCode500 = 500;
+const statusCodeForbidden = 403;
 
 export const init = (fetch, dispatch) => async id => {
   const projectResponse = await fetchProject(fetch)(id);
   
+  if(projectResponse.status === statusCodeForbidden){
+    dispatch({ type: 'init', data: { project:null, dataset:null, group:null, users: [], status: resilienceStatus.FORBIDDEN } });
+    return;
+  }
   if(projectResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
@@ -34,6 +39,10 @@ export const init = (fetch, dispatch) => async id => {
   
   const [datasetResponse, groupResponse, usersResponse, annotationsStatusResponse] = await Promise.all([datasetPromise, groupPromise, usersPromise, annotationsStatusPromise]);
 
+  if(datasetResponse.status === statusCodeForbidden || annotationsStatusResponse.status === statusCodeForbidden){
+    dispatch({ type: 'init', data: { project:null, dataset:null, annotationsStatus:null, group:null, users: [], status: resilienceStatus.FORBIDDEN } });
+    return;
+  }
   if(datasetResponse.status >= statusCode500 || groupPromise.status >= statusCode500 || usersResponse.status >= statusCode500 || annotationsStatusResponse.status >= statusCode500){
     dispatch({ type: 'init', data: { project:null, dataset:null, annotationsStatus:null, group:null, users: [], status: resilienceStatus.ERROR } });
     return;
@@ -45,7 +54,7 @@ export const init = (fetch, dispatch) => async id => {
   
   dispatch({ type: 'init', data: { project, dataset, group, users, annotationsStatus, status: resilienceStatus.SUCCESS } });
 };
-const lock_project = 'lock_project';
+const update_status = 'update_status';
 const lock_project_start = 'lock_project_start';
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -75,7 +84,7 @@ export const reducer = (state, action) => {
         isModalOpened: false
       };
     }
-    case lock_project: {
+    case update_status: {
       const {status} = action.data;
       return {
         ...state,
@@ -114,12 +123,12 @@ export const onLockSubmit = (fetch, dispatch, history) => async id => {
   dispatch({type: lock_project_start});
   let data;
   const response = await fetchDeleteProject(fetch)(id);
-  if (response.status >= statusCode500) {
-    data = {status: resilienceStatus.ERROR};
-    dispatch({data, type: lock_project});
+  if (response.status === statusCodeForbidden || response.status >= statusCode500) {
+    data = {status: response.status === statusCodeForbidden ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR};
+    dispatch({data, type: update_status});
   } else {
     data = {status: resilienceStatus.SUCCESS};
-    dispatch({data, type: lock_project});
+    dispatch({data, type: update_status});
     history.push("/projects");
   }
 }
@@ -128,7 +137,14 @@ const usePage = (fetch) => {
   const { id } = useParams();
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const onExport = projectId => fetchExportAnnotations(fetch)(projectId);
+  const onExport = projectId => {
+    const response = fetchExportAnnotations(fetch)(projectId);
+    if(response.status === 403 || response.status >= 500){
+      dispatch({type: update_status, data: {status: response.status === 403 ? resilienceStatus.FORBIDDEN : resilienceStatus.ERROR}});
+      return;
+    }
+    return response;
+  };
   const open_modal = 'open_modal';
   const lock = {
     onCancel: () => dispatch({type: open_modal, data: {isModalOpened: false}}),

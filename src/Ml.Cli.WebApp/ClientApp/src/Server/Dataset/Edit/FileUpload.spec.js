@@ -1,6 +1,5 @@
 ﻿import { render } from '@testing-library/react';
 import {FileUpload} from "./FileUpload";
-import {BrowserRouter as Router} from "react-router-dom";
 
 describe('FileUpload', () => {
 
