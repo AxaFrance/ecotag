@@ -3,8 +3,9 @@ import Title from "../../TitleBar";
 import {Link} from 'react-router-dom';
 import './Home.scss';
 import withAuthentication, { Administateur, Annotateur, DataScientist } from "../withAuthentication";
+import {OidcUserStatus} from "@axa-fr/react-oidc";
 
-export const Home = ({ user: { roles = [] } }) => (
+export const Home = ({ user: { roles = [] }, userLoadingState }) => (
     <div className="home">
         <Title title="Accueil" goButton={false}/>
         <div className="home__links-container">
@@ -14,11 +15,11 @@ export const Home = ({ user: { roles = [] } }) => (
             { roles.includes(DataScientist) && <Link className="home__link" to="/datasets">
                 <div className="home__link-container home__link-container--datasets">Datasets</div>
             </Link>}
-            { roles.includes(Administateur) && <Link className="home__link" to="/groups">
-                <div className="home__link-container home__link-container--groups">Groupes</div>
+            { roles.includes(Administateur) && <Link className="home__link" to="/teams">
+                <div className="home__link-container home__link-container--groups">Equipes</div>
             </Link>}
         </div>
-        {(!roles.includes(Annotateur) && !roles.includes(DataScientist) && !roles.includes(Administateur)) && <p>Vous n'avez aucun rôle attribué à votre profile.</p>}
+        {(!roles.includes(Annotateur) && !roles.includes(DataScientist) && !roles.includes(Administateur) && userLoadingState === OidcUserStatus.Loaded) && <p>Vous n'avez aucun rôle attribué à votre profile.</p>}
     </div>
 );
 

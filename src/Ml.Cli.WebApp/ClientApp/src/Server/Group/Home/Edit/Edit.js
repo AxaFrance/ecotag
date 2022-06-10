@@ -61,7 +61,7 @@ const Edit = ({
       isOpen={isManageUsersModalVisible}
       onOutsideTap={() => setManageUsersModalVisible(false)}>
       <Modal.HeaderBase>
-        <p>Ajouter/Supprimer des utilisateurs à ce groupe</p>
+        <p>Ajouter/Supprimer des utilisateurs de cette équipe</p>
       </Modal.HeaderBase>
       <Modal.Body>
         <Users

@@ -67,7 +67,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 {...fields[LABELS]}
               />
               <MultiSelectInput
-                label="Groupe"
+                label="Equipe"
                 name={GROUP}
                 id={GROUP}
                 onChange={onChange}

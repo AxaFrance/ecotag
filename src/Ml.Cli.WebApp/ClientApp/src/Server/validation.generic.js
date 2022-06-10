@@ -26,7 +26,6 @@ export const computeInitialStateErrorMessage = (state, rules) => {
 
 export const validate = (rules, value) => {
   const validationResult = Validate.validation.firstError(Validate.validation.validateView(value, rules));
-
   return validationResult != null ? validationResult.message : null;
 };
 

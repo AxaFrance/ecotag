@@ -39,7 +39,7 @@ exports[`Check Dataset ItemsTable behaviour Should render correctly 1`] = `
             <span
               class="af-table__th-content"
             >
-              Groupe
+              Equipe
             </span>
           </th>
           <th

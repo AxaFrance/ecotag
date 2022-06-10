@@ -21,7 +21,7 @@ const Home = ({
               }) => {
   return (
       <>
-        <Title subtitle="Gestion des groupes d'annotateurs" title="Page Groupes"  />
+        <Title subtitle="Gestion des équipes d'annotateurs" title="Equipes"  />
         <div className="af-home container">
           <h1 className="af-title--content">Création</h1>
           <New
@@ -32,7 +32,7 @@ const Home = ({
               onSubmitCreateGroup={onSubmitCreateGroup}
           />
           <h1 className="af-title--content">
-            {`Affichage - il y a actuellement (${numberItemsTotal}) groupes`}
+            {`Il y a (${numberItemsTotal}) équipes`}
           </h1>
           <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément">
             <ItemsTable

@@ -118,7 +118,7 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('groupName')}
-                            headerColumnName={'Groupe'}
+                            headerColumnName={'Equipe'}
                             filterColumnValue={filters.columns.groupName.value}
                         />
                         <HeaderColumnCell

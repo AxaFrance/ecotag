@@ -64,7 +64,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                 <span className="af-table__th-content">Nom</span>
                             </Table.Th>
                             <Table.Th>
-                                <span className="af-table__th-content">Groupe</span>
+                                <span className="af-table__th-content">Equipe</span>
                             </Table.Th>
                             <Table.Th>
                                 <span className="af-table__th-content">Classification</span>
