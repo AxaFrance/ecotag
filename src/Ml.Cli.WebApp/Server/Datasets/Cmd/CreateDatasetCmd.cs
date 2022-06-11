@@ -22,7 +22,7 @@ public record CreateDatasetCmdInput
     [RegularExpression("(?im)^[{(]?[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?$")]
     public string GroupId { get; set; }
 
-    [MaxLength(32)] [MinLength(1)] public string CreatorNameIdentifier { get; set; }
+    [MaxLength(64)] [MinLength(1)] public string CreatorNameIdentifier { get; set; }
     
     [MaxLength(256)]
     [MinLength(3)]

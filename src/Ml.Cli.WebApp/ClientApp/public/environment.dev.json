@@ -17,5 +17,8 @@
     "instrumentationKey": "",
     "logLevel": "DEBUG",
     "active": false
+  },
+  "dataset": {
+    "isBlobImportActive": false
   }
 }
