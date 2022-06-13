@@ -165,12 +165,15 @@ export const reducer = (state, action) => {
                 }
                 return previousValue;
               }
+              
               newFields = {
                 ...newFields,
                 [TYPE]: {
                   ...fields[TYPE],
+                  value: '',
                   options : options.reduce(reducer, [])
                 }};
+              
               return {
                 ...state,
                 fields: newFields,
