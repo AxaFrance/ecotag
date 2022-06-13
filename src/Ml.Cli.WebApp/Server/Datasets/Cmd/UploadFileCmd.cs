@@ -37,7 +37,6 @@ public record UploadFileCmdInput
 public class UploadFileCmd
 {
     public const string FileTooLarge = "FileTooLarge";
-    public const int Mb = 1048576;
 
     public const string DatasetLocked = "DatasetLocked";
     public const string UserNotInGroup = "UserNotInGroup";

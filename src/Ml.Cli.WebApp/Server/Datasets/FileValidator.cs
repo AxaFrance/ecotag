@@ -6,8 +6,9 @@ namespace Ml.Cli.WebApp.Server.Datasets;
 
 public static class FileValidator
 {
-    private const int Mb = 1048576;
-    
+    public const int Mb = 1048576;
+    public const int MaxFileSize = 128;
+
     public static bool IsFileExtensionValid(string fileName, string datasetType)
     {
         var extension = Path.GetExtension(fileName)?.ToLower();
@@ -30,8 +31,9 @@ public static class FileValidator
         return true;
     }
 
+    
     public static bool IsFileSizeValid(Stream fileStream)
     {
-        return fileStream.Length < 32 * Mb;
+        return fileStream.Length < MaxFileSize * Mb;
     }
 }
