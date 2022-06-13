@@ -19,6 +19,6 @@
     "active": false
   },
   "dataset": {
-    "isBlobImportActive": false
+    "isBlobTransferActive": false
   }
 }

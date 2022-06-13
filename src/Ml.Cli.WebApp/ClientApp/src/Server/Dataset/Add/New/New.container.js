@@ -151,7 +151,7 @@ export const init = (fetch, dispatch) => async () => {
 
 const useNew = (history, fetch, telemetry, environment) => {
   let iniStateReducer = initState;
-  if(!environment.dataset.isBlobImportActive){
+  if(!environment.dataset.isBlobTransferActive) {
     iniStateReducer={...initState,fields: {
          ...initState.fields,
         [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: false, message: "", isVisible:false},
@@ -172,7 +172,7 @@ const useNew = (history, fetch, telemetry, environment) => {
         [CLASSIFICATION]: fields[CLASSIFICATION].value
       }
       if(fields[DATASETS_IMPORT].isChecked){
-        newDataset[IMPORTED_DATASET_NAME] = fields[IMPORTED_DATASET_NAME].value
+        newDataset[IMPORTED_DATASET_NAME] = fields[IMPORTED_DATASET_NAME].value;
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
       if(response.status >= 500){

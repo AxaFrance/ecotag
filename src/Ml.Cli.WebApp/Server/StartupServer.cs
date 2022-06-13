@@ -149,8 +149,8 @@ namespace Ml.Cli.WebApp.Server
                             }
                         }
                     };
-                    var validateAudience = !String.IsNullOrEmpty(oidcUserSettings.RequireAudience);
-                    if (validateAudience)
+                    var isValidateAudience = !String.IsNullOrEmpty(oidcUserSettings.RequireAudience);
+                    if (isValidateAudience)
                     {
                         options.Audience = oidcUserSettings.RequireAudience;
                     }
@@ -173,7 +173,7 @@ namespace Ml.Cli.WebApp.Server
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = false,
+                        ValidateAudience = isValidateAudience,
                         ValidateLifetime = true,
                         RequireSignedTokens = true
                     };

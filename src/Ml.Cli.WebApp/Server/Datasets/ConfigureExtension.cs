@@ -14,6 +14,8 @@ public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<DatasetsSettings>(
+            configuration.GetSection(DatasetsSettings.Datasets));
         services.AddScoped<IFileService, FileService>();
         services.AddDbContext<DatasetContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
