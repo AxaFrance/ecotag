@@ -275,44 +275,5 @@ CREATE CLUSTERED INDEX [IND_GroupName] ON [sch_ECOTAG].[T_Group]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
 GO
 
-DECLARE @firstUserId uniqueidentifier
-DECLARE @secondUserId uniqueidentifier
-DECLARE @thirdUserId uniqueidentifier
-
-DECLARE @firstGroupId uniqueidentifier
-DECLARE @secondGroupId uniqueidentifier
-DECLARE @thirdGroupId uniqueidentifier
-
-DECLARE @firstProjectId uniqueidentifier
-DECLARE @secondProjectId uniqueidentifier
-DECLARE @thirdProjectId uniqueidentifier
-
-SET @firstUserId = newid()
-SET @secondUserId = newid()
-SET @thirdUserId = newid()
-
-SET @firstGroupId = newid()
-SET @secondGroupId = newid()
-SET @thirdGroupId = newid()
-
-SET @firstProjectId = newid()
-SET @secondProjectId = newid()
-SET @thirdProjectId = newid()
-
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@firstUserId,"first@gmail.com","S111111")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@secondUserId,"second@gmail.com","S222222")
-INSERT INTO [sch_ECOTAG].[T_User]([USR_Id],[USR_Email],[USR_NameIdentifier]) VALUES (@thirdUserId,"third@gmail.com","S333333")
-
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@firstGroupId, "firstgroup", "S111111", 637831187822285511, 637831187822285511)
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@secondGroupId, "secondgroup", "S111111", 637831187625235412, 637831187822285511)
-INSERT INTO [sch_ECOTAG].[T_Group]([GRP_Id],[GRP_Name],[GRP_CREATORNAMEIDENTIFIER],[GRP_CREATEDATE],[GRP_UpdateDate]) VALUES (@thirdGroupId, "thirdgroup", "S222222", 637831187822285511, 637831187822285511)
-
-INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @firstUserId)
-INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @secondUserId)
-INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @firstGroupId, @thirdUserId)
-INSERT INTO [sch_ECOTAG].[T_GroupUsers]([GPU_Id],[GRP_Id],[USR_Id]) VALUES (newid(), @secondGroupId, @secondUserId)
-
-GO
-
 USE [ecotag]
 GO
