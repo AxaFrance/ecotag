@@ -151,7 +151,7 @@ export const init = (fetch, dispatch) => async () => {
 
 const useNew = (history, fetch, telemetry, environment) => {
   let iniStateReducer = initState;
-  if(!environment.dataset.isBlobTransferActive) {
+  if(!environment.datasets.isBlobTransferActive) {
     iniStateReducer={...initState,fields: {
          ...initState.fields,
         [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: false, message: "", isVisible:false},

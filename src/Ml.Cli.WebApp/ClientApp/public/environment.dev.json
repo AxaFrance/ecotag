@@ -18,7 +18,7 @@
     "logLevel": "DEBUG",
     "active": false
   },
-  "dataset": {
+  "datasets": {
     "isBlobTransferActive": false
   }
 }

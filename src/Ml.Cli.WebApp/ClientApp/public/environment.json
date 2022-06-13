@@ -17,5 +17,8 @@
     "instrumentationKey": "#{Spa:AppInsights:InstrumentationKey}#",
     "logLevel": "#{Spa:AppInsights:LogLevel}#",
     "active": #{Spa:AppInsights:Active}#
+  },
+  "datasets": {
+    "isBlobTransferActive": #{Spa:Datasets:IsBlobTransferActive}#
   }
 }
