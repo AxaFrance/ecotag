@@ -171,6 +171,7 @@ export const reducer = (state, action) => {
                 [TYPE]: {
                   ...fields[TYPE],
                   value: '',
+                  message:MSG_REQUIRED,
                   options : options.reduce(reducer, [])
                 }};
               
