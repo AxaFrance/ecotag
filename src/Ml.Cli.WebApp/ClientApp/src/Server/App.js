@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { OidcProvider, withOidcSecure } from '@axa-fr/react-oidc';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {OidcProvider, OidcSecure} from '@axa-fr/react-oidc';
 import EnvironmentProvider, { withEnvironment } from './EnvironmentProvider';
 import './App.scss';
 import Header from './shared/Header';
@@ -15,29 +15,34 @@ import Authenticating from "./shared/Oidc/Authenticating.component";
 import SessionLost from "./shared/Oidc/SessionLost.component";
 import ServiceWorkerNotSupported from "./shared/Oidc/ServiceWorkerNotSupported.component";
 import {CallBackSuccess} from "./shared/Oidc/Callback.component";
+import AccessToken from "./AccessToken";
 
-export const RoutesBase = ({ environment }) => (
-  <Router basename={environment.baseUrl}>
-      <Header />
-      <Routes />
-      <Footer />
-  </Router>
-);
+const AppWithOidcProvider = withEnvironment(({ environment }) => (
+    <OidcProvider configuration={environment.oidc.configuration}
+                  loadingComponent={Loading}
+                  authenticatingErrorComponent={AuthenticatingError}
+                  authenticatingComponent={Authenticating}
+                  sessionLostComponent={SessionLost}
+                  serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
+                  callbackSuccessComponent={CallBackSuccess}>
+        <TelemetryProvider {...environment.telemetry} >
+            <OidcSecure>
+                <Header />
+                <Routes />
+                <Footer />
+            </OidcSecure>
+        </TelemetryProvider>
+    </OidcProvider>));
 
-const SecureRouteBase = withOidcSecure(RoutesBase);
+
 
 const Authentification = ({ environment }) => (
-      <OidcProvider configuration={environment.oidc.configuration}
-                    loadingComponent={Loading}
-                    authenticatingErrorComponent={AuthenticatingError}
-                    authenticatingComponent={Authenticating}
-                    sessionLostComponent={SessionLost}
-                    serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
-                    callbackSuccessComponent={CallBackSuccess}>
-          <TelemetryProvider {...environment.telemetry} >
-              <SecureRouteBase environment={environment} />
-          </TelemetryProvider>
-      </OidcProvider>
+    <Router basename={environment.baseUrl}>
+        <Switch>
+            <Route path="/access_token" component={AccessToken}    />
+            <Route component={AppWithOidcProvider} />
+        </Switch>
+    </Router>
 );
 
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
