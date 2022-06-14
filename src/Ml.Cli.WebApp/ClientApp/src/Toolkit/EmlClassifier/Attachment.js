@@ -3,6 +3,7 @@ import {useEffect} from "react";
 import MailWithAttachment from "./MailWithAttachment";
 import PdfAttachment from "./PdfAttachment";
 import DownloadAttachment from "./DownloadAttachment";
+import TxtAttachment from "./TxtAttachment";
 
 export const formatTitle =(level, filename) => {
     if(!level){
@@ -72,6 +73,13 @@ const Attachment = ({attachment, onChange, styleImageContainer }) => {
                 <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <PdfAttachment blob={attachment.blob} id={id} onChange={onChange}/>
+                </div>
+            </div>
+        case "text/plain":
+            return <div id={id}>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <div ref={ref} style={styleImageContainer}>
+                    <TxtAttachment blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
             </div>
         default:

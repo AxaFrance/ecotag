@@ -261,7 +261,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
                 <div id="email-container">
                     <div className="eml__container" >
                         <div>
-                            <MailSummary mmary attachment={document} setState={setState} state={state} labels={labels} title={"Document"} />
+                            <MailSummary mmary attachment={document} setState={setState} state={state} labels={labels} title={filename} />
                         </div>
                         <div>
                             <Attachment attachment={document} styleImageContainer={styleImageContainer} onChange={onChange} />

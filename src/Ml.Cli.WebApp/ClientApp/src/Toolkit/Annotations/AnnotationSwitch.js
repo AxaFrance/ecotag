@@ -37,10 +37,8 @@ const setAnnotationObject = (annotationType, e) => {
         case 'NER':
             return e;
         case "ImageClassifier":
-            return {
-                "label": e
-            };
         case "EmlClassifier":
+        case "DocumentClassifier":
             return {
                 "label": e
             };
