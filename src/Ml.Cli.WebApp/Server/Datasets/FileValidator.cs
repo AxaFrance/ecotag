@@ -22,6 +22,11 @@ public static class FileValidator
             var emlExtension = new List<string> { ".eml" };
             if (!emlExtension.Contains(extension)) return false;
         }
+        else if (datasetType == DatasetTypeEnumeration.Document.ToString())
+        {
+            var emlExtension = new List<string> { ".eml", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".txt",  ".doc", ".docx", ".xml", ".html", ".rtf" };
+            if (!emlExtension.Contains(extension)) return false;
+        }
         else
         {
             var textExtension = new List<string> { ".txt" };

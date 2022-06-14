@@ -13,7 +13,7 @@ public record CreateDatasetCmdInput
     [RegularExpression(@"^[a-zA-Z0-9-_]*$")]
     public string Name { get; set; }
 
-    [RegularExpression(@"Image|Text|Eml")] public string Type { get; set; }
+    [RegularExpression(@"Image|Text|Eml|Document")] public string Type { get; set; }
 
     [RegularExpression(@"Public|Internal|Confidential|Critical$")]
     public string Classification { get; set; }

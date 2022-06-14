@@ -39,7 +39,7 @@ const AppWithOidcProvider = withEnvironment(({ environment }) => (
 const Authentification = ({ environment }) => (
     <Router basename={environment.baseUrl}>
         <Switch>
-            <Route path="/access_token" component={AccessToken}    />
+            <Route path="/access-token" component={AccessToken}    />
             <Route component={AppWithOidcProvider} />
         </Switch>
     </Router>

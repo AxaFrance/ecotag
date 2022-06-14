@@ -9,6 +9,11 @@ import Attachments from "./Attachments";
 
 import "./EmlClassifier.scss";
 import MailSummary from "./MailSummary";
+import Attachment from "./Attachment";
+
+const isEml =(blob) =>{
+    return blob.mimeType === "message/rfc822" || (blob.mimeType === "application/octet-stream" && blob.filename.toLocaleLowerCase().endsWith(".eml"))
+}
 
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
@@ -63,7 +68,7 @@ async function parseMessageAsync(file, level=0) {
     let finalAttachments = [];
     for(let i=0;i<attachments.length; i++) {
         let attachment = attachments[i];
-        if (attachment.mimeType === "message/rfc822" || (attachment.mimeType === "application/octet-stream" && attachment.filename.toLocaleLowerCase().endsWith(".eml"))) {
+        if (isEml(attachment)) {
             const message = await parseMessageAsync(attachment.blob, attachment.level);
             const newAttachment = {...attachment,...message};
             finalAttachments.push(newAttachment);
@@ -86,16 +91,43 @@ const onFileChange = (state, setState) => async (e) => {
     }
     setState({ ...state, loaderMode:LoaderModes.get, mail: null, annotation :{classification:null}});
     const file = e.target.files[0];
-    const messageFormatted = await parseMessageAsync(file);
-    setState({...state, loaderMode:LoaderModes.none, mail: messageFormatted });
+    const filename = e.currentTarget.value;
+    const isEmlInput = { filename,  mimeType:file.type};
+    if(isEml(isEmlInput)) {
+        const messageFormatted = await parseMessageAsync(file);
+        setState({...state, loaderMode: LoaderModes.none, document: null, mail: messageFormatted});
+    }
+    else{
+        const document = {
+            blob:file,
+            filename,
+            mimeType:file.type,
+            id : cuid(),
+            level:0
+        }
+        setState({...state, loaderMode: LoaderModes.none, document, mail: null});
+    }
 }
 
-const initAsync = async (url, expectedOutput) => {
+const initAsync = async (url, expectedOutput, filename) => {
     const response = await fetch(url);
     const blob = await response.blob();
-    const message = await parseMessageAsync(blob);
     let annotation = expectedOutput ? expectedOutput : {label:null};
-    return {mail:message, annotation};
+    const isEmlInput = { filename,  mimeType:blob.type};
+    if(isEml(isEmlInput)){
+        const message = await parseMessageAsync(blob);
+        return {mail:message, document:null, annotation};
+    }
+    
+    const document = {
+        blob,
+        filename,
+        mimeType:blob.type,
+        id : cuid(),
+        level:0,
+        isVisibleScreen:true,
+    }
+    return {mail: null, document:document, annotation};
 }
 
 const findAttachment =(attachment, id, level=0) =>{
@@ -141,19 +173,20 @@ const updateAttachments =(attachments, id, dataToAdd) =>{
 }
 
 
-const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
+const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachment'}) => {
     const [state, setState] = useState({
         fontSize:60,
         loaderMode: LoaderModes.get,
         mail:null,
+        document:null,
         annotation: {label: null},
     });
 
     useEffect( () => {
         let isMounted = true;
         if (url) {
-            setState({...state, loaderMode : LoaderModes.get, mail:null, annotation :{label:null}});
-            initAsync(url, expectedOutput).then((data)=> {
+            setState({...state, loaderMode : LoaderModes.get, mail:null, document:null, annotation :{label:null}});
+            initAsync(url, expectedOutput, filename).then((data)=> {
                 if(isMounted) {
                     setState({...state, loaderMode: LoaderModes.none, ...data});
                 }
@@ -162,7 +195,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
         return () => {
             isMounted = false;
         };
-    }, [url, expectedOutput, labels]);
+    }, [url, expectedOutput, labels, filename]);
 
     const styleImageContainer= {
         zoom: `${state.fontSize}%`
@@ -204,6 +237,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
     }
     
     const mail = state.mail;
+    const document = state.document;
     return <div id="main">
         {!url && <div>
             <h1>Front-end Email Parser Demo</h1>
@@ -211,7 +245,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                 <input type="file" onChange={onFileChange(state, setState)} />
             </form>
         </div>}
-        <Loader mode={state.loaderMode} text={"Your browser is extracting the eml"}>
+        <Loader mode={state.loaderMode} text={"Your browser is extracting data"}>
             {mail != null && <div id="email-container">
                 <div className="eml__container" >
                     <div>
@@ -223,6 +257,17 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput}) => {
                     </div>
                 </div>
             </div>}
+            {document != null &&
+                <div id="email-container">
+                    <div className="eml__container" >
+                        <div>
+                            <MailSummary mmary attachment={document} setState={setState} state={state} labels={labels} title={"Document"} />
+                        </div>
+                        <div>
+                            <Attachment attachment={document} styleImageContainer={styleImageContainer} onChange={onChange} />
+                        </div>
+                    </div>
+                </div>}
         </Loader>
         <Toolbar
             state={state}

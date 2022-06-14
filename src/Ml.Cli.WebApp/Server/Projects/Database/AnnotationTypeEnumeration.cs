@@ -7,5 +7,6 @@ public enum AnnotationTypeEnumeration
     NamedEntity = 2,
     Ocr = 3,
     Rotation = 4,
-    EmlClassifier = 5
+    EmlClassifier = 5,
+    DocumentClassifier = 6
 }

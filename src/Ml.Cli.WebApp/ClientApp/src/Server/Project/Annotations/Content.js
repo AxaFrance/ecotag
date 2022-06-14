@@ -7,12 +7,13 @@ import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 import Loader, {LoaderModes} from '@axa-fr/react-toolkit-loader';
 import {annotationItemStatus} from "./Annotation.reducer";
 
-const AnnotationDispatch = ({ annotationType, labels, url, onSubmit,expectedOutput={} }) => {
+const AnnotationDispatch = ({ annotationType, labels, url, onSubmit,expectedOutput={}, filename }) => {
     return <AnnotationSwitch
         url={url}
         annotationType={annotationType}
         labels ={labels}
         expectedOutput={expectedOutput}
+        filename={filename}
         onSubmit={onSubmit}
     />
 };
@@ -67,6 +68,7 @@ export const Content = ({project, currentItem, onSubmit, onNext, onPrevious, has
                                     text={getText(currentItem)}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}
                                     annotationType={project.annotationType} labels={project.labels} onSubmit={onSubmit}
+                                    filename={currentItem.fileName}
                                     url={currentItem.blobUrl} />
             </> : null);
     }};

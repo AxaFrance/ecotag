@@ -156,7 +156,12 @@ export const reducer = (state, action) => {
                     value: 'EmlClassifier',
                     label: "Classification de mail",
                     type: "Eml"
-                  }];
+                  },
+                {
+                  value: 'DocumentClassifier',
+                  label: "Classification de document",
+                  type: "Document"
+                }];
               const datasetId = event.value;
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
               const reducer = (previousValue, currentValue) => {

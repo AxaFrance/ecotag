@@ -11,6 +11,8 @@ const typeDatasetExtention = (datasetType) =>  {
             return '.jpg, .jpeg, .png, .tiff';
         case "Text":
             return '.txt';
+        case "Document":
+            return '.eml, .txt, .jpg, .jpeg, .png, .tiff, etc.';
         default:
             return '.eml';
     }
@@ -22,6 +24,8 @@ const typeMimeDatasetExtention = (datasetType) =>  {
             return 'image/jpeg, image/png, image/tiff';
         case "Text":
             return 'text/plain';
+        case "Document":
+            return '';
         default:
             return "message/rfc822,application/octet-stream";
     }

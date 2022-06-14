@@ -131,7 +131,7 @@ public class DatasetsRepository
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var file = await _datasetContext.Files.Include(f => f.Dataset).AsNoTracking().Where(file =>
-            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId)).Select(f => new {Filename = f.Name, BlobDirectoryUri = f.Dataset.BlobUri}).FirstOrDefaultAsync();
+            file.Id == new Guid(fileId) && file.DatasetId == new Guid(datasetId)).Select(f => new {Filename = f.Name, f.ContentType, BlobDirectoryUri = f.Dataset.BlobUri}).FirstOrDefaultAsync();
         if (file == null)
         {
             result.Error = new ErrorResult
@@ -141,7 +141,15 @@ public class DatasetsRepository
             return result;
         }
         
-        return await _fileService.DownloadAsync($"{file.BlobDirectoryUri}/{file.Filename}");
+        var fileDownloaded = await _fileService.DownloadAsync($"{file.BlobDirectoryUri}/{file.Filename}");
+        if (!fileDownloaded.IsSuccess)
+        {
+            return fileDownloaded;
+        }
+
+        var fileServiceDataModel = fileDownloaded.Data;
+        result.Data = fileServiceDataModel with { ContentType = file.ContentType };
+        return result;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateFileAsync(string datasetId, Stream stream,
