@@ -66,6 +66,7 @@ namespace Ml.Cli.JobApiCall
             var numberIteration =
                 jObject.ContainsKey("numberIteration") ? (int) jObject.Property("numberIteration") : 1;
             var numberParallel = jObject.ContainsKey("numberParallel") ? (int) jObject.Property("numberParallel") : 1;
+            var waitTimeMsBetweenRequest = jObject.ContainsKey("waitTimeMsBetweenRequest") ? (int) jObject.Property("waitTimeMsBetweenRequest") : 0;
 
             if (!jObject.ContainsKey("Authorization"))
             {
@@ -112,7 +113,8 @@ namespace Ml.Cli.JobApiCall
                 uri,
                 tokenSortByFileType,
                 numberIteration,
-                numberParallel
+                numberParallel,
+                waitTimeMsBetweenRequest
             );
         }
 
