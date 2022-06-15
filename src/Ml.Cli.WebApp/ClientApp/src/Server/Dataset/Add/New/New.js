@@ -59,7 +59,7 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets })
               onChange={onChange}
               options={[
                 { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
-                { value: 'Document', label: 'Documents (.txt, .eml, .jpg, .png, jpeg, .tiff, etc.)' },
+                { value: 'Document', label: 'Documents (.txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .rtf, .odt, .zip)' },
                 { value: 'Text', label: 'Text (.txt)' }, 
                 { value: 'Eml', label: 'Mail (.eml)' },
               ]}

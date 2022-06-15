@@ -18,7 +18,7 @@ const AccessTokenWithProvider = withEnvironment(({environment}) => {
         scope : config.scope.replace("offline_access", ""),
         service_worker_relative_url: null,
         service_worker_only:false,
-        redirect_uri: window.location.origin + '/access_token/authentication/callback'
+        redirect_uri: window.location.origin + '/access-token/authentication/callback'
     };
 
     return <OidcProvider configuration={configuration} configurationName={configurationName}

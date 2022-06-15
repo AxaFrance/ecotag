@@ -24,7 +24,7 @@ public static class FileValidator
         }
         else if (datasetType == DatasetTypeEnumeration.Document.ToString())
         {
-            var emlExtension = new List<string> { ".eml", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".txt",  ".doc", ".docx", ".xml", ".html", ".rtf" };
+            var emlExtension = new List<string> { ".eml", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".txt",  ".doc", ".docx", ".pdf", ".rtf",".odt", ".zip", ".msg" };
             if (!emlExtension.Contains(extension)) return false;
         }
         else
