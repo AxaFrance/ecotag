@@ -176,7 +176,7 @@ internal static class DatasetMock
         var fileModel = new FileModel
         {
             DatasetId = dataset1Id,
-            ContentType = "MyContent",
+            ContentType = "image/png",
             CreateDate = DateTime.Now.Ticks,
             Name = "demo.png",
             Size = 20,
@@ -185,7 +185,7 @@ internal static class DatasetMock
         var fileModel2 = new FileModel
         {
             DatasetId = dataset3Id,
-            ContentType = "MyContent",
+            ContentType = "image/png",
             CreateDate = DateTime.Now.Ticks,
             Name = "demo.png",
             Size = 20,
@@ -202,7 +202,7 @@ internal static class DatasetMock
             var f = new FileModel
             {
                 DatasetId = dataset3Id,
-                ContentType = "MyContent",
+                ContentType = "image/png",
                 CreateDate = DateTime.Now.Ticks,
                 Name = $"demo{i}.png",
                 Size = 20,
