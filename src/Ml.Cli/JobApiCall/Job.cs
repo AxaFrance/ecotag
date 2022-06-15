@@ -74,7 +74,11 @@ namespace Ml.Cli.JobApiCall
                     {
                         foreach (var currentFile in listsOfFile)
                         {
-                            await PlayData(httpClient, inputTask, currentFile, extension, outputDirectory);
+                            await PlayDataAsync(httpClient, inputTask, currentFile, extension, outputDirectory);
+                            if (inputTask.WaitTimeMsBetweenRequest > 0)
+                            {
+                                await Task.Delay(inputTask.WaitTimeMsBetweenRequest);
+                            }
                         }
                     });
                     tasks.Add(task);
@@ -85,7 +89,7 @@ namespace Ml.Cli.JobApiCall
             }
         }
 
-        private async Task PlayData(HttpClient httpClient, Callapi inputTask, string currentFile, string extension, string outputDirectory)
+        private async Task PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFile, string extension, string outputDirectory)
         {
             if (Path.GetExtension(currentFile) == ".json")
             {
