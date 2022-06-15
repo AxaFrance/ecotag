@@ -19,7 +19,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
         tabindex="0"
       >
         <input
-          accept="message/rfc822,application/octet-stream"
+          accept="message/rfc822, application/octet-stream"
           autocomplete="off"
           multiple=""
           name="datasetUploadFiles"
@@ -67,7 +67,7 @@ exports[`FileUpload given "Image" should render correctly 1`] = `
     <h2
       class="edit-dataset__file-upload-title"
     >
-      Upload des fichiers .jpg, .jpeg, .png, .tiff
+      Upload des fichiers .jpg, .jpeg, .png, .tiff, .tif
     </h2>
     <div
       class="af-form__file-input"
