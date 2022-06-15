@@ -8,9 +8,11 @@ import {Locked} from "../Dataset.service";
 const typeDatasetExtention = (datasetType) =>  {
     switch (datasetType){
         case "Image":
-            return '.jpg, .jpeg, .png, .tiff';
+            return '.jpg, .jpeg, .png, .tiff, .tif';
         case "Text":
             return '.txt';
+        case "Document":
+            return '.txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .rtf, .odt, .zip';
         default:
             return '.eml';
     }
@@ -22,8 +24,10 @@ const typeMimeDatasetExtention = (datasetType) =>  {
             return 'image/jpeg, image/png, image/tiff';
         case "Text":
             return 'text/plain';
+        case "Document":
+            return 'message/rfc822, application/octet-stream, text/plain, image/jpeg, image/png, image/tiff, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text, application/pdf, application/rtf, application/zip';
         default:
-            return "message/rfc822,application/octet-stream";
+            return "message/rfc822, application/octet-stream";
     }
 }
 

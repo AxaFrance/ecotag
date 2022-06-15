@@ -30,6 +30,7 @@ public static class AnnotationInputValidator
                 }
                 break;
             case AnnotationTypeEnumeration.EmlClassifier:
+            case AnnotationTypeEnumeration.DocumentClassifier:
             case AnnotationTypeEnumeration.ImageClassifier:
                 var annotationImageClassifier =
                     DeserializeAnnotation<AnnotationImageClassifier>(expectedOutput, logger);

@@ -15,7 +15,7 @@ const SideAttachements = ({attachments, level=0}) =>{
     </ul>
 }
 
-const MailSummary = ({attachment, state, setState, labels}) => {
+const MailSummary = ({attachment, state, setState, labels, title="Mail principal"}) => {
 
     let options = [
         { value: 'fun', label: 'For fun' },
@@ -44,9 +44,9 @@ const MailSummary = ({attachment, state, setState, labels}) => {
         <h3>Mail</h3>
         <ul style={{backgroundColor:attachment.isVisibleScreen ? "#82b1ff6e": ""} }>
             <li>
-                <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>Mail principal</a></span>
+                <span><a href={`${window.location.toString().replace(location.hash,"")}#${attachment.id}`}>{title}</a></span>
                 <MultiSelect
-                    name={"MailAnnotation"}
+                    name={"Annotation"}
                     onChange={onChangeClassification}
                     value={state.annotation.label}
                     options={options}
@@ -54,10 +54,10 @@ const MailSummary = ({attachment, state, setState, labels}) => {
                 />
             </li>
         </ul>
-        {mail.attachments.length >0 ? <>
+        { (mail && mail.attachments && mail.attachments.length >0) && <>
             <h4>Pièces jointes</h4>
             <SideAttachements attachments={mail.attachments} />
-        </>: null}
+        </>}
     </div>
 }
 

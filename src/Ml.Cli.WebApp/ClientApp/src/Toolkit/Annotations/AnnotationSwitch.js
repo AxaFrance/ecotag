@@ -37,10 +37,8 @@ const setAnnotationObject = (annotationType, e) => {
         case 'NER':
             return e;
         case "ImageClassifier":
-            return {
-                "label": e
-            };
         case "EmlClassifier":
+        case "DocumentClassifier":
             return {
                 "label": e
             };
@@ -48,7 +46,7 @@ const setAnnotationObject = (annotationType, e) => {
     return null;
 }
 
-const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSubmit}) => {
+const AnnotationSwitch = ({url, annotationType, labels, filename, expectedOutput={}, onSubmit}) => {
     
     const onDatasetSubmit = async e => {
         onSubmit(setAnnotationObject(annotationType, e));
@@ -109,11 +107,13 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
                 expectedOutput={expectedOutput}
             />
         case "EmlClassifier":
+        case "DocumentClassifier":
             return <EmlClassifierLazy
                 url={url}
                 labels={labels}
                 onSubmit={onDatasetSubmit}
                 expectedOutput={expectedOutput}
+                filename={filename}
             />
         default:
             return <></>
