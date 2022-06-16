@@ -12,6 +12,10 @@ const configurationName = "access_token"
 
 const AccessTokenWithProvider = withEnvironment(({environment}) => {
 
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister()
+        } })
     const config = environment.oidc.configuration
     const configuration = {
         ...config,
