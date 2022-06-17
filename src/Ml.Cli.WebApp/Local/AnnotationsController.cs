@@ -11,6 +11,7 @@ namespace Ml.Cli.WebApp.Local
 {
     [ApiController]
     [Route("api/local/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AnnotationsController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;

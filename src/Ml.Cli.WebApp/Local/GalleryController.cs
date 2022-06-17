@@ -8,6 +8,7 @@ namespace Ml.Cli.WebApp.Local
 {
     [ApiController]
     [Route("api/local/gallery")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GalleryController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;

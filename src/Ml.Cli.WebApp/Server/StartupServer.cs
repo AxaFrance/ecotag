@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -27,6 +28,22 @@ using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
 {
+    
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection Remove<T>(this IServiceCollection services)
+        {
+            if (services.IsReadOnly)
+            {
+                throw new ReadOnlyException($"{nameof(services)} is read only");
+            }
+
+            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(T));
+            if (serviceDescriptor != null) services.Remove(serviceDescriptor);
+
+            return services;
+        }
+    }
     [ExcludeFromCodeCoverage]
     public class StartupServer
     {
@@ -101,6 +118,12 @@ namespace Ml.Cli.WebApp.Server
             services.AddSingleton<IDateTime, SystemDateTime>();
             services
                 .AddControllersWithViews();
+
+            services.Remove<Local.AnnotationsController>();
+            services.Remove<Local.ComparesController>();
+            services.Remove<Local.DatasetsController>();
+            services.Remove<Local.FilesController>();
+            services.Remove<Local.GalleryController>();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
@@ -170,7 +193,7 @@ namespace Ml.Cli.WebApp.Server
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "AXA Fastag", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Ecotag", Version = "v1"});
             });
         }
 
