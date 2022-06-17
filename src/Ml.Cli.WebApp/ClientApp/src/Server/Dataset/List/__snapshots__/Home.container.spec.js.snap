@@ -45,7 +45,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
     <a
       class="af-home__access-token"
       href="/access-token"
-      target="_blank"
+      target="_self"
     >
       access token
     </a>

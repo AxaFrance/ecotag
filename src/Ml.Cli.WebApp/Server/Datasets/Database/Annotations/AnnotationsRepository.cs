@@ -85,7 +85,7 @@ public class AnnotationsRepository
         return annotations;
     }
 
-    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=10)
+    public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=20)
     {
         var query =
             _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) 
