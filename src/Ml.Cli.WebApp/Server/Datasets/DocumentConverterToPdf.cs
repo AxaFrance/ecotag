@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ public class DocumentConverterToPdf
 {
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
     private readonly ILogger<DocumentConverterToPdf> _logger;
+    private readonly static SemaphoreSlim semaphoreSlim= new SemaphoreSlim(1, 1);
 
     public DocumentConverterToPdf(IOptions<DatasetsSettings> datasetsSettings, ILogger<DocumentConverterToPdf> logger)
     {
@@ -38,9 +40,16 @@ public class DocumentConverterToPdf
             {
                 await inputStream.CopyToAsync(fileStream);
             }
-
-            await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
-                _datasetsSettings.Value.LibreOfficeTimeout);
+            await semaphoreSlim.WaitAsync();
+            try
+            {
+                await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
+                    _datasetsSettings.Value.LibreOfficeTimeout);
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
             var pdfPath = $"{fileTempPath.Replace(Path.GetExtension(fileTempPath), "")}.pdf";
             if (File.Exists(pdfPath))
             {
