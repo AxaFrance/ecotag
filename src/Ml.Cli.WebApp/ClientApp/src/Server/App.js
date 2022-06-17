@@ -22,7 +22,6 @@ import {OidcProvider, OidcSecure} from "@axa-fr/react-oidc";
 
 const AppWithOidcProvider = withEnvironment(({ environment }) => {
     
-    
     let history = useHistory();
 
     const withCustomHistory= () =>  {
