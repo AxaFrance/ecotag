@@ -18,6 +18,9 @@ const isEml =(blob) =>{
 async function parseMessageAsync(file, level=0) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
+    if(!email || !email.from){
+        return null;
+    }
     const messageFormatted = {types: []};
     messageFormatted.from = email.from;
     messageFormatted.to = email.to;
