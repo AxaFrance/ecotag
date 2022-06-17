@@ -12,7 +12,7 @@ public interface IFileService
     Task<bool> DeleteAsync(string blobFileUri);
     Task<bool> DeleteDirectoryAsync(string blobDirectoryUri);
     Task<IList<string>> GetImportedDatasetsNamesAsync(string blobUri);
-    Task<Boolean> IsFileExist(string blobUri);
+    Task<Boolean> IsFileExistAsync(string blobUri);
     Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(
         string blobUri,
         string datasetType);

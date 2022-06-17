@@ -11,7 +11,7 @@ namespace Ml.Cli.WebApp.Server.Datasets.Cmd;
 public record UploadFile
 {
     [Required]
-    [MaxLength(1024)]
+    [MaxLength(512)]
     [RegularExpression(@"^[a-zA-Z0-9-_\. ()]*$")]
     [MinLength(3)]
     public string Name { get; set; }

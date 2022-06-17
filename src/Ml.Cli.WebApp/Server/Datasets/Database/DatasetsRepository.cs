@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
@@ -18,13 +19,16 @@ public class DatasetsRepository
     private readonly IMemoryCache _cache;
     private readonly IFileService _fileService;
     private readonly ImportDatasetFilesService _importDatasetFilesService;
+    private readonly DocumentConverterToPdf _documentConverterToPdf;
+    private IList<string> extentions = new List<string>() { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".tif", ".tiff", ".rtf", ".odt", ".ods", ".odp" };
 
-    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache, ImportDatasetFilesService importDatasetFilesService)
+    public DatasetsRepository(DatasetContext datasetsContext, IFileService fileService, IMemoryCache cache, ImportDatasetFilesService importDatasetFilesService, DocumentConverterToPdf documentConverterToPdf= null)
     {
         _datasetContext = datasetsContext;
         _fileService = fileService;
         _cache = cache;
         _importDatasetFilesService = importDatasetFilesService;
+        _documentConverterToPdf = documentConverterToPdf;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> CreateDatasetAsync(CreateDataset createDataset)
@@ -127,7 +131,7 @@ public class DatasetsRepository
         return true;
     }
 
-    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId)
+    public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> GetFileAsync(string datasetId, string fileId, bool isTakePdfConvertionIdAvailable=false)
     {
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         var file = await _datasetContext.Files.Include(f => f.Dataset).AsNoTracking().Where(file =>
@@ -140,7 +144,25 @@ public class DatasetsRepository
             };
             return result;
         }
-        
+
+        if (isTakePdfConvertionIdAvailable && extentions.Contains(Path.GetExtension(file.Filename)))
+        {
+            var fileNamePdf = $"{file.Filename}.pdf";
+            var isFileExist = await _fileService.IsFileExistAsync($"{file.BlobDirectoryUri}/{fileNamePdf}");
+            if (isFileExist)
+            {
+                var fileDownloadedPdf = await _fileService.DownloadAsync($"{file.BlobDirectoryUri}/{fileNamePdf}");
+                if (!fileDownloadedPdf.IsSuccess)
+                {
+                    return fileDownloadedPdf;
+                }
+
+                var fileServiceDataModelPdf = fileDownloadedPdf.Data;
+                result.Data = fileServiceDataModelPdf with { ContentType = "application/pdf" };
+                return result;
+            }
+        }
+
         var fileDownloaded = await _fileService.DownloadAsync($"{file.BlobDirectoryUri}/{file.Filename}");
         if (!fileDownloaded.IsSuccess)
         {
@@ -179,7 +201,18 @@ public class DatasetsRepository
             var taskSaveSql = _datasetContext.SaveChangesAsync();
             var datasetInfo = await GetDatasetInfoAsync(datasetId);
             var taskUploadBlob = _fileService.UploadStreamAsync($"{datasetInfo.BlobUri}/{fileName}", stream);
+            
             Task.WaitAll(taskSaveSql, taskUploadBlob);
+            if (extentions.Contains(Path.GetExtension(fileName)))
+            {
+                stream.Position = 0;
+                var streamPdf = await _documentConverterToPdf.Convert(fileName, stream);
+                if (streamPdf == null)
+                {
+                    await _fileService.UploadStreamAsync($"{datasetInfo.BlobUri}/{fileName}.pdf", streamPdf);
+                }
+            }
+
         }
         catch (DbUpdateException)
         {

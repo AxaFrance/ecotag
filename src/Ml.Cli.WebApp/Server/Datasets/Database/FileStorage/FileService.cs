@@ -241,7 +241,7 @@ public class FileService : IFileService
         return (fileBlob.Name, getPropertiesResult);
     }
 
-    public async Task<Boolean> IsFileExist(string blobUri)
+    public async Task<Boolean> IsFileExistAsync(string blobUri)
     {
         var blobStorageName = GetBlobStorageName(blobUri);
         var containerName = GetContainerName(blobUri);
