@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server.Datasets;
 
@@ -12,10 +13,12 @@ namespace Ml.Cli.WebApp.Server.Projects.Cmd;
 public class DocumentConverterToPdf
 {
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
+    private readonly ILogger<DocumentConverterToPdf> _logger;
 
-    public DocumentConverterToPdf(IOptions<DatasetsSettings> datasetsSettings)
+    public DocumentConverterToPdf(IOptions<DatasetsSettings> datasetsSettings, ILogger<DocumentConverterToPdf> logger)
     {
         _datasetsSettings = datasetsSettings;
+        _logger = logger;
     }
     
     public async Task<Stream> Convert(string filename, Stream inputStream)
@@ -24,26 +27,38 @@ public class DocumentConverterToPdf
         {
             return null;
         }
-        var basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        var exe = $"{basePath}\\LibreOfficePortable\\LibreOfficePortable.exe";
-        var tempFilePathWithoutFileName = Path.GetTempPath();
-        var fileTempPath = Path.Combine(tempFilePathWithoutFileName, Path.GetFileName(filename));
-        await using (var fileStream = File.Create(fileTempPath))
+        try
         {
-            await inputStream.CopyToAsync(fileStream);
-        }
-        await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath, _datasetsSettings.Value.LibreOfficeTimeout);
-        var pdfPath = $"{fileTempPath.Replace(Path.GetExtension(fileTempPath), "")}.pdf";
-        if (File.Exists(pdfPath))
-        {
-            var outputStream = await System.IO.File.ReadAllBytesAsync(pdfPath);
-            var stream = new MemoryStream(outputStream);
-            File.Delete(pdfPath);
+            filename = Guid.NewGuid() + filename;
+            var basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var exe = $"{basePath}\\LibreOfficePortable\\LibreOfficePortable.exe";
+            var tempFilePathWithoutFileName = Path.GetTempPath();
+            var fileTempPath = Path.Combine(tempFilePathWithoutFileName, Path.GetFileName(filename));
+            await using (var fileStream = File.Create(fileTempPath))
+            {
+                await inputStream.CopyToAsync(fileStream);
+            }
+
+            await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
+                _datasetsSettings.Value.LibreOfficeTimeout);
+            var pdfPath = $"{fileTempPath.Replace(Path.GetExtension(fileTempPath), "")}.pdf";
+            if (File.Exists(pdfPath))
+            {
+                var outputStream = await File.ReadAllBytesAsync(pdfPath);
+                var stream = new MemoryStream(outputStream);
+                File.Delete(pdfPath);
+                File.Delete(fileTempPath);
+                return stream;
+            }
+
             File.Delete(fileTempPath);
-            return stream;
+            return null;
         }
-        File.Delete(fileTempPath);
-        return null;
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error converting to PDF");
+            return null;
+        }
     }
 
     static async Task LaunchCommandLineAppAsync(string libreOfficeExecutablePath, string directoryPath, string filePath, int timeoutMs=20000)
