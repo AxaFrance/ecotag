@@ -6,6 +6,6 @@ namespace Ml.Cli.WebApp.Server.Datasets;
 public class DatasetsSettings
 {
     public string LibreOfficeExePath { get; set; }
-    public int LibreOfficeTimout { get; set; }
+    public int LibreOfficeTimeout { get; set; }
     public static string Datasets { get; set; } = "Datasets";
 }

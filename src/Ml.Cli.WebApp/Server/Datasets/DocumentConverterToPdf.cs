@@ -32,7 +32,7 @@ public class DocumentConverterToPdf
         {
             await inputStream.CopyToAsync(fileStream);
         }
-        await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath, _datasetsSettings.Value.LibreOfficeTimout);
+        await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath, _datasetsSettings.Value.LibreOfficeTimeout);
         var pdfPath = $"{fileTempPath.Replace(Path.GetExtension(fileTempPath), "")}.pdf";
         if (File.Exists(pdfPath))
         {

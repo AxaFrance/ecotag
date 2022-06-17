@@ -190,11 +190,18 @@ namespace Ml.Cli.WebApp.Server
             {
                 services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build-server"; });
             }
-
-            services.AddSwaggerGen(options =>
+            if (IsSwagger())
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Ecotag", Version = "v1"});
-            });
+                services.AddSwaggerGen(options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecotag", Version = "v1" });
+                });
+            }
+        }
+
+        private bool IsSwagger()
+        {
+            return Configuration["SwaggerActive"] == "True";
         }
 
         private CorsSettings GetCorsSettings()
@@ -234,8 +241,12 @@ namespace Ml.Cli.WebApp.Server
                 app.UseCors("CorsPolicy");
             }
             app.UseAuthentication();
-            app.UseSwagger();
-            app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
+            if (IsSwagger())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
+            }
+
             app.UseRouting();
             app.UseResponseCaching();
             app.UseAuthorization();
