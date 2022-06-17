@@ -47,7 +47,11 @@ public class GetProjectFileCmd
        var extentions = new List<string>() { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".tif", ".tiff", ".rtf", ".odt", ".ods", ".odp" };
        if (!file.IsSuccess) return file;
        if (!extentions.Contains(Path.GetExtension(file.Data.Name))) return file;
-       var newStream = await _documentConverterToPdf.Convert(file.Data.Name, file.Data.Stream);
+       var newStream = await _documentConverterToPdf.ConvertAsync(file.Data.Name, file.Data.Stream);
+       if (newStream == null)
+       {
+           return file;
+       }
        var res = new ResultWithError<FileServiceDataModel, ErrorResult>
        {
            Data = new FileServiceDataModel()

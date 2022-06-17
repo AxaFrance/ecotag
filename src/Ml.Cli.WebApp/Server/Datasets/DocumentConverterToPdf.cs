@@ -21,7 +21,7 @@ public class DocumentConverterToPdf
         _logger = logger;
     }
     
-    public async Task<Stream> Convert(string filename, Stream inputStream)
+    public async Task<Stream> ConvertAsync(string filename, Stream inputStream)
     {
         if (string.IsNullOrEmpty(_datasetsSettings.Value.LibreOfficeExePath))
         {
