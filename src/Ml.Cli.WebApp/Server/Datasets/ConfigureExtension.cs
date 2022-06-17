@@ -6,6 +6,7 @@ using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets;
 
@@ -14,6 +15,8 @@ public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<DatasetsSettings>(
+            configuration.GetSection(DatasetsSettings.Datasets));
         services.AddScoped<IFileService, FileService>();
         services.AddDbContext<DatasetContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
@@ -28,5 +31,6 @@ public static class ConfigureExtension
         services.AddScoped<GetImportedDatasetsCmd, GetImportedDatasetsCmd>();
         services.AddScoped<AnnotationsRepository, AnnotationsRepository>();
         services.AddScoped<ImportDatasetFilesService, ImportDatasetFilesService>();
+        services.AddScoped<DocumentConverterToPdf, DocumentConverterToPdf>();
     }
 }

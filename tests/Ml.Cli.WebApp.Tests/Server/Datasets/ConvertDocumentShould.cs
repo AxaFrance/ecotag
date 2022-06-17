@@ -23,8 +23,8 @@ public class ConvertDatasetShould
         var filePath = @"C:\Users\A115VC\Desktop\LibreOfficePortable\ecotag import export.docx";
         var filePath2 = @"C:\Users\A115VC\Documents\Permis (3).pptx";
         var inputStream = System.IO.File.OpenRead(filePath2);
-        
-        await NewMethod(filePath2, inputStream);
+       
+       // await NewMethod(filePath2, inputStream);
     }
 
 

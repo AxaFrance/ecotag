@@ -45,6 +45,8 @@ namespace Ml.Cli.WebApp.Server
         {
             services.Configure<OidcSettings>(
                 Configuration.GetSection(OidcSettings.Oidc));
+            services.Configure<DatasetsSettings>(
+                Configuration.GetSection(DatasetsSettings.Datasets));
             var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
             var oidcUserSettings = Configuration.GetSection(OidcUserSettings.OidcUser).Get<OidcUserSettings>();
             var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
