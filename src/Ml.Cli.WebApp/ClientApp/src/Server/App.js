@@ -1,6 +1,5 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {OidcProvider, OidcSecure} from '@axa-fr/react-oidc';
 import EnvironmentProvider, { withEnvironment } from './EnvironmentProvider';
 import './App.scss';
 import Header from './shared/Header';
@@ -16,15 +15,33 @@ import SessionLost from "./shared/Oidc/SessionLost.component";
 import ServiceWorkerNotSupported from "./shared/Oidc/ServiceWorkerNotSupported.component";
 import {CallBackSuccess} from "./shared/Oidc/Callback.component";
 import AccessToken from "./AccessToken";
+import {useHistory} from "react-router";
+import {OidcProvider, OidcSecure} from "@axa-fr/react-oidc";
 
-const AppWithOidcProvider = withEnvironment(({ environment }) => (
-    <OidcProvider configuration={environment.oidc.configuration}
+
+
+const AppWithOidcProvider = withEnvironment(({ environment }) => {
+    
+    let history = useHistory();
+
+    const withCustomHistory= () =>  {
+        return {
+            replaceState: (url, stateHistory) => {
+                history.replace(url);
+                window.dispatchEvent(new Event('popstate'));
+            }
+        };
+    };
+    
+    return <OidcProvider configuration={environment.oidc.configuration}
                   loadingComponent={Loading}
                   authenticatingErrorComponent={AuthenticatingError}
                   authenticatingComponent={Authenticating}
                   sessionLostComponent={SessionLost}
                   serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
-                  callbackSuccessComponent={CallBackSuccess}>
+                  callbackSuccessComponent={CallBackSuccess}
+                         withCustomHistory={withCustomHistory}
+    >
         <TelemetryProvider {...environment.telemetry} >
             <OidcSecure>
                 <Header />
@@ -32,15 +49,20 @@ const AppWithOidcProvider = withEnvironment(({ environment }) => (
                 <Footer />
             </OidcSecure>
         </TelemetryProvider>
-    </OidcProvider>));
+    </OidcProvider>
+});
 
 
 
 const Authentification = ({ environment }) => (
     <Router basename={environment.baseUrl}>
         <Switch>
-            <Route path="/access-token" component={AccessToken}    />
-            <Route component={AppWithOidcProvider} />
+            <Route path="/access-token">
+                <AccessToken/>
+            </Route>
+            <Route>
+                <AppWithOidcProvider/>
+            </Route>
         </Switch>
     </Router>
 );

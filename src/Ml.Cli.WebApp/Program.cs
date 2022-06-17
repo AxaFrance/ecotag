@@ -56,7 +56,6 @@ namespace Ml.Cli.WebApp
             
             app.OnExecute(async () =>
             {
-
                 var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
                 var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());
                 var comparesValue = PathAdapter.AdaptPathForCurrentOs(comparesPaths.Value());
@@ -115,13 +114,12 @@ namespace Ml.Cli.WebApp
                     config.AddEnvironmentVariables();
                 }).ConfigureAppConfiguration((context, config) =>
                 {
-                    if (!context.HostingEnvironment.IsDevelopment()) {
-                        var builtConfig = config.Build();
-                        var keyVaultConfigBuilder = new ConfigurationBuilder();
-                        keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
-                        var keyVaultConfig = keyVaultConfigBuilder.Build();
-                        config.AddConfiguration(keyVaultConfig);
-                    }
+                    if (context.HostingEnvironment.IsDevelopment()) return;
+                    var builtConfig = config.Build();
+                    var keyVaultConfigBuilder = new ConfigurationBuilder();
+                    keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+                    var keyVaultConfig = keyVaultConfigBuilder.Build();
+                    config.AddConfiguration(keyVaultConfig);
                 })
                 .UseSerilog((context, logger) => { logger.ReadFrom.Configuration(context.Configuration); })
                 .ConfigureWebHostDefaults(webBuilder =>

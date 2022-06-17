@@ -4,6 +4,6 @@
         default:["https://localhost:5001"]
 };
 
-    const excludedDomains = {
+    const excludedRoutesStartWith = {
         default:["https://localhost:5001/access-token"]
     };

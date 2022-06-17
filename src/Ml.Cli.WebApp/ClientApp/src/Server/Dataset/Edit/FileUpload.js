@@ -8,11 +8,11 @@ import {Locked} from "../Dataset.service";
 const typeDatasetExtention = (datasetType) =>  {
     switch (datasetType){
         case "Image":
-            return '.jpg, .jpeg, .png, .tiff, .tif';
+            return '.jpg, .jpeg, .png';
         case "Text":
             return '.txt';
         case "Document":
-            return '.txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .rtf, .odt, .zip';
+            return '.txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip';
         default:
             return '.eml';
     }
@@ -21,11 +21,11 @@ const typeDatasetExtention = (datasetType) =>  {
 const typeMimeDatasetExtention = (datasetType) =>  {
     switch (datasetType){
         case "Image":
-            return 'image/jpeg, image/png, image/tiff';
+            return 'image/jpeg, image/png';
         case "Text":
             return 'text/plain';
         case "Document":
-            return 'message/rfc822, application/octet-stream, text/plain, image/jpeg, image/png, image/tiff, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text, application/pdf, application/rtf, application/zip';
+            return 'message/rfc822, application/octet-stream, text/plain, image/jpeg, image/png, image/tiff, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text, application/pdf, application/rtf, application/zip, application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/vnd.ms-powerpoint application/vnd.openxmlformats-officedocument.presentationml.presentation, application/vnd.oasis.opendocument.text, application/vnd.oasis.opendocument.spreadsheet, application/vnd.oasis.opendocument.presentation';
         default:
             return "message/rfc822, application/octet-stream";
     }

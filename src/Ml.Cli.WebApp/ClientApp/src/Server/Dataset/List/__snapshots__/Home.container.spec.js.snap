@@ -42,6 +42,13 @@ exports[`Home.container HomeContainer render correctly 1`] = `
         Nouveau dataset
       </span>
     </a>
+    <a
+      class="af-home__access-token"
+      href="/access-token"
+      target="_blank"
+    >
+      access token
+    </a>
     <h1
       class="af-title--content"
     >

@@ -1,5 +1,5 @@
 ﻿import {OidcProvider, OidcSecure, useOidcAccessToken} from "@axa-fr/react-oidc";
-import React from "react";
+import React, {useEffect} from "react";
 import {withEnvironment} from "./EnvironmentProvider";
 import Loading from "./shared/Oidc/Loading.component";
 import AuthenticatingError from "./shared/Oidc/AuthenticateError.component";
@@ -7,10 +7,30 @@ import Authenticating from "./shared/Oidc/Authenticating.component";
 import SessionLost from "./shared/Oidc/SessionLost.component";
 import ServiceWorkerNotSupported from "./shared/Oidc/ServiceWorkerNotSupported.component";
 import {CallBackSuccess} from "./shared/Oidc/Callback.component";
+import {useHistory} from "react-router";
 
 const configurationName = "access_token"
 
 const AccessTokenWithProvider = withEnvironment(({environment}) => {
+
+    let history = useHistory();
+    
+    useEffect(() => {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister();
+            } })
+    }, []);
+
+    const withCustomHistory= () =>  {
+        return {
+            replaceState: (url, stateHistory) => {
+                history.replace(url);
+                window.dispatchEvent(new Event('popstate'));
+            }
+        };
+    };
+
 
     const config = environment.oidc.configuration
     const configuration = {
@@ -27,7 +47,9 @@ const AccessTokenWithProvider = withEnvironment(({environment}) => {
                          authenticatingComponent={Authenticating}
                          sessionLostComponent={SessionLost}
                          serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
-                         callbackSuccessComponent={CallBackSuccess}>
+                         callbackSuccessComponent={CallBackSuccess}
+                         withCustomHistory={withCustomHistory}
+    >
         <OidcSecure configurationName={configurationName}>
             <AccessToken/>
         </OidcSecure>

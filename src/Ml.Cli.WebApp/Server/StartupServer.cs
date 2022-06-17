@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -27,6 +28,22 @@ using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
 {
+    
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection Remove<T>(this IServiceCollection services)
+        {
+            if (services.IsReadOnly)
+            {
+                throw new ReadOnlyException($"{nameof(services)} is read only");
+            }
+
+            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(T));
+            if (serviceDescriptor != null) services.Remove(serviceDescriptor);
+
+            return services;
+        }
+    }
     [ExcludeFromCodeCoverage]
     public class StartupServer
     {
@@ -45,6 +62,8 @@ namespace Ml.Cli.WebApp.Server
         {
             services.Configure<OidcSettings>(
                 Configuration.GetSection(OidcSettings.Oidc));
+            services.Configure<DatasetsSettings>(
+                Configuration.GetSection(DatasetsSettings.Datasets));
             var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
             var oidcUserSettings = Configuration.GetSection(OidcUserSettings.OidcUser).Get<OidcUserSettings>();
             var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
@@ -99,6 +118,12 @@ namespace Ml.Cli.WebApp.Server
             services.AddSingleton<IDateTime, SystemDateTime>();
             services
                 .AddControllersWithViews();
+
+            services.Remove<Local.AnnotationsController>();
+            services.Remove<Local.ComparesController>();
+            services.Remove<Local.DatasetsController>();
+            services.Remove<Local.FilesController>();
+            services.Remove<Local.GalleryController>();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
@@ -165,11 +190,18 @@ namespace Ml.Cli.WebApp.Server
             {
                 services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build-server"; });
             }
-
-            services.AddSwaggerGen(options =>
+            if (IsSwagger())
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "AXA Fastag", Version = "v1"});
-            });
+                services.AddSwaggerGen(options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecotag", Version = "v1" });
+                });
+            }
+        }
+
+        private bool IsSwagger()
+        {
+            return Configuration["SwaggerActive"] == "True";
         }
 
         private CorsSettings GetCorsSettings()
@@ -209,8 +241,12 @@ namespace Ml.Cli.WebApp.Server
                 app.UseCors("CorsPolicy");
             }
             app.UseAuthentication();
-            app.UseSwagger();
-            app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
+            if (IsSwagger())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecotag"); });
+            }
+
             app.UseRouting();
             app.UseResponseCaching();
             app.UseAuthorization();
