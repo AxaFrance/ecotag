@@ -18,8 +18,8 @@ export const Home = ({ user: { roles = [] }, userLoadingState }) => (
             { roles.includes(Administateur) && <Link className="home__link" to="/teams">
                 <div className="home__link-container home__link-container--groups">Equipes</div>
             </Link>}
+            {(!roles.includes(Annotateur) && !roles.includes(DataScientist) && !roles.includes(Administateur) && userLoadingState === OidcUserStatus.Loaded) && <p>Vous n'avez aucun rôle attribué à votre profile.</p>}
         </div>
-        {(!roles.includes(Annotateur) && !roles.includes(DataScientist) && !roles.includes(Administateur) && userLoadingState === OidcUserStatus.Loaded) && <p>Vous n'avez aucun rôle attribué à votre profile.</p>}
     </div>
 );
 
