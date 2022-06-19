@@ -82,6 +82,11 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
             promises.length = 0;
         }
     }
+    data = {
+        status: resilienceStatus.SUCCESS,
+        items: [],
+    }
+    dispatch({type: 'reserve_annotation', data});
     
     if (currentItemsLength === 0 && annotationLength === 0) {
         const url = "end";
@@ -129,7 +134,7 @@ export const usePage = (fetch) => {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            if (currentIndex + 8 >= items.length) {
+            if (currentIndex + 10 >= items.length) {
                 reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
             }
         }
