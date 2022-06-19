@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -15,8 +18,10 @@ public class DocumentConverterToPdf
 {
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
     private readonly ILogger<DocumentConverterToPdf> _logger;
-    private readonly static SemaphoreSlim semaphoreSlim= new SemaphoreSlim(1, 1);
-
+    private readonly static SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(Environment.ProcessorCount, Environment.ProcessorCount);
+    private static List<int> _ports = new List<int>();
+    private static object _locker = new object();
+    private static string _dirname = Guid.NewGuid().ToString();
     public DocumentConverterToPdf(IOptions<DatasetsSettings> datasetsSettings, ILogger<DocumentConverterToPdf> logger)
     {
         _datasetsSettings = datasetsSettings;
@@ -33,14 +38,15 @@ public class DocumentConverterToPdf
         try
         {
             var basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var exe = $"{basePath}\\LibreOfficePortable\\LibreOfficePortable.exe";
+            var exe = _datasetsSettings.Value.LibreOfficeExePath.Replace("{basePath}", basePath);
+            
             var tempFilePathWithoutFileName = Path.GetTempPath();
             var fileTempPath = Path.Combine(tempFilePathWithoutFileName, Path.GetFileName(filename));
             await using (var fileStream = File.Create(fileTempPath))
             {
                 await inputStream.CopyToAsync(fileStream);
             }
-            await semaphoreSlim.WaitAsync();
+            await _semaphoreSlim.WaitAsync();
             try
             {
                 await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
@@ -48,7 +54,7 @@ public class DocumentConverterToPdf
             }
             finally
             {
-                semaphoreSlim.Release();
+                _semaphoreSlim.Release();
             }
             var pdfPath = $"{fileTempPath.Replace(Path.GetExtension(fileTempPath), "")}.pdf";
             if (File.Exists(pdfPath))
@@ -73,27 +79,53 @@ public class DocumentConverterToPdf
     static async Task LaunchCommandLineAppAsync(string libreOfficeExecutablePath, string directoryPath, string filePath, int timeoutMs=20000)
     {
         directoryPath = directoryPath.TrimEnd(Path.DirectorySeparatorChar);
+        
+      
+
+        int currentPort = 0;
+        lock(_locker)
+        {
+            for (int i = 8100; i < 9000; i++)
+            {
+                if (!_ports.Contains(i))
+                {
+                    _ports.Add(i);
+                    currentPort = i;
+                    break;
+                }
+            }
+            if (currentPort == 0)
+            {
+                throw new Exception("No port found");
+            }
+        }
+        var userPath = Path.Combine(Path.GetTempPath(), _dirname,currentPort.ToString() ).Replace("\\", "/");
+        Directory.CreateDirectory(userPath);
+
+        string argument =
+            $"/C -nofirststartwizard \"-env:UserInstallation=file:///{userPath}/\" -accept=\"socket,host=0.0.0.0,port={currentPort.ToString()};urp;\" -headless -convert-to pdf -outdir \"{directoryPath}\" \"{filePath}\"";
         var startInfo = new ProcessStartInfo
         {
             CreateNoWindow = true,
             UseShellExecute = false,
             FileName = libreOfficeExecutablePath, 
             WindowStyle = ProcessWindowStyle.Hidden,
-            Arguments = $"/C -headless -writer  -convert-to pdf -outdir \"{directoryPath}\" \"{filePath}\"",
+            Arguments = argument,
             RedirectStandardOutput = true,
             RedirectStandardError = true
         };
         var cmd = new Process();
-        cmd.StartInfo = startInfo;
-        var output = new StringBuilder();
-        cmd.OutputDataReceived += (sender, args) => output.AppendLine(args.Data);
         string stdError;
-        try 
+        var output = new StringBuilder();
+        try
         {
+            cmd.StartInfo = startInfo;
+            cmd.OutputDataReceived += (sender, args) => output.AppendLine(args.Data);
+
             cmd.Start();
             cmd.BeginOutputReadLine();
-            stdError = await cmd.StandardError.ReadToEndAsync();
             cmd.WaitForExit(timeoutMs);
+            stdError = await cmd.StandardError.ReadToEndAsync();
             if (cmd.HasExited == false)
                 if (cmd.Responding)
                     cmd.CloseMainWindow();
@@ -103,6 +135,13 @@ public class DocumentConverterToPdf
         catch (Exception e)
         {
             throw new Exception("OS error while executing: " + e.Message);
+        }
+        finally
+        {
+            lock (_locker)
+            {
+                _ports.Remove(currentPort);
+            }
         }
 
         if (cmd.ExitCode != 0)

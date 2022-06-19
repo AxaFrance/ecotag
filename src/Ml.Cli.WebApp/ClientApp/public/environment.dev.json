@@ -5,6 +5,7 @@
     "configuration": {
       "client_id": "interactive.public.short",
       "redirect_uri": "https://localhost:5001/authentication/callback",
+      "silent_redirect_uri": "https://localhost:5001/authentication/silent-callback",
       "post_logout_redirect_uri": "https://localhost:5001/authentication/logout",
       "scope": "openid profile email api offline_access",
       "authority": "https://demo.identityserver.io",
