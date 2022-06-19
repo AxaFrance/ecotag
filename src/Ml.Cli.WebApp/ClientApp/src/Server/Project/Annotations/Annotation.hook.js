@@ -82,6 +82,7 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
             promises.length = 0;
         }
     }
+    await Promise.all(promises);
     data = {
         status: resilienceStatus.SUCCESS,
         items: [],
