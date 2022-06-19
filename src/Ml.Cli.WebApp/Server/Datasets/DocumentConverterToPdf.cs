@@ -18,7 +18,7 @@ public class DocumentConverterToPdf
 {
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
     private readonly ILogger<DocumentConverterToPdf> _logger;
-    private readonly static SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(Environment.ProcessorCount, Environment.ProcessorCount);
+    private static SemaphoreSlim _semaphoreSlim = null;
     private static List<int> _ports = new List<int>();
     private static object _locker = new object();
     private static string _dirname = Guid.NewGuid().ToString();
@@ -30,6 +30,15 @@ public class DocumentConverterToPdf
     
     public async Task<Stream> ConvertAsync(string filename, Stream inputStream)
     {
+        lock (_locker)
+        {
+            if (_semaphoreSlim == null)
+            {
+                var numberWorker = _datasetsSettings.Value.LibreOfficeNumberWorker ?? Environment.ProcessorCount;
+                _semaphoreSlim = new SemaphoreSlim(numberWorker, numberWorker);
+            }
+        }
+
         if (string.IsNullOrEmpty(_datasetsSettings.Value.LibreOfficeExePath))
         {
             return null;
