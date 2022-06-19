@@ -70,7 +70,7 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
             const blob = await response.blob();
             annotation.blobUrl = window.URL.createObjectURL(blob);
             data = {
-                status: i + 1 === annotationLength ? resilienceStatus.SUCCESS : resilienceStatus.LOADING,
+                status: resilienceStatus.LOADING,
                 items: [annotation],
             }
             dispatch({type: 'reserve_annotation', data});
