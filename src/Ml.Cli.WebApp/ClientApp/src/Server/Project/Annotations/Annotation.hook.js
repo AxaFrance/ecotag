@@ -61,18 +61,26 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
     
     const annotations = await response.json();
     const annotationLength = annotations.length;
+    const promises=[];
     for (let i = 0; i < annotationLength; i++) {
         const annotation = annotations[i];
         const url = `projects/${projectId}/files/${annotation.fileId}`;
-        const response = await fetch(url, {method: 'GET'});
-        if(response.status === 403 || response.status >= 500) continue;
-        const blob = await response.blob();
-        annotation.blobUrl = window.URL.createObjectURL(blob);
-        data = {
-            status: i+1 === annotationLength ? resilienceStatus.SUCCESS : resilienceStatus.LOADING,
-            items: [annotation],
+        const responsePromise = fetch(url, {method: 'GET'}).then(async response => {
+            if (response.status === 403 || response.status >= 500) return;
+            const blob = await response.blob();
+            annotation.blobUrl = window.URL.createObjectURL(blob);
+            data = {
+                status: i + 1 === annotationLength ? resilienceStatus.SUCCESS : resilienceStatus.LOADING,
+                items: [annotation],
+            }
+            dispatch({type: 'reserve_annotation', data});
+        });
+        promises.push(responsePromise);
+        if(promises.length >= 4)
+        {
+            await Promise.all(promises);
+            promises.length = 0;
         }
-        dispatch({type: 'reserve_annotation', data});
     }
     
     if (currentItemsLength === 0 && annotationLength === 0) {
@@ -121,7 +129,7 @@ export const usePage = (fetch) => {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            if (currentIndex + 20 >= items.length) {
+            if (currentIndex + 8 >= items.length) {
                 reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
             }
         }
