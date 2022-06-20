@@ -17,5 +17,9 @@
     "instrumentationKey": "",
     "logLevel": "DEBUG",
     "active": false
+  },
+  "datasets": {
+    "reserveHttpCallInParallel": 2,
+    "reserveBeforeEndIndex": 10
   }
 }

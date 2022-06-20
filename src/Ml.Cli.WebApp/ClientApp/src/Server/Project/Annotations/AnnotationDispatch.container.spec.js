@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import {resilienceStatus} from "../../shared/Resilience";
-import {annotate, init, initialState, reserveAnnotation} from "./Annotation.hook";
+import {annotate, init, initialState, reserveAnnotationAsync} from "./Annotation.hook";
 import {reducer} from "./Annotation.reducer";
 
 describe('AnnotationDispatch.container', () => {
@@ -119,7 +119,7 @@ describe('AnnotationDispatch.container', () => {
   describe('.reserveAnnotation()', () => {
     it('should stop reservation if loading', async () => {
       let givenDispatch = jest.fn();
-      await reserveAnnotation(() => {}, givenDispatch, {})('0001', '0001', 0, resilienceStatus.LOADING);
+      await reserveAnnotationAsync(() => {}, givenDispatch, {})('0001', '0001', 0, resilienceStatus.LOADING);
       expect(givenDispatch).toHaveBeenCalledTimes(0);
     });
     
@@ -129,7 +129,7 @@ describe('AnnotationDispatch.container', () => {
           let givenFetch = jest.fn()
               .mockResolvedValueOnce({status: fetchStatus});
           let givenDispatch = jest.fn();
-          await reserveAnnotation(givenFetch, givenDispatch, {})('0001', '0001', 0, resilienceStatus.SUCCESS);
+          await reserveAnnotationAsync(givenFetch, givenDispatch, {})('0001', '0001', 0, resilienceStatus.SUCCESS);
           expect(givenDispatch).toHaveBeenCalledWith({type: 'reserve_annotation', data: {items: [], status: expectedStatus}});
         }
     )

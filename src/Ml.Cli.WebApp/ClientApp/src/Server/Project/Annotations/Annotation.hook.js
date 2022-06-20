@@ -37,7 +37,7 @@ export const init = (fetch, dispatch) => async projectId => {
 
     dispatch({type: 'init', data});
 };
-export const reserveAnnotation = (fetch, dispatch, history) => async (projectId, documentId, currentItemsLength, status) => {
+export const reserveAnnotationAsync = (fetch, dispatch, history) => async (projectId, documentId, currentItemsLength, status, environment) => {
     if (status === resilienceStatus.LOADING) {
         return;
     }
@@ -72,11 +72,12 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
             data = {
                 status: resilienceStatus.LOADING,
                 items: [annotation],
-            }
+            };
             dispatch({type: 'reserve_annotation', data});
         });
         promises.push(responsePromise);
-        if(promises.length >= 4)
+        const reserveHttpCallInParallel = environment?.datasets?.reserveHttpCallInParallel ?? 2; 
+        if(promises.length >= reserveHttpCallInParallel)
         {
             await Promise.allSettled(promises);
             promises.length = 0;
@@ -122,7 +123,7 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     dispatch({type: 'annotate', data});
 };
 
-export const usePage = (fetch) => {
+export const usePage = (fetch, environment) => {
     const {projectId, documentId} = useParams();
     const history = useHistory();
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -130,13 +131,14 @@ export const usePage = (fetch) => {
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
-                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus));
+                .then(() => reserveAnnotationAsync(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus, environment));
         } else {
             const items = state.annotations.items;
             const currentItem = items.find((item) => item.fileId === documentId);
             const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            if (currentIndex + 10 >= items.length) {
-                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
+            const reserveBeforeEndIndex = environment?.datasets?.reserveBeforeEndIndex ?? 10;
+            if (currentIndex + reserveBeforeEndIndex >= items.length) {
+                reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus, environment)
             }
         }
     }, [documentId]);

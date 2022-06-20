@@ -55,7 +55,7 @@ public class DocumentConverterToPdf
             {
                 await inputStream.CopyToAsync(fileStream);
             }
-            await _semaphoreSlim.WaitAsync();
+            await _semaphoreSlim.WaitAsync(TimeSpan.FromSeconds(120));
             try
             {
                 await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
@@ -88,20 +88,16 @@ public class DocumentConverterToPdf
     static async Task LaunchCommandLineAppAsync(string libreOfficeExecutablePath, string directoryPath, string filePath, int timeoutMs=20000)
     {
         directoryPath = directoryPath.TrimEnd(Path.DirectorySeparatorChar);
-        
-      
 
-        int currentPort = 0;
+        var currentPort = 0;
         lock(_locker)
         {
-            for (int i = 8100; i < 9000; i++)
+            for (var i = 8100; i < 9000; i++)
             {
-                if (!_ports.Contains(i))
-                {
-                    _ports.Add(i);
-                    currentPort = i;
-                    break;
-                }
+                if (_ports.Contains(i)) continue;
+                _ports.Add(i);
+                currentPort = i;
+                break;
             }
             if (currentPort == 0)
             {
@@ -111,7 +107,7 @@ public class DocumentConverterToPdf
         var userPath = Path.Combine(Path.GetTempPath(), _dirname,currentPort.ToString() ).Replace("\\", "/");
         Directory.CreateDirectory(userPath);
 
-        string argument =
+        var argument =
             $"/C -nofirststartwizard \"-env:UserInstallation=file:///{userPath}/\" -accept=\"socket,host=0.0.0.0,port={currentPort.ToString()};urp;\" -headless -convert-to pdf -outdir \"{directoryPath}\" \"{filePath}\"";
         var startInfo = new ProcessStartInfo
         {

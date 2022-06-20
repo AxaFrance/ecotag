@@ -40,7 +40,8 @@ const AppWithOidcProvider = withEnvironment(({ environment }) => {
                   sessionLostComponent={SessionLost}
                   serviceWorkerNotSupportedComponent={ServiceWorkerNotSupported}
                   callbackSuccessComponent={CallBackSuccess}
-                         withCustomHistory={withCustomHistory}
+                  callbackErrorComponent={AuthenticatingError}
+                  withCustomHistory={withCustomHistory}
     >
         <TelemetryProvider {...environment.telemetry} >
             <OidcSecure>
