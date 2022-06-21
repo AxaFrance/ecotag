@@ -12,7 +12,7 @@ public record UploadFile
 {
     [Required]
     [MaxLength(1024)]
-    [RegularExpression(@"^[a-zA-Z0-9-_\. ()]*$")]
+    [RegularExpression(@"^[a-zA-Z0-9-_\. (){}-]*$")]
     [MinLength(3)]
     public string Name { get; set; }
 
