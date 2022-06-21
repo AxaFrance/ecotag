@@ -12,6 +12,7 @@ using Ml.Cli.PathManager;
 using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Local.Paths;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Datasets;
 using Serilog;
 
 namespace Ml.Cli.WebApp
@@ -127,7 +128,10 @@ namespace Ml.Cli.WebApp
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                     webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<StartupServer>();
-                });
+                }).ConfigureServices(((hostContext, services) =>
+                {
+                    services.AddHostedService<DatasetsWorker>();
+                }));
 
         private static IHostBuilder CreateHostBuilderLocal(string[] args) =>
             Host.CreateDefaultBuilder(args)

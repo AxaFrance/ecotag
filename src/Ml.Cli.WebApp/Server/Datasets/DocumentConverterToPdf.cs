@@ -27,6 +27,14 @@ public class DocumentConverterToPdf
         _datasetsSettings = datasetsSettings;
         _logger = logger;
     }
+
+    public int LibreOfficeNumberWorker
+    {
+        get
+        {
+            return _datasetsSettings.Value.LibreOfficeNumberWorker ?? Environment.ProcessorCount;
+        }
+    }
     
     public async Task<Stream> ConvertAsync(string filename, Stream inputStream)
     {
@@ -34,7 +42,7 @@ public class DocumentConverterToPdf
         {
             if (_semaphoreSlim == null)
             {
-                var numberWorker = _datasetsSettings.Value.LibreOfficeNumberWorker ?? Environment.ProcessorCount;
+                var numberWorker = LibreOfficeNumberWorker;
                 _semaphoreSlim = new SemaphoreSlim(numberWorker, numberWorker);
             }
         }
@@ -104,7 +112,7 @@ public class DocumentConverterToPdf
                 throw new Exception("No port found");
             }
         }
-        var userPath = Path.Combine(Path.GetTempPath(), _dirname,currentPort.ToString() ).Replace("\\", "/");
+        var userPath = Path.Combine(Path.GetTempPath(), _dirname, currentPort.ToString()).Replace("\\", "/");
         Directory.CreateDirectory(userPath);
 
         var argument =

@@ -42,28 +42,8 @@ public class GetProjectFileCmd
         if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
-       var file= await _datasetsRepository.GetFileAsync(datasetId, fileId);
-
-       var extentions = new List<string>() { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".tif", ".tiff", ".rtf", ".odt", ".ods", ".odp" };
-       if (!file.IsSuccess) return file;
-       if (!extentions.Contains(Path.GetExtension(file.Data.Name))) return file;
-       var newStream = await _documentConverterToPdf.ConvertAsync(file.Data.Name, file.Data.Stream);
-       if (newStream == null)
-       {
-           return file;
-       }
-       var res = new ResultWithError<FileServiceDataModel, ErrorResult>
-       {
-           Data = new FileServiceDataModel()
-           {
-               Stream = newStream,
-               Length = newStream.Position,
-               Name = $"{file.Data.Name}.pdf",
-               ContentType = "application/pdf"
-           }
-       };
-       return res;
-
+       var file= await _datasetsRepository.GetFileAsync(datasetId, fileId, true);
+       return file;
     }
     
 

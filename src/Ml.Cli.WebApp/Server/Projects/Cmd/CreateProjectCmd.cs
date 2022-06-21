@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -62,12 +63,14 @@ public class CreateProjectCmd
     private readonly ProjectsRepository _projectsRepository;
     private readonly GroupsRepository _groupsRepository;
     private readonly UsersRepository _usersRepository;
+    private readonly AnnotationsRepository _annotationsRepository;
 
-    public CreateProjectCmd(ProjectsRepository projectsRepository, GroupsRepository groupsRepository, UsersRepository usersRepository)
+    public CreateProjectCmd(ProjectsRepository projectsRepository, GroupsRepository groupsRepository, UsersRepository usersRepository, AnnotationsRepository annotationsRepository)
     {
         _projectsRepository = projectsRepository;
         _groupsRepository = groupsRepository;
         _usersRepository = usersRepository;
+        _annotationsRepository = annotationsRepository;
     }
 
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateProjectWithUserInput createProjectWithUserInput)
@@ -136,6 +139,9 @@ public class CreateProjectCmd
             return commandResult;
         }
 
+        if(_annotationsRepository != null) {
+            await _annotationsRepository.InitializeReservationAsync(createProjectWithUserInput.CreateProjectInput.DatasetId, result.Data);
+        }
         commandResult.Data = result.Data;
         return commandResult;
     }

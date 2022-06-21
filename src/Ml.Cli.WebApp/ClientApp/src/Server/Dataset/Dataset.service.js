@@ -18,6 +18,7 @@ export const Locked = {
     None:0,
     Pending:1,
     Locked:2,
+    LockedAndWorkInProgress:3
 }
 
 export const fetchDatasets = fetch => async (locked = null) =>{

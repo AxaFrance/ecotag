@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -22,7 +23,17 @@ public class ListDatasetCmd
 
         if (user == null) return new List<ListDataset>();
 
-        var result = await _datasetsRepository.ListDatasetAsync(locked, user.GroupIds);
+        var lockedItems = new List<DatasetLockedEnumeration>();
+        if (locked is DatasetLockedEnumeration.Locked)
+        {
+            lockedItems.Add(DatasetLockedEnumeration.Locked);
+            lockedItems.Add(DatasetLockedEnumeration.LockedAndWorkInProgress);
+        }
+        else if(locked.HasValue)
+        {
+            lockedItems.Add(locked.Value);
+        }
+        var result = await _datasetsRepository.ListDatasetAsync(lockedItems, user.GroupIds);
         return result;
     }
 }

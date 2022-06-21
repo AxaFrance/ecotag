@@ -1,6 +1,6 @@
 ﻿import {resilienceStatus} from "../../shared/Resilience";
 import {useHistory, useParams} from "react-router";
-import {useEffect, useReducer} from "react";
+import {useEffect, useReducer, useRef} from "react";
 import {fetchAnnotate, fetchProject, fetchReserveAnnotations} from "../Project.service";
 import {reducer} from "./Annotation.reducer";
 
@@ -123,25 +123,50 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     dispatch({type: 'annotate', data});
 };
 
+function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    // Remember the latest function.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
+
 export const usePage = (fetch, environment) => {
     const {projectId, documentId} = useParams();
     const history = useHistory();
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
                 .then(() => reserveAnnotationAsync(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus, environment));
-        } else {
-            const items = state.annotations.items;
-            const currentItem = items.find((item) => item.fileId === documentId);
-            const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            const reserveBeforeEndIndex = environment?.datasets?.reserveBeforeEndIndex ?? 10;
-            if (currentIndex + reserveBeforeEndIndex >= items.length) {
-                reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus, environment)
-            }
-        }
+        } 
     }, [documentId]);
+
+    useInterval(() => {
+        if(state.annotations.reservationStatus === resilienceStatus.LOADING){
+            return;
+        }
+        const items = state.annotations.items;
+        const currentItem = items.find((item) => item.fileId === documentId);
+        const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
+        const reserveBeforeEndIndex = environment?.datasets?.reserveBeforeEndIndex ?? 10;
+        if (currentIndex + reserveBeforeEndIndex >= items.length) {
+            reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus, environment)
+        }
+    }, 3000);
 
     const items = state.annotations.items;
     const itemSize = items.length;

@@ -32,5 +32,6 @@ public static class ConfigureExtension
         services.AddScoped<AnnotationsRepository, AnnotationsRepository>();
         services.AddScoped<ImportDatasetFilesService, ImportDatasetFilesService>();
         services.AddScoped<DocumentConverterToPdf, DocumentConverterToPdf>();
+        services.AddScoped<DatasetsConvertRepository, DatasetsConvertRepository>();
     }
 }

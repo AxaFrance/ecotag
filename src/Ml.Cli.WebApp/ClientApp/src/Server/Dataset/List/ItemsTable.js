@@ -11,6 +11,8 @@ const getIconClassname = (locked) =>{
     switch (locked) {
         case Locked.Locked:
             return 'btn af-btn--circle af-btn--locked';
+        case Locked.LockedAndWorkInProgress:
+            return 'btn af-btn--circle af-btn--locked-and-work-in-progress';
         case Locked.Pending:
             return 'btn af-btn--circle af-btn--pending';
         case Locked.None:
@@ -22,6 +24,7 @@ const getIconClassname = (locked) =>{
 const getIcon = (locked) =>{
     switch (locked) {
         case Locked.Locked:
+        case Locked.LockedAndWorkInProgress:
             return 'lock';
         case Locked.Pending:
             return 'refresh';
@@ -35,6 +38,8 @@ const getTitle = (locked) =>{
     switch (locked) {
         case Locked.Locked:
             return 'vérouillée';
+        case Locked.LockedAndWorkInProgress:
+            return 'vérouillée et travail en cours';
         case Locked.Pending:
             return 'en cours';
         case Locked.None:

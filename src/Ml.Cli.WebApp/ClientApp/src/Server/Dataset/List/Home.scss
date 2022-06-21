@@ -10,6 +10,9 @@
   &--pending {
     background-color: orange;
   }
+  &--locked-and-work-in-progress {
+    background-color: darkgoldenrod;
+  }
   &--none {
     background-color: #2a87d0;
   }

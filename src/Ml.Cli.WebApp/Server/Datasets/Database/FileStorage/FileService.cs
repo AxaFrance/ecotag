@@ -31,7 +31,7 @@ public class FileService : IFileService
         var containerName = GetContainerName(blobFileUri);
         var fileName = GetPathEnd(blobFileUri);
         fileStream.Position = 0;
-        var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
+        var cloudBlob = await CloudBlockBlobAsync(blobStorageName, containerName, fileName);
         await cloudBlob.UploadAsync(fileStream);
     }
 
@@ -40,7 +40,7 @@ public class FileService : IFileService
         var blobStorageName = GetBlobStorageName(blobFileUri);
         var containerName = GetContainerName(blobFileUri);
         var fileName = GetPathEnd(blobFileUri);
-        var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
+        var cloudBlob = await CloudBlockBlobAsync(blobStorageName, containerName, fileName);
         return await cloudBlob.DeleteIfExistsAsync();
     }
 
@@ -91,6 +91,15 @@ public class FileService : IFileService
         return path;
     }
     
+    public async Task<Boolean> IsFileExistAsync(string blobUri)
+    {
+        var blobStorageName = GetBlobStorageName(blobUri);
+        var containerName = GetContainerName(blobUri);
+        var fileName = GetPathEnd(blobUri);
+        var blobClient = await CloudBlockBlobAsync(blobStorageName, containerName, fileName);
+        return await blobClient.ExistsAsync();
+    }
+    
     private static string GetContainerName(string blobFileUri)
     {
         var paths = blobFileUri.Replace("azureblob://", "").Split("/");
@@ -108,7 +117,7 @@ public class FileService : IFileService
         var blobStorageName = GetBlobStorageName(blobFileUri);
         var containerName = GetContainerName(blobFileUri);
         var fileName = GetPathEnd(blobFileUri);
-        var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
+        var cloudBlob = await CloudBlockBlobAsync(blobStorageName, containerName, fileName);
         var result = new ResultWithError<FileServiceDataModel, ErrorResult>();
         if (cloudBlob == null)
         {
@@ -134,7 +143,7 @@ public class FileService : IFileService
     private async Task<ResultWithError<FileInfoServiceDataModel, ErrorResult>> GetPropertiesAsync(string blobStorageName,
         string containerName, string fileName)
     {
-        var cloudBlob = await CloudBlockBlob(blobStorageName, containerName, fileName);
+        var cloudBlob = await CloudBlockBlobAsync(blobStorageName, containerName, fileName);
         var result = new ResultWithError<FileInfoServiceDataModel, ErrorResult>();
         if (cloudBlob == null)
         {
@@ -165,7 +174,7 @@ public class FileService : IFileService
         return container;
     }
 
-    private async Task<BlobClient> CloudBlockBlob(string blobStorageName, string containerName, string fileName)
+    private async Task<BlobClient> CloudBlockBlobAsync(string blobStorageName, string containerName, string fileName)
     {
         if (string.IsNullOrEmpty(fileName)) return null;
         var container = await CloudBlobContainer(blobStorageName, containerName);

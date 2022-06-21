@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -14,4 +15,6 @@ public interface IFileService
     Task<IDictionary<string, ResultWithError<FileInfoServiceDataModel, ErrorResult>>> GetInputDatasetFilesAsync(
         string blobUri,
         string datasetType);
+
+    Task<Boolean> IsFileExistAsync(string blobUri);
 }

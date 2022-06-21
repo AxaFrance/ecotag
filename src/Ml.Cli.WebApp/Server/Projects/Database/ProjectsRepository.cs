@@ -69,6 +69,7 @@ public class ProjectsRepository
         var projectModelEnum = await _projectsContext.Projects
             .AsNoTracking()
             .Where(project => userGroupIds.Contains(project.GroupId.ToString()))
+            .OrderByDescending(p => p.CreateDate)
             .ToListAsync();
         return projectModelEnum.ConvertAll(element => element.ToProjectDataModel());
     }
