@@ -2,7 +2,7 @@
 import { GlobalHotKeys } from 'react-hotkeys';
 import Toolbar, {ToolbarButtonContainer, ToolbarButton} from '../Toolbar';
 
-const ToolbarContainer = ({ setState, state, onSubmit }) => {
+const ToolbarContainer = ({ setState, state, onSubmit, isSubmitDisabled }) => {
 
     const onZoomIn = (e) => {
         e.preventDefault();
@@ -28,7 +28,7 @@ const ToolbarContainer = ({ setState, state, onSubmit }) => {
     
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
-            <Toolbar onSubmit={onSubmit} isSubmitDisabled={state.annotation.label ===null}>
+            <Toolbar onSubmit={onSubmit} isSubmitDisabled={isSubmitDisabled}>
                 <ToolbarButtonContainer>
                     <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In" />
                     <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out" />

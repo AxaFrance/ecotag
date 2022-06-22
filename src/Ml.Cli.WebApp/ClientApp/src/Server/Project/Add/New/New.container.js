@@ -161,6 +161,11 @@ export const reducer = (state, action) => {
                   value: 'DocumentClassifier',
                   label: "Classification de document",
                   type: "Document"
+                },
+                {
+                  value: 'DocumentOcr',
+                  label: "Saisie de texte contenu dans un document",
+                  type: "Document"
                 }];
               const datasetId = event.value;
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;

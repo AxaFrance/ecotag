@@ -56,6 +56,13 @@ public static class AnnotationInputValidator
                     isValid = true;
                 }
                 break;
+            case AnnotationTypeEnumeration.DocumentOcr:
+                var annotationDocumentOcr = DeserializeAnnotation<AnnotationDocumentOcr>(expectedOutput, logger);
+                if (annotationDocumentOcr != null)
+                {
+                    isValid = AnnotationDocumentOcrValidator.Validate(annotationDocumentOcr.Labels, project);
+                }
+                break;
             case AnnotationTypeEnumeration.Ocr:
                 var annotationOcr = DeserializeAnnotation<AnnotationOcr>(expectedOutput, logger);
                 if (annotationOcr != null)

@@ -10,6 +10,7 @@ import Attachments from "./Attachments";
 import "./EmlClassifier.scss";
 import MailSummary from "./MailSummary";
 import Attachment from "./Attachment";
+import {EmlMode} from "./EmlMode";
 
 const isEml =(blob) =>{
     return blob.mimeType === "message/rfc822" || (blob.mimeType === "application/octet-stream" && blob.filename.toLocaleLowerCase().endsWith(".eml"))
@@ -92,7 +93,8 @@ const onFileChange = (state, setState) => async (e) => {
     if(e.target.files.length === 0){
         return;
     }
-    setState({ ...state, loaderMode:LoaderModes.get, mail: null, annotation :{classification:null}});
+    
+    setState({ ...state, loaderMode:LoaderModes.get, mail: null, annotation :{label:null}});
     const file = e.target.files[0];
     const filename = e.currentTarget.value;
     const isEmlInput = { filename,  mimeType:file.type};
@@ -112,10 +114,15 @@ const onFileChange = (state, setState) => async (e) => {
     }
 }
 
-const initAsync = async (url, expectedOutput, filename) => {
+const initAsync = async (url, expectedOutput, filename, mode) => {
     const response = await fetch(url);
     const blob = await response.blob();
-    let annotation = expectedOutput ? expectedOutput : {label:null};
+    let annotation; 
+        if(mode === EmlMode.classifier) {
+            annotation= expectedOutput ? expectedOutput : {label: null};
+        } else {
+            annotation= expectedOutput ? expectedOutput.labels : {};
+        }
     const isEmlInput = { filename,  mimeType:blob.type};
     if(isEml(isEmlInput)){
         const message = await parseMessageAsync(blob);
@@ -175,21 +182,22 @@ const updateAttachments =(attachments, id, dataToAdd) =>{
     return newAttachments;
 }
 
-
-const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachment'}) => {
+const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachment', mode = EmlMode.classifier}) => {
+    
+    const annotationDefaultValue = mode === EmlMode.classifier ? {label: null}: {};
     const [state, setState] = useState({
         fontSize:60,
         loaderMode: LoaderModes.get,
         mail:null,
         document:null,
-        annotation: {label: null},
+        annotation: annotationDefaultValue,
     });
 
     useEffect( () => {
         let isMounted = true;
         if (url) {
             setState({...state, loaderMode : LoaderModes.get, mail:null, document:null, annotation :{label:null}});
-            initAsync(url, expectedOutput, filename).then((data)=> {
+            initAsync(url, expectedOutput, filename, mode).then((data)=> {
                 if(isMounted) {
                     setState({...state, loaderMode: LoaderModes.none, ...data});
                 }
@@ -236,7 +244,16 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
     }
     
     const onSubmitWrapper= () => {
-        onSubmit(state.annotation.label);
+        if(mode ===EmlMode.ocr){
+            const defaultLabel = {}
+            labels.map(label => {
+                const propertyName = label.name;
+                defaultLabel[propertyName] = state.annotation[propertyName] ? state.annotation[propertyName]: '';
+            });
+            onSubmit(defaultLabel);
+        } else{
+            onSubmit(state.annotation.label);
+        }
     }
     
     const mail = state.mail;
@@ -251,23 +268,23 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
         <Loader mode={state.loaderMode} text={"Your browser is extracting data"}>
             {mail != null && <div id="email-container">
                 <div className="eml__container" >
-                    <div>
-                        <MailSummary attachment={mail} setState={setState} state={state} labels={labels} />
-                    </div>
-                    <div>
+                    <div className="eml__container-principal">
                         <Mail attachment={mail} title="Mail principal" onChange={onChange} />
                         <Attachments mail={mail.mail} styleImageContainer={styleImageContainer} onChange={onChange} />
+                    </div>
+                    <div className="eml__container-summary">
+                        <MailSummary attachment={mail} setState={setState} state={state} labels={labels}  mode={mode} />
                     </div>
                 </div>
             </div>}
             {document != null &&
                 <div id="email-container">
                     <div className="eml__container" >
-                        <div>
-                            <MailSummary mmary attachment={document} setState={setState} state={state} labels={labels} title={filename} />
-                        </div>
-                        <div>
+                        <div className="eml__container-principal">
                             <Attachment attachment={document} styleImageContainer={styleImageContainer} onChange={onChange} />
+                        </div>
+                        <div className="eml__container-summary">
+                            <MailSummary attachment={document} setState={setState} state={state} labels={labels} title={filename} mainTitle={"Document"} mode={mode} />
                         </div>
                     </div>
                 </div>}
@@ -276,6 +293,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
             state={state}
             setState={setState}
             onSubmit={onSubmitWrapper}
+            isSubmitDisabled={mode === EmlMode.classifier ? state.annotation.label ===null : false}
         />
     </div>
 }

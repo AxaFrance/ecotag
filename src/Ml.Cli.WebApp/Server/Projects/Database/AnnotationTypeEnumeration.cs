@@ -8,5 +8,6 @@ public enum AnnotationTypeEnumeration
     Ocr = 3,
     Rotation = 4,
     EmlClassifier = 5,
-    DocumentClassifier = 6
+    DocumentClassifier = 6,
+    DocumentOcr = 7
 }

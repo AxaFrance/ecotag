@@ -2,7 +2,7 @@
 
 const EmlClassifier = React.lazy(() => import('./EmlClassifier'));
 
-const EmlClassifierLazy = ({url, labels, onSubmit, expectedOutput, filename}) => {
+const EmlClassifierLazy = ({url, labels, onSubmit, expectedOutput, filename, mode}) => {
     
     return <Suspense fallback={<div>Loading...</div>}>
         <EmlClassifier
@@ -11,6 +11,7 @@ const EmlClassifierLazy = ({url, labels, onSubmit, expectedOutput, filename}) =>
             onSubmit={onSubmit}
             expectedOutput={expectedOutput}
             filename={filename}
+            mode={mode}
         />
     </Suspense>
     

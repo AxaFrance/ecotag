@@ -8,6 +8,7 @@ import NamedEntityLazy from "../NamedEntity/NamedEntityLazy";
 
 import ImageClassifierLazy from "../ImageClassifier/ImageClassifierLazy";
 import EmlClassifierLazy from "../EmlClassifier/EmlClassifierLazy";
+import {EmlMode} from "../EmlClassifier/EmlMode";
 
 
 const setAnnotationObject = (annotationType, e) => {
@@ -23,6 +24,10 @@ const setAnnotationObject = (annotationType, e) => {
                 "width": e.width,
                 "height": e.height,
                 "labels": e.labels
+            };
+        case 'DocumentOcr':
+            return {
+                "labels": e
             };
         case "Rotation":
             return {
@@ -114,6 +119,16 @@ const AnnotationSwitch = ({url, annotationType, labels, filename, expectedOutput
                 onSubmit={onDatasetSubmit}
                 expectedOutput={expectedOutput}
                 filename={filename}
+                mode={EmlMode.classifier}
+            />
+        case "DocumentOcr":
+            return <EmlClassifierLazy
+                url={url}
+                labels={labels}
+                onSubmit={onDatasetSubmit}
+                expectedOutput={expectedOutput}
+                filename={filename}
+                mode={EmlMode.ocr}
             />
         default:
             return <></>
