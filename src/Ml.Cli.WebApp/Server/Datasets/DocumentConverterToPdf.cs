@@ -63,7 +63,7 @@ public class DocumentConverterToPdf
             {
                 await inputStream.CopyToAsync(fileStream);
             }
-            await _semaphoreSlim.WaitAsync(TimeSpan.FromSeconds(120));
+            await _semaphoreSlim.WaitAsync(TimeSpan.FromSeconds(_datasetsSettings.Value.LibreOfficeTimeout+2));
             try
             {
                 await LaunchCommandLineAppAsync(exe, tempFilePathWithoutFileName, fileTempPath,
