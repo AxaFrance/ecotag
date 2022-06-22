@@ -58,7 +58,7 @@ public class DocumentConverterToPdf
             var exe = _datasetsSettings.Value.LibreOfficeExePath.Replace("{basePath}", basePath);
             
             var tempFilePathWithoutFileName = Path.GetTempPath();
-            var fileTempPath = Path.Combine(tempFilePathWithoutFileName, Path.GetFileName(filename));
+            var fileTempPath = Path.Combine(tempFilePathWithoutFileName, Guid.NewGuid() + Path.GetFileName(filename));
             await using (var fileStream = File.Create(fileTempPath))
             {
                 await inputStream.CopyToAsync(fileStream);

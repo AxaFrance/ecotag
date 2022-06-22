@@ -98,7 +98,7 @@ public class AnnotationsRepository
             var files = await _datasetsContext.Files.Where(f => f.DatasetId == datasetGuid)
                 .Select(f => new { f.Id, f.Name }).ToListAsync();
 
-            var currentTicks = DateTime.Now.AddMinutes(10).Ticks;
+            var currentTicks = DateTime.Now.AddDays(2).Ticks;
             foreach (var file in files)
             {
                 if (!DatasetsRepository.ExtentionsConvertedToPdf.Contains(Path.GetExtension(file.Name))) continue;

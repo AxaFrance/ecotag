@@ -47,8 +47,9 @@ public class DatasetsConvertRepository
 
         var filenames = await _datasetsContext.Files.AsNoTracking().Where(f => f.DatasetId == Guid.Parse(datasetId))
             .Select(f => new FileToConvertPdf {Name = f.Name, Id=f.Id }).ToListAsync();
-
-        var chunks = SplitByChunks(filenames, _documentConverterToPdf.LibreOfficeNumberWorker);
+        
+        var chunkSize = (filenames.Count / _documentConverterToPdf.LibreOfficeNumberWorker) + 1;
+        var chunks = SplitByChunks(filenames, chunkSize);
         var promises = new List<Task>();
         foreach (var chunk in chunks)
         {
