@@ -20,7 +20,7 @@ public class DeleteProjectShould
     {
         var (mockedFileService, mockedBlobService) = InitServices();
         var mockedResult = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService);
-        var deleteProjectCmd = new ExportThenDeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedResult.DeleteRepository, mockedBlobService);
+        var deleteProjectCmd = new ExportThenDeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedResult.DeleteRepository, mockedBlobService, mockedResult.GroupRepository);
         var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, mockedResult.Dataset3Project1Id);
         var resultOk = result as OkResult;
         Assert.NotNull(resultOk);
@@ -33,7 +33,7 @@ public class DeleteProjectShould
     {
         var (mockedFileService, mockedBlobService) = InitServices();
         var mockedResult = await DatasetMock.InitMockAsync(nameIdentifier, mockedFileService);
-        var deleteProjectCmd = new ExportThenDeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedResult.DeleteRepository, mockedBlobService);
+        var deleteProjectCmd = new ExportThenDeleteProjectCmd(mockedResult.UsersRepository, mockedResult.ProjectsRepository, mockedResult.DatasetsRepository, mockedResult.AnnotationsRepository, mockedResult.DeleteRepository, mockedBlobService, mockedResult.GroupRepository);
         var result = await mockedResult.ProjectsController.Delete(deleteProjectCmd, isProjectKnown ? mockedResult.Dataset3Project1Id : new Guid().ToString());
         var resultKo = result as BadRequestObjectResult;
         Assert.NotNull(resultKo);
