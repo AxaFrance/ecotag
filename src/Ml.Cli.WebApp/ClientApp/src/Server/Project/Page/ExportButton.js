@@ -25,9 +25,8 @@ const ExportButton = ({user: {roles = []}, onExport, projectId, projectName}) =>
     
     return (
         <>
-            {roles.includes(DataScientist) ?
+            {roles.includes(DataScientist) &&
                 <a className="ft-actionBar__link" onClick={exportAnnotations} href="">Exporter</a>
-                : null
             }
         </>
     );
