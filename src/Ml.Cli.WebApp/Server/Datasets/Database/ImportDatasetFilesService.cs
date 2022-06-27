@@ -46,7 +46,8 @@ public class ImportDatasetFilesService
         var filesResult = await fileService.GetInputDatasetFilesAsync(
             $"azureblob://TransferFileStorage/input/{importedDatasetName}", datasetType.ToString());
         var successFiles = filesResult
-            .Where(x => x.Value.IsSuccess).ToList();
+            .Where(x => x.Value.IsSuccess).Where(f => FileValidator.IsFileExtensionValid(f.Key, datasetType.ToString()) && FileValidator.IsFileSizeValid(f.Value.Data.Length)).ToList();
+        
         await datasetContext.Files.AddRangeAsync(successFiles.Select(x => new FileModel
         {
             Name = x.Key,

@@ -37,7 +37,9 @@ export const init = (fetch, dispatch) => async projectId => {
 
     dispatch({type: 'init', data});
 };
-export const reserveAnnotationAsync = (fetch, dispatch, history) => async (projectId, documentId, currentItemsLength, status, environment) => {
+
+export const reserveAnnotationAsync = (fetch, dispatch, history) => async (projectId, documentId, currentItems, status, environment) => {
+    const currentItemsLength = currentItems.length;
     if (status === resilienceStatus.LOADING) {
         return;
     }
@@ -62,8 +64,13 @@ export const reserveAnnotationAsync = (fetch, dispatch, history) => async (proje
     const annotations = await response.json();
     const annotationLength = annotations.length;
     const promises=[];
+    let firstFullfilledFileId = null;
     for (let i = 0; i < annotationLength; i++) {
         const annotation = annotations[i];
+        const itemFound = currentItems.find(ci => ci.fileId === annotation.fileId);
+        if(itemFound){
+            continue;
+        }
         const url = `projects/${projectId}/files/${annotation.fileId}`;
         const responsePromise = fetch(url, {method: 'GET'}).then(async response => {
             if (response.status === 403 || response.status >= 500) return;
@@ -73,6 +80,9 @@ export const reserveAnnotationAsync = (fetch, dispatch, history) => async (proje
                 status: resilienceStatus.LOADING,
                 items: [annotation],
             };
+            if(!firstFullfilledFileId){
+                firstFullfilledFileId = annotation.fileId;
+            }
             dispatch({type: 'reserve_annotation', data});
         });
         promises.push(responsePromise);
@@ -93,8 +103,8 @@ export const reserveAnnotationAsync = (fetch, dispatch, history) => async (proje
     if (currentItemsLength === 0 && annotationLength === 0) {
         const url = "end";
         history.replace(url);
-    } else if (fileId == null && currentItemsLength === 0 && annotationLength > 0) {
-        const url = `${annotations[0].fileId}`;
+    } else if (fileId == null && currentItemsLength === 0 && annotationLength > 0 && firstFullfilledFileId) {
+        const url = `${firstFullfilledFileId}`;
         history.replace(url);
     }
 };
@@ -151,7 +161,7 @@ export const usePage = (fetch, environment) => {
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
-                .then(() => reserveAnnotationAsync(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus, environment));
+                .then(() => reserveAnnotationAsync(fetch, dispatch, history)(projectId, documentId, state.annotations.items, state.annotations.reservationStatus, environment));
         } 
     }, [documentId]);
 
@@ -164,9 +174,9 @@ export const usePage = (fetch, environment) => {
         const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
         const reserveBeforeEndIndex = environment?.datasets?.reserveBeforeEndIndex ?? 10;
         if (currentIndex + reserveBeforeEndIndex >= items.length) {
-            reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus, environment)
+            reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items, state.annotations.reservationStatus, environment)
         }
-    }, 3000);
+    }, 5000);
 
     const items = state.annotations.items;
     const itemSize = items.length;

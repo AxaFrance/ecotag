@@ -39,6 +39,11 @@ public static class FileValidator
     
     public static bool IsFileSizeValid(Stream fileStream)
     {
-        return fileStream.Length < MaxFileSize * Mb;
+        return IsFileSizeValid(fileStream.Length);
+    }
+    
+    public static bool IsFileSizeValid(long fileLenght)
+    {
+        return fileLenght < MaxFileSize * Mb;
     }
 }
