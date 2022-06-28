@@ -13,6 +13,7 @@ namespace Ml.Cli.WebApp.Local
 {
     [ApiController]
     [Route("api/local/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class DatasetsController : ControllerBase
     {
         private readonly IFileLoader _fileLoader;

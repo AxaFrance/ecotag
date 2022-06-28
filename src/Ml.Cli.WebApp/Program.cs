@@ -12,6 +12,7 @@ using Ml.Cli.PathManager;
 using Ml.Cli.WebApp.Local;
 using Ml.Cli.WebApp.Local.Paths;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Datasets;
 using Serilog;
 
 namespace Ml.Cli.WebApp
@@ -56,7 +57,6 @@ namespace Ml.Cli.WebApp
             
             app.OnExecute(async () =>
             {
-
                 var tasksValue = PathAdapter.AdaptPathForCurrentOs(tasksPath.Value());
                 var baseValue = PathAdapter.AdaptPathForCurrentOs(basePath.Value());
                 var comparesValue = PathAdapter.AdaptPathForCurrentOs(comparesPaths.Value());
@@ -115,13 +115,12 @@ namespace Ml.Cli.WebApp
                     config.AddEnvironmentVariables();
                 }).ConfigureAppConfiguration((context, config) =>
                 {
-                    if (!context.HostingEnvironment.IsDevelopment()) {
-                        var builtConfig = config.Build();
-                        var keyVaultConfigBuilder = new ConfigurationBuilder();
-                        keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
-                        var keyVaultConfig = keyVaultConfigBuilder.Build();
-                        config.AddConfiguration(keyVaultConfig);
-                    }
+                    if (context.HostingEnvironment.IsDevelopment()) return;
+                    var builtConfig = config.Build();
+                    var keyVaultConfigBuilder = new ConfigurationBuilder();
+                    keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+                    var keyVaultConfig = keyVaultConfigBuilder.Build();
+                    config.AddConfiguration(keyVaultConfig);
                 })
                 .UseSerilog((context, logger) => { logger.ReadFrom.Configuration(context.Configuration); })
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -129,7 +128,10 @@ namespace Ml.Cli.WebApp
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                     webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<StartupServer>();
-                });
+                }).ConfigureServices(((hostContext, services) =>
+                {
+                    services.AddHostedService<DatasetsWorker>();
+                }));
 
         private static IHostBuilder CreateHostBuilderLocal(string[] args) =>
             Host.CreateDefaultBuilder(args)

@@ -6,6 +6,7 @@ using Ml.Cli.WebApp.Server.Datasets.Cmd;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Projects.Cmd;
 
 namespace Ml.Cli.WebApp.Server.Datasets;
 
@@ -30,5 +31,7 @@ public static class ConfigureExtension
         services.AddScoped<GetImportedDatasetsCmd, GetImportedDatasetsCmd>();
         services.AddScoped<AnnotationsRepository, AnnotationsRepository>();
         services.AddScoped<ImportDatasetFilesService, ImportDatasetFilesService>();
+        services.AddScoped<DocumentConverterToPdf, DocumentConverterToPdf>();
+        services.AddScoped<DatasetsConvertRepository, DatasetsConvertRepository>();
     }
 }

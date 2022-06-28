@@ -58,14 +58,33 @@ const New = ({ fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets })
               helpMessage="Ex : Image, Text"
               onChange={onChange}
               options={[
-                { value: 'Image', label: 'Images (.jpg, .png, jpeg, .tiff)' },
+                { value: 'Image', label: 'Images (.jpg, .png, jpeg)' },
+                { value: 'Document', label: 'Documents (.txt, .eml, .tiff, .pdf, .doc, etc.)' },
                 { value: 'Text', label: 'Text (.txt)' }, 
                 { value: 'Eml', label: 'Mail (.eml)' },
               ]}
               forceDisplayMessage={hasSubmit}
               messageType="error"
               {...fields[TYPE]}
-            />
+            > 
+                <HelpButton mode="click" classModifier="classifications">
+                    <h2>Informations sur les criticités</h2>
+                    <ul>
+                        <li>
+                            <span> <b>Images</b> : .jpg, .png, jpeg</span>
+                        </li>
+                        <li>
+                            <span><b>Documents</b>: .txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip</span>
+                        </li>
+                        <li>
+                            <span><b>Text</b>: .txt</span>
+                        </li>
+                        <li>
+                            <span><b>Eml</b>: .eml</span>
+                        </li>
+                    </ul>
+                </HelpButton>
+            </SelectInput>
             <SelectInput
               label="Classification"
               name={CLASSIFICATION}

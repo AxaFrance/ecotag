@@ -5,7 +5,7 @@ namespace Ml.Cli.JobApiCall
 {
     public class Callapi : IInputTask
     {
-        public Callapi(string type, string id, bool enabled, string fileDirectory, string outputDirectoryJsons, string outputDirectoryImages, string outputDirectoryInputs, string outputDirectoryOutputs, string frontDefaultStringsMatcher, string downloadStringsMatcher, bool enabledSaveImages, bool enabledSaveInputs, bool enabledSaveOutputs, Uri url, bool sortByFileType, int numberIteration, int numberParallel)
+        public Callapi(string type, string id, bool enabled, string fileDirectory, string outputDirectoryJsons, string outputDirectoryImages, string outputDirectoryInputs, string outputDirectoryOutputs, string frontDefaultStringsMatcher, string downloadStringsMatcher, bool enabledSaveImages, bool enabledSaveInputs, bool enabledSaveOutputs, Uri url, bool sortByFileType, int numberIteration, int numberParallel, int waitTimeMsMsBetweenRequest=0)
         {
             Type = type;
             Id = id;
@@ -24,6 +24,7 @@ namespace Ml.Cli.JobApiCall
             SortByFileType = sortByFileType;
             NumberIteration = numberIteration;
             NumberParallel = numberParallel;
+            WaitTimeMsBetweenRequest = waitTimeMsMsBetweenRequest;
         }
 
         public string Id { get; }
@@ -43,5 +44,6 @@ namespace Ml.Cli.JobApiCall
         public bool SortByFileType { get; }
         public int NumberIteration { get; }
         public int NumberParallel { get; }
+        public int WaitTimeMsBetweenRequest { get; }
     }
 }

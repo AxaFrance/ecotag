@@ -45,6 +45,7 @@ const New = ({ datasets, groups, fields, onChange, hasSubmit, onSubmit }) => {
                 name={TYPE}
                 id={TYPE}
                 disabled={!fields[DATASET].value}
+                forceDisplayPlaceholder={true}
                 onChange={onChange}
                 forceDisplayMessage={hasSubmit}
                 messageType="error"

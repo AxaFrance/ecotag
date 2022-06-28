@@ -8,12 +8,10 @@ import Home from './Home/Home';
 
 const Routes = () => (
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/projects" component={Project} />
-      <Route path="/datasets" component={Dataset} />
-      <Route path="/teams" component={GroupHome} />
-      <Route path="/datasets" component={Dataset} />
-      <Route component={PageNotFound} />
+        <Route path="/projects" ><Project/></Route>
+        <Route path="/datasets" ><Dataset/></Route>
+        <Route path="/teams" ><GroupHome/></Route>
+        <Route><Home/></Route>
     </Switch>
   );
 

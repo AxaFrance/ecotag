@@ -45,6 +45,8 @@ const lockedText= (locked) =>{
     switch (locked){
         case Locked.Locked:
             return "Dataset verrouillé"
+        case Locked.LockedAndWorkInProgress:
+            return "Dataset en cours de travail"
         default:
             return "Dataset en cours d'import"
     }

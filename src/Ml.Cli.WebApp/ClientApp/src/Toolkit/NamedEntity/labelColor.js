@@ -28,11 +28,3 @@ export const setLabelsColor = labels => {
   });
   return labelsProcessed;
 };
-
-export const setLabelColor = label => {
-  const color = label.color || COLOR[label.id] || '#ffe184';
-  return {
-    ...label,
-    color,
-  };
-};

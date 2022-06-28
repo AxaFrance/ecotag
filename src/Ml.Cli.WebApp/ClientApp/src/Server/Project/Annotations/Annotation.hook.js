@@ -1,6 +1,6 @@
 ﻿import {resilienceStatus} from "../../shared/Resilience";
 import {useHistory, useParams} from "react-router";
-import {useEffect, useReducer} from "react";
+import {useEffect, useReducer, useRef} from "react";
 import {fetchAnnotate, fetchProject, fetchReserveAnnotations} from "../Project.service";
 import {reducer} from "./Annotation.reducer";
 
@@ -37,7 +37,9 @@ export const init = (fetch, dispatch) => async projectId => {
 
     dispatch({type: 'init', data});
 };
-export const reserveAnnotation = (fetch, dispatch, history) => async (projectId, documentId, currentItemsLength, status) => {
+
+export const reserveAnnotationAsync = (fetch, dispatch, history) => async (projectId, documentId, currentItems, status, environment) => {
+    const currentItemsLength = currentItems.length;
     if (status === resilienceStatus.LOADING) {
         return;
     }
@@ -61,25 +63,48 @@ export const reserveAnnotation = (fetch, dispatch, history) => async (projectId,
     
     const annotations = await response.json();
     const annotationLength = annotations.length;
+    const promises=[];
+    let firstFullfilledFileId = null;
     for (let i = 0; i < annotationLength; i++) {
         const annotation = annotations[i];
-        const url = `projects/${projectId}/files/${annotation.fileId}`;
-        const response = await fetch(url, {method: 'GET'});
-        if(response.status === 403 || response.status >= 500) continue;
-        const blob = await response.blob();
-        annotation.blobUrl = window.URL.createObjectURL(blob);
-        data = {
-            status: i+1 === annotationLength ? resilienceStatus.SUCCESS : resilienceStatus.LOADING,
-            items: [annotation],
+        const itemFound = currentItems.find(ci => ci.fileId === annotation.fileId);
+        if(itemFound){
+            continue;
         }
-        dispatch({type: 'reserve_annotation', data});
+        const url = `projects/${projectId}/files/${annotation.fileId}`;
+        const responsePromise = fetch(url, {method: 'GET'}).then(async response => {
+            if (response.status === 403 || response.status >= 500) return;
+            const blob = await response.blob();
+            annotation.blobUrl = window.URL.createObjectURL(blob);
+            data = {
+                status: resilienceStatus.LOADING,
+                items: [annotation],
+            };
+            if(!firstFullfilledFileId){
+                firstFullfilledFileId = annotation.fileId;
+            }
+            dispatch({type: 'reserve_annotation', data});
+        });
+        promises.push(responsePromise);
+        const reserveHttpCallInParallel = environment?.datasets?.reserveHttpCallInParallel ?? 2; 
+        if(promises.length >= reserveHttpCallInParallel)
+        {
+            await Promise.allSettled(promises);
+            promises.length = 0;
+        }
     }
+    await Promise.allSettled(promises);
+    data = {
+        status: resilienceStatus.SUCCESS,
+        items: [],
+    }
+    dispatch({type: 'reserve_annotation', data});
     
     if (currentItemsLength === 0 && annotationLength === 0) {
         const url = "end";
         history.replace(url);
-    } else if (fileId == null && currentItemsLength === 0 && annotationLength > 0) {
-        const url = `${annotations[0].fileId}`;
+    } else if (fileId == null && currentItemsLength === 0 && annotationLength > 0 && firstFullfilledFileId) {
+        const url = `${firstFullfilledFileId}`;
         history.replace(url);
     }
 };
@@ -108,24 +133,50 @@ export const annotate = (fetch, dispatch, history) => async (projectId, fileId, 
     dispatch({type: 'annotate', data});
 };
 
-export const usePage = (fetch) => {
+function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    // Remember the latest function.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
+
+export const usePage = (fetch, environment) => {
     const {projectId, documentId} = useParams();
     const history = useHistory();
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    
     useEffect(() => {
         if (state.status === resilienceStatus.LOADING) {
             init(fetch, dispatch)(projectId)
-                .then(() => reserveAnnotation(fetch, dispatch, history)(projectId, documentId, state.annotations.items.length, state.annotations.reservationStatus));
-        } else {
-            const items = state.annotations.items;
-            const currentItem = items.find((item) => item.fileId === documentId);
-            const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
-            if (currentIndex + 5 === items.length) {
-                reserveAnnotation(fetch, dispatch, history)(projectId, null, state.annotations.items.length, state.annotations.reservationStatus)
-            }
-        }
+                .then(() => reserveAnnotationAsync(fetch, dispatch, history)(projectId, documentId, state.annotations.items, state.annotations.reservationStatus, environment));
+        } 
     }, [documentId]);
+
+    useInterval(() => {
+        if(state.annotations.reservationStatus === resilienceStatus.LOADING){
+            return;
+        }
+        const items = state.annotations.items;
+        const currentItem = items.find((item) => item.fileId === documentId);
+        const currentIndex = !currentItem ? -1 : items.indexOf(currentItem);
+        const reserveBeforeEndIndex = environment?.datasets?.reserveBeforeEndIndex ?? 10;
+        if (currentIndex + reserveBeforeEndIndex >= items.length) {
+            reserveAnnotationAsync(fetch, dispatch, history)(projectId, null, state.annotations.items, state.annotations.reservationStatus, environment)
+        }
+    }, 5000);
 
     const items = state.annotations.items;
     const itemSize = items.length;

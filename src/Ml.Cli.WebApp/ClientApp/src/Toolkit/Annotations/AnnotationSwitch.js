@@ -8,6 +8,7 @@ import NamedEntityLazy from "../NamedEntity/NamedEntityLazy";
 
 import ImageClassifierLazy from "../ImageClassifier/ImageClassifierLazy";
 import EmlClassifierLazy from "../EmlClassifier/EmlClassifierLazy";
+import {EmlMode} from "../EmlClassifier/EmlMode";
 
 
 const setAnnotationObject = (annotationType, e) => {
@@ -24,6 +25,10 @@ const setAnnotationObject = (annotationType, e) => {
                 "height": e.height,
                 "labels": e.labels
             };
+        case 'DocumentOcr':
+            return {
+                "labels": e
+            };
         case "Rotation":
             return {
                 "type": e.type,
@@ -37,10 +42,8 @@ const setAnnotationObject = (annotationType, e) => {
         case 'NER':
             return e;
         case "ImageClassifier":
-            return {
-                "label": e
-            };
         case "EmlClassifier":
+        case "DocumentClassifier":
             return {
                 "label": e
             };
@@ -48,7 +51,7 @@ const setAnnotationObject = (annotationType, e) => {
     return null;
 }
 
-const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSubmit}) => {
+const AnnotationSwitch = ({url, annotationType, labels, filename, expectedOutput={}, onSubmit}) => {
     
     const onDatasetSubmit = async e => {
         onSubmit(setAnnotationObject(annotationType, e));
@@ -109,11 +112,23 @@ const AnnotationSwitch = ({url, annotationType, labels, expectedOutput={}, onSub
                 expectedOutput={expectedOutput}
             />
         case "EmlClassifier":
+        case "DocumentClassifier":
             return <EmlClassifierLazy
                 url={url}
                 labels={labels}
                 onSubmit={onDatasetSubmit}
                 expectedOutput={expectedOutput}
+                filename={filename}
+                mode={EmlMode.classifier}
+            />
+        case "DocumentOcr":
+            return <EmlClassifierLazy
+                url={url}
+                labels={labels}
+                onSubmit={onDatasetSubmit}
+                expectedOutput={expectedOutput}
+                filename={filename}
+                mode={EmlMode.ocr}
             />
         default:
             return <></>

@@ -2,24 +2,28 @@
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 import convertPdfToImagesAsync from "../Pdf/pdf";
 
-function PdfAttachment({blob, id, onChange}){
+const loadFileAsync= async (file)=> {
+    return await file.text();
+}
+
+function TxtAttachment({blob, id, onChange}){
     const [state, setState] = useState({
-        files: [],
+        text: "",
         loaderMode: LoaderModes.none,
     });
     useEffect(() => {
         let isMounted = true;
         setState({
             ...state,
-            files: [],
+            text: "",
             loaderMode: LoaderModes.get,
         });
         onChange("loading", {id, loaderMode: LoaderModes.get});
-        convertPdfToImagesAsync([ window.location.origin+"/pdf.2.13.216.min.js"],  window.location.origin+"/pdf.2.13.216.worker.min.js")(blob).then(files => {
+        loadFileAsync(blob).then(text => {
             if(isMounted) {
                 setState({
                     ...state,
-                    files: files,
+                    text: text,
                     loaderMode: LoaderModes.none,
                 });
                 onChange("loading", {id, loaderMode: LoaderModes.none});
@@ -29,14 +33,11 @@ function PdfAttachment({blob, id, onChange}){
             isMounted = false;
         };
     }, [id]);
-    return (<Loader mode={state.loaderMode} text={"Your browser is extracting the pdf to png images"}>
-            <div>
-                {state.files.map((file, index) =><div className="eml__attachment-image-container" key={index.toString()}>
-                    <span className="eml__attachment-image-title" >p{index}</span>
-                    <img  src={file}  alt="pdf page" className="eml__attachment-image" />
-                </div>)}
-            </div>
+    return (<Loader mode={state.loaderMode} text={"Your browser is extracting text"}>
+        <div>
+            <p>{state.text}</p>
+        </div>
     </Loader>);
 }
 
-export default PdfAttachment;
+export default TxtAttachment;

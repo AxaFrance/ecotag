@@ -24,10 +24,10 @@ const Labels = ({ labels, state, setState }) => {
             <div key={label.name}>
               <p className="ocr-labels__label">{label.name}</p>
               <textarea
-    name={label.name}
-    value={value}
-    onChange={e => saveLabelValue(e, label)}
-    className="ocr-labels__textarea"/>
+                name={label.name}
+                value={value}
+                onChange={e => saveLabelValue(e, label)}
+                className="ocr-labels__textarea"/>
             </div>
           );
         })}

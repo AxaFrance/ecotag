@@ -13,6 +13,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
                 <Link className="btn af-btn af-btn--quote" to="/datasets/new">
                     <span className="af-btn__text">Nouveau dataset</span>
                 </Link>
+                <a className="af-home__access-token" target="_self" href="/access-token">access token</a>
                 <h1 className="af-title--content">Vos datasets actifs : {items.length}</h1>
                 <div className="row row--datasets-filters">
                     <div className="col">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +46,8 @@ public class ImportDatasetFilesService
         var filesResult = await fileService.GetInputDatasetFilesAsync(
             $"azureblob://TransferFileStorage/input/{importedDatasetName}", datasetType.ToString());
         var successFiles = filesResult
-            .Where(x => x.Value.IsSuccess).ToList();
+            .Where(x => x.Value.IsSuccess).Where(f => FileValidator.IsFileExtensionValid(f.Key, datasetType.ToString()) && FileValidator.IsFileSizeValid(f.Value.Data.Length)).ToList();
+        
         await datasetContext.Files.AddRangeAsync(successFiles.Select(x => new FileModel
         {
             Name = x.Key,
@@ -55,8 +57,20 @@ public class ImportDatasetFilesService
             Size = x.Value.Data.Length,
             DatasetId = Guid.Parse(datasetId)
         }));
+
+        var locked = DatasetLockedEnumeration.Locked;
+        if (datasetType == DatasetTypeEnumeration.Document)
+        {
+            var isContainFileToConvertPdf = successFiles.Count(sf =>
+                DatasetsRepository.ExtentionsConvertedToPdf.Contains(Path.GetExtension(sf.Key))) != 0;
+            if (isContainFileToConvertPdf)
+            {
+                locked = DatasetLockedEnumeration.LockedAndWorkInProgress;
+            }
+        }
+        
         var datsetModel = await datasetContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).FirstAsync();
-        datsetModel.Locked = DatasetLockedEnumeration.Locked;
+        datsetModel.Locked = locked;
         await datasetContext.SaveChangesAsync();
         cache.Remove($"GetDatasetInfoAsync({datasetId})");
     }

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Ml.Cli.WebApp.Server;
+using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -85,7 +86,7 @@ public class CreateProjectShould
             {
                 HttpContext = context
             };
-            var createProjectCmd = new CreateProjectCmd(projectsRepository, groupsRepository, usersRepository);
+            var createProjectCmd = new CreateProjectCmd(projectsRepository, groupsRepository, usersRepository, null);
             var result = await projectsController.Create(createProjectCmd, new CreateProjectInput()
             {
                 Name = name,

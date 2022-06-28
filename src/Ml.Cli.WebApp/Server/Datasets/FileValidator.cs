@@ -14,12 +14,17 @@ public static class FileValidator
         var extension = Path.GetExtension(fileName)?.ToLower();
         if (datasetType == DatasetTypeEnumeration.Image.ToString())
         {
-            var imageExtension = new List<string> { ".png", ".jpg", ".jpeg", ".tif", ".tiff" };
+            var imageExtension = new List<string> { ".png", ".jpg", ".jpeg" };
             if (!imageExtension.Contains(extension)) return false;
         }
         else if (datasetType == DatasetTypeEnumeration.Eml.ToString())
         {
             var emlExtension = new List<string> { ".eml" };
+            if (!emlExtension.Contains(extension)) return false;
+        }
+        else if (datasetType == DatasetTypeEnumeration.Document.ToString())
+        {
+            var emlExtension = new List<string> { ".eml", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".txt",  ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".rtf", ".odt", ".ods", ".odp", ".zip", ".msg" };
             if (!emlExtension.Contains(extension)) return false;
         }
         else
@@ -34,6 +39,11 @@ public static class FileValidator
     
     public static bool IsFileSizeValid(Stream fileStream)
     {
-        return fileStream.Length < MaxFileSize * Mb;
+        return IsFileSizeValid(fileStream.Length);
+    }
+    
+    public static bool IsFileSizeValid(long fileLenght)
+    {
+        return fileLenght < MaxFileSize * Mb;
     }
 }

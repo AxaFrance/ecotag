@@ -20,10 +20,11 @@ exports[`Home "" Render home page 1`] = `
     </div>
     <div
       class="home__links-container"
-    />
-    <p>
-      Vous n'avez aucun rôle attribué à votre profile.
-    </p>
+    >
+      <p>
+        Vous n'avez aucun rôle attribué à votre profile.
+      </p>
+    </div>
   </div>
 </DocumentFragment>
 `;

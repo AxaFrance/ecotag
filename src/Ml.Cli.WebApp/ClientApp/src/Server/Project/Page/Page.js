@@ -7,6 +7,7 @@ import ActionBar from './ActionBar';
 import './Page.scss';
 import Lock from "../../shared/Lock/Lock";
 import ConfirmModal from "../../shared/ConfirmModal/ConfirmModal";
+import {DataScientist} from "../../withAuthentication";
 
 const Page = ({ project, dataset, users, group, annotationsStatus, isModalOpened, onExport, user, lock }) => (
   <div className="ft-project-page">
@@ -26,13 +27,15 @@ const Page = ({ project, dataset, users, group, annotationsStatus, isModalOpened
           <Users users={users} numberAnnotationsByUsers={annotationsStatus == null ? [] : annotationsStatus.numberAnnotationsByUsers} />
       </div>
     </div>
-    <Lock 
-        isLocked={false}
-        onLockAction={lock.onLockAction}
-        text="Clôturer"
-        lockedText="Projet fermé"
-        isDisabled={false}
-    />
+      { user?.roles?.includes(DataScientist) &&
+            <Lock 
+                isLocked={false}
+                onLockAction={lock.onLockAction}
+                text="Clôturer"
+                lockedText="Projet fermé"
+                isDisabled={false}
+            /> 
+      }
   </div>
 );
 

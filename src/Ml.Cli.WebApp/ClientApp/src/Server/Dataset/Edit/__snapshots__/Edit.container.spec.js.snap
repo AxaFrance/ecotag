@@ -49,7 +49,7 @@ exports[`Edit should render correctly 1`] = `
           tabindex="0"
         >
           <input
-            accept="message/rfc822,application/octet-stream"
+            accept="message/rfc822, application/octet-stream"
             autocomplete="off"
             multiple=""
             name="datasetUploadFiles"
@@ -158,7 +158,7 @@ exports[`Edit.container init should init correctly 1`] = `
           tabindex="0"
         >
           <input
-            accept="message/rfc822,application/octet-stream"
+            accept="message/rfc822, application/octet-stream"
             autocomplete="off"
             multiple=""
             name="datasetUploadFiles"

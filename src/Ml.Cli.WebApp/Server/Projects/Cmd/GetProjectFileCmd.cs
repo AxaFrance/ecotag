@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -13,13 +15,15 @@ public class GetProjectFileCmd
     public const string DatasetNotFound = "DatasetNotFound";
     private readonly DatasetsRepository _datasetsRepository;
     private readonly ProjectsRepository _projectsRepository;
+    private readonly DocumentConverterToPdf _documentConverterToPdf;
     private readonly UsersRepository _usersRepository;
 
-    public GetProjectFileCmd(UsersRepository usersRepository, DatasetsRepository datasetsRepository, ProjectsRepository projectsRepository)
+    public GetProjectFileCmd(UsersRepository usersRepository, DatasetsRepository datasetsRepository, ProjectsRepository projectsRepository, DocumentConverterToPdf documentConverterToPdf)
     {
         _usersRepository = usersRepository;
         _datasetsRepository = datasetsRepository;
         _projectsRepository = projectsRepository;
+        _documentConverterToPdf = documentConverterToPdf;
     }
 
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> ExecuteAsync(string projectId, string fileId,
@@ -38,6 +42,9 @@ public class GetProjectFileCmd
         if (datasetInfo == null) return commandResult.ReturnError(DatasetNotFound);
         if (!user.GroupIds.Contains(datasetInfo.GroupId)) return commandResult.ReturnError(UserNotInGroup);
 
-        return await _datasetsRepository.GetFileAsync(datasetId, fileId);
+       var file= await _datasetsRepository.GetFileAsync(datasetId, fileId, true);
+       return file;
     }
+    
+
 }

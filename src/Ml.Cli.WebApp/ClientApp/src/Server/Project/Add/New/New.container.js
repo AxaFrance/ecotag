@@ -156,7 +156,17 @@ export const reducer = (state, action) => {
                     value: 'EmlClassifier',
                     label: "Classification de mail",
                     type: "Eml"
-                  }];
+                  },
+                {
+                  value: 'DocumentClassifier',
+                  label: "Classification de document",
+                  type: "Document"
+                },
+                {
+                  value: 'DocumentOcr',
+                  label: "Saisie de texte contenu dans un document",
+                  type: "Document"
+                }];
               const datasetId = event.value;
               const datasetType = state.datasets.find(dataset => dataset.id === datasetId).type;
               const reducer = (previousValue, currentValue) => {
@@ -171,6 +181,7 @@ export const reducer = (state, action) => {
                 [TYPE]: {
                   ...fields[TYPE],
                   value: '',
+                  message:MSG_REQUIRED,
                   options : options.reduce(reducer, [])
                 }};
               

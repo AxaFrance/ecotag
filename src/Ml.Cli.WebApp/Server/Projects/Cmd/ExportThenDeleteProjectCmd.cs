@@ -7,6 +7,7 @@ using Ml.Cli.WebApp.Server.Datasets;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
+using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects.Cmd.Annotations;
 using Ml.Cli.WebApp.Server.Projects.Database;
@@ -22,6 +23,7 @@ public class ExportThenDeleteProjectCmd
     private readonly DeleteRepository _deleteRepository;
     private readonly IFileService _fileService;
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
+    private readonly GroupsRepository _groupsRepository;
     public const string UserNotFound = "UserNotFound";
 
     public ExportThenDeleteProjectCmd(UsersRepository usersRepository, 
@@ -30,6 +32,7 @@ public class ExportThenDeleteProjectCmd
         AnnotationsRepository annotationsRepository, 
         DeleteRepository deleteRepository, 
         IFileService fileService,
+        GroupsRepository groupsRepository,
         IOptions<DatasetsSettings> datasetsSettings)
     {
         _usersRepository = usersRepository;
@@ -39,6 +42,7 @@ public class ExportThenDeleteProjectCmd
         _deleteRepository = deleteRepository;
         _fileService = fileService;
         _datasetsSettings = datasetsSettings;
+        _groupsRepository = groupsRepository;
     }
     
     public async Task<ResultWithError<bool, ErrorResult>> ExecuteAsync(string projectId, string nameIdentifier)
@@ -79,15 +83,16 @@ public class ExportThenDeleteProjectCmd
             NumberAnnotationsDone = annotationsStatus.NumberAnnotationsDone,
             NumberAnnotationsToDo = annotationsStatus.NumberAnnotationsToDo
         };
-        
-        await UploadProject(exportCmdResult);
+
+        var group = await _groupsRepository.GetGroupAsync(datasetResult.GroupId);
+        await UploadProject(exportCmdResult, group.Name);
         await _deleteRepository.DeleteProjectWithDatasetAsync(datasetResult, projectId);
 
         commandResult.Data = true;
         return commandResult;
     }
 
-    private async Task UploadProject(GetExportCmdResult exportCmdResult)
+    private async Task UploadProject(GetExportCmdResult exportCmdResult, string groupName)
     {
         if (_datasetsSettings.Value.IsBlobTransferActive)
         {
@@ -96,7 +101,7 @@ public class ExportThenDeleteProjectCmd
             var fileName =
                 $"{exportCmdResult.ProjectName}_{DateTime.Now.Ticks}/{exportCmdResult.ProjectName}-annotations.json";
             var stream = new MemoryStream(bytes);
-            await _fileService.UploadStreamAsync($"azureblob://TransferFileStorage/{containerName}/{fileName}", stream);
+            await _fileService.UploadStreamAsync($"azureblob://TransferFileStorage/{containerName}/{groupName}/{fileName}", stream);
         }
     }
 }

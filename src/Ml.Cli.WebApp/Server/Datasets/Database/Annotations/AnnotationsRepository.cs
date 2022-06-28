@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -84,11 +85,40 @@ public class AnnotationsRepository
                 { NameIdentifier = t.Key, NumberAnnotations = t.Select(o => o.FileId).Count() }).ToListAsync();
         return annotations;
     }
+    
+    public async Task InitializeReservationAsync(string datasetId, string projectId)
+    {
+        var datasetGuid = Guid.Parse(datasetId);
+
+        var datasetType = await _datasetsContext.Datasets.Where(d => d.Id == datasetGuid).Select(d => d.Type)
+            .FirstAsync();
+
+        if (datasetType == DatasetTypeEnumeration.Document)
+        {
+            var files = await _datasetsContext.Files.Where(f => f.DatasetId == datasetGuid)
+                .Select(f => new { f.Id, f.Name }).ToListAsync();
+
+            var currentTicks = DateTime.Now.AddDays(2).Ticks;
+            foreach (var file in files)
+            {
+                if (!DatasetsRepository.ExtentionsConvertedToPdf.Contains(Path.GetExtension(file.Name))) continue;
+                var projectGuid = Guid.Parse(projectId);
+                var reservationModel = new ReservationModel()
+                {
+                    FileId = file.Id,
+                    ProjectId = projectGuid,
+                    TimeStamp = currentTicks,
+                };
+                _datasetsContext.Reservations.Add(reservationModel);
+            }
+            await _datasetsContext.SaveChangesAsync();
+        }
+    }
 
     public async Task<IList<ReserveOutput>> ReserveAsync(string projectId, string datasetId, string creatorNameIdentifier, string fileId=null, int numberAnnotation=1, int numberToReserve=10)
     {
         var query =
-            _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId) 
+            _datasetsContext.Files.Where(f => f.DatasetId == new Guid(datasetId)
                                               && f.Annotations.Count(a => a.ProjectId == new Guid(projectId)) < numberAnnotation
                                               && f.Annotations.Count(a => a.ProjectId == new Guid(projectId) && a.CreatorNameIdentifier == creatorNameIdentifier) == 0
                                               ).Select(file =>
