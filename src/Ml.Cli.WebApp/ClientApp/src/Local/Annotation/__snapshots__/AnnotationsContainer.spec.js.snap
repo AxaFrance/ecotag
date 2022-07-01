@@ -78,6 +78,16 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
     class="image-classifier"
   >
     <div
+      class="image-classifier__image-container"
+    >
+      <img
+        alt="Classifier image"
+        id="currentImage"
+        src=""
+        style="width: 100%; transform: rotate(0deg);"
+      />
+    </div>
+    <div
       class="image-classifier__buttons-container"
     >
       <div
@@ -91,16 +101,6 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
           Firstname
         </button>
       </div>
-    </div>
-    <div
-      class="image-classifier__image-container"
-    >
-      <img
-        alt="Classifier image"
-        id="currentImage"
-        src=""
-        style="width: 80%; transform: rotate(0deg);"
-      />
     </div>
   </div>
   <div
@@ -118,7 +118,7 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
           min="1"
           name="width"
           type="range"
-          value="80"
+          value="100"
         />
         <label
           class="toolbar__button-progress-item-label"

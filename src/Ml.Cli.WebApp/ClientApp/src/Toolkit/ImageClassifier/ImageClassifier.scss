@@ -2,11 +2,13 @@
   justify-content: center;
   text-align: center;
   width:100%;
+  flex-flow: column-reverse;
+  display: inline-flex;
   &--inline-mode{
+    flex-flow: row;
     display: flex;
   }
   &__image-container{
-    display: flex;
     justify-content: center;
     width:100%;
     align-items: center;
