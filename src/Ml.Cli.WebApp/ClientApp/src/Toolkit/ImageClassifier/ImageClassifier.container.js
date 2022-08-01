@@ -9,7 +9,7 @@ const ImageClassifierContainer = ({url, labels, onSubmit, expectedOutput}) => {
         url,
         rotate: 0,
         widthImage: 100,
-        inlineMode: true,
+        inlineMode: false,
         marginRotate: 0,
         initialRotate: true,
         userInput: {},
