@@ -46,6 +46,18 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
         <>
             <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
                 <div className={className}>
+                    <div className="image-classifier__image-container">
+                        <img
+                            src={url}
+                            id="currentImage"
+                            alt="Classifier image"
+                            style={{
+                                width: `${state.widthImage}%`,
+                                transform: `rotate(${state.rotate}deg)`,
+                                margin: `${state.initialRotate ? '' : state.marginRotate}`,
+                            }}
+                        />
+                    </div>
                     <div className={classNameButtonsContainer}>
                         {coloredLabels.map((label, index) => {
                             let isSelected = false;
@@ -58,18 +70,6 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                                 </div>
                             );
                         })}
-                    </div>
-                    <div className="image-classifier__image-container">
-                        <img
-                            src={url}
-                            id="currentImage"
-                            alt="Classifier image"
-                            style={{
-                                width: `${state.widthImage}%`,
-                                transform: `rotate(${state.rotate}deg)`,
-                                margin: `${state.initialRotate ? '' : state.marginRotate}`,
-                            }}
-                        />
                     </div>
                 </div>
             </GlobalHotKeys>

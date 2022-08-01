@@ -3,13 +3,23 @@
 exports[`Check Image Classifier behaviour Should render correctly and click on button 1`] = `
 <DocumentFragment>
   <div
-    class="image-classifier"
+    class="image-classifier image-classifier--inline-mode"
   >
     <div
-      class="image-classifier__buttons-container"
+      class="image-classifier__image-container"
+    >
+      <img
+        alt="Classifier image"
+        id="currentImage"
+        src="sample_image.png"
+        style="width: 100%; transform: rotate(0deg);"
+      />
+    </div>
+    <div
+      class="image-classifier__buttons-container image-classifier__buttons-container--inline-mode"
     >
       <div
-        class="image-classifier__button-container"
+        class="image-classifier__button-container image-classifier__button-container--inline-mode"
         title="Raccourci : 1"
       >
         <button
@@ -20,7 +30,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </button>
       </div>
       <div
-        class="image-classifier__button-container"
+        class="image-classifier__button-container image-classifier__button-container--inline-mode"
         title="Raccourci : 2"
       >
         <button
@@ -31,7 +41,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </button>
       </div>
       <div
-        class="image-classifier__button-container"
+        class="image-classifier__button-container image-classifier__button-container--inline-mode"
         title="Raccourci : 3"
       >
         <button
@@ -42,7 +52,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </button>
       </div>
       <div
-        class="image-classifier__button-container"
+        class="image-classifier__button-container image-classifier__button-container--inline-mode"
         title="Raccourci : 4"
       >
         <button
@@ -52,16 +62,6 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
           Other
         </button>
       </div>
-    </div>
-    <div
-      class="image-classifier__image-container"
-    >
-      <img
-        alt="Classifier image"
-        id="currentImage"
-        src="sample_image.png"
-        style="width: 80%; transform: rotate(0deg);"
-      />
     </div>
   </div>
   <div
@@ -79,7 +79,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
           min="1"
           name="width"
           type="range"
-          value="80"
+          value="100"
         />
         <label
           class="toolbar__button-progress-item-label"
@@ -91,6 +91,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         class="toolbar__button-switch-item"
       >
         <input
+          checked=""
           class="toolbar__button-switch-item-input"
           id="inlineMode"
           type="checkbox"
