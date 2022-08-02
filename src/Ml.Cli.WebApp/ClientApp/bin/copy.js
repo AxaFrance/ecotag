@@ -7,9 +7,9 @@ const applyCopy=(input) => {
         if (fs.existsSync(destinationPath)) {
             const envFilename = "environment.dev.json";
             const envCustomFilename = "environment.dev-custom.json";
-            const destinationFilePath = path.join(destinationPath, `${envCustomFilename}`);
+            const destinationFilePath = path.join(destinationPath, envCustomFilename);
             if(!fs.existsSync(destinationPath)){
-                fs.copyFileSync(path.join(__dirname, `..\\public\\${envFilename}`), destinationFilePath);
+                fs.copyFileSync(path.join(__dirname, '..', 'public', envFilename), destinationFilePath);
                 console.log(`File copied successfully at ${destinationFilePath}`);
             }
         }
