@@ -42,7 +42,7 @@ export const extractRoles = (oidcUser, oidcMode) => {
                   roles.push(Annotateur);
               }
           }
-    }else{
+    } else {
         roles.push(Annotateur);
         roles.push(DataScientist);
         roles.push(Administateur);

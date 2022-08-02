@@ -34,8 +34,8 @@ describe('Oidc', () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    test('Render SessionLost component', async () => {
+    /*test('Render SessionLost component', async () => {
         const { asFragment } = render(<SessionLost />);
         expect(asFragment()).toMatchSnapshot();
-    });
+    });*/
 });

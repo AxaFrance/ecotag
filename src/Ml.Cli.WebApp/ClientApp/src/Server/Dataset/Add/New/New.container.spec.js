@@ -21,7 +21,8 @@ const fetch = () => {
 
 describe('New.container', () => {
     it('NewContainer render correctly', async () => {
-        const { container, getAllByText } = render(<Router><NewContainer fetch={fetch} /></Router>);
+        const environment = {datasets: {isBlobTransferActive:true}};
+        const { container, getAllByText } = render(<Router><NewContainer fetch={fetch} environment={environment} /></Router>);
         await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
         await waitFor(() => getAllByText(/Nouveau dataset/i));
     });
