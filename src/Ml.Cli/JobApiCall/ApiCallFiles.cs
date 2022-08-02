@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -188,10 +189,12 @@ namespace Ml.Cli.JobApiCall
                 );
                 
                 ServicePointManager.FindServicePoint(fileUrl.Url).ConnectionLeaseTimeout = 60000;
+                var request = new HttpRequestMessage(HttpMethod.Get, fileUrl.Url);
                 await httpClient.GetAsync(fileUrl.Url);
-                var httpResponse = await httpClient.GetAsync(fileUrl.Url);
-                var contentType = httpResponse.Headers.GetValues("Content-Type").FirstOrDefault();
-                var extension = MimeTypeMap.GetExtension(contentType, false) ?? ".png";
+                var httpResponse = httpClient.SendAsync(
+                    request, HttpCompletionOption.ResponseHeadersRead).Result;
+                var contentType = httpResponse.Content.Headers.ContentType;
+                var extension = MimeTypeMap.GetExtension(contentType?.MediaType, false) ?? ".png";
                 var filePath = Path.Combine(
                     outputPath,
                     (inputTask.SortByFileType ? fileName : fileUrl.Key) + extension);
