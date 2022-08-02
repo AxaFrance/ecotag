@@ -24,40 +24,6 @@ exports[`Oidc Render Authenticating component 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Oidc Render AuthenticatingError component 1`] = `
-<DocumentFragment>
-  <div
-    class="oidc-authenticating"
-    style="color: rgb(53, 110, 255); position: absolute; z-index: 1000; top: 0px; bottom: 0px; right: 0px; left: 0px;"
-  >
-    <div
-      class="oidc-authenticating__container"
-    >
-      <h1
-        class="oidc-authenticating__title"
-      >
-        Authentification erreur
-      </h1>
-      <p
-        class="oidc-authenticating__content"
-      >
-        Une erreur s'est produite lors de l'authentification.
-      </p>
-      <button
-        class="btn af-btn"
-        name="reauthenticate"
-      >
-        <span
-          class="af-btn-text"
-        >
-          Ré-authentifier
-        </span>
-      </button>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`Oidc Render CallBackSuccess component 1`] = `
 <DocumentFragment>
   <div
@@ -112,40 +78,6 @@ exports[`Oidc Render ServiceWorkerNotSupported component 1`] = `
       >
         Votre navigateur n’est pas assez sécurisé pour que l’authentification fonctionne. Essayez de mettre à jour votre navigateur ou d’utiliser un navigateur plus récent.
       </p>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Oidc Render SessionLost component 1`] = `
-<DocumentFragment>
-  <div
-    class="oidc-session-lost"
-    style="color: rgb(53, 110, 255); position: absolute; z-index: 1000; top: 0px; bottom: 0px; right: 0px; left: 0px;"
-  >
-    <div
-      class="oidc-session-lost__container"
-    >
-      <h1
-        class="oidc-session-lost__title"
-      >
-        Session expirée
-      </h1>
-      <p
-        class="oidc-session-lost__content"
-      >
-        Votre session a expiré. Veuillez vous ré-authentifier.
-      </p>
-      <button
-        class="btn af-btn"
-        name="reauthenticate"
-      >
-        <span
-          class="af-btn-text"
-        >
-          Ré-authentifier
-        </span>
-      </button>
     </div>
   </div>
 </DocumentFragment>
