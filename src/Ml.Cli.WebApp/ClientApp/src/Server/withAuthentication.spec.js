@@ -12,7 +12,7 @@ describe.each([
 
         const roles =  extractRoles({
             "member_of" : [memberOf]
-        })
+        }, "AXA_FRANCE");
 
         expect(roles).toStrictEqual(expectedRoles ? expectedRoles.split(","): [])
     });

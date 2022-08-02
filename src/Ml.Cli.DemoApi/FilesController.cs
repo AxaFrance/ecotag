@@ -15,7 +15,7 @@ namespace Ml.Cli.DemoApi
             var directory = id.Replace(".png", "");
             var response = fileLoader.LoadStream($"images{Path.DirectorySeparatorChar}{directory}{Path.DirectorySeparatorChar}license-specimen.pdf.png");
 
-            return Ok(response);
+            return File(response, "image/png");
         }
     }
 }

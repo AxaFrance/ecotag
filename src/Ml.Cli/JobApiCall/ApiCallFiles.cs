@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MimeTypes;
 using Ml.Cli.FileLoader;
 using Ml.Cli.JobApiCall.FileHandler;
 using Newtonsoft.Json;
@@ -147,7 +149,7 @@ namespace Ml.Cli.JobApiCall
                 {
                     if (IsStringsArrayMatch(imageUrl.Key, stringsArray.ToArray()))
                     {
-                        await DownloadImageAsync(httpClient, fileName, imageUrl, inputTask);
+                        await DownloadFilesAsync(httpClient, fileName, imageUrl, inputTask);
                     }
                 }
             }
@@ -177,7 +179,7 @@ namespace Ml.Cli.JobApiCall
             }
         }
 
-        private async Task DownloadImageAsync(HttpClient httpClient, string fileName, FileUrls fileUrl, Callapi inputTask)
+        private async Task DownloadFilesAsync(HttpClient httpClient, string fileName, FileUrls fileUrl, Callapi inputTask)
         {
             if (fileUrl.Url != null)
             {
@@ -185,18 +187,25 @@ namespace Ml.Cli.JobApiCall
                     inputTask.OutputDirectoryImages,
                     inputTask.SortByFileType ? fileUrl.Key : fileName
                 );
+                
+                ServicePointManager.FindServicePoint(fileUrl.Url).ConnectionLeaseTimeout = 60000;
+                var request = new HttpRequestMessage(HttpMethod.Get, fileUrl.Url);
+                await httpClient.GetAsync(fileUrl.Url);
+                var httpResponse = httpClient.SendAsync(
+                    request, HttpCompletionOption.ResponseHeadersRead).Result;
+                var contentType = httpResponse.Content.Headers.ContentType;
+                var extension = contentType != null ? MimeTypeMap.GetExtension(contentType.MediaType, false) : ".png";
                 var filePath = Path.Combine(
                     outputPath,
-                    (inputTask.SortByFileType ? fileName : fileUrl.Key) + ".png");
+                    (inputTask.SortByFileType ? fileName : fileUrl.Key) + extension);
                 filePath = _fileHandler.SetFileName(filePath, _fileLoader);
                 if (_fileLoader.FileExists(filePath))
                 {
                     return;
                 }
-                ServicePointManager.FindServicePoint(fileUrl.Url).ConnectionLeaseTimeout = 60000;
-                await httpClient.GetAsync(fileUrl.Url);
-                var imageBytes = await httpClient.GetByteArrayAsync(fileUrl.Url);
 
+                var imageBytes = await httpResponse.Content.ReadAsByteArrayAsync();
+                
                 _fileLoader.CreateDirectory(outputPath);
                 
                 await _fileLoader.WriteAllBytesOfFileAsync(filePath
