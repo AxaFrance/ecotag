@@ -194,7 +194,7 @@ namespace Ml.Cli.JobApiCall
                 var httpResponse = httpClient.SendAsync(
                     request, HttpCompletionOption.ResponseHeadersRead).Result;
                 var contentType = httpResponse.Content.Headers.ContentType;
-                var extension = MimeTypeMap.GetExtension(contentType?.MediaType, false) ?? ".png";
+                var extension = contentType != null ? MimeTypeMap.GetExtension(contentType.MediaType, false) : ".png";
                 var filePath = Path.Combine(
                     outputPath,
                     (inputTask.SortByFileType ? fileName : fileUrl.Key) + extension);
