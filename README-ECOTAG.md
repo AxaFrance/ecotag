@@ -33,15 +33,16 @@ Ecotag an is an awesome annotation tools.
 To run the demo with .NET 6 on your machine :
 
 ```sh
+git clone https://github.com/AxaGuilDEv/ml-cli.git
 
 # Run blob storage and SQL Server
 cd ./ml-cli
 docker-compose up -d
 
-cd ./ml-cli/src/Ml.Cli.WebApp
-dotnet run 
 # run Ecotag
-# you can navigate at https://localhost:5001
+cd ./src/Ml.Cli.WebApp
+dotnet run 
+# then, you can navigate to https://localhost:5001
 
 ```
 
