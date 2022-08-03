@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
           
       - uses: actions/setup-dotnet@v1
-      - run: dotnet test # /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
+      - run: dotnet test 
 
   build-linux:
     environment: ml-cli
@@ -48,6 +48,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
       
       - name: Sonarqube Begin
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:axaguildev /k:AxaGuilDEv_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
@@ -55,22 +56,10 @@ jobs:
       - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
     
       - name: Sonarqube end
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: SonarCloud Scan
-#        uses: sonarsource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        with:
-#          args: >
-#            -Dsonar.organization=axaguildev
-#            -Dsonar.projectKey=AxaGuilDEv_ml-cli
-#            -Dsonar.exclusions=**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts
-#            -Dsonar.javascript.lcov.reportPaths=**/ClientApp/coverage/lcov.info
-#            -Dsonar.cs.opencover.reportsPaths=**/opencover.xml
-
 
   tags:
     runs-on: ubuntu-latest
