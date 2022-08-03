@@ -41,6 +41,7 @@ docker-compose up -d
 
 # run Ecotag
 cd ./src/Ml.Cli.WebApp
+dotnet dev-certs https --trust
 dotnet run 
 # then, you can navigate to https://localhost:5001
 
