@@ -1,10 +1,17 @@
-﻿FROM node:lts-buster-slim AS node_base
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-COPY --from=node_base . .
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+ && apt-get install -y --no-install-recommends nodejs \
+ && echo "node version: $(node --version)" \
+ && echo "npm version: $(npm --version)" \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /src
-RUN echo "NODE Version:" && node --version
-RUN echo "NPM Version:" && npm --version
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
-WORKDIR /src/src/Ml.Cli.WebApp
-ENTRYPOINT ["dotnet", "run", "--", "--tasks-path", "../../demo/tasks-licenses-docker-compose.json", "--base-path", "../../demo", "--compares-paths", "licenses/compares", "--datasets-paths", "licenses/datasets"]
+RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
+WORKDIR /app
+COPY --from=build /publish .
+ENTRYPOINT ["/app/Ml.Cli.WebApp", "--base-path", "../"]
