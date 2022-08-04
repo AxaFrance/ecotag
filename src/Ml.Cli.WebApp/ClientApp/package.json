@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc": "6.0.4",
+    "@axa-fr/react-oidc": "6.0.6",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@microsoft/applicationinsights-web": "2.8.2",
     "@monaco-editor/react": "4.2.1",
@@ -40,7 +40,7 @@
     "start:local": "env-cmd -f .env.local react-scripts start",
     "start:server": "env-cmd -f .env.server react-scripts start",
     "build:local": "env-cmd -f .env.local react-scripts build",
-    "build:server": "npm run copy && env-cmd -f .env.server react-scripts build",
+    "build:server": "env-cmd -f .env.server react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "postinstall": "npm rebuild canvas --update-binary",
@@ -48,7 +48,6 @@
     "build-storybook": "build-storybook",
     "prepare": "node ./bin/copy.js"
   },
-  "homepage": ".",
   "browserslist": {
     "production": [
       ">0.2%",
