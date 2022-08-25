@@ -5,8 +5,9 @@
   "dependencies": {
     "@axa-fr/react-oidc": "6.0.6",
     "@axa-fr/react-toolkit-all": "1.4.1",
-    "@microsoft/applicationinsights-web": "2.8.2",
+    "@microsoft/applicationinsights-web": "2.8.6",
     "@monaco-editor/react": "4.2.1",
+    "acorn": "^8.8.0",
     "classnames": "2.3.1",
     "cuid": "2.1.8",
     "date-fns": "2.29.1",
@@ -14,11 +15,11 @@
     "env-cmd": "10.1.0",
     "glob": "7.1.7",
     "js-levenshtein": "1.1.6",
-    "konva": "8.3.2",
+    "konva": "8.3.10",
     "monaco-editor": "0.25.2",
     "mw.validation": "1.0.15",
     "plotty": "0.4.7",
-    "postal-mime": "1.0.12",
+    "postal-mime": "1.0.13",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
@@ -33,7 +34,7 @@
     "react-toastify": "8.0.3",
     "sanitize-html": "2.7.1",
     "tesseract.js": "2.1.5",
-    "use-image": "1.0.7"
+    "use-image": "1.0.12"
   },
   "scripts": {
     "start:local": "env-cmd -f .env.local react-scripts start",
@@ -60,23 +61,23 @@
     ]
   },
   "devDependencies": {
-    "sass": "1.54.2",
-    "@storybook/addon-actions": "6.4.22",
-    "@storybook/addon-essentials": "6.4.22",
-    "@storybook/addon-links": "6.4.22",
-    "@storybook/builder-webpack5": "6.4.22",
-    "@storybook/manager-webpack5": "6.4.22",
-    "@storybook/node-logger": "6.4.22",
-    "@storybook/preset-create-react-app": "4.1.0",
-    "@storybook/react": "6.4.22",
+    "@storybook/addon-actions": "6.5.10",
+    "@storybook/addon-essentials": "6.5.10",
+    "@storybook/addon-links": "6.5.10",
+    "@storybook/builder-webpack5": "6.5.10",
+    "@storybook/manager-webpack5": "6.5.10",
+    "@storybook/node-logger": "6.5.10",
+    "@storybook/preset-create-react-app": "4.1.2",
+    "@storybook/react": "6.5.10",
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
     "jest-watch-typeahead": "0.6.5",
-    "prop-types": "15.8.0",
+    "prop-types": "15.8.1",
     "react-scripts": " 5.0.1",
+    "sass": "1.54.2",
     "typescript": "4.7.4",
-    "webpack": "5.72.0"
+    "webpack": "5.74.0"
   },
   "eslintConfig": {
     "overrides": [
