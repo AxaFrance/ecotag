@@ -22,4 +22,4 @@ RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linu
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
 WORKDIR /app
 COPY --from=build /publish .
-ENTRYPOINT ["/app/Ml.Cli.WebApp", "--base-path", "../"]
+ENTRYPOINT /app/Ml.Cli.WebApp ${APP_ARGS}
