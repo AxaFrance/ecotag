@@ -2,7 +2,7 @@
   "apiUrl": "#{Spa:ApiUrl}#",
   "baseUrl": "#{Spa:BaseUrl}#",
   "oidc": {
-    "mode": "Default",
+    "mode": "#{Spa:Oidc:Mode}#",
     "configuration": {
       "client_id": "#{Spa:Oidc:ClientId}#",
       "redirect_uri": "#{Spa:Oidc:RedirectUri}#",
