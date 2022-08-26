@@ -1,12 +1,12 @@
 ﻿{
-  "apiUrl": "https://localhost:5001/api/server/{path}",
+  "apiUrl": "http://localhost:5010/api/server/{path}",
   "baseUrl": "",
   "oidc": {
     "mode": "Default",
     "configuration": {
       "client_id": "interactive.public",
-      "redirect_uri": "https://localhost:5001/authentication/callback",
-      "silent_redirect_uri": "https://localhost:5001/authentication/silent-callback",
+      "redirect_uri": "http://localhost:5010/authentication/callback",
+      "silent_redirect_uri": "http://localhost:5010/authentication/silent-callback",
       "scope": "openid profile email api offline_access",
       "authority": "https://demo.duendesoftware.com",
       "service_worker_relative_url":"/OidcServiceWorker.js",

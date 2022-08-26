@@ -115,10 +115,11 @@ namespace Ml.Cli.WebApp
                     config.AddEnvironmentVariables();
                 }).ConfigureAppConfiguration((context, config) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment()) return;
                     var builtConfig = config.Build();
+                    if (builtConfig["KeyVault:BaseUrl"] == null) return;
                     var keyVaultConfigBuilder = new ConfigurationBuilder();
-                    keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+                    keyVaultConfigBuilder.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]),
+                        new DefaultAzureCredential());
                     var keyVaultConfig = keyVaultConfigBuilder.Build();
                     config.AddConfiguration(keyVaultConfig);
                 })
