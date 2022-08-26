@@ -37,14 +37,8 @@ git clone https://github.com/AxaGuilDEv/ml-cli.git
 
 # Run blob storage and SQL Server
 cd ./ml-cli
-docker-compose up -d
-
-# run Ecotag
-cd ./src/Ml.Cli.WebApp
-dotnet dev-certs https --trust
-dotnet run 
-# then, you can navigate to https://localhost:5001
-
+docker-compose up 
+# then, you can navigate to http://localhost:5010
 ```
 
 # How it works
