@@ -22,13 +22,12 @@ RUN apt update \
 	&& apt-get install -y libreoffice
 
 RUN libreoffice --version
-ENV ASPNETCORE_ENVIRONMENT="Docker"
 
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
-
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
 WORKDIR /app
 COPY --from=build /publish .
+ENV ASPNETCORE_ENVIRONMENT="Docker"
 ENTRYPOINT /app/Ml.Cli.WebApp ${APP_ARGS}
