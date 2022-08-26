@@ -18,13 +18,13 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-RUN sed -i "s/#{Api:Datasets:LibreOfficeTimeout}#/${Api_Datasets_LibreOfficeTimeout}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:Datasets:LibreOfficeExePath}#/${Api_Datasets_LibreOfficeExePath}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:Datasets:LibreOfficeNumberWorker}#/${Api_Datasets_LibreOfficeNumberWorker}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:CorsOrigins}#/${Api_CorsOrigins}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:Oidc:Authority}#/${Api_Oidc_Authority}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:OidcUser:RequireAudience}#/${Api_OidcUser_RequireAudience}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
-RUN sed -i "s/#{Api:OidcUser:RequireScope}#/${Api_OidcUser_RequireScope}/" ./src/Ml.Cli.WebApp/appsettings-server.Production.json
+RUN apt update \
+	&& apt-get install -y libreoffice
+
+RUN libreoffice --version
+ENV ASPNETCORE_ENVIRONMENT="Docker"
+
+COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
 
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 

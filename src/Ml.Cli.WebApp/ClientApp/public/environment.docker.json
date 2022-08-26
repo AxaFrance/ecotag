@@ -1,4 +1,4 @@
-{
+﻿{
   "apiUrl": "https://localhost:5001/api/server/{path}",
   "baseUrl": "",
   "oidc": {
