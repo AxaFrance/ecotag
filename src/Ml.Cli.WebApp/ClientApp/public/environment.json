@@ -2,12 +2,11 @@
   "apiUrl": "#{Spa:ApiUrl}#",
   "baseUrl": "#{Spa:BaseUrl}#",
   "oidc": {
-    "isEnabled": false,
+    "mode": "#{Spa:Oidc:Mode}#",
     "configuration": {
       "client_id": "#{Spa:Oidc:ClientId}#",
       "redirect_uri": "#{Spa:Oidc:RedirectUri}#",
       "silent_redirect_uri": "#{Spa:Oidc:SilentRedirectUri}#",
-      "post_logout_redirect_uri": "#{Spa:Oidc:PostLogoutUri}#",
       "scope": "#{Spa:Oidc:Scope}#",
       "authority": "#{Spa:Oidc:Authority}#",
       "service_worker_relative_url":"/OidcServiceWorker.js",

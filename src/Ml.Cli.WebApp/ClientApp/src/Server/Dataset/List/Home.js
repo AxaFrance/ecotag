@@ -5,7 +5,7 @@ import './Home.scss';
 import ItemsTable from "./ItemsTable";
 import EmptyArrayManager from "../../../EmptyArrayManager";
 
-const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
+const Home = ({ items, numberTotalItems, filters, onChangePaging, onChangeFilter }) => {
     return (
         <>
             <Title title="Datasets" subtitle="un dataset représente un essemble de données" />
@@ -14,7 +14,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter }) => {
                     <span className="af-btn__text">Nouveau dataset</span>
                 </Link>
                 <a className="af-home__access-token" target="_self" href="/access-token">access token</a>
-                <h1 className="af-title--content">Vos datasets actifs : {items.length}</h1>
+                <h1 className="af-title--content">Vos datasets actifs : {numberTotalItems}</h1>
                 <div className="row row--datasets-filters">
                     <div className="col">
                         <div className="af-filter-inline">

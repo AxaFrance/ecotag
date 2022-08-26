@@ -26,10 +26,12 @@ export const HomeContainer = ({ fetch, user }) => {
   };
   let paging = filters.paging;
   const items = filterPaging(itemsSorted, filtersState.paging.numberItemsByPage, paging.currentPage);
+  const numberTotalItems = itemsSorted && itemsSorted.length ? itemsSorted.length : 0;
   return (
     <HomeWithResilience
       {...state}
       items={items}
+      numberTotalItems={numberTotalItems}
       filters={filters}
       onChangePaging={onChangePaging}
       onChangeSort={onChangeSort}

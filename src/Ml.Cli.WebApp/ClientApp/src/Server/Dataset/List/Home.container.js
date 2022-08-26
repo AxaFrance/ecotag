@@ -115,8 +115,8 @@ export const HomeContainer = ({ fetch }) => {
     },
   };
   const items = filterPaging(itemsSorted, filtersState.paging.numberItemsByPage, filters.paging.currentPage);
-
-  return <HomeWithResilience {...state} items={items} filters={filters} onChangePaging={onChangePaging} onChangeFilter={onChangeFilter} />;
+  const numberTotalItems =  itemsSorted && itemsSorted.length ? itemsSorted.length : 0;
+  return <HomeWithResilience {...state} items={items} numberTotalItems={numberTotalItems} filters={filters} onChangePaging={onChangePaging} onChangeFilter={onChangeFilter} />;
 };
 
 export default withCustomFetch(fetch)(HomeContainer);

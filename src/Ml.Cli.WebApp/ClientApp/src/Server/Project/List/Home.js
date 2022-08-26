@@ -7,8 +7,8 @@ import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
 import {DataScientist} from "../../withAuthentication";
 
-const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fetch, user }) => {
-  const numberItemsTotal = items && items.length ? items.length : 0;
+const Home = ({ items, numberTotalItems, filters, onChangePaging, onChangeFilter, onChangeSort, fetch, user }) => {
+  
   return (
       <>
         <Title title="Projets" subtitle="Tagger un ensemble de données" />
@@ -16,7 +16,7 @@ const Home = ({ items, filters, onChangePaging, onChangeFilter, onChangeSort, fe
           {user.roles.includes(DataScientist) && <Link className="btn af-btn af-btn--quote" to="/projects/new">
             <span className="af-btn__text">Nouveau projet</span>
           </Link>}
-          <h1 className="af-title--content">{`Vos projets en cours (${numberItemsTotal})`}</h1>
+          <h1 className="af-title--content">{`Vos projets en cours (${numberTotalItems})`}</h1>
           <div className="row row--projects-filters">
             <div className="col">
               <div className="af-filter-inline">
