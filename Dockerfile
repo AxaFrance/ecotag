@@ -13,7 +13,6 @@ RUN wget "$NODE_DOWNLOAD_URL" -O nodejs.tar.gz \
 	&& apt update \
 	&& apt-get install -y nodejs
 
-
 WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
@@ -22,16 +21,15 @@ COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.W
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.js
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
+
 RUN apt update \
 	&& apt-get install -y libreoffice
 
 RUN libreoffice --version
 RUN sed -i 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/bootstraprc
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
-
 WORKDIR /app
 COPY --from=build /publish .
-COPY --from=build /usr/lib/libreoffice ./libreoffice
 
 ENTRYPOINT /app/Ml.Cli.WebApp ${APP_ARGS}
