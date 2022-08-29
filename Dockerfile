@@ -18,8 +18,6 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-
-
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.js
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
@@ -30,7 +28,7 @@ RUN apt update \
 	&& apt-get install -y libreoffice
 
 RUN libreoffice --version
-RUN sed 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/bootstraprc
+RUN sed -i 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/bootstraprc
 
 WORKDIR /app
 COPY --from=build /publish .
