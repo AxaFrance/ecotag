@@ -135,8 +135,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: axaguildev/ecotag:${{ needs.tags.outputs.new_version }},axaguildev/ecotag:latest
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: axaguildev/ecotag:${{ needs.tags.outputs.new_version }},axaguildev/ecotag:latest
   release:
     environment: ml-cli
     runs-on: ubuntu-latest
