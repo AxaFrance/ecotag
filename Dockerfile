@@ -30,6 +30,7 @@ RUN apt update \
 	&& apt-get install -y libreoffice
 
 RUN libreoffice --version
+RUN sed 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/bootstraprc
 
 WORKDIR /app
 COPY --from=build /publish .
