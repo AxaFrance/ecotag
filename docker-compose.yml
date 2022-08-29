@@ -3,7 +3,6 @@
 services:
   database:
     build: ./docker
-    #container_name: "ecotag_db"
     image: "mcr.microsoft.com/mssql/server"
     ports:
       - "1433:1433"
@@ -16,6 +15,7 @@ services:
       - 10000:10000
       - 10010:10001
   ecotag:
+    #image: "axaguildev/ecotag:latest"
     build:
       context: .
       dockerfile: ./Dockerfile

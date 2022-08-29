@@ -19,14 +19,19 @@ Ecotag an is an awesome annotation tools.
 - Manage roles (ECOTAG_ADMINISTRATEUR, ECOTAG_DATA_SCIENTIST, ECOTAG_ANNOTATEUR)
 - Manage datasets
 - Create labelling project
-  - Image Zoning
-  - Image Classification
-  - Image Rotation
-  - Image Transcription
+  - Image : png, jpg, jpeg 
+    - Zoning
+    - Classification
+    - Rotation
+    - Transcription
+  - Document : txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip
+    - Classification 
+    - Transcription
   - Text NER Zoning
-  - Eml classification
 - Labelling Export 
 
+Video of features:
+- French : https://www.youtube.com/watch?v=jB8AQAtxk_E
 
 # Getting started
 
