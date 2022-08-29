@@ -18,10 +18,10 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-#RUN apt update \
-#	&& apt-get install -y libreoffice
+RUN apt update \
+	&& apt-get install -y libreoffice
 
-#RUN libreoffice --version
+RUN libreoffice --version
 
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.js
