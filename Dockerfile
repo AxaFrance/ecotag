@@ -18,16 +18,19 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-RUN apt update \
-	&& apt-get install -y libreoffice
 
-RUN libreoffice --version
 
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
 COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.js
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0 AS final
+
+RUN apt update \
+	&& apt-get install -y libreoffice
+
+RUN libreoffice --version
+
 WORKDIR /app
 COPY --from=build /publish .
 

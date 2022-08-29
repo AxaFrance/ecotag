@@ -16,9 +16,10 @@ services:
       - 10000:10000
       - 10010:10001
   ecotag:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: "axaguildev/ecotag:pr-261"
+    #build:
+    #  context: .
+    #  dockerfile: ./Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
     ports:
