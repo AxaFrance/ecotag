@@ -33,7 +33,6 @@ Ecotag an is an awesome annotation tools.
 Video of features:
 - French : https://www.youtube.com/watch?v=jB8AQAtxk_E
 
-
 # Getting started
 
 To run the demo with .NET 6 on your machine :
