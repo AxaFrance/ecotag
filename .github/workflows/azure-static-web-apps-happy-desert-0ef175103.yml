@@ -18,6 +18,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - name: npm ci
+        run: npm ci
+        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+      - name: npm run build-storybook 
+        run: npm run build-storybook 
+        working-directory: ./src/Ml.Cli.WebApp/ClientApp
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
