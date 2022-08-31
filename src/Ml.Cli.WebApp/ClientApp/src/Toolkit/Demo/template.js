@@ -68,7 +68,7 @@ export const zoneAsync = (cv) => async (sceneUrl, imgDescription, goodMatchSizeT
     
     const isGray = isImgGray(cv)(imgCv);
    
-    const {image: imgResized, ratio} = imageResize(cv)(imgCv, 1600);
+    const {image: imgResized, ratio} = imageResize(cv)(imgCv, 1400);
     //const imgVersoCvTemplate = await loadImageAsync(cv)(imgDescription.template_url);
     //const imgVersoCvTemplateResized = imageResize(cv)(imgVersoCvTemplate, 600).image;
    // const youhou = detectAndComputeSerializable(cv)( imgVersoCvTemplateResized);

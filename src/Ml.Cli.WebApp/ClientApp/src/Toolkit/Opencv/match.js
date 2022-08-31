@@ -21,15 +21,16 @@ const match = (cv) => (descriptors1, descriptors2) => {
     return goodMatches;
 }
 
-const knnMatch = (cv) =>  (descriptors1, descriptors2, knnDistanceOption = 0.6) => {
+const knnMatch = (cv) =>  (descriptors1, descriptors2, knnDistanceOption = 0.7) => {
     console.log("using knnMatch...");
     const goodMatchesTmp = []
     const bf = new cv.BFMatcher(cv.NORM_HAMMING, false); // NORM_L2 NORM_HAMMING
     const matches = new cv.DMatchVectorVector();
     //Reference: https://docs.opencv.org/3.3.0/db/d39/classcv_1_1DescriptorMatcher.html#a378f35c9b1a5dfa4022839a45cdf0e89
-    bf.knnMatch(descriptors1, descriptors2, matches, 4);
+    bf.knnMatch(descriptors1, descriptors2, matches, 2);
     bf.delete();
     let counter = 0;
+    console.log("match size : " +matches.size())
     for (let i = 0; i < matches.size(); ++i) {
         let match = matches.get(i);
         let dMatch1 = match.get(0);
@@ -43,7 +44,7 @@ const knnMatch = (cv) =>  (descriptors1, descriptors2, knnDistanceOption = 0.6) 
 
     const goodMatches = new cv.DMatchVector();
 
-    const sorted = goodMatchesTmp.filter(b => b.distance < 80).sort((a,b) => a.distance - b.distance);
+    const sorted = goodMatchesTmp.filter(b => b.distance < 100).sort((a,b) => a.distance - b.distance);
     console.log(sorted);
     sorted.forEach(match =>  goodMatches.push_back(match));
     
@@ -292,7 +293,7 @@ export const computeAndComputeHomographyRectangle = (cv) => (imgDescription, sce
     let result = null
     let numberIteration = 0;
     while (isBug) {
-        if(numberIteration > 4){
+        if(numberIteration >= 1){
             return null;
         }
         numberIteration++;
@@ -327,10 +328,11 @@ export const computeAndComputeHomographyRectangle = (cv) => (imgDescription, sce
                 console.warn("rectangle.isError");
                 continue;
             }
-            const thresholdMinArea = 0.04;
+            const thresholdMinArea = 0.004;
             const area = (rectangle.xmax - rectangle.xmin) * (rectangle.ymax - rectangle.ymin);
             const sceneArea = sceneImg.cols * sceneImg.rows;
             
+            console.log(" sceneArea " + sceneArea + " area " + area)
             if(area < sceneArea * thresholdMinArea){
                 isBug = true;
                 console.warn("thresholdMinArea");

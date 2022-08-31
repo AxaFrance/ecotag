@@ -266,6 +266,10 @@ const TagOverTextContainer = ({ expectedOutput, url, onSubmit }) => {
           begin: { x: e.left, y: e.top },
           end: { x: e.left + e.width, y: e.top + e.height },
           id: cuid(),
+          labelId: e.id,
+          fill:"grey",
+          opacity:0.4,
+          stroke:1,
         };
       });
       setState({

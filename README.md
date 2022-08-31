@@ -10,3 +10,5 @@
 Ecotag and ML-Cli share the same executable and core libraries.
 - Ecotag is a server that industrialize labelling. [Ecotag Readme](https://github.com/AxaGuilDEv/ml-cli/blob/master/README-ECOTAG.md)
 - ML-Cli is a local tool that is used during development. [ML-Cli Readme](https://github.com/AxaGuilDEv/ml-cli/blob/master/README-ML-CLI.md)
+
+Storybook is available here https://happy-desert-0ef175103.1.azurestaticapps.net/

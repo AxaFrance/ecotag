@@ -11,7 +11,7 @@ import './TemplateGenerator.scss';
 const TemplateGenerator = () => {
 
     const [loaded, error] = useScript(
-        `https://docs.opencv.org/4.5.5/opencv.js`
+        `https://docs.opencv.org/4.6.0/opencv.js`
     );
     
     const [state, setState] = useState({

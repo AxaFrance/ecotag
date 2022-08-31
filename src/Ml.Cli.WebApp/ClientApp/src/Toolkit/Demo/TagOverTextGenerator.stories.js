@@ -29,7 +29,7 @@ const optionsSelect = [
 function TagOverTextGenerator( {templates =[]}){
 
     const [loaded, error] = useScript(
-        `https://docs.opencv.org/4.5.5/opencv.js`
+        `https://docs.opencv.org/4.6.0/opencv.js`
     );
     
     const [state, setState] = useState({
@@ -57,7 +57,7 @@ function TagOverTextGenerator( {templates =[]}){
         }
         else{
             const files = await playAlgoNoTemplateAsync(file);
-            setState({...state, noTemplateImage: files[0], croppedContoursBase64: [null]});
+            setState({...state, noTemplateImage: "", croppedContoursBase64: files});
         }
     };
 
