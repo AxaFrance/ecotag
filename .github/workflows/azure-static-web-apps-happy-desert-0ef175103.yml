@@ -21,9 +21,6 @@ jobs:
       - name: npm ci
         run: npm ci
         working-directory: ./src/Ml.Cli.WebApp/ClientApp
-      - name: npm run build-storybook 
-        run: npm run build-storybook 
-        working-directory: ./src/Ml.Cli.WebApp/ClientApp
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -36,6 +33,7 @@ jobs:
           app_location: "/src/Ml.Cli.WebApp/ClientApp" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "/src/Ml.Cli.WebApp/ClientApp/storybook-static" # Built app content directory - optional
+          app_build_command: 'npm run build-storybook'
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
