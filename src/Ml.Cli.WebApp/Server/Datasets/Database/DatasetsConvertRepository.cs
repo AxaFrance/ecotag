@@ -67,6 +67,16 @@ public class DatasetsConvertRepository
         public string Name { get; set; }
         public Guid Id  {get; set; }
     }
+    
+    public static Stream GenerateStreamFromString(string s)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(s);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
+    }
 
     private static async Task ConvertToPdfAsync(IServiceScopeFactory serviceScopeFactory, IList<FileToConvertPdf> filenames, Guid datasetId)
     {
@@ -87,8 +97,11 @@ public class DatasetsConvertRepository
             count = filenames.Count();
             if (!DatasetsRepository.ExtentionsConvertedToPdf.Contains(Path.GetExtension(filename.Name))) continue;
             var fileNamePdf = $"{filename.Name}.pdf";
+            var fileNamePdfError = $"{filename.Name}_pdf.error";
             var isFileExist = await fileService.IsFileExistAsync($"{dataset.BlobUri}/{fileNamePdf}");
             if (isFileExist) continue;
+            var isFileErrorExist = await fileService.IsFileExistAsync($"{dataset.BlobUri}/{fileNamePdfError}");
+            if (isFileErrorExist) continue;
             var file = await fileService.DownloadAsync($"{dataset.BlobUri}/{filename.Name}");
             if (!file.IsSuccess) continue;
             var streamPdf = await documentConverterToPdf.ConvertAsync(filename.Name, file.Data.Stream);
@@ -96,6 +109,11 @@ public class DatasetsConvertRepository
             {
                 streamPdf.Position = 0;
                 await fileService.UploadStreamAsync($"{dataset.BlobUri}/{fileNamePdf}", streamPdf);
+            }
+            else
+            {
+                var streamTxt = GenerateStreamFromString("ko");
+                await fileService.UploadStreamAsync($"{dataset.BlobUri}/{fileNamePdfError}", streamTxt);
             }
 
             var reservations = await datasetContext.Reservations.Where(r => r.FileId == filename.Id).ToListAsync();

@@ -147,7 +147,7 @@ public class DocumentConverterToPdf
         }
         catch (Exception e)
         {
-            throw new Exception("OS error while executing: " + e.Message);
+            throw new Exception($"OS error while executing: {e.Message}");
         }
         finally
         {
@@ -159,7 +159,7 @@ public class DocumentConverterToPdf
 
         if (cmd.ExitCode != 0)
         {
-            throw new Exception("Finished with exit code = " + cmd.ExitCode + ": " + stdError);
+            throw new Exception($"Finished with exit code = {cmd.ExitCode}: {stdError}");
         }
 
         var stdOut = output.ToString();
