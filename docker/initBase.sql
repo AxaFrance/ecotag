@@ -164,7 +164,7 @@ CREATE TABLE [sch_ECOTAG].[T_Project](
     [PRJ_NumberCrossAnnotation] [int] NOT NULL CHECK (PRJ_NumberCrossAnnotation between 1 and 10),
     [PRJ_CreateDate] BIGINT NOT NULL,
     [PRJ_AnnotationType] int NOT NULL,
-    [PRJ_LabelsJson] [varchar](2048) NOT NULL,
+    [PRJ_LabelsJson] [NVARCHAR](max) NOT NULL,
     [PRJ_CreatorNameIdentifier] [varchar](64) NOT NULL,
     CONSTRAINT [PK_T_Project] PRIMARY KEY NONCLUSTERED ([PRJ_Id]),
     CONSTRAINT [FK_T_Project_GRP_Id] FOREIGN KEY (GRP_Id) REFERENCES [sch_ECOTAG].[T_Group] (GRP_Id),
