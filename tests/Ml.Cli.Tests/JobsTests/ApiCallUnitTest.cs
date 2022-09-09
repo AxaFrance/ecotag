@@ -184,8 +184,7 @@ namespace Ml.Cli.Tests.JobsTests
                 true,
                 uri,
                 false,
-                1, 1
-            );
+                1, 1);
 
             await apiCallFiles.ApiCallFilesAsync("test", jsonContent, inputTask);
             
@@ -236,8 +235,7 @@ namespace Ml.Cli.Tests.JobsTests
                 new Uri("http://localhost:6001/licenses/upload"), 
                 true, 
                 1, 
-                1
-            );
+                1);
             Assert.Equal(JsonConvert.SerializeObject(expectedCallapiResult), JsonConvert.SerializeObject(callapiResult));
         }
     }

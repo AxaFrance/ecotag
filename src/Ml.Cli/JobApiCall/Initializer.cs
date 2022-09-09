@@ -65,6 +65,17 @@ namespace Ml.Cli.JobApiCall
 
             var numberIteration =
                 jObject.ContainsKey("numberIteration") ? (int) jObject.Property("numberIteration") : 1;
+            
+            var numberRetryOnHttp500 =
+                jObject.ContainsKey("numberRetryOnHttp500") ? (int) jObject.Property("numberRetryOnHttp500") : 0;
+            var delayOn500 =
+                jObject.ContainsKey("delayOn500") ? (int) jObject.Property("delayOn500") : 5000;
+            var isSaveResultOnError =
+                jObject.ContainsKey("isSaveResultOnError") ? (bool) jObject.Property("isSaveResultOnError") : true;
+            var stopAfterNumberFiles =
+                jObject.ContainsKey("stopAfterNumberFiles") ? (int?) jObject.Property("stopAfterNumberFiles") : null;
+            
+            
             var numberParallel = jObject.ContainsKey("numberParallel") ? (int) jObject.Property("numberParallel") : 1;
             var waitTimeMsBetweenRequest = jObject.ContainsKey("waitTimeMsBetweenRequest") ? (int) jObject.Property("waitTimeMsBetweenRequest") : 0;
 
@@ -114,7 +125,11 @@ namespace Ml.Cli.JobApiCall
                 tokenSortByFileType,
                 numberIteration,
                 numberParallel,
-                waitTimeMsBetweenRequest
+                waitTimeMsBetweenRequest,
+                numberRetryOnHttp500,
+                delayOn500,
+                isSaveResultOnError,
+                stopAfterNumberFiles
             );
         }
 
