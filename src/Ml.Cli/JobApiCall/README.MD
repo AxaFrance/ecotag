@@ -45,7 +45,11 @@ tasks.json
     "url": "url_path",
     "sortByFileType": false,
     "numberIteration": 2,
-    "numberParallel": 2
+    "numberParallel": 2,
+    "numberRetryOnHttp500":0,
+    "delayOn500":5000,
+    "isSaveResultOnError": true,
+    "stopAfterNumberFiles":null,
   }
 ] 
 ```
@@ -91,3 +95,11 @@ tasks.json
 - **numberParallel**: an int that defines how many calls to the service can be done at the same time
     - default: 1
     - example: if you more than 3 files that will be sent to the service, and if numberParallel equals 2, two files will be sent at the same time. When the treatment for one of them ends, the third file will be sent, and so on.
+- **numberRetryOnHttp500**: number of call HTTP retry
+  - default: 0
+- **delayOn500**: wait time in ms before retry call HTTP
+  - default: 5000
+- **isSaveResultOnError**: if request superior or equal to 500 then result is not saved
+  - default: true
+- **stopAfterNumberFiles**: after "stopAfterNumberFiles" files the JobApiCall stop
+  - default: null
