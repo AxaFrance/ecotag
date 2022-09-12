@@ -17,6 +17,7 @@ namespace Ml.Cli
             public List<KeyValuePair<string, IEnumerable<string>>> Headers { get; set; }
             public long TimeMs { get; set; }
             public long TicksAt { get; set; }
+            public int TryNumber { get; set; }
         }
     }
 }

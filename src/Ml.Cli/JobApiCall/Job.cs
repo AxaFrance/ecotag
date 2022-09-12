@@ -59,41 +59,68 @@ namespace Ml.Cli.JobApiCall
                 inputTask.OutputDirectoryJsons.Replace("{date}", DateTime.Now.ToString("MM_dd_yyyy-hh_mm"));
             _fileLoader.CreateDirectory(outputDirectory);
 
-            var files = _fileLoader.EnumerateFiles(inputTask.FileDirectory, "*");
-            var tasks = new List<Task>();
+            var files = _fileLoader.EnumerateFiles(inputTask.FileDirectory, "*").ToList();
+            var tasks = new List<Task<string>>();
             foreach (var index in Enumerable.Range(0, inputTask.NumberIteration))
             {
                 var extension = ".json";
                 if (index > 1) extension = $"_{index}{extension}";
 
-                var listsOfFiles = ChunkBy(files.ToList(), files.Count() / inputTask.NumberParallel);
+                //var listsOfFiles = ChunkBy(files.ToList(), files.Count() / inputTask.NumberParallel);
                 
-                foreach (var listsOfFile in listsOfFiles)
+                var indexFile = 0;
+                var indexFileFetched = 0;
+                var numberKO = 0;
+                while (indexFile < files.Count())
                 {
-                    var task = Task.Run(async () =>
+                    while (tasks.Count < inputTask.NumberParallel)
                     {
-                        foreach (var currentFile in listsOfFile)
+                        var task = PlayDataAsync(httpClient, inputTask, files[indexFile], extension, outputDirectory);
+                        indexFile += 1;
+                        tasks.Add(task);
+                    }
+                    await Task.Delay(10);
+                    var tasksToRemove = new List<Task<string>>();
+                    foreach (var task in tasks)
+                    {
+                        if (task.IsCompleted)
                         {
-                            await PlayDataAsync(httpClient, inputTask, currentFile, extension, outputDirectory);
-                            if (inputTask.WaitTimeMsBetweenRequest > 0)
+                            if (!String.IsNullOrEmpty(task.Result))
                             {
-                                await Task.Delay(inputTask.WaitTimeMsBetweenRequest);
+                                indexFileFetched += 1;
                             }
+                            if (task.Result == "KO")
+                            {
+                                numberKO += 1;
+                                _logger.LogWarning("number KO: " + numberKO +"/"+ (indexFile+1));
+                            }
+                            tasksToRemove.Add(task);
                         }
-                    });
-                    tasks.Add(task);
-                }
+                    }
 
-                var task2 = Task.WhenAll(tasks.ToArray());
-                await task2;
+                    foreach (var task in tasksToRemove)
+                    {
+                        tasks.Remove(task);
+                    }
+
+                    if (inputTask.StopAfterNumberFiles.HasValue)
+                    {
+                        if (indexFileFetched == inputTask.StopAfterNumberFiles.Value)
+                        {
+                            break;
+                        }
+                    }
+                    
+                }
+                
             }
         }
 
-        private async Task PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFile, string extension, string outputDirectory)
+        private async Task<string> PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFile, string extension, string outputDirectory)
         {
             if (Path.GetExtension(currentFile) == ".json")
             {
-                return;
+                return String.Empty;
             }
 
             var fileName = Path.GetFileName(currentFile);
@@ -104,26 +131,68 @@ namespace Ml.Cli.JobApiCall
                 if (_fileLoader.FileExists(targetFileName))
                 {
                     _logger.LogWarning($"Task Id: {inputTask.Id} - Already processed file {fileName}");
+                    return String.Empty;
                 }
                 else
                 {
                     _logger.LogInformation(
                         $"Task Id: {inputTask.Id} - Processing {fileName} on thread {Thread.CurrentThread.ManagedThreadId}");
-                    var httpResult = await CallHttpAsync(httpClient, inputTask, currentFile, jsonFileName);
-                    var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
-                    await _fileLoader.WriteAllTextInFileAsync(targetFileName,
-                        json);
-                    if (inputTask.EnabledSaveImages || inputTask.EnabledSaveInputs || inputTask.EnabledSaveOutputs)
-                        await _callFiles.ApiCallFilesAsync(fileName, json, inputTask);
+                    Program.HttpResult httpResult = null;
+
+                    for (var i = 0; i < inputTask.NumberRetryOnHttp500 + 1; i++)
+                    {
+                        try
+                        {
+                            httpResult = await CallHttpAsync(httpClient, inputTask, currentFile, jsonFileName, i);
+                            if (httpResult.StatusCode < 500)
+                            {
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            httpResult = new Program.HttpResult
+                            {
+                                FileName = fileName,
+                                FileDirectory = Path.Combine(inputTask.OutputDirectoryJsons, targetFileName),
+                                ImageDirectory = inputTask.OutputDirectoryImages,
+                                FrontDefaultStringsMatcher = inputTask.FrontDefaultStringsMatcher,
+                                StatusCode = 600,
+                                Body = $"Task Id: {inputTask.Id} - Error : {e.Message}",
+                                Headers = new List<KeyValuePair<string, IEnumerable<string>>>(),
+                                TimeMs = 0,
+                                Url = inputTask.Url,
+                                TicksAt = DateTime.UtcNow.Ticks,
+                                TryNumber = i
+                            };
+                            _logger.LogError($"Task Id: {inputTask.Id} - Error : {e.Message}");
+                        }
+                        await Task.Delay(inputTask.DelayOn500);
+                    }
+
+                    if (httpResult == null)
+                            throw new ApplicationException("httpResult is null");
+
+                    if (httpResult.StatusCode < 500 || inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500)
+                    {
+                        var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
+                        await _fileLoader.WriteAllTextInFileAsync(targetFileName,
+                            json);
+                        if (inputTask.EnabledSaveImages || inputTask.EnabledSaveInputs || inputTask.EnabledSaveOutputs)
+                            await _callFiles.ApiCallFilesAsync(fileName, json, inputTask);
+                    }
+
+                    return httpResult.StatusCode < 500 ? "OK" : "KO";
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError($"Task Id: {inputTask.Id} - Error : {e.Message}");
+                return "Exception";
             }
         }
 
-        private async Task<Program.HttpResult> CallHttpAsync(HttpClient httpClient, Callapi inputTask, string file, string targetFileName)
+        private async Task<Program.HttpResult> CallHttpAsync(HttpClient httpClient, Callapi inputTask, string file, string targetFileName, int tryNumber)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, inputTask.Url);
             
@@ -195,7 +264,8 @@ namespace Ml.Cli.JobApiCall
                 Headers = headersList.Where(w => w.Key != "Authorization").ToList(),
                 TimeMs = elapsedMs,
                 Url = inputTask.Url,
-                TicksAt = DateTime.UtcNow.Ticks
+                TicksAt = DateTime.UtcNow.Ticks,
+                TryNumber = tryNumber
             };
             return httpResult;
         }

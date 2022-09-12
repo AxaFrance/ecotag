@@ -5,8 +5,19 @@ namespace Ml.Cli.JobApiCall
 {
     public class Callapi : IInputTask
     {
-        public Callapi(string type, string id, bool enabled, string fileDirectory, string outputDirectoryJsons, string outputDirectoryImages, string outputDirectoryInputs, string outputDirectoryOutputs, string frontDefaultStringsMatcher, string downloadStringsMatcher, bool enabledSaveImages, bool enabledSaveInputs, bool enabledSaveOutputs, Uri url, bool sortByFileType, int numberIteration, int numberParallel, int waitTimeMsMsBetweenRequest=0)
+
+
+        public Callapi(string type, string id, bool enabled, string fileDirectory, string outputDirectoryJsons,
+            string outputDirectoryImages, string outputDirectoryInputs, string outputDirectoryOutputs,
+            string frontDefaultStringsMatcher, string downloadStringsMatcher, bool enabledSaveImages,
+            bool enabledSaveInputs, bool enabledSaveOutputs, Uri url, bool sortByFileType, int numberIteration,
+            int numberParallel, 
+            int waitTimeMsMsBetweenRequest = 0, 
+            int numberRetryOnHttp500=0, 
+            int delayOn500=5000, 
+            bool isSaveResultOnError=true, int? stopAfterNumberFiles = null)
         {
+            StopAfterNumberFiles = stopAfterNumberFiles;
             Type = type;
             Id = id;
             Enabled = enabled;
@@ -25,6 +36,9 @@ namespace Ml.Cli.JobApiCall
             NumberIteration = numberIteration;
             NumberParallel = numberParallel;
             WaitTimeMsBetweenRequest = waitTimeMsMsBetweenRequest;
+            NumberRetryOnHttp500 = numberRetryOnHttp500;
+            DelayOn500 = delayOn500;
+            IsSaveResultOnError = isSaveResultOnError;
         }
 
         public string Id { get; }
@@ -45,5 +59,11 @@ namespace Ml.Cli.JobApiCall
         public int NumberIteration { get; }
         public int NumberParallel { get; }
         public int WaitTimeMsBetweenRequest { get; }
+        
+        public int  NumberRetryOnHttp500 { get; }
+        public int  DelayOn500 { get; }
+        public bool  IsSaveResultOnError { get; }
+        public int?  StopAfterNumberFiles { get; }
+
     }
 }
