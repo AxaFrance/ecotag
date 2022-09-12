@@ -14,7 +14,7 @@ namespace Ml.Cli.JobApiCall
             int numberParallel, 
             int waitTimeMsMsBetweenRequest = 0, 
             int numberRetryOnHttp500=0, 
-            int delayOn500=10000, 
+            int delayOn500=5000, 
             bool isSaveResultOnError=true, int? stopAfterNumberFiles = null)
         {
             StopAfterNumberFiles = stopAfterNumberFiles;
