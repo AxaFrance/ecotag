@@ -174,7 +174,7 @@ namespace Ml.Cli.JobApiCall
                     if (httpResult == null)
                             throw new ApplicationException("httpResult is null");
 
-                    if (httpResult.StatusCode < 500 || inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500)
+                    if (httpResult.StatusCode < 500 || (inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500))
                     {
                         var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
                         await _fileLoader.WriteAllTextInFileAsync(targetFileName,
