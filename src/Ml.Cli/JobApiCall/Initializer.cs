@@ -17,7 +17,7 @@ namespace Ml.Cli.JobApiCall
         {
             var tokenEnabledSave = (bool) (jObject["enabledSaveImages"] ?? false);
             var tokenEnabledSaveInputs = (bool) (jObject["enabledSaveInputs"] ?? false);
-            var tokenEnabledSaveOutputs = (bool) (jObject["enabledSaveOutputs"] ?? false);
+            var tokenEnabledSaveOutputs = (bool) (jObject["enabledSaveOutputs"] ?? true);
             var tokenSortByFileType = (bool) (jObject["sortByFileType"] ?? true);
             var frontDefaultStringMatcher =
                 jObject.Property("frontDefaultStringsMatcher", StringComparison.Ordinal) != null;
