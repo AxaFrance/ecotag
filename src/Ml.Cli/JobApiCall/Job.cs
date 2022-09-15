@@ -113,7 +113,7 @@ namespace Ml.Cli.JobApiCall
                     }
                     
                 }
-                
+                Task.WaitAll(tasks.ToArray());
             }
         }
 
@@ -169,6 +169,11 @@ namespace Ml.Cli.JobApiCall
                             _logger.LogError($"Task Id: {inputTask.Id} - Error : {e.Message}");
                         }
                         await Task.Delay(inputTask.DelayOn500);
+                        
+                        if (i < inputTask.NumberRetryOnHttp500 + 1)
+                        {
+                            await Task.Delay(inputTask.DelayOn500);
+                        }
                     }
 
                     if (httpResult == null)
