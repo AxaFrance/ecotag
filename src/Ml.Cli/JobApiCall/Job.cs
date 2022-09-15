@@ -61,6 +61,7 @@ namespace Ml.Cli.JobApiCall
 
             var files = _fileLoader.EnumerateFiles(inputTask.FileDirectory, "*").ToList();
             var tasks = new List<Task<string>>();
+            var numberFiles = files.Count;
             foreach (var index in Enumerable.Range(0, inputTask.NumberIteration))
             {
                 var extension = ".json";
@@ -70,10 +71,10 @@ namespace Ml.Cli.JobApiCall
                 
                 var indexFile = 0;
                 var indexFileFetched = 0;
-                var numberKO = 0;
-                while (indexFile < files.Count())
+                var numberKo = 0;
+                while (indexFile < numberFiles)
                 {
-                    while (tasks.Count < inputTask.NumberParallel)
+                    while (tasks.Count < inputTask.NumberParallel && indexFile < numberFiles)
                     {
                         var task = PlayDataAsync(httpClient, inputTask, files[indexFile], extension, outputDirectory);
                         indexFile += 1;
@@ -91,8 +92,8 @@ namespace Ml.Cli.JobApiCall
                             }
                             if (task.Result == "KO")
                             {
-                                numberKO += 1;
-                                _logger.LogWarning("number KO: " + numberKO +"/"+ (indexFile+1));
+                                numberKo += 1;
+                                _logger.LogWarning("number KO: " + numberKo +"/"+ (indexFile+1));
                             }
                             tasksToRemove.Add(task);
                         }
@@ -173,7 +174,7 @@ namespace Ml.Cli.JobApiCall
                     if (httpResult == null)
                             throw new ApplicationException("httpResult is null");
 
-                    if (httpResult.StatusCode < 500 || inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500)
+                    if (httpResult.StatusCode < 500 || (inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500))
                     {
                         var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
                         await _fileLoader.WriteAllTextInFileAsync(targetFileName,
