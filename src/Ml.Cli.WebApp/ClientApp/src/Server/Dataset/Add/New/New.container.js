@@ -151,15 +151,12 @@ export const init = (fetch, dispatch) => async () => {
 
 const useNew = (history, fetch, telemetry, environment) => {
   let iniStateReducer = initState;
-  console.log(environment.datasets)
   if(!environment.datasets.isBlobTransferActive) {
     iniStateReducer={...initState,fields: {
          ...initState.fields,
         [DATASETS_IMPORT]: {...initState.fields[DATASETS_IMPORT],isChecked: false, isVisible:false},
         [IMPORTED_DATASET_NAME]: {...initState.fields[IMPORTED_DATASET_NAME], isVisible:false} }}
-    console.log("iniStateReducer");
   }
-  console.log(iniStateReducer);
   const [state, dispatch] = useReducer(reducer, iniStateReducer);
   const onChange = event => dispatch({ type: 'onChange', event });
   const onSubmit = async () => {
