@@ -193,7 +193,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/linux-x64/ml-cli/linux-x64-ml-cli-web.zip
+          asset_path: ./drop/linux-x64/ml-cli-web/linux-x64-ml-cli-web.zip
           asset_name: linux-x64-ml-cli-web.zip
           asset_content_type: application/zip
       - run: dotnet publish ./src/Ml.Cli.DemoApi/Ml.Cli.DemoApi.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/demo-api

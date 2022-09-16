@@ -47,8 +47,8 @@ export const preInitState = {
       value: '',
       message: MSG_REQUIRED,
     },
-    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: "", isVisible:false},
-    [IMPORTED_DATASET_NAME]: {name: IMPORTED_DATASET_NAME, value: '', disabled: true, message: MSG_REQUIRED, isVisible:false}
+    [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: true, message: "", isVisible:true},
+    [IMPORTED_DATASET_NAME]: {name: IMPORTED_DATASET_NAME, value: '', disabled: true, message: MSG_REQUIRED, isVisible:true}
   },
 };
 
@@ -154,8 +154,8 @@ const useNew = (history, fetch, telemetry, environment) => {
   if(!environment.datasets.isBlobTransferActive) {
     iniStateReducer={...initState,fields: {
          ...initState.fields,
-        [DATASETS_IMPORT]: {name: DATASETS_IMPORT, isChecked: false, message: "", isVisible:false},
-        [IMPORTED_DATASET_NAME]: {name: IMPORTED_DATASET_NAME, value: '', disabled: true, message: MSG_REQUIRED, isVisible:false} }}
+        [DATASETS_IMPORT]: {...initState.fields[DATASETS_IMPORT],isChecked: false, isVisible:false},
+        [IMPORTED_DATASET_NAME]: {...initState.fields[IMPORTED_DATASET_NAME], isVisible:false} }}
   }
   const [state, dispatch] = useReducer(reducer, iniStateReducer);
   const onChange = event => dispatch({ type: 'onChange', event });
@@ -171,7 +171,7 @@ const useNew = (history, fetch, telemetry, environment) => {
         [GROUP]: fields[GROUP].value,
         [CLASSIFICATION]: fields[CLASSIFICATION].value
       }
-      if(fields[DATASETS_IMPORT].isChecked){
+      if(fields[DATASETS_IMPORT].isChecked) {
         newDataset[IMPORTED_DATASET_NAME] = fields[IMPORTED_DATASET_NAME].value;
       }
       const response = await fetchCreateDataset(fetch)(newDataset);
