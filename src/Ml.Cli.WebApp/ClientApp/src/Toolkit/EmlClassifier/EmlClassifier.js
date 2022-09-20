@@ -1,5 +1,5 @@
 ﻿import PostalMime from 'postal-mime';
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 import Toolbar from "./Toolbar.container";
 import cuid from "cuid";
@@ -192,6 +192,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
         document:null,
         annotation: annotationDefaultValue,
     });
+    const containerRef = useRef(null);
 
     useEffect( () => {
         let isMounted = true;
@@ -200,6 +201,12 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
             initAsync(url, expectedOutput, filename, mode).then((data)=> {
                 if(isMounted) {
                     setState({...state, loaderMode: LoaderModes.none, ...data});
+                    if (containerRef.current.scrollIntoView) {
+                        containerRef.current.scrollIntoView({
+                            block: 'start',
+                            behavior: 'smooth',
+                        });
+                    }
                 }
             });
         }
@@ -255,6 +262,8 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
             onSubmit(state.annotation.label);
         }
     }
+
+   
     
     const mail = state.mail;
     const document = state.document;
@@ -265,8 +274,9 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
                 <input type="file" onChange={onFileChange(state, setState)} />
             </form>
         </div>}
+        <div ref={containerRef}>
         <Loader mode={state.loaderMode} text={"Your browser is extracting data"}>
-            {mail != null && <div id="email-container">
+            {mail != null && <div id="email-container"  >
                 <div className="eml__container" >
                     <div className="eml__container-principal">
                         <Mail attachment={mail} title="Mail principal" onChange={onChange} />
@@ -278,7 +288,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
                 </div>
             </div>}
             {document != null &&
-                <div id="email-container">
+                <div id="email-container"  ref={containerRef}>
                     <div className="eml__container" >
                         <div className="eml__container-principal">
                             <Attachment attachment={document} styleImageContainer={styleImageContainer} onChange={onChange} />
@@ -289,6 +299,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename='attachm
                     </div>
                 </div>}
         </Loader>
+        </div>
         <Toolbar
             state={state}
             setState={setState}

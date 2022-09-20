@@ -4,7 +4,7 @@ import {EmlMode} from "./EmlMode";
 
 const mockedFunction = (labelName) => {console.log(labelName)};
 
-const labels = [{name: "Dog"}, {name: "Cat"}, {name: "Duck"}, {name: "Other"}];
+const labels = [{name: "Dog"}, {name: "Cat"}, {name: "Duck"}, {name: "Other"},{name: "Dog1"}, {name: "Cat1"}, {name: "Duck1"}, {name: "Other2"},{name: "Dog3"}, {name: "Cat3"}, {name: "Duck3"}];
 
 export default {
     title: 'EmlClassifier',

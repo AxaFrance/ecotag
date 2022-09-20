@@ -14,6 +14,7 @@
     display:flex;
     flex-direction:row;
     margin-bottom:64px;
+    min-height: 100vh;
   }
 
   &__container-mail {
@@ -41,6 +42,8 @@
     position: sticky;
     word-break: break-all;
     top: 0;
+    overflow-y: scroll;
+    height: calc( 100vh - 80px );
   }
   &__attachment-image-container{
     display: inline-block;
