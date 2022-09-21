@@ -74,103 +74,105 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
       />
     </button>
   </div>
-  <div
-    class="image-classifier"
-  >
+  <div>
     <div
-      class="image-classifier__image-container"
-    >
-      <img
-        alt="Classifier image"
-        id="currentImage"
-        src=""
-        style="width: 100%; transform: rotate(0deg);"
-      />
-    </div>
-    <div
-      class="image-classifier__buttons-container"
+      class="image-classifier"
     >
       <div
-        class="image-classifier__button-container"
-        title="Raccourci : 1"
+        class="image-classifier__image-container"
+      >
+        <img
+          alt="Classifier image"
+          id="currentImage"
+          src=""
+          style="width: 100%; transform: rotate(0deg);"
+        />
+      </div>
+      <div
+        class="image-classifier__buttons-container"
+      >
+        <div
+          class="image-classifier__button-container"
+          title="Raccourci : 1"
+        >
+          <button
+            class="image-classifier-btn"
+            style="background-color: rgb(0, 129, 148);"
+          >
+            Firstname
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="toolbar"
+    >
+      <div
+        class="toolbar__button-container toolbar__button-container--progress-bar"
+      >
+        <div
+          class="toolbar__button-progress-item"
+        >
+          <input
+            class="toolbar__button-progress-item-input"
+            max="80"
+            min="1"
+            name="width"
+            type="range"
+            value="100"
+          />
+          <label
+            class="toolbar__button-progress-item-label"
+          >
+            Image Size
+          </label>
+        </div>
+        <div
+          class="toolbar__button-switch-item"
+        >
+          <input
+            class="toolbar__button-switch-item-input"
+            id="inlineMode"
+            type="checkbox"
+          />
+          <label
+            class="toolbar__button-switch-item-label"
+            for="inlineMode"
+          >
+            Inline mode
+          </label>
+        </div>
+      </div>
+      <div
+        class="toolbar__button-container"
       >
         <button
-          class="image-classifier-btn"
-          style="background-color: rgb(0, 129, 148);"
+          class="toolbar__button-item"
+          title="Raccourci : L"
         >
-          Firstname
+          <span
+            class="glyphicon glyphicon-reset"
+          />
+          <div
+            class="toolbar__button-item-label"
+          >
+            Rotate Left
+          </div>
+        </button>
+        <button
+          class="toolbar__button-item"
+          title="Raccourci : R"
+        >
+          <span
+            class="glyphicon glyphicon-repeat"
+          />
+          <div
+            class="toolbar__button-item-label"
+          >
+            Rotate Right
+          </div>
         </button>
       </div>
-    </div>
-  </div>
-  <div
-    class="toolbar"
-  >
-    <div
-      class="toolbar__button-container toolbar__button-container--progress-bar"
-    >
-      <div
-        class="toolbar__button-progress-item"
-      >
-        <input
-          class="toolbar__button-progress-item-input"
-          max="80"
-          min="1"
-          name="width"
-          type="range"
-          value="100"
-        />
-        <label
-          class="toolbar__button-progress-item-label"
-        >
-          Image Size
-        </label>
-      </div>
-      <div
-        class="toolbar__button-switch-item"
-      >
-        <input
-          class="toolbar__button-switch-item-input"
-          id="inlineMode"
-          type="checkbox"
-        />
-        <label
-          class="toolbar__button-switch-item-label"
-          for="inlineMode"
-        >
-          Inline mode
-        </label>
-      </div>
-    </div>
-    <div
-      class="toolbar__button-container"
-    >
-      <button
-        class="toolbar__button-item"
-        title="Raccourci : L"
-      >
-        <span
-          class="glyphicon glyphicon-reset"
-        />
-        <div
-          class="toolbar__button-item-label"
-        >
-          Rotate Left
-        </div>
-      </button>
-      <button
-        class="toolbar__button-item"
-        title="Raccourci : R"
-      >
-        <span
-          class="glyphicon glyphicon-repeat"
-        />
-        <div
-          class="toolbar__button-item-label"
-        >
-          Rotate Right
-        </div>
-      </button>
     </div>
   </div>
 </DocumentFragment>
