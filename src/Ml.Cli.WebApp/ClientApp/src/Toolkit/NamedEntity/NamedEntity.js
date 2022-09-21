@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Label from './Label';
 import './NamedEntity.scss';
 import TextAnnotation from './TextAnnotation';
@@ -13,6 +13,15 @@ const initAsync = async (url, setState, state, expectedOutput) => {
   setState({...state, text, value: Array.isArray(expectedOutput) ? expectedOutput : [] })
 }
 
+const autoScroll = (containerRef) => {
+  if (containerRef?.current?.scrollIntoView) {
+    containerRef.current.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
+    });
+  }
+}
+
 const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] }) => {
   const initialValue = {
     label: labels[0],
@@ -23,15 +32,16 @@ const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] })
   }
   
   const [state, setState] = useState(initialValue);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if(text){
       setState({...initialValue, text});
+      autoScroll(containerRef);
     } else{
       setState(initialValue);
-      initAsync(url, setState, state, expectedOutput);
+      initAsync(url, setState, state, expectedOutput).then(() => autoScroll(containerRef));
     }
-   
   }, [url, expectedOutput, text]);
 
   const selectLabel = label => {
@@ -69,7 +79,7 @@ const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] })
   const handlers = generateHandlers();
 
   return (
-    <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
+    <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers} ref={containerRef}>
       <div className="annotationContainer">
         <div className="sticky">
           <Label labels={labels} selectLabel={selectLabel} selectedLabel={state.label} />

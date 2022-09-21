@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useState} from "react";
+﻿import React, {useEffect, useRef, useState} from "react";
 import Toolbar from "./Toolbar.container";
 import '../Toolbar/Toolbar.scss';
 import ImageClassifier from "./ImageClassifier";
@@ -14,6 +14,7 @@ const ImageClassifierContainer = ({url, labels, onSubmit, expectedOutput}) => {
         initialRotate: true,
         userInput: {},
     });
+    const containerRef = useRef(null);
 
     useEffect(() => {
         const userInput = {};
@@ -21,13 +22,19 @@ const ImageClassifierContainer = ({url, labels, onSubmit, expectedOutput}) => {
             userInput[key] = value;
         }
         setState({ ...state, userInput });
+        if (containerRef?.current?.scrollIntoView) {
+            containerRef.current.scrollIntoView({
+                block: 'start',
+                behavior: 'smooth',
+            });
+        }
     }, [url]);
     
     return (
-        <>
+        <div ref={containerRef}>
             <ImageClassifier onSubmit={onSubmit} url={url} labels={labels} state={state} expectedOutput={expectedOutput}/>
             <Toolbar state={state} setState={setState}/>
-        </>
+        </div>
     )
 };
 

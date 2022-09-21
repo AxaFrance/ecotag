@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Irot from './Irot';
 import Toolbar from './Toolbar';
 
@@ -29,13 +29,21 @@ const IrotContainer = ({ url, onSubmit, expectedOutput=null, defaultImageDimensi
     imageDimensions: defaultImageDimensions,
     imageAnomaly: false,
   });
+  const containerRef = useRef(null);
+  
   const formattedExpectedOutput = formatExpectedOutput(expectedOutput);
   useEffect(() => {
     setState({ ...state, ...formattedExpectedOutput });
+    if (containerRef?.current?.scrollIntoView) {
+      containerRef.current.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }
   }, [url, expectedOutput]);
 
   return (
-    <div className="rotation-container-adapter">
+    <div className="rotation-container-adapter" ref={containerRef}>
       <Irot state={state} setState={setState} url={url} />
       <Toolbar url={url} state={state} setState={setState} onSubmit={onSubmit} expectedAngle={formattedExpectedOutput.rotate} />
     </div>
