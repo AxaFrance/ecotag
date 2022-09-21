@@ -79,8 +79,8 @@ const NamedEntity = ({ text= null, labels, onSubmit, url, expectedOutput = [] })
   const handlers = generateHandlers();
 
   return (
-    <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers} ref={containerRef}>
-      <div className="annotationContainer">
+    <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
+      <div className="annotationContainer" ref={containerRef}>
         <div className="sticky">
           <Label labels={labels} selectLabel={selectLabel} selectedLabel={state.label} />
         </div>
