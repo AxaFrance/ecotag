@@ -60,14 +60,26 @@ namespace Ml.Cli.JobApiCall
             _fileLoader.CreateDirectory(outputDirectory);
 
             var files = _fileLoader.EnumerateFiles(inputTask.FileDirectory, "*").ToList();
+
+            if (inputTask.ChunkByNumberPart.HasValue && inputTask.ChunkIndex.HasValue)
+            {
+                files.Sort((x, y) => string.Compare(x, y));
+                var numberChunk = inputTask.ChunkByNumberPart.Value;
+                var chunkIndex = inputTask.ChunkIndex.Value;
+                var d = files.Count / (decimal)numberChunk;
+                var numberfilesbychunck = d > ((int)files.Count / numberChunk)
+                    ? (files.Count / numberChunk) + 1
+                    : (files.Count / numberChunk);
+                var listsOfFiles = ChunkBy(files.ToList(), numberfilesbychunck);
+                files = listsOfFiles[chunkIndex];
+            }
+
             var tasks = new List<Task<string>>();
             var numberFiles = files.Count;
             foreach (var index in Enumerable.Range(0, inputTask.NumberIteration))
             {
                 var extension = ".json";
                 if (index > 1) extension = $"_{index}{extension}";
-
-                //var listsOfFiles = ChunkBy(files.ToList(), files.Count() / inputTask.NumberParallel);
                 
                 var indexFile = 0;
                 var indexFileFetched = 0;

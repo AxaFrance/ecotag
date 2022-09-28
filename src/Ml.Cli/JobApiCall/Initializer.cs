@@ -74,8 +74,11 @@ namespace Ml.Cli.JobApiCall
                 jObject.ContainsKey("isSaveResultOnError") ? (bool) jObject.Property("isSaveResultOnError") : true;
             var stopAfterNumberFiles =
                 jObject.ContainsKey("stopAfterNumberFiles") ? (int?) jObject.Property("stopAfterNumberFiles") : null;
-            
-            
+            var chunkByNumberPart =
+                jObject.ContainsKey("chunkByNumberPart") ? (int?) jObject.Property("chunkByNumberPart") : null;
+            var chunkIndex =
+                jObject.ContainsKey("chunkIndex") ? (int?) jObject.Property("chunkIndex") : null;
+
             var numberParallel = jObject.ContainsKey("numberParallel") ? (int) jObject.Property("numberParallel") : 1;
             var waitTimeMsBetweenRequest = jObject.ContainsKey("waitTimeMsBetweenRequest") ? (int) jObject.Property("waitTimeMsBetweenRequest") : 0;
 
@@ -129,7 +132,9 @@ namespace Ml.Cli.JobApiCall
                 numberRetryOnHttp500,
                 delayOn500,
                 isSaveResultOnError,
-                stopAfterNumberFiles
+                stopAfterNumberFiles,
+                chunkByNumberPart,
+                chunkIndex
             );
         }
 

@@ -15,7 +15,11 @@ namespace Ml.Cli.JobApiCall
             int waitTimeMsMsBetweenRequest = 0, 
             int numberRetryOnHttp500=0, 
             int delayOn500=5000, 
-            bool isSaveResultOnError=true, int? stopAfterNumberFiles = null)
+            bool isSaveResultOnError=true, 
+            int? stopAfterNumberFiles = null,
+            int? chunkByNumberPart = null,
+            int? chunkIndex = null
+            )
         {
             StopAfterNumberFiles = stopAfterNumberFiles;
             Type = type;
@@ -39,6 +43,8 @@ namespace Ml.Cli.JobApiCall
             NumberRetryOnHttp500 = numberRetryOnHttp500;
             DelayOn500 = delayOn500;
             IsSaveResultOnError = isSaveResultOnError;
+            ChunkIndex = chunkIndex;
+            ChunkByNumberPart = chunkByNumberPart;
         }
 
         public string Id { get; }
@@ -64,6 +70,8 @@ namespace Ml.Cli.JobApiCall
         public int  DelayOn500 { get; }
         public bool  IsSaveResultOnError { get; }
         public int?  StopAfterNumberFiles { get; }
+        public int?  ChunkByNumberPart { get; }
+        public int?  ChunkIndex{ get; }
 
     }
 }
