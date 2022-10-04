@@ -125,7 +125,7 @@ const Gallery = ({fetch}) => {
             setState({...state, ...options, files: [], errorMessage: ""});
             return;
         }
-        const uri = encodeURI("/api/local/gallery/" + filesPath);
+        const uri = encodeURI(`/api/local/gallery/${utf8_to_b64(filesPath)}`);
         const response = await fetchGetData(fetch)(uri);
         if(!response.ok){
             setState({...state, ...options, errorMessage: "New files fetch on options submission failed", files: []});

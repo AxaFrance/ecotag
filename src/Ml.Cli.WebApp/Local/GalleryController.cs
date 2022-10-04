@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ml.Cli.FileLoader;
@@ -20,11 +22,12 @@ namespace Ml.Cli.WebApp.Local
             _basePath = basePath;
         }
         
-        [HttpGet("{directoryPath}")]
+        [HttpGet("{directoryPathBase64}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetFilesFromDirectory(string directoryPath)
+        public IActionResult GetFilesFromDirectory(string directoryPathBase64)
         {
+            var directoryPath = Encoding.UTF8.GetString(Convert.FromBase64String(directoryPathBase64));
             var files = FilesHandler.GetFilesFromDirectoryPath(directoryPath, _basePath, _fileLoader);
             if (files == null)
             {
