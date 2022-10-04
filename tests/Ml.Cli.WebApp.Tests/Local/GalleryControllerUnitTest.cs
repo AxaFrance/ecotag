@@ -17,13 +17,13 @@ namespace Ml.Cli.WebApp.Tests
             basePath.Setup(mock => mock.IsPathSecure(It.IsAny<string>())).Returns(true);
             
             var fileLoader = new Mock<IFileLoader>();
-            fileLoader.Setup(mock => mock.EnumerateFiles("birthdateFolder"))
+            fileLoader.Setup(mock => mock.EnumerateFiles("C:\\github\\fork\\ml-cli\\demo\\licenses\\images"))
                 .Returns(new[]{"birthdateFolder\\{someFileName}.pdf.png", "birthdateFolder\\{otherFilename}.pdf.png"});
             
             var galleryController = new GalleryController(fileLoader.Object, basePath.Object);
 
             var result =
-                galleryController.GetFilesFromDirectory("birthdateFolder");
+                galleryController.GetFilesFromDirectory("QzpcZ2l0aHViXGZvcmtcbWwtY2xpXGRlbW9cbGljZW5zZXNcaW1hZ2Vz");
             
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
