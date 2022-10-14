@@ -10,7 +10,8 @@
       "scope": "#{Spa:Oidc:Scope}#",
       "authority": "#{Spa:Oidc:Authority}#",
       "service_worker_relative_url":"/OidcServiceWorker.js",
-      "service_worker_only": true
+      "service_worker_only": true,
+      "token_renew_mode": "access_token_invalid"
     }
   },
   "telemetry": {
