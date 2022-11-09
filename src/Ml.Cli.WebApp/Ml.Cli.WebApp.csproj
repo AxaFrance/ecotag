@@ -15,7 +15,7 @@
   <ItemGroup>
 	<PackageReference Include="Azure.Identity" Version="1.6.0" />
 	<PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
-	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.7" />
+	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
 	<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
