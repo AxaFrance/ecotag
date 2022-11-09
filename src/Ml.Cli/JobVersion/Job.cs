@@ -44,9 +44,9 @@ namespace Ml.Cli.JobVersion
             {
                 return await _client.GetStringAsync(url);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                _logger.LogWarning($"Task Id: {taskId} -  Server in {url}");
+                _logger.LogError(exception, $"Task Id: {taskId} -  Server in {url}");
                 return "";
             }
         }
