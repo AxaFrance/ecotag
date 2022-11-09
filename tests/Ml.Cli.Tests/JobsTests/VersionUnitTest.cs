@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ml.Cli.FileLoader;
@@ -29,8 +30,8 @@ namespace Ml.Cli.Tests.JobsTests
             Mock.Get(factory).Setup(x => x.CreateClient("Default")).Returns(() =>
             {
                 var client = handler.CreateClient();
-                handler.SetupRequest(HttpMethod.Get, "https://url").ReturnsResponse("{\"version\":\"1.0\"}")
-                    .Callback(() => handler.SetupRequest(HttpMethod.Get, "https://url").ReturnsResponse("{\"version\":\"2.0\"}"));
+                handler.SetupRequest(HttpMethod.Get, "https://url").ReturnsResponse("{\"version\":\"1.0\"}", MediaTypeNames.Application.Json)
+                    .Callback(() => handler.SetupRequest(HttpMethod.Get, "https://url").ReturnsResponse("{\"version\":\"2.0\"}", MediaTypeNames.Application.Json));
                 return client;
             });
             
