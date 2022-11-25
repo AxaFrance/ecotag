@@ -88,5 +88,12 @@ namespace Ml.Cli.FileLoader
             path = PathAdapter.AdaptPathForCurrentOs(path);
             return File.OpenRead(path);
         }
+
+        public void Copy(string from, string to)
+        {
+            from = PathAdapter.AdaptPathForCurrentOs(from);
+            to = PathAdapter.AdaptPathForCurrentOs(to);
+            File.Copy(from, to);
+        }
     }
 }
