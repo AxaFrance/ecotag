@@ -13,6 +13,7 @@ using Ml.Cli.InputTask;
 using Ml.Cli.JobApiCall;
 using Ml.Cli.JobApiCall.FileHandler;
 using Ml.Cli.JobCompare;
+using Ml.Cli.JobCopy;
 using Ml.Cli.JobDataset;
 using Ml.Cli.JobLoop;
 using Ml.Cli.JobParallel;
@@ -122,6 +123,7 @@ namespace Ml.Cli
             services.AddSingleton<TaskParallel>();
             services.AddSingleton<TaskSerial>();
             services.AddSingleton<TaskLoop>();
+            services.AddSingleton<TaskCopy>();
 
             services.AddSingleton<IInputTask, TasksGroup>();
             services.AddSingleton<IInputTask, LoopTask>();
@@ -130,6 +132,7 @@ namespace Ml.Cli
             services.AddSingleton<IInputTask, DatasetTask>();
             services.AddSingleton<IInputTask, ScriptTask>();
             services.AddSingleton<IInputTask, VersionTask>();
+            services.AddSingleton<IInputTask, CopyTask>();
         }
 
         private async Task Run(string path, string baseDirectory, ServiceProvider provider, ServiceCollection services)
@@ -196,6 +199,9 @@ namespace Ml.Cli
                     break;
                 case "callapi":
                     await provider.GetService<TaskApiCall>().ApiCallAsync((Callapi)task);
+                    break;
+                case "copy":
+                    await provider.GetService<TaskCopy>().CopyAsync((CopyTask)task);
                     break;
                 case "compare":
                     await provider.GetService<TaskCompare>().CompareAsync((CompareTask)task);

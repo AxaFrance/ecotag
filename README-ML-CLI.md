@@ -343,6 +343,7 @@ You can execute several tasks in command line interface (CLI):
 - [`script`](./src/Ml.Cli/JobScript#readme) will execute a user-defined script on files stored in a repository.
 - [`compare`](./src/Ml.Cli/JobCompare#readme) is used to compare two sets of json files; the resulting json file can be used to see the results with the help of the server.
 - [`dataset`](./src/Ml.Cli/JobDataset#readme) is used to generate a dataset file which will contain all annotations (of a same, user-specified type and configuration) made on json files with the help of Ml-Cli front.
+- [`copy`](./src/Ml.Cli/JobCopy#readme) copy from a directory to another directory.
 
 
 ### tasks-sample.json

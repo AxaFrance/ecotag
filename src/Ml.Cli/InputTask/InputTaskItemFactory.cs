@@ -68,6 +68,8 @@ namespace Ml.Cli.InputTask
                     return JobLoop.Initializer.CreateTask(jObject, type, tokenEnabled, _taskId);
                 case "wait_version_change":
                     return JobVersion.Initializer.CreateTask(jObject, type, tokenEnabled, isBaseDirectoryValid, _baseDirectory, _taskId, _pathValidatorHelper);
+                case "copy":
+                    return JobCopy.Initializer.CreateTask(jObject, type, tokenEnabled, isBaseDirectoryValid, _baseDirectory, _taskId, _pathValidatorHelper);
                 case "callapi":
                     return JobApiCall.Initializer.CreateTask(jObject, type, tokenEnabled, isBaseDirectoryValid, _baseDirectory, _taskId, _services, _pathValidatorHelper);
                 case "script":
