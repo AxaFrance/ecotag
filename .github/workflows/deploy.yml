@@ -1,4 +1,4 @@
-﻿name: CI
+﻿name: Deploy
 
 on:
   push:
@@ -10,17 +10,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  build-windows:
-    environment: ml-cli
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-dotnet@v1
-      - run: dotnet test
   
   build-linux:
     environment: ml-cli
@@ -48,4 +37,4 @@ jobs:
           app-name: 'ecotag'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./drop/linux-x64/ml-cli
+          package: ./drop/linux-x64/ml-cli/linux-x64-ml-cli.zip
