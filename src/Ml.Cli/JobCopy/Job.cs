@@ -23,8 +23,9 @@ namespace Ml.Cli.JobCopy
            var files = _fileLoader.EnumerateFiles(inputTask.From, inputTask.Pattern);
            foreach (var file in files)
            {
-               _fileLoader.Copy(file, Path.Combine(inputTask.To, Path.GetFileName(file)));
-               _logger.LogInformation($"Copy file {inputTask.From} to {inputTask.From}");
+                var destinationPath = Path.Combine(inputTask.To, Path.GetFileName(file)); 
+               _fileLoader.Copy(file, destinationPath);
+               _logger.LogInformation($"Copy file {file} to {destinationPath}");
            }
         }
     }
