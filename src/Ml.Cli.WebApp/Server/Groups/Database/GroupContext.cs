@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ml.Cli.WebApp.Server.Groups.Database.Group;
 using Ml.Cli.WebApp.Server.Groups.Database.GroupUsers;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
@@ -19,13 +20,24 @@ public class GroupContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GroupUsersModel>()
+        var userBuilder = modelBuilder.Entity<UserModel>();
+        userBuilder.HasIndex( u => u.Email).IsUnique();
+        userBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        
+        var groupBuilder = modelBuilder.Entity<GroupModel>();
+        groupBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        
+        var groupUsersModelBuilder = modelBuilder.Entity<GroupUsersModel>();
+        groupUsersModelBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+        groupUsersModelBuilder.Property(u => u.UserId).HasConversion(new GuidToStringConverter());
+        
+        groupUsersModelBuilder
             .HasKey(gu => new { gu.GroupId, gu.UserId });
-        modelBuilder.Entity<GroupUsersModel>()
+        groupUsersModelBuilder
             .HasOne(gu => gu.Group)
             .WithMany(g => g.GroupUsers)
             .HasForeignKey(gu => gu.GroupId);
-        modelBuilder.Entity<GroupUsersModel>()
+        groupUsersModelBuilder
             .HasOne(gu => gu.User)
             .WithMany(u => u.GroupUsers)
             .HasForeignKey(gu => gu.UserId);

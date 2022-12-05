@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 
@@ -30,34 +31,50 @@ public class DeleteContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<FileModel>()
+        var fileBuilder = modelBuilder.Entity<FileModel>();
+        fileBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        fileBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
+        fileBuilder
             .HasOne(gu => gu.Dataset)
             .WithMany(u => u.Files)
             .HasForeignKey(gu => gu.DatasetId);
 
-        modelBuilder.Entity<AnnotationModel>()
+        var annotationModelBuilder = modelBuilder.Entity<AnnotationModel>();
+        annotationModelBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        annotationModelBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+        annotationModelBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
+        annotationModelBuilder
             .HasOne(gu => gu.File)
             .WithMany(u => u.Annotations)
             .HasForeignKey(gu => gu.FileId);
 
-        modelBuilder.Entity<AnnotationModel>()
+        annotationModelBuilder
             .HasOne<ProjectModel>()
             .WithMany()
             .HasForeignKey(gu => gu.ProjectId);
 
-        modelBuilder.Entity<ReservationModel>()
+        var reservationModelBuilder = modelBuilder.Entity<ReservationModel>();
+        reservationModelBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        reservationModelBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+        reservationModelBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
+        reservationModelBuilder
             .HasOne(gu => gu.File)
             .WithMany(u => u.Reservations)
             .HasForeignKey(gu => gu.FileId);
 
-        modelBuilder.Entity<ReservationModel>()
+        reservationModelBuilder
             .HasOne<ProjectModel>()
             .WithMany()
             .HasForeignKey(gu => gu.ProjectId);
 
-        modelBuilder.Entity<ProjectModel>()
+        var projectModelBuilder = modelBuilder.Entity<ProjectModel>();
+        projectModelBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        projectModelBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
+        projectModelBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+        projectModelBuilder
             .HasOne<DatasetModel>()
             .WithMany()
             .HasForeignKey(gu => gu.DatasetId);
+        
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 namespace Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 [ExcludeFromCodeCoverage]
-public class FileService : IFileService
+public class FileBlobService : IFileService
 {
     private readonly IConfiguration _configuration;
     public const string FileNameMissing = "FileNameMissing";
@@ -20,7 +20,7 @@ public class FileService : IFileService
     public const string DownloadError = "DownloadError";
     private const int ChunkSize = 500;
 
-    public FileService(IConfiguration configuration)
+    public FileBlobService(IConfiguration configuration)
     {
         _configuration = configuration;
     }

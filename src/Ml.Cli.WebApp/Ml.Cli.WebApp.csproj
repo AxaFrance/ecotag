@@ -17,6 +17,7 @@
 	<PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
 	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
 	<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
 	<PackageReference Include="MimeKit" Version="3.2.0" />
@@ -42,6 +43,7 @@
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Include=".db\.gitignore" />
     <None Include="ClientApp\public\web.config" />
   </ItemGroup>
 

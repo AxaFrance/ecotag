@@ -19,14 +19,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ml.Cli.WebApp.Server.Audits;
+using Ml.Cli.WebApp.Server.Audits.Database;
 using Ml.Cli.WebApp.Server.Datasets;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Serilog;
-using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -97,6 +100,7 @@ namespace Ml.Cli.WebApp.Server
             services.ConfigureDatasets(Configuration);
             services.ConfigureProjects(Configuration);
             services.ConfigureServiceAudits(Configuration);
+
             
              services.AddAuthorization(options =>
                   {
@@ -251,6 +255,18 @@ namespace Ml.Cli.WebApp.Server
             app.UseSerilogRequestLogging();
             app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
+            
+            var auditContext = serviceProvider.GetService<AuditContext>();
+            auditContext.Database.EnsureCreated();
+            var datasetContext = serviceProvider.GetService<DatasetContext>();
+            datasetContext.Database.EnsureCreated();
+            var projectContext = serviceProvider.GetService<ProjectContext>();
+            projectContext.Database.EnsureCreated();
+            var deleteContext = serviceProvider.GetService<DeleteContext>();
+            deleteContext.Database.EnsureCreated();
+            var groupContext = serviceProvider.GetService<GroupContext>();
+            groupContext.Database.EnsureCreated();
+            
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "sameorigin");

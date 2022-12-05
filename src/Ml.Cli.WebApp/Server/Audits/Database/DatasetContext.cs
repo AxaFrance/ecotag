@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ml.Cli.WebApp.Server.Audits.Database;
 
@@ -21,7 +22,7 @@ public class AuditContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-
+        var datasetBuilder = modelBuilder.Entity<AuditModel>();
+        datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
     }
 }

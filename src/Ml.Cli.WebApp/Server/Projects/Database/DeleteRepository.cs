@@ -67,9 +67,16 @@ public class DeleteRepository
     private async Task DeleteFilesAsync(string datasetId)
     {
         var files = await _deleteContext.Files.Where(file => new Guid(datasetId) == file.DatasetId).ToListAsync();
-        _deleteContext.Files.RemoveRange(files);
-        var blobUri = await _deleteContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).Select(d => d.BlobUri).FirstAsync();
-        await _fileService.DeleteDirectoryAsync(blobUri);
+        if (files.Count > 0)
+        {
+            _deleteContext.Files.RemoveRange(files);
+        }
+
+        var blobUri = await _deleteContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).Select(d => d.BlobUri).FirstOrDefaultAsync();
+        if (!string.IsNullOrEmpty(blobUri))
+        {
+            await _fileService.DeleteDirectoryAsync(blobUri);
+        }
     }
 
     public async Task DeleteProjectWithDatasetAsync(GetDatasetInfo dataset, string projectId)

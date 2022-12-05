@@ -131,7 +131,7 @@ namespace Ml.Cli.WebApp
                     webBuilder.UseStartup<StartupServer>();
                 }).ConfigureServices(((hostContext, services) =>
                 {
-                    services.AddHostedService<DatasetsWorker>();
+                 //   services.AddHostedService<DatasetsWorker>();
                 }));
 
         private static IHostBuilder CreateHostBuilderLocal(string[] args) =>
