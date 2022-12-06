@@ -27,11 +27,12 @@ jobs:
         working-directory: ./drop
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
-          cp –R /LibreOfficePortal_7.4.2_winx64 /drop/win-x64/ml-cli/LibreOfficePortal
-          rm /drop/win-x64/ml-cli/appsettings-server.Production.json
-          cp /drop/win-x64/ml-cli/appsettings-server.Desktop.json /drop/win-x64/ml-cli/appsettings-server.Production.json 
-          rm /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
-          cp /drop/win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
+          mkdir /win-x64/ml-cli/LibreOfficePortal
+          cp –R /LibreOfficePortal_7.4.2_winx64 /win-x64/ml-cli/LibreOfficePortal
+          rm /win-x64/ml-cli/appsettings-server.Production.json
+          cp win-x64/ml-cli/appsettings-server.Desktop.json /win-x64/ml-cli/appsettings-server.Production.json 
+          rm /win-x64/ml-cli/ClientApp/build-server/environment.json
+          cp /win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /win-x64/ml-cli/ClientApp/build-server/environment.json
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
