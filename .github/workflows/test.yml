@@ -29,7 +29,7 @@ jobs:
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
           ls ./drop/win-x64/ml-cli/
           echo "---------------"
-          mkdir -p drop/win-x64/ml-cli/.LibreOfficePortal
+          mkdir -p ./drop/win-x64/ml-cli/.LibreOfficePortal
           ls ./drop/win-x64/ml-cli/
           echo "---------------"
           ls
