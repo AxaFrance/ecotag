@@ -28,8 +28,10 @@ jobs:
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
           ls ./drop/win-x64/ml-cli/
+          echo "---------------"
           mkdir ./drop/win-x64/ml-cli/.LibreOfficePortal
-          cp –R "./drop/LibreOfficePortal_7.4.2_winx64" "./drop/win-x64/ml-cli/.LibreOfficePortal"
+          ls
+          cp –R "./LibreOfficePortal_7.4.2_winx64" "./drop/win-x64/ml-cli/.LibreOfficePortal"
           rm ./drop/win-x64/ml-cli/appsettings-server.Production.json
           cp ./drop/win-x64/ml-cli/appsettings-server.Desktop.json ./drop/win-x64/ml-cli/appsettings-server.Production.json 
           rm ./drop/win-x64/ml-cli/ClientApp/build-server/environment.json
