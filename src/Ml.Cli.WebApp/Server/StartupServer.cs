@@ -96,6 +96,7 @@ namespace Ml.Cli.WebApp.Server
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+            
             services.ConfigureGroups(Configuration);
             services.ConfigureDatasets(Configuration);
             services.ConfigureProjects(Configuration);

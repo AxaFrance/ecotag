@@ -1,7 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using FileContextCore;
-using FileContextCore.FileManager;
-using FileContextCore.Serializer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,15 +15,21 @@ public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)
     {
+        var databaseMode = configuration[DatabaseSettings.Mode];
+        if (databaseMode == DatabaseMode.Sqlite) {
+            services.AddScoped<IFileService, FileHardDriveService>();
+            var connectionString = configuration.GetConnectionString("EcotagDatatset") ?? "Data Source=.db/EcotagDatatset.db";
+            services.AddSqlite<DatasetContext>(connectionString);
+        }
+        else
+        {
+            services.AddScoped<IFileService, FileBlobService>();
+            services.AddDbContext<DatasetContext>(options =>
+              options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        }
+        
         services.Configure<DatasetsSettings>(
             configuration.GetSection(DatasetsSettings.Datasets));
-        //ervices.AddScoped<IFileService, FileBlobService>();
-        services.AddScoped<IFileService, FileHardDriveService>();
-        //services.AddDbContext<DatasetContext>(options =>
-          //  options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-        var connectionString = configuration.GetConnectionString("EcotagDatatset") ?? "Data Source=.db/EcotagDatatset.db";
-        services.AddSqlite<DatasetContext>(connectionString);
-        
         services.AddScoped<DatasetsRepository, DatasetsRepository>();
         services.AddScoped<CreateDatasetCmd, CreateDatasetCmd>();
         services.AddScoped<ListDatasetCmd, ListDatasetCmd>();

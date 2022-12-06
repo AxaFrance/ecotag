@@ -20,7 +20,7 @@ public class ExportThenDeleteProjectCmd
     private readonly ProjectsRepository _projectsRepository;
     private readonly DatasetsRepository _datasetsRepository;
     private readonly AnnotationsRepository _annotationsRepository;
-    private readonly DeleteRepository _deleteRepository;
+    private readonly IDeleteRepository _deleteRepository;
     private readonly IFileService _fileService;
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
     private readonly GroupsRepository _groupsRepository;
@@ -30,7 +30,7 @@ public class ExportThenDeleteProjectCmd
         ProjectsRepository projectsRepository, 
         DatasetsRepository datasetsRepository, 
         AnnotationsRepository annotationsRepository, 
-        DeleteRepository deleteRepository, 
+        IDeleteRepository deleteRepository, 
         IFileService fileService,
         GroupsRepository groupsRepository,
         IOptions<DatasetsSettings> datasetsSettings)
