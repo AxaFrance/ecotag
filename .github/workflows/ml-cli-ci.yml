@@ -213,6 +213,15 @@ jobs:
           asset_name: linux-x64-demo-api.zip
           asset_content_type: application/zip
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/ml-cli
+      - name: LibreOffice
+        working-directory: ./drop
+        run: |
+          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
+          cp –R /LibreOfficePortal_7.4.2_winx64 /drop/win-x64/ml-cli/LibreOfficePortal
+          rm /drop/win-x64/ml-cli/appsettings-server.Production.json
+          cp /drop/win-x64/ml-cli/appsettings-server.Desktop.json /drop/win-x64/ml-cli/appsettings-server.Production.json 
+          rm /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
+          cp /drop/win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:

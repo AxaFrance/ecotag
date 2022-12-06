@@ -1,0 +1,49 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - uses: actions/setup-dotnet@v1
+      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./drop/win-x64/ml-cli
+      - name: LibreOffice
+        working-directory: ./drop
+        run: |
+          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
+          cp –R /LibreOfficePortal_7.4.2_winx64 /drop/win-x64/ml-cli/LibreOfficePortal
+          rm /drop/win-x64/ml-cli/appsettings-server.Production.json
+          cp /drop/win-x64/ml-cli/appsettings-server.Desktop.json /drop/win-x64/ml-cli/appsettings-server.Production.json 
+          rm /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
+          cp /drop/win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
+        with:
+          filename: win-x64-ml-cli.zip
+          path: .
+          directory: ./drop/win-x64/ml-cli
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/win-x64/ml-cli/win-x64-ml-cli.zip
+          asset_name: win-x64-ml-cli.zip
+          asset_content_type: application/zip

@@ -18,9 +18,9 @@ public class DocumentConverterToPdf
 {
     private readonly IOptions<DatasetsSettings> _datasetsSettings;
     private readonly ILogger<DocumentConverterToPdf> _logger;
-    private static SemaphoreSlim _semaphoreSlim = null;
-    private static List<int> _ports = new List<int>();
-    private static object _locker = new object();
+    private static SemaphoreSlim _semaphoreSlim;
+    private static List<int> _ports = new();
+    private static object _locker = new();
     private static string _dirname = Guid.NewGuid().ToString();
     public DocumentConverterToPdf(IOptions<DatasetsSettings> datasetsSettings, ILogger<DocumentConverterToPdf> logger)
     {
