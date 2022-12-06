@@ -28,11 +28,11 @@ jobs:
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
           ls /win-x64/ml-cli/
-          cp –R /LibreOfficePortal_7.4.2_winx64 /win-x64/ml-cli/.LibreOfficePortal
-          rm /win-x64/ml-cli/appsettings-server.Production.json
-          cp win-x64/ml-cli/appsettings-server.Desktop.json /win-x64/ml-cli/appsettings-server.Production.json 
-          rm /win-x64/ml-cli/ClientApp/build-server/environment.json
-          cp /win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /win-x64/ml-cli/ClientApp/build-server/environment.json
+          cp –R /LibreOfficePortal_7.4.2_winx64 ./win-x64/ml-cli/.LibreOfficePortal
+          rm ./win-x64/ml-cli/appsettings-server.Production.json
+          cp ./win-x64/ml-cli/appsettings-server.Desktop.json ./win-x64/ml-cli/appsettings-server.Production.json 
+          rm ./win-x64/ml-cli/ClientApp/build-server/environment.json
+          cp ./win-x64/ml-cli/ClientApp/build-server/environment.desktop.json ./win-x64/ml-cli/ClientApp/build-server/environment.json
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
