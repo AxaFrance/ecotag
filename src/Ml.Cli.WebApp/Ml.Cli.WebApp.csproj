@@ -43,8 +43,8 @@
     <Content Include="ClientApp\src\Toolkit\TagOverText\expectedOutput.json" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    <None Include=".db\.gitignore" />
-    <None Include=".LibreOfficePortal\.gitignore" />
+    <Content Include=".db\.gitignore" />
+    <Content Include=".LibreOfficePortal\.gitignore" />
     <None Include="ClientApp\public\environment.dekstop.json" />
     <None Include="ClientApp\public\web.config" />
   </ItemGroup>
