@@ -26,14 +26,14 @@ jobs:
       - name: LibreOffice
         #working-directory: .
         run: |
-          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
+          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 /drop/win-x64/ml-cli/LibreOffice
           ls ./drop/win-x64/ml-cli/
           echo "---------------"
-          mkdir -p ./drop/win-x64/ml-cli/.LibreOfficePortal
-          ls ./drop/win-x64/ml-cli/
-          echo "---------------"
-          ls
-          cp –R /LibreOfficePortal_7.4.2_winx64/* /drop/win-x64/ml-cli/.LibreOfficePortal
+          #mkdir -p ./drop/win-x64/ml-cli/.LibreOfficePortal
+          #ls ./drop/win-x64/ml-cli/
+          #echo "---------------"
+          #ls
+          #cp –R /LibreOfficePortal_7.4.2_winx64/* /drop/win-x64/ml-cli/.LibreOfficePortal
           rm /drop/win-x64/ml-cli/appsettings-server.Production.json
           cp /drop/win-x64/ml-cli/appsettings-server.Desktop.json /drop/win-x64/ml-cli/appsettings-server.Production.json 
           rm /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
