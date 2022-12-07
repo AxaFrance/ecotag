@@ -26,17 +26,19 @@ jobs:
       - name: LibreOffice
         #working-directory: .
         run: |
-          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1
+          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 LibreOffice
           echo "---------------"
-          mkdir -p ./drop/win-x64/ml-cli/LibreOffice
+          mv LibreOffice drop/win-x64/ml-cli
           ls ./drop/win-x64/ml-cli/
           echo "---------------"
-          ls
-          cp –R /LibreOfficePortal_7.4.2_winx64/* /drop/win-x64/ml-cli/LibreOffice
-          rm /drop/win-x64/ml-cli/appsettings-server.Production.json
-          cp /drop/win-x64/ml-cli/appsettings-server.Desktop.json /drop/win-x64/ml-cli/appsettings-server.Production.json 
-          rm /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
-          cp /drop/win-x64/ml-cli/ClientApp/build-server/environment.desktop.json /drop/win-x64/ml-cli/ClientApp/build-server/environment.json
+          #ls
+          #cp –R /LibreOfficePortal_7.4.2_winx64/* /drop/win-x64/ml-cli/LibreOffice
+          cd drop/win-x64/ml-cli
+          rm appsettings-server.Production.json
+          cp appsettings-server.Desktop.json appsettings-server.Production.json 
+          cd ClientApp/build-server
+          rm environment.json
+          cp environment.desktop.json environment.json
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
