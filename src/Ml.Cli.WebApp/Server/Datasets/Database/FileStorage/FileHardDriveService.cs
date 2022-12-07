@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.StaticFiles;
 using Ml.Cli.PathManager;
@@ -13,11 +12,11 @@ public class FileHardDriveService : IFileService
 
     public FileHardDriveService()
     {
-        _basePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), ".data");
+        _basePath = Path.Combine("./", ".data");
     }
     public async Task UploadStreamAsync(string blobFileUri, Stream fileStream)
     {
-        blobFileUri = AdapatBlobToHardDrive(blobFileUri);
+        blobFileUri = AdaptBlobToHardDrive(blobFileUri);
         var info = new DirectoryInfo(Path.GetDirectoryName(blobFileUri));  
         if (!info.Exists) {  
             info.Create();  
@@ -27,7 +26,7 @@ public class FileHardDriveService : IFileService
         await fileStream.CopyToAsync(outputFileStream);
     }
 
-    private string AdapatBlobToHardDrive(string blobFileUri)
+    private string AdaptBlobToHardDrive(string blobFileUri)
     {
         blobFileUri = blobFileUri.Replace("azureblob://", _basePath + "/");
         blobFileUri = PathAdapter.AdaptPathForCurrentOs(blobFileUri);
@@ -36,7 +35,7 @@ public class FileHardDriveService : IFileService
 
     public async Task<ResultWithError<FileServiceDataModel, ErrorResult>> DownloadAsync(string blobFileUri)
     {
-        blobFileUri = AdapatBlobToHardDrive(blobFileUri);
+        blobFileUri = AdaptBlobToHardDrive(blobFileUri);
         var file = new FileInfo(blobFileUri);
         if (!file.Exists)
             return new ResultWithError<FileServiceDataModel, ErrorResult>
@@ -71,7 +70,7 @@ public class FileHardDriveService : IFileService
 
     public async Task<bool> DeleteAsync(string blobFileUri)
     {
-        blobFileUri = AdapatBlobToHardDrive(blobFileUri);
+        blobFileUri = AdaptBlobToHardDrive(blobFileUri);
         var file = new FileInfo(blobFileUri);
         if (!file.Exists) return false;
         file.Delete();
@@ -99,7 +98,7 @@ public class FileHardDriveService : IFileService
 
     public async Task<bool> DeleteDirectoryAsync(string blobDirectoryUri)
     {
-        blobDirectoryUri = AdapatBlobToHardDrive(blobDirectoryUri);
+        blobDirectoryUri = AdaptBlobToHardDrive(blobDirectoryUri);
         var directory = new DirectoryInfo(blobDirectoryUri);
         if (!directory.Exists) return false;
         RecursiveDelete(directory);
@@ -118,7 +117,7 @@ public class FileHardDriveService : IFileService
 
     public async Task<bool> IsFileExistAsync(string blobUri)
     {
-        blobUri = AdapatBlobToHardDrive(blobUri);
+        blobUri = AdaptBlobToHardDrive(blobUri);
         var file = new FileInfo(blobUri);
         return file.Exists;
     }
