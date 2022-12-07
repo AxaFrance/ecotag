@@ -19,19 +19,13 @@ public static class ConfigureExtension
         {
             var connectionStringProject = configuration.GetConnectionString("EcotagProject") ?? "Data Source=.db/EcotagProject.db";
             services.AddSqlite<ProjectContext>(connectionStringProject);
-            var connectionString = configuration.GetConnectionString("EcotagDelete") ?? "Data Source=.db/EcotagDelete.db";
-            services.AddSqlite<DeleteContext>(connectionString);
-            services.AddScoped<IDeleteRepository, DeleteSqlLiteRepository>();
         }
         else
         {
             services.AddDbContext<ProjectContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-            services.AddDbContext<DeleteContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-            services.AddScoped<IDeleteRepository, DeleteRepository>();
         }
-    
+        services.AddScoped<IDeleteRepository, DeleteSqlLiteRepository>();
 
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
         services.AddScoped<DatasetsRepository, DatasetsRepository>();

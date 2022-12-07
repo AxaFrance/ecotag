@@ -266,8 +266,6 @@ namespace Ml.Cli.WebApp.Server
                 datasetContext.Database.EnsureCreated();
                 var projectContext = serviceProvider.GetService<ProjectContext>();
                 projectContext.Database.EnsureCreated();
-                var deleteContext = serviceProvider.GetService<DeleteContext>();
-                deleteContext.Database.EnsureCreated();
                 var groupContext = serviceProvider.GetService<GroupContext>();
                 groupContext.Database.EnsureCreated();
             }
