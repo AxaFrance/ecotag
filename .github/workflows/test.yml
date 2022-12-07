@@ -39,18 +39,8 @@ jobs:
           cd ClientApp/build-server
           rm environment.json
           cp environment.desktop.json environment.json
-      - name: Zip Release
-        uses: TheDoctor0/zip-release@0.6.0
+      - name: Upload WebApp1 Build Artifact
+        uses: actions/upload-artifact@v2
         with:
-          filename: win-x64-ml-cli.zip
-          path: .
-          directory: ./drop/win-x64/ml-cli
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/win-x64/ml-cli/win-x64-ml-cli.zip
-          asset_name: win-x64-ml-cli.zip
-          asset_content_type: application/zip
+          name: Publish win-x64 Fibonacci
+          path: ./win-x64/fibonacci
