@@ -43,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Publish win-x64 Fibonacci
-          path: ./win-x64/fibonacci
+          path: ./drop/win-x64/ml-cli
