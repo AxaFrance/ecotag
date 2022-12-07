@@ -257,17 +257,21 @@ namespace Ml.Cli.WebApp.Server
             app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
             
-            var auditContext = serviceProvider.GetService<AuditContext>();
-            auditContext.Database.EnsureCreated();
-            var datasetContext = serviceProvider.GetService<DatasetContext>();
-            datasetContext.Database.EnsureCreated();
-            var projectContext = serviceProvider.GetService<ProjectContext>();
-            projectContext.Database.EnsureCreated();
-            var deleteContext = serviceProvider.GetService<DeleteContext>();
-            deleteContext.Database.EnsureCreated();
-            var groupContext = serviceProvider.GetService<GroupContext>();
-            groupContext.Database.EnsureCreated();
-            
+            var databaseMode = Configuration[DatabaseSettings.Mode];
+            if (databaseMode == DatabaseMode.Sqlite)
+            {
+                var auditContext = serviceProvider.GetService<AuditContext>();
+                auditContext.Database.EnsureCreated();
+                var datasetContext = serviceProvider.GetService<DatasetContext>();
+                datasetContext.Database.EnsureCreated();
+                var projectContext = serviceProvider.GetService<ProjectContext>();
+                projectContext.Database.EnsureCreated();
+                var deleteContext = serviceProvider.GetService<DeleteContext>();
+                deleteContext.Database.EnsureCreated();
+                var groupContext = serviceProvider.GetService<GroupContext>();
+                groupContext.Database.EnsureCreated();
+            }
+
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "sameorigin");
