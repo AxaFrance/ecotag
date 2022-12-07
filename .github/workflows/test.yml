@@ -23,21 +23,15 @@ jobs:
 
       - uses: actions/setup-dotnet@v1
       - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./drop/win-x64/ml-cli
-      - name: LibreOffice
-        #working-directory: .
+      - name: LibreOffice install Windows x64
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 LibreOffice
-          echo "---------------"
           mv LibreOffice drop/win-x64/ml-cli
-          mkdir .data
-          mkdir .db
           ls ./drop/win-x64/ml-cli/
           echo "---------------"
-          #ls
-          #cp –R /LibreOfficePortal_7.4.2_winx64/* /drop/win-x64/ml-cli/LibreOffice
           cd drop/win-x64/ml-cli
           rm appsettings-server.Production.json
-          cp appsettings-server.Desktop.json appsettings-server.Production.json 
+          cp appsettings-server.DesktopWinx64.json appsettings-server.Production.json 
           cd ClientApp/build-server
           rm environment.json
           cp environment.desktop.json environment.json
