@@ -263,7 +263,7 @@ internal static class DatasetMock
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
-        var deleteRepository = new DeleteSqlLiteRepository(datasetContext, projectContext, fileService);
+        var deleteRepository = new DeleteRepository(datasetContext, projectContext, fileService);
         
         var controllerContext = ControllerContext(nameIdentifier);
         var datasetsController = new DatasetsController();

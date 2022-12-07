@@ -25,7 +25,7 @@ public static class ConfigureExtension
             services.AddDbContext<ProjectContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
         }
-        services.AddScoped<IDeleteRepository, DeleteSqlLiteRepository>();
+        services.AddScoped<IDeleteRepository, DeleteRepository>();
 
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
         services.AddScoped<DatasetsRepository, DatasetsRepository>();

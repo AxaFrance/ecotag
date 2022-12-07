@@ -75,7 +75,6 @@ public class FileHardDriveService : IFileService
         if (!file.Exists) return false;
         file.Delete();
         return true;
-
     }
     
     private static void RecursiveDelete(DirectoryInfo baseDir)

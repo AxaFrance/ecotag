@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ml.Cli.WebApp.Local.Paths;
 using Ml.Cli.WebApp.Server.Audits;
 using Ml.Cli.WebApp.Server.Audits.Database;
 using Ml.Cli.WebApp.Server.Datasets;
@@ -102,7 +104,6 @@ namespace Ml.Cli.WebApp.Server
             services.ConfigureProjects(Configuration);
             services.ConfigureServiceAudits(Configuration);
 
-            
              services.AddAuthorization(options =>
                   {
                       var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
@@ -260,6 +261,11 @@ namespace Ml.Cli.WebApp.Server
             var databaseMode = Configuration[DatabaseSettings.Mode];
             if (databaseMode == DatabaseMode.Sqlite)
             {
+                var file = new DirectoryInfo("./");
+                if (!file.Exists)
+                {
+                    file.Create();
+                }
                 var auditContext = serviceProvider.GetService<AuditContext>();
                 auditContext.Database.EnsureCreated();
                 var datasetContext = serviceProvider.GetService<DatasetContext>();

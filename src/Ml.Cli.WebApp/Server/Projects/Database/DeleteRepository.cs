@@ -7,13 +7,13 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database;
 
-public class DeleteSqlLiteRepository : IDeleteRepository
+public class DeleteRepository : IDeleteRepository
 {
     private readonly DatasetContext _datasetContext;
     private readonly ProjectContext _projectContext;
     private readonly IFileService _fileService;
 
-    public DeleteSqlLiteRepository(DatasetContext datasetContext, ProjectContext projectContext, IFileService fileService)
+    public DeleteRepository(DatasetContext datasetContext, ProjectContext projectContext, IFileService fileService)
     {
         _datasetContext = datasetContext;
         _projectContext = projectContext;
