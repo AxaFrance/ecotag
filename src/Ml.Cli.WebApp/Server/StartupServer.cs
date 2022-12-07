@@ -261,7 +261,7 @@ namespace Ml.Cli.WebApp.Server
             var databaseMode = Configuration[DatabaseSettings.Mode];
             if (databaseMode == DatabaseMode.Sqlite)
             {
-                var file = new DirectoryInfo("./");
+                var file = new DirectoryInfo("./db");
                 if (!file.Exists)
                 {
                     file.Create();
