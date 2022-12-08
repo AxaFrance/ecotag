@@ -68,7 +68,7 @@ public class UploadFileShould
     [InlineData("s666666", "test.txt", null, 1, UploadFileCmd.DatasetLocked)]
     [InlineData("s666666", "test.eml_badextention", null, 2, UploadFileCmd.InvalidModel)]
     [InlineData("s666666", "test.txt_badextention", null, 3, UploadFileCmd.InvalidModel)]
-    [InlineData("s666666", "test.jpg", FileValidator.MaxFileSize * FileValidator.Mb, 0, UploadFileCmd.FileTooLarge)]
+    [InlineData("s666666", "test.jpg", (long)(FileValidator.MaxFileSize * FileValidator.Mb), 0, UploadFileCmd.FileTooLarge)]
     public async Task ReturnBadRequest(string nameIdentifier, string fileName, long? fileLength, int indexDataset,
         string errorKey)
     {
