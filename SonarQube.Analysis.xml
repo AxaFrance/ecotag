@@ -3,6 +3,6 @@
     <Property Name="sonar.host.url">https://sonarcloud.io</Property>
     <Property Name="sonar.sources">src</Property>
     <Property Name="sonar.exclusions">**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*Sould.cs,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build-local/**,**/ClientApp/build-server/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts,**/ClientApp/public/**</Property>
-    <Property Name="sonar.cs.opencover.reportsPaths">**/coverage.json</Property>
+    <Property Name="sonar.cs.opencover.reportsPaths">tests/Ml.Cli.WebApp.Tests/coverage.json</Property>
     <Property Name="sonar.javascript.lcov.reportPaths">src/Ml.Cli.WebApp/ClientApp/coverage/lcov.info</Property>
 </SonarQubeAnalysisProperties>
