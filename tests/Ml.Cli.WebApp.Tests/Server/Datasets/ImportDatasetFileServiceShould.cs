@@ -29,7 +29,7 @@ public class ImportDatasetFileServiceShould
             {
                 "firstFile.txt",
                 new ResultWithError<FileInfoServiceDataModel, ErrorResult>
-                    { Error = new ErrorResult { Key = FileService.InvalidFileExtension } }
+                    { Error = new ErrorResult { Key = FileBlobService.InvalidFileExtension } }
             },
             {
                 "secondFile.txt",
@@ -39,7 +39,7 @@ public class ImportDatasetFileServiceShould
                         { Name = "secondFile.txt", Length = 10, ContentType = "image" }
                 }
             },
-            { "thirdFile.txt", new ResultWithError<FileInfoServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileService.InvalidFileExtension}} }
+            { "thirdFile.txt", new ResultWithError<FileInfoServiceDataModel, ErrorResult>{Error = new ErrorResult{Key = FileBlobService.InvalidFileExtension}} }
         };
         var fileService = new Mock<IFileService>();
         fileService

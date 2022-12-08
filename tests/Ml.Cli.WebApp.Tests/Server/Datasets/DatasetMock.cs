@@ -46,7 +46,7 @@ public record MockResult
     public AnnotationsController AnnotationsController { get; set; }
     public AnnotationsRepository AnnotationsRepository { get; set; }
     public ProjectsRepository ProjectsRepository { get; set; }
-    public DeleteRepository DeleteRepository { get; set; }
+    public IDeleteRepository DeleteRepository { get; set; }
     public IList<string> fileIds { get; set; }
     public string DatasetEmlOpen { get; set; }
     public string DatasetTxtOpen { get; set; }
@@ -98,9 +98,6 @@ internal static class DatasetMock
 
         var datasetContextFunc = GetInMemoryDatasetContext();
         var datasetContext = datasetContextFunc();
-
-        var deleteContext = GetInMemoryDeleteContext()();
-            
         var dataset1 = new DatasetModel
         {
             Classification = DatasetClassificationEnumeration.Confidential,
@@ -164,11 +161,6 @@ internal static class DatasetMock
         datasetContext.Datasets.Add(dataset5);
         await datasetContext.SaveChangesAsync();
 
-        deleteContext.Datasets.Add(dataset1);
-        deleteContext.Datasets.Add(dataset2);
-        deleteContext.Datasets.Add(dataset3);
-        await deleteContext.SaveChangesAsync();
-        
         var dataset1Id = dataset1.Id;
         var dataset2Id = dataset2.Id;
         var dataset3Id = dataset3.Id;
@@ -193,8 +185,6 @@ internal static class DatasetMock
         };
         datasetContext.Files.Add(fileModel);
         datasetContext.Files.Add(fileModel2);
-        deleteContext.Files.Add(fileModel);
-        deleteContext.Files.Add(fileModel2);
 
         var files = new List<FileModel>();
         for (var i = 0; i < 40; i++)
@@ -210,11 +200,9 @@ internal static class DatasetMock
             };
             files.Add(f);
             datasetContext.Files.Add(f);
-            deleteContext.Files.Add(f);
         }
 
         await datasetContext.SaveChangesAsync();
-        await deleteContext.SaveChangesAsync();
 
         var projectModel = new ProjectModel()
         {
@@ -231,9 +219,7 @@ internal static class DatasetMock
 
         var projectContext = CreateProjectShould.GetInMemoryProjectContext();
         projectContext.Projects.Add(projectModel);
-        deleteContext.Projects.Add(projectModel);
         await projectContext.SaveChangesAsync();
-        await deleteContext.SaveChangesAsync();
 
         var annotation1File1 = new AnnotationModel
         {
@@ -263,11 +249,6 @@ internal static class DatasetMock
         datasetContext.Annotations.Add(annotation1File2);
         datasetContext.Annotations.Add(annotation2File1);
         await datasetContext.SaveChangesAsync();
-        
-        deleteContext.Annotations.Add(annotation1File1);
-        deleteContext.Annotations.Add(annotation1File2);
-        deleteContext.Annotations.Add(annotation2File1);
-        await deleteContext.SaveChangesAsync();
 
         var fileId1 = fileModel.Id;
         var fileId2 = fileModel2.Id;
@@ -282,7 +263,7 @@ internal static class DatasetMock
         var annotationRepository = new AnnotationsRepository(datasetContext, mockedAnnotationsService.ServiceScopeFactory.Object, memoryCache);
         var projectRepository = new ProjectsRepository(projectContext, memoryCache);
         
-        var deleteRepository = new DeleteRepository(deleteContext, fileService);
+        var deleteRepository = new DeleteRepository(datasetContext, projectContext, fileService);
         
         var controllerContext = ControllerContext(nameIdentifier);
         var datasetsController = new DatasetsController();
@@ -348,19 +329,5 @@ internal static class DatasetMock
         return DatasetContext;
     }
     
-    public static Func<DeleteContext> GetInMemoryDeleteContext()
-    {
-        var builder = new DbContextOptionsBuilder<DeleteContext>();
-        var databaseName = Guid.NewGuid().ToString();
-        builder.UseInMemoryDatabase(databaseName);
-        DeleteContext DeleteContext()
-        {
-            var options = builder.Options;
-            var deleteContext = new DeleteContext(options);
-            deleteContext.Database.EnsureCreated();
-            deleteContext.Database.EnsureCreatedAsync();
-            return deleteContext;
-        }
-        return DeleteContext;
-    }
+
 }

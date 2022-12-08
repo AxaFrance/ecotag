@@ -31,7 +31,7 @@ namespace Ml.Cli.WebApp.Server.Projects
                 var errorKey = result.Error.Key;
                 return errorKey switch
                 {
-                    FileService.FileNameMissing => NotFound(),
+                    FileBlobService.FileNameMissing => NotFound(),
                     GetProjectFileCmd.DatasetNotFound => NotFound(),
                     DatasetsRepository.FileNotFound => NotFound(),
                     ProjectsRepository.NotFound => NotFound(),

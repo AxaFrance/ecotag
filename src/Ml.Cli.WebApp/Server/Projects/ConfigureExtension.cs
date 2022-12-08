@@ -14,13 +14,21 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ProjectContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
-        services.AddDbContext<DeleteContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        var databaseMode = configuration[DatabaseSettings.Mode];
+        if (databaseMode == DatabaseMode.Sqlite)
+        {
+            var connectionStringProject = configuration.GetConnectionString("EcotagProject") ?? "Data Source=.db/EcotagProject.db";
+            services.AddSqlite<ProjectContext>(connectionStringProject);
+        }
+        else
+        {
+            services.AddDbContext<ProjectContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        }
+        services.AddScoped<IDeleteRepository, DeleteRepository>();
+
         services.AddScoped<ProjectsRepository, ProjectsRepository>();
         services.AddScoped<DatasetsRepository, DatasetsRepository>();
-        services.AddScoped<DeleteRepository, DeleteRepository>();
         services.AddScoped<CreateProjectCmd, CreateProjectCmd>();
         services.AddScoped<GetAllProjectsCmd, GetAllProjectsCmd>();
         services.AddScoped<GetProjectCmd, GetProjectCmd>();

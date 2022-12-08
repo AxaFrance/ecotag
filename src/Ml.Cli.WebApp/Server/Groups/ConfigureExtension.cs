@@ -15,8 +15,16 @@ public static class ConfigureExtension
 {
     public static void ConfigureGroups(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<GroupContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        var databaseMode = configuration[DatabaseSettings.Mode];
+        if (databaseMode == DatabaseMode.Sqlite) {
+            var connectionString = configuration.GetConnectionString("EcotagGroup") ?? "Data Source=.db/EcotagGroup.db";
+            services.AddSqlite<GroupContext>(connectionString);
+        }
+        else
+        {
+            services.AddDbContext<GroupContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("ECOTAGContext")));
+        }
         services.AddScoped<GroupsRepository, GroupsRepository>();
         services.AddScoped<UsersRepository, UsersRepository>();
         services.AddScoped<CreateGroupCmd, CreateGroupCmd>();

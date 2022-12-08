@@ -7,69 +7,78 @@ using Ml.Cli.WebApp.Server.Datasets.Database.FileStorage;
 
 namespace Ml.Cli.WebApp.Server.Projects.Database;
 
-public class DeleteRepository
+public class DeleteRepository : IDeleteRepository
 {
-    private readonly DeleteContext _deleteContext;
+    private readonly DatasetContext _datasetContext;
+    private readonly ProjectContext _projectContext;
     private readonly IFileService _fileService;
 
-    public DeleteRepository(DeleteContext deleteContext, IFileService fileService)
+    public DeleteRepository(DatasetContext datasetContext, ProjectContext projectContext, IFileService fileService)
     {
-        _deleteContext = deleteContext;
+        _datasetContext = datasetContext;
+        _projectContext = projectContext;
         _fileService = fileService;
     }
 
     private bool IsDatasetUsedByOtherProjects(string projectId, string datasetId)
     {
-        return _deleteContext.Projects.AsNoTracking().Any(project =>
+        return _projectContext.Projects.AsNoTracking().Any(project =>
             project.Id != new Guid(projectId) && project.DatasetId == new Guid(datasetId));
     }
 
     private async Task DeleteAnnotationsByProjectIdAsync(string projectId)
     {
-        var annotations = await _deleteContext.Annotations
+        var annotations = await _datasetContext.Annotations
             .Where(annotation => annotation.ProjectId == new Guid(projectId)).ToListAsync();
         foreach (var annotation in annotations)
         {
-            _deleteContext.Annotations.Remove(annotation);
+            _datasetContext.Annotations.Remove(annotation);
         }
     }
 
     private async Task DeleteReservationsByProjectIdAsync(string projectId)
     {
-        var reservations = await _deleteContext.Reservations
+        var reservations = await _datasetContext.Reservations
             .Where(reservation => reservation.ProjectId == new Guid(projectId)).ToListAsync();
         foreach (var reservation in reservations)
         {
-            _deleteContext.Reservations.Remove(reservation);
+            _datasetContext.Reservations.Remove(reservation);
         }
     }
 
     private async Task DeleteProjectAsync(string projectId)
     {
-        var project = await _deleteContext.Projects
+        var project = await _projectContext.Projects
             .FirstOrDefaultAsync(project => project.Id == new Guid(projectId));
         if (project == null)
         {
             return;
         }
 
-        _deleteContext.Projects.Remove(project);
+        _projectContext.Projects.Remove(project);
     }
 
     private async Task DeleteDatasetAsync(string datasetId)
     {
-        var dataset = await _deleteContext.Datasets
+        var dataset = await _datasetContext.Datasets
             .FirstOrDefaultAsync(dataset => dataset.Id == new Guid(datasetId));
 
-        if (dataset != null) _deleteContext.Datasets.Remove(dataset);
+        if (dataset != null) _datasetContext.Datasets.Remove(dataset);
     }
 
     private async Task DeleteFilesAsync(string datasetId)
     {
-        var files = await _deleteContext.Files.Where(file => new Guid(datasetId) == file.DatasetId).ToListAsync();
-        _deleteContext.Files.RemoveRange(files);
-        var blobUri = await _deleteContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).Select(d => d.BlobUri).FirstAsync();
-        await _fileService.DeleteDirectoryAsync(blobUri);
+        var files = await _datasetContext.Files.Where(file => new Guid(datasetId) == file.DatasetId).ToListAsync();
+        if (files.Count > 0)
+        {
+            _datasetContext.Files.RemoveRange(files);
+        }
+
+        var blobUri = await _datasetContext.Datasets.Where(d => d.Id == Guid.Parse(datasetId)).Select(d => d.BlobUri).FirstOrDefaultAsync();
+        if (!string.IsNullOrEmpty(blobUri))
+        {
+            await _fileService.DeleteDirectoryAsync(blobUri);
+        }
     }
 
     public async Task DeleteProjectWithDatasetAsync(GetDatasetInfo dataset, string projectId)
@@ -83,7 +92,7 @@ public class DeleteRepository
             await DeleteFilesAsync(dataset.Id);
             await DeleteDatasetAsync(dataset.Id);
         }
-
-        await _deleteContext.SaveChangesAsync();
+        await _projectContext.SaveChangesAsync();
+        await _datasetContext.SaveChangesAsync();
     }
 }

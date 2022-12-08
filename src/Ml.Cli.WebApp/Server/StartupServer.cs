@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,15 +19,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ml.Cli.WebApp.Local.Paths;
 using Ml.Cli.WebApp.Server.Audits;
+using Ml.Cli.WebApp.Server.Audits.Database;
 using Ml.Cli.WebApp.Server.Datasets;
+using Ml.Cli.WebApp.Server.Datasets.Database;
 using Ml.Cli.WebApp.Server.Groups.Oidc;
 using Ml.Cli.WebApp.Server.Oidc;
 using Ml.Cli.WebApp.Server.Groups;
+using Ml.Cli.WebApp.Server.Groups.Database;
 using Ml.Cli.WebApp.Server.Groups.Database.Users;
 using Ml.Cli.WebApp.Server.Projects;
+using Ml.Cli.WebApp.Server.Projects.Database;
 using Serilog;
-using ConfigureExtension = Ml.Cli.WebApp.Server.Groups.ConfigureExtension;
 
 namespace Ml.Cli.WebApp.Server
 {
@@ -93,11 +98,12 @@ namespace Ml.Cli.WebApp.Server
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+            
             services.ConfigureGroups(Configuration);
             services.ConfigureDatasets(Configuration);
             services.ConfigureProjects(Configuration);
             services.ConfigureServiceAudits(Configuration);
-            
+
              services.AddAuthorization(options =>
                   {
                       var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
@@ -251,6 +257,25 @@ namespace Ml.Cli.WebApp.Server
             app.UseSerilogRequestLogging();
             app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
+            
+            var databaseMode = Configuration[DatabaseSettings.Mode];
+            if (databaseMode == DatabaseMode.Sqlite)
+            {
+                var file = new DirectoryInfo("./.db");
+                if (!file.Exists)
+                {
+                    file.Create();
+                }
+                var auditContext = serviceProvider.GetService<AuditContext>();
+                auditContext.Database.EnsureCreated();
+                var datasetContext = serviceProvider.GetService<DatasetContext>();
+                datasetContext.Database.EnsureCreated();
+                var projectContext = serviceProvider.GetService<ProjectContext>();
+                projectContext.Database.EnsureCreated();
+                var groupContext = serviceProvider.GetService<GroupContext>();
+                groupContext.Database.EnsureCreated();
+            }
+
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "sameorigin");

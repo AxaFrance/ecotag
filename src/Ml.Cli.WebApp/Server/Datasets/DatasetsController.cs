@@ -120,7 +120,7 @@ public class DatasetsController : Controller
             var errorKey = result.Error.Key;
             return errorKey switch
             {
-                FileService.FileNameMissing => NotFound(),
+                FileBlobService.FileNameMissing => NotFound(),
                 GetFileCmd.DatasetNotFound => NotFound(),
                 DatasetsRepository.FileNotFound => NotFound(),
                 _ => Forbid()
