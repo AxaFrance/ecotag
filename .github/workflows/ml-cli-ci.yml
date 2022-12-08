@@ -53,7 +53,7 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:axaguildev /k:AxaGuilDEv_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 
-      - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
+      - run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.json
     
       - name: Sonarqube end
         if: ${{ github.actor != 'dependabot[bot]' }}
