@@ -14,11 +14,11 @@ public static class ConfigureExtension
 {
     public static void ConfigureProjects(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseMode = configuration[DatabaseSettings.Mode];
-        if (databaseMode == DatabaseMode.Sqlite)
+        var databaseSettings = configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
+        if (databaseSettings.Mode == DatabaseMode.Sqlite)
         {
             var connectionStringProject = configuration.GetConnectionString("EcotagProject") ?? "Data Source=.db/EcotagProject.db";
-            services.AddSqlite<ProjectContext>(connectionStringProject);
+            services.AddSqlite<ProjectSqliteContext>(connectionStringProject);
         }
         else
         {

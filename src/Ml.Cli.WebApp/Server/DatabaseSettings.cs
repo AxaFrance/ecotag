@@ -3,7 +3,8 @@
 namespace Ml.Cli.WebApp.Server;
 
 [ExcludeFromCodeCoverage]
-public static class DatabaseSettings
+public class DatabaseSettings
 {
-    public static string Mode { get; set; } = "Database:Mode";
+    public string Mode { get; set; }
+    public static string Database { get; set; } = "Database";
 }

@@ -71,6 +71,8 @@ namespace Ml.Cli.WebApp.Server
                 Configuration.GetSection(OidcSettings.Oidc));
             services.Configure<DatasetsSettings>(
                 Configuration.GetSection(DatasetsSettings.Datasets));
+            services.Configure<DatabaseSettings>(
+                Configuration.GetSection(DatabaseSettings.Database));
             var oidcSettings = Configuration.GetSection(OidcSettings.Oidc).Get<OidcSettings>();
             var oidcUserSettings = Configuration.GetSection(OidcUserSettings.OidcUser).Get<OidcUserSettings>();
             var httpClientService = services.AddHttpClient(NamedHttpClients.ProxiedClient);
@@ -258,8 +260,9 @@ namespace Ml.Cli.WebApp.Server
             app.UseErrorLogging();
             AuditsService.ConfigureAudits(serviceProvider);
             
-            var databaseMode = Configuration[DatabaseSettings.Mode];
-            if (databaseMode == DatabaseMode.Sqlite)
+            
+            var databaseSettings = Configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
+            if (databaseSettings.Mode == DatabaseMode.Sqlite)
             {
                 var file = new DirectoryInfo("./.db");
                 if (!file.Exists)

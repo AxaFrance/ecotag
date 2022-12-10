@@ -5,17 +5,17 @@ using Ml.Cli.WebApp.Server.Datasets.Database.Annotations;
 
 namespace Ml.Cli.WebApp.Server.Datasets.Database;
 
-public class DatasetContext : DbContext
+public class DatasetSqliteContext : DbContext
 {
-    public DatasetContext()
+    public DatasetSqliteContext()
     {
     }
 
-    public DatasetContext(DbContextOptions<DatasetContext> options) : base(options)
+    public DatasetSqliteContext(DbContextOptions<DatasetContext> options) : base(options)
     {
     }
 
-    public DatasetContext(DbContextOptionsBuilder options) : base(options.Options)
+    public DatasetSqliteContext(DbContextOptionsBuilder options) : base(options.Options)
     {
     }
 
@@ -30,20 +30,30 @@ public class DatasetContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var datasetBuilder = modelBuilder.Entity<DatasetModel>();
+        datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        datasetBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
         
         var fileBuilder = modelBuilder.Entity<FileModel>();
+        fileBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        fileBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
         fileBuilder
             .HasOne(gu => gu.Dataset)
             .WithMany(u => u.Files)
             .HasForeignKey(gu => gu.DatasetId);
         
         var annotationBuilder = modelBuilder.Entity<AnnotationModel>();
+        annotationBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        annotationBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+        annotationBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
         annotationBuilder
             .HasOne(gu => gu.File)
             .WithMany(u => u.Annotations)
             .HasForeignKey(gu => gu.FileId);
 
         var reservationBuilder = modelBuilder.Entity<ReservationModel>();
+        annotationBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        annotationBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+        annotationBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
         reservationBuilder
             .HasOne(gu => gu.File)
             .WithMany(u => u.Reservations)

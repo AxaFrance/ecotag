@@ -22,9 +22,5 @@ public class ProjectContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var datasetBuilder = modelBuilder.Entity<ProjectModel>();
-        datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
-        datasetBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
-        datasetBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
     }
 }

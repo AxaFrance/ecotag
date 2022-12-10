@@ -12,11 +12,11 @@ public static class ConfigureExtension
     [ExcludeFromCodeCoverage]
     public static void ConfigureServiceAudits(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseMode = configuration[DatabaseSettings.Mode];
-        if (databaseMode == DatabaseMode.Sqlite)
+        var databaseSettings = configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
+        if (databaseSettings.Mode == DatabaseMode.Sqlite)
         {
             var connectionString = configuration.GetConnectionString("EcotagAudit") ?? "Data Source=.db/EcotagAudit.db";
-            services.AddSqlite<AuditContext>(connectionString);
+            services.AddSqlite<AuditSqliteContext>(connectionString);
         }
         else
         {

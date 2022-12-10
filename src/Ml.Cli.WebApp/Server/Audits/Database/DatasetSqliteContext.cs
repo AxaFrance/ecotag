@@ -4,17 +4,17 @@ using Microsoft.Extensions.Options;
 
 namespace Ml.Cli.WebApp.Server.Audits.Database;
 
-public class AuditContext : DbContext
+public class AuditSqliteContext : DbContext
 {
-    public AuditContext()
+    public AuditSqliteContext(IOptions<DatabaseSettings> optionsDatabaseSettings)
     {
     }
 
-    public AuditContext(DbContextOptions<AuditContext> options) : base(options)
+    public AuditSqliteContext(DbContextOptions<AuditContext> options) : base(options)
     {
     }
 
-    public AuditContext(DbContextOptionsBuilder options) : base(options.Options)
+    public AuditSqliteContext(DbContextOptionsBuilder options) : base(options.Options)
     {
     }
 
@@ -24,5 +24,6 @@ public class AuditContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var datasetBuilder = modelBuilder.Entity<AuditModel>();
+        datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
     }
 }

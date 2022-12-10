@@ -15,10 +15,10 @@ public static class ConfigureExtension
 {
     public static void ConfigureGroups(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseMode = configuration[DatabaseSettings.Mode];
-        if (databaseMode == DatabaseMode.Sqlite) {
+        var databaseSettings = configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
+        if (databaseSettings.Mode == DatabaseMode.Sqlite) {
             var connectionString = configuration.GetConnectionString("EcotagGroup") ?? "Data Source=.db/EcotagGroup.db";
-            services.AddSqlite<GroupContext>(connectionString);
+            services.AddSqlite<GroupSqliteContext>(connectionString);
         }
         else
         {

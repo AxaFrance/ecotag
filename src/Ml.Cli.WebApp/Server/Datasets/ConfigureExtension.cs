@@ -15,11 +15,11 @@ public static class ConfigureExtension
 {
     public static void ConfigureDatasets(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseMode = configuration[DatabaseSettings.Mode];
-        if (databaseMode == DatabaseMode.Sqlite) {
+        var databaseSettings = configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
+        if (databaseSettings.Mode == DatabaseMode.Sqlite) {
             services.AddScoped<IFileService, FileHardDriveService>();
             var connectionString = configuration.GetConnectionString("EcotagDatatset") ?? "Data Source=.db/EcotagDatatset.db";
-            services.AddSqlite<DatasetContext>(connectionString);
+            services.AddSqlite<DatasetSqliteContext>(connectionString);
         }
         else
         {

@@ -6,15 +6,15 @@ using Ml.Cli.WebApp.Server.Groups.Database.Users;
 
 namespace Ml.Cli.WebApp.Server.Groups.Database;
 
-public class GroupContext : DbContext
+public class GroupSqliteContext : DbContext
 {
-    public GroupContext() { }
+    public GroupSqliteContext() { }
 
-    public GroupContext(DbContextOptions<GroupContext> options) : base(options)
+    public GroupSqliteContext(DbContextOptions<GroupContext> options) : base(options)
     {
     }
 
-    public GroupContext(DbContextOptionsBuilder options) : base(options.Options)
+    public GroupSqliteContext(DbContextOptionsBuilder options) : base(options.Options)
     {
     }
 
@@ -22,8 +22,14 @@ public class GroupContext : DbContext
     {
         var userBuilder = modelBuilder.Entity<UserModel>();
         userBuilder.HasIndex( u => u.Email).IsUnique();
+        userBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        
+        var groupBuilder = modelBuilder.Entity<GroupModel>();
+        groupBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
         
         var groupUsersModelBuilder = modelBuilder.Entity<GroupUsersModel>();
+        groupUsersModelBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+        groupUsersModelBuilder.Property(u => u.UserId).HasConversion(new GuidToStringConverter());
         
         groupUsersModelBuilder
             .HasKey(gu => new { gu.GroupId, gu.UserId });
