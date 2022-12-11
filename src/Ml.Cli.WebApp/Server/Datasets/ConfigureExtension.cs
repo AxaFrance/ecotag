@@ -19,7 +19,7 @@ public static class ConfigureExtension
         if (databaseSettings.Mode == DatabaseMode.Sqlite) {
             services.AddScoped<IFileService, FileHardDriveService>();
             var connectionString = configuration.GetConnectionString("EcotagDatatset") ?? "Data Source=.db/EcotagDatatset.db";
-            services.AddSqlite<DatasetSqliteContext>(connectionString);
+            services.AddSqlite<DatasetContext>(connectionString);
         }
         else
         {

@@ -18,7 +18,7 @@ public static class ConfigureExtension
         if (databaseSettings.Mode == DatabaseMode.Sqlite)
         {
             var connectionStringProject = configuration.GetConnectionString("EcotagProject") ?? "Data Source=.db/EcotagProject.db";
-            services.AddSqlite<ProjectSqliteContext>(connectionStringProject);
+            services.AddSqlite<ProjectContext>(connectionStringProject);
         }
         else
         {

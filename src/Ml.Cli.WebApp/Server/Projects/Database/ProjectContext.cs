@@ -18,9 +18,17 @@ public class ProjectContext : DbContext
     }
 
     public virtual DbSet<ProjectModel> Projects { get; set; }
-    
-    
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        if (Database.IsSqlite())
+        {
+            var datasetBuilder = modelBuilder.Entity<ProjectModel>();
+            datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+            datasetBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+            datasetBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
+        }
     }
+
 }

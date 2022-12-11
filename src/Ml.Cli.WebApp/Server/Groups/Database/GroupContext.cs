@@ -35,6 +35,17 @@ public class GroupContext : DbContext
             .HasOne(gu => gu.User)
             .WithMany(u => u.GroupUsers)
             .HasForeignKey(gu => gu.UserId);
+
+        if (Database.IsSqlite())
+        {
+            userBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        
+            var groupBuilder = modelBuilder.Entity<GroupModel>();
+            groupBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        
+            groupUsersModelBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+            groupUsersModelBuilder.Property(u => u.UserId).HasConversion(new GuidToStringConverter());
+        }
     }
 
     public virtual DbSet<GroupModel> Groups { get; set; }

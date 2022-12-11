@@ -20,9 +20,12 @@ public class AuditContext : DbContext
 
     public virtual DbSet<AuditModel> Audits { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var datasetBuilder = modelBuilder.Entity<AuditModel>();
+        if (Database.IsSqlite())
+        {
+            var datasetBuilder = modelBuilder.Entity<AuditModel>();
+            datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+        }
     }
 }

@@ -18,7 +18,7 @@ public static class ConfigureExtension
         var databaseSettings = configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
         if (databaseSettings.Mode == DatabaseMode.Sqlite) {
             var connectionString = configuration.GetConnectionString("EcotagGroup") ?? "Data Source=.db/EcotagGroup.db";
-            services.AddSqlite<GroupSqliteContext>(connectionString);
+            services.AddSqlite<GroupContext>(connectionString);
         }
         else
         {

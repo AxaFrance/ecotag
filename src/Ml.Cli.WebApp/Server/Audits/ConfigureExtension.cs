@@ -16,7 +16,7 @@ public static class ConfigureExtension
         if (databaseSettings.Mode == DatabaseMode.Sqlite)
         {
             var connectionString = configuration.GetConnectionString("EcotagAudit") ?? "Data Source=.db/EcotagAudit.db";
-            services.AddSqlite<AuditSqliteContext>(connectionString);
+            services.AddSqlite<AuditContext>(connectionString);
         }
         else
         {

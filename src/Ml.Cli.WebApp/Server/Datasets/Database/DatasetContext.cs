@@ -48,6 +48,24 @@ public class DatasetContext : DbContext
             .HasOne(gu => gu.File)
             .WithMany(u => u.Reservations)
             .HasForeignKey(gu => gu.FileId);
+
+
+        if (Database.IsSqlite())
+        {
+            datasetBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+            datasetBuilder.Property(u => u.GroupId).HasConversion(new GuidToStringConverter());
+        
+            fileBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+            fileBuilder.Property(u => u.DatasetId).HasConversion(new GuidToStringConverter());
+
+            annotationBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+            annotationBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+            annotationBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
+
+            reservationBuilder.Property(u => u.Id).HasConversion(new GuidToStringConverter());
+            reservationBuilder.Property(u => u.FileId).HasConversion(new GuidToStringConverter());
+            reservationBuilder.Property(u => u.ProjectId).HasConversion(new GuidToStringConverter());
+        }
     }
     
 }
