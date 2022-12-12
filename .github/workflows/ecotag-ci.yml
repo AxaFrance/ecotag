@@ -39,7 +39,7 @@ jobs:
 
       - name: npm test
         run: npm test -- --runInBand --coverage --watchAll=false
-        working-directory: ./src/MAxaGuilDev.Ecotag/ClientApp
+        working-directory: ./src/AxaGuilDev.Ecotag/ClientApp
         
       - name: npm run build-storybook
         run: npm run build-storybook
