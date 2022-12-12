@@ -17,9 +17,9 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/AxaGuilDev.Ecotag/ClientApp/public/environment.json
-COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/AxaGuilDev.Ecotag/ClientApp/public/OidcTrustedDomains.js
-RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
+COPY ./src/AxaGuilDev.MlCli/ClientApp/public/environment.docker.json ./src/AxaGuilDev.Ecotag/ClientApp/public/environment.json
+COPY ./src/AxaGuilDev.MlCli/ClientApp/public/OidcTrustedDomains.docker.js ./src/AxaGuilDev.Ecotag/ClientApp/public/OidcTrustedDomains.js
+RUN dotnet publish "./src/AxaGuilDev.Ecotag/AxaGuilDev.MlCli.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS final
 
