@@ -56,11 +56,11 @@ To run the demo with .NET 6 on your machine :
 
 ```sh
 git clone https://github.com/AxaGuilDEv/ecotag
-cd ./ecotag/src/AxaGuilDEv.MlCli.DemoApi
+cd ./ecotag/src/MlCli.DemoApi
 dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
-cd ./ecotag/src/AxaGuilDEv.Ecotag
+cd ./ecotag/src/Ecotag
 dotnet run -- --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
@@ -83,7 +83,7 @@ As you can see, ML-Cli can use several parameters:
 
 ```sh
 # you can also run ml-cli batch only
- cd ./ecotag/src/AxaGuilDEv.MlCli
+ cd ./ecotag/src/MlCli
 dotnet run -- -t ..\..\demo\tasks-licenses.json  -b ..\..\demo
 ```
 
@@ -98,11 +98,11 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-AxaGuilDEv.Ecotag.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
+Ecotag.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
-chmod +x AxaGuilDEv.Ecotag
-AxaGuilDEv.Ecotag --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
+chmod +x Ecotag
+Ecotag --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
 ## Getting started on Windows 10
@@ -140,7 +140,7 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-AxaGuilDEv.Ecotag.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
+Ecotag.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # then navigate to: http://localhost:5000/ 
 ```
 
@@ -177,8 +177,8 @@ Then, in another command line :
 ```sh
 # run the demo-api
 cd demo-api
-chmod +x AxaGuilDEv.MlCli.DemoApi
-./AxaGuilDEv.MlCli.DemoApi
+chmod +x MlCli.DemoApi
+./MlCli.DemoApi
 # start demo api in background at https://localhost:6001
 ```
 
@@ -186,8 +186,8 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-chmod +x AxaGuilDEv.Ecotag
-./AxaGuilDEv.Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
+chmod +x Ecotag
+./Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: https://your-jupyterlab/proxy/5000/ (the last / is mandatory)
 ```
 
@@ -218,8 +218,8 @@ Then, in another command line :
 ```sh
 # run the demo-api
 cd demo-api
-chmod +x AxaGuilDEv.MlCli.DemoApi
-./AxaGuilDEv.MlCli.DemoApi
+chmod +x MlCli.DemoApi
+./MlCli.DemoApi
 # start demo api in background at https://localhost:6001
 ```
 
@@ -227,8 +227,8 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-chmod +x AxaGuilDEv.Ecotag
-./AxaGuilDEv.Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
+chmod +x Ecotag
+./Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: http://localhost:5000/ 
 ```
 
