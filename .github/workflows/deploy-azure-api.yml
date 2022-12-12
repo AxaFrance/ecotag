@@ -1,0 +1,40 @@
+﻿name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  build-linux:
+    environment: ml-cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - uses: actions/setup-dotnet@v1
+      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli-web
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
+        with:
+          filename: linux-x64-ml-cli-web.zip
+          path: .
+          directory: ./drop/linux-x64/ml-cli-web
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'ecotag'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./drop/linux-x64/ml-cli-web/linux-x64-ml-cli-web.zip

@@ -1,0 +1,22 @@
+﻿.images-error {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.images-list {
+  margin: 1em 0 1em 0;
+
+  &__item {
+    margin: 0 0 1em 15px;
+  }
+
+  &__image-container {
+    width: 100%;
+  }
+
+  &__file_image {
+    max-width: 100%
+  }
+}

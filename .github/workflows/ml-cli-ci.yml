@@ -35,15 +35,15 @@ jobs:
 
       - name: npm install
         run: npm install
-        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+        working-directory: ./src/AxaGuilDev.Ecotag/ClientApp
 
       - name: npm test
         run: npm test -- --runInBand --coverage --watchAll=false
-        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+        working-directory: ./src/MAxaGuilDev.Ecotag/ClientApp
         
       - name: npm run build-storybook
         run: npm run build-storybook
-        working-directory: ./src/Ml.Cli.WebApp/ClientApp
+        working-directory: ./src/AxaGuilDev.Ecotag/ClientApp
 
       - uses: actions/setup-dotnet@v1
       
@@ -165,7 +165,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           
       - uses: actions/setup-dotnet@v1
-      - run: dotnet publish ./src/Ml.Cli/Ml.Cli.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli 
+      - run: dotnet publish ./src/AxaGuilDev.MlCli/AxaGuilDev.MlCli.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -181,7 +181,7 @@ jobs:
           asset_path: ./drop/linux-x64/ml-cli/linux-x64-ml-cli.zip
           asset_name: linux-x64-ml-cli.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli-web 
+      - run: dotnet publish ./src/AxaGuilDev.Ecotag/AxaGuilDev.Ecotag.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli-web 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -197,7 +197,7 @@ jobs:
           asset_path: ./drop/linux-x64/ml-cli-web/linux-x64-ml-cli-web.zip
           asset_name: linux-x64-ml-cli-web.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.DemoApi/Ml.Cli.DemoApi.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/demo-api
+      - run: dotnet publish ./src/AxaGuilDev.MlCli.DemoApi/AxaGuilDev.MlCli.DemoApi.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/demo-api
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -213,7 +213,7 @@ jobs:
           asset_path: ./drop/linux-x64/demo-api/linux-x64-demo-api.zip
           asset_name: linux-x64-demo-api.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/ml-cli
+      - run: dotnet publish ./src/AxaGuilDev.Ecotag/AxaGuilDev.Ecotag.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/ml-cli
       - name: LibreOffice install Windows x64
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 LibreOffice
@@ -241,7 +241,7 @@ jobs:
           asset_path: ./drop/win-x64/ml-cli/win-x64-ml-cli.zip
           asset_name: win-x64-ml-cli.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.DemoApi/Ml.Cli.DemoApi.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/demo-api
+      - run: dotnet publish ./src/AxaGuilDev.MlCli.DemoApi/AxaGuilDev.MlCli.DemoApi.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/demo-api
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -257,7 +257,7 @@ jobs:
           asset_path: ./drop/win-x64/demo-api/win-x64-demo-api.zip
           asset_name: win-x64-demo-api.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/rhel-x64/ml-cli
+      - run: dotnet publish ./src/AxaGuilDev.Ecotag/AxaGuilDev.Ecotag.csproj -c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/rhel-x64/ml-cli
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -273,7 +273,7 @@ jobs:
           asset_path: ./drop/rhel-x64/ml-cli/rhel-x64-ml-cli.zip
           asset_name: rhel-x64-ml-cli.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.DemoApi/Ml.Cli.DemoApi.csproj -c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/rhel-x64/demo-api
+      - run: dotnet publish ./src/AxaGuilDev.MlCli.DemoApi/AxaGuilDev.MlCli.DemoApi.csproj -c Release -r rhel-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/rhel-x64/demo-api
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -289,7 +289,7 @@ jobs:
           asset_path: ./drop/rhel-x64/demo-api/rhel-x64-demo-api.zip
           asset_name: rhel-x64-demo-api.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/ml-cli
+      - run: dotnet publish ./src/AxaGuilDev.Ecotag/AxaGuilDev.Ecotag.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/ml-cli
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
@@ -305,7 +305,7 @@ jobs:
           asset_path: ./drop/osx-x64/ml-cli/osx-x64-ml-cli.zip
           asset_name: osx-x64-ml-cli.zip
           asset_content_type: application/zip
-      - run: dotnet publish ./src/Ml.Cli.DemoApi/Ml.Cli.DemoApi.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/demo-api
+      - run: dotnet publish ./src/AxaGuilDev.MlCli.DemoApi/AxaGuilDev.MlCli.DemoApi.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/demo-api
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:

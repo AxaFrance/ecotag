@@ -17,8 +17,8 @@ WORKDIR /src
 RUN echo "dotnet Version:" &&  dotnet --version
 COPY . .
 
-COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/Ml.Cli.WebApp/ClientApp/public/environment.json
-COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.js
+COPY ./src/Ml.Cli.WebApp/ClientApp/public/environment.docker.json ./src/AxaGuilDev.Ecotag/ClientApp/public/environment.json
+COPY ./src/Ml.Cli.WebApp/ClientApp/public/OidcTrustedDomains.docker.js ./src/AxaGuilDev.Ecotag/ClientApp/public/OidcTrustedDomains.js
 RUN dotnet publish "./src/Ml.Cli.WebApp/Ml.Cli.WebApp.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS final
@@ -32,4 +32,4 @@ RUN sed -i 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/
 WORKDIR /app
 COPY --from=build /publish .
 
-ENTRYPOINT /app/Ml.Cli.WebApp ${APP_ARGS}
+ENTRYPOINT /app/AxaGuilDev.Ecotag ${APP_ARGS}

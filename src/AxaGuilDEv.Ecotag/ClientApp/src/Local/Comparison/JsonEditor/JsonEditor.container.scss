@@ -1,0 +1,32 @@
+.editor-container {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  top: 1em;
+  position: sticky;
+  align-self: flex-start;
+  justify-content: space-between;
+  margin-top: 1em;
+
+  &__errors-container {
+    width: 100%;
+  }
+
+  &__error-message {
+    text-align: center;
+    color: red;
+  }
+
+  &__button {
+    margin-top: 1em;
+  }
+}
+
+.images-editor-container {
+  display: flex;
+  width: 100%;
+
+  &__images_column {
+    width: 50%;
+  }
+}

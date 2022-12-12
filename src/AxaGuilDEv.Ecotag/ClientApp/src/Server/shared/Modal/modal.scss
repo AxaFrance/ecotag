@@ -1,0 +1,129 @@
+@import '@axa-fr/react-toolkit-core/src/common/scss/core.scss';
+
+.ReactModal__Overlay {
+  animation: fademodal 0.1s linear;
+  z-index: 3;
+}
+
+.af-modal {
+  position: fixed;
+  left: 50%;
+  top: 20%;
+  transform: translate(-50%, 0);
+  z-index: 1050;
+  outline: 0;
+  margin: 0 auto;
+  width: 50%;
+
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: $color;
+
+    &.show {
+      opacity: 0.5;
+    }
+  }
+
+  &__dialog {
+    position: relative;
+    margin: 10px;
+    animation: appeardialog 0.3s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    background-clip: padding-box;
+    border: 1px solid $color-mine-shaft;
+    border-radius: 0;
+    outline: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid $gray-lighter;
+
+    &-title {
+      font-weight: inherit;
+      margin-bottom: 0;
+    }
+
+    &-close-btn {
+      font-size: 1rem;
+      line-height: 1rem;
+      border: none;
+      box-shadow: none;
+      background: none;
+      padding: 0.5rem;
+
+      &:hover {
+        background-color: $gray-lighter;
+      }
+
+      .glyphicon-close {
+        width: 17px;
+      }
+    }
+  }
+
+  &__body {
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 15px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 15px;
+    border-top: 1px solid $gray-lighter;
+
+    & > .af-btn:not(:last-child) {
+      margin-right: 0.25rem;
+    }
+
+    & > .af-btn:not(:first-child) {
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+@keyframes appeardialog {
+  0% {
+    top: -100%;
+    opacity: 0;
+  }
+
+  0% {
+    top: -100%;
+    opacity: 1;
+  }
+
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes fademodal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
