@@ -30,7 +30,7 @@ Ecotag an is an awesome annotation tools.
   - Text NER Zoning
 - Labelling Export
 
-ML-Cli is the official CLI of Ecotag [ML-Cli Readme](https://github.com/AxaGuilDEv/ecotag/blob/master/README-/ecotag.md)
+ML-Cli is the official CLI of Ecotag [ML-Cli Readme](https://github.com/AxaGuilDEv/ecotag/blob/master/README-ML-CLI.md)
 
 
 Video of features:

@@ -99,7 +99,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: AxaGuilDEv/ecotag
+          images: axaguildev/ecotag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -129,7 +129,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: AxaGuilDEv/ecotag
+          images: axaguildev/ecotag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -137,7 +137,7 @@ jobs:
           context: .
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          tags: AxaGuilDEv/ecotag:${{ needs.tags.outputs.new_version }},AxaGuilDEv/ecotag:latest
+          tags: axaguildev/ecotag:${{ needs.tags.outputs.new_version }},axaguildev/ecotag:latest
   release:
     environment: ml-cli
     runs-on: ubuntu-latest
@@ -220,7 +220,7 @@ jobs:
           mv LibreOffice drop/win-x64/ecotag
           ls ./drop/win-x64/ecotag/
           echo "---------------"
-          cd drop/win-x64/ml-cli
+          cd drop/win-x64/ecotag
           rm appsettings-server.Production.json
           cp appsettings-server.DesktopWinx64.json appsettings-server.Production.json 
           cd ClientApp/build-server
