@@ -1,14 +1,14 @@
 # Ecotag
 
-[![CI](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml/badge.svg)](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=alert_status)](https://sonarcloud.io/dashboard?id=AxaGuilDEv_ml-cli) [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=reliability_rating) [![Security](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=security_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=security_rating) [![Code Corevage](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=coverage)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=Coverage) [![Twitter](https://img.shields.io/twitter/follow/GuildDEvOpen?style=social)](https://twitter.com/intent/follow?screen_name=GuildDEvOpen) [![Docker Ecotag](https://img.shields.io/docker/pulls/axaguildev/ecotag.svg)](https://hub.docker.com/r/axaguildev/ecotag/builds)
+[![CI](https://github.com/AxaGuilDEv//ecotag/actions/workflows//ecotag-ci.yml/badge.svg)](https://github.com/AxaGuilDEv//ecotag/actions/workflows//ecotag-ci.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_/ecotag&metric=alert_status)](https://sonarcloud.io/dashboard?id=AxaGuilDEv_/ecotag) [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_/ecotag&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_/ecotag&metric=reliability_rating) [![Security](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_/ecotag&metric=security_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_/ecotag&metric=security_rating) [![Code Corevage](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_/ecotag&metric=coverage)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_/ecotag&metric=Coverage) [![Twitter](https://img.shields.io/twitter/follow/GuildDEvOpen?style=social)](https://twitter.com/intent/follow?screen_name=GuildDEvOpen) [![Docker Ecotag](https://img.shields.io/docker/pulls/axaguildev/ecotag.svg)](https://hub.docker.com/r/axaguildev/ecotag/builds)
 
 - [About](#about)
 - [Getting Started](#getting-started)
 - [How It Works](#how-it-works)
 - [Contribute](#contribute)
 
-![Ml-cli webapp](./docs/ecotag.PNG "Ml-cli webapp")
+![ecotag webapp](./docs/ecotag.PNG "/ecotag webapp")
 
 
 # About
@@ -30,7 +30,7 @@ Ecotag an is an awesome annotation tools.
   - Text NER Zoning
 - Labelling Export
 
-ML-Cli is the official CLI of Ecotag [ML-Cli Readme](https://github.com/AxaGuilDEv/ml-cli/blob/master/README-ML-CLI.md)
+ML-Cli is the official CLI of Ecotag [/ecotag Readme](https://github.com/AxaGuilDEv/ecotag/blob/master/README-/ecotag.md)
 
 
 Video of features:
@@ -43,10 +43,10 @@ A storybook is available here https://happy-desert-0ef175103.1.azurestaticapps.n
 To run the demo with .NET 6 on your machine :
 
 ```sh
-git clone https://github.com/AxaGuilDEv/ml-cli.git
+git clone https://github.com/AxaGuilDEv/ecotag.git
 
 # Run blob storage and SQL Server
-cd ./ml-cli
+cd ./ecotag
 docker-compose up 
 # then, you can navigate to http://localhost:5010
 ```
@@ -58,7 +58,7 @@ Technologies:
 - .NET 6
 - OpenID Connect 
 
-![Ml-cli webapp](./docs/ecotag_architecture.PNG "Ml-cli webapp")
+![/ecotag webapp](./docs/ecotag_architecture.PNG "ecotag webapp")
 
 # Contribute
 

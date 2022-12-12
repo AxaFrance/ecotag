@@ -1,6 +1,6 @@
 ﻿# Ml-Cli
 
-[![CI](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml/badge.svg)](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml)
+[![CI](https://github.com/AxaGuilDEv/ml-cli/actions/workflows/ml-cli-ci.yml/badge.svg)](https://github.com/AxaGuilDEv/ecotag/actions/workflows/ecotag-ci.yml)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=alert_status)](https://sonarcloud.io/dashboard?id=AxaGuilDEv_ml-cli) [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=reliability_rating) [![Security](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=security_rating)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=security_rating) [![Code Corevage](https://sonarcloud.io/api/project_badges/measure?project=AxaGuilDEv_ml-cli&metric=coverage)](https://sonarcloud.io/component_measures?id=AxaGuilDEv_ml-cli&metric=Coverage) [![Twitter](https://img.shields.io/twitter/follow/GuildDEvOpen?style=social)](https://twitter.com/intent/follow?screen_name=GuildDEvOpen)
 
 ![Ml-cli webapp](./docs/ml-cli-script-application.gif "Ml-cli webapp")
@@ -55,12 +55,12 @@ In production we use complex sequences of algorithm ML in a micro-service archit
 To run the demo with .NET 6 on your machine :
 
 ```sh
-git clone https://github.com/AxaGuilDEv/ml-cli
-cd ./ml-cli/src/AxaGuilDEv.MlCli.DemoApi
+git clone https://github.com/AxaGuilDEv/ecotag
+cd ./ecotag/src/AxaGuilDEv.MlCli.DemoApi
 dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
-cd ./ml-cli/src/AxaGuilDEv.Ecotag
+cd ./ecotag/src/AxaGuilDEv.Ecotag
 dotnet run -- --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
@@ -83,7 +83,7 @@ As you can see, ML-Cli can use several parameters:
 
 ```sh
 # you can also run ml-cli batch only
- cd ./ml-cli/src/AxaGuilDEv.MlCli
+ cd ./ecotag/src/AxaGuilDEv.MlCli
 dotnet run -- -t ..\..\demo\tasks-licenses.json  -b ..\..\demo
 ```
 
@@ -94,7 +94,7 @@ ML-Cli autonomous x64 distribution is available on :
 - MacOS
 - Windows 10
 
- [Check out the artifact on the latest build on master](https://dev.azure.com/axaguildev/ml-cli/_build?definitionId=11)
+ [Check out the artifact on the latest build on master](https://dev.azure.com/axaguildev/ecotag/_build?definitionId=11)
 
 ```sh
 # Run on Windows
@@ -107,7 +107,7 @@ AxaGuilDEv.Ecotag --tasks-path ../../demo/tasks-licenses.json --base-path ../../
 
 ## Getting started on Windows 10
 
-Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
+Select the current version of the project (https://github.com/AxaGuilDEv/ecotag/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
 Don't forget the "v" before the numbers !
 
 Run the following commands :
@@ -117,14 +117,14 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-win-x64.zip --output ml-cli.zip
-unzip ml-cli.zip -d ./ml-cli
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-win-x64.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ecotag
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo-api-win-x64.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo-api-win-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -152,7 +152,7 @@ pip install jupyter-server-proxy
 jupyter labextension install @jupyterlab/server-proxy
 ```
 
-Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
+Select the current version of the project (https://github.com/AxaGuilDEv/ecotag/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
 Don't forget the "v" before the numbers !
 
 Run the following commands :
@@ -162,14 +162,14 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-linux-x64.zip --output ml-cli.zip
-unzip ml-cli.zip -d ./ml-cli
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-linux-x64.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ecotag
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo-api-linux-x64.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo-api-linux-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
@@ -193,7 +193,7 @@ chmod +x AxaGuilDEv.Ecotag
 
 ## Getting started on macosx
 
-Select the current version of the project (https://github.com/AxaGuilDEv/ml-cli/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
+Select the current version of the project (https://github.com/AxaGuilDEv/ecotag/releases) and use it to replace the <INSERT_CURRENT_VERSION_TAG_HERE> tag.
 Don't forget the "v" before the numbers !
 
 Run the following commands :
@@ -203,14 +203,14 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output ml-cli.zip
-unzip ml-cli.zip -d ./ml-cli
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output ml-cli.zip
+unzip ml-cli.zip -d ./ecotag
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo.zip --output demo.zip
 unzip demo.zip -d ./demo
 ```
 
