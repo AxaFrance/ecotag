@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaGuilDEv.MlCli", "src\AxaGuilDEv.MlCli\AxaGuilDEv.MlCli.csproj", "{5C3B334A-D4DF-42D9-A559-03369B3E6E89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlCli", "src\MlCli\MlCli.csproj", "{5C3B334A-D4DF-42D9-A559-03369B3E6E89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaGuilDEv.MlCli.Tests", "tests\AxaGuilDEv.MlCli.Tests\AxaGuilDEv.MlCli.Tests.csproj", "{8D6B8131-AA81-4E6D-81E2-171FCFD24F3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlCli.Tests", "tests\MlCli.Tests\MlCli.Tests.csproj", "{8D6B8131-AA81-4E6D-81E2-171FCFD24F3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaGuilDEv.Ecotag.Tests", "tests\AxaGuilDEv.Ecotag.Tests\AxaGuilDEv.Ecotag.Tests.csproj", "{1520FDCE-FD6E-4FB6-BC24-F0006E23ED82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecotag.Tests", "tests\Ecotag.Tests\Ecotag.Tests.csproj", "{1520FDCE-FD6E-4FB6-BC24-F0006E23ED82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaGuilDEv.Ecotag", "src\AxaGuilDEv.Ecotag\AxaGuilDEv.Ecotag.csproj", "{E3535970-24DB-4E37-8AC9-02BFEC75310D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecotag", "src\Ecotag\Ecotag.csproj", "{E3535970-24DB-4E37-8AC9-02BFEC75310D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaGuilDEv.MlCli.DemoApi", "src\AxaGuilDEv.MlCli.DemoApi\AxaGuilDEv.MlCli.DemoApi.csproj", "{5FB3CA58-893F-4AC3-A1A5-FEFED2115A69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlCli.DemoApi", "src\MlCli.DemoApi\MlCli.DemoApi.csproj", "{5FB3CA58-893F-4AC3-A1A5-FEFED2115A69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

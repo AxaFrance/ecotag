@@ -23,7 +23,7 @@ jobs:
           node-version: '18'
 
       - uses: actions/setup-dotnet@v1
-      - run: dotnet publish ./src/AxaGuilDEv.Ecotag/AxaGuilDEv.Ecotag.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./drop/linux-x64/ecotag
+      - run: dotnet publish ./src/Ecotag/Ecotag.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./drop/linux-x64/ecotag
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
