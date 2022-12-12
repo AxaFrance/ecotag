@@ -8,7 +8,7 @@
 - [How It Works](#how-it-works)
 - [Contribute](#contribute)
 
-![ecotag webapp](./docs/ecotag.PNG "/ecotag webapp")
+![ecotag webapp](./docs/ecotag.PNG "ecotag webapp")
 
 
 # About
