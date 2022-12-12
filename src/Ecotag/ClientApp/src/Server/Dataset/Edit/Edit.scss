@@ -1,0 +1,42 @@
+﻿.edit-dataset {
+  &__file-upload-files-load-error {
+    color: red;
+    margin-left: 4em;
+  }
+
+  &__file-upload-files-send-error {
+    color: red;
+    margin-left: 4em;
+  }
+
+  &__file-upload-container {
+    padding: 0 50px;
+    margin-bottom: 50px;
+
+    &--disabled {
+      display: none;
+    }
+  }
+
+  &__file-upload-title {
+    text-align: center;
+  }
+
+  .af-btn {
+    width: 25%
+  }
+
+  .af-tabs__control {
+    margin-left: 10px;
+  }
+
+  &__modal-core-text {
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 1.1px;
+  }
+
+  &__file-list-container {
+    margin-bottom: 50px;
+  }
+}

@@ -1,0 +1,27 @@
+
+.ocr-labels {
+  &__container {
+    position: sticky;
+    top: 0;
+    max-height: 80vh;
+  }
+
+  &__form {
+    position: sticky;
+    top: 0;
+    overflow: auto;
+  }
+
+  &__label {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  &__textarea {
+    display: flex;
+    border: 1px solid #212121;
+    width: 100%;
+    min-height: 20px;
+    margin-bottom: 15px;
+  }
+}

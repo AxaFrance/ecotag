@@ -1,0 +1,31 @@
+@import '@axa-fr/react-toolkit-form-filter-inline/dist/filter-inline.scss';
+
+.af-btn {
+  &--quote {
+    margin-bottom: 1em;
+  }
+}
+
+.row--projects-filters {
+  padding-bottom: 2rem;
+}
+
+.projects-af-popover__wrapper > .af-popover__wrapper {
+  width: 100%;
+}
+
+.af-popover__container--project-home {
+  width: 100%;
+}
+
+.projects-af-popover__wrapper .af-popover__container .af-popover__arrow::before {
+  background: #939393;
+}
+
+.projects-af-popover__wrapper .af-popover__container-pop {
+  background: #939393;
+}
+
+.projects-af-popover__wrapper h3 {
+  color: white;
+}

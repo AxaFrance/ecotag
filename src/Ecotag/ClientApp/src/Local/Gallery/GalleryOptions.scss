@@ -1,0 +1,21 @@
+﻿.gallery {
+  &__header {
+    display: flex;
+    background-color: #00008f;
+    margin-bottom: 0.5em;
+    color: white;
+    justify-content: space-between;
+  }
+
+  &__options-container-left {
+    display: flex;
+    margin: 1em;
+    height: 50px;
+  }
+
+  &__options-container-right {
+    display: flex;
+    margin: 1em;
+    height: 50px;
+  }
+}

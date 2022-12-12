@@ -1,0 +1,32 @@
+@import '@axa-fr/react-toolkit-form-filter-inline/dist/filter-inline.scss';
+
+.af-btn {
+  &--quote {
+    margin-bottom: 1em;
+  }
+
+  &--locked {
+    background-color: green;
+  }
+
+  &--pending {
+    background-color: orange;
+  }
+
+  &--locked-and-work-in-progress {
+    background-color: darkgoldenrod;
+  }
+
+  &--none {
+    background-color: #2a87d0;
+  }
+}
+
+.row--datasets-filters {
+  padding-bottom: 1.5rem;
+}
+
+
+.af-home__access-token {
+  margin-left: 2em;
+}

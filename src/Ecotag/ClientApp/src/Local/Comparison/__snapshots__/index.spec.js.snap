@@ -1,0 +1,2029 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check a compare file insertion Find table result of KOs after file input and change select state to All 1`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="AXA Logo"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            ML-CLI
+            <span
+              class="af-header__subtitle"
+            >
+              Made by AXA
+            </span>
+          </h2>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Visualising file : dataSourceFile.json
+      </h1>
+    </div>
+  </div>
+  <div
+    class="file-loader__container"
+  >
+    <div
+      class="file-loader__input"
+    >
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file_loader"
+          tabindex="0"
+        >
+          <input
+            accept="application/json"
+            autocomplete="off"
+            multiple=""
+            name="placeJsonFile"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Slide/Deposit files
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Browse
+        </button>
+      </div>
+    </div>
+    <div
+      class="library__container"
+    >
+      <p
+        class="library__title"
+      >
+        Files
+      </p>
+      <span>
+        No file found.
+      </span>
+      <div
+        class="library__files-list"
+      />
+    </div>
+  </div>
+  <div
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Filters
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="1"
+          >
+            Time
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="2"
+          >
+            Scripts
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="3"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div
+            class="tabs__container tabs__container--justify"
+          >
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                File state:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="select_type"
+                  name="SelectType"
+                >
+                  <option
+                    value="KO"
+                  >
+                    KO
+                  </option>
+                  <option
+                    value="OK"
+                  >
+                    OK
+                  </option>
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                </select>
+                <span
+                  aria-controls="select_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Files extensions:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="extension_type"
+                  name="ExtensionType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                  <option
+                    value="PNG"
+                  >
+                    PNG
+                  </option>
+                  <option
+                    value="JPG/JPEG"
+                  >
+                    JPG/JPEG
+                  </option>
+                  <option
+                    value="PDF"
+                  >
+                    PDF
+                  </option>
+                  <option
+                    value="TIFF"
+                  >
+                    TIFF
+                  </option>
+                </select>
+                <span
+                  aria-controls="extension_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Server status:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="status_code_type"
+                  name="StatusCodeType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                  <option
+                    value="200"
+                  >
+                    200
+                  </option>
+                </select>
+                <span
+                  aria-controls="status_code_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+            </div>
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                Search Bar:
+              </p>
+              <textarea
+                class="af-form__input-textarea"
+                id="text_area_searchbar"
+                name="TextAreaSearchBar"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="file-input"
+  >
+    <button
+      class="btn af-btn"
+      id="submit-btn"
+    >
+      Apply filters
+    </button>
+  </div>
+  <div
+    class="stats"
+  >
+    <div
+      class="stats__title"
+    >
+      <span>
+        Stats:
+      </span>
+      <div
+        class="table-result__collapse-button"
+      >
+        -
+      </div>
+    </div>
+    <div
+      class="stats__results stats__results--header"
+    >
+      <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="are_errors_counted_checkbox"
+          >
+            Remove errors from stats:
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              class="af-form__input-checkbox"
+              id="are_errors_counted_checkbox"
+              name="areErrorsCountedCheckbox"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="are_errors_counted_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Are errors counted ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="is_merging_checkbox"
+          >
+            Merge keys
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              checked=""
+              class="af-form__input-checkbox"
+              id="is_merging_checkbox"
+              name="merge"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="is_merging_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Is merge activated ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="excel-export-btn"
+      >
+        <div
+          class="excel-export-btn__container"
+        >
+          <button
+            class="btn af-btn"
+          >
+            Export
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          OK Files: 0
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          KO Files: 1
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Total : 1
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--double-columns stats__results-info--separator"
+      >
+        <div
+          class="af-popover__wrapper"
+        >
+          <div
+            class="af-popover__container"
+          >
+            <div
+              class="af-popover__container-over"
+              role="presentation"
+            >
+              <button
+                class="btn af-btn--circle"
+                type="button"
+              >
+                <span
+                  class="af-more-help"
+                >
+                  i
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <span>
+          Completeness left : 100.00%
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--double-columns"
+      >
+        <span>
+          Completeness right : 50.00%
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Total time left : 0 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Total time right : 28.292 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Difference : 28.292 seconds (+0% gain)
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Average time left : 0 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Average time right : 28.292 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Difference : 28.292 seconds (+0% gain)
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Status Code : 200 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Number on the left : 1 
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Number on the right : 1 
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : firstname 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 0 
+          </li>
+          <li>
+            Number OK : 1 
+          </li>
+          <li>
+            Number KO : 0 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 100 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 100.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : lastname 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 0 
+          </li>
+          <li>
+            Number OK : 1 
+          </li>
+          <li>
+            Number KO : 0 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 100 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 100.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : birthdate 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 10 
+          </li>
+          <li>
+            Number OK : 0 
+          </li>
+          <li>
+            Number KO : 1 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 0 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 0.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : categoryB 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 15 
+          </li>
+          <li>
+            Number OK : 0 
+          </li>
+          <li>
+            Number KO : 1 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 0 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 0.00 %
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    class="af-paging paging__top"
+  >
+    <div
+      class="af-paging__limit"
+    >
+      <div
+        class="af-paging__limit"
+      >
+        <form
+          class="af-paging__form"
+        >
+          <div
+            class="af-form__group"
+          >
+            <div
+              class="col col-sm-2 col-md-2 col-lg-2 col-xl-2"
+            >
+              <label
+                class="af-form__group-label"
+                for="paging-top"
+              >
+                Show
+              </label>
+            </div>
+            <div
+              class="col col-sm-10 col-md-10 col-lg-10 col-xl-10"
+            >
+              <div
+                class="af-form__select"
+              >
+                <div
+                  class="af-form__select-container"
+                >
+                  <select
+                    class="af-form__input-select"
+                    id="paging-top"
+                  >
+                    <option
+                      value="5"
+                    >
+                      5
+                    </option>
+                    <option
+                      value="10"
+                    >
+                      10
+                    </option>
+                    <option
+                      value="25"
+                    >
+                      25
+                    </option>
+                    <option
+                      value="50"
+                    >
+                      50
+                    </option>
+                    <option
+                      value="100"
+                    >
+                      100
+                    </option>
+                  </select>
+                  <span
+                    class="glyphicon glyphicon-menu-down"
+                  />
+                </div>
+                <span
+                  class="af-form__input-cmplt"
+                >
+                  elements
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="af-paging__pager"
+    >
+      <nav
+        class="af-pager"
+      >
+        <ul
+          class="af-pager__pagination"
+        >
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Previous
+            </span>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--active"
+          >
+            <a
+              class="af-pager__item-link"
+              href="#"
+            >
+              <span>
+                1
+              </span>
+            </a>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Next
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="table-result"
+  >
+    <div
+      class="table-result__header"
+    >
+      <div>
+        <p>
+          File result : {FileName}_pdf.json
+        </p>
+        <h2>
+          <span
+            class="table-result__row--red"
+          >
+            KO
+          </span>
+           Time left - Time right ratio : 28.292 seconds
+        </h2>
+      </div>
+      <div
+        class="table-result__buttons-group"
+      >
+        <div
+          class="table-result__copy-button"
+        >
+          Copy
+        </div>
+        <div
+          class="table-result__collapse-button"
+        >
+          -
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-result__elements-container"
+    >
+      <button
+        class="table-result__parse-button"
+        type="button"
+      >
+        <span>
+          Annotate
+        </span>
+      </button>
+    </div>
+    <div
+      class="table-result__column-container"
+    >
+      <div
+        class="table-result__column"
+      >
+        <div
+          class="table-margin"
+        >
+          <div>
+            Copy the local file link:
+          </div>
+          <button
+            class="table-result__copy-clipboard-button"
+          >
+            Click here
+          </button>
+          <h3>
+            https://url
+          </h3>
+          <div
+            class="table-result__column table-result__column--time-span"
+          >
+            Time: 0 seconds
+          </div>
+          <div>
+            [{"firstname":"JOHN","lastname":"DOE","birthdate":"2021-02-02","categoryB":"categoryB_value"}]
+          </div>
+        </div>
+      </div>
+      <div
+        class="table-result__column table-result__column--separator"
+      >
+        <div
+          class="table-margin"
+        >
+          <div>
+            Copy the local file link:
+          </div>
+          <button
+            class="table-result__copy-clipboard-button"
+          >
+            Click here
+          </button>
+          <h3>
+            https://url
+          </h3>
+          <div
+            class="table-result__column table-result__column--time-span"
+          >
+            Time: 28.292 seconds
+          </div>
+          <div>
+            [{"firstname":"JOHN","lastname":"DOE","birthdate":"","categoryB":null}]
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="table-result__row table-result__row--overflow"
+    >
+      <span>
+        [{"firstname":"JOHN","lastname":"DOE","birthdate":"
+      </span>
+      <del
+        style="background:#ffe6e6;"
+      >
+        2021-02-02
+      </del>
+      <span>
+        ","categoryB":
+      </span>
+      <del
+        style="background:#ffe6e6;"
+      >
+        "categoryB_value"
+      </del>
+      <ins
+        style="background:#e6ffe6;"
+      >
+        null
+      </ins>
+      <span>
+        }]
+      </span>
+    </div>
+  </div>
+  <div
+    class="af-paging"
+  >
+    <div
+      class="af-paging__limit"
+    >
+      <div
+        class="af-paging__limit"
+      >
+        <form
+          class="af-paging__form"
+        >
+          <div
+            class="af-form__group"
+          >
+            <div
+              class="col col-sm-2 col-md-2 col-lg-2 col-xl-2"
+            >
+              <label
+                class="af-form__group-label"
+                for="paging-bottom"
+              >
+                Show
+              </label>
+            </div>
+            <div
+              class="col col-sm-10 col-md-10 col-lg-10 col-xl-10"
+            >
+              <div
+                class="af-form__select"
+              >
+                <div
+                  class="af-form__select-container"
+                >
+                  <select
+                    class="af-form__input-select"
+                    id="paging-bottom"
+                  >
+                    <option
+                      value="5"
+                    >
+                      5
+                    </option>
+                    <option
+                      value="10"
+                    >
+                      10
+                    </option>
+                    <option
+                      value="25"
+                    >
+                      25
+                    </option>
+                    <option
+                      value="50"
+                    >
+                      50
+                    </option>
+                    <option
+                      value="100"
+                    >
+                      100
+                    </option>
+                  </select>
+                  <span
+                    class="glyphicon glyphicon-menu-down"
+                  />
+                </div>
+                <span
+                  class="af-form__input-cmplt"
+                >
+                  elements
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="af-paging__pager"
+    >
+      <nav
+        class="af-pager"
+      >
+        <ul
+          class="af-pager__pagination"
+        >
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Previous
+            </span>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--active"
+          >
+            <a
+              class="af-pager__item-link"
+              href="#"
+            >
+              <span>
+                1
+              </span>
+            </a>
+          </li>
+          <li
+            class="af-pager__item af-pager__item--disabled"
+          >
+            <span
+              class="af-pager__item-nolink"
+            >
+              Next
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="Toastify"
+  />
+</DocumentFragment>
+`;
+
+exports[`Check a compare file insertion Find table result of KOs after file input and change select state to All 2`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="AXA Logo"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            ML-CLI
+            <span
+              class="af-header__subtitle"
+            >
+              Made by AXA
+            </span>
+          </h2>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Visualising file : dataSourceFile.json
+      </h1>
+    </div>
+  </div>
+  <div
+    class="file-loader__container"
+  >
+    <div
+      class="file-loader__input"
+    >
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file_loader"
+          tabindex="0"
+        >
+          <input
+            accept="application/json"
+            autocomplete="off"
+            multiple=""
+            name="placeJsonFile"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Slide/Deposit files
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Browse
+        </button>
+      </div>
+    </div>
+    <div
+      class="library__container"
+    >
+      <p
+        class="library__title"
+      >
+        Files
+      </p>
+      <span>
+        No file found.
+      </span>
+      <div
+        class="library__files-list"
+      />
+    </div>
+  </div>
+  <div
+    class="tabs"
+  >
+    <div
+      class="tabs__header"
+    >
+      <ul
+        class="af-tabs__control"
+      >
+        <li
+          class="af-tabs__item af-tabs__item--active"
+        >
+          <button
+            class="af-tabs__link"
+            id="0"
+          >
+            Filters
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="1"
+          >
+            Time
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="2"
+          >
+            Scripts
+          </button>
+        </li>
+        <li
+          class="af-tabs__item"
+        >
+          <button
+            class="af-tabs__link"
+            id="3"
+          >
+            Configuration
+          </button>
+        </li>
+      </ul>
+      <div
+        class="af-tabs__content"
+      >
+        <div
+          class="af-tabs__pane"
+        >
+          <div
+            class="tabs__container tabs__container--justify"
+          >
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                File state:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="select_type"
+                  name="SelectType"
+                >
+                  <option
+                    value="KO"
+                  >
+                    KO
+                  </option>
+                  <option
+                    value="OK"
+                  >
+                    OK
+                  </option>
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                </select>
+                <span
+                  aria-controls="select_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Files extensions:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="extension_type"
+                  name="ExtensionType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                  <option
+                    value="PNG"
+                  >
+                    PNG
+                  </option>
+                  <option
+                    value="JPG/JPEG"
+                  >
+                    JPG/JPEG
+                  </option>
+                  <option
+                    value="PDF"
+                  >
+                    PDF
+                  </option>
+                  <option
+                    value="TIFF"
+                  >
+                    TIFF
+                  </option>
+                </select>
+                <span
+                  aria-controls="extension_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+              <p
+                class="tabs__title"
+              >
+                Server status:
+              </p>
+              <div
+                class="af-form__select-container"
+              >
+                <select
+                  class="af-form__input-select"
+                  id="status_code_type"
+                  name="StatusCodeType"
+                >
+                  <option
+                    value="All"
+                  >
+                    All
+                  </option>
+                  <option
+                    value="200"
+                  >
+                    200
+                  </option>
+                </select>
+                <span
+                  aria-controls="status_code_type"
+                  class="glyphicon glyphicon-menu-down"
+                />
+              </div>
+            </div>
+            <div
+              class="tabs__filter-container"
+            >
+              <p
+                class="tabs__title"
+              >
+                Search Bar:
+              </p>
+              <textarea
+                class="af-form__input-textarea"
+                id="text_area_searchbar"
+                name="TextAreaSearchBar"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="file-input"
+  >
+    <button
+      class="btn af-btn"
+      id="submit-btn"
+    >
+      Apply filters
+    </button>
+  </div>
+  <div
+    class="stats"
+  >
+    <div
+      class="stats__title"
+    >
+      <span>
+        Stats:
+      </span>
+      <div
+        class="table-result__collapse-button"
+      >
+        -
+      </div>
+    </div>
+    <div
+      class="stats__results stats__results--header"
+    >
+      <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="are_errors_counted_checkbox"
+          >
+            Remove errors from stats:
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              class="af-form__input-checkbox"
+              id="are_errors_counted_checkbox"
+              name="areErrorsCountedCheckbox"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="are_errors_counted_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Are errors counted ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row af-form__group"
+      >
+        <div
+          class="col-md-2"
+        >
+          <label
+            class="af-form__group-label"
+            for="is_merging_checkbox"
+          >
+            Merge keys
+          </label>
+        </div>
+        <div
+          class="col-md-10"
+        >
+          <div
+            class="af-form__checkbox-toggle"
+          >
+            <input
+              checked=""
+              class="af-form__input-checkbox"
+              id="is_merging_checkbox"
+              name="merge"
+              type="checkbox"
+            />
+            <label
+              class="af-form__label"
+              for="is_merging_checkbox"
+            >
+              <span
+                class="af-form__indicator"
+              >
+                <i
+                  class="glyphicon glyphicon-ok"
+                />
+              </span>
+              <span
+                class="af-form__description"
+              >
+                Is merge activated ?
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="excel-export-btn"
+      >
+        <div
+          class="excel-export-btn__container"
+        >
+          <button
+            class="btn af-btn"
+          >
+            Export
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          OK Files: 0
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          KO Files: 1
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Total : 1
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--double-columns stats__results-info--separator"
+      >
+        <div
+          class="af-popover__wrapper"
+        >
+          <div
+            class="af-popover__container"
+          >
+            <div
+              class="af-popover__container-over"
+              role="presentation"
+            >
+              <button
+                class="btn af-btn--circle"
+                type="button"
+              >
+                <span
+                  class="af-more-help"
+                >
+                  i
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <span>
+          Completeness left : 100.00%
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--double-columns"
+      >
+        <span>
+          Completeness right : 50.00%
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Total time left : 0 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Total time right : 28.292 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Difference : 28.292 seconds (+0% gain)
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Average time left : 0 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Average time right : 28.292 seconds
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Difference : 28.292 seconds (+0% gain)
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Status Code : 200 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Number on the left : 1 
+        </span>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Number on the right : 1 
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : firstname 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 0 
+          </li>
+          <li>
+            Number OK : 1 
+          </li>
+          <li>
+            Number KO : 0 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 100 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 100.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : lastname 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 0 
+          </li>
+          <li>
+            Number OK : 1 
+          </li>
+          <li>
+            Number KO : 0 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 100 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 0
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 100.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : birthdate 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 10 
+          </li>
+          <li>
+            Number OK : 0 
+          </li>
+          <li>
+            Number KO : 1 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 0 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 0.00 %
+        </span>
+      </div>
+    </div>
+    <div
+      class="stats__results"
+    >
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <span>
+          Key : categoryB 
+        </span>
+      </div>
+      <div
+        class="stats__results-info stats__results-info--separator"
+      >
+        <ul>
+          <li>
+            Levenshtein score : 15 
+          </li>
+          <li>
+            Number OK : 0 
+          </li>
+          <li>
+            Number KO : 1 
+          </li>
+          <li>
+            Number Total : 1 
+          </li>
+          <li>
+            Percentage OK : 0 %
+          </li>
+        </ul>
+      </div>
+      <div
+        class="stats__results-info"
+      >
+        <span>
+          Completeness OK Left : 1
+        </span>
+        <br />
+        <span>
+          Completeness KO Left : 0
+        </span>
+        <br />
+        <span>
+          Completeness OK Right : 0
+        </span>
+        <br />
+        <span>
+          Completeness KO Right : 1
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Left : 100.00 %
+        </span>
+        <br />
+        <span>
+          Percentage completeness OK Right : 0.00 %
+        </span>
+      </div>
+    </div>
+  </div>
+  <span
+    class="empty-array__error"
+  >
+    <b>
+      There is no file related to that filter configuration
+    </b>
+  </span>
+  <div
+    class="Toastify"
+  />
+</DocumentFragment>
+`;

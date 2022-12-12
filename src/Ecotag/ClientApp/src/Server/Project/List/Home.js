@@ -1,0 +1,58 @@
+import React from 'react';
+import {Link,} from 'react-router-dom';
+import Title from '../../../TitleBar';
+import './Home.scss';
+import '../../shared/Modal/modal.scss';
+import EmptyArrayManager from "../../../EmptyArrayManager";
+import ItemsTable from "./ItemsTable";
+import {DataScientist} from "../../withAuthentication";
+
+const Home = ({items, numberTotalItems, filters, onChangePaging, onChangeFilter, onChangeSort, fetch, user}) => {
+
+    return (
+        <>
+            <Title title="Projets" subtitle="Tagger un ensemble de données"/>
+            <div className="af-home container">
+                {user.roles.includes(DataScientist) && <Link className="btn af-btn af-btn--quote" to="/projects/new">
+                    <span className="af-btn__text">Nouveau projet</span>
+                </Link>}
+                <h1 className="af-title--content">{`Vos projets en cours (${numberTotalItems})`}</h1>
+                <div className="row row--projects-filters">
+                    <div className="col">
+                        <div className="af-filter-inline">
+              <span className="af-filter-inline__title">
+                <span className="glyphicon glyphicon-filter"/>
+                <span className="af-filter-inline__title-text">Filtrer par</span>
+              </span>
+                            <div className="af-filter-inline__field">
+                                <label className="af-form__group-label" htmlFor="inputTextFilterProjects">
+                                    Nom du projet
+                                </label>
+                                <div className="af-form__text">
+                                    <input
+                                        className="af-form__input-text"
+                                        id="inputTextFilterProjects"
+                                        name="inputTextFilterProjects"
+                                        onChange={event => onChangeFilter(event.target.value)}
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément">
+                    <ItemsTable
+                        items={items}
+                        filters={filters}
+                        onChangePaging={onChangePaging}
+                        onChangeSort={onChangeSort}
+                        fetch={fetch}
+                    />
+                </EmptyArrayManager>
+            </div>
+        </>
+    );
+};
+
+export default Home;
