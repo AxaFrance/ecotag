@@ -45,8 +45,7 @@
     "eject": "react-scripts eject",
     "postinstall": "npm rebuild canvas --update-binary",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "prepare": "node ./bin/copy.js"
+    "build-storybook": "build-storybook"
   },
   "browserslist": {
     "production": [
