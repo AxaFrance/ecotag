@@ -47,20 +47,20 @@ jobs:
 
       - uses: actions/setup-dotnet@v1
       
-      - name: Sonarqube Begin
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet test -p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
-          dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:AxaGuilDev /k:AxaGuilDev_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+      #- name: Sonarqube Begin
+       # if: ${{ github.actor != 'dependabot[bot]' }}
+       # run: |
+       #   dotnet tool install --global dotnet-sonarscanner
+       #   dotnet test -p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
+       #   dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:AxaGuilDev /k:AxaGuilDev_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 
       - run: dotnet test /p:CollectCoverage=true
     
-      - name: Sonarqube end
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Sonarqube end
+      #  if: ${{ github.actor != 'dependabot[bot]' }}
+      #  run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   tags:
     runs-on: ubuntu-latest
