@@ -56,11 +56,11 @@ To run the demo with .NET 6 on your machine :
 
 ```sh
 git clone https://github.com/AxaGuilDEv/ml-cli
-cd ./ml-cli/src/Ml.Cli.DemoApi
+cd ./ml-cli/src/AxaGuilDEv.MlCli.DemoApi
 dotnet run
 # run demo API, you can navigate at https://localhost:6001/licenses/version
 
-cd ./ml-cli/src/Ml.Cli.WebApp
+cd ./ml-cli/src/AxaGuilDEv.Ecotag
 dotnet run -- --tasks-path ..\..\demo\tasks-licenses.json  --base-path ..\..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # run ml-cli batch + web application
 # you can navigate at https://localhost:5001
@@ -83,7 +83,7 @@ As you can see, ML-Cli can use several parameters:
 
 ```sh
 # you can also run ml-cli batch only
- cd ./ml-cli/src/Ml.Cli
+ cd ./ml-cli/src/AxaGuilDEv.MlCli
 dotnet run -- -t ..\..\demo\tasks-licenses.json  -b ..\..\demo
 ```
 
@@ -98,11 +98,11 @@ ML-Cli autonomous x64 distribution is available on :
 
 ```sh
 # Run on Windows
-Ml.Cli.WebApp.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
+AxaGuilDEv.Ecotag.exe --tasks-path ..\..\demo\tasks-licenses.json --base-path ..\..\demo --compares-paths licenses\output
 
 # Run on Mac 
-chmod +x Ml.Cli.WebApp
-Ml.Cli.WebApp --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
+chmod +x AxaGuilDEv.Ecotag
+AxaGuilDEv.Ecotag --tasks-path ../../demo/tasks-licenses.json --base-path ../../demo --compares-paths licenses/output
 ```
 
 ## Getting started on Windows 10
@@ -117,10 +117,10 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/win-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-win-x64.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/win-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo-api-win-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
@@ -140,7 +140,7 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-Ml.Cli.WebApp.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
+AxaGuilDEv.Ecotag.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # then navigate to: http://localhost:5000/ 
 ```
 
@@ -162,10 +162,10 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/linux-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-linux-x64.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/linux-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/demo-api-linux-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
@@ -177,8 +177,8 @@ Then, in another command line :
 ```sh
 # run the demo-api
 cd demo-api
-chmod +x Ml.Cli.DemoApi
-./Ml.Cli.DemoApi
+chmod +x AxaGuilDEv.MlCli.DemoApi
+./AxaGuilDEv.MlCli.DemoApi
 # start demo api in background at https://localhost:6001
 ```
 
@@ -186,8 +186,8 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-chmod +x Ml.Cli.WebApp
-./Ml.Cli.WebApp --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
+chmod +x AxaGuilDEv.Ecotag
+./AxaGuilDEv.Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: https://your-jupyterlab/proxy/5000/ (the last / is mandatory)
 ```
 
@@ -203,10 +203,10 @@ cd ml-cli
 export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURRENT_VERSION=v0.40.6
 
 # Download ml-cli-web 
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/osx-x64-ml-cli.zip --output ml-cli.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ml-cli
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/osx-x64-demo-api.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ml-cli/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
@@ -218,8 +218,8 @@ Then, in another command line :
 ```sh
 # run the demo-api
 cd demo-api
-chmod +x Ml.Cli.DemoApi
-./Ml.Cli.DemoApi
+chmod +x AxaGuilDEv.MlCli.DemoApi
+./AxaGuilDEv.MlCli.DemoApi
 # start demo api in background at https://localhost:6001
 ```
 
@@ -227,8 +227,8 @@ Then, in another command line :
 ```sh
 # run ml-cli
 cd ml-cli
-chmod +x Ml.Cli.WebApp
-./Ml.Cli.WebApp --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
+chmod +x AxaGuilDEv.Ecotag
+./AxaGuilDEv.Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: http://localhost:5000/ 
 ```
 

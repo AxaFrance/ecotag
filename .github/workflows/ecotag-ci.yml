@@ -194,8 +194,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/linux-x64/ml-cli-web/ecotag-linux-x64-ml.zip
-          asset_name: ecotag-linux-x64-ml.zip
+          asset_path: ./drop/linux-x64/ecotag/ecotag-linux-x64.zip
+          asset_name: ecotag-linux-x64.zip
           asset_content_type: application/zip
       - run: dotnet publish ./src/AxaGuilDEv.MlCli.DemoApi/AxaGuilDEv.MlCli.DemoApi.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/demo-api
       - name: Zip Release
@@ -218,7 +218,7 @@ jobs:
         run: |
           git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 LibreOffice
           mv LibreOffice drop/win-x64/ecotag
-          ls ./drop/win-x64/ml-cli/
+          ls ./drop/win-x64/ecotag/
           echo "---------------"
           cd drop/win-x64/ml-cli
           rm appsettings-server.Production.json
@@ -238,7 +238,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/win-x64/ml-cli/ecotag-win-x64.zip
+          asset_path: ./drop/win-x64/ecotag/ecotag-win-x64.zip
           asset_name: ecotag-win-x64.zip
           asset_content_type: application/zip
       - run: dotnet publish ./src/AxaGuilDEv.MlCli.DemoApi/AxaGuilDEv.MlCli.DemoApi.csproj -c Release -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/win-x64/demo-api
@@ -270,7 +270,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./drop/osx-x64/ml-cli/ecotag-osx-x64.zip
+          asset_path: ./drop/osx-x64/ecotag/ecotag-osx-x64.zip
           asset_name: ecotag-osx-x64-.zip
           asset_content_type: application/zip
       - run: dotnet publish ./src/AxaGuilDEv.MlCli.DemoApi/AxaGuilDEv.MlCli.DemoApi.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/demo-api
