@@ -23,7 +23,7 @@ jobs:
           node-version: '16'
 
       - uses: actions/setup-dotnet@v1
-      - run: dotnet publish ./src/AxaGuilDev.MlCli/AxaGuilDev.MlCli.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli-web
+      - run: dotnet publish ./src/AxaGuilDEv.Ecotag/AxaGuilDEv.Ecotag.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli-web
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
