@@ -52,7 +52,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet test -p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/opencover.xml
-          dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:AxaGuilDEv /k:AxaGuilDEv_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+          dotnet sonarscanner begin /d:sonar.login=${{ secrets.SONAR_TOKEN }} /o:AxaGuilDev /k:AxaGuilDev_ml-cli /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 
       - run: dotnet test /p:CollectCoverage=true
     
