@@ -17,19 +17,11 @@
   "telemetry": {
     "instrumentationKey": "#{Spa:AppInsights:InstrumentationKey}#",
     "logLevel": "#{Spa:AppInsights:LogLevel}#",
-    "active":
-    #{
-  Spa: AppInsights
-  :
-  Active
-}#
-},
-"datasets": {
-"reserveHttpCallInParallel": #{Spa: Oidc: ReserveHttpCallInParallel
-}#,
-"reserveBeforeEndIndex": #{
-Spa: Oidc: ReserveBeforeEndIndex
-}#,
-"isBlobTransferActive": #{Spa: Datasets: IsBlobTransferActive}#
-}
+    "active":#{Spa:AppInsights:Active}#
+  },
+    "datasets": {
+    "reserveHttpCallInParallel": #{Spa:Oidc:ReserveHttpCallInParallel}#,
+    "reserveBeforeEndIndex": #{Spa:Oidc:ReserveBeforeEndIndex}#,
+    "isBlobTransferActive": #{Spa:Datasets:IsBlobTransferActive}#
+  }
 }
