@@ -1,6 +1,6 @@
-﻿# Contributing to ML-CLI
+﻿# Contributing to Ecotag
 
-We would love to see you contributing to ML-CLI and help to improve it. As a contributor, you should follow our [**code of conduct**](CODE_OF_CONDUCT.md).
+We would love to see you contributing to Ecotag and help to improve it. As a contributor, you should follow our [**code of conduct**](CODE_OF_CONDUCT.md).
 
 # Code quality and rules
 
@@ -40,4 +40,4 @@ You can help us by submitting an issue to our [**Azure repository**][repo].\
 If you are able to solve it, please feel free to submit a pull request with the fix !
 
 [commit-messages]: https://chris.beams.io/posts/git-commit/
-[repo]: https://axafrance.visualstudio.com/SquadNSD/_git/ml-cli
+[repo]: https://axafrance.visualstudio.com/SquadNSD/_git/Ecotag
