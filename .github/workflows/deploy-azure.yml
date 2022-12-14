@@ -1,0 +1,49 @@
+﻿name: Deploy Azure Demo
+
+on:
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  build-linux:
+    environment: ml-cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - uses: actions/setup-dotnet@v1
+      - run: dotnet publish ./src/Ecotag/Ecotag.csproj -c Release -r win-x64 --output ./drop/win-x64/ecotag
+      - name: Download libreOffice and Set Up Azure Configuration
+        run: |
+          git clone https://github.com/guillaume-chervet/LibreOfficePortal_7.4.2_winx64.git --depth 1 LibreOffice
+          mv LibreOffice drop/win-x64/ecotag
+          cd drop/win-x64/ecotag
+          rm appsettings-server.Production.json
+          cp appsettings-server.Azure.json appsettings-server.Production.json 
+          cd ClientApp/build-server
+          rm environment.json
+          cp environment.azure.json environment.json
+          rm OidcTrustedDomains.js
+          cp OidcTrustedDomains.azure.js OidcTrustedDomains.js
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
+        with:
+          filename: ecotag-win-x64.zip
+          path: .
+          directory: ./drop/win-x64/ecotag
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'axaguildev-ecotag'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./drop/win-x64/ecotag/ecotag-win-x64.zip

@@ -10,6 +10,8 @@
 
 ![ecotag webapp](./docs/ecotag.PNG "ecotag webapp")
 
+Online Demo of ecotag :
+https://axaguildev-ecotag.azurewebsites.net
 
 # About
 
@@ -31,7 +33,6 @@ Ecotag an is an awesome annotation tools.
 - Labelling Export
 
 ML-Cli is the official CLI of Ecotag [ML-Cli Readme](https://github.com/AxaGuilDEv/ecotag/blob/master/README-ML-CLI.md)
-
 
 Video of features:
 - French : https://www.youtube.com/watch?v=jB8AQAtxk_E
