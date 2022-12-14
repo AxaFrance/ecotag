@@ -34,7 +34,7 @@ jobs:
           rm environment.json
           cp environment.azure.json environment.json
           rm OidcTrustedDomains.js
-          cp OidcTrustedDomains.docker.js OidcTrustedDomains.js
+          cp OidcTrustedDomains.azure.js OidcTrustedDomains.js
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
         with:
