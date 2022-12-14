@@ -44,6 +44,7 @@
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
         <Content Include=".db\.gitignore" />
         <Content Include="LibreOffice\.gitignore" />
+        <None Include="ClientApp\public\environment.azure.json" />
         <None Include="ClientApp\public\web.config" />
     </ItemGroup>
 

@@ -1,0 +1,27 @@
+﻿{
+  "apiUrl": "https://axaguildev-ecotag.azurewebsites.net/api/server/{path}",
+  "baseUrl": "",
+  "oidc": {
+    "mode": "Default",
+    "configuration": {
+      "client_id": "interactive.public",
+      "redirect_uri": "https://axaguildev-ecotag.azurewebsites.net/authentication/callback",
+      "silent_redirect_uri": "https://axaguildev-ecotag.azurewebsites.net/authentication/silent-callback",
+      "scope": "openid profile email api offline_access",
+      "authority": "https://demo.duendesoftware.com",
+      "service_worker_relative_url": "/OidcServiceWorker.js",
+      "service_worker_only": true,
+      "token_renew_mode": "access_token_invalid"
+    }
+  },
+  "telemetry": {
+    "instrumentationKey": "",
+    "logLevel": "DEBUG",
+    "active": false
+  },
+  "datasets": {
+    "isBlobTransferActive": false,
+    "reserveHttpCallInParallel": 2,
+    "reserveBeforeEndIndex": 10
+  }
+}
