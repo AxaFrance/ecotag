@@ -4,15 +4,18 @@ using System.IO;
 using System.Threading.Tasks;
 using AxaGuilDEv.MlCli.PathManager;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Logging;
 
 namespace AxaGuilDEv.Ecotag.Server.Datasets.Database.FileStorage;
 
 public class FileHardDriveService : IFileService
 {
+    private readonly ILogger<FileHardDriveService> _logger;
     private readonly string _basePath;
 
-    public FileHardDriveService()
+    public FileHardDriveService(ILogger<FileHardDriveService> logger)
     {
+        _logger = logger;
         _basePath = Path.Combine("./", ".data");
     }
 
@@ -40,14 +43,12 @@ public class FileHardDriveService : IFileService
             };
         await using var fileStream = new FileStream(blobFileUri,
             FileMode.Open, FileAccess.Read);
-        var memoryStream = new MemoryStream();
-        await memoryStream.CopyToAsync(fileStream);
         var provider = new FileExtensionContentTypeProvider();
         string contentType;
         if (!provider.TryGetContentType(blobFileUri, out contentType)) contentType = "application/octet-stream";
         var dataModel = new FileServiceDataModel
         {
-            Stream = memoryStream,
+            Stream = fileStream,
             Name = fileStream.Name,
             Length = fileStream.Length,
             ContentType = contentType
@@ -74,7 +75,7 @@ public class FileHardDriveService : IFileService
         blobDirectoryUri = AdaptBlobToHardDrive(blobDirectoryUri);
         var directory = new DirectoryInfo(blobDirectoryUri);
         if (!directory.Exists) return false;
-        RecursiveDelete(directory);
+        RecursiveDelete(_logger, directory);
         return true;
     }
 
@@ -103,17 +104,23 @@ public class FileHardDriveService : IFileService
         return blobFileUri;
     }
 
-    private static void RecursiveDelete(DirectoryInfo baseDir)
+    private static void RecursiveDelete(ILogger<FileHardDriveService> logger, DirectoryInfo baseDir)
     {
         if (!baseDir.Exists)
             return;
 
-        foreach (var dir in baseDir.EnumerateDirectories()) RecursiveDelete(dir);
+        foreach (var dir in baseDir.EnumerateDirectories()) RecursiveDelete(logger, dir);
         var files = baseDir.GetFiles();
         foreach (var file in files)
         {
-            file.IsReadOnly = false;
-            file.Delete();
+            try
+            {
+                file.IsReadOnly = false;
+                file.Delete();
+            } catch (Exception e)
+            {
+                logger.LogError(e, "Error while deleting file");
+            }
         }
 
         baseDir.Delete();
