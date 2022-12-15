@@ -38,16 +38,18 @@ public class FileHardDriveService : IFileService
                     Key = "FileNotFound"
                 }
             };
-        var fsSource = new FileStream(blobFileUri,
+        await using var fileStream = new FileStream(blobFileUri,
             FileMode.Open, FileAccess.Read);
+        var memoryStream = new MemoryStream();
+        await memoryStream.CopyToAsync(fileStream);
         var provider = new FileExtensionContentTypeProvider();
         string contentType;
         if (!provider.TryGetContentType(blobFileUri, out contentType)) contentType = "application/octet-stream";
         var dataModel = new FileServiceDataModel
         {
-            Stream = fsSource,
-            Name = fsSource.Name,
-            Length = fsSource.Length,
+            Stream = memoryStream,
+            Name = fileStream.Name,
+            Length = fileStream.Length,
             ContentType = contentType
         };
 
