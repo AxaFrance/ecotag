@@ -36,6 +36,7 @@ ML-Cli is the official CLI of Ecotag [ML-Cli Readme](https://github.com/AxaGuilD
 
 Video of features:
 - French : https://www.youtube.com/watch?v=jB8AQAtxk_E
+- English : https://www.youtube.com/watch?v=OBlNJ7D92mw
 
 A storybook is available here https://happy-desert-0ef175103.1.azurestaticapps.net/
 
