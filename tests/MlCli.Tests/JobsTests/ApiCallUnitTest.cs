@@ -95,12 +95,13 @@ public class ApiCallUnitTest
         fileLoader.SetupSequence(mock => mock.FileExists(It.IsAny<string>()))
             .Returns(false)
             .Returns(true)
+            .Returns(true)
             .Returns(true);
         fileLoader.Setup(mock => mock.WriteAllTextInFileAsync(It.IsAny<string>(), It.IsAny<string>()));
         fileLoader.Setup(mock => mock.ReadAllTextInFileAsync(It.IsAny<string>())).ReturnsAsync(
-            "{\"type\":\"Multipart Form\",\"data\":[{\"key\":\"file\",\"type\":\"file\",\"value\":\"toto.pdf\"},{\"key\":\"someKey\",\"type\":\"text\",\"value\":\"someValue\"}]}");
+            "{\"type\":\"Multipart Form\",\"data\":[{\"key\":\"file\",\"type\":\"file\",\"value\":\"toto.pdf\"},{\"key\":\"settings\",\"type\":\"file\",\"value\":\"toto-settings.json\",\"filename\":\"realname-settings.json\"},{\"key\":\"someKey\",\"type\":\"text\",\"value\":\"someValue\"}]}");
         fileLoader.Setup(mock => mock.EnumerateFiles(It.IsAny<string>(), It.IsAny<string>()))
-            .Returns(new List<string> { "toto.json", "toto.pdf" });
+            .Returns(new List<string> { "toto.json", "toto-settings.json", "toto.pdf" });
         fileLoader.Setup(mock => mock.OpenRead(It.IsAny<string>())).Returns(Mock.Of<Stream>());
         var fileHandler = new Mock<IFileHandler>();
 
@@ -131,7 +132,7 @@ public class ApiCallUnitTest
             mock => mock.WriteAllTextInFileAsync(
                 PathAdapter.AdaptPathForCurrentOs("baseDirectory/ml/raw_ap/outputJsons/toto_pdf.json"),
                 It.IsAny<string>()), Times.Once());
-        fileLoader.Verify(mock => mock.FileExists(It.IsAny<string>()), Times.Exactly(3));
+        fileLoader.Verify(mock => mock.FileExists(It.IsAny<string>()), Times.Exactly(4));
     }
 
     [Fact]

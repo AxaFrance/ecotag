@@ -25,7 +25,9 @@ public record CallApiSetting
     public string Key { get; set; }
     public string Value { get; set; }
     public string Type { get; set; }
+    public string FileName { get; set; }
 }
+
 
 public class TaskApiCall
 {
@@ -110,9 +112,9 @@ public class TaskApiCall
 
                 foreach (var task in tasksToRemove) tasks.Remove(task);
 
-                if (inputTask.StopAfterNumberFiles.HasValue)
-                    if (indexFileFetched == inputTask.StopAfterNumberFiles.Value)
-                        break;
+                if (!inputTask.StopAfterNumberFiles.HasValue) continue;
+                if (indexFileFetched == inputTask.StopAfterNumberFiles.Value)
+                    break;
             }
 
             Task.WaitAll(tasks.ToArray());
@@ -207,6 +209,7 @@ public class TaskApiCall
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (callApiSettings != null && callApiSettings.Data.Count > 0)
                     foreach (var setting in callApiSettings.Data)
+                    {
                         if (setting.Type != "file")
                         {
                             requestContent.Add(new StringContent(setting.Value), setting.Key);
@@ -217,13 +220,15 @@ public class TaskApiCall
                             if (_fileLoader.FileExists(settingFile))
                             {
                                 var streamContent = new StreamContent(_fileLoader.OpenRead(settingFile));
-                                requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(settingFile)}");
+                                var filename = setting.FileName ?? Path.GetFileName(settingFile);
+                                requestContent.Add(streamContent, "file", filename);
                             }
                             else
                             {
                                 _logger.LogWarning($"Task Id: {inputTask.Id} - Error : file {settingFile} not found");
                             }
                         }
+                    }
             }
             catch (Exception e)
             {
