@@ -1,0 +1,17 @@
+{
+  "header": {
+    "title": "An eco-system that aims to be eco-friendly",
+    "errors": {
+      "not_connected": "Not connected"
+    }
+  },
+  "home": {
+    "title": "Home",
+    "projects": "Projects",
+    "datasets": "Datasets",
+    "groups": "Groups",
+    "errors": {
+      "no_roles": "No role is associated to your profile."
+    }
+  }
+}

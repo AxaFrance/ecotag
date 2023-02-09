@@ -1,0 +1,17 @@
+{
+  "header": {
+    "title": "Un écosystème qui vise à être écologique",
+    "errors": {
+      "not_connected": "Non connecté"
+    }
+  },
+  "home": {
+    "title": "Accueil",
+    "projects": "Projets",
+    "datasets": "Datasets",
+    "groups": "Groupes",
+    "errors": {
+      "no_roles": "Aucun rôle n'est attribué à votre profil."
+    }
+  }
+}

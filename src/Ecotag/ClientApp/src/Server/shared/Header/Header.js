@@ -2,6 +2,7 @@ import React from 'react';
 import {Header, Name, User} from '@axa-fr/react-toolkit-all';
 import logo from '@axa-fr/react-toolkit-core/dist/assets/logo-axa.svg';
 import withAuthentication from '../../withAuthentication';
+import i18next from "i18next";
 import './Header.scss';
 
 const formatRoles = (roles) => {
@@ -16,9 +17,9 @@ const formatRoles = (roles) => {
     );
 }
 
-export const AppHeader = ({user: {title = 'Ecotag', link = null, name = 'Non Connecté', roles = ['NOT_FOUND']}}) => (
+export const AppHeader = ({user: {title = 'Ecotag', link = null, name = i18next.t('header.errors.not_connected'), roles = ['NOT_FOUND']}}) => (
     <Header>
-        <Name title={title} subtitle="An eco-system that aim to be eco for the planet" img={logo} alt={title}/>
+        <Name title={title} subtitle={i18next.t('header.title')} img={logo} alt={title}/>
         <User name={name} href={link} profile={formatRoles(roles)}/>
     </Header>
 );
