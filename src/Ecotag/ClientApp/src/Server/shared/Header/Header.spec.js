@@ -1,16 +1,23 @@
-﻿import React from "react";
+﻿import React from 'react';
 import '@testing-library/jest-dom';
 import {render} from '@testing-library/react';
-import {AppHeader} from "./Header";
+import {AppHeader} from './Header';
+import '../../../i18n';
+import i18next from 'i18next';
 
 describe('Header', () => {
-    test('Render header page', async () => {
+    const user = {
+        roles: ["youhou", "youhou"],
+        name: 'Guillaume Chervet'
+    };
 
-        const user = {
-            roles: ["youhou", "youhou"],
-            name: 'Guillaume Chervet'
-        }
-        const {asFragment, container} = render(<AppHeader user={user}/>);
+    it('Renders header page in english', async () => {
+        const {asFragment} = render(<AppHeader user={user}/>);
+        expect(asFragment()).toMatchSnapshot();
+    });
+    it('Renders header page in french', () => {
+        i18next.changeLanguage('fr');
+        const {asFragment} = render(<AppHeader user={user}/>);
         expect(asFragment()).toMatchSnapshot();
     });
 });

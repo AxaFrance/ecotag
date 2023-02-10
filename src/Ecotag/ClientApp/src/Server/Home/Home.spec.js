@@ -1,11 +1,12 @@
-﻿import React from "react";
+﻿import React from 'react';
 import '@testing-library/jest-dom';
 import {render, waitFor} from '@testing-library/react';
-import {Home} from "./Home";
-import {BrowserRouter as Router} from "react-router-dom";
-import {Administateur, Annotateur, DataScientist} from "../withAuthentication";
-import {OidcUserStatus} from "@axa-fr/react-oidc";
-
+import {Home} from './Home';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {Administateur, Annotateur, DataScientist} from '../withAuthentication';
+import {OidcUserStatus} from '@axa-fr/react-oidc';
+import '../../i18n';
+import i18next from 'i18next';
 
 describe.each([
     [`${DataScientist},${Annotateur}`],
@@ -13,7 +14,7 @@ describe.each([
     [`${DataScientist},${Annotateur},${Administateur}`],
     [""]
 ])('Home %p', (roles) => {
-    test('Render home page', async () => {
+    test('Render home page with correct buttons depending on user roles', async () => {
         const user = {
             roles: roles ? roles.split(",") : [],
             name: 'Guillaume Chervet'
@@ -32,6 +33,23 @@ describe.each([
         }
 
 
+        expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe('Home translation', () => {
+    const user = {
+        roles: [DataScientist,Annotateur,Administateur],
+        name: 'Guillaume Chervet'
+    };
+
+    it('Renders component with english translation', () => {
+        const {asFragment} = render(<Router basename="/"><Home user={user} userLoadingState={OidcUserStatus.Loaded}/></Router>);
+        expect(asFragment()).toMatchSnapshot();
+    });
+    it('Renders component with french translation', () => {
+        i18next.changeLanguage('fr');
+        const {asFragment} = render(<Router basename="/"><Home user={user} userLoadingState={OidcUserStatus.Loaded}/></Router>);
         expect(asFragment()).toMatchSnapshot();
     });
 });

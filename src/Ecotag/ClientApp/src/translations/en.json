@@ -5,6 +5,12 @@
       "not_connected": "Not connected"
     }
   },
+  "not_found": {
+    "title": "404 Page Not Found",
+    "not": "not",
+    "found": "found",
+    "message": "The page you are looking for is not here !"
+  },
   "home": {
     "title": "Home",
     "projects": "Projects",

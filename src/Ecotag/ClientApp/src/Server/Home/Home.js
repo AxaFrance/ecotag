@@ -1,10 +1,10 @@
-﻿import React from "react";
+﻿import React from 'react';
 import Title from "../../TitleBar";
 import {Link} from 'react-router-dom';
 import './Home.scss';
-import withAuthentication, {Administateur, Annotateur, DataScientist} from "../withAuthentication";
-import {OidcUserStatus} from "@axa-fr/react-oidc";
-import {useTranslation} from "react-i18next";
+import withAuthentication, {Administateur, Annotateur, DataScientist} from '../withAuthentication';
+import {OidcUserStatus} from '@axa-fr/react-oidc';
+import {useTranslation} from 'react-i18next';
 
 export const Home = ({user: {roles = []}, userLoadingState}) => {
     const {t} = useTranslation();
