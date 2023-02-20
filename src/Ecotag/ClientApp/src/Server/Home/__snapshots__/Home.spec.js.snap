@@ -159,7 +159,7 @@ exports[`Home "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR,ECOTAG_ADMINISTRATEUR" Re
         <div
           class="home__link-container home__link-container--groups"
         >
-          Groups
+          Teams
         </div>
       </a>
     </div>
@@ -215,7 +215,7 @@ exports[`Home translation Renders component with english translation 1`] = `
         <div
           class="home__link-container home__link-container--groups"
         >
-          Groups
+          Teams
         </div>
       </a>
     </div>
@@ -271,7 +271,7 @@ exports[`Home translation Renders component with french translation 1`] = `
         <div
           class="home__link-container home__link-container--groups"
         >
-          Groupes
+          Équipes
         </div>
       </a>
     </div>

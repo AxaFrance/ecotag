@@ -15,7 +15,7 @@
     "title": "Home",
     "projects": "Projects",
     "datasets": "Datasets",
-    "groups": "Groups",
+    "groups": "Teams",
     "errors": {
       "no_roles": "No role is associated to your profile."
     }
