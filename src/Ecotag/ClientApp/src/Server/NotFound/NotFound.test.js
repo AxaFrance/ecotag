@@ -2,8 +2,7 @@ import React from 'react';
 import NotFound from './NotFound.component';
 import {render} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
-import '../../i18n';
-import i18next from 'i18next';
+import {changeProjectTranslationLanguage} from "../../translations/useProjectTranslation";
 
 describe('NotFound', () => {
     it('Renders NotFound page component with correct english translation', () => {
@@ -11,7 +10,7 @@ describe('NotFound', () => {
         expect(asFragment()).toMatchSnapshot();
     });
     it('Renders NotFound page component with correct french translation', () => {
-        i18next.changeLanguage('fr');
+        changeProjectTranslationLanguage('fr');
         const {asFragment} = render(<BrowserRouter><NotFound/></BrowserRouter>);
         expect(asFragment()).toMatchSnapshot();
     });

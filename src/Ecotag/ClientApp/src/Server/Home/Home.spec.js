@@ -5,8 +5,7 @@ import {Home} from './Home';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Administateur, Annotateur, DataScientist} from '../withAuthentication';
 import {OidcUserStatus} from '@axa-fr/react-oidc';
-import '../../i18n';
-import i18next from 'i18next';
+import {changeProjectTranslationLanguage} from "../../translations/useProjectTranslation";
 
 describe.each([
     [`${DataScientist},${Annotateur}`],
@@ -48,7 +47,7 @@ describe('Home translation', () => {
         expect(asFragment()).toMatchSnapshot();
     });
     it('Renders component with french translation', () => {
-        i18next.changeLanguage('fr');
+        changeProjectTranslationLanguage('fr');
         const {asFragment} = render(<Router basename="/"><Home user={user} userLoadingState={OidcUserStatus.Loaded}/></Router>);
         expect(asFragment()).toMatchSnapshot();
     });
