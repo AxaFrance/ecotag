@@ -24,7 +24,7 @@ describe('Home.hook for groups', () => {
     const GROUPS_ROUTE = "groups";
     const givenGroups = [{
         "id": "0001",
-        "name": "developpeurs",
+        "name": "developers",
         "users": [
             {"email": "clement.trofleau.lbc@axa.fr"},
             {"email": "gilles.cruchon@axa.fr"},

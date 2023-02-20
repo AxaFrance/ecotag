@@ -3,6 +3,7 @@ import Table, {Paging} from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import Edit from "./Edit";
 import './ItemsTable.scss';
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 const computeUsersList = users => {
     if (users.length === 0) {
@@ -13,12 +14,13 @@ const computeUsersList = users => {
 
 const UserRow = ({id, name, users, eligibleUsers, onUpdateUser}) => {
     const [isManageUsersModalVisible, setManageUsersModalVisible] = useState(false);
+    const {translate} = useProjectTranslation();
     return (
         <Table.Tr key={id}>
             <Table.Td>{name}</Table.Td>
             <Table.Td>{computeUsersList(users)}</Table.Td>
             <Table.Td class="af-table__cell af-table__small">
-                <Action id="editActionId" icon="pencil" title="Modifier"
+                <Action id="editActionId" icon="pencil" title={translate('group.list.edit')}
                         onClick={() => setManageUsersModalVisible(true)}/>
                 <Edit
                     idGroup={id}
@@ -34,19 +36,21 @@ const UserRow = ({id, name, users, eligibleUsers, onUpdateUser}) => {
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onUpdateUser}) => {
+    const {translate} = useProjectTranslation();
+
     return (
         <>
             <Table>
                 <Table.Header>
                     <Table.Tr>
                         <Table.Th>
-                            <span className="af-table__th-content">Nom</span>
+                            <span className="af-table__th-content">{translate('group.list.header.name')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Utilisateurs</span>
+                            <span className="af-table__th-content">{translate('group.list.header.users')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Actions</span>
+                            <span className="af-table__th-content">{translate('group.list.header.actions')}</span>
                         </Table.Th>
                     </Table.Tr>
                 </Table.Header>
@@ -69,6 +73,10 @@ const ItemsTable = ({items, filters, onChangePaging, onUpdateUser}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
+                displayLabel={translate('paging.display')}
+                elementsLabel={translate('paging.elements')}
+                previousLabel={translate('paging.previous')}
+                nextLabel={translate('paging.next')}
             />
         </>
     )
