@@ -14,6 +14,7 @@ describe.each([
     [""]
 ])('Home %p', (roles) => {
     test('Render home page with correct buttons depending on user roles', async () => {
+        changeProjectTranslationLanguage('en');
         const user = {
             roles: roles ? roles.split(",") : [],
             name: 'Guillaume Chervet'
@@ -31,7 +32,6 @@ describe.each([
             await waitFor(() => expect(container.querySelector('.home__link-container--groups')).not.toBeNull());
         }
 
-
         expect(asFragment()).toMatchSnapshot();
     });
 });
@@ -43,6 +43,7 @@ describe('Home translation', () => {
     };
 
     it('Renders component with english translation', () => {
+        changeProjectTranslationLanguage('en');
         const {asFragment} = render(<Router basename="/"><Home user={user} userLoadingState={OidcUserStatus.Loaded}/></Router>);
         expect(asFragment()).toMatchSnapshot();
     });

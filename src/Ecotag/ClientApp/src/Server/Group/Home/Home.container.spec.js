@@ -31,6 +31,7 @@ describe('Home.container for groups', () => {
     };
 
     it('HomeContainer render correctly the groups', async () => {
+        changeProjectTranslationLanguage('en');
         const {container, asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer
             fetch={givenFetch}/></BrowserRouter>);
         const messageEl = await waitFor(() => getByText('developers'));
@@ -49,6 +50,7 @@ describe('Home.container for groups', () => {
     });
     describe('Home.container translation', () => {
         it('should render groups correctly with english translation', async () => {
+            changeProjectTranslationLanguage('en');
             const {asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer
                 fetch={givenFetch}/></BrowserRouter>);
             const messageEl = await waitFor(() => getByText('developers'));
