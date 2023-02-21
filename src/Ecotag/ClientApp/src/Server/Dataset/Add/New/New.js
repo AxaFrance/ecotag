@@ -2,12 +2,13 @@ import React from 'react';
 import Title from '../../../../TitleBar';
 import Stepper from '../../../shared/Stepper';
 import {Button, MultiSelectInput, SelectInput, TextInput} from '@axa-fr/react-toolkit-all';
-import {CheckboxInput, CheckboxModes} from "@axa-fr/react-toolkit-form-input-checkbox";
+import {CheckboxInput, CheckboxModes} from '@axa-fr/react-toolkit-form-input-checkbox';
 import HelpButton from '@axa-fr/react-toolkit-help';
 import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
 import {CLASSIFICATION, DATASETS_IMPORT, GROUP, IMPORTED_DATASET_NAME, NAME, TYPE} from './constants';
+import useProjectTranslation from '../../../../translations/useProjectTranslation';
 
 const groupsAsOptions = (groups) => groups && groups.length > 0 ? groups.map(group => ({
     label: group.name,
@@ -19,140 +20,144 @@ const datasetsAsOptions = (datasets) => datasets && datasets.length > 0 ? datase
     value: dataset
 })) : [];
 
-const datasetsImportOptions = [
-    {
-        key: "checkbox_areDatasetsImported",
-        id: "are_datasets_imported_checkbox",
-        value: "datasetsValue",
-        label: "Importer depuis un blob :",
-        disabled: false
-    }
-];
+const New = ({fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets}) => {
+    const {translate} = useProjectTranslation();
 
-const New = ({fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets}) => (
-    <>
-        <Title title=" Nouveau dataset" goTo="/datasets" goTitle="Datasets"/>
-        <Stepper title="Nouveau dataset" link="/datasets/new"/>
-        <div className="af-form">
-            <form className="container" name="newDataset">
-                <h1 className="af-title--content">Nouveau dataset</h1>
-                <article className="af-panel">
-                    <section className="af-panel__content af-panel__content--new-dataset">
-                        <TextInput
-                            label="Nom"
-                            name={NAME}
-                            id={NAME}
-                            onChange={onChange}
-                            helpMessage="Ex: cni-dataset"
-                            forceDisplayMessage={hasSubmit}
-                            messageType="error"
-                            {...fields[NAME]}
-                        />
-                        <MultiSelectInput
-                            label="Equipe"
-                            name={GROUP}
-                            id={GROUP}
-                            onChange={onChange}
-                            options={groupsAsOptions(groups)}
-                            forceDisplayMessage={hasSubmit}
-                            messageType="error"
-                            {...fields[GROUP]}/>
-                        <SelectInput
-                            label="Type"
-                            name={TYPE}
-                            id={TYPE}
-                            helpMessage="Ex : Image, Text"
-                            onChange={onChange}
-                            options={[
-                                {value: 'Image', label: 'Images (.jpg, .png, jpeg)'},
-                                {value: 'Document', label: 'Documents (.txt, .eml, .tiff, .pdf, .doc, etc.)'},
-                                {value: 'Text', label: 'Text (.txt)'},
-                                {value: 'Eml', label: 'Mail (.eml)'},
-                            ]}
-                            forceDisplayMessage={hasSubmit}
-                            messageType="error"
-                            {...fields[TYPE]}
-                        >
-                            <HelpButton mode="click" classModifier="classifications">
-                                <h2>Informations sur les criticités</h2>
-                                <ul>
-                                    <li>
-                                        <span> <b>Images</b> : .jpg, .png, jpeg</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Documents</b>: .txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Text</b>: .txt</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Eml</b>: .eml</span>
-                                    </li>
-                                </ul>
-                            </HelpButton>
-                        </SelectInput>
-                        <SelectInput
-                            label="Classification"
-                            name={CLASSIFICATION}
-                            id={CLASSIFICATION}
-                            helpMessage="Ex : Critique"
-                            onChange={onChange}
-                            options={[
-                                {value: 'Public', label: 'Publique'},
-                                {value: 'Internal', label: 'Interne'},
-                                {value: 'Confidential', label: 'Confidentiel'},
-                                {value: 'Critical', label: 'Critique'},
-                            ]}
-                            forceDisplayMessage={hasSubmit}
-                            messageType="error"
-                            {...fields[CLASSIFICATION]}>
-                            <HelpButton mode="click" classModifier="classifications">
-                                <h2>Informations sur les criticités</h2>
-                                <ul>
-                                    <li>
-                                        <span> <b>Public</b> : Une information créée délibérément pour le public, ou spécifiquement conçue pour diffusion dans le public</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Interne</b>: Une information accessible à l'ensemble ou à une large partie des salariés qui n'est pas destinée à des personnes extérieures</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Confidentiel</b>: Une information dont l'accès est limité à un auditoire spécifique</span>
-                                    </li>
-                                    <li>
-                                        <span><b>Critique</b>: Veillez contacter votre manager.</span>
-                                    </li>
-                                </ul>
-                            </HelpButton>
-                        </SelectInput>
-                        <CheckboxInput
-                            name={DATASETS_IMPORT}
-                            id={DATASETS_IMPORT}
-                            mode={CheckboxModes.toggle}
-                            label="Importer depuis un blob : "
-                            onChange={onChange}
-                            options={datasetsImportOptions}
-                            {...fields[DATASETS_IMPORT]}
-                        />
-                        <SelectInput
-                            label="Dataset à importer : "
-                            name={IMPORTED_DATASET_NAME}
-                            id={IMPORTED_DATASET_NAME}
-                            onChange={onChange}
-                            forceDisplayMessage={hasSubmit}
-                            messageType="error"
-                            options={datasetsAsOptions(optionsDatasets)}
-                            forceDisplayPlaceholder={true}
-                            {...fields[IMPORTED_DATASET_NAME]}
-                        />
-                    </section>
-                </article>
-                <Button classModifier="hasiconRight confirm" id="myForm" onClick={onSubmit}>
-                    <span className="af-btn-text">Valider</span>
-                    <i className="glyphicon glyphicon-arrowthin-right"/>
-                </Button>
-            </form>
-        </div>
-    </>
-);
+    const datasetsImportOptions = [
+        {
+            key: "checkbox_areDatasetsImported",
+            id: "are_datasets_imported_checkbox",
+            value: "datasetsValue",
+            label: translate('dataset.new.import_input.label'),
+            disabled: false
+        }
+    ];
+
+    return (
+        <>
+            <Title title={translate('dataset.new.title')} goTo="/datasets" goTitle="Datasets"/>
+            <Stepper title={translate('dataset.new.stepper.title')} link="/datasets/new"/>
+            <div className="af-form">
+                <form className="container" name="newDataset">
+                    <h1 className="af-title--content">{translate('dataset.new.form_title')}</h1>
+                    <article className="af-panel">
+                        <section className="af-panel__content af-panel__content--new-dataset">
+                            <TextInput
+                                label={translate('dataset.new.name_input.label')}
+                                name={NAME}
+                                id={NAME}
+                                onChange={onChange}
+                                helpMessage={translate('dataset.new.name_input.help_message')}
+                                forceDisplayMessage={hasSubmit}
+                                messageType="error"
+                                {...fields[NAME]}
+                            />
+                            <MultiSelectInput
+                                label={translate('dataset.new.team_input.label')}
+                                name={GROUP}
+                                id={GROUP}
+                                onChange={onChange}
+                                options={groupsAsOptions(groups)}
+                                forceDisplayMessage={hasSubmit}
+                                messageType="error"
+                                {...fields[GROUP]}/>
+                            <SelectInput
+                                label={translate('dataset.new.type_import.label')}
+                                name={TYPE}
+                                id={TYPE}
+                                helpMessage={translate('dataset.new.type_import.help_message')}
+                                onChange={onChange}
+                                options={[
+                                    {value: 'Image', label: translate('dataset.new.type_import.options_labels.image')},
+                                    {value: 'Document', label: translate('dataset.new.type_import.options_labels.document')},
+                                    {value: 'Text', label: translate('dataset.new.type_import.options_labels.text')},
+                                    {value: 'Eml', label: translate('dataset.new.type_import.options_labels.eml')},
+                                ]}
+                                forceDisplayMessage={hasSubmit}
+                                messageType="error"
+                                {...fields[TYPE]}
+                            >
+                                <HelpButton mode="click" classModifier="classifications">
+                                    <h2>{translate('dataset.new.type_input.help.title')}</h2>
+                                    <ul>
+                                        <li>
+                                            <span> <b>{translate('dataset.new.type_input.help.images.name')}</b>{translate('dataset.new.type_input.help.images.types')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.type_input.help.documents.name')}</b>{translate('dataset.new.type_input.help.documents.types')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.type_input.help.text.name')}</b>{translate('dataset.new.type_input.help.text.types')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.type_input.help.eml.name')}</b>{translate('dataset.new.type_input.help.eml.types')}</span>
+                                        </li>
+                                    </ul>
+                                </HelpButton>
+                            </SelectInput>
+                            <SelectInput
+                                label={translate('dataset.new.classification_input.label')}
+                                name={CLASSIFICATION}
+                                id={CLASSIFICATION}
+                                helpMessage={translate('dataset.new.classification_input.help_message')}
+                                onChange={onChange}
+                                options={[
+                                    {value: 'Public', label: translate('dataset.new.classification_input.options.public.label')},
+                                    {value: 'Internal', label: translate('dataset.new.classification_input.options.internal.label')},
+                                    {value: 'Confidential', label: translate('dataset.new.classification_input.options.confidential.label')},
+                                    {value: 'Critical', label: translate('dataset.new.classification_input.options.critical.label')},
+                                ]}
+                                forceDisplayMessage={hasSubmit}
+                                messageType="error"
+                                {...fields[CLASSIFICATION]}>
+                                <HelpButton mode="click" classModifier="classifications">
+                                    <h2>{translate('dataset.new.classification_input.help.title')}</h2>
+                                    <ul>
+                                        <li>
+                                            <span> <b>{translate('dataset.new.classification_input.help.public.name')}</b>{translate('dataset.new.classification_input.help.public.detail')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.classification_input.help.internal.name')}</b>{translate('dataset.new.classification_input.help.internal.detail')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.classification_input.help.confidential.name')}</b>{translate('dataset.new.classification_input.help.confidential.detail')}</span>
+                                        </li>
+                                        <li>
+                                            <span><b>{translate('dataset.new.classification_input.help.critical.name')}</b>{translate('dataset.new.classification_input.help.critical.detail')}</span>
+                                        </li>
+                                    </ul>
+                                </HelpButton>
+                            </SelectInput>
+                            <CheckboxInput
+                                name={DATASETS_IMPORT}
+                                id={DATASETS_IMPORT}
+                                mode={CheckboxModes.toggle}
+                                label={translate('dataset.new.import_input.label')}
+                                onChange={onChange}
+                                options={datasetsImportOptions}
+                                {...fields[DATASETS_IMPORT]}
+                            />
+                            <SelectInput
+                                label={translate('dataset.new.dataset_to_import.label')}
+                                name={IMPORTED_DATASET_NAME}
+                                id={IMPORTED_DATASET_NAME}
+                                onChange={onChange}
+                                forceDisplayMessage={hasSubmit}
+                                messageType="error"
+                                options={datasetsAsOptions(optionsDatasets)}
+                                forceDisplayPlaceholder={true}
+                                {...fields[IMPORTED_DATASET_NAME]}
+                            />
+                        </section>
+                    </article>
+                    <Button classModifier="hasiconRight confirm" id="myForm" onClick={onSubmit}>
+                        <span className="af-btn-text">{translate('dataset.new.validate')}</span>
+                        <i className="glyphicon glyphicon-arrowthin-right"/>
+                    </Button>
+                </form>
+            </div>
+        </>
+    );
+}
 
 export default New;

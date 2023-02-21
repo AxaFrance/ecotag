@@ -57,7 +57,7 @@ describe('Home.container for groups', () => {
             );
             expect(asFragment()).toMatchSnapshot();
         });
-    })
+    });
     it('should render groups correctly with french translation', async () => {
         changeProjectTranslationLanguage('fr');
         const {asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer

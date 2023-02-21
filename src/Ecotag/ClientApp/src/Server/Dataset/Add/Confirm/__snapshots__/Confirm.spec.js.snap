@@ -1,6 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Confirm Should render correctly 1`] = `
+exports[`Confirm Should render correctly in english 1`] = `
+<DocumentFragment>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/datasets"
+        title="Datasets"
+      >
+        <i
+          class="glyphicon glyphicon-arrowthin-left"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Confirmation
+      </h1>
+    </div>
+  </div>
+  <div
+    class="af-steps-new af-steps-new--devis"
+  >
+    <ol
+      class="af-steps-list"
+    >
+      <li
+        class="past af-steps-list-step number"
+        title="New dataset"
+      >
+        <a
+          class="af-steps-list-stepLabel"
+          href="/datasets/new"
+        >
+          <div
+            class="af-steps-list-stepNumber"
+          >
+            1
+          </div>
+          <div
+            class="af-steps-list-stepTitle"
+          >
+            New dataset
+          </div>
+        </a>
+      </li>
+      <li
+        class="af-steps-list-step af-steps-list-step--success"
+        title="Confirmation"
+      >
+        <div
+          class="af-steps-list-stepLabel"
+        >
+          <span
+            class="af-steps-list-stepTitle"
+          >
+            Confirm
+          </span>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <div
+    class="af-confirm"
+  >
+    <span
+      class="glyphicon glyphicon--ring glyphicon-ok"
+    />
+    <h2
+      class="af-confirm__message"
+    >
+      New dataset added !
+    </h2>
+    <h4
+      class="af-confirm__message"
+    >
+      If you have imported a dataset, the process of adding files can take a while.
+    </h4>
+    <button
+      class="btn af-btn af-btn--success af-btn--hasiconLeft"
+      id="return_datatset"
+      name="return_datatset"
+    >
+      <span
+        class="af-btn-text"
+      >
+        Go back to datasets list
+      </span>
+      <span
+        class="icons-list__item-icon glyphicon glyphicon-list-alt"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Confirm should render correctly in french 1`] = `
 <DocumentFragment>
   <div
     class="af-title-bar af-title-bar--backhome"

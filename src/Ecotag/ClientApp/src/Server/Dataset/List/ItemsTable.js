@@ -5,6 +5,7 @@ import Action from "@axa-fr/react-toolkit-action";
 import {useHistory} from "react-router-dom";
 import {formatTimestampToString} from "../../date";
 import {Locked} from "../Dataset.service";
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 const getIconClassname = (locked) => {
     switch (locked) {
@@ -33,27 +34,27 @@ const getIcon = (locked) => {
     }
 }
 
-const getTitle = (locked) => {
-    switch (locked) {
-        case Locked.Locked:
-            return 'vérouillée';
-        case Locked.LockedAndWorkInProgress:
-            return 'vérouillée et travail en cours';
-        case Locked.Pending:
-            return 'en cours';
-        case Locked.None:
-            return 'dévérouillée';
-
-    }
-}
-
 const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
 
     const history = useHistory();
+    const {translate} = useProjectTranslation();
 
     const editDatasetButton = id => {
         const path = `datasets/${id}`
         history.push(path);
+    };
+
+    const getTitle = (locked) => {
+        switch (locked) {
+            case Locked.Locked:
+                return translate('dataset.list.actions_titles.locked');
+            case Locked.LockedAndWorkInProgress:
+                return translate('dataset.list.actions_titles.locked_and_work_in_progress');
+            case Locked.Pending:
+                return translate('dataset.list.actions_titles.pending');
+            case Locked.None:
+                return translate('dataset.list.actions_titles.none');
+        }
     };
 
     return (
@@ -62,27 +63,27 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                 <Table.Header>
                     <Table.Tr>
                         <Table.Th>
-                            <span className="af-table__th-content">Verrouillage</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.lock')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Nom</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.name')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Equipe</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.team')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Classification</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.classification')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Nombre de fichiers</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.nb_files')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Type</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.type')}</span>
                         </Table.Th>
                         <Table.Th>
-                            <span className="af-table__th-content">Date création</span>
+                            <span className="af-table__th-content">{translate('dataset.list.header.creation_date')}</span>
                         </Table.Th>
-                        <Table.Th><span className="af-table__th-content">Action</span></Table.Th>
+                        <Table.Th><span className="af-table__th-content">{translate('dataset.list.header.action')}</span></Table.Th>
                     </Table.Tr>
                 </Table.Header>
                 <Table.Body>
@@ -103,7 +104,7 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                                 <Table.Td>{type}</Table.Td>
                                 <Table.Td>{formatTimestampToString(createDate)}</Table.Td>
                                 <Table.Td>
-                                    <Action id="id" icon="edit" title="Editer" onClick={() => {
+                                    <Action id="id" icon="edit" title={translate('dataset.list.edit')} onClick={() => {
                                         editDatasetButton(id)
                                     }}/>
                                 </Table.Td>
@@ -118,6 +119,10 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
+                displayLabel={translate('paging.display')}
+                elementsLabel={translate('paging.elements')}
+                previousLabel={translate('paging.previous')}
+                nextLabel={translate('paging.next')}
             />
         </Loader>
 

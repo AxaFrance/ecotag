@@ -15,6 +15,7 @@ import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 import {formatTimestampToString} from "../../date";
 import {resilienceStatus} from "../../shared/Resilience";
 import {Locked} from "../Dataset.service";
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 const bytesToSize = (bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -24,6 +25,8 @@ const bytesToSize = (bytes) => {
 }
 
 const FileList = ({state, setState, fetch}) => {
+
+    const {translate} = useProjectTranslation();
 
     const deleteFile = async file => {
         setState({...state, status: resilienceStatus.POST});
@@ -92,37 +95,52 @@ const FileList = ({state, setState, fetch}) => {
         <div className="edit-dataset__file-list-container">
             <Tabs classModifier="container" onChange={() => {
             }}>
-                <Tabs.Tab title="Information générales">
+                <Tabs.Tab title={translate('dataset.edit.files_list.global_info_tab.title')}>
                     <ArticleRestitution>
                         <SectionRestitution>
                             <SectionRestitutionRow title="">
                                 <SectionRestitutionColumn>
-                                    <Restitution label="Nom" value={state.dataset.name}/>
-                                    <Restitution label="Date de création"
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.name')}
+                                                 value={state.dataset.name}/>
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.creation_date')}
                                                  value={formatTimestampToString(state.dataset.createDate)}/>
-                                    <Restitution label="Type" value={state.dataset.type}/>
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.type')}
+                                                 value={state.dataset.type}/>
                                 </SectionRestitutionColumn>
                                 <SectionRestitutionColumn>
-                                    <Restitution label="Nombre de fichiers" value={state.files.filesSend.length}/>
-                                    <Restitution label="Poids total des fichiers" value={bytesToSize(fileSizeTotal)}/>
-                                    <Restitution label="Poids moyen des fichiers" value={bytesToSize(fileSizeAverage)}/>
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.nb_files')}
+                                                 value={state.files.filesSend.length}/>
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.files_total_size')}
+                                                 value={bytesToSize(fileSizeTotal)}/>
+                                    <Restitution label={translate('dataset.edit.files_list.global_info_tab.files_mean_size')}
+                                                 value={bytesToSize(fileSizeAverage)}/>
                                 </SectionRestitutionColumn>
                             </SectionRestitutionRow>
                         </SectionRestitution>
                     </ArticleRestitution>
                 </Tabs.Tab>
-                <Tabs.Tab title="Liste des fichiers">
+                <Tabs.Tab title={translate('dataset.edit.files_list.files_list_tab.title')}>
                     <Table>
                         <Table.Header>
                             <Table.Tr>
                                 <Table.Th>
-                                    <span className="af-table__th-content">Nom</span>
+                                    <span className="af-table__th-content">
+                                        {translate('dataset.edit.files_list.files_list_tab.name')}
+                                    </span>
                                 </Table.Th>
                                 <Table.Th>
-                                    <span className="af-table__th-content ">Type</span>
+                                    <span className="af-table__th-content ">
+                                        {translate('dataset.edit.files_list.files_list_tab.type')}
+                                    </span>
                                 </Table.Th>
-                                <Table.Th>Size</Table.Th>
-                                {state.dataset.locked !== Locked.None ? null : <Table.Th>Action</Table.Th>}
+                                <Table.Th>
+                                    {translate('dataset.edit.files_list.files_list_tab.size')}
+                                </Table.Th>
+                                {state.dataset.locked !== Locked.None ?
+                                    null :
+                                    <Table.Th>
+                                        {translate('dataset.edit.files_list.files_list_tab.action')}
+                                    </Table.Th>}
                             </Table.Tr>
                         </Table.Header>
                         <Table.Body>
@@ -137,7 +155,7 @@ const FileList = ({state, setState, fetch}) => {
                                     {state.dataset.locked !== Locked.None ? null : <Table.Td> <Action
                                         id="deleteButton"
                                         icon="trash"
-                                        title="Supprimer"
+                                        title={translate('dataset.edit.files_list.files_list_tab.delete_action')}
                                         onClick={() => deleteFile(file)}
                                     /></Table.Td>}
                                 </Table.Tr>
@@ -150,6 +168,10 @@ const FileList = ({state, setState, fetch}) => {
                         numberPages={numberPages}
                         currentPage={currentPages}
                         id="home_paging"
+                        displayLabel={translate('paging.display')}
+                        elementsLabel={translate('paging.elements')}
+                        previousLabel={translate('paging.previous')}
+                        nextLabel={translate('paging.next')}
                     />
                 </Tabs.Tab>
             </Tabs>

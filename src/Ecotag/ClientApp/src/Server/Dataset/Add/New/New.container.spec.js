@@ -1,9 +1,9 @@
 ﻿import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import {render, waitFor} from '@testing-library/react';
-import {BrowserRouter as Router} from "react-router-dom";
-import {NewContainer, preInitState, reducer} from "./New.container";
-import {resilienceStatus} from "../../../shared/Resilience";
+import {BrowserRouter as Router} from 'react-router-dom';
+import {NewContainer, preInitState, reducer} from './New.container';
+import {resilienceStatus} from '../../../shared/Resilience';
 import {
     DATASETS_IMPORT,
     GROUP,
@@ -12,7 +12,8 @@ import {
     MSG_REQUIRED,
     NAME,
     TYPE
-} from "./constants";
+} from './constants';
+import {changeProjectTranslationLanguage} from '../../../../translations/useProjectTranslation';
 
 const fetch = () => {
     return {
@@ -22,15 +23,30 @@ const fetch = () => {
 };
 
 describe('New.container', () => {
-    it('NewContainer render correctly', async () => {
-        const environment = {datasets: {isBlobTransferActive: true}};
-        const {container, getAllByText} = render(<Router><NewContainer fetch={fetch}
-                                                                       environment={environment}/></Router>);
-        await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
-        await waitFor(() => getAllByText(/Nouveau dataset/i));
+
+    describe('translation', () => {
+        const renderComponentAndCheckSnapshot = async (expectedText) => {
+            const regex = new RegExp(expectedText, 'i');
+            const environment = {datasets: {isBlobTransferActive: true}};
+            const {container, getAllByText} = render(<Router><NewContainer fetch={fetch}
+                                                                           environment={environment}/></Router>);
+            await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
+            await waitFor(() => getAllByText(regex));
+        };
+
+        it('should render correctly in english', async () => {
+            changeProjectTranslationLanguage('en');
+            await renderComponentAndCheckSnapshot();
+        });
+        it('should render correctly in french', async () => {
+            changeProjectTranslationLanguage('fr');
+            await renderComponentAndCheckSnapshot();
+        });
     });
 
     describe('New.reducer', () => {
+        beforeAll(() => changeProjectTranslationLanguage('en'));
+
         it('Should set the new fields with asked values when calling OnChange action', () => {
             const givenState = {...preInitState};
             const givenAction = {

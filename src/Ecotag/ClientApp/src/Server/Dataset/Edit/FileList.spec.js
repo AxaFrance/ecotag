@@ -1,7 +1,8 @@
 ﻿import {fireEvent, render, waitFor} from '@testing-library/react';
-import FileList from "./FileList";
-import {Locked} from "../Dataset.service";
-import {resilienceStatus} from "../../shared/Resilience";
+import FileList from './FileList';
+import {Locked} from '../Dataset.service';
+import {resilienceStatus} from '../../shared/Resilience';
+import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
 
 describe('FileList', () => {
     const givenState = {
@@ -21,19 +22,32 @@ describe('FileList', () => {
             locked: Locked.None
         }
     };
-    it('should render correctly', async () => {
-        const {asFragment, getByText} = render(<FileList fetch={() => {
-        }} state={givenState} setState={() => {
-        }}/>);
+
+    const renderComponentThenNavigateAndCheckSnapshots = async (language, expectedText) => {
+        changeProjectTranslationLanguage(language);
+        const {asFragment, getByText} = render(<FileList
+            fetch={() => {}}
+            state={givenState}
+            setState={() => {}}/>);
+
         expect(asFragment()).toMatchSnapshot();
-        const tabButton = getByText(/Liste des fichiers/i);
+        const regex = new RegExp(expectedText, "i");
+        const tabButton = getByText(regex);
         fireEvent.click(tabButton);
         await waitFor(() => expect(getByText(/testFile.png/i)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
+    };
 
+    it('should render correctly in english', async () => {
+        await renderComponentThenNavigateAndCheckSnapshots("en", "Files list");
     });
+    it('should render correctly in french', async () => {
+        await renderComponentThenNavigateAndCheckSnapshots("fr", "Liste des fichiers");
+    })
 
     describe('deleteFile', () => {
+
+        beforeAll(() => changeProjectTranslationLanguage('en'));
 
         const testCases = [
             [403, resilienceStatus.FORBIDDEN],
@@ -46,10 +60,10 @@ describe('FileList', () => {
             const givenSetState = jest.fn();
             const {getByText, getByTitle} = render(<FileList fetch={givenFetch} state={givenState}
                                                              setState={givenSetState}/>);
-            const tabButton = getByText(/Liste des fichiers/i);
+            const tabButton = getByText(/Files list/i);
             fireEvent.click(tabButton);
             await waitFor(() => expect(getByText(/testFile.png/i)).not.toBeNull());
-            const deleteButton = getByTitle(/Supprimer/i);
+            const deleteButton = getByTitle(/Delete/i);
             fireEvent.click(deleteButton);
             await waitFor(() => expect(givenSetState).toHaveBeenCalled());
             expect(givenSetState).toHaveBeenCalledWith({
@@ -66,10 +80,10 @@ describe('FileList', () => {
                 const givenSetState = jest.fn();
                 const {getByText, getByTitle} = render(<FileList fetch={givenFetch} state={givenState}
                                                                  setState={givenSetState}/>);
-                const tabButton = getByText(/Liste des fichiers/i);
+                const tabButton = getByText(/Files list/i);
                 fireEvent.click(tabButton);
                 await waitFor(() => expect(getByText(/testFile.png/i)).not.toBeNull());
-                const deleteButton = getByTitle(/Supprimer/i);
+                const deleteButton = getByTitle(/Delete/i);
                 fireEvent.click(deleteButton);
                 await waitFor(() => expect(givenSetState).toHaveBeenCalled());
                 expect(givenSetState).toHaveBeenCalledWith({...givenState, status: expectedStatus});
@@ -78,6 +92,9 @@ describe('FileList', () => {
     });
 
     describe('downloadAsync', () => {
+
+        beforeAll(() => changeProjectTranslationLanguage('en'));
+
         const testCases = [
             [403, resilienceStatus.FORBIDDEN],
             [500, resilienceStatus.ERROR]
@@ -90,7 +107,7 @@ describe('FileList', () => {
                     .mockResolvedValueOnce({status: returnedStatus});
                 const givenSetState = jest.fn();
                 const {getByText} = render(<FileList fetch={givenFetch} state={givenState} setState={givenSetState}/>);
-                const tabButton = getByText(/Liste des fichiers/i);
+                const tabButton = getByText(/Files list/i);
                 fireEvent.click(tabButton);
                 await waitFor(() => expect(getByText(/testFile.png/i)).not.toBeNull());
                 const downloadButton = getByText(/testFile.png/i);

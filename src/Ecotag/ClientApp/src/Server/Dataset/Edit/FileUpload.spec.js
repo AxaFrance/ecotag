@@ -1,5 +1,6 @@
 ﻿import {render} from '@testing-library/react';
 import {FileUpload} from "./FileUpload";
+import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
 
 describe('FileUpload', () => {
 
@@ -23,14 +24,25 @@ describe('FileUpload', () => {
 
     const cases = ["Image", "Text", "Eml"];
     test.each(cases)(
-        "given %p should render correctly",
+        "given %p should render correctly in english",
         (datasetType) => {
+            changeProjectTranslationLanguage('en');
             const newState = {...state, dataset: {...state.dataset, type: datasetType}};
-            const {asFragment} = render(<FileUpload state={newState} setState={() => {
-            }} fetch={() => {
-            }}/>);
+            const {asFragment} = render(<FileUpload
+                state={newState}
+                setState={() => {}}
+                fetch={() => {}}/>);
             expect(asFragment()).toMatchSnapshot();
         }
     );
 
+    it('should render correctly in french', () => {
+        changeProjectTranslationLanguage('fr');
+        const newState = {...state, dataset: {...state.dataset, type: "Image"}};
+        const {asFragment} = render(<FileUpload
+            state={newState}
+            setState={() => {}}
+            fetch={() => {}}/>);
+        expect(asFragment()).toMatchSnapshot();
+    });
 })

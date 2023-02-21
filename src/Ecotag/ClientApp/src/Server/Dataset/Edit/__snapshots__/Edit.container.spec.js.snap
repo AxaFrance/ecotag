@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edit should render correctly 1`] = `
+exports[`Edit should render correctly in english 1`] = `
 <DocumentFragment>
   <div
     class="edit-dataset"
@@ -28,7 +28,116 @@ exports[`Edit should render correctly 1`] = `
         <small
           class="af-title-bar__subtitle"
         >
-          Edition du dataset
+          Dataset edition
+        </small>
+      </div>
+    </div>
+    <div
+      class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
+    >
+      <h2
+        class="edit-dataset__file-upload-title"
+      >
+        Upload files .eml
+      </h2>
+      <div
+        class="af-form__file-input"
+      >
+        <div
+          class="drop-box hidden-mobile"
+          id="file"
+          tabindex="0"
+        >
+          <input
+            accept="message/rfc822, application/octet-stream"
+            autocomplete="off"
+            multiple=""
+            name="datasetUploadFiles"
+            style="display: none;"
+            tabindex="-1"
+            type="file"
+          />
+          <div>
+            Drag/drop your files here
+          </div>
+        </div>
+        <button
+          class="af-btn af-btn--file af-btn--hasIconLeft"
+          type="button"
+        >
+          <i
+            class="glyphicon glyphicon-open"
+          />
+           Browse
+        </button>
+      </div>
+      <div>
+        <button
+          class="btn af-btn af-btn--disabled"
+          disabled=""
+          id="sendFiles"
+          name="sendFiles"
+        >
+          <span
+            class="af-btn__text"
+          >
+            Send
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="lock__button-container"
+    >
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        icon="lock"
+        id="lock-button"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Dataset is being imported
+        </span>
+        <i
+          class="lock__button-icon glyphicon glyphicon-lock"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Edit should render correctly in french 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset"
+  >
+    <div
+      class="af-title-bar af-title-bar--backhome"
+    >
+      <div
+        class="container-fluid container af-title-bar__wrapper"
+      >
+        <a
+          class="btn af-btn--circle"
+          href="/datasets"
+          title="Datasets"
+        >
+          <i
+            class="glyphicon glyphicon-arrowthin-left"
+          />
+        </a>
+        <h1
+          class="af-title-bar__title"
+        >
+          datasetName
+        </h1>
+        <small
+          class="af-title-bar__subtitle"
+        >
+          Édition du dataset
         </small>
       </div>
     </div>
@@ -58,7 +167,7 @@ exports[`Edit should render correctly 1`] = `
             type="file"
           />
           <div>
-            Glissez/déposez vos fichiers
+            Glissez/déposez vos fichiers ici
           </div>
         </div>
         <button
@@ -137,7 +246,7 @@ exports[`Edit.container init should init correctly 1`] = `
         <small
           class="af-title-bar__subtitle"
         >
-          Edition du dataset
+          Dataset edition
         </small>
       </div>
     </div>
@@ -147,7 +256,7 @@ exports[`Edit.container init should init correctly 1`] = `
       <h2
         class="edit-dataset__file-upload-title"
       >
-        Upload des fichiers .eml
+        Upload files .eml
       </h2>
       <div
         class="af-form__file-input"
@@ -167,7 +276,7 @@ exports[`Edit.container init should init correctly 1`] = `
             type="file"
           />
           <div>
-            Glissez/déposez vos fichiers
+            Drag/drop your files here
           </div>
         </div>
         <button
@@ -177,7 +286,7 @@ exports[`Edit.container init should init correctly 1`] = `
           <i
             class="glyphicon glyphicon-open"
           />
-           Parcourir
+           Browse
         </button>
       </div>
       <div
@@ -192,7 +301,7 @@ exports[`Edit.container init should init correctly 1`] = `
           <span
             class="af-btn__text"
           >
-            Envoyer
+            Send
           </span>
         </button>
       </div>
@@ -209,7 +318,7 @@ exports[`Edit.container init should init correctly 1`] = `
         <span
           class="af-btn__text"
         >
-          Dataset en cours d'import
+          Dataset is being imported
         </span>
         <i
           class="lock__button-icon glyphicon glyphicon-lock"
@@ -229,11 +338,11 @@ exports[`Edit.container init should init with error message 1`] = `
       class="resilicience__error-message"
     >
       <p>
-        Une erreur serveur est survenue.
+        An error occurred.
       </p>
       <br />
       <p>
-        Nous sommes au courant du problème. Une investigation est en cours...
+        We are aware of the problem. An investigation is ongoing...
       </p>
     </div>
   </div>
@@ -249,7 +358,7 @@ exports[`Edit.container init should init with forbidden message 1`] = `
       class="resilicience__error-message"
     >
       <p>
-        Vous n'avez pas le droit d'accéder à cette ressource.
+        You are not allowed to access this resource.
       </p>
     </div>
   </div>

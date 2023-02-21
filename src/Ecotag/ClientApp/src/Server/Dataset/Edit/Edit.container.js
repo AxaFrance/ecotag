@@ -1,15 +1,16 @@
 ﻿import React, {useState} from 'react';
-import FileUpload from "./FileUpload";
-import FileList from "./FileList";
+import FileUpload from './FileUpload';
+import FileList from './FileList';
 import './Edit.scss';
-import Title from "../../../TitleBar";
-import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
-import {fetchDataset, fetchLockDataset, Locked} from "../Dataset.service";
-import {resilienceStatus, withResilience} from "../../shared/Resilience";
-import {useParams} from "react-router-dom";
-import withCustomFetch from "../../withCustomFetch";
-import Lock from "../../shared/Lock/Lock";
-import ConfirmModal from "../../shared/ConfirmModal/ConfirmModal";
+import Title from '../../../TitleBar';
+import {computeNumberPages, filterPaging} from '../../shared/filtersUtils';
+import {fetchDataset, fetchLockDataset, Locked} from '../Dataset.service';
+import {resilienceStatus, withResilience} from '../../shared/Resilience';
+import {useParams} from 'react-router-dom';
+import withCustomFetch from '../../withCustomFetch';
+import Lock from '../../shared/Lock/Lock';
+import ConfirmModal from '../../shared/ConfirmModal/ConfirmModal';
+import useProjectTranslation from '../../../translations/useProjectTranslation';
 
 export const init = (fetch, setState) => async (id, state) => {
     const response = await fetchDataset(fetch)(id);
@@ -44,32 +45,34 @@ const lockDataset = (fetch, setState) => async (state, idDataset) => {
     setState({...state, ...data, openLockModal: false, dataset: {...state.dataset, locked: Locked.Locked}});
 };
 
-const lockedText = (locked) => {
-    switch (locked) {
-        case Locked.Locked:
-            return "Dataset verrouillé"
-        case Locked.LockedAndWorkInProgress:
-            return "Dataset en cours de travail"
-        default:
-            return "Dataset en cours d'import"
-    }
-}
-
 export const Edit = ({fetch, state, setState, lock}) => {
+    const {translate} = useProjectTranslation();
     const isDisabled = state.files.filesSend.length === 0;
+
+    const lockedText = (locked) => {
+        switch (locked) {
+            case Locked.Locked:
+                return translate('dataset.edit.locked_state.locked');
+            case Locked.LockedAndWorkInProgress:
+                return translate('dataset.edit.locked_state.locked_and_work_in_progress');
+            default:
+                return translate('dataset.edit.locked_state.default');
+        }
+    };
+
     return (
         <div className="edit-dataset">
-            <ConfirmModal title='Voulez-vous verrouiller le dataset définitivement ?' isOpen={state.openLockModal}
+            <ConfirmModal title={translate('dataset.edit.confirm_modal.title')} isOpen={state.openLockModal}
                           onCancel={lock.onCancel} onSubmit={lock.onSubmit}>
                 <p className="edit-dataset__modal-core-text">
-                    Cette action est définitive. <br/>
-                    Toute modification (ajout, supression de fichier) sera impossible par la suite.
+                    {translate('dataset.edit.confirm_modal.warning_first_part')}<br/>
+                    {translate('dataset.edit.confirm_modal.warning_second_part')}
                 </p>
             </ConfirmModal>
-            <Title title={state.dataset.name} subtitle="Edition du dataset" goTo="/datasets" goTitle="Datasets"/>
+            <Title title={state.dataset.name} subtitle={translate('dataset.edit.subtitle')} goTo="/datasets" goTitle="Datasets"/>
             <FileUpload fetch={fetch} state={state} setState={setState}/>
             {state.files.filesSend.length === 0 ? null : <FileList fetch={fetch} state={state} setState={setState}/>}
-            <Lock text="Verrouiller" lockedText={lockedText(state.dataset.locked)} isDisabled={isDisabled}
+            <Lock text={translate('dataset.edit.lock')} lockedText={lockedText(state.dataset.locked)} isDisabled={isDisabled}
                   isLocked={state.dataset.locked !== Locked.None} onLockAction={lock.onLockDataset}/>
         </div>
     );

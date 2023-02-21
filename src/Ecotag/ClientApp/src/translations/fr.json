@@ -11,6 +11,16 @@
     "previous": "« Précédent",
     "next": "Suivant »"
   },
+  "stepper": {
+    "confirm": "Confirmation"
+  },
+  "resilience": {
+    "error": {
+      "first_part": "Une erreur est survenue.",
+      "second_part": "Nous sommes au courant du problème. Une investigation est en cours..."
+    },
+    "forbidden": "Vous n'avez pas le droit d'accéder à cette ressource."
+  },
   "not_found": {
     "title": "404 Page Introuvable",
     "not": "non",
@@ -55,6 +65,182 @@
         "footer": {
           "cancel": "Annuler",
           "validation": "Valider"
+        }
+      }
+    }
+  },
+  "dataset": {
+    "title": "Datasets",
+    "subtitle": "Un dataset représente un ensemble de données",
+    "new_dataset": "Nouveau dataset",
+    "access_token": "Jeton d'accès",
+    "active_datasets_counter": "Vos datasets actifs : ",
+    "filter_by": "Filtrer par",
+    "name": "Nom",
+    "empty_list": "Aucun élément",
+    "list": {
+      "actions_titles": {
+        "locked": "verrouillée",
+        "locked_and_work_in_progress": "verrouillée et travail en cours",
+        "pending": "en cours",
+        "none": "déverrouillée"
+      },
+      "header": {
+        "lock": "Verrouillage",
+        "name": "Nom",
+        "team": "Équipe",
+        "classification": "Classification",
+        "nb_files": "Nombre de fichiers",
+        "type": "Type",
+        "creation_date": "Date création",
+        "action": "Action"
+      },
+      "edit": "Éditer"
+    },
+    "new": {
+      "title": "Nouveau dataset",
+      "stepper": {
+        "title": "Nouveau dataset"
+      },
+      "form_title": "Nouveau dataset",
+      "name_input": {
+        "label": "Nom",
+        "help_message": "Ex : cni-dataset"
+      },
+      "team_input": {
+        "label": "Équipe"
+      },
+      "type_input": {
+        "label": "Type",
+        "help_message": "Ex : Image, Text",
+        "options_labels": {
+          "image": "Images (.jpg, .png, jpeg)",
+          "document": "Documents (.txt, .eml, .tiff, .pdf, .doc, etc.)",
+          "text": "Text (.txt)",
+          "eml": "Emails (.eml)"
+        },
+        "help": {
+          "title": "Informations sur les types de documents acceptés",
+          "images": {
+            "name": "Images",
+            "types": " : .jpg, .png, jpeg"
+          },
+          "documents": {
+            "name": "Documents",
+            "types": " : .txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip"
+          },
+          "text": {
+            "name": "Text",
+            "types": " : .txt"
+          },
+          "eml": {
+            "name": "Eml",
+            "types": " : .eml"
+          }
+        }
+      },
+      "classification_input": {
+        "label": "Classification",
+        "help_message": "Ex : Critique",
+        "options": {
+          "public": {
+            "label": "Publique"
+          },
+          "internal": {
+            "label": "Interne"
+          },
+          "confidential": {
+            "label": "Confidentielle"
+          },
+          "critical": {
+            "label": "Critique"
+          }
+        },
+        "help": {
+          "title": "Informations sur les criticités",
+          "public": {
+            "name": "Publique",
+            "detail": " : Une information créée délibérément pour le public, ou spécifiquement conçue pour diffusion dans le public"
+          },
+          "internal": {
+            "name": "Interne",
+            "detail": " : Une information accessible à l'ensemble ou à une large partie des salariés qui n'est pas destinée à des personnes extérieures"
+          },
+          "confidential": {
+            "name": "Confidentielle",
+            "detail": " : Une information dont l'accès est limité à un auditoire spécifique"
+          },
+          "critical": {
+            "name": "Critique",
+            "detail": " : Veuillez contacter votre manager."
+          }
+        }
+      },
+      "import_input": {
+        "label": "Importer depuis un blob : "
+      },
+      "dataset_to_import": {
+        "label": "Dataset à importer : "
+      },
+      "validate": "Valider"
+    },
+    "confirm": {
+      "title": "Confirmation",
+      "stepper": "Nouveau dataset",
+      "confirmation_title": "Nouveau dataset ajouté !",
+      "confirmation_description": "Si vous avez importé un dataset, le processus d'ajout des fichiers peut prendre un moment.",
+      "return_button_label": "Retour liste datasets"
+    },
+    "edit": {
+      "confirm_modal": {
+        "title": "Voulez-vous verrouiller le dataset définitivement ?",
+        "warning_first_part": "Cette action est définitive.",
+        "warning_second_part": "Toute modification (ajout, suppression de fichier) sera impossible par la suite."
+      },
+      "subtitle": "Édition du dataset",
+      "lock": "Verrouiller",
+      "locked_state": {
+        "locked": "Dataset verrouillé",
+        "locked_and_work_in_progress": "Dataset en cours de travail",
+        "default": "Dataset en cours d'import"
+      },
+      "file_upload": {
+        "title": "Upload des fichiers ",
+        "file_input": {
+          "label": "Parcourir",
+          "placeholder": "Glissez/déposez vos fichiers ici"
+        },
+        "send_button": {
+          "label": "Envoyer"
+        },
+        "errors": {
+          "already_existing": {
+            "first_part": "Le fichier ",
+            "second_part": " existe déjà"
+          },
+          "could_not_upload": {
+            "first_part": "Le fichier ",
+            "second_part": " n'a pas pu être uploadé"
+          }
+        }
+      },
+      "files_list": {
+        "global_info_tab": {
+          "title": "Informations générales",
+          "name": "Nom",
+          "creation_date": "Date de création",
+          "type": "Type",
+          "nb_files": "Nombre de fichiers",
+          "files_total_size": "Poids total des fichiers",
+          "files_mean_size": "Poids moyen des fichiers"
+        },
+        "files_list_tab": {
+          "title": "Liste des fichiers",
+          "name": "Nom",
+          "type": "Type",
+          "size": "Poids",
+          "action": "Action",
+          "delete_action": "Supprimer"
         }
       }
     }
