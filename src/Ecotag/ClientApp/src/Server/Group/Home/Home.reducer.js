@@ -21,7 +21,6 @@ export const initialState = {
 
 export const initState = computeInitialStateErrorMessage(initialState, rules);
 
-
 export const reducer = (state, action) => {
     switch (action.type) {
         case 'init': {

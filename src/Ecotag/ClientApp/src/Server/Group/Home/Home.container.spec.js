@@ -1,11 +1,11 @@
 import React from 'react';
-import {createMemoryHistory} from "history";
+import {createMemoryHistory} from 'history';
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, waitFor} from '@testing-library/react';
 import {HomeContainer} from './Home.container';
-import sleep from "../../../sleep";
-import {fireEvent} from "@testing-library/dom";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import sleep from '../../../sleep';
+import {fireEvent} from '@testing-library/dom';
+import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
 
 describe('Home.container for groups', () => {
 
@@ -71,4 +71,3 @@ describe('Home.container for groups', () => {
         expect(asFragment()).toMatchSnapshot();
     });
 });
-

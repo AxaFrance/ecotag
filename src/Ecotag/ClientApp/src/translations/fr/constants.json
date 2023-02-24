@@ -1,0 +1,12 @@
+{
+  "constants": {
+    "groups": {
+      "new": {
+        "MSG_REQUIRED": "Le champ est obligatoire",
+        "MSG_MIN_LENGTH": "Veuillez saisir au moins {minLength} caractère(s)",
+        "MSG_MAX_LENGTH": "Veuillez saisir au plus {maxLength} caractère(s)",
+        "MSG_GROUP_NAME_ALREADY_EXIST": "Une équipe avec ce nom existe déjà"
+      }
+    }
+  }
+}
