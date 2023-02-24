@@ -1,9 +1,12 @@
 ﻿import React, {useState} from "react";
 import {DataScientist} from "../../withAuthentication";
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 const ExportButton = ({user: {roles = []}, onExport, projectId, projectName}) => {
 
     const [downloading, setDownloading] = useState(false);
+
+    const {translate} = useProjectTranslation();
 
     const exportAnnotations = async e => {
         e.preventDefault();
@@ -26,7 +29,7 @@ const ExportButton = ({user: {roles = []}, onExport, projectId, projectName}) =>
     return (
         <>
             {roles.includes(DataScientist) &&
-                <a className="ft-actionBar__link" onClick={exportAnnotations} href="">Exporter</a>
+                <a className="ft-actionBar__link" onClick={exportAnnotations} href="">{translate('project.project_page.export_button.label')}</a>
             }
         </>
     );

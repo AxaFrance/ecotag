@@ -18,7 +18,7 @@ exports[`FileList should render correctly in english 1`] = `
             class="af-tabs__link"
             id="0"
           >
-            Global information
+            General information
           </button>
         </li>
         <li
@@ -195,7 +195,7 @@ exports[`FileList should render correctly in english 2`] = `
             class="af-tabs__link"
             id="0"
           >
-            Global information
+            General information
           </button>
         </li>
         <li

@@ -226,7 +226,7 @@
       },
       "files_list": {
         "global_info_tab": {
-          "title": "Global information",
+          "title": "General information",
           "name": "Name",
           "creation_date": "Creation date",
           "type": "Type",
@@ -242,6 +242,123 @@
           "action": "Action",
           "delete_action": "Delete"
         }
+      }
+    }
+  },
+  "project": {
+    "projects_list": {
+      "title": "Projects",
+      "subtitle": "Tag a dataset",
+      "new": "New project",
+      "active_projects_counter": "Pending projects :",
+      "filter_by": "Filter by",
+      "project_name": "Project name",
+      "no_elements": "No elements",
+      "list": {
+        "headers": {
+          "name": "Name",
+          "team": "Team",
+          "creation_date": "Creation date",
+          "annotation_type": "Annotation type",
+          "status": "Status",
+          "action": "Action",
+          "edit": "Edit"
+        },
+        "nb_tags_to_do": {
+          "resilience": {
+            "loading": "Loading...",
+            "error": "Error..."
+          },
+          "title": "Annotations",
+          "to_do": "To do",
+          "done": "Done",
+          "remaining": "Remaining",
+          "percentage": {
+            "done": "Done",
+            "pending": "Remaining"
+          }
+        }
+      }
+    },
+    "new": {
+      "title": "New annotation project",
+      "stepper": "New project",
+      "name_input": {
+        "label": "Name",
+        "help_message": "Ex: Registration Document 2019"
+      },
+      "dataset_input": {
+        "label": "Dataset"
+      },
+      "type_input": {
+        "label": "Type"
+      },
+      "nb_cross_annotation_input": {
+        "label": "Number of cross annotations",
+        "help_message": "Cross annotations made by different annotators"
+      },
+      "labels_input": {
+        "label": "Labels"
+      },
+      "team_input": {
+        "label": "Team"
+      },
+      "confirmation_button_label": "Validate"
+    },
+    "confirm": {
+      "title": "Confirmation",
+      "stepper": "New project",
+      "new_project_added": "New project added !",
+      "view_project_button_label": "See project",
+      "go_back_button_label": "Go back to projects list"
+    },
+    "project_page": {
+      "confirmation_modal": {
+        "title": "Do you want to close the project ?",
+        "description_first_part": "This action is permanent.",
+        "description_second_part": "The project will no longer exist.",
+        "description_third_part": "The associated dataset will be deleted if it is not associated to any other project."
+      },
+      "subtitle": "Project type",
+      "action_bar": {
+        "start_button_label": "Start tagging"
+      },
+      "export_button": {
+        "label": "Export"
+      },
+      "overview": {
+        "title": "General information",
+        "name": "Name",
+        "annotation_type": "Annotation type",
+        "creation_date": "Creation date",
+        "nb_files": "Number of files",
+        "nb_cross_annotation": "Number of cross annotations",
+        "annotations_progress": "Annotations progress",
+        "dataset": "Dataset",
+        "dataset_type": "Dataset type",
+        "team": "Annotators team",
+        "emails": "Team emails"
+      },
+      "labels": {
+        "title": "Labels",
+        "name": "Name",
+        "color": "Color",
+        "popover": {
+          "title": "Details",
+          "color": "Color : "
+        }
+      },
+      "users": {
+        "title": "Annotations",
+        "no_annotations": "There are no annotations on this project yet.",
+        "headers": {
+          "emails": "Emails",
+          "nb_annotations": "Annotations number"
+        }
+      },
+      "lock": {
+        "text": "Close",
+        "locked_text": "Projet closed"
       }
     }
   }

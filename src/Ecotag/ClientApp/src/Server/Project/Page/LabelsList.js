@@ -1,16 +1,18 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 import Popover from '@axa-fr/react-toolkit-popover';
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 export const Label = ({labels}) => {
+    const {translate} = useProjectTranslation();
     return (
         <div className="ft-labels">
-            <h2>Labels</h2>
+            <h2>{translate('project.project_page.labels.title')}</h2>
             <Table>
                 <Table.Header>
                     <Table.Tr>
-                        <Table.Th>Name</Table.Th>
-                        <Table.Th>Couleur</Table.Th>
+                        <Table.Th>{translate('project.project_page.labels.name')}</Table.Th>
+                        <Table.Th>{translate('project.project_page.labels.color')}</Table.Th>
                     </Table.Tr>
                 </Table.Header>
                 <Table.Body>
@@ -24,10 +26,10 @@ export const Label = ({labels}) => {
                                         classModifier="color"
                                     >
                                         <Popover.Pop>
-                                            <h2>Détails</h2>
+                                            <h2>{translate('project.project_page.labels.popover.title')}</h2>
                                             <p>
                                                 <span>Id : <b>{label.id}</b></span><br/>
-                                                <span>Couleur : <b>{label.color}</b></span><br/>
+                                                <span>{translate('project.project_page.labels.popover.color')}<b>{label.color}</b></span><br/>
                                             </p>
                                         </Popover.Pop>
                                         <Popover.Over>

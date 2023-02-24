@@ -5,6 +5,7 @@ import {initialState, onLockSubmit, PageContainer, reducer} from './Page.contain
 import {BrowserRouter as Router} from "react-router-dom";
 import {resilienceStatus} from "../../shared/Resilience";
 import {DataScientist} from "../../withAuthentication";
+import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
 
 function fail(message = "The fail function was called") {
     throw new Error(message);
@@ -13,7 +14,7 @@ function fail(message = "The fail function was called") {
 describe('Page.container', () => {
     const givenDataset = {
         "id": "0001",
-        "name": "Carte verte",
+        "name": "Green card",
         "type": "Image",
         "numberFiles": 300,
         "createDate": new Date("10-30-2019").getTime(),
@@ -21,7 +22,7 @@ describe('Page.container', () => {
     };
     const givenProject = {
         "id": "0001",
-        "name": "Relevé d'information",
+        "name": "Information statement",
         "datasetId": "0004",
         "numberTagToDo": 10,
         "createDate": new Date("04-04-2011").getTime(),
@@ -36,7 +37,7 @@ describe('Page.container', () => {
 
     const group = {
         "id": "0001",
-        "name": "developpeurs",
+        "name": "developers",
         "userIds": ["0001", "0002"]
     };
     const users = [
@@ -61,21 +62,33 @@ describe('Page.container', () => {
         numberAnnotationsToDo: 288,
         percentageNumberAnnotationsDone: 32
     };
-    it('PageContainer render correctly', async () => {
-        const givenFetch = jest.fn()
-            .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
-            .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
-            .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(group)})
-            .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(users)})
-            .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(annotationStatus)})
-        const {getByText} = render(<Router><PageContainer fetch={givenFetch}
-                                                          user={{roles: [DataScientist]}}/></Router>);
-        const messageEl = await waitFor(() => getByText('02/01/0001'));
-        expect(messageEl).toHaveTextContent(
-            '02/01/0001'
-        );
+    describe('PageContainer traduction', () => {
+        const renderComponentAndCheckSnapshot = async() => {
+            const givenFetch = jest.fn()
+                .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
+                .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenDataset)})
+                .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(group)})
+                .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(users)})
+                .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(annotationStatus)})
+            const {asFragment, getByText} = render(<Router><PageContainer fetch={givenFetch}
+                                                              user={{roles: [DataScientist]}}/></Router>);
+            const messageEl = await waitFor(() => getByText('02/01/0001'));
+            expect(messageEl).toHaveTextContent(
+                '02/01/0001'
+            );
+            expect(asFragment()).toMatchSnapshot();
+        };
+        it('should render correctly in english', async () => {
+            changeProjectTranslationLanguage('en');
+            await renderComponentAndCheckSnapshot();
+        });
+        it('should render correctly in french', async () => {
+            changeProjectTranslationLanguage('fr');
+            await renderComponentAndCheckSnapshot();
+        });
     });
     it('should display forbidden message when trying to get unauthorized projects', async () => {
+        changeProjectTranslationLanguage('en');
         const givenFetch = () => {
             return {
                 status: 403
@@ -83,12 +96,13 @@ describe('Page.container', () => {
         };
         const {getByText} = render(<Router><PageContainer fetch={givenFetch}
                                                           user={{roles: [DataScientist]}}/></Router>);
-        const messageEl = await waitFor(() => getByText(/droit/i));
+        const messageEl = await waitFor(() => getByText(/allowed/i));
         expect(messageEl).toHaveTextContent(
-            'droit'
+            'allowed'
         );
     });
     it('should display error message when calling projects incorrectly', async () => {
+        changeProjectTranslationLanguage('en');
         const givenFetch = () => {
             return {
                 status: 500
@@ -102,17 +116,19 @@ describe('Page.container', () => {
         );
     });
     it('should display forbidden message when trying to get unauthorized datasets or annotations status', async () => {
+        changeProjectTranslationLanguage('en');
         const givenFetch = jest.fn()
             .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
             .mockResolvedValueOnce({ok: false, status: 403});
         const {getByText} = render(<Router><PageContainer fetch={givenFetch}
                                                           user={{roles: [DataScientist]}}/></Router>);
-        const messageEl = await waitFor(() => getByText(/droit/i));
+        const messageEl = await waitFor(() => getByText(/allowed/i));
         expect(messageEl).toHaveTextContent(
-            'droit'
+            'allowed'
         );
     });
     it('should display error message when calling datasets or annotations status incorrectly', async () => {
+        changeProjectTranslationLanguage('en');
         const givenFetch = jest.fn()
             .mockResolvedValueOnce({ok: true, status: 200, json: () => Promise.resolve(givenProject)})
             .mockResolvedValueOnce({ok: false, status: 500})
@@ -128,6 +144,7 @@ describe('Page.container', () => {
     });
 
     describe('.reducer()', () => {
+        changeProjectTranslationLanguage('en');
         it('should set the new fields with asked values after onChange action', () => {
             const givenState = {...initialState};
             const givenAction = {

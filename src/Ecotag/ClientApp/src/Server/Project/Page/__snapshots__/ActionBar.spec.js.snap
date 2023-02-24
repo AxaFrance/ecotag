@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ActionBar ActionBar render correctly 1`] = `
+exports[`ActionBar should render correctly in english 1`] = `
 <DocumentFragment>
   <div
     class="ft-actionBar"
@@ -8,12 +8,38 @@ exports[`ActionBar ActionBar render correctly 1`] = `
     <button
       class="btn af-btn"
       id="startTagging"
-      name="Start Tagging"
+      name="Start tagging"
     >
       <span
         class="af-btn-text"
       >
-        Start Tagging
+        Start tagging
+      </span>
+    </button>
+    <a
+      class="ft-actionBar__link"
+      href=""
+    >
+      Export
+    </a>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ActionBar should render correctly in french 1`] = `
+<DocumentFragment>
+  <div
+    class="ft-actionBar"
+  >
+    <button
+      class="btn af-btn"
+      id="startTagging"
+      name="Commencer à annoter"
+    >
+      <span
+        class="af-btn-text"
+      >
+        Commencer à annoter
       </span>
     </button>
     <a

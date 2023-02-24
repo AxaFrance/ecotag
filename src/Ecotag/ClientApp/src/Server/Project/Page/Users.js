@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
-import EmptyArrayManager from "../../../EmptyArrayManager";
+import EmptyArrayManager from '../../../EmptyArrayManager';
+import useProjectTranslation from '../../../translations/useProjectTranslation';
 
 const UserLine = ({users, annotationUser}) => {
     const user = users.find(user => user.nameIdentifier.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())
@@ -15,24 +16,23 @@ const UserLine = ({users, annotationUser}) => {
 }
 
 export const UserAnnotationsStatus = ({users = [], numberAnnotationsByUsers = []}) => {
+    const {translate} = useProjectTranslation();
     return (
         <div>
-            <h2>Annotations</h2>
+            <h2>{translate('project.project_page.users.title')}</h2>
             <EmptyArrayManager items={numberAnnotationsByUsers}
-                               emptyArrayMessage="Il n'y a pas d'annotation sur ce projet pour l'instant.">
+                               emptyArrayMessage={translate('project.project_page.users.no_annotations')}>
                 <Table>
                     <Table.Header>
                         <Table.Tr>
-                            <Table.Th>Emails</Table.Th>
-                            <Table.Th>Nombre d&apos;annotations</Table.Th>
+                            <Table.Th>{translate('project.project_page.users.headers.emails')}</Table.Th>
+                            <Table.Th>{translate('project.project_page.users.headers.nb_annotations')}</Table.Th>
                         </Table.Tr>
                     </Table.Header>
                     <Table.Body>
-
                         {numberAnnotationsByUsers.map(annotationUser => (
                             <UserLine users={users} annotationUser={annotationUser}/>
                         ))}
-
                     </Table.Body>
                 </Table>
             </EmptyArrayManager>

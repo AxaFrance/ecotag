@@ -23,7 +23,7 @@ import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
 import {init} from './New.hook';
 import {resilienceStatus, withResilience} from '../../../shared/Resilience';
-import {telemetryEvents, withTelemetry} from "../../../Telemetry";
+import {telemetryEvents, withTelemetry} from '../../../Telemetry';
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
