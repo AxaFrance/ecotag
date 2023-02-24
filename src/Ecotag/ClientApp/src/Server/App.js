@@ -4,7 +4,6 @@ import EnvironmentProvider, {withEnvironment} from './EnvironmentProvider';
 import './App.scss';
 import Header from './shared/Header';
 import Footer from './shared/Footer';
-
 import Routes from './AppRoutes';
 import {Helmet} from "react-helmet";
 import TelemetryProvider from './Telemetry';
@@ -17,7 +16,6 @@ import {CallBackSuccess} from "./shared/Oidc/Callback.component";
 import AccessToken from "./AccessToken";
 import {useHistory} from "react-router";
 import {OidcProvider, OidcSecure} from "@axa-fr/react-oidc";
-
 
 const AppWithOidcProvider = withEnvironment(({environment}) => {
 

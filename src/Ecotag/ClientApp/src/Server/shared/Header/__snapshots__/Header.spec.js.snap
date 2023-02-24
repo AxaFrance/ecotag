@@ -32,7 +32,7 @@ exports[`Header Renders header page in english 1`] = `
             <span
               class="af-header__subtitle"
             >
-              An eco-system that aims to be eco-friendly
+              An eco-system to be eco-friendly
             </span>
           </h2>
         </div>
@@ -88,7 +88,7 @@ exports[`Header Renders header page in french 1`] = `
             <span
               class="af-header__subtitle"
             >
-              Un écosystème qui vise à être écologique
+              Un écosystème pour être écologique
             </span>
           </h2>
         </div>
