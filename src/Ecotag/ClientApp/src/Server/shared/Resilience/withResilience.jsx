@@ -7,13 +7,33 @@ import useProjectTranslation from '../../../translations/useProjectTranslation';
 export const withResilience = Component => ({status, loaderText = null, ...otherProps}) => {
     const {translate} = useProjectTranslation();
     const {ERROR, SUCCESS, LOADING, POST, FORBIDDEN} = resilienceStatus;
+
+    const setLoaderText = (loaderText, loaderMode) => {
+        let result;
+        if(loaderText !== null){
+            return loaderText;
+        }
+        switch (loaderMode){
+            case LoaderModes.get:
+                result = translate('resilience.get');
+                break;
+            case LoaderModes.post:
+                result = translate('resilience.post');
+                break;
+            default:
+                result = null;
+                break;
+        }
+        return result;
+    }
+
     return (
         <>
             {
                 {
-                    [LOADING]: <Loader mode={LoaderModes.get} text={loaderText}><Component
+                    [LOADING]: <Loader mode={LoaderModes.get} text={setLoaderText(loaderText, LoaderModes.get)}><Component
                         loaderMode={LoaderModes.get} {...otherProps} /></Loader>,
-                    [POST]: <Loader mode={LoaderModes.get} text={loaderText}> <Component
+                    [POST]: <Loader mode={LoaderModes.get} text={setLoaderText(loaderText, LoaderModes.post)}> <Component
                         loaderMode={LoaderModes.post} {...otherProps} /></Loader>,
                     [ERROR]: (
                         <div className="resilience">
