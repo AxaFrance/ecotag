@@ -5,7 +5,8 @@
         "MSG_REQUIRED": "The field is mandatory",
         "MSG_MIN_LENGTH": "Please provide at least {minLength} character(s)",
         "MSG_MAX_LENGTH": "Please provide at most {maxLength} character(s)",
-        "MSG_GROUP_NAME_ALREADY_EXIST": "A team with this name already exists"
+        "MSG_GROUP_NAME_ALREADY_EXIST": "A team with this name already exists",
+        "MSG_REGEX": "Please provide an alphanumeric character, – and _ included, accents excluded"
       }
     }
   }

@@ -81,8 +81,7 @@ exports[`Home.container for groups Home.container translation should render grou
             </div>
           </div>
           <button
-            class="btn af-btn af-btn--hasiconRight af-btn--confirm af-btn--disabled"
-            disabled=""
+            class="btn af-btn af-btn--hasiconRight af-btn--confirm"
             id="myForm"
           >
             <span
@@ -382,8 +381,7 @@ exports[`Home.container for groups HomeContainer render correctly the groups 1`]
             </div>
           </div>
           <button
-            class="btn af-btn af-btn--hasiconRight af-btn--confirm af-btn--disabled"
-            disabled=""
+            class="btn af-btn af-btn--hasiconRight af-btn--confirm"
             id="myForm"
           >
             <span
@@ -683,8 +681,7 @@ exports[`Home.container for groups should render groups correctly with french tr
             </div>
           </div>
           <button
-            class="btn af-btn af-btn--hasiconRight af-btn--confirm af-btn--disabled"
-            disabled=""
+            class="btn af-btn af-btn--hasiconRight af-btn--confirm"
             id="myForm"
           >
             <span

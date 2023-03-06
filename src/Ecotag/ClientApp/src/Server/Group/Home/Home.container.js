@@ -3,10 +3,10 @@ import React from 'react';
 import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging} from '../../shared/Home/Home.filters';
 import {useHome} from './Home.hook';
-import {withResilience} from "../../shared/Resilience";
-import {NAME} from "./New/constants";
-import compose from "../../compose";
-import {withTelemetry} from "../../Telemetry";
+import {withResilience} from '../../shared/Resilience';
+import {NAME} from './New/constants';
+import compose from '../../compose';
+import {withTelemetry} from '../../Telemetry';
 
 const HomeWithResilience = withResilience(Home);
 
