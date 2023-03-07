@@ -62,16 +62,16 @@ const New = ({fields, onChange, hasSubmit, onSubmit, groups, optionsDatasets}) =
                                 messageType="error"
                                 {...fields[GROUP]}/>
                             <SelectInput
-                                label={translate('dataset.new.type_import.label')}
+                                label={translate('dataset.new.type_input.label')}
                                 name={TYPE}
                                 id={TYPE}
-                                helpMessage={translate('dataset.new.type_import.help_message')}
+                                helpMessage={translate('dataset.new.type_input.help_message')}
                                 onChange={onChange}
                                 options={[
-                                    {value: 'Image', label: translate('dataset.new.type_import.options_labels.image')},
-                                    {value: 'Document', label: translate('dataset.new.type_import.options_labels.document')},
-                                    {value: 'Text', label: translate('dataset.new.type_import.options_labels.text')},
-                                    {value: 'Eml', label: translate('dataset.new.type_import.options_labels.eml')},
+                                    {value: 'Image', label: translate('dataset.new.type_input.options_labels.image')},
+                                    {value: 'Document', label: translate('dataset.new.type_input.options_labels.document')},
+                                    {value: 'Text', label: translate('dataset.new.type_input.options_labels.text')},
+                                    {value: 'Eml', label: translate('dataset.new.type_input.options_labels.eml')},
                                 ]}
                                 forceDisplayMessage={hasSubmit}
                                 messageType="error"
