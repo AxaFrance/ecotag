@@ -56,6 +56,7 @@ tasks.json
     "delayOn500":5000,
     "isSaveResultOnError": true,
     "stopAfterNumberFiles":null,
+    "isDefaultTargetFileMode": true,
   }
 ] 
 ```
@@ -124,3 +125,7 @@ tasks.json
     - default: true
 - **stopAfterNumberFiles**: after "stopAfterNumberFiles" files the JobApiCall stop
     - default: null
+- **isDefaultTargetFileMode**: Pattern to generate file name in outputDirectoryJsons
+  - default: true
+  - true: generate file from {000E90E8-5C65-413A-8911-CE848FE245B4}.4dd580d307bf5820e0a3b36211055fc7.pdf to {000E90E8-5C65-413A-8911-CE848FE245B4}_4dd580d307bf5820e0a3b36211055fc7_pdf.json
+  - false: generate file from {000E90E8-5C65-413A-8911-CE848FE245B4}.4dd580d307bf5820e0a3b36211055fc7.pdf to {000E90E8-5C65-413A-8911-CE848FE245B4}.4dd580d307bf5820e0a3b36211055fc7.json

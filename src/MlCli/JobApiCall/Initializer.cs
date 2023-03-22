@@ -72,6 +72,7 @@ public class Initializer
             jObject.ContainsKey("chunkIndex") ? (int?)jObject.Property("chunkIndex") : null;
 
         var numberParallel = jObject.ContainsKey("numberParallel") ? (int)jObject.Property("numberParallel") : 1;
+        var defaultTargetFileMode = !jObject.ContainsKey("isDefaultTargetFileMode") || (bool)jObject.Property("isDefaultTargetFileMode");
         var waitTimeMsBetweenRequest = jObject.ContainsKey("waitTimeMsBetweenRequest")
             ? (int)jObject.Property("waitTimeMsBetweenRequest")
             : 0;
@@ -128,7 +129,8 @@ public class Initializer
             isSaveResultOnError,
             stopAfterNumberFiles,
             chunkByNumberPart,
-            chunkIndex
+            chunkIndex,
+            defaultTargetFileMode
         );
     }
 

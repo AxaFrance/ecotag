@@ -34,20 +34,30 @@ public class ApiCallFiles
     private void FindElementsTokens(JToken containerToken, List<FileUrls> urlsList,
         Dictionary<string, JsonsList> jsonsDict)
     {
-        if (containerToken.Type == JTokenType.Object)
-            foreach (var child in containerToken.Children<JProperty>())
+        switch (containerToken.Type)
+        {
+            case JTokenType.Object:
             {
-                if (child.Name.Contains("url_", StringComparison.Ordinal))
-                    urlsList.Add(new FileUrls(child.Name, new Uri(child.Value.ToString())));
-                else if (child.Name.Contains("input_", StringComparison.Ordinal))
-                    jsonsDict["input"].Jsons.Add(new FileJsons(child.Name, child.Value.ToString()));
-                else if (child.Name.Contains("output_", StringComparison.Ordinal))
-                    jsonsDict["output"].Jsons.Add(new FileJsons(child.Name, child.Value.ToString()));
-                FindElementsTokens(child.Value, urlsList, jsonsDict);
+                foreach (var child in containerToken.Children<JProperty>())
+                {
+                    if (child.Name.Contains("url_", StringComparison.Ordinal))
+                        urlsList.Add(new FileUrls(child.Name, new Uri(child.Value.ToString())));
+                    else if (child.Name.Contains("input_", StringComparison.Ordinal))
+                        jsonsDict["input"].Jsons.Add(new FileJsons(child.Name, child.Value.ToString()));
+                    else if (child.Name.Contains("output_", StringComparison.Ordinal))
+                        jsonsDict["output"].Jsons.Add(new FileJsons(child.Name, child.Value.ToString()));
+                    FindElementsTokens(child.Value, urlsList, jsonsDict);
+                }
+
+                break;
             }
-        else if (containerToken.Type == JTokenType.Array)
-            foreach (var child in containerToken.Children())
-                FindElementsTokens(child, urlsList, jsonsDict);
+            case JTokenType.Array:
+            {
+                foreach (var child in containerToken.Children())
+                    FindElementsTokens(child, urlsList, jsonsDict);
+                break;
+            }
+        }
     }
 
     public async Task ApiCallFilesAsync(string fileName, string json, Callapi inputTask)
@@ -78,10 +88,8 @@ public class ApiCallFiles
             FindElementsTokens(node, urlsList, jsonsDict);
 
             var tempStringsArray = inputTask.DownloadStringsMatcher.Split(",");
-            var stringsArray = new List<string>();
-            foreach (var regex in tempStringsArray) stringsArray.Add(regex.Trim());
 
-            await DownloadFilesAsync(httpClient, fileName, urlsList, jsonsDict, stringsArray.ToArray(), inputTask);
+            await DownloadFilesAsync(httpClient, fileName, urlsList, jsonsDict, tempStringsArray.Select(regex => regex.Trim()).ToArray(), inputTask);
         }
         catch (Exception ex)
         {
@@ -95,17 +103,15 @@ public class ApiCallFiles
         if (inputTask.EnabledSaveImages)
         {
             _fileLoader.CreateDirectory(inputTask.OutputDirectoryImages);
-            foreach (var imageUrl in urlsList)
-                if (IsStringsArrayMatch(imageUrl.Key, stringsArray.ToArray()))
-                    await DownloadFilesAsync(httpClient, fileName, imageUrl, inputTask);
+            foreach (var imageUrl in urlsList.Where(imageUrl => IsStringsArrayMatch(imageUrl.Key, stringsArray.ToArray())))
+                await DownloadFilesAsync(httpClient, fileName, imageUrl, inputTask);
         }
 
         if (inputTask.EnabledSaveInputs)
         {
             _fileLoader.CreateDirectory(inputTask.OutputDirectoryInputs);
-            foreach (var input in jsonsDict["input"].Jsons)
-                if (IsStringsArrayMatch(input.Key, stringsArray.ToArray()))
-                    await DownloadJsonAsync(input, inputTask, true);
+            foreach (var input in jsonsDict["input"].Jsons.Where(input => IsStringsArrayMatch(input.Key, stringsArray.ToArray())))
+                await DownloadJsonAsync(input, inputTask, true);
         }
 
         if (inputTask.EnabledSaveOutputs)
@@ -165,10 +171,7 @@ public class ApiCallFiles
     public static bool IsStringsArrayMatch(string input, string[] stringsArray)
     {
         if (stringsArray == null || input == null) return false;
-        foreach (var element in stringsArray)
-            if (input.Contains(element))
-                return true;
-        return false;
+        return stringsArray.Any(element => input.Contains(element));
     }
 
     private interface IFileObjects

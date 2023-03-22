@@ -335,15 +335,15 @@ etc.
 ## Ml-Cli batch
 
 You can execute several tasks in command line interface (CLI):
-- [`wait_version_change`](./src/Ml.Cli/JobVersion#readme) is a task that will wait for the version obtained via the url to change for a user-defined amount of time.
-- [`callapi`](./src/Ml.Cli/JobApiCall#readme) is a task which will call an online service to get jsons files describing files containing images. These json files contain a list of URLs leading to extracted images of the files containing images. The task can also download these images after generating the related json file.
-- [`parallel`](./src/Ml.Cli/JobParallel#readme) and serial are used to describe the way of handling your tasks.
-- [`serial`](./src/Ml.Cli/JobSerial#readme) are used to describe the way of handling your tasks.
-- [`loop`](./src/Ml.Cli/JobLoop#readme) is used to execute the task indefinitely.
-- [`script`](./src/Ml.Cli/JobScript#readme) will execute a user-defined script on files stored in a repository.
-- [`compare`](./src/Ml.Cli/JobCompare#readme) is used to compare two sets of json files; the resulting json file can be used to see the results with the help of the server.
-- [`dataset`](./src/Ml.Cli/JobDataset#readme) is used to generate a dataset file which will contain all annotations (of a same, user-specified type and configuration) made on json files with the help of Ml-Cli front.
-- [`copy`](./src/Ml.Cli/JobCopy#readme) copy from a directory to another directory.
+- [`wait_version_change`](./src/MlCli/JobVersion#readme) is a task that will wait for the version obtained via the url to change for a user-defined amount of time.
+- [`callapi`](./src/MlCli/JobApiCall#readme) is a task which will call an online service to get jsons files describing files containing images. These json files contain a list of URLs leading to extracted images of the files containing images. The task can also download these images after generating the related json file.
+- [`parallel`](./src/MlCli/JobParallel#readme) and serial are used to describe the way of handling your tasks.
+- [`serial`](./src/MlCli/JobSerial#readme) are used to describe the way of handling your tasks.
+- [`loop`](./src/MlCli/JobLoop#readme) is used to execute the task indefinitely.
+- [`script`](./src/MlCli/JobScript#readme) will execute a user-defined script on files stored in a repository.
+- [`compare`](./src/MlCli/JobCompare#readme) is used to compare two sets of json files; the resulting json file can be used to see the results with the help of the server.
+- [`dataset`](./src/MlCli/JobDataset#readme) is used to generate a dataset file which will contain all annotations (of a same, user-specified type and configuration) made on json files with the help of Ml-Cli front.
+- [`copy`](./src/MlCli/JobCopy#readme) copy from a directory to another directory.
 
 
 ### tasks-sample.json

@@ -28,41 +28,16 @@ public class TaskCompare
                 ? fileLeftPath
                 : Path.Combine(inputTask.LeftDirectory, fileLeftPath);
             _logger.LogInformation($"Task Id: {inputTask.Id} - Compare {fileName}");
-            var jsonLeft = await _fileLoader.ReadAllTextInFileAsync(filePath);
-            Program.HttpResult left;
-            try
-            {
-                left = JsonConvert.DeserializeObject<Program.HttpResult>(jsonLeft);
-            }
-            catch (JsonException)
-            {
-                left = CreateHttpResult(jsonLeft, fileName, filePath);
-            }
-
+            var left = await FormatToHttpResult(filePath, fileName, filePath);
             var fileRightPath = Path.Combine(inputTask.RightDirectory, fileName);
             if (!_fileLoader.FileExists(fileRightPath))
             {
-                if (inputTask.OnFileNotFound == "warning")
-                {
-                    _logger.LogWarning(
-                        $"Task Id: {inputTask.Id} - File not found for comparison in right path: {fileRightPath}");
-                    continue;
-                }
-
-                throw new FileNotFoundException(fileRightPath);
+                if (inputTask.OnFileNotFound != "warning") throw new FileNotFoundException(fileRightPath);
+                _logger.LogWarning(
+                    $"Task Id: {inputTask.Id} - File not found for comparison in right path: {fileRightPath}");
+                continue;
             }
-
-            var jsonRight = await _fileLoader.ReadAllTextInFileAsync(fileRightPath);
-            Program.HttpResult right;
-            try
-            {
-                right = JsonConvert.DeserializeObject<Program.HttpResult>(jsonRight);
-            }
-            catch (JsonException)
-            {
-                right = CreateHttpResult(jsonRight, fileName, fileRightPath);
-            }
-
+            var right = await FormatToHttpResult(fileRightPath, fileName, filePath);
             compareResults.Add(new CompareResult
             {
                 FileName = fileName,
@@ -79,6 +54,26 @@ public class TaskCompare
             fileContent.CompareLocation,
             JsonConvert.SerializeObject(fileContent,
                 Formatting.Indented));
+    }
+
+    private async Task<Program.HttpResult> FormatToHttpResult(string fileRightPath, string fileName, string filePath)
+    {
+        var jsonRight = await _fileLoader.ReadAllTextInFileAsync(fileRightPath);
+        Program.HttpResult right;
+        try
+        {
+            right = JsonConvert.DeserializeObject<Program.HttpResult>(jsonRight);
+            if (right.Body == null)
+            {
+                right = CreateHttpResult(jsonRight, fileName, filePath);
+            }
+        }
+        catch (JsonException)
+        {
+            right = CreateHttpResult(jsonRight, fileName, fileRightPath);
+        }
+
+        return right;
     }
 
     private Program.HttpResult CreateHttpResult(string body, string fileName, string fileDirectory)
