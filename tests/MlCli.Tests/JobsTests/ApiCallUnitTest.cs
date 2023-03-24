@@ -279,5 +279,4 @@ public class ApiCallUnitTest
         var filename = TaskApiCall.GetTargetFileName(isDefaultTargetFileMode, currentFilePath, ".json");
         Assert.Equal(expectedFilename, filename);
     }
-
 }
