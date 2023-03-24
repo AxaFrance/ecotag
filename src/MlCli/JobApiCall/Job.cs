@@ -121,16 +121,17 @@ public class TaskApiCall
         }
     }
 
-    private async Task<string> PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFile,
+    private async Task<string> PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFilePath,
         string extension, string outputDirectory)
     {
-        if (Path.GetExtension(currentFile) == ".json") return string.Empty;
+        if (Path.GetExtension(currentFilePath) == ".json") return string.Empty;
 
-        var fileName = Path.GetFileName(currentFile);
-        var jsonFileName = $"{fileName.Replace(".", "_")}{extension}";
+        
+        var jsonFileName = GetTargetFileName(inputTask.IsDefaultTargetFileMode, currentFilePath, extension);
         var targetFileName = Path.Combine(outputDirectory, jsonFileName);
         try
         {
+            var fileName = Path.GetFileName(currentFilePath);
             if (_fileLoader.FileExists(targetFileName))
             {
                 _logger.LogWarning($"Task Id: {inputTask.Id} - Already processed file {fileName}");
@@ -145,7 +146,7 @@ public class TaskApiCall
             {
                 try
                 {
-                    httpResult = await CallHttpAsync(httpClient, inputTask, currentFile, jsonFileName, i);
+                    httpResult = await CallHttpAsync(httpClient, inputTask, currentFilePath, jsonFileName, i);
                     if (httpResult.StatusCode < 500) break;
                 }
                 catch (Exception e)
@@ -173,14 +174,13 @@ public class TaskApiCall
             if (httpResult == null)
                 throw new ApplicationException("httpResult is null");
 
-            if (httpResult.StatusCode < 500 || (inputTask.IsSaveResultOnError && httpResult.StatusCode >= 500))
-            {
-                var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
-                await _fileLoader.WriteAllTextInFileAsync(targetFileName,
-                    json);
-                if (inputTask.EnabledSaveImages || inputTask.EnabledSaveInputs || inputTask.EnabledSaveOutputs)
-                    await _callFiles.ApiCallFilesAsync(fileName, json, inputTask);
-            }
+            if (httpResult.StatusCode >= 500 && (!inputTask.IsSaveResultOnError || httpResult.StatusCode < 500))
+                return httpResult.StatusCode < 500 ? "OK" : "KO";
+            var json = JsonConvert.SerializeObject(httpResult, Formatting.Indented);
+            await _fileLoader.WriteAllTextInFileAsync(targetFileName,
+                json);
+            if (inputTask.EnabledSaveImages || inputTask.EnabledSaveInputs || inputTask.EnabledSaveOutputs)
+                await _callFiles.ApiCallFilesAsync(fileName, json, inputTask);
 
             return httpResult.StatusCode < 500 ? "OK" : "KO";
         }
@@ -188,6 +188,21 @@ public class TaskApiCall
         {
             _logger.LogError($"Task Id: {inputTask.Id} - Error : {e.Message}");
             return "Exception";
+        }
+    }
+
+    public static string GetTargetFileName(bool isDefaultTargetFileMode, string currentFilePath, string extension)
+    {
+        var fileName = Path.GetFileName(currentFilePath);
+        if (isDefaultTargetFileMode)
+        {
+            var jsonFileName = $"{fileName.Replace(".", "_")}{extension}";
+            return  jsonFileName;
+        }
+        else
+        {
+            var jsonFileName = fileName.Replace(Path.GetExtension(currentFilePath), "") + extension;
+            return jsonFileName;
         }
     }
 

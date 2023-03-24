@@ -5,6 +5,7 @@ namespace AxaGuilDEv.MlCli.JobApiCall;
 
 public class Callapi : IInputTask
 {
+
     public Callapi(string type, string id, bool enabled, string fileDirectory, string outputDirectoryJsons,
         string outputDirectoryImages, string outputDirectoryInputs, string outputDirectoryOutputs,
         string frontDefaultStringsMatcher, string downloadStringsMatcher, bool enabledSaveImages,
@@ -16,9 +17,12 @@ public class Callapi : IInputTask
         bool isSaveResultOnError = true,
         int? stopAfterNumberFiles = null,
         int? chunkByNumberPart = null,
-        int? chunkIndex = null
+        int? chunkIndex = null,
+        bool isDefaultTargetFileMode = true
+        
     )
     {
+        IsDefaultTargetFileMode = isDefaultTargetFileMode;
         StopAfterNumberFiles = stopAfterNumberFiles;
         Type = type;
         Id = id;
@@ -71,4 +75,6 @@ public class Callapi : IInputTask
     public string Id { get; }
     public string Type { get; }
     public bool Enabled { get; }
+    
+    public bool IsDefaultTargetFileMode { get; }
 }

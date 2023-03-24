@@ -3,7 +3,7 @@
     "LocalBatch": {
       "commandName": "Project",
       "launchBrowser": true,
-      "commandLineArgs": "--tasks-path ../../demo/tasks-licenses.json  --base-path ../../demo --compares-paths licenses/compares --datasets-paths licenses/datasets",
+      "commandLineArgs": "---tasks-path C:/Demo/integration/tasks-ged.json  --base-path C:/Demo/integration",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
