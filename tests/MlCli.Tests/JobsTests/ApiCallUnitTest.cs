@@ -275,7 +275,7 @@ public class ApiCallUnitTest
     [InlineData(true, @"{00087046-E26C-4183-826D-E6F074C0ED08}_9f7f4e92aabcbe45ca7a34212a05865f_pdf.json")]
     public void GetTargetFileNameShouldReturnCorrectFilename(bool isDefaultTargetFileMode, string expectedFilename)
     {
-        var currentFilePath = @"C:\Demo\{00087046-E26C-4183-826D-E6F074C0ED08}.9f7f4e92aabcbe45ca7a34212a05865f.pdf";
+        var currentFilePath = PathAdapter.AdaptPathForCurrentOs(@"C:\Demo\{00087046-E26C-4183-826D-E6F074C0ED08}.9f7f4e92aabcbe45ca7a34212a05865f.pdf");
         var filename = TaskApiCall.GetTargetFileName(isDefaultTargetFileMode, currentFilePath, ".json");
         Assert.Equal(expectedFilename, filename);
     }
