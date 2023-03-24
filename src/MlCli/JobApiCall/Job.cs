@@ -121,16 +121,17 @@ public class TaskApiCall
         }
     }
 
-    private async Task<string> PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFile,
+    private async Task<string> PlayDataAsync(HttpClient httpClient, Callapi inputTask, string currentFilePath,
         string extension, string outputDirectory)
     {
-        if (Path.GetExtension(currentFile) == ".json") return string.Empty;
+        if (Path.GetExtension(currentFilePath) == ".json") return string.Empty;
 
-        var fileName = Path.GetFileName(currentFile);
-        var jsonFileName = GetTargetFileName(inputTask, currentFile, extension, outputDirectory, fileName);
+        
+        var jsonFileName = GetTargetFileName(inputTask.IsDefaultTargetFileMode, currentFilePath, extension);
         var targetFileName = Path.Combine(outputDirectory, jsonFileName);
         try
         {
+            var fileName = Path.GetFileName(currentFilePath);
             if (_fileLoader.FileExists(targetFileName))
             {
                 _logger.LogWarning($"Task Id: {inputTask.Id} - Already processed file {fileName}");
@@ -145,7 +146,7 @@ public class TaskApiCall
             {
                 try
                 {
-                    httpResult = await CallHttpAsync(httpClient, inputTask, currentFile, jsonFileName, i);
+                    httpResult = await CallHttpAsync(httpClient, inputTask, currentFilePath, jsonFileName, i);
                     if (httpResult.StatusCode < 500) break;
                 }
                 catch (Exception e)
@@ -190,17 +191,17 @@ public class TaskApiCall
         }
     }
 
-    private static string GetTargetFileName(Callapi inputTask, string currentFile, string extension, string outputDirectory,
-        string fileName)
+    public static string GetTargetFileName(bool isDefaultTargetFileMode, string currentFilePath, string extension)
     {
-        if (inputTask.IsDefaultTargetFileMode)
+        var fileName = Path.GetFileName(currentFilePath);
+        if (isDefaultTargetFileMode)
         {
             var jsonFileName = $"{fileName.Replace(".", "_")}{extension}";
             return  jsonFileName;
         }
         else
         {
-            var jsonFileName = fileName.Replace(Path.GetExtension(currentFile), "") + extension;
+            var jsonFileName = fileName.Replace(Path.GetExtension(currentFilePath), "") + extension;
             return jsonFileName;
         }
     }
