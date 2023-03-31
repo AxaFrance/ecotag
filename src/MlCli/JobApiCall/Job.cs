@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
@@ -236,7 +237,7 @@ public class TaskApiCall
                             {
                                 var streamContent = new StreamContent(_fileLoader.OpenRead(settingFile));
                                 var filename = setting.FileName ?? Path.GetFileName(settingFile);
-                                requestContent.Add(streamContent, "file", filename);
+                                requestContent.Add(streamContent, "file", WebUtility.UrlEncode(filename));
                             }
                             else
                             {
