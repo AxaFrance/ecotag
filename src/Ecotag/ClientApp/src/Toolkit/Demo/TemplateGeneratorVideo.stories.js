@@ -1,5 +1,5 @@
 ﻿import Loader, {LoaderModes} from "@axa-fr/react-toolkit-loader";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import {storiesOf} from "@storybook/react";
 import {File} from "@axa-fr/react-toolkit-form-input-file";
 import {playAlgoWithCurrentTemplateAsync, toBase64Async} from "./template";
@@ -8,46 +8,54 @@ import {detectAndComputeSerializable} from "../Opencv/match";
 import useScript from "../Script/useScript";
 import './TemplateGenerator.scss';
 
+import Webcam from "react-webcam";
+
+function WebcamImage({captureCallBack, templateJson}) {
+  const [img, setImg] = useState(null);
+  const webcamRef = useRef(null);
+
+  const videoConstraints = {
+    width: 420,
+    height: 420,
+    facingMode: "user",
+  };
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImg(imageSrc);
+    captureCallBack(imageSrc, templateJson);
+  }, [webcamRef, templateJson]);
+
+  return (
+    <div className="Container">
+      {img === null ? (
+        <>
+          <Webcam
+            audio={false}
+            mirrored={true}
+            height={800}
+            width={800}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
+          />
+          <button onClick={capture}>Capture photo</button>
+        </>
+      ) : (
+        <>
+          <button onClick={() => setImg(null)}>Retake</button>
+          <img src={img} alt="screenshot" />
+        </>
+      )}
+    </div>
+  );
+}
+
 const TemplateGenerator = () => {
 
     const [loaded, error] = useScript(
         `https://docs.opencv.org/4.7.0/opencv.js`
     );
-    const videoRef = useRef(null);
-    const canevasRef = useRef(null);
-    useEffect(() => {
-        if(videoRef && videoRef.current) {
-            const cv = window.cv;
-            let video = videoRef.current; // video is the id of video tag
-            navigator.mediaDevices.getUserMedia({video: true, audio: false})
-                .then(function (stream) {
-                    video.srcObject = stream;
-                    video.play();
-
-                    let canvasFrame = canevasRef.current;
-                    let context = canvasFrame.getContext("2d");
-                    let src = new cv.Mat(height, width, cv.CV_8UC4);
-                    let dst = new cv.Mat(height, width, cv.CV_8UC1);
-
-                    const FPS = 30;
-                    function processVideo() {
-                        let begin = Date.now();
-                        context.drawImage(video, 0, 0, width, height);
-                        src.data.set(context.getImageData(0, 0, width, height).data);
-                        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-                        cv.imshow("canvasOutput", dst); // canvasOutput is the id of another <canvas>;
-                        // schedule next one.
-                        let delay = 1000/FPS - (Date.now() - begin);
-                        setTimeout(processVideo, delay);
-                    }
-// schedule first one.
-                    setTimeout(processVideo, 0);
-                })
-                .catch(function (err) {
-                    console.log("An error occurred! " + err);
-                });
-        }
-    }, [videoRef]);
 
     const [state, setState] = useState({
         loaderMode: LoaderModes.none,
@@ -56,7 +64,6 @@ const TemplateGenerator = () => {
         croppedContoursBase64: [null],
         errorMessage: ""
     });
-    
     
     if (!loaded) {
         return (<p>Loading</p>);
@@ -73,9 +80,9 @@ const TemplateGenerator = () => {
         setState({...state, jsonContent: jsonValue, templateImage: convertedfile});
     }
 
-    const onFileTest = value => {
-        const file = value.values[0].file;
-        const template = {imgDescription: JSON.parse(state.jsonContent), goodMatchSizeThreshold: 5};
+    const capture = (value, templateJson ) => {
+        const file = {fileBase64: value, name: "screen.base64" };
+        const template = {imgDescription: JSON.parse(templateJson), goodMatchSizeThreshold: 5};
         setState({...state, loaderMode: LoaderModes.get, croppedContoursBase64: [null]});
         playAlgoWithCurrentTemplateAsync(template, setState, state, file);
     }
@@ -101,32 +108,17 @@ const TemplateGenerator = () => {
                     <img src={state.templateImage} alt="template image"/>
                 }
                 <div className="template-generator__content">{state.jsonContent}</div>
-                    <>
-                        <table cellPadding="0" cellSpacing="0" width="0" border="0">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <video ref={videoRef} id="videoInput" width="320" height="240"></video>
-                                </td>
-                                <td>
-                                    <canvas ref={canevasRef} id="canvasOutput" width="320" height="240"></canvas>
-                                </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="caption">videoInput</div>
-                                </td>
-                                <td>
-                                    <div className="caption">canvasOutput</div>
-                                </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </>
+                <WebcamImage captureCallBack={capture} templateJson={state.jsonContent} />
+                {state.errorMessage ? (
+                            <p className="template-generator__error">{state.errorMessage}</p>
+                        ) : (
+                            <>
+                                {state.croppedContoursBase64 && state.croppedContoursBase64[0] &&
+                                    <img src={state.croppedContoursBase64[0]} alt="image found"/>
+                                }
+                            </>
+                        )
+                        }
             </form>
         </Loader>
     )

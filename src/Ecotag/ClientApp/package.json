@@ -32,6 +32,7 @@
     "react-router": "5.2.1",
     "react-router-dom": "5.3.0",
     "react-toastify": "8.0.3",
+    "react-webcam": "7.0.1",
     "sanitize-html": "2.7.1",
     "tesseract.js": "2.1.5",
     "use-image": "1.0.12"
