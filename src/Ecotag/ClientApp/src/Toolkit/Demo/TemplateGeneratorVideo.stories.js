@@ -32,9 +32,9 @@ function WebcamImage({captureCallBack, templateJson}) {
         <>
           <Webcam
             audio={false}
-            mirrored={true}
-            height={800}
-            width={800}
+            mirrored={false}
+            height={400}
+            width={400}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
@@ -72,7 +72,7 @@ const TemplateGenerator = () => {
     const onChange = async value => {
         const file = value.values[0].file;
         const cv = window.cv;
-        const convertedfile = await toBase64Async(file);
+        const convertedfile = await toBase64Async(file);  
         const imgVersoCvTemplate = await loadImageAsync(cv)(convertedfile);
         const imgVersoCvTemplateResized = imageResize(cv)(imgVersoCvTemplate, 600).image;
         const resizedImg = detectAndComputeSerializable(cv)(imgVersoCvTemplateResized);
@@ -108,17 +108,32 @@ const TemplateGenerator = () => {
                     <img src={state.templateImage} alt="template image"/>
                 }
                 <div className="template-generator__content">{state.jsonContent}</div>
-                <WebcamImage captureCallBack={capture} templateJson={state.jsonContent} />
-                {state.errorMessage ? (
+                <table>
+                    <tbody>
+                      <tr>
+                        <td>Webcam</td>
+                        <td>Image Found</td>
+                      </tr>
+                      <tr>
+                        <td><WebcamImage captureCallBack={capture} templateJson={state.jsonContent} /></td>
+                        <td>  {state.errorMessage ? (
                             <p className="template-generator__error">{state.errorMessage}</p>
                         ) : (
                             <>
                                 {state.croppedContoursBase64 && state.croppedContoursBase64[0] &&
-                                    <img src={state.croppedContoursBase64[0]} alt="image found"/>
+                                    <><img src={state.croppedContoursBase64[0]} alt="image found"/>
+                                    </>
                                 }
                             </>
                         )
-                        }
+                        }</td>
+                      </tr>
+
+                      
+                      </tbody>
+                </table>
+                
+              
             </form>
         </Loader>
     )
