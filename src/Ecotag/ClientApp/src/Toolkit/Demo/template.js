@@ -36,6 +36,8 @@ export const playAlgoAsync = (cv) => async (file, imgDescription, goodMatchSizeT
         files = await convertPdfToImagesAsync()(file, 2);
     } else if (filename.endsWith(".tif") || filename.endsWith(".tiff")) {
         files = await convertTiffToImagesAsync()(file);
+    } else if (filename.endsWith(".base64")) {
+        files = [file.fileBase64];
     } else {
         files = [await toBase64Async(file)];
     }
@@ -48,6 +50,8 @@ export const playAlgoNoTemplateAsync = async (file) => {
     let files;
     if (filename.endsWith(".pdf")) {
         files = await convertPdfToImagesAsync()(file, 2);
+    } else if (filename.endsWith(".base64")) {
+        files = [file.fileBase64];
     } else if (filename.endsWith(".tif") || filename.endsWith(".tiff")) {
         files = await convertTiffToImagesAsync()(file);
     } else {
@@ -185,7 +189,7 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin, witdh, 
 }
 
 export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
-    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+    return playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
         if (result) {
             setState({
                 ...state, ...result.data,

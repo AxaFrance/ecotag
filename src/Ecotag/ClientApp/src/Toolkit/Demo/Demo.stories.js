@@ -24,7 +24,7 @@ const optionsSelect = [
 function Demo({templates = []}) {
 
     const [loaded, error] = useScript(
-        `https://docs.opencv.org/4.6.0/opencv.js`
+        `https://docs.opencv.org/4.7.0/opencv.js`
     );
 
     const initialState = {
