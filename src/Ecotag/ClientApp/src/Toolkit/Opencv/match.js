@@ -74,6 +74,8 @@ export const detectAndCompute = (cv) => (img, detectionAlgorithm) => {
 
 export const detectAndComputeSerializable = (cv) => (img) => {
     const detectionAlgorithm = new cv.BRISK();
+    //const detectionAlgorithm = new cv.AKAZE();
+    //const detectionAlgorithm = new cv.ORB(10000);
 
     // find the keypoints with ORB
     const {keypoints, descriptors} = detectAndCompute(cv)(img, detectionAlgorithm);
@@ -119,6 +121,7 @@ export const detectAndMatch = (cv) => (imgDescription, im2, minMatch = 20) => {
 
     // Initiate STAR detector
     //const detectionAlgorithm = new cv.ORB(10000);
+    // const detectionAlgorithm = new cv.SIFT();
     //const detectionAlgorithm = new cv.AKAZE();
     const detectionAlgorithm = new cv.BRISK();
 

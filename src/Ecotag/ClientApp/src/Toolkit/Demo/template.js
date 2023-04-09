@@ -189,7 +189,7 @@ export const cropImageAsync = (cv) => async (imageUrlBase64, xmin, ymin, witdh, 
 }
 
 export const playAlgoWithCurrentTemplateAsync = (template, setState, state, file) => {
-    playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
+    return playAlgoAsync(window.cv)(file, template.imgDescription, template.goodMatchSizeThreshold).then(result => {
         if (result) {
             setState({
                 ...state, ...result.data,

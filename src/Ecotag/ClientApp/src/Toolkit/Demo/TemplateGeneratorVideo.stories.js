@@ -108,6 +108,7 @@ const TemplateGenerator = () => {
                     <img src={state.templateImage} alt="template image"/>
                 }
                 <div className="template-generator__content">{state.jsonContent}</div>
+                {state.jsonContent &&
                 <table>
                     <tbody>
                       <tr>
@@ -122,6 +123,7 @@ const TemplateGenerator = () => {
                             <>
                                 {state.croppedContoursBase64 && state.croppedContoursBase64[0] &&
                                     <><img src={state.croppedContoursBase64[0]} alt="image found"/>
+                                    {state.confidenceRate}
                                     </>
                                 }
                             </>
@@ -131,7 +133,7 @@ const TemplateGenerator = () => {
 
                       
                       </tbody>
-                </table>
+                </table>}
                 
               
             </form>
