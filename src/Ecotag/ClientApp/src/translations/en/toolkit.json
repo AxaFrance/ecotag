@@ -99,5 +99,31 @@
         "label": "Rotate Right"
       }
     }
+  },
+  "rotation": {
+    "image_alt": "Image to rotate",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "opacity_label": "Opacity",
+      "dark_mode_label": "Dark mode",
+      "anomaly_label": "Anomaly",
+      "angle_label": "Angle"
+    }
+  },
+  "named_entity": {
+    "label": {
+      "shortcut": "Shortcut :"
+    },
+    "toolbar": {
+      "keep_annotation_label": "Keep Labels",
+      "zoom_in": {
+        "title": "Shortcut: Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut: 0",
+        "label": "Zoom Out"
+      }
+    }
   }
 }

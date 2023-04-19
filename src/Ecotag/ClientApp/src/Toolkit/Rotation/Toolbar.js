@@ -4,6 +4,7 @@ import Toolbar, {ToolbarButtonContainer, ToolbarProgressButton, ToolbarSwitchBut
 
 import './Toolbar.scss';
 import './ComponentsModifier.scss';
+import useProjectTranslation from "../../translations/useProjectTranslation";
 
 configure({ignoreRepeatedEventsWhenKeyHeldDown: false});
 
@@ -22,6 +23,8 @@ const getImageInfo = imageDimensions => {
 };
 
 const ToolbarContainer = ({url, state, setState, onSubmit, expectedAngle}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
     const {imageWidth, imageHeight} = getImageInfo(state.imageDimensions);
     const isSubmitDisabled = imageHeight === 0;
 
@@ -81,7 +84,7 @@ const ToolbarContainer = ({url, state, setState, onSubmit, expectedAngle}) => {
                 <ToolbarButtonContainer classModifier="filters">
                     <ToolbarProgressButton
                         classModifier="width-image"
-                        label="Image size"
+                        label={translate('rotation.toolbar.progress_label')}
                         id="width-image"
                         value={state.widthImage}
                         onChange={e => setState({...state, widthImage: e.target.value})}
@@ -92,7 +95,7 @@ const ToolbarContainer = ({url, state, setState, onSubmit, expectedAngle}) => {
                     />
                     <ToolbarProgressButton
                         classModifier="opacity"
-                        label="Opacité"
+                        label={translate('rotation.toolbar.opacity_label')}
                         id="opacity"
                         value={state.opacity}
                         onChange={e => setState({...state, opacity: e.target.value})}
@@ -108,20 +111,20 @@ const ToolbarContainer = ({url, state, setState, onSubmit, expectedAngle}) => {
                         id="light-grid"
                         checked={!state.lightGrid}
                         onChange={() => setState({...state, lightGrid: !state.lightGrid})}
-                        label="Dark mode"
+                        label={translate('rotation.toolbar.dark_mode_label')}
                     />
                     <ToolbarSwitchButton
                         classModifier="anomaly"
                         id="anomaly"
                         checked={state.imageAnomaly}
                         onChange={() => setState({...state, imageAnomaly: !state.imageAnomaly})}
-                        label="Anomalie"
+                        label={translate('rotation.toolbar.anomaly_label')}
                     />
                 </ToolbarButtonContainer>
                 <ToolbarButtonContainer>
                     <ToolbarProgressButton
                         classModifier="angle"
-                        label={`Angle: ${state.rotate}°`}
+                        label={`${translate('rotation.toolbar.angle_label')}: ${state.rotate}°`}
                         id="angle"
                         onChange={e => setState({...state, rotate: e.target.value})}
                         value={state.rotate}

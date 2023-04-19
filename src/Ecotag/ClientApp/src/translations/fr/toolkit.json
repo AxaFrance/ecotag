@@ -99,5 +99,31 @@
         "label": "Rotation Droite"
       }
     }
+  },
+  "rotation": {
+    "image_alt": "Image à tourner",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "opacity_label": "Opacité",
+      "dark_mode_label": "Mode sombre",
+      "anomaly_label": "Anomalie",
+      "angle_label": "Angle"
+    }
+  },
+  "named_entity": {
+    "label": {
+      "shortcut": "Raccourci :"
+    },
+    "toolbar": {
+      "keep_annotation_label": "Garder les labels",
+      "zoom_in": {
+        "title": "Raccourci: Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci: 0",
+        "label": "Dézoomer"
+      }
+    }
   }
 }
