@@ -1,0 +1,103 @@
+{
+  "page_annotation": {
+   "subtitle": "Project of type"
+  },
+  "annotation_status": {
+    "loading": "Loading next element",
+    "post": "Save in progress",
+    "error": "Error during save"
+  },
+  "reservation_status": {
+    "loading": "Reservation of the next element in progress",
+    "post": "Reservation of the next element in progress",
+    "error": "Error during loading"
+  },
+  "content": {
+    "end": {
+      "title": "Annotation",
+      "text": "You annotated all you could on this dataset. Thanks a lot !"
+    },
+    "start": "Reservation of elements to annotate in progress",
+    "toolbar": {
+      "previous": "Previous",
+      "next": "Next",
+      "text": {
+        "error": "save error at",
+        "saved": "saved at",
+        "saved_previous_session": "saved during a previous session"
+      }
+    }
+  },
+  "cropping": {
+    "toolbar": {
+      "keep_annotation": "Keep annotation",
+      "delete": {
+        "title": "Shortcut : Delete",
+        "label": "Delete"
+      },
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom Out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      },
+      "select_all": {
+        "title": "Shortcut : A",
+        "label": "Select All"
+      },
+      "move": "Move",
+      "submit": {
+        "title": "Shortcut : Ctrl + Spacebar",
+        "label": "Submit"
+      },
+      "reset": {
+        "title": "Shortcut : Ctrl + Alt + Spacebar",
+        "label": "Reset"
+      }
+    },
+    "labels": {
+      "title": "Labels",
+      "button": {
+        "has_shortcut": "Shortcut : alt + ",
+        "no_shortcut": "No shortcut"
+      }
+    }
+  },
+  "ocr": {
+    "alt_image": "Image to annotate",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "inline_mode_label": "Inline mode",
+      "rotation_left": {
+        "title": "Shortcut : L",
+        "label": "Rotate Left"
+      },
+      "rotation_right": {
+        "title": "Shortcut : R",
+        "label": "Rotate Right"
+      }
+    }
+  },
+  "image_classifier": {
+    "image_alt": "Classifier image",
+    "shortcut": "Shortcut :",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "inline_mode_label": "Inline mode",
+      "rotate_left": {
+        "title": "Shortcut : L",
+        "label": "Rotate Left"
+      },
+      "rotate_right": {
+        "title": "Shortcut : R",
+        "label": "Rotate Right"
+      }
+    }
+  }
+}

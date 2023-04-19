@@ -1,0 +1,103 @@
+{
+  "page_annotation": {
+    "subtitle": "Projet de type"
+  },
+  "annotation_status": {
+    "loading": "Chargement de l'élément suivant en cours",
+    "post": "Sauvegarde en cours",
+    "error": "Erreur lors de la sauvegarde"
+  },
+  "reservation_status": {
+    "loading": "Réservation de l'élément suivant en cours",
+    "post": "Réservation de l'élément suivant en cours",
+    "error": "Erreur lors du chargement"
+  },
+  "content": {
+    "end": {
+      "title": "Annotation",
+      "text": "Vous avez annoté tout ce que vous pouviez sur ce dataset. Merci beaucoup !"
+    },
+    "start": "Réservation d'éléments d'annotation en cours",
+    "toolbar": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "text": {
+        "error": "sauvegarde erreur à",
+        "saved": "sauvegardé à",
+        "saved_previous_session": "sauvegardé lors d'une session précédente"
+      }
+    }
+  },
+  "cropping": {
+    "toolbar": {
+      "keep_annotation": "Garder l'annotation",
+      "delete": {
+        "title": "Raccourci : Supprimer",
+        "label": "Supprimer"
+      },
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      },
+      "select_all": {
+        "title": "Raccourci : A",
+        "label": "Tout sélectionner"
+      },
+      "move": "Déplacer",
+      "submit": {
+        "title": "Raccourci : Ctrl + Barre espace",
+        "label": "Envoyer"
+      },
+      "reset": {
+        "title": "Raccourci : Ctrl + Alt + Barre espace",
+        "label": "Réinitialiser"
+      }
+    },
+    "labels": {
+      "title": "Labels",
+      "button": {
+        "has_shortcut": "Raccourci : alt + ",
+        "no_shortcut": "Pas de raccourci"
+      }
+    }
+  },
+  "ocr": {
+    "alt_image": "Image à annoter",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "inline_mode_label": "Mode une ligne",
+      "rotation_left": {
+        "title": "Raccourci : L",
+        "label": "Rotation Gauche"
+      },
+      "rotation_right": {
+        "title": "Raccourci : R",
+        "label": "Rotation Droite"
+      }
+    }
+  },
+  "image_classifier": {
+    "image_alt": "Image de classification",
+    "shortcut": "Raccourci :",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "inline_mode_label": "Mode une ligne",
+      "rotate_left": {
+        "title": "Raccourci : L",
+        "label": "Rotation Gauche"
+      },
+      "rotate_right": {
+        "title": "Raccourci : R",
+        "label": "Rotation Droite"
+      }
+    }
+  }
+}

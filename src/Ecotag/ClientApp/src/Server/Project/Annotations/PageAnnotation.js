@@ -2,6 +2,7 @@ import Title from "../../../TitleBar";
 import {Content} from "./Content";
 import React from "react";
 import {withResilience} from "../../shared/Resilience";
+import useProjectTranslation from "../../../translations/useProjectTranslation";
 
 export const PageAnnotation = ({
                                    project,
@@ -14,21 +15,25 @@ export const PageAnnotation = ({
                                    reservationStatus,
                                    documentId,
                                    annotationStatus
-                               }) => <>
-    <Title title={project.name}
-           subtitle={`Projet de type ${project.annotationType}`}
-           goTo={`/projects/${project.id}`}/>
-    <Content reservationStatus={reservationStatus}
-             annotationStatus={annotationStatus}
-             onNext={onNext}
-             onPrevious={onPrevious}
-             project={project}
-             onSubmit={onSubmit}
-             currentItem={currentItem}
-             hasPrevious={hasPrevious}
-             hasNext={hasNext}
-             documentId={documentId}
-    />
-</>
+                               }) => {
+    const {translate} = useProjectTranslation('toolkit');
+
+    return(<>
+        <Title title={project.name}
+               subtitle={`${translate('page_annotation.subtitle')} ${project.annotationType}`}
+               goTo={`/projects/${project.id}`}/>
+        <Content reservationStatus={reservationStatus}
+                 annotationStatus={annotationStatus}
+                 onNext={onNext}
+                 onPrevious={onPrevious}
+                 project={project}
+                 onSubmit={onSubmit}
+                 currentItem={currentItem}
+                 hasPrevious={hasPrevious}
+                 hasNext={hasNext}
+                 documentId={documentId}
+        />
+    </>);
+}
 
 export const PageAnnotationWithResilience = withResilience(PageAnnotation);

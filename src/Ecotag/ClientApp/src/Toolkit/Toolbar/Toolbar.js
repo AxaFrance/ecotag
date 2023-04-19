@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 import './Toolbar.scss';
+import useProjectTranslation from "../../translations/useProjectTranslation";
 
 export const ToolbarButtonContainer = ({children, classModifier = undefined}) => {
     const name = 'toolbar__button-container';
@@ -64,6 +65,8 @@ export const ToolbarProgressButton = ({label, id, classModifier, ...otherProps})
 
 const Toolbar = ({isSubmitDisabled = false, onSubmit, onReset = undefined, children, classModifier}) => {
 
+    const {translate} = useProjectTranslation('toolkit');
+
     const containerClassName = "toolbar"
 
     const className = classNames(containerClassName, {
@@ -75,17 +78,18 @@ const Toolbar = ({isSubmitDisabled = false, onSubmit, onReset = undefined, child
             {children}
             <ToolbarButtonContainer classModifier="submit">
                 {onReset && (
-                    <button title="Raccourci : Ctrl + Alt + Barre espace" className="toolbar__button-reset"
+                    <button title={translate('cropping.toolbar.reset.title')}
+                            className="toolbar__button-reset"
                             onClick={onReset}>
-                        Reset
+                        {translate('cropping.toolbar.reset.label')}
                     </button>
                 )}
                 <button
                     className="toolbar__button-submit"
-                    title="Raccourci : Ctrl + Barre espace"
+                    title={translate('cropping.toolbar.submit.title')}
                     disabled={isSubmitDisabled}
                     onClick={onSubmit}>
-                    Submit
+                    {translate('cropping.toolbar.submit.label')}
                 </button>
             </ToolbarButtonContainer>
         </div>

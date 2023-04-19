@@ -1,8 +1,10 @@
 import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import {ToolbarButton, ToolbarButtonContainer, ToolbarProgressButton, ToolbarSwitchButton} from '../Toolbar';
+import useProjectTranslation from "../../translations/useProjectTranslation";
 
 const ToolbarContainer = ({state, setState}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const getImageInfo = () => {
         const image = document.getElementById('currentImage');
         const imageWidth = image.width;
@@ -48,22 +50,31 @@ const ToolbarContainer = ({state, setState}) => {
             <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
                 <ToolbarButtonContainer classModifier="progress-bar">
                     <ToolbarProgressButton
-                        label="Image Size"
+                        label={translate('image_classifier.toolbar.progress_label')}
                         onChange={e => setState({...state, widthImage: e.target.value})}
                         value={state.widthImage}
                         min="1"
                         max="80"
                     />
-                    <ToolbarSwitchButton id="inlineMode" checked={state.inlineMode} onChange={inlineMode}
-                                         label="Inline mode"/>
+                    <ToolbarSwitchButton
+                        id="inlineMode"
+                        checked={state.inlineMode}
+                        onChange={inlineMode}
+                        label={translate('image_classifier.toolbar.inline_mode_label')}
+                    />
                 </ToolbarButtonContainer>
                 <ToolbarButtonContainer>
-                    <ToolbarButton title="Raccourci : L" onClick={rotateImage} icon="reset" label="Rotate Left"/>
                     <ToolbarButton
-                        title="Raccourci : R"
+                        title={translate('image_classifier.toolbar.rotate_left.title')}
+                        onClick={rotateImage}
+                        icon="reset"
+                        label={translate('image_classifier.toolbar.rotate_left.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('image_classifier.toolbar.rotate_right.title')}
                         onClick={() => rotateImage('right')}
                         icon="repeat"
-                        label="Rotate Right"
+                        label={translate('image_classifier.toolbar.rotate_right.label')}
                     />
                 </ToolbarButtonContainer>
             </GlobalHotKeys>
