@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import FileLoader from "./FileLoader";
 
-const mockedFunction = () => {
-};
+const mockedFunction = () => {};
+const mockedFetchFunction = () => ({status: 500});
 
 export default {
     title: 'FileLoader',
@@ -17,5 +17,6 @@ Default.args = {
     name: "fileLoader_component",
     accept: "application/json",
     onCustomLoad: mockedFunction,
-    onFailure: mockedFunction
+    onFailure: mockedFunction,
+    fetch: mockedFetchFunction
 };

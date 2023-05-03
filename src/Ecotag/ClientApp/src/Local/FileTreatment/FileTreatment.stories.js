@@ -11,6 +11,7 @@ import "@axa-fr/react-toolkit-all/dist/style/bootstrap/reboot.css"
 import FileTreatment from "./FileTreatment";
 
 const MonacoEditor = React.lazy(() => import('@monaco-editor/react'));
+const mockedFetch = () => ({status: 500});
 
 export default {
     title: 'File Treatment',
@@ -40,7 +41,8 @@ Default.args = {
         },
         statusCodes: [{value: "Tout", label: "Tout"}]
     },
-    MonacoEditor: MonacoEditor
+    MonacoEditor: MonacoEditor,
+    fetch: mockedFetch
 }
 
 Default.parameters = {

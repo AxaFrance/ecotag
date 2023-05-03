@@ -6,6 +6,8 @@ export default {
     component: DatasetHandler
 };
 
+const mockedFetch = () => ({status: 500});
+
 const Template = (args) => <DatasetHandler {...args} />;
 
 export const Default = Template.bind({});
@@ -16,7 +18,8 @@ Default.args = {
         annotationType: "JsonEditor",
         configuration: "{}",
         items: []
-    }
+    },
+    fetch: mockedFetch
 };
 
 Default.parameters = {
