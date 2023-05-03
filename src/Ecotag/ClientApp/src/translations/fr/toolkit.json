@@ -175,5 +175,45 @@
         "label": "Remplir l'image"
       }
     }
+  },
+  "eml_classifier": {
+    "title": "Démo de parsing d'email par front-end",
+    "fallback_file_name": "pièce jointe",
+    "loading": "Votre navigateur est en train d'extraire les données",
+    "mail": {
+      "title": "Mail principal",
+      "from": "De :",
+      "to": "À :",
+      "cc": "Cc :",
+      "bcc": "Bcc :",
+      "subject": "Sujet :"
+    },
+    "attachments": {
+      "title": "Pièce jointe :",
+      "pdf_attachment": {
+        "loading": "Votre navigateur est en train d'extraire le pdf en images png"
+      },
+      "txt_attachment": {
+        "loading": "Votre navigateur est en train d'extraire le texte"
+      }
+    },
+    "mail_summary": {
+      "main_title": "Mail",
+      "main_title_document": "Document",
+      "title": "Mail principal",
+      "annotation": "Annotation",
+      "attachments": "Pièces jointes",
+      "side_attachments": "(chargement)"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      }
+    }
   }
 }

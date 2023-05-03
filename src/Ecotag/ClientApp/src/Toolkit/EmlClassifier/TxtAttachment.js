@@ -1,11 +1,13 @@
 ﻿import {useEffect, useState} from "react";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
+import useProjectTranslation from "../../translations/useProjectTranslation";
 
 const loadFileAsync = async (file) => {
     return await file.text();
 }
 
 function TxtAttachment({blob, id, onChange}) {
+    const {translate} = useProjectTranslation('toolkit');
     const [state, setState] = useState({
         text: "",
         loaderMode: LoaderModes.none,
@@ -32,7 +34,7 @@ function TxtAttachment({blob, id, onChange}) {
             isMounted = false;
         };
     }, [id]);
-    return (<Loader mode={state.loaderMode} text={"Your browser is extracting text"}>
+    return (<Loader mode={state.loaderMode} text={translate('eml_classifier.attachments.txt_attachment.loading')}>
         <div>
             <p>{state.text}</p>
         </div>

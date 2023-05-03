@@ -175,5 +175,45 @@
         "label": "Fit Image"
       }
     }
+  },
+  "eml_classifier": {
+    "title": "Front End Email Parser Demo",
+    "fallback_file_name": "attachment",
+    "loading": "Your browser is extracting data",
+    "mail": {
+      "title": "Main mail",
+      "from": "From :",
+      "to": "To :",
+      "cc": "Cc :",
+      "bcc": "Bcc :",
+      "subject": "Subject :"
+    },
+    "attachments": {
+      "title": "Attachment :",
+      "pdf_attachment": {
+        "loading": "Your browser is extracting the pdf to png images"
+      },
+      "txt_attachment": {
+        "loading": "Your browser is extracting the text"
+      }
+    },
+    "mail_summary": {
+      "main_title": "Mail",
+      "main_title_document": "Document",
+      "title": "Main mail",
+      "annotation": "Annotation",
+      "attachments": "Attachments",
+      "side_attachments": "(loading)"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom Out"
+      }
+    }
   }
 }

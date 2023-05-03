@@ -1,8 +1,10 @@
 ﻿import {LoaderModes, MultiSelect} from "@axa-fr/react-toolkit-all";
 import React from "react";
 import {EmlMode} from "./EmlMode";
+import useProjectTranslation from "../../translations/useProjectTranslation";
 
 const SideAttachements = ({attachments, level = 0}) => {
+    const {translate} = useProjectTranslation('toolkit');
     if (!attachments) {
         return null;
     }
@@ -11,7 +13,7 @@ const SideAttachements = ({attachments, level = 0}) => {
             return <li style={{backgroundColor: attachment.isVisibleScreen ? "#82b1ff6e" : ""}}
                        key={`side_attachment_${attachment.id}`}>
                 <span><a
-                    href={`${window.location.toString().replace(location.hash, "")}#${attachment.id}`}>{attachment.filename}{attachment.loaderMode === LoaderModes.get ? " (chargement)" : ""}</a></span>
+                    href={`${window.location.toString().replace(location.hash, "")}#${attachment.id}`}>{attachment.filename}{attachment.loaderMode === LoaderModes.get ? ` ${translate('eml_classifier.mail_summary.side_attachments')}` : ""}</a></span>
                 {attachment.mail && <SideAttachements attachments={attachment.mail.attachments} level={level + 1}/>}
             </li>
         })}
@@ -27,8 +29,14 @@ const MailSummary = ({mode, ...args}) => {
     return <MailSummaryClassifier {...args}  />
 }
 
-const MailSummaryClassifier = ({attachment, state, setState, labels, title = "Mail principal", mainTitle = "Mail"}) => {
-
+const MailSummaryClassifier = ({attachment, state, setState, labels, title, mainTitle}) => {
+    const {translate} = useProjectTranslation('toolkit');
+    if(!title){
+        title = translate('eml_classifier.mail_summary.title');
+    }
+    if(!mainTitle){
+        mainTitle = translate('eml_classifier.mail_summary.main_title');
+    }
     let options = [
         {value: 'fun', label: 'For fun'},
         {value: 'work', label: 'For work'},
@@ -60,21 +68,27 @@ const MailSummaryClassifier = ({attachment, state, setState, labels, title = "Ma
             </li>
         </ul>
         <MultiSelect
-            name={"Annotation"}
+            name={translate('eml_classifier.mail_summary.annotation')}
             onChange={onChangeClassification}
             value={state.annotation.label}
             options={options}
             autoFocus={true}
         />
         {(mail && mail.attachments && mail.attachments.length > 0) && <>
-            <h4>Pièces jointes</h4>
+            <h4>{translate('eml_classifier.mail_summary.attachments')}</h4>
             <SideAttachements attachments={mail.attachments}/>
         </>}
     </div>
 }
 
-const MailSummaryOcr = ({attachment, state, setState, labels = [], title = "Mail principal", mainTitle = "Mail"}) => {
-
+const MailSummaryOcr = ({attachment, state, setState, labels = [], title, mainTitle}) => {
+    const {translate} = useProjectTranslation('toolkit');
+    if(!title){
+        title = translate('eml_classifier.mail_summary.title');
+    }
+    if(!mainTitle){
+        mainTitle = translate('eml_classifier.mail_summary.main_title');
+    }
     const onChange = (event, label) => {
         setState({...state, annotation: {...state.annotation, [label.name]: event.target.value}});
     }
@@ -102,7 +116,7 @@ const MailSummaryOcr = ({attachment, state, setState, labels = [], title = "Mail
             );
         })}
         {(mail && mail.attachments && mail.attachments.length > 0) && <>
-            <h4>Pièces jointes</h4>
+            <h4>{translate('eml_classifier.mail_summary.attachments')}</h4>
             <SideAttachements attachments={mail.attachments}/>
         </>}
     </div>
