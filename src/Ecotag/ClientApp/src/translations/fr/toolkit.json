@@ -125,5 +125,55 @@
         "label": "Dézoomer"
       }
     }
+  },
+  "tag_over_text": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "Pas de raccourci",
+      "groups": {
+        "block": "Bloc"
+      }
+    },
+    "toolbar": {
+      "enable_creation": {
+        "label": "Activer création"
+      },
+      "delete": {
+        "title": "Raccourci : Suppr",
+        "label": "Supprimer"
+      },
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      }
+    }
+  },
+  "tag_over_text_label": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "Pas de raccourci"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      }
+    }
   }
 }

@@ -125,5 +125,55 @@
         "label": "Zoom Out"
       }
     }
+  },
+  "tag_over_text": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "No shortcut",
+      "groups": {
+        "block": "Block"
+      }
+    },
+    "toolbar": {
+      "enable_creation": {
+        "label": "Enable creation"
+      },
+      "delete": {
+        "title": "Shortcut : Delete",
+        "label": "Delete"
+      },
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      }
+    }
+  },
+  "tag_over_text_label": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "No shortcut"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      }
+    }
   }
 }
