@@ -1,0 +1,20 @@
+{
+  "header": {
+    "title": "An eco-system to be eco-friendly",
+    "errors": {
+      "not_connected": "Not connected"
+    }
+  },
+  "stepper": {
+    "confirm": "Confirm"
+  },
+  "resilience": {
+    "get": "Loading...",
+    "post": "Saving...",
+    "error": {
+      "first_part": "An error occurred.",
+      "second_part": "We are aware of the problem. An investigation is ongoing..."
+    },
+    "forbidden": "You are not allowed to access this resource."
+  }
+}

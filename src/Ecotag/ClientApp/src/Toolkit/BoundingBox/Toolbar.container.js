@@ -3,7 +3,7 @@ import {scaleBy} from './Cropping';
 import {GlobalHotKeys} from 'react-hotkeys';
 import cuid from 'cuid';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer, ToolbarSwitchButton} from '../Toolbar';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const getFileExtension = filename => {
     if (!filename) return '';

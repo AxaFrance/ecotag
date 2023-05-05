@@ -3,7 +3,7 @@ import React from 'react';
 import {render, waitFor} from '@testing-library/react';
 import {Overview} from './Overview';
 import {BrowserRouter as Router} from "react-router-dom";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 const project = {
     "id": "0001",

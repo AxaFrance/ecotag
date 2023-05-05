@@ -2,7 +2,7 @@ import {resilienceStatus} from "../../shared/Resilience";
 import React from "react";
 
 import "./ReservationStatus.scss";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const ReservationStatus = ({status}) => {
     const {translate} = useProjectTranslation('toolkit');

@@ -10,7 +10,7 @@ import {useParams} from 'react-router-dom';
 import withCustomFetch from '../../withCustomFetch';
 import Lock from '../../shared/Lock/Lock';
 import ConfirmModal from '../../shared/ConfirmModal/ConfirmModal';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 export const init = (fetch, setState) => async (id, state) => {
     const response = await fetchDataset(fetch)(id);

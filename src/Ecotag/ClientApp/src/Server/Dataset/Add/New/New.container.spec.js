@@ -13,7 +13,7 @@ import {
     NAME,
     TYPE
 } from './constants';
-import {changeProjectTranslationLanguage} from '../../../../translations/useProjectTranslation';
+import {changeProjectTranslationLanguage} from '../../../../useProjectTranslation';
 
 const fetch = () => {
     return {

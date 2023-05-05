@@ -2,7 +2,7 @@
 import {BrowserRouter as Router} from "react-router-dom";
 import React from "react";
 import {Confirm} from "./Confirm";
-import {changeProjectTranslationLanguage} from "../../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../../useProjectTranslation";
 
 describe('Confirm', () => {
     const renderComponentAndCheckSnapshot = () => {

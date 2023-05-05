@@ -1,8 +1,8 @@
 import {resilienceStatus} from "../../shared/Resilience";
 import React from "react";
 
-import "./AnnotationStatus.scss"
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import "./AnnotationStatus.scss";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const AnnotationStatus = ({status}) => {
     const {translate} = useProjectTranslation('toolkit');

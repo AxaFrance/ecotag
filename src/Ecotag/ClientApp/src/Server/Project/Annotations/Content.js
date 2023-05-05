@@ -6,7 +6,7 @@ import React from "react";
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 import Loader, {LoaderModes} from '@axa-fr/react-toolkit-loader';
 import {annotationItemStatus} from "./Annotation.reducer";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const AnnotationDispatch = ({annotationType, labels, url, onSubmit, expectedOutput = {}, filename}) => {
     return <AnnotationSwitch

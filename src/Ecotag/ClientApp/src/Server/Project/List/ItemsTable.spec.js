@@ -1,7 +1,7 @@
 ﻿import {render} from "@testing-library/react";
 import {LoaderModes} from "@axa-fr/react-toolkit-all";
 import ItemsTable from "./ItemsTable";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 const items = [{
     id: "0001",

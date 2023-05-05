@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 import EmptyArrayManager from '../../../EmptyArrayManager';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 const UserLine = ({users, annotationUser}) => {
     const user = users.find(user => user.nameIdentifier.toLowerCase() === annotationUser.nameIdentifier.toLowerCase())

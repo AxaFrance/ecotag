@@ -1,7 +1,7 @@
 import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import {ToolbarButton, ToolbarButtonContainer, ToolbarProgressButton, ToolbarSwitchButton} from '../Toolbar';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const ToolbarContainer = ({state, setState}) => {
     const {translate} = useProjectTranslation('toolkit');

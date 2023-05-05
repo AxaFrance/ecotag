@@ -8,7 +8,7 @@ import {
     SectionRestitutionRow
 } from '@axa-fr/react-toolkit-restitution';
 import {formatTimestampToString} from "../../date";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const Overview = ({project, dataset, group, annotationsStatus, users = []}) => {
 

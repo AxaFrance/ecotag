@@ -4,7 +4,7 @@ import Title from '../../../TitleBar';
 import './Home.scss';
 import ItemsTable from "./ItemsTable";
 import EmptyArrayManager from "../../../EmptyArrayManager";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const Home = ({items, numberTotalItems, filters, onChangePaging, onChangeFilter}) => {
     const {translate} = useProjectTranslation();

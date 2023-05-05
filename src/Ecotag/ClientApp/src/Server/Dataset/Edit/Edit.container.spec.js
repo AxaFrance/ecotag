@@ -1,7 +1,7 @@
 ﻿import {render, waitFor} from '@testing-library/react';
 import {Edit, EditContainer} from "./Edit.container";
 import {BrowserRouter as Router} from "react-router-dom";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 describe('Edit.container', () => {
     describe('init', () => {

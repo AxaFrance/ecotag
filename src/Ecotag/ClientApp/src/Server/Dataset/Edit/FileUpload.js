@@ -3,7 +3,7 @@ import {File, FileTable} from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
 import {resilienceStatus} from "../../shared/Resilience";
 import {Locked} from "../Dataset.service";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 
 const typeDatasetExtention = (datasetType) => {

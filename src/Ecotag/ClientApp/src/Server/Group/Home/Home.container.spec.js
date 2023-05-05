@@ -5,7 +5,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import {HomeContainer} from './Home.container';
 import sleep from '../../../sleep';
 import {fireEvent} from '@testing-library/dom';
-import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('Home.container for groups', () => {
 

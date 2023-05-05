@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, TextInput} from '@axa-fr/react-toolkit-all';
 import {NAME} from './constants';
 import './New.scss';
-import useProjectTranslation from "../../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../../useProjectTranslation";
 
 const New = ({fields, disabled, hasSubmit, onChangeCreateGroup, onSubmitCreateGroup}) => {
     const {translate} = useProjectTranslation();

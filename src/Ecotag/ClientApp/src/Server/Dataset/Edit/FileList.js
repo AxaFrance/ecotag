@@ -15,7 +15,7 @@ import {computeNumberPages, filterPaging} from "../../shared/filtersUtils";
 import {formatTimestampToString} from "../../date";
 import {resilienceStatus} from "../../shared/Resilience";
 import {Locked} from "../Dataset.service";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const bytesToSize = (bytes) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -168,10 +168,10 @@ const FileList = ({state, setState, fetch}) => {
                         numberPages={numberPages}
                         currentPage={currentPages}
                         id="home_paging"
-                        displayLabel={translate('paging.display')}
-                        elementsLabel={translate('paging.elements')}
-                        previousLabel={translate('paging.previous')}
-                        nextLabel={translate('paging.next')}
+                        displayLabel={translate('dataset.paging.display')}
+                        elementsLabel={translate('dataset.paging.elements')}
+                        previousLabel={translate('dataset.paging.previous')}
+                        nextLabel={translate('dataset.paging.next')}
                     />
                 </Tabs.Tab>
             </Tabs>

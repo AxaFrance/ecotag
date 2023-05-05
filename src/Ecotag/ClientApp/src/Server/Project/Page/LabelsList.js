@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from '@axa-fr/react-toolkit-table';
 import Popover from '@axa-fr/react-toolkit-popover';
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const Label = ({labels}) => {
     const {translate} = useProjectTranslation();

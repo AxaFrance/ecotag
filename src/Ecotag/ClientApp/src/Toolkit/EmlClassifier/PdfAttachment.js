@@ -1,7 +1,7 @@
 ﻿import {useEffect, useState} from "react";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
 import convertPdfToImagesAsync from "../Pdf/pdf";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 function PdfAttachment({blob, id, onChange}) {
     const {translate} = useProjectTranslation('toolkit');

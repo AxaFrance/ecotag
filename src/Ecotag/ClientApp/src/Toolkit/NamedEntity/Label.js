@@ -3,7 +3,7 @@ import {setLabelsColor} from './labelColor';
 import './Label.scss';
 import {adaptTextColorToBackgroundColor} from '../colors';
 import {generateLabelsKeyMap} from "../labels";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Label = ({labels, selectLabel, selectedLabel}) => {
     const {translate} = useProjectTranslation('toolkit');

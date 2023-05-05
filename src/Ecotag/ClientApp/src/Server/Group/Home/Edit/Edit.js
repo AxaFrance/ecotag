@@ -4,7 +4,7 @@ import {MessageTypes} from '@axa-fr/react-toolkit-form-core';
 import Modal from '@axa-fr/react-toolkit-modal-default';
 
 import "./Edit.scss";
-import useProjectTranslation from "../../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../../useProjectTranslation";
 
 const Users = ({idGroup, users, eligibleUsers, setUsersToSubmit}) => {
     const {translate} = useProjectTranslation();

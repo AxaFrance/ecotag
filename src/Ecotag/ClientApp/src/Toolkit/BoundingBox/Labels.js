@@ -2,7 +2,7 @@ import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 
 import './Labels.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Labels = ({setState, state, labels}) => {
     const {translate} = useProjectTranslation('toolkit');

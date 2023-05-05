@@ -3,7 +3,7 @@ import React from 'react';
 import {getByText, render, waitFor} from '@testing-library/react';
 import {HomeContainer} from './Home.container';
 import {BrowserRouter as Router} from 'react-router-dom';
-import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 const fetch = async (url, config) => {
 

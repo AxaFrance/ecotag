@@ -8,7 +8,7 @@ import './Page.scss';
 import Lock from '../../shared/Lock/Lock';
 import ConfirmModal from '../../shared/ConfirmModal/ConfirmModal';
 import {DataScientist} from '../../withAuthentication';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 const Page = ({project, dataset, users, group, annotationsStatus, isModalOpened, onExport, user, lock}) => {
     const {translate} = useProjectTranslation();

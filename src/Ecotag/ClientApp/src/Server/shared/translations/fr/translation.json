@@ -1,0 +1,20 @@
+{
+  "header": {
+    "title": "Un écosystème pour être écologique",
+    "errors": {
+      "not_connected": "Non connecté"
+    }
+  },
+  "stepper": {
+    "confirm": "Confirmation"
+  },
+  "resilience": {
+    "get": "Chargement en cours...",
+    "post": "Sauvegarde en cours...",
+    "error": {
+      "first_part": "Une erreur est survenue.",
+      "second_part": "Nous sommes au courant du problème. Une investigation est en cours..."
+    },
+    "forbidden": "Vous n'avez pas le droit d'accéder à cette ressource."
+  }
+}

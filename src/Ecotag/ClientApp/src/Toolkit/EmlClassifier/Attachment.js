@@ -4,7 +4,7 @@ import MailWithAttachment from "./MailWithAttachment";
 import PdfAttachment from "./PdfAttachment";
 import DownloadAttachment from "./DownloadAttachment";
 import TxtAttachment from "./TxtAttachment";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 export const formatTitle = (level, filename, attachmentStr) => {
     if (!level) {

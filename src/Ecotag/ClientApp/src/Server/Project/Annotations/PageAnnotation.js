@@ -2,7 +2,7 @@ import Title from "../../../TitleBar";
 import {Content} from "./Content";
 import React from "react";
 import {withResilience} from "../../shared/Resilience";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const PageAnnotation = ({
                                    project,

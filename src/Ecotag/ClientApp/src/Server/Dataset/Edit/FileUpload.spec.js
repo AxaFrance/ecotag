@@ -1,6 +1,6 @@
 ﻿import {render} from '@testing-library/react';
 import {FileUpload} from "./FileUpload";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 describe('FileUpload', () => {
 

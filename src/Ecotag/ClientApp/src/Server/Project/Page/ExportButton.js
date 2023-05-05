@@ -1,6 +1,6 @@
 ﻿import React, {useState} from "react";
 import {DataScientist} from "../../withAuthentication";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const ExportButton = ({user: {roles = []}, onExport, projectId, projectName}) => {
 

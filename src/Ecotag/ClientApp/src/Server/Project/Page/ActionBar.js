@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import Button from '@axa-fr/react-toolkit-button';
 import './Page.scss';
 import ExportButton from "./ExportButton";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from '../../../useProjectTranslation';
 
 export const ActionBar = ({projectId, projectName, isAnnotationClosed, onExport, user}) => {
     const history = useHistory();

@@ -5,7 +5,7 @@ import LabelInput from '../../../shared/Label/LabelInput';
 import {Button, MultiSelectInput, NumberInput, SelectInput, TextInput} from '@axa-fr/react-toolkit-all';
 import {DATASET, GROUP, LABELS, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from './constants';
 import './New.scss';
-import useProjectTranslation from "../../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../../useProjectTranslation";
 
 const New = ({datasets, groups, fields, onChange, hasSubmit, onSubmit}) => {
     const {translate} = useProjectTranslation();

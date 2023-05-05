@@ -8,7 +8,7 @@ import {fetchAnnotationsStatus} from '../Project.service';
 import {resilienceStatus} from '../../shared/Resilience';
 import {Popover} from '@axa-fr/react-toolkit-all';
 import {ProgressBar} from './ProgressBar';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 const NumberTagToDo = ({state}) => {
     const {translate} = useProjectTranslation();
@@ -168,10 +168,10 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
-                displayLabel={translate('paging.display')}
-                elementsLabel={translate('paging.elements')}
-                previousLabel={translate('paging.previous')}
-                nextLabel={translate('paging.next')}
+                displayLabel={translate('project.paging.display')}
+                elementsLabel={translate('project.paging.elements')}
+                previousLabel={translate('project.paging.previous')}
+                nextLabel={translate('project.paging.next')}
             />
         </>
     )

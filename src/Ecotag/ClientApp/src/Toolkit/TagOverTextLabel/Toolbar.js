@@ -2,7 +2,7 @@ import React from 'react';
 import {scaleBy} from '../BoundingBox/Cropping';
 import {GlobalHotKeys} from 'react-hotkeys';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer} from '../Toolbar';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const getFileExtension = filename => {
     if (!filename) return '';

@@ -6,7 +6,7 @@ import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from '../../../EmptyArrayManager';
 import ItemsTable from './ItemsTable';
 import {DataScientist} from '../../withAuthentication';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 const Home = ({items, numberTotalItems, filters, onChangePaging, onChangeFilter, onChangeSort, fetch, user}) => {
     const {translate} = useProjectTranslation();

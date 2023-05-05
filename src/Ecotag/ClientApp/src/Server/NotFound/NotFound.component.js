@@ -1,7 +1,7 @@
 import React from 'react';
 import Title from '../../TitleBar';
 import './notfound.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const NotFound = () => {
     const {translate} = useProjectTranslation();

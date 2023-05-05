@@ -5,7 +5,7 @@ import Action from "@axa-fr/react-toolkit-action";
 import {useHistory} from "react-router-dom";
 import {formatTimestampToString} from "../../date";
 import {Locked} from "../Dataset.service";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const getIconClassname = (locked) => {
     switch (locked) {
@@ -119,10 +119,10 @@ const ItemsTable = ({items, filters, loaderMode, onChangePaging}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
-                displayLabel={translate('paging.display')}
-                elementsLabel={translate('paging.elements')}
-                previousLabel={translate('paging.previous')}
-                nextLabel={translate('paging.next')}
+                displayLabel={translate('dataset.paging.display')}
+                elementsLabel={translate('dataset.paging.elements')}
+                previousLabel={translate('dataset.paging.previous')}
+                nextLabel={translate('dataset.paging.next')}
             />
         </Loader>
 

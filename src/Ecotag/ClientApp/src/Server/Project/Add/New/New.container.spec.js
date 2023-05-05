@@ -4,7 +4,7 @@ import {render, waitFor} from '@testing-library/react';
 import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
-import {changeProjectTranslationLanguage} from "../../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../../useProjectTranslation";
 
 const telemetry = {trackEvent: (eventName) => console.log(eventName)};
 

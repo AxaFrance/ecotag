@@ -3,7 +3,7 @@ import React from 'react';
 import {render, waitFor} from '@testing-library/react';
 import {Label} from './LabelsList';
 import {BrowserRouter as Router} from 'react-router-dom';
-import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 const labels = [
     {

@@ -1,6 +1,6 @@
 ﻿import {useEffect, useState} from "react";
 import {Loader, LoaderModes} from "@axa-fr/react-toolkit-all";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const loadFileAsync = async (file) => {
     return await file.text();

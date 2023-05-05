@@ -4,7 +4,7 @@ import {render, waitFor} from '@testing-library/react';
 import {ActionBar} from './ActionBar';
 import {BrowserRouter as Router} from "react-router-dom";
 import {DataScientist} from "../../withAuthentication";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('ActionBar', () => {
     const renderComponentAndCheckSnapshot = async(expectedText) => {

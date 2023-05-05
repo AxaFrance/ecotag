@@ -5,7 +5,7 @@ import {initialState, onLockSubmit, PageContainer, reducer} from './Page.contain
 import {BrowserRouter as Router} from "react-router-dom";
 import {resilienceStatus} from "../../shared/Resilience";
 import {DataScientist} from "../../withAuthentication";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 function fail(message = "The fail function was called") {
     throw new Error(message);

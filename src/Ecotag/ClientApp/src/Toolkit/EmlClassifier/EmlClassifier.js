@@ -11,7 +11,7 @@ import "./EmlClassifier.scss";
 import MailSummary from "./MailSummary";
 import Attachment from "./Attachment";
 import {EmlMode} from "./EmlMode";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const isEml = (blob) => {
     return blob.mimeType === "message/rfc822" || (blob.mimeType === "application/octet-stream" && blob.filename.toLocaleLowerCase().endsWith(".eml"))

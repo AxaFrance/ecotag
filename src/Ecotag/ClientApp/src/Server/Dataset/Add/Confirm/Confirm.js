@@ -4,7 +4,7 @@ import Stepper from '../../../shared/Stepper';
 import Button from '@axa-fr/react-toolkit-button';
 import {withRouter} from 'react-router-dom';
 import './Confirm.scss';
-import useProjectTranslation from "../../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../../useProjectTranslation";
 
 export const Confirm = ({navBack}) => {
     const {translate} = useProjectTranslation();

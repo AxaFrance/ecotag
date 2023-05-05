@@ -3,7 +3,7 @@ import Table, {Paging} from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
 import Edit from "./Edit";
 import './ItemsTable.scss';
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const computeUsersList = users => {
     if (users.length === 0) {
@@ -73,10 +73,10 @@ const ItemsTable = ({items, filters, onChangePaging, onUpdateUser}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
-                displayLabel={translate('paging.display')}
-                elementsLabel={translate('paging.elements')}
-                previousLabel={translate('paging.previous')}
-                nextLabel={translate('paging.next')}
+                displayLabel={translate('group.paging.display')}
+                elementsLabel={translate('group.paging.elements')}
+                previousLabel={translate('group.paging.previous')}
+                nextLabel={translate('group.paging.next')}
             />
         </>
     )

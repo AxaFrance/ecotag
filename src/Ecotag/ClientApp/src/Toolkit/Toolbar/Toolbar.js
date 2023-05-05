@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import '@axa-fr/react-toolkit-core/dist/assets/fonts/icons/af-icons.css';
 import './Toolbar.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 export const ToolbarButtonContainer = ({children, classModifier = undefined}) => {
     const name = 'toolbar__button-container';

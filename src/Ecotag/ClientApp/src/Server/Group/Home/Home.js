@@ -6,7 +6,7 @@ import './Home.scss';
 import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const Home = ({
                   items,

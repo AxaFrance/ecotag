@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './Irot.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Irot = ({state, setState, url}) => {
     const {translate} = useProjectTranslation('toolkit');

@@ -6,7 +6,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 
 import {fetch} from './mock';
 import {Annotateur, DataScientist} from "../../withAuthentication";
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../../useProjectTranslation";
 
 
 describe.each([

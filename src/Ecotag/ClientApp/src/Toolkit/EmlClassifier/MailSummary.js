@@ -1,7 +1,7 @@
 ﻿import {LoaderModes, MultiSelect} from "@axa-fr/react-toolkit-all";
 import React from "react";
 import {EmlMode} from "./EmlMode";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const SideAttachements = ({attachments, level = 0}) => {
     const {translate} = useProjectTranslation('toolkit');

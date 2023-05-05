@@ -1,7 +1,7 @@
 import React from 'react';
 import Labels from './Labels';
 import classNames from 'classnames';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const defaultClassName = 'ocr-container';
 const defaultClassNameLabels = 'ocr-container__labels';

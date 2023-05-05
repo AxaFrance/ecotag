@@ -2,7 +2,7 @@
 import {resilienceStatus} from '.';
 import Loader, {LoaderModes} from '@axa-fr/react-toolkit-loader';
 import './withResilience.scss';
-import useProjectTranslation from '../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 export const withResilience = Component => ({status, loaderText = null, ...otherProps}) => {
     const {translate} = useProjectTranslation();

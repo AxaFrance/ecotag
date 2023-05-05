@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {setFocus} from '../BoundingBox/Cropping';
 
 import './Labels.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const useFocus = () => {
     const htmlElRef = useRef(null);

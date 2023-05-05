@@ -4,7 +4,7 @@ import Toolbar, {ToolbarButtonContainer, ToolbarProgressButton, ToolbarSwitchBut
 
 import './Toolbar.scss';
 import './ComponentsModifier.scss';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 configure({ignoreRepeatedEventsWhenKeyHeldDown: false});
 

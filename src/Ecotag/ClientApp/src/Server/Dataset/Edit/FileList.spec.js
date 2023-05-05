@@ -2,7 +2,7 @@
 import FileList from './FileList';
 import {Locked} from '../Dataset.service';
 import {resilienceStatus} from '../../shared/Resilience';
-import {changeProjectTranslationLanguage} from '../../../translations/useProjectTranslation';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('FileList', () => {
     const givenState = {

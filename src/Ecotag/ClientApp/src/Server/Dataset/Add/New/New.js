@@ -8,7 +8,7 @@ import '@axa-fr/react-toolkit-alert/dist/alert.scss';
 import '@axa-fr/react-toolkit-popover/dist/popover.scss';
 import './New.scss';
 import {CLASSIFICATION, DATASETS_IMPORT, GROUP, IMPORTED_DATASET_NAME, NAME, TYPE} from './constants';
-import useProjectTranslation from '../../../../translations/useProjectTranslation';
+import useProjectTranslation from '../../../../useProjectTranslation';
 
 const groupsAsOptions = (groups) => groups && groups.length > 0 ? groups.map(group => ({
     label: group.name,

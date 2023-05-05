@@ -5,7 +5,7 @@ import {Home} from './Home';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Administateur, Annotateur, DataScientist} from '../withAuthentication';
 import {OidcUserStatus} from '@axa-fr/react-oidc';
-import {changeProjectTranslationLanguage} from "../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from "../../useProjectTranslation";
 
 describe.each([
     [`${DataScientist},${Annotateur}`],

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Step, StepBase, Steps} from '@axa-fr/react-toolkit-all';
 import './Stepper.scss';
-import useProjectTranslation from "../../../translations/useProjectTranslation";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const Stepper = ({activeStep, link, title}) => {
     const {translate} = useProjectTranslation();

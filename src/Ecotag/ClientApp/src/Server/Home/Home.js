@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import './Home.scss';
 import withAuthentication, {Administateur, Annotateur, DataScientist} from '../withAuthentication';
 import {OidcUserStatus} from '@axa-fr/react-oidc';
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 export const Home = ({user: {roles = []}, userLoadingState}) => {
     const {translate} = useProjectTranslation();

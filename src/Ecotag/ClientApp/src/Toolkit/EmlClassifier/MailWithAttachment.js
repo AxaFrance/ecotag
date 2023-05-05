@@ -3,7 +3,7 @@ import {useInView} from "react-intersection-observer";
 import {formatTitle} from "./Attachment";
 import Attachments from "./Attachments";
 import classNames from "classnames";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 
 const displayEmail = (email) => {

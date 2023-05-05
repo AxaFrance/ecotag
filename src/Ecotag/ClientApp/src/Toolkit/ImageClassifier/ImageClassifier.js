@@ -6,7 +6,7 @@ import '@axa-fr/react-toolkit-button/src/button.scss'
 import classNames from "classnames";
 import {GlobalHotKeys} from 'react-hotkeys';
 import {generateLabelsKeyMap} from "../labels";
-import useProjectTranslation from "../../translations/useProjectTranslation";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const defaultClassName = 'image-classifier';
 const defaultClassNameButtonsContainer = 'image-classifier__buttons-container';

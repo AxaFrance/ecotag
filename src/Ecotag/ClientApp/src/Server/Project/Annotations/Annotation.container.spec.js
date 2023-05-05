@@ -4,7 +4,7 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {MemoryRouter, Route} from "react-router-dom";
 import {AnnotationContainer} from "./Annotation.container";
 import {expectedOutputJsonOcr, fetch} from './mock';
-import {changeProjectTranslationLanguage} from "../../../translations/useProjectTranslation";
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('Annotation.container', () => {
 
