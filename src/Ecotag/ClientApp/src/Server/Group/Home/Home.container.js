@@ -46,12 +46,12 @@ export const HomeContainer = ({fetch, telemetry}) => {
         },
     };
     const itemsFiltered = filterPaging(items, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
-    const isSubmitable = !state.fields[NAME].message;
+    const isSubmittable = !state.fields[NAME].message;
 
     return (
         <HomeWithResilience
             {...state}
-            isSubmitable={isSubmitable}
+            isSubmitable={isSubmittable}
             numberItemsTotal={items.length}
             items={itemsFiltered}
             filters={filters}
