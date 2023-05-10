@@ -3,12 +3,13 @@ import {Link} from 'react-router-dom';
 import './TitleBar.scss';
 
 import {Title} from "@axa-fr/react-toolkit-layout-header";
+import useProjectTranslation from "../useProjectTranslation";
 
 const defaultClassName = 'af-title-bar';
 const TitleBar = ({title, goTo = "/", goTitle = "Home page", classModifier = "", subtitle = null, goButton = true}) => {
 
     if (!goButton) {
-        return <Title title="Accueil"/>
+        return <Title title={title}/>
     }
 
     const divClassName = "af-title-bar af-title-bar--backhome" + (classModifier ? " " + classModifier : "");

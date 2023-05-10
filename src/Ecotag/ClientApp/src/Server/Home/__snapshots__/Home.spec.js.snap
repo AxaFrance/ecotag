@@ -14,7 +14,7 @@ exports[`Home "" Render home page with correct buttons depending on user roles 1
         <h1
           class="af-title-bar__title"
         >
-          Accueil
+          Home
         </h1>
       </div>
     </div>
@@ -43,7 +43,7 @@ exports[`Home "ECOTAG_ANNOTATEUR" Render home page with correct buttons dependin
         <h1
           class="af-title-bar__title"
         >
-          Accueil
+          Home
         </h1>
       </div>
     </div>
@@ -79,7 +79,7 @@ exports[`Home "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR" Render home page with co
         <h1
           class="af-title-bar__title"
         >
-          Accueil
+          Home
         </h1>
       </div>
     </div>
@@ -125,7 +125,7 @@ exports[`Home "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR,ECOTAG_ADMINISTRATEUR" Re
         <h1
           class="af-title-bar__title"
         >
-          Accueil
+          Home
         </h1>
       </div>
     </div>
@@ -181,7 +181,7 @@ exports[`Home translation Renders component with english translation 1`] = `
         <h1
           class="af-title-bar__title"
         >
-          Accueil
+          Home
         </h1>
       </div>
     </div>

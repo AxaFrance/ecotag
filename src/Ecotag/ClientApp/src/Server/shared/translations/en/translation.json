@@ -5,6 +5,10 @@
       "not_connected": "Not connected"
     }
   },
+  "footer": {
+    "copyright_trademark": "©",
+    "copyright": "AXA All rights reserved"
+  },
   "stepper": {
     "confirm": "Confirm"
   },
