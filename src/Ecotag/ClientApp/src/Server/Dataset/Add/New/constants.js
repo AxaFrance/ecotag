@@ -15,11 +15,11 @@ export let MSG_MAX_LENGTH;
 
 const updateTranslations = () => {
     const options = {ns: 'constants'};
-    MSG_REQUIRED = i18next.t('constants.datasets.new.MSG_REQUIRED', options);
-    MSG_MIN_LENGTH = i18next.t('constants.datasets.new.MSG_MIN_LENGTH', options);
-    MSG_MAX_LENGTH = i18next.t('constants.datasets.new.MSG_MAX_LENGTH', options);
-    MSG_DATASET_NAME_ALREADY_EXIST = i18next.t('constants.datasets.new.MSG_DATASET_NAME_ALREADY_EXIST', options);
-    MSG_DATASET_NAME_FORMAT = i18next.t('constants.datasets.new.MSG_DATASET_NAME_FORMAT', options);
+    MSG_REQUIRED = i18next.t('datasets.new.MSG_REQUIRED', options);
+    MSG_MIN_LENGTH = i18next.t('datasets.new.MSG_MIN_LENGTH', options);
+    MSG_MAX_LENGTH = i18next.t('datasets.new.MSG_MAX_LENGTH', options);
+    MSG_DATASET_NAME_ALREADY_EXIST = i18next.t('datasets.new.MSG_DATASET_NAME_ALREADY_EXIST', options);
+    MSG_DATASET_NAME_FORMAT = i18next.t('datasets.new.MSG_DATASET_NAME_FORMAT', options);
 };
 
 if (i18next.isInitialized) {
