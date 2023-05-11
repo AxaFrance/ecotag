@@ -7,7 +7,7 @@ import useProjectTranslation from "../../../useProjectTranslation";
 const FooterApp = () => {
     const {translate} = useProjectTranslation();
     const copyright =
-        translate('footer.copyright_trademark') + ' ' + new Date().getFullYear() + ' ' + translate('footer.copyright');
+        translate('shared.footer.copyright_trademark') + ' ' + new Date().getFullYear() + ' ' + translate('shared.footer.copyright');
     return(
         <Footer icon={logo} copyright={copyright}/>
     );

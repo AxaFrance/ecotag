@@ -1,24 +1,26 @@
 {
-  "header": {
-    "title": "An eco-system to be eco-friendly",
-    "errors": {
-      "not_connected": "Not connected"
-    }
-  },
-  "footer": {
-    "copyright_trademark": "©",
-    "copyright": "AXA All rights reserved"
-  },
-  "stepper": {
-    "confirm": "Confirm"
-  },
-  "resilience": {
-    "get": "Loading...",
-    "post": "Saving...",
-    "error": {
-      "first_part": "An error occurred.",
-      "second_part": "We are aware of the problem. An investigation is ongoing..."
+  "shared": {
+    "header": {
+      "title": "An eco-system to be eco-friendly",
+      "errors": {
+        "not_connected": "Not connected"
+      }
     },
-    "forbidden": "You are not allowed to access this resource."
+    "footer": {
+      "copyright_trademark": "©",
+      "copyright": "AXA All rights reserved"
+    },
+    "stepper": {
+      "confirm": "Confirm"
+    },
+    "resilience": {
+      "get": "Loading...",
+      "post": "Saving...",
+      "error": {
+        "first_part": "An error occurred.",
+        "second_part": "We are aware of the problem. An investigation is ongoing..."
+      },
+      "forbidden": "You are not allowed to access this resource."
+    }
   }
 }

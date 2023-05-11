@@ -14,7 +14,7 @@ const Stepper = ({activeStep, link, title}) => {
                 <div className="af-steps-list-stepLabel" onClick={() => {
                 }}>
 
-                    <span className="af-steps-list-stepTitle">{translate('stepper.confirm')}</span>
+                    <span className="af-steps-list-stepTitle">{translate('shared.stepper.confirm')}</span>
                 </div>
             </StepBase>
         </Steps>

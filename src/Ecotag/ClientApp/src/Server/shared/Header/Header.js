@@ -17,9 +17,9 @@ const formatRoles = (roles) => {
     );
 }
 
-export const AppHeader = ({user: {title = 'Ecotag', link = null, name = i18next.t('header.errors.not_connected'), roles = ['NOT_FOUND']}}) => (
+export const AppHeader = ({user: {title = 'Ecotag', link = null, name = i18next.t('shared.header.errors.not_connected'), roles = ['NOT_FOUND']}}) => (
     <Header>
-        <Name title={title} subtitle={i18next.t('header.title')} img={logo} alt={title}/>
+        <Name title={title} subtitle={i18next.t('shared.header.title')} img={logo} alt={title}/>
         <User name={name} href={link} profile={formatRoles(roles)}/>
     </Header>
 );

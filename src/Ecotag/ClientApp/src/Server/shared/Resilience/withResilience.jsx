@@ -15,10 +15,10 @@ export const withResilience = Component => ({status, loaderText = null, ...other
         }
         switch (loaderMode){
             case LoaderModes.get:
-                result = translate('resilience.get');
+                result = translate('shared.resilience.get');
                 break;
             case LoaderModes.post:
-                result = translate('resilience.post');
+                result = translate('shared.resilience.post');
                 break;
             default:
                 result = null;
@@ -38,16 +38,16 @@ export const withResilience = Component => ({status, loaderText = null, ...other
                     [ERROR]: (
                         <div className="resilience">
                             <div className="resilicience__error-message">
-                                <p>{translate('resilience.error.first_part')}</p>
+                                <p>{translate('shared.resilience.error.first_part')}</p>
                                 <br/>
-                                <p>{translate('resilience.error.second_part')}</p>
+                                <p>{translate('shared.resilience.error.second_part')}</p>
                             </div>
                         </div>
                     ),
                     [FORBIDDEN]: (
                         <div className="resilience">
                             <div className="resilicience__error-message">
-                                <p>{translate('resilience.forbidden')}</p>
+                                <p>{translate('shared.resilience.forbidden')}</p>
                             </div>
                         </div>
                     ),
