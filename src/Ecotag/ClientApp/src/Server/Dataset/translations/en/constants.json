@@ -1,13 +1,11 @@
 {
-  "constants": {
-    "datasets": {
-      "new": {
-        "MSG_REQUIRED": "The field is mandatory",
-        "MSG_DATASET_NAME_ALREADY_EXIST": "A dataset with this name already exists",
-        "MSG_DATASET_NAME_FORMAT": "Please provide alphanumeric characters, – and _ included, accents excluded",
-        "MSG_MIN_LENGTH": "Please provide at least {minLength} character(s)",
-        "MSG_MAX_LENGTH": "Please provide at most {maxLength} character(s)"
-      }
+  "datasets": {
+    "new": {
+      "MSG_REQUIRED": "The field is mandatory",
+      "MSG_DATASET_NAME_ALREADY_EXIST": "A dataset with this name already exists",
+      "MSG_DATASET_NAME_FORMAT": "Please provide alphanumeric characters, – and _ included, accents excluded",
+      "MSG_MIN_LENGTH": "Please provide at least {minLength} character(s)",
+      "MSG_MAX_LENGTH": "Please provide at most {maxLength} character(s)"
     }
   }
 }
