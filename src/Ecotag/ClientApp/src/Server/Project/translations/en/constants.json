@@ -1,0 +1,25 @@
+{
+  "projects": {
+    "new": {
+      "MSG_REQUIRED": "The field is mandatory",
+      "MSG_MAX_LABELS_LENGTH": "The maximum number of labels is set to 90",
+      "MSG_MIN_LENGTH": "The field does not contain enough characters (3 min)",
+      "MSG_MAX_LENGTH": "The field contains too many characters (48 max)",
+      "MSG_TEXT_REGEX": "Please provide alphanumeric characters, – and _ included, accents excluded",
+      "MSG_PROJECT_NAME_ALREADY_EXIST": "A project with this name already exists",
+      "MSG_DUPLICATE_LABEL_NAME": "Several labels have the same name",
+      "MSG_RULE_NUMBER": "Please provide an integer between 1 and 10",
+      "types": {
+        "cropping": "Image area cropping",
+        "image_classifier": "Classification",
+        "ocr": "Image text input",
+        "named_entity": "Text area selection",
+        "rotation": "Rotation",
+        "eml_classifier": "Mail classification",
+        "document_classifier": "Documents classification",
+        "document_ocr": "Document text input"
+      },
+      "LABEL_NUMBER": "Label number"
+    }
+  }
+}

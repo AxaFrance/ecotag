@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Home.container HomeContainer render correctly 1`] = `
+exports[`Home.container should render correctly in english 1`] = `
 <DocumentFragment>
   <div
     class="af-title-bar af-title-bar--backhome"
@@ -25,7 +25,389 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       <small
         class="af-title-bar__subtitle"
       >
-        un dataset représente un essemble de données
+        A dataset is the representation of a collection of data
+      </small>
+    </div>
+  </div>
+  <div
+    class="af-home container"
+  >
+    <a
+      class="btn af-btn af-btn--quote"
+      href="/datasets/new"
+    >
+      <span
+        class="af-btn__text"
+      >
+        New dataset
+      </span>
+    </a>
+    <a
+      class="af-home__access-token"
+      href="/access-token"
+      target="_self"
+    >
+      Access token
+    </a>
+    <h1
+      class="af-title--content"
+    >
+      Your active datasets : 1
+    </h1>
+    <div
+      class="row row--datasets-filters"
+    >
+      <div
+        class="col"
+      >
+        <div
+          class="af-filter-inline"
+        >
+          <span
+            class="af-filter-inline__title"
+          >
+            <span
+              class="glyphicon glyphicon-filter"
+            />
+            <span
+              class="af-filter-inline__title-text"
+            >
+              Filter by
+            </span>
+          </span>
+          <div
+            class="af-filter-inline__field"
+          >
+            <label
+              class="af-form__group-label"
+              for="inputtext1"
+            >
+              Name
+            </label>
+            <div
+              class="af-form__text"
+            >
+              <input
+                class="af-form__input-text"
+                id="inputtext1"
+                name="inputtextname"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="af-loader"
+      style="min-height: 94px; position: relative;"
+    >
+      <table
+        class="af-table"
+      >
+        <thead
+          class="af-table-thead"
+        >
+          <tr
+            class="af-table__tr"
+          >
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Lock
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Name
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Team
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Classification
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Number of files
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Type
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Creation date
+              </span>
+            </th>
+            <th
+              class="af-table__th"
+            >
+              <span
+                class="af-table__th-content"
+              >
+                Action
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="af-table__body"
+        >
+          <tr
+            class="af-table__tr"
+          >
+            <td
+              class="af-table__cell"
+            >
+              <a
+                class=""
+                href="#"
+                id="lock"
+                role="button"
+                tabindex="0"
+              >
+                <i
+                  class="glyphicon glyphicon-undefined"
+                />
+              </a>
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              Green card
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              My team
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              Public
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              300
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              Image
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              02/01/0001
+            </td>
+            <td
+              class="af-table__cell"
+            >
+              <a
+                class="btn af-btn--circle"
+                href="#"
+                id="id"
+                role="button"
+                tabindex="0"
+                title="Edit"
+              >
+                <i
+                  class="glyphicon glyphicon-edit"
+                />
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div
+        class="af-paging"
+      >
+        <div
+          class="af-paging__limit"
+        >
+          <div
+            class="af-paging__limit"
+          >
+            <form
+              class="af-paging__form"
+            >
+              <div
+                class="af-form__group"
+              >
+                <div
+                  class="col col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                >
+                  <label
+                    class="af-form__group-label"
+                    for="home_paging"
+                  >
+                    Display
+                  </label>
+                </div>
+                <div
+                  class="col col-sm-10 col-md-10 col-lg-10 col-xl-10"
+                >
+                  <div
+                    class="af-form__select"
+                  >
+                    <div
+                      class="af-form__select-container"
+                    >
+                      <select
+                        class="af-form__input-select"
+                        id="home_paging"
+                      >
+                        <option
+                          value="5"
+                        >
+                          5
+                        </option>
+                        <option
+                          value="10"
+                        >
+                          10
+                        </option>
+                        <option
+                          value="25"
+                        >
+                          25
+                        </option>
+                        <option
+                          value="50"
+                        >
+                          50
+                        </option>
+                        <option
+                          value="100"
+                        >
+                          100
+                        </option>
+                      </select>
+                      <span
+                        class="glyphicon glyphicon-menu-down"
+                      />
+                    </div>
+                    <span
+                      class="af-form__input-cmplt"
+                    >
+                      elements
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          class="af-paging__pager"
+        >
+          <nav
+            class="af-pager"
+          >
+            <ul
+              class="af-pager__pagination"
+            >
+              <li
+                class="af-pager__item af-pager__item--disabled"
+              >
+                <span
+                  class="af-pager__item-nolink"
+                >
+                  « Previous
+                </span>
+              </li>
+              <li
+                class="af-pager__item af-pager__item--active"
+              >
+                <a
+                  class="af-pager__item-link"
+                  href="#"
+                >
+                  <span>
+                    1
+                  </span>
+                </a>
+              </li>
+              <li
+                class="af-pager__item af-pager__item--disabled"
+              >
+                <span
+                  class="af-pager__item-nolink"
+                >
+                  Next »
+                </span>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Home.container should render correctly in french 1`] = `
+<DocumentFragment>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        Datasets
+      </h1>
+      <small
+        class="af-title-bar__subtitle"
+      >
+        Un dataset représente un ensemble de données
       </small>
     </div>
   </div>
@@ -47,7 +429,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
       href="/access-token"
       target="_self"
     >
-      access token
+      Jeton d'accès
     </a>
     <h1
       class="af-title--content"
@@ -135,7 +517,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
               <span
                 class="af-table__th-content"
               >
-                Equipe
+                Équipe
               </span>
             </th>
             <th
@@ -209,17 +591,17 @@ exports[`Home.container HomeContainer render correctly 1`] = `
             <td
               class="af-table__cell"
             >
-              Carte verte
+              Green card
             </td>
             <td
               class="af-table__cell"
             >
-              mon groupe
+              My team
             </td>
             <td
               class="af-table__cell"
             >
-              Publique
+              Public
             </td>
             <td
               class="af-table__cell"
@@ -245,7 +627,7 @@ exports[`Home.container HomeContainer render correctly 1`] = `
                 id="id"
                 role="button"
                 tabindex="0"
-                title="Editer"
+                title="Éditer"
               >
                 <i
                   class="glyphicon glyphicon-edit"

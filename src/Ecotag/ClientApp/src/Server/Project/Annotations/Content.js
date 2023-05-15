@@ -6,6 +6,7 @@ import React from "react";
 import AnnotationSwitch from "../../../Toolkit/Annotations/AnnotationSwitch";
 import Loader, {LoaderModes} from '@axa-fr/react-toolkit-loader';
 import {annotationItemStatus} from "./Annotation.reducer";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const AnnotationDispatch = ({annotationType, labels, url, onSubmit, expectedOutput = {}, filename}) => {
     return <AnnotationSwitch
@@ -34,22 +35,6 @@ const formatter = () => {
     );
 }
 
-const getText = (currentItem) => {
-    if (currentItem) {
-        switch (currentItem.status) {
-            case annotationItemStatus.ERROR:
-                return `${currentItem.fileName} sauvegarde erreur à ${formatter().format(currentItem.statusDate)}`;
-            case annotationItemStatus.SAVED:
-                return `${currentItem.fileName} sauvegardé à ${formatter().format(currentItem.statusDate)}`;
-            case annotationItemStatus.SAVED_PREVIOUS_SESSION:
-                return `${currentItem.fileName} sauvegardé lors d'une session précédente}`;
-            default:
-                return currentItem.fileName;
-        }
-    }
-    return currentItem;
-}
-
 export const Content = ({
                             project,
                             currentItem,
@@ -62,19 +47,37 @@ export const Content = ({
                             reservationStatus,
                             annotationStatus
                         }) => {
+
+    const {translate} = useProjectTranslation('toolkit');
+
+    const getText = (currentItem) => {
+        if (currentItem) {
+            switch (currentItem.status) {
+                case annotationItemStatus.ERROR:
+                    return `${currentItem.fileName} ${translate('content.toolbar.text.error')} ${formatter().format(currentItem.statusDate)}`;
+                case annotationItemStatus.SAVED:
+                    return `${currentItem.fileName} ${translate('content.toolbar.text.saved')} ${formatter().format(currentItem.statusDate)}`;
+                case annotationItemStatus.SAVED_PREVIOUS_SESSION:
+                    return `${currentItem.fileName} ${translate('content.toolbar.text.saved_previous_session')}`;
+                default:
+                    return currentItem.fileName;
+            }
+        }
+        return currentItem;
+    }
+
     switch (documentId) {
         case "end":
-            return <div className="container"><Alert classModifier="info" title="Annotation">
-                Vous avez annoté tout ce que vous pouviez sur ce dataset.
-                Merci beaucoup !
+            return <div className="container"><Alert classModifier="info" title={translate('content.end.title')}>
+                {translate('content.end.text')}
             </Alert></div>;
         case "start":
-            return <Loader mode={LoaderModes.get} text={"Réservation d'éléments d'annotation en cours"}/>;
+            return <Loader mode={LoaderModes.get} text={translate('content.start')}/>;
         default:
             return (currentItem != null ? <>
                 <ReservationStatus status={reservationStatus}/>
                 <AnnotationStatus status={annotationStatus}/>
-                <AnnotationsToolbar onPreviousPlaceholder={"Précédent"} onNextPlaceholder={"Suivant"} onNext={onNext}
+                <AnnotationsToolbar onPreviousPlaceholder={translate('content.toolbar.previous')} onNextPlaceholder={translate('content.toolbar.next')} onNext={onNext}
                                     onPrevious={onPrevious} isPreviousDisabled={!hasPrevious} isNextDisabled={!hasNext}
                                     text={getText(currentItem)}/>
                 <AnnotationDispatch expectedOutput={currentItem.annotation.expectedOutput}

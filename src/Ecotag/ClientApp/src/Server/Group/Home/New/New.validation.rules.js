@@ -1,4 +1,4 @@
-import {MSG_MAX_LENGTH, MSG_MIN_LENGTH, MSG_REQUIRED, NAME} from './constants';
+import {MSG_MAX_LENGTH, MSG_MIN_LENGTH, MSG_REGEX, MSG_REQUIRED, NAME} from './constants';
 
 const rulesRequired = {
     required: {
@@ -23,7 +23,7 @@ const rulesMaxLength = {
 const rulesRegex = {
     pattern: {
         regex: /^[a-zA-Z0-9-_]*$/,
-        message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
+        message: MSG_REGEX
     },
 }
 

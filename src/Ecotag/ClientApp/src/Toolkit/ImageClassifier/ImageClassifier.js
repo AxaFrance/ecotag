@@ -6,6 +6,7 @@ import '@axa-fr/react-toolkit-button/src/button.scss'
 import classNames from "classnames";
 import {GlobalHotKeys} from 'react-hotkeys';
 import {generateLabelsKeyMap} from "../labels";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const defaultClassName = 'image-classifier';
 const defaultClassNameButtonsContainer = 'image-classifier__buttons-container';
@@ -18,6 +19,7 @@ const generateKeyMap = (length) => {
 };
 
 const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const className = classNames(defaultClassName, {
         [`${defaultClassName}--inline-mode`]: state.inlineMode,
     });
@@ -50,7 +52,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                         <img
                             src={url}
                             id="currentImage"
-                            alt="Classifier image"
+                            alt={translate('image_classifier.image_alt')}
                             style={{
                                 width: `${state.widthImage}%`,
                                 transform: `rotate(${state.rotate}deg)`,
@@ -65,7 +67,7 @@ const ImageClassifier = ({url, labels, onSubmit, state, expectedOutput}) => {
                                 isSelected = true;
                             }
                             return (
-                                <div title={`Raccourci : ${keyMap[(index + 1).toString(16)]}`} key={index}
+                                <div title={`${translate('image_classifier.shortcut')} ${keyMap[(index + 1).toString(16)]}`} key={index}
                                      className={classNameButtonContainer}>
                                     <button
                                         className={`image-classifier-btn${isSelected ? " image-classifier-btn--selected" : ""}`}

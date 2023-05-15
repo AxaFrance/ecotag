@@ -4,8 +4,9 @@ import MailWithAttachment from "./MailWithAttachment";
 import PdfAttachment from "./PdfAttachment";
 import DownloadAttachment from "./DownloadAttachment";
 import TxtAttachment from "./TxtAttachment";
+import useProjectTranslation from "../../useProjectTranslation";
 
-export const formatTitle = (level, filename) => {
+export const formatTitle = (level, filename, attachmentStr) => {
     if (!level) {
         return filename;
     }
@@ -13,7 +14,7 @@ export const formatTitle = (level, filename) => {
     for (let i = 0; i < level; i++) {
         levelString += ">"
     }
-    return `${levelString} Pièce jointe: ${filename}`;
+    return `${levelString} ${attachmentStr} ${filename}`;
 }
 
 const mappingExtension = {
@@ -37,6 +38,7 @@ const adaptTypeMime = (mimeType, filename) => {
 }
 
 const Attachment = ({attachment, onChange, styleImageContainer}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const {ref, inView} = useInView({
         inViewThreshold: 0,
     });
@@ -46,6 +48,7 @@ const Attachment = ({attachment, onChange, styleImageContainer}) => {
     const id = attachment.id;
     const level = attachment.level || 0;
     const classNameTitle = "eml__attachment-title";
+    const attachmentStr = translate('eml_classifier.attachments.title');
 
     let mimeType = adaptTypeMime(attachment.mimeType, attachment.filename);
 
@@ -53,7 +56,7 @@ const Attachment = ({attachment, onChange, styleImageContainer}) => {
         case "message/rfc822":
             return <div id={id}>
                 <h2 ref={ref} className={classNameTitle}
-                    id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                    id={attachment.filename}>{formatTitle(level, attachment.filename, attachmentStr)}</h2>
                 <MailWithAttachment attachment={attachment}
                                     styleImageContainer={styleImageContainer} onChange={onChange}/>
             </div>
@@ -64,28 +67,28 @@ const Attachment = ({attachment, onChange, styleImageContainer}) => {
         case "image/svg+xml":
             const url = URL.createObjectURL(attachment.blob);
             return <div id={id}>
-                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename, attachmentStr)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <img src={url} alt={attachment.filename} className="eml__attachment-image"/>
                 </div>
             </div>
         case "application/pdf":
             return <div id={id}>
-                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename, attachmentStr)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <PdfAttachment blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
             </div>
         case "text/plain":
             return <div id={id}>
-                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename)}</h2>
+                <h2 className={classNameTitle} id={attachment.filename}>{formatTitle(level, attachment.filename, attachmentStr)}</h2>
                 <div ref={ref} style={styleImageContainer}>
                     <TxtAttachment blob={attachment.blob} id={id} onChange={onChange}/>
                 </div>
             </div>
         default:
             return <div ref={ref} id={id}>
-                <h2 className={classNameTitle}>{formatTitle(level, `${attachment.filename} ${attachment.mimeType}`)}</h2>
+                <h2 className={classNameTitle}>{formatTitle(level, `${attachment.filename, attachmentStr} ${attachment.mimeType}`)}</h2>
                 <DownloadAttachment filename={attachment.filename} blob={attachment.blob}/>
             </div>
     }

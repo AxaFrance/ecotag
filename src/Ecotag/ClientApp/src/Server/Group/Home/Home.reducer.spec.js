@@ -5,7 +5,7 @@ describe('Home.reducer', () => {
     describe('.reducer()', () => {
         const givenGroups = [{
             "id": "0001",
-            "name": "developpeurs",
+            "name": "developers",
             "users": [
                 {"email": "clement.trofleau.lbc@axa.fr"},
                 {"email": "gilles.cruchon@axa.fr"},
@@ -45,7 +45,7 @@ describe('Home.reducer', () => {
         it('should set loading to true and hasSubmit to false during a group creation', () => {
             const newGroup = {
                 "id": "0001",
-                "name": "developpeurs",
+                "name": "developers",
                 "users": [
                     {"email": "clement.trofleau.lbc@axa.fr"},
                     {"email": "gilles.cruchon@axa.fr"},

@@ -1,8 +1,11 @@
 import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import './Labels.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Labels = ({setState, state, labels}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
     const selectLabel = label => {
         setState({...state, currentLabelId: label.id});
     };
@@ -40,12 +43,12 @@ const Labels = ({setState, state, labels}) => {
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
             <div className="totl-labels__container">
-                <h2 className="totl-labels__title">Labels</h2>
+                <h2 className="totl-labels__title">{translate('tag_over_text_label.labels.title')}</h2>
                 {labels.map((label, index) => {
                     return (
                         <button
                             key={index}
-                            title="Pas de raccourci"
+                            title={translate('tag_over_text_label.labels.no_shortcut')}
                             className={
                                 state.currentLabelId === index.toString() ? 'totl-labels__button-current' : 'totl-labels__labels-button'
                             }

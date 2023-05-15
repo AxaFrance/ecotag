@@ -3,10 +3,10 @@ import React from 'react';
 import withCustomFetch from '../../withCustomFetch';
 import {computeNumberPages, filterPaging} from '../../shared/Home/Home.filters';
 import {useHome} from './Home.hook';
-import {withResilience} from "../../shared/Resilience";
-import {NAME} from "./New/constants";
-import compose from "../../compose";
-import {withTelemetry} from "../../Telemetry";
+import {withResilience} from '../../shared/Resilience';
+import {NAME} from './New/constants';
+import compose from '../../compose';
+import {withTelemetry} from '../../Telemetry';
 
 const HomeWithResilience = withResilience(Home);
 
@@ -46,12 +46,12 @@ export const HomeContainer = ({fetch, telemetry}) => {
         },
     };
     const itemsFiltered = filterPaging(items, state.filters.paging.numberItemsByPage, filters.paging.currentPage);
-    const isSubmitable = !state.fields[NAME].message;
+    const isSubmittable = !state.fields[NAME].message;
 
     return (
         <HomeWithResilience
             {...state}
-            isSubmitable={isSubmitable}
+            isSubmitable={isSubmittable}
             numberItemsTotal={items.length}
             items={itemsFiltered}
             filters={filters}

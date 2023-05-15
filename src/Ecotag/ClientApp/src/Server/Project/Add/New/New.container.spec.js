@@ -4,6 +4,7 @@ import {render, waitFor} from '@testing-library/react';
 import {createProject, initState, NewContainer, reducer} from './New.container';
 import {BrowserRouter as Router} from "react-router-dom";
 import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from "./constants";
+import {changeProjectTranslationLanguage} from "../../../../useProjectTranslation";
 
 const telemetry = {trackEvent: (eventName) => console.log(eventName)};
 
@@ -11,7 +12,7 @@ const fetch = () => {
     return {
         ok: true, json: () => Promise.resolve({
             "id": "0001",
-            "name": "Relevé d'information",
+            "name": "Information statement",
             "datasetId": "0004",
             "numberTagToDo": 10,
             "createDate": new Date("04-04-2011").getTime(),
@@ -44,12 +45,22 @@ const fetch = () => {
 };
 
 describe('New.container', () => {
-    it('NewContainer render correctly', async () => {
-        const {container, getAllByText} = render(<Router><NewContainer fetch={fetch}/></Router>);
-        await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
-        await waitFor(() => getAllByText(/Nouveau projet d'annotation/i));
+    describe('New.container translation', () => {
+        const renderComponentAndCheckSnapshot = async(expectedText) => {
+            const {container, getAllByText} = render(<Router><NewContainer fetch={fetch}/></Router>);
+            const regex = new RegExp(expectedText, 'i');
+            await waitFor(() => expect(container.querySelector(".af-spinner--active")).toBeNull());
+            await waitFor(() => getAllByText(regex));
+        };
+        it('should render correctly in english', async () => {
+            changeProjectTranslationLanguage('en');
+            await renderComponentAndCheckSnapshot("New annotation project");
+        });
+        it('should render correctly in french', async () => {
+            changeProjectTranslationLanguage('fr');
+            await renderComponentAndCheckSnapshot("Nouveau projet d'annotation");
+        });
     });
-
     describe('New.reducer', () => {
         it('should set the new fields with asked values after onChange action', () => {
             const givenState = {...initState};

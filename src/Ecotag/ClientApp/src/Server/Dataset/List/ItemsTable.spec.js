@@ -1,12 +1,13 @@
-﻿import ItemsTable from "./ItemsTable";
-import {render} from "@testing-library/react";
-import {LoaderModes} from "@axa-fr/react-toolkit-all";
+﻿import ItemsTable from './ItemsTable';
+import {render} from '@testing-library/react';
+import {LoaderModes} from '@axa-fr/react-toolkit-all';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 const items = [{
     id: "0001",
-    name: "Carte verte",
+    name: "Green card",
     type: "Image",
-    classification: "Publique",
+    classification: "Public",
     numberFiles: 300,
     createDate: new Date("01-28-2022").getTime()
 }];
@@ -34,13 +35,21 @@ const filters = {
 
 describe("Check Dataset ItemsTable behaviour", () => {
 
-    test("Should render correctly", () => {
+    const renderComponentAndCheckSnapshot = () => {
         const {asFragment} = render(<ItemsTable items={items} filters={filters} loaderMode={LoaderModes.none}
                                                 onChangeSort={() => {
                                                 }} onChangePaging={() => {
         }}/>);
 
         expect(asFragment()).toMatchSnapshot();
-    });
+    }
 
+    it("should render correctly in english", () => {
+        changeProjectTranslationLanguage('en');
+        renderComponentAndCheckSnapshot();
+    });
+    it("should render correctly in french", () => {
+        changeProjectTranslationLanguage('fr');
+        renderComponentAndCheckSnapshot();
+    });
 });

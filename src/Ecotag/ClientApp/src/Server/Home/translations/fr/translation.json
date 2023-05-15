@@ -1,0 +1,11 @@
+{
+  "home": {
+    "title": "Accueil",
+    "projects": "Projets",
+    "datasets": "Datasets",
+    "groups": "Équipes",
+    "errors": {
+      "no_roles": "Aucun rôle n'est attribué à votre profil."
+    }
+  }
+}

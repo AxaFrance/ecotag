@@ -1,9 +1,26 @@
+import i18next from "i18next";
+
 export const NAME = 'NAME';
 
-export const MSG_REQUIRED = 'Le champ est obligatoire';
+export let MSG_REQUIRED;
 
-export const MSG_MIN_LENGTH = 'Veuillez saisir au moins {minLength} caractère(s)';
+export let MSG_MIN_LENGTH;
 
-export const MSG_MAX_LENGTH = 'Veuillez saisir au plus {maxLength} caractère(s)';
+export let MSG_MAX_LENGTH;
 
-export const MSG_GROUP_NAME_ALREADY_EXIST = 'Une équipe avec ce nom existe déjà';
+export let MSG_GROUP_NAME_ALREADY_EXIST;
+
+export let MSG_REGEX;
+
+const updateTranslations = () => {
+    const options = {ns: 'constants'};
+    MSG_REQUIRED = i18next.t('groups.new.MSG_REQUIRED', options);
+    MSG_MIN_LENGTH = i18next.t('groups.new.MSG_MIN_LENGTH', options);
+    MSG_MAX_LENGTH = i18next.t('groups.new.MSG_MAX_LENGTH', options);
+    MSG_GROUP_NAME_ALREADY_EXIST = i18next.t('groups.new.MSG_GROUP_NAME_ALREADY_EXIST', options);
+    MSG_REGEX = i18next.t('groups.new.MSG_REGEX', options);
+};
+
+if (i18next.isInitialized) {
+    updateTranslations();
+}

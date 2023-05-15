@@ -93,7 +93,7 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
       >
         <div
           class="image-classifier__button-container"
-          title="Raccourci : 1"
+          title="Shortcut : 1"
         >
           <button
             class="image-classifier-btn"
@@ -148,7 +148,7 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
       >
         <button
           class="toolbar__button-item"
-          title="Raccourci : L"
+          title="Shortcut : L"
         >
           <span
             class="glyphicon glyphicon-reset"
@@ -161,7 +161,7 @@ exports[`Should check AnnotationsContainer component behaviour Should display an
         </button>
         <button
           class="toolbar__button-item"
-          title="Raccourci : R"
+          title="Shortcut : R"
         >
           <span
             class="glyphicon glyphicon-repeat"

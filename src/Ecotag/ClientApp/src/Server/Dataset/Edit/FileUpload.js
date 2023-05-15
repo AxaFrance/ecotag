@@ -3,6 +3,7 @@ import {File, FileTable} from '@axa-fr/react-toolkit-form-input-file';
 import Button from '@axa-fr/react-toolkit-button';
 import {resilienceStatus} from "../../shared/Resilience";
 import {Locked} from "../Dataset.service";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 
 const typeDatasetExtention = (datasetType) => {
@@ -32,6 +33,8 @@ const typeMimeDatasetExtention = (datasetType) => {
 }
 
 export const FileUpload = ({fetch, setState, state}) => {
+
+    const {translate} = useProjectTranslation();
 
     const onChange = values => {
         const reader = new FileReader();
@@ -130,8 +133,7 @@ export const FileUpload = ({fetch, setState, state}) => {
         <>
             <div
                 className={`edit-dataset__file-upload-container edit-dataset__file-upload-container--${state.dataset.locked !== Locked.None ? 'disabled' : ''}`}>
-                <h2 className="edit-dataset__file-upload-title">Upload des
-                    fichiers {typeDatasetExtention(state.dataset.type)}</h2>
+                <h2 className="edit-dataset__file-upload-title">{translate('dataset.edit.file_upload.title')}{typeDatasetExtention(state.dataset.type)}</h2>
                 <File
                     id='file'
                     name='datasetUploadFiles'
@@ -141,7 +143,8 @@ export const FileUpload = ({fetch, setState, state}) => {
                     readOnly={false}
                     disabled={false}
                     accept={typeMimeDatasetExtention(state.dataset.type)}
-                    label="Parcourir"
+                    label={translate('dataset.edit.file_upload.file_input.label')}
+                    placeholder={translate('dataset.edit.file_upload.file_input.placeholder')}
                     icon='open'
                 />
                 {state.files.filesLoad.length === 0 ? '' :
@@ -153,21 +156,27 @@ export const FileUpload = ({fetch, setState, state}) => {
                         onClick={sendFile}
                         disabled={state.files.filesLoad.length === 0}
                         classModifier={state.files.filesLoad.length === 0 ? 'disabled' : ''}>
-                        <span className="af-btn__text">Envoyer</span>
+                        <span className="af-btn__text">{translate('dataset.edit.file_upload.send_button.label')}</span>
                     </Button>
                 </div>
             </div>
             {state.files.filesLoadError.length === 0 ? null :
                 <ul className="edit-dataset__file-upload-files-load-error">
                     {state.files.filesLoadError.map(file =>
-                        <li><span>Le fichier {file.file.name} existe déjà</span></li>
+                        <li><span>
+                            {translate('dataset.edit.file_upload.errors.already_existing.first_part')}
+                            {file.file.name}
+                            {translate('dataset.edit.file_upload.errors.already_existing.second_part')}</span></li>
                     )}
                 </ul>
             }
             {state.files.filesSendError.length === 0 ? null :
                 <ul className="edit-dataset__file-upload-files-load-error">
                     {state.files.filesSendError.map(file =>
-                        <li><span>Le fichier {file.file.name} na pas pu être uploadé</span></li>
+                        <li><span>
+                            {translate('dataset.edit.file_upload.errors.could_not_upload.first_part')}
+                            {file.file.name}
+                            {translate('dataset.edit.file_upload.errors.could_not_upload.second_part')}</span></li>
                     )}
                 </ul>
             }

@@ -1,0 +1,11 @@
+{
+  "datasets": {
+    "new": {
+      "MSG_REQUIRED": "Le champ est obligatoire",
+      "MSG_DATASET_NAME_ALREADY_EXIST": "Un dataset avec ce nom existe déjà",
+      "MSG_DATASET_NAME_FORMAT": "Veuillez saisir des caractères alphanumériques, – et _ inclus, accents exclus",
+      "MSG_MIN_LENGTH": "Veuillez saisir au moins {minLength} caractère(s)",
+      "MSG_MAX_LENGTH": "Veuillez saisir au plus {maxLength} caractère(s)"
+    }
+  }
+}

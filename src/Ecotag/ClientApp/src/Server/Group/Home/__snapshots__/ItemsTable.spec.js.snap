@@ -17,7 +17,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
           <span
             class="af-table__th-content"
           >
-            Nom
+            Name
           </span>
         </th>
         <th
@@ -26,7 +26,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
           <span
             class="af-table__th-content"
           >
-            Utilisateurs
+            Users
           </span>
         </th>
         <th
@@ -65,7 +65,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
             id="editActionId"
             role="button"
             tabindex="0"
-            title="Modifier"
+            title="Edit"
           >
             <i
               class="glyphicon glyphicon-pencil"
@@ -97,7 +97,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
                 class="af-form__group-label"
                 for="home_paging"
               >
-                Afficher
+                Display
               </label>
             </div>
             <div
@@ -146,7 +146,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
                 <span
                   class="af-form__input-cmplt"
                 >
-                  éléments
+                  elements
                 </span>
               </div>
             </div>
@@ -169,7 +169,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
             <span
               class="af-pager__item-nolink"
             >
-              « Précédent
+              « Previous
             </span>
           </li>
           <li
@@ -190,7 +190,7 @@ exports[`Check Group ItemsTable behaviour Should render correctly and display us
             <span
               class="af-pager__item-nolink"
             >
-              Suivant »
+              Next »
             </span>
           </li>
         </ul>

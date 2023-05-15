@@ -3,6 +3,7 @@ import {scaleBy} from '../BoundingBox/Cropping';
 import {GlobalHotKeys} from 'react-hotkeys';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer, ToolbarSwitchButton} from '../Toolbar';
 import './ComponentModifier.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const getFileExtension = filename => {
     if (!filename) return '';
@@ -37,6 +38,7 @@ const _isDeleteDisabled = shapes => {
 };
 
 const ToolbarContainer = ({setState, state, fitImage, onSubmit, image, expectedOutput}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const isSubmitDisabled = _isSubmitDisabled(state.labels, image);
     const isDeleteDisabled = _isDeleteDisabled(state.shapes);
 
@@ -150,20 +152,35 @@ const ToolbarContainer = ({setState, state, fitImage, onSubmit, image, expectedO
                         id="enable-creation"
                         checked={state.enableCreate}
                         onChange={enableCreateToggle}
-                        label="Enable creation"
+                        label={translate('tag_over_text.toolbar.enable_creation.label')}
                     />
                 </ToolbarButtonContainer>
                 <ToolbarButtonContainer>
                     <ToolbarButton
-                        title="Raccourci : Delete"
+                        title={translate('tag_over_text.toolbar.delete.title')}
                         disabled={isDeleteDisabled}
                         onClick={onDelete}
                         icon="trash"
-                        label="Delete"
+                        label={translate('tag_over_text.toolbar.delete.label')}
                     />
-                    <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In"/>
-                    <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out"/>
-                    <ToolbarButton title="Raccourci : F" onClick={handleFitImage} icon="resize-full" label="Fit Image"/>
+                    <ToolbarButton
+                        title={translate('tag_over_text.toolbar.zoom_in.title')}
+                        onClick={onZoomIn}
+                        icon="zoom-in"
+                        label={translate('tag_over_text.toolbar.zoom_in.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('tag_over_text.toolbar.zoom_out.title')}
+                        onClick={onZoomOut}
+                        icon="zoom-out"
+                        label={translate('tag_over_text.toolbar.zoom_out.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('tag_over_text.toolbar.fit_image.title')}
+                        onClick={handleFitImage}
+                        icon="resize-full"
+                        label={translate('tag_over_text.toolbar.fit_image.label')}
+                    />
                 </ToolbarButtonContainer>
             </Toolbar>
         </GlobalHotKeys>

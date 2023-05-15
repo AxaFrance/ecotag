@@ -1,8 +1,11 @@
 ﻿import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer, ToolbarSwitchButton} from '../Toolbar';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const ToolbarContainer = ({setState, state, onSubmit}) => {
+
+    const {translate} = useProjectTranslation('toolkit');
 
     const onZoomIn = (e) => {
         e.preventDefault();
@@ -38,12 +41,12 @@ const ToolbarContainer = ({setState, state, onSubmit}) => {
                         id="keepAnnotation"
                         checked={state.keepLabels}
                         onChange={keepLabelsToggle}
-                        label="Keep Labels"
+                        label={translate('named_entity.toolbar.keep_annotation_label')}
                     />
                 </ToolbarButtonContainer>
                 <ToolbarButtonContainer>
-                    <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In"/>
-                    <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out"/>
+                    <ToolbarButton title={translate('named_entity.toolbar.zoom_in.title')} onClick={onZoomIn} icon="zoom-in" label={translate('named_entity.toolbar.zoom_in.label')}/>
+                    <ToolbarButton title={translate('named_entity.toolbar.zoom_out.title')} onClick={onZoomOut} icon="zoom-out" label={translate('named_entity.toolbar.zoom_out.label')}/>
                 </ToolbarButtonContainer>
             </Toolbar>
         </GlobalHotKeys>

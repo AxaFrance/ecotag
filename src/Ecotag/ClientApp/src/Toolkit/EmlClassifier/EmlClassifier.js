@@ -11,12 +11,13 @@ import "./EmlClassifier.scss";
 import MailSummary from "./MailSummary";
 import Attachment from "./Attachment";
 import {EmlMode} from "./EmlMode";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const isEml = (blob) => {
     return blob.mimeType === "message/rfc822" || (blob.mimeType === "application/octet-stream" && blob.filename.toLocaleLowerCase().endsWith(".eml"))
 }
 
-async function parseMessageAsync(file, level = 0) {
+async function parseMessageAsync(file, fallbackFileName, level = 0) {
     const parser = new PostalMime();
     const email = await parser.parse(file);
     if (!email || !email.from) {
@@ -56,7 +57,7 @@ async function parseMessageAsync(file, level = 0) {
                 }
             }
             const blob = new Blob([attachment.content], {type: attachment.mimeType});
-            const filename = attachment.filename || 'attachment';
+            const filename = attachment.filename || fallbackFileName;
             const mimeType = attachment.mimeType;
             results.push({
                 blob,
@@ -73,7 +74,7 @@ async function parseMessageAsync(file, level = 0) {
     for (let i = 0; i < attachments.length; i++) {
         let attachment = attachments[i];
         if (isEml(attachment)) {
-            const message = await parseMessageAsync(attachment.blob, attachment.level);
+            const message = await parseMessageAsync(attachment.blob, fallbackFileName, attachment.level);
             const newAttachment = {...attachment, ...message};
             finalAttachments.push(newAttachment);
         } else {
@@ -89,7 +90,7 @@ async function parseMessageAsync(file, level = 0) {
     };
 }
 
-const onFileChange = (state, setState) => async (e) => {
+const onFileChange = (state, setState, fallbackFileName) => async (e) => {
     if (e.target.files.length === 0) {
         return;
     }
@@ -99,7 +100,7 @@ const onFileChange = (state, setState) => async (e) => {
     const filename = e.currentTarget.value;
     const isEmlInput = {filename, mimeType: file.type};
     if (isEml(isEmlInput)) {
-        const messageFormatted = await parseMessageAsync(file);
+        const messageFormatted = await parseMessageAsync(file, fallbackFileName);
         setState({...state, loaderMode: LoaderModes.none, document: null, mail: messageFormatted});
     } else {
         const document = {
@@ -113,7 +114,7 @@ const onFileChange = (state, setState) => async (e) => {
     }
 }
 
-const initAsync = async (url, expectedOutput, filename, mode) => {
+const initAsync = async (url, expectedOutput, filename, mode, fallbackFileName) => {
     const response = await fetch(url);
     const blob = await response.blob();
     let annotation;
@@ -124,7 +125,7 @@ const initAsync = async (url, expectedOutput, filename, mode) => {
     }
     const isEmlInput = {filename, mimeType: blob.type};
     if (isEml(isEmlInput)) {
-        const message = await parseMessageAsync(blob);
+        const message = await parseMessageAsync(blob, fallbackFileName);
         return {mail: message, document: null, annotation};
     }
 
@@ -184,8 +185,12 @@ const updateAttachments = (attachments, id, dataToAdd) => {
     return newAttachments;
 }
 
-const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename = 'attachment', mode = EmlMode.classifier}) => {
-
+const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename, mode = EmlMode.classifier}) => {
+    const {translate} = useProjectTranslation('toolkit');
+    const fallbackFileName = translate('eml_classifier.fallback_file_name');
+    if(!filename){
+        filename = fallbackFileName;
+    }
     const annotationDefaultValue = mode === EmlMode.classifier ? {label: null} : {};
     const [state, setState] = useState({
         fontSize: 60,
@@ -200,7 +205,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename = 'attac
         let isMounted = true;
         if (url) {
             setState({...state, loaderMode: LoaderModes.get, mail: null, document: null, annotation: {label: null}});
-            initAsync(url, expectedOutput, filename, mode).then((data) => {
+            initAsync(url, expectedOutput, filename, mode, fallbackFileName).then((data) => {
                 if (isMounted) {
                     setState({...state, loaderMode: LoaderModes.none, ...data});
                     if (containerRef.current.scrollIntoView) {
@@ -270,17 +275,17 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename = 'attac
     const document = state.document;
     return <div id="main">
         {!url && <div>
-            <h1>Front-end Email Parser Demo</h1>
+            <h1>{translate('eml_classifier.title')}</h1>
             <form>
-                <input type="file" onChange={onFileChange(state, setState)}/>
+                <input type="file" onChange={onFileChange(state, setState, fallbackFileName)}/>
             </form>
         </div>}
         <div ref={containerRef}>
-            <Loader mode={state.loaderMode} text={"Your browser is extracting data"}>
+            <Loader mode={state.loaderMode} text={translate('eml_classifier.loading')}>
                 {mail != null && <div id="email-container">
                     <div className="eml__container">
                         <div className="eml__container-principal">
-                            <Mail attachment={mail} title="Mail principal" onChange={onChange}/>
+                            <Mail attachment={mail} title={translate('eml_classifier.mail.title')} onChange={onChange}/>
                             <Attachments mail={mail.mail} styleImageContainer={styleImageContainer}
                                          onChange={onChange}/>
                         </div>
@@ -299,7 +304,7 @@ const EmlClassifier = ({url, labels, onSubmit, expectedOutput, filename = 'attac
                             </div>
                             <div className="eml__container-summary">
                                 <MailSummary attachment={document} setState={setState} state={state} labels={labels}
-                                             title={filename} mainTitle={"Document"} mode={mode}/>
+                                             title={filename} mainTitle={translate('eml_classifier.mail_summary.main_title_document')} mode={mode}/>
                             </div>
                         </div>
                     </div>}

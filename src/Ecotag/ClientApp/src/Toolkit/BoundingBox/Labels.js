@@ -2,8 +2,11 @@ import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 
 import './Labels.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Labels = ({setState, state, labels}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
     const selectLabel = label => {
         setState({...state, currentLabelId: label.id});
     };
@@ -64,12 +67,12 @@ const Labels = ({setState, state, labels}) => {
     return (
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
             <div className="labels-container">
-                <h2 className="labels-title">Labels</h2>
+                <h2 className="labels-title">{translate('cropping.labels.title')}</h2>
                 {labels.map((label, index) => {
                     return (
                         <button
                             key={index}
-                            title={index + 1 <= shortcuts.length ? `Raccourci : alt + ${index + 1}` : 'Pas de raccourci'}
+                            title={index + 1 <= shortcuts.length ? `${translate('cropping.labels.button.has_shortcut')}${index + 1}` : translate('cropping.labels.button.no_shortcut')}
                             className={state.currentLabelId === index.toString() || state.currentLabelId === label.id ? 'labels-button-current' : 'labels-button'}
                             onClick={() => selectLabel(label)}>
                             <div className="labels-color" style={{backgroundColor: label.color}}/>

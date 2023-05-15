@@ -1,9 +1,11 @@
 ﻿import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer} from '../Toolbar';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const ToolbarContainer = ({setState, state, onSubmit, isSubmitDisabled}) => {
 
+    const {translate} = useProjectTranslation('toolkit');
     const onZoomIn = (e) => {
         e.preventDefault();
         setState({...state, fontSize: state.fontSize + 1});
@@ -30,8 +32,8 @@ const ToolbarContainer = ({setState, state, onSubmit, isSubmitDisabled}) => {
         <GlobalHotKeys allowChanges={true} keyMap={keyMap} handlers={handlers}>
             <Toolbar onSubmit={onSubmit} isSubmitDisabled={isSubmitDisabled}>
                 <ToolbarButtonContainer>
-                    <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In"/>
-                    <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out"/>
+                    <ToolbarButton title={translate('eml_classifier.toolbar.zoom_in.title')} onClick={onZoomIn} icon="zoom-in" label={translate('eml_classifier.toolbar.zoom_in.label')}/>
+                    <ToolbarButton title={translate('eml_classifier.toolbar.zoom_out.title')} onClick={onZoomOut} icon="zoom-out" label={translate('eml_classifier.toolbar.zoom_out.label')}/>
                 </ToolbarButtonContainer>
             </Toolbar>
         </GlobalHotKeys>

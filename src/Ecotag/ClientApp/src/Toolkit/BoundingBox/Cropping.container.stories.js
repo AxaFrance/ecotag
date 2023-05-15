@@ -10,5 +10,5 @@ const onSubmit = (data) => {
 };
 
 storiesOf('Cropping', module).add('CroppingContainer', () => (
-    <CroppingContainer labels={labels} url={url} onSubmit={onSubmit}/>
+    <CroppingContainer labels={labels} url={url} onSubmit={onSubmit} expectedOutput={null}/>
 ));

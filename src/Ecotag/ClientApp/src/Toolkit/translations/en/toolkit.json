@@ -1,0 +1,219 @@
+{
+  "page_annotation": {
+   "subtitle": "Project of type"
+  },
+  "annotation_status": {
+    "loading": "Loading next element",
+    "post": "Save in progress",
+    "error": "Error during save"
+  },
+  "reservation_status": {
+    "loading": "Reservation of the next element in progress",
+    "post": "Reservation of the next element in progress",
+    "error": "Error during loading"
+  },
+  "content": {
+    "end": {
+      "title": "Annotation",
+      "text": "You annotated all you could on this dataset. Thanks a lot !"
+    },
+    "start": "Reservation of elements to annotate in progress",
+    "toolbar": {
+      "previous": "Previous",
+      "next": "Next",
+      "text": {
+        "error": "save error at",
+        "saved": "saved at",
+        "saved_previous_session": "saved during a previous session"
+      }
+    }
+  },
+  "cropping": {
+    "toolbar": {
+      "keep_annotation": "Keep annotation",
+      "delete": {
+        "title": "Shortcut : Delete",
+        "label": "Delete"
+      },
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom Out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      },
+      "select_all": {
+        "title": "Shortcut : A",
+        "label": "Select All"
+      },
+      "move": "Move",
+      "submit": {
+        "title": "Shortcut : Ctrl + Spacebar",
+        "label": "Submit"
+      },
+      "reset": {
+        "title": "Shortcut : Ctrl + Alt + Spacebar",
+        "label": "Reset"
+      }
+    },
+    "labels": {
+      "title": "Labels",
+      "button": {
+        "has_shortcut": "Shortcut : alt + ",
+        "no_shortcut": "No shortcut"
+      }
+    }
+  },
+  "ocr": {
+    "alt_image": "Image to annotate",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "inline_mode_label": "Inline mode",
+      "rotation_left": {
+        "title": "Shortcut : L",
+        "label": "Rotate Left"
+      },
+      "rotation_right": {
+        "title": "Shortcut : R",
+        "label": "Rotate Right"
+      }
+    }
+  },
+  "image_classifier": {
+    "image_alt": "Classifier image",
+    "shortcut": "Shortcut :",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "inline_mode_label": "Inline mode",
+      "rotate_left": {
+        "title": "Shortcut : L",
+        "label": "Rotate Left"
+      },
+      "rotate_right": {
+        "title": "Shortcut : R",
+        "label": "Rotate Right"
+      }
+    }
+  },
+  "rotation": {
+    "image_alt": "Image to rotate",
+    "toolbar": {
+      "progress_label": "Image Size",
+      "opacity_label": "Opacity",
+      "dark_mode_label": "Dark mode",
+      "anomaly_label": "Anomaly",
+      "angle_label": "Angle"
+    }
+  },
+  "named_entity": {
+    "label": {
+      "shortcut": "Shortcut :"
+    },
+    "toolbar": {
+      "keep_annotation_label": "Keep Labels",
+      "zoom_in": {
+        "title": "Shortcut: Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut: 0",
+        "label": "Zoom Out"
+      }
+    }
+  },
+  "tag_over_text": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "No shortcut",
+      "groups": {
+        "block": "Block"
+      }
+    },
+    "toolbar": {
+      "enable_creation": {
+        "label": "Enable creation"
+      },
+      "delete": {
+        "title": "Shortcut : Delete",
+        "label": "Delete"
+      },
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      }
+    }
+  },
+  "tag_over_text_label": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "No shortcut"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom out"
+      },
+      "fit_image": {
+        "title": "Shortcut : F",
+        "label": "Fit Image"
+      }
+    }
+  },
+  "eml_classifier": {
+    "title": "Front End Email Parser Demo",
+    "fallback_file_name": "attachment",
+    "loading": "Your browser is extracting data",
+    "mail": {
+      "title": "Main mail",
+      "from": "From :",
+      "to": "To :",
+      "cc": "Cc :",
+      "bcc": "Bcc :",
+      "subject": "Subject :"
+    },
+    "attachments": {
+      "title": "Attachment :",
+      "pdf_attachment": {
+        "loading": "Your browser is extracting the pdf to png images"
+      },
+      "txt_attachment": {
+        "loading": "Your browser is extracting the text"
+      }
+    },
+    "mail_summary": {
+      "main_title": "Mail",
+      "main_title_document": "Document",
+      "title": "Main mail",
+      "annotation": "Annotation",
+      "attachments": "Attachments",
+      "side_attachments": "(loading)"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Shortcut : Z",
+        "label": "Zoom In"
+      },
+      "zoom_out": {
+        "title": "Shortcut : 0",
+        "label": "Zoom Out"
+      }
+    }
+  }
+}

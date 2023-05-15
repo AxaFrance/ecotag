@@ -1,11 +1,13 @@
 import React from 'react';
 import Labels from './Labels';
 import classNames from 'classnames';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const defaultClassName = 'ocr-container';
 const defaultClassNameLabels = 'ocr-container__labels';
 
 const Ocr = ({state, url, setState}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const className = classNames(defaultClassName, {
         [`${defaultClassName}--inline-mode`]: state.inlineMode,
     });
@@ -25,7 +27,7 @@ const Ocr = ({state, url, setState}) => {
                         transform: `rotate(${state.rotate}deg)`,
                         margin: `${state.initialRotate ? '' : state.marginRotate}`,
                     }}
-                    alt="Image to Annotate"
+                    alt={translate('ocr.alt_image')}
                 />
                 <Labels className={classNameLabels} state={state} setState={setState} labels={state.labels}/>
             </div>

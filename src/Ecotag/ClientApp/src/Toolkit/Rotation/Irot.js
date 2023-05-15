@@ -1,8 +1,11 @@
 import React from 'react';
 
 import './Irot.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Irot = ({state, setState, url}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
     const onImageLoad = ({target: image}) => {
         setState({
             ...state,
@@ -24,7 +27,7 @@ const Irot = ({state, setState, url}) => {
                         opacity: `${state.opacity}`,
                         margin: `${state.initialRotate ? '' : state.marginRotate}`,
                     }}
-                    alt="Image to rotate"/>
+                    alt={translate('rotation.image_alt')}/>
             </div>
         </div>
     );

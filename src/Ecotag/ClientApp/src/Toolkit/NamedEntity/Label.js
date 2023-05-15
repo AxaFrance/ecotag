@@ -3,8 +3,10 @@ import {setLabelsColor} from './labelColor';
 import './Label.scss';
 import {adaptTextColorToBackgroundColor} from '../colors';
 import {generateLabelsKeyMap} from "../labels";
+import useProjectTranslation from "../../useProjectTranslation";
 
 const Label = ({labels, selectLabel, selectedLabel}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const coloredLabels = setLabelsColor(labels);
     const keyMapArray = {};
     generateLabelsKeyMap(keyMapArray, labels.length);
@@ -15,7 +17,7 @@ const Label = ({labels, selectLabel, selectedLabel}) => {
                 return (
                     <span key={id + index} onClick={() => selectLabel(label)}>
                       <label
-                          title={`Raccourci : ${keyMapArray[(index + 1).toString(16)]}`}
+                          title={`${translate('named_entity.label.shortcut')} ${keyMapArray[(index + 1).toString(16)]}`}
                           className="label__element"
                           style={selectedLabel.id === id ? {
                               color: adaptTextColorToBackgroundColor(color),

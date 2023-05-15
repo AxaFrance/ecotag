@@ -1,6 +1,7 @@
 import React from 'react';
 import {GlobalHotKeys} from 'react-hotkeys';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer, ToolbarProgressButton, ToolbarSwitchButton} from '../Toolbar';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const getFileExtension = filename => {
     if (!filename) return '';
@@ -8,6 +9,9 @@ const getFileExtension = filename => {
 };
 
 const ToolbarContainer = ({state, setState, onSubmit}) => {
+
+    const {translate} = useProjectTranslation('toolkit')
+
     const getImageInfo = () => {
         const image = document.getElementById('currentImage');
         const imageWidth = image.width;
@@ -73,22 +77,31 @@ const ToolbarContainer = ({state, setState, onSubmit}) => {
                 <Toolbar onSubmit={submitAnnotation}>
                     <ToolbarButtonContainer classModifier="progress-bar">
                         <ToolbarProgressButton
-                            label="Image Size"
+                            label={translate('ocr.toolbar.progress_label')}
                             onChange={e => setState({...state, widthImage: e.target.value})}
                             value={state.widthImage}
                             min="1"
                             max="80"
                         />
-                        <ToolbarSwitchButton id="inlineMode" checked={state.inlineMode} onChange={inlineMode}
-                                             label="Inline mode"/>
+                        <ToolbarSwitchButton
+                            id="inlineMode"
+                            checked={state.inlineMode}
+                            onChange={inlineMode}
+                            label={translate('ocr.toolbar.inline_mode_label')}
+                        />
                     </ToolbarButtonContainer>
                     <ToolbarButtonContainer>
-                        <ToolbarButton title="Raccourci : L" onClick={rotateImage} icon="reset" label="Rotate Left"/>
                         <ToolbarButton
-                            title="Raccourci : R"
+                            title={translate('ocr.toolbar.rotation_left.title')}
+                            onClick={rotateImage}
+                            icon="reset"
+                            label={translate('ocr.toolbar.rotation_left.label')}
+                        />
+                        <ToolbarButton
+                            title={translate('ocr.toolbar.rotation_right.title')}
                             onClick={() => rotateImage('right')}
                             icon="repeat"
-                            label="Rotate Right"
+                            label={translate('ocr.toolbar.rotation_right.label')}
                         />
                     </ToolbarButtonContainer>
                 </Toolbar>

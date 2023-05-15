@@ -3,6 +3,7 @@ import {scaleBy} from './Cropping';
 import {GlobalHotKeys} from 'react-hotkeys';
 import cuid from 'cuid';
 import Toolbar, {ToolbarButton, ToolbarButtonContainer, ToolbarSwitchButton} from '../Toolbar';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const getFileExtension = filename => {
     if (!filename) return '';
@@ -26,6 +27,9 @@ const _isDeleteDisabled = shapes => {
 };
 
 const ToolbarContainer = ({setState, state, fitImage, onSubmit, image, initShape, labels}) => {
+
+    const {translate} = useProjectTranslation('toolkit');
+
     const isSubmitDisabled = !image;
     const isDeleteDisabled = _isDeleteDisabled(state.shapes);
 
@@ -144,22 +148,47 @@ const ToolbarContainer = ({setState, state, fitImage, onSubmit, image, initShape
                         id="keepAnnotation"
                         checked={state.keepAnnotation}
                         onChange={keepAnnotationToggle}
-                        label="Keep Annotation"
+                        label={translate('cropping.toolbar.keep_annotation')}
                     />
                 </ToolbarButtonContainer>
                 <ToolbarButtonContainer>
                     <ToolbarButton
-                        title="Raccourci : Delete"
+                        title={translate('cropping.toolbar.delete.title')}
                         onClick={onDelete}
                         disabled={isDeleteDisabled}
                         icon="trash"
-                        label="Delete"
+                        label={translate('cropping.toolbar.delete.label')}
                     />
-                    <ToolbarButton title="Raccourci : Z" onClick={onZoomIn} icon="zoom-in" label="Zoom In"/>
-                    <ToolbarButton title="Raccourci : 0" onClick={onZoomOut} icon="zoom-out" label="Zoom Out"/>
-                    <ToolbarButton title="Raccourci : F" onClick={handleFitImage} icon="resize-full" label="Fit Image"/>
-                    <ToolbarButton title="Raccourci : A" onClick={selectAll} icon="picture" label="Select All"/>
-                    <ToolbarButton onClick={moveImage} icon="move" label="Move" toggle={state.moveImageActive}/>
+                    <ToolbarButton
+                        title={translate('cropping.toolbar.zoom_in.title')}
+                        onClick={onZoomIn}
+                        icon="zoom-in"
+                        label={translate('cropping.toolbar.zoom_in.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('cropping.toolbar.zoom_out.title')}
+                        onClick={onZoomOut}
+                        icon="zoom-out"
+                        label={translate('cropping.toolbar.zoom_out.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('cropping.toolbar.fit_image.title')}
+                        onClick={handleFitImage}
+                        icon="resize-full"
+                        label={translate('cropping.toolbar.fit_image.label')}
+                    />
+                    <ToolbarButton
+                        title={translate('cropping.toolbar.select_all.title')}
+                        onClick={selectAll}
+                        icon="picture"
+                        label={translate('cropping.toolbar.select_all.label')}
+                    />
+                    <ToolbarButton
+                        onClick={moveImage}
+                        icon="move"
+                        label={translate('cropping.toolbar.move')}
+                        toggle={state.moveImageActive}
+                    />
                 </ToolbarButtonContainer>
             </Toolbar>
         </GlobalHotKeys>

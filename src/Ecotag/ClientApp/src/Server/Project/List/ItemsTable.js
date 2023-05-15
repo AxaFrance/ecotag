@@ -1,21 +1,23 @@
-﻿import HeaderColumnCell from "./ColumnHeader";
-import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
+﻿import HeaderColumnCell from './ColumnHeader';
+import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import Table, {Paging} from '@axa-fr/react-toolkit-table';
 import Action from '@axa-fr/react-toolkit-action';
-import {formatTimestampToString} from "../../date";
-import {fetchAnnotationsStatus} from "../Project.service";
-import {resilienceStatus} from "../../shared/Resilience";
+import {formatTimestampToString} from '../../date';
+import {fetchAnnotationsStatus} from '../Project.service';
+import {resilienceStatus} from '../../shared/Resilience';
 import {Popover} from '@axa-fr/react-toolkit-all';
-import {ProgressBar} from "./ProgressBar";
+import {ProgressBar} from './ProgressBar';
+import useProjectTranslation from '../../../useProjectTranslation';
 
 const NumberTagToDo = ({state}) => {
+    const {translate} = useProjectTranslation();
     const {ERROR, SUCCESS, LOADING} = resilienceStatus;
     const annotationsStatus = state.annotationsStatus;
     return <>{{
-        [LOADING]: <span>Chargement...</span>,
+        [LOADING]: <span>{translate('project.projects_list.list.nb_tags_to_do.resilience.loading')}</span>,
         [ERROR]: (
-            <span>Erreur...</span>
+            <span>{translate('project.projects_list.list.nb_tags_to_do.resilience.error')}</span>
         ),
         [SUCCESS]: <>
             <div className="projects-af-popover__wrapper">
@@ -24,12 +26,12 @@ const NumberTagToDo = ({state}) => {
                     classModifier="project-home"
                 >
                     <Popover.Pop>
-                        <h3>Annotations</h3>
+                        <h3>{translate('project.projects_list.list.nb_tags_to_do.title')}</h3>
                         <table>
                             <tr>
-                                <td>A faire</td>
-                                <td>Réalisées</td>
-                                <td>Restantes</td>
+                                <td>{translate('project.projects_list.list.nb_tags_to_do.to_do')}</td>
+                                <td>{translate('project.projects_list.list.nb_tags_to_do.done')}</td>
+                                <td>{translate('project.projects_list.list.nb_tags_to_do.remaining')}</td>
                             </tr>
                             <tr>
                                 <td>{annotationsStatus.numberAnnotationsToDo}</td>
@@ -40,7 +42,10 @@ const NumberTagToDo = ({state}) => {
                     </Popover.Pop>
                     <Popover.Over>
                         <ProgressBar percentage={annotationsStatus.percentageNumberAnnotationsDone}
-                                     label={annotationsStatus.percentageNumberAnnotationsDone === 100 ? "Terminé" : "En cours"}/>
+                                     label={annotationsStatus.percentageNumberAnnotationsDone === 100 ?
+                                         translate('project.projects_list.list.nb_tags_to_do.percentage.done') :
+                                         translate('project.projects_list.list.nb_tags_to_do.percentage.pending')}
+                        />
                     </Popover.Over>
                 </Popover>
             </div>
@@ -71,6 +76,7 @@ const initAsync = (fetch) => async (state, setState, id) => {
 
 const ProjectRow = ({id, name, groupName, createDate, annotationType, fetch}) => {
     const history = useHistory();
+    const {translate} = useProjectTranslation();
     const projectPageButton = id => {
         const path = `/projects/${id}`;
         history.push(path);
@@ -95,15 +101,19 @@ const ProjectRow = ({id, name, groupName, createDate, annotationType, fetch}) =>
             <Table.Td>{groupName}</Table.Td>
             <Table.Td>{createDate}</Table.Td>
             <Table.Td>{annotationType}</Table.Td>
-            <Table.Td><NumberTagToDo state={state}/></Table.Td>
             <Table.Td>
-                <Action id="id" icon="zoom-in" title="Editer" onClick={() => projectPageButton(id)}/>
+                <NumberTagToDo state={state}/>
+            </Table.Td>
+            <Table.Td>
+                <Action id="id" icon="zoom-in" title={translate('project.projects_list.list.headers.edit')} onClick={() => projectPageButton(id)}/>
             </Table.Td>
         </Table.Tr>
     );
 };
 
 const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
+    const {translate} = useProjectTranslation();
+
     return (
         <>
             <Table>
@@ -111,29 +121,29 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                     <Table.Tr>
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('name')}
-                            headerColumnName={'Nom'}
+                            headerColumnName={translate('project.projects_list.list.headers.name')}
                             filterColumnValue={filters.columns.name.value}
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('groupName')}
-                            headerColumnName={'Equipe'}
+                            headerColumnName={translate('project.projects_list.list.headers.team')}
                             filterColumnValue={filters.columns.groupName.value}
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('createDate')}
-                            headerColumnName={'Date création'}
+                            headerColumnName={translate('project.projects_list.list.headers.creation_date')}
                             filterColumnValue={filters.columns.createDate.value}
                         />
                         <HeaderColumnCell
                             onChangeSort={onChangeSort('annotationType')}
-                            headerColumnName={"Type d'annotation"}
+                            headerColumnName={translate('project.projects_list.list.headers.annotation_type')}
                             filterColumnValue={filters.columns.annotationType.value}
                         />
                         <HeaderColumnCell
-                            headerColumnName={'Status'}
+                            headerColumnName={translate('project.projects_list.list.headers.status')}
                         />
                         <Table.Th classModifier="sortable">
-                            <span className="af-table__th-content af-btn__text">Action</span>
+                            <span className="af-table__th-content af-btn__text">{translate('project.projects_list.list.headers.action')}</span>
                         </Table.Th>
                     </Table.Tr>
                 </Table.Header>
@@ -158,6 +168,10 @@ const ItemsTable = ({items, filters, onChangePaging, onChangeSort, fetch}) => {
                 numberPages={filters.paging.numberPages}
                 currentPage={filters.paging.currentPage}
                 id="home_paging"
+                displayLabel={translate('project.paging.display')}
+                elementsLabel={translate('project.paging.elements')}
+                previousLabel={translate('project.paging.previous')}
+                nextLabel={translate('project.paging.next')}
             />
         </>
     )

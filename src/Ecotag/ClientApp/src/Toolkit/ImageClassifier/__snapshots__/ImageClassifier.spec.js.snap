@@ -21,7 +21,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
       >
         <div
           class="image-classifier__button-container"
-          title="Raccourci : 1"
+          title="Shortcut : 1"
         >
           <button
             class="image-classifier-btn"
@@ -32,7 +32,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </div>
         <div
           class="image-classifier__button-container"
-          title="Raccourci : 2"
+          title="Shortcut : 2"
         >
           <button
             class="image-classifier-btn"
@@ -43,7 +43,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </div>
         <div
           class="image-classifier__button-container"
-          title="Raccourci : 3"
+          title="Shortcut : 3"
         >
           <button
             class="image-classifier-btn"
@@ -54,7 +54,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </div>
         <div
           class="image-classifier__button-container"
-          title="Raccourci : 4"
+          title="Shortcut : 4"
         >
           <button
             class="image-classifier-btn"
@@ -109,7 +109,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
       >
         <button
           class="toolbar__button-item"
-          title="Raccourci : L"
+          title="Shortcut : L"
         >
           <span
             class="glyphicon glyphicon-reset"
@@ -122,7 +122,7 @@ exports[`Check Image Classifier behaviour Should render correctly and click on b
         </button>
         <button
           class="toolbar__button-item"
-          title="Raccourci : R"
+          title="Shortcut : R"
         >
           <span
             class="glyphicon glyphicon-repeat"

@@ -1,4 +1,14 @@
-import {DATASET, GROUP, LABELS, MSG_REQUIRED, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from './constants';
+import {
+    DATASET,
+    GROUP,
+    LABELS,
+    MSG_REQUIRED,
+    MSG_RULE_NUMBER,
+    MSG_TEXT_REGEX,
+    NAME,
+    NUMBER_CROSS_ANNOTATION,
+    TYPE
+} from './constants';
 
 const rulesRequired = {
     required: {
@@ -21,14 +31,14 @@ const rulesMinLength = min => ({
 const ruleText = {
     pattern: {
         regex: /^[a-zA-Z0-9-_]*$/,
-        message: "Veuillez saisir un caractère alpha numérique, – et _ inclus, accents exclus"
+        message: MSG_TEXT_REGEX
     }
 }
 
 const ruleNumber = {
     pattern: {
         regex: /^([1-9]|10)$/,
-        message: 'Veuillez saisir un nombre entier compris entre 1 et 10',
+        message: MSG_RULE_NUMBER,
     },
 };
 

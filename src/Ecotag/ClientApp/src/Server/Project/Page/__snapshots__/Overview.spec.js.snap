@@ -1,6 +1,248 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Overview Overview render correctly 1`] = `
+exports[`Overview should render correctly in english 1`] = `
+<DocumentFragment>
+  <article
+    class="af-restitution"
+  >
+    <header
+      class="af-restitution__header"
+    >
+      <div
+        class="af-restitution__header-left"
+      >
+        <div
+          class="af-restitution__title"
+        >
+          <span
+            class="af-restitution__title-main"
+          >
+            General information
+          </span>
+          <span
+            class="af-restitution__title-subtitle"
+          />
+        </div>
+      </div>
+    </header>
+    <section
+      class="af-restitution__content"
+    >
+      <div
+        class="col col-sm-12 col-md-12 col-lg-12 col-xl-12"
+      >
+        <div
+          class="row af-restitution__content-left"
+        >
+          <div
+            class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+          >
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Name
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Information statement
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Annotation type
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                NER
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Creation date
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                02/01/0001
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Number of files
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                0
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Number of cross annotations
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                -
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Annotations progress
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                32%
+              </dd>
+            </dl>
+          </div>
+          <div
+            class="col-sm-12 col-md-12 col-lg-6 col-xl-6"
+          >
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Dataset
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Green card
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Dataset type
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                Image
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Annotators team
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                developers
+              </dd>
+            </dl>
+            <dl
+              class="af-restitution__listdef"
+            >
+              <dt
+                class="af-restitution__listdef-item"
+              >
+                <span
+                  class="af-restitution__text"
+                >
+                  Team emails
+                </span>
+              </dt>
+              <dd
+                class="af-restitution__listdef-value"
+              >
+                <ul
+                  class="af-restitution__listul"
+                >
+                  <li
+                    class="af-restitution__listul-item"
+                  >
+                    guillaume.chervet@axa.fr
+                  </li>
+                  <li
+                    class="af-restitution__listul-item"
+                  >
+                    lilian.delouvy@axa.fr
+                  </li>
+                </ul>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+</DocumentFragment>
+`;
+
+exports[`Overview should render correctly in french 1`] = `
 <DocumentFragment>
   <article
     class="af-restitution"
@@ -52,7 +294,7 @@ exports[`Overview Overview render correctly 1`] = `
               <dd
                 class="af-restitution__listdef-value"
               >
-                Relevé d'information
+                Information statement
               </dd>
             </dl>
             <dl
@@ -164,7 +406,7 @@ exports[`Overview Overview render correctly 1`] = `
               <dd
                 class="af-restitution__listdef-value"
               >
-                Carte verte
+                Green card
               </dd>
             </dl>
             <dl
@@ -194,13 +436,13 @@ exports[`Overview Overview render correctly 1`] = `
                 <span
                   class="af-restitution__text"
                 >
-                  Equipe d'annotateurs
+                  Équipe d'annotateurs
                 </span>
               </dt>
               <dd
                 class="af-restitution__listdef-value"
               >
-                developpeurs
+                developers
               </dd>
             </dl>
             <dl

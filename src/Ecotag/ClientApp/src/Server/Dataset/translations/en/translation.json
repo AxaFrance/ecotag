@@ -1,0 +1,184 @@
+{
+  "dataset": {
+    "title": "Datasets",
+    "subtitle": "A dataset is the representation of a collection of data",
+    "new_dataset": "New dataset",
+    "access_token": "Access token",
+    "active_datasets_counter": "Your active datasets : ",
+    "filter_by": "Filter by",
+    "name": "Name",
+    "empty_list": "No elements",
+    "list": {
+      "actions_titles": {
+        "locked": "locked",
+        "locked_and_work_in_progress": "locked and work in progress",
+        "pending": "pending",
+        "none": "unlocked"
+      },
+      "header": {
+        "lock": "Lock",
+        "name": "Name",
+        "team": "Team",
+        "classification": "Classification",
+        "nb_files": "Number of files",
+        "type": "Type",
+        "creation_date": "Creation date",
+        "action": "Action"
+      },
+      "edit": "Edit"
+    },
+    "new": {
+      "title": "New dataset",
+      "stepper": {
+        "title": "New dataset"
+      },
+      "form_title": "New dataset",
+      "name_input": {
+        "label": "Name",
+        "help_message": "Ex : bank-account-details-dataset"
+      },
+      "team_input": {
+        "label": "Team"
+      },
+      "type_input": {
+        "label": "Type",
+        "help_message": "Ex : Image, Text",
+        "options_labels": {
+          "image": "Images (.jpg, .png, jpeg)",
+          "document": "Documents (.txt, .eml, .tiff, .pdf, .doc, etc.)",
+          "text": "Text (.txt)",
+          "eml": "Emails (.eml)"
+        },
+        "help": {
+          "title": "Information on the accepted documents types",
+          "images": {
+            "name": "Images",
+            "types": " : .jpg, .png, jpeg"
+          },
+          "documents": {
+            "name": "Documents",
+            "types": " : .txt, .eml, .msg, .jpg, .png, jpeg, .tiff, .tif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .rtf, .odt, .ods, .odp, .zip"
+          },
+          "text": {
+            "name": "Text",
+            "types": " : .txt"
+          },
+          "eml": {
+            "name": "Eml",
+            "types": " : .eml"
+          }
+        }
+      },
+      "classification_input": {
+        "label": "Classification",
+        "help_message": "Ex : Critical",
+        "options": {
+          "public": {
+            "label": "Public"
+          },
+          "internal": {
+            "label": "Internal"
+          },
+          "confidential": {
+            "label": "Confidential"
+          },
+          "critical": {
+            "label": "Critical"
+          }
+        },
+        "help": {
+          "title": "Information on criticality",
+          "public": {
+            "name": "Public",
+            "detail": " : a piece of information made deliberately for the public, or specifically made for public diffusion"
+          },
+          "internal": {
+            "name": "Internal",
+            "detail": " : a piece of information that is accessible to all or a large portion of employees and is not intended for external parties."
+          },
+          "confidential": {
+            "name": "Confidential",
+            "detail": " : a piece of information restricted to a specific audience"
+          },
+          "critical": {
+            "name": "Critical",
+            "detail": " : Please refer to your manager."
+          }
+        }
+      },
+      "import_input": {
+        "label": "Import from a blob : "
+      },
+      "dataset_to_import": {
+        "label": "Dataset to import : "
+      },
+      "validate": "Validation"
+    },
+    "confirm": {
+      "title": "Confirmation",
+      "stepper": "New dataset",
+      "confirmation_title": "New dataset added !",
+      "confirmation_description": "If you have imported a dataset, the process of adding files can take a while.",
+      "return_button_label": "Go back to datasets list"
+    },
+    "edit": {
+      "confirm_modal": {
+        "title": "Do you want to lock the dataset permanently ?",
+        "warning_first_part": "This action is permanent.",
+        "warning_second_part": "Every modification (addition or deletion of files) will be impossible then."
+      },
+      "subtitle": "Dataset edition",
+      "lock": "Lock",
+      "locked_state": {
+        "locked": "Dataset locked",
+        "locked_and_work_in_progress": "Dataset is being worked on",
+        "default": "Dataset is being imported"
+      },
+      "file_upload": {
+        "title": "Upload files ",
+        "file_input": {
+          "label": "Browse",
+          "placeholder": "Drag/drop your files here"
+        },
+        "send_button": {
+          "label": "Send"
+        },
+        "errors": {
+          "already_existing": {
+            "first_part": "The file ",
+            "second_part": " already exists"
+          },
+          "could_not_upload": {
+            "first_part": "The file ",
+            "second_part": " could not be uploaded"
+          }
+        }
+      },
+      "files_list": {
+        "global_info_tab": {
+          "title": "General information",
+          "name": "Name",
+          "creation_date": "Creation date",
+          "type": "Type",
+          "nb_files": "Number of files",
+          "files_total_size": "Total files size",
+          "files_mean_size": "Average file size"
+        },
+        "files_list_tab": {
+          "title": "Files list",
+          "name": "Name",
+          "type": "Type",
+          "size": "Size",
+          "action": "Action",
+          "delete_action": "Delete"
+        }
+      }
+    },
+    "paging": {
+      "display": "Display",
+      "elements": "elements",
+      "previous": "« Previous",
+      "next": "Next »"
+    }
+  }
+}

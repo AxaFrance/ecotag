@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FileUpload given "Eml" should render correctly 1`] = `
+exports[`FileUpload given "Eml" should render correctly in english 1`] = `
 <DocumentFragment>
   <div
     class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
@@ -8,7 +8,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
     <h2
       class="edit-dataset__file-upload-title"
     >
-      Upload des fichiers .eml
+      Upload files .eml
     </h2>
     <div
       class="af-form__file-input"
@@ -28,7 +28,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
           type="file"
         />
         <div>
-          Glissez/déposez vos fichiers
+          Drag/drop your files here
         </div>
       </div>
       <button
@@ -38,7 +38,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
         <i
           class="glyphicon glyphicon-open"
         />
-         Parcourir
+         Browse
       </button>
     </div>
     <div>
@@ -51,7 +51,7 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
         <span
           class="af-btn__text"
         >
-          Envoyer
+          Send
         </span>
       </button>
     </div>
@@ -59,7 +59,125 @@ exports[`FileUpload given "Eml" should render correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`FileUpload given "Image" should render correctly 1`] = `
+exports[`FileUpload given "Image" should render correctly in english 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
+  >
+    <h2
+      class="edit-dataset__file-upload-title"
+    >
+      Upload files .jpg, .jpeg, .png
+    </h2>
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="file"
+        tabindex="0"
+      >
+        <input
+          accept="image/jpeg, image/png"
+          autocomplete="off"
+          multiple=""
+          name="datasetUploadFiles"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Drag/drop your files here
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasIconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Browse
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        id="sendFiles"
+        name="sendFiles"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Send
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FileUpload given "Text" should render correctly in english 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
+  >
+    <h2
+      class="edit-dataset__file-upload-title"
+    >
+      Upload files .txt
+    </h2>
+    <div
+      class="af-form__file-input"
+    >
+      <div
+        class="drop-box hidden-mobile"
+        id="file"
+        tabindex="0"
+      >
+        <input
+          accept="text/plain"
+          autocomplete="off"
+          multiple=""
+          name="datasetUploadFiles"
+          style="display: none;"
+          tabindex="-1"
+          type="file"
+        />
+        <div>
+          Drag/drop your files here
+        </div>
+      </div>
+      <button
+        class="af-btn af-btn--file af-btn--hasIconLeft"
+        type="button"
+      >
+        <i
+          class="glyphicon glyphicon-open"
+        />
+         Browse
+      </button>
+    </div>
+    <div>
+      <button
+        class="btn af-btn af-btn--disabled"
+        disabled=""
+        id="sendFiles"
+        name="sendFiles"
+      >
+        <span
+          class="af-btn__text"
+        >
+          Send
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FileUpload should render correctly in french 1`] = `
 <DocumentFragment>
   <div
     class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
@@ -87,66 +205,7 @@ exports[`FileUpload given "Image" should render correctly 1`] = `
           type="file"
         />
         <div>
-          Glissez/déposez vos fichiers
-        </div>
-      </div>
-      <button
-        class="af-btn af-btn--file af-btn--hasIconLeft"
-        type="button"
-      >
-        <i
-          class="glyphicon glyphicon-open"
-        />
-         Parcourir
-      </button>
-    </div>
-    <div>
-      <button
-        class="btn af-btn af-btn--disabled"
-        disabled=""
-        id="sendFiles"
-        name="sendFiles"
-      >
-        <span
-          class="af-btn__text"
-        >
-          Envoyer
-        </span>
-      </button>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`FileUpload given "Text" should render correctly 1`] = `
-<DocumentFragment>
-  <div
-    class="edit-dataset__file-upload-container edit-dataset__file-upload-container--disabled"
-  >
-    <h2
-      class="edit-dataset__file-upload-title"
-    >
-      Upload des fichiers .txt
-    </h2>
-    <div
-      class="af-form__file-input"
-    >
-      <div
-        class="drop-box hidden-mobile"
-        id="file"
-        tabindex="0"
-      >
-        <input
-          accept="text/plain"
-          autocomplete="off"
-          multiple=""
-          name="datasetUploadFiles"
-          style="display: none;"
-          tabindex="-1"
-          type="file"
-        />
-        <div>
-          Glissez/déposez vos fichiers
+          Glissez/déposez vos fichiers ici
         </div>
       </div>
       <button

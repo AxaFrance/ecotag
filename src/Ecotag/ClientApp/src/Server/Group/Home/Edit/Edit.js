@@ -4,28 +4,33 @@ import {MessageTypes} from '@axa-fr/react-toolkit-form-core';
 import Modal from '@axa-fr/react-toolkit-modal-default';
 
 import "./Edit.scss";
+import useProjectTranslation from "../../../../useProjectTranslation";
 
-const Users = ({idGroup, users, eligibleUsers, setUsersToSubmit}) => (
-    <form className="af-form-multi-select-users" onSubmit={(event) => event.preventDefault()}>
-        <MultiSelectInput
-            label={''}
-            name={`group_${idGroup}`}
-            options={eligibleUsers}
-            onChange={data => setUsersToSubmit(data.values)}
-            values={users}
-            messageType={MessageTypes.error}
-            forceDisplayMessage={false}
-            readOnly={false}
-            disabled={false}
-            isVisible={true}
-            className={'multi-select-users'}
-            classModifier={'multi-select-users'}
-            placeholder={'Ajouter un utilisateur'}
-            classNameContainerLabel={'classNameContainerLabel'}
-            classNameContainerInput={'classNameContainerInput'}
-        />
-    </form>
-);
+const Users = ({idGroup, users, eligibleUsers, setUsersToSubmit}) => {
+    const {translate} = useProjectTranslation();
+
+    return (
+        <form className="af-form-multi-select-users" onSubmit={(event) => event.preventDefault()}>
+            <MultiSelectInput
+                label={''}
+                name={`group_${idGroup}`}
+                options={eligibleUsers}
+                onChange={data => setUsersToSubmit(data.values)}
+                values={users}
+                messageType={MessageTypes.error}
+                forceDisplayMessage={false}
+                readOnly={false}
+                disabled={false}
+                isVisible={true}
+                className={'multi-select-users'}
+                classModifier={'multi-select-users'}
+                placeholder={translate('group.list.edit_popup.add_user_placeholder')}
+                classNameContainerLabel={'classNameContainerLabel'}
+                classNameContainerInput={'classNameContainerInput'}
+            />
+        </form>
+    );
+}
 
 const Edit = ({
                   idGroup,
@@ -37,6 +42,7 @@ const Edit = ({
               }) => {
     const actualUsers = users.map(user => user.email);
     const [usersToSubmit, setUsersToSubmit] = useState(actualUsers);
+    const {translate} = useProjectTranslation();
     const eligibleEmailsUsers = eligibleUsers.map(user => user.email);
     const eligibleUsersOptions = [...actualUsers, ...eligibleEmailsUsers].map(email => ({
         value: email,
@@ -61,7 +67,7 @@ const Edit = ({
             isOpen={isManageUsersModalVisible}
             onOutsideTap={() => setManageUsersModalVisible(false)}>
             <Modal.HeaderBase>
-                <p>Ajouter/Supprimer des utilisateurs de cette équipe</p>
+                <p>{translate('group.list.edit_popup.header')}</p>
             </Modal.HeaderBase>
             <Modal.Body>
                 <Users
@@ -74,7 +80,7 @@ const Edit = ({
             <Modal.Footer>
                 <button className="btn af-btn af-btn--reverse" type="button"
                         onClick={() => setManageUsersModalVisible(false)}>
-                    Annuler
+                    {translate('group.list.edit_popup.footer.cancel')}
                 </button>
                 <button
                     className="btn af-btn"
@@ -85,7 +91,7 @@ const Edit = ({
                         setManageUsersModalVisible(false);
                         return false;
                     }}>
-                    Valider
+                    {translate('group.list.edit_popup.footer.validation')}
                 </button>
             </Modal.Footer>
         </Modal>

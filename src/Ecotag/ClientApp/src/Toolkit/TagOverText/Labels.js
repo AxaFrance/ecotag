@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {setFocus} from '../BoundingBox/Cropping';
 
 import './Labels.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
 const useFocus = () => {
     const htmlElRef = useRef(null);
@@ -12,6 +13,7 @@ const useFocus = () => {
 };
 
 const CustomInput = ({label, selectLabel, currentLabelId, onChange}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const [inputRef, setInputFocus] = useFocus();
     useEffect(() => {
         if (currentLabelId === label.id) {
@@ -36,7 +38,7 @@ const CustomInput = ({label, selectLabel, currentLabelId, onChange}) => {
 
     return (
         <input
-            title={'Pas de raccourci'}
+            title={translate('tag_over_text.labels.no_shortcut')}
             className={`tagovertext-labels__input ${className}`}
             value={label.label}
             id={`text_${label.id}`}
@@ -72,16 +74,20 @@ const Group = ({group, currentLabelId, selectLabel, onChange}) => {
     );
 };
 
-const Groups = ({groupsOfLabels, ...otherProps}) => (
-    <div className="tagovertext-labels__groups-container">
-        {Object.keys(groupsOfLabels).map(key => (
-            <div key={key}>
-                <span className="tagovertext-labels__group-title">bloc {key}</span>
-                <Group group={groupsOfLabels[key]} {...otherProps} />
-            </div>
-        ))}
-    </div>
-);
+const Groups = ({groupsOfLabels, ...otherProps}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
+    return(
+        <div className="tagovertext-labels__groups-container">
+            {Object.keys(groupsOfLabels).map(key => (
+                <div key={key}>
+                    <span className="tagovertext-labels__group-title">${translate('tag_over_text.labels.groups.block')} {key}</span>
+                    <Group group={groupsOfLabels[key]} {...otherProps} />
+                </div>
+            ))}
+        </div>
+    )
+};
 
 const getShapeByLabelId = (shapes, id) => shapes.find(shape => shape.labelId === id);
 
@@ -91,6 +97,8 @@ const getNewLabels = (labels, labelId, newProps) => {
 };
 
 const Labels = ({setState, state, croppingHeight, croppingWidth}) => {
+    const {translate} = useProjectTranslation('toolkit');
+
     const selectLabel = labelId => {
         const shape = getShapeByLabelId(state.shapes, labelId);
         const shapes = setFocus(state.shapes, shape.id);
@@ -137,7 +145,7 @@ const Labels = ({setState, state, croppingHeight, croppingWidth}) => {
     const shapeWidthFocus = state.shapes.find(s => s.focus);
     return (
         <div className="tagovertext-labels__container" style={{height: croppingHeight}}>
-            <h2 className="tagovertext-labels__title">Labels</h2>
+            <h2 className="tagovertext-labels__title">{translate('tag_over_text.labels.title')}</h2>
             <Groups
                 groupsOfLabels={groupsOfLabels}
                 onChange={onChange}

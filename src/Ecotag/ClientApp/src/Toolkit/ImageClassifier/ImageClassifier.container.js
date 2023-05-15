@@ -36,7 +36,7 @@ const ImageClassifierContainer = ({url, labels, onSubmit, expectedOutput}) => {
                              expectedOutput={expectedOutput}/>
             <Toolbar state={state} setState={setState}/>
         </div>
-    )
+    );
 };
 
 export default React.memo(ImageClassifierContainer);

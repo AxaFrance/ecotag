@@ -6,7 +6,7 @@ import {fetchCreateProject} from '../../Project.service';
 import {computeInitialStateErrorMessage, genericHandleChange} from '../../../validation.generic';
 import {
     DATASET,
-    GROUP,
+    GROUP, LABEL_NUMBER,
     LABELS,
     MSG_DUPLICATE_LABEL_NAME,
     MSG_MAX_LABELS_LENGTH,
@@ -17,13 +17,20 @@ import {
     MSG_TEXT_REGEX,
     NAME,
     NUMBER_CROSS_ANNOTATION,
-    TYPE
+    TYPE,
+    TYPE_CROPPING,
+    TYPE_DOCUMENT_CLASSIFIER, TYPE_DOCUMENT_OCR,
+    TYPE_EML_CLASSIFIER,
+    TYPE_IMAGE_CLASSIFIER,
+    TYPE_NAMED_ENTITY,
+    TYPE_OCR,
+    TYPE_ROTATION
 } from './constants';
 import compose from '../../../compose';
 import withCustomFetch from '../../../withCustomFetch';
 import {init} from './New.hook';
 import {resilienceStatus, withResilience} from '../../../shared/Resilience';
-import {telemetryEvents, withTelemetry} from "../../../Telemetry";
+import {telemetryEvents, withTelemetry} from '../../../Telemetry';
 
 const errorList = fields => Object.keys(fields).filter(key => setErrorMessage(key)(fields));
 
@@ -85,7 +92,7 @@ export const reducer = (state, action) => {
                 case LABELS:
                     let message = null;
                     if (newValues.length === 0) {
-                        message = MSG_REQUIRED
+                        message = MSG_REQUIRED;
                     } else if (newValues.length > 90) {
                         message = MSG_MAX_LABELS_LENGTH
                     } else if (hasDuplicates(getLabelsNames(newValues))) {
@@ -93,11 +100,11 @@ export const reducer = (state, action) => {
                     } else {
                         newValues.forEach(function (value, index) {
                             if (value.name.length < 3) {
-                                message = `Label numéro ${index + 1} : ${MSG_MIN_LENGTH}`
+                                message = `${LABEL_NUMBER} ${index + 1} : ${MSG_MIN_LENGTH}`
                             } else if (value.name.length > 48) {
-                                message = `Label numéro ${index + 1} : ${MSG_MAX_LENGTH}`
+                                message = `${LABEL_NUMBER} ${index + 1} : ${MSG_MAX_LENGTH}`
                             } else if (!value.name.match(/^[a-zA-Z0-9-_]*$/)) {
-                                message = `Label numéro ${index + 1} : ${MSG_TEXT_REGEX}`
+                                message = `${LABEL_NUMBER} ${index + 1} : ${MSG_TEXT_REGEX}`
                             }
                         })
                     }
@@ -126,42 +133,42 @@ export const reducer = (state, action) => {
 
                         const options = [{
                             value: 'Cropping',
-                            label: "Sélection de zone d'image",
+                            label: TYPE_CROPPING,
                             type: "Image"
                         },
                             {
                                 value: 'ImageClassifier',
-                                label: 'Classification',
+                                label: TYPE_IMAGE_CLASSIFIER,
                                 type: "Image"
                             },
                             {
                                 value: 'Ocr',
-                                label: 'Saisie de texte contenu dans une image',
+                                label: TYPE_OCR,
                                 type: "Image"
                             },
                             {
                                 value: 'NamedEntity',
-                                label: 'Sélection de zone de texte',
+                                label: TYPE_NAMED_ENTITY,
                                 type: "Text"
                             },
                             {
                                 value: 'Rotation',
-                                label: 'Rotation',
+                                label: TYPE_ROTATION,
                                 type: "Image"
                             },
                             {
                                 value: 'EmlClassifier',
-                                label: "Classification de mail",
+                                label: TYPE_EML_CLASSIFIER,
                                 type: "Eml"
                             },
                             {
                                 value: 'DocumentClassifier',
-                                label: "Classification de document",
+                                label: TYPE_DOCUMENT_CLASSIFIER,
                                 type: "Document"
                             },
                             {
                                 value: 'DocumentOcr',
-                                label: "Saisie de texte contenu dans un document",
+                                label: TYPE_DOCUMENT_OCR,
                                 type: "Document"
                             }];
                         const datasetId = event.value;
@@ -256,7 +263,7 @@ const useNew = (fetch, history, telemetry) => {
     return {state, onChange, onSubmit};
 };
 
-const NewWithResilience = withResilience(New)
+const NewWithResilience = withResilience(New);
 
 export const NewContainer = ({fetch, history, telemetry}) => {
     const {state, onChange, onSubmit} = useNew(fetch, history, telemetry);

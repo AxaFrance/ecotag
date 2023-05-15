@@ -2,8 +2,10 @@ import {resilienceStatus} from "../../shared/Resilience";
 import React from "react";
 
 import "./ReservationStatus.scss";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const ReservationStatus = ({status}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const {ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
     if (SUCCESS === status) {
         return null;
@@ -13,10 +15,10 @@ export const ReservationStatus = ({status}) => {
              style={{"backgroundColor": (status === POST || status === LOADING) ? "blue" : "red"}}>
             {
                 {
-                    [LOADING]: <span>Réservation éléments suivant en cours</span>,
-                    [POST]: <span>Réservation élément suivant en cours</span>,
+                    [LOADING]: <span>{translate('annotation_status.loading')}</span>,
+                    [POST]: <span>{translate('annotation_status.post')}</span>,
                     [ERROR]: (
-                        <span>Erreur lors du chargement</span>
+                        <span>{translate('annotation_status.error')}</span>
                     ),
                     [SUCCESS]: null
                 }[status]

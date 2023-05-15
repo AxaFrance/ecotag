@@ -1,22 +1,17 @@
 [
   {
-    "id": "1",
-    "name": "recto_lib"
+    "name": "Recto",
+    "color": "#212121",
+    "id": "0"
   },
   {
-    "id": "2",
-    "name": "verso_lib"
+    "name": "Verso",
+    "color": "#ffbb00",
+    "id": "1"
   },
   {
-    "id": "3",
-    "name": "verso_lib1"
-  },
-  {
-    "id": "4",
-    "name": "verso_lib2"
-  },
-  {
-    "id": "5",
-    "name": "verso_lib3"
+    "name": "Signature",
+    "color": "#f20713",
+    "id": "2"
   }
 ]

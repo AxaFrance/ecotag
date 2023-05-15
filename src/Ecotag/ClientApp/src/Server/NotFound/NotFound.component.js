@@ -1,26 +1,31 @@
 import React from 'react';
 import Title from '../../TitleBar';
 import './notfound.scss';
+import useProjectTranslation from "../../useProjectTranslation";
 
-const NotFound = () => (
-    <>
-        <Title title="404 Page Not Found"/>
-        <div className="container af-container--notfound">
-            <h1 className="af-notfound__title">
-                <div className="af-notfound__title-covernumber">
-                    <span className="af-notfound__title-number">404</span>
-                </div>
-                <div className="af-notfound__title-covernot">
+const NotFound = () => {
+    const {translate} = useProjectTranslation();
+
+    return(
+        <>
+            <Title title={translate('not_found.title')}/>
+            <div className="container af-container--notfound">
+                <h1 className="af-notfound__title">
+                    <div className="af-notfound__title-covernumber">
+                        <span className="af-notfound__title-number">404</span>
+                    </div>
+                    <div className="af-notfound__title-covernot">
           <span className="af-notfound__title-not">
-            not
+            {translate('not_found.not')}
             <br/>
-            found
+            {translate('not_found.found')}
           </span>
-                </div>
-            </h1>
-            <p className="af-notfound__message">The page you are looking for is not here!</p>
-        </div>
-    </>
-);
+                    </div>
+                </h1>
+                <p className="af-notfound__message">{translate('not_found.message')}</p>
+            </div>
+        </>
+    );
+};
 
 export default NotFound;

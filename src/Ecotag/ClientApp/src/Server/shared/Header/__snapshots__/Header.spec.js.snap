@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header Render header page 1`] = `
+exports[`Header Renders header page in english 1`] = `
 <DocumentFragment>
   <div
     class="af-header"
@@ -32,7 +32,63 @@ exports[`Header Render header page 1`] = `
             <span
               class="af-header__subtitle"
             >
-              An eco-system that aim to be eco for the planet
+              An eco-system to be eco-friendly
+            </span>
+          </h2>
+        </div>
+        <div
+          class="af-info-user"
+        >
+          <span
+            class="af-info-user__name"
+          >
+            Guillaume Chervet
+          </span>
+          <span
+            class="af-info-user__profile"
+          >
+            [youhou, youhou]
+          </span>
+        </div>
+      </header>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Header Renders header page in french 1`] = `
+<DocumentFragment>
+  <div
+    class="af-header"
+  >
+    <div
+      class="container af-header__wrapper"
+    >
+      <header
+        class="af-header__content"
+        role="banner"
+      >
+        <div
+          class="af-header__name"
+        >
+          <a
+            class="af-logo"
+            href="/"
+          >
+            <img
+              alt="Ecotag"
+              class="af-logo__brand"
+              src="logo-axa.svg"
+            />
+          </a>
+          <h2
+            class="af-header__title"
+          >
+            Ecotag
+            <span
+              class="af-header__subtitle"
+            >
+              Un écosystème pour être écologique
             </span>
           </h2>
         </div>

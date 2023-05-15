@@ -2,7 +2,8 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import {render, waitFor} from '@testing-library/react';
 import {UserAnnotationsStatus} from './Users';
-import {BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter as Router} from 'react-router-dom';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 const users = [
     {
@@ -23,11 +24,20 @@ const numberAnnotationsByUsers = [{"nameIdentifier": "S000005", numberAnnotation
 }]
 
 describe('Users', () => {
-    it('Users render correctly', async () => {
+    const renderComponentAndCheckSnapshot = async(expectedText) => {
+        const regex = new RegExp(expectedText, 'i');
         const {asFragment, getByText} = render(<Router><UserAnnotationsStatus users={users}
                                                                               numberAnnotationsByUsers={numberAnnotationsByUsers}/></Router>);
-        await waitFor(() => expect(getByText(/Emails/i)).not.toBeNull());
+        await waitFor(() => expect(getByText(regex)).not.toBeNull());
         expect(asFragment()).toMatchSnapshot();
+    };
+    it('should render correctly in english', async () => {
+        changeProjectTranslationLanguage('en');
+        await renderComponentAndCheckSnapshot("Annotations number");
+    });
+    it('should render correctly in french', async() => {
+        changeProjectTranslationLanguage('fr');
+        await renderComponentAndCheckSnapshot("Nombre d'annotations");
     });
 });
 

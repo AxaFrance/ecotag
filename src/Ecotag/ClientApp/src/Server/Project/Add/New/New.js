@@ -5,33 +5,35 @@ import LabelInput from '../../../shared/Label/LabelInput';
 import {Button, MultiSelectInput, NumberInput, SelectInput, TextInput} from '@axa-fr/react-toolkit-all';
 import {DATASET, GROUP, LABELS, NAME, NUMBER_CROSS_ANNOTATION, TYPE} from './constants';
 import './New.scss';
+import useProjectTranslation from "../../../../useProjectTranslation";
 
 const New = ({datasets, groups, fields, onChange, hasSubmit, onSubmit}) => {
+    const {translate} = useProjectTranslation();
     const groupsAsOptions =
         groups && groups.length > 0 ? groups.map(group => ({label: group.name, value: group.id})) : [];
     const datasetsAsOptions =
         datasets && datasets.length > 0 ? datasets.map(dataset => ({label: dataset.name, value: dataset.id})) : [];
     return (
         <>
-            <Title title="Nouveau projet d'annotation" goTo="/projects" goTitle="Projets"/>
-            <Stepper title="Nouveau projet" link="/projects/new"/>
+            <Title title={translate('project.new.title')} goTo="/projects" goTitle="Projets"/>
+            <Stepper title={translate('project.new.stepper')} link="/projects/new"/>
             <div className="af-form">
                 <form className="container" name="newProject">
                     <article className="af-panel af-panel--new">
                         <section className="af-panel__content af-panel__content--new-project">
-                            <h1 className="af-title--content">Nouveau projet d&apos;annotation</h1>
+                            <h1 className="af-title--content">{translate('project.new.title')}</h1>
                             <TextInput
-                                label="Nom"
+                                label={translate('project.new.name_input.label')}
                                 name={NAME}
                                 id={NAME}
                                 onChange={onChange}
-                                helpMessage="Ex : Carte grise 2019"
+                                helpMessage={translate('project.new.name_input.help_message')}
                                 forceDisplayMessage={hasSubmit}
                                 messageType="error"
                                 {...fields[NAME]}
                             />
                             <MultiSelectInput
-                                label="Dataset"
+                                label={translate('project.new.dataset_input.label')}
                                 name={DATASET}
                                 id={DATASET}
                                 onChange={onChange}
@@ -41,7 +43,7 @@ const New = ({datasets, groups, fields, onChange, hasSubmit, onSubmit}) => {
                                 {...fields[DATASET]}
                             />
                             <SelectInput
-                                label="Type"
+                                label={translate('project.new.type_input.label')}
                                 name={TYPE}
                                 id={TYPE}
                                 disabled={!fields[DATASET].value}
@@ -52,23 +54,23 @@ const New = ({datasets, groups, fields, onChange, hasSubmit, onSubmit}) => {
                                 {...fields[TYPE]}
                             />
                             <NumberInput
-                                label="Nombre annotation croisée"
+                                label={translate('project.new.nb_cross_annotation_input.label')}
                                 onChange={onChange}
                                 forceDisplayMessage={hasSubmit}
                                 messageType="error"
-                                helpMessage="Croisement d'annotation réalisé par des annotateurs différents"
+                                helpMessage={translate('project.new.nb_cross_annotation_input.help_message')}
                                 {...fields[NUMBER_CROSS_ANNOTATION]}
                             />
                             <LabelInput
                                 forceDisplayMessage={hasSubmit}
-                                label="Labels"
+                                label={translate('project.new.labels_input.label')}
                                 name={LABELS}
                                 id={LABELS}
                                 onChange={onChange}
                                 {...fields[LABELS]}
                             />
                             <MultiSelectInput
-                                label="Equipe"
+                                label={translate('project.new.team_input.label')}
                                 name={GROUP}
                                 id={GROUP}
                                 onChange={onChange}
@@ -80,7 +82,7 @@ const New = ({datasets, groups, fields, onChange, hasSubmit, onSubmit}) => {
                         </section>
                     </article>
                     <Button classModifier="hasiconRight confirm" id="myForm" onClick={onSubmit}>
-                        <span className="af-btn-text">Valider</span>
+                        <span className="af-btn-text">{translate('project.new.confirmation_button_label')}</span>
                         <i className="glyphicon glyphicon-arrowthin-right"/>
                     </Button>
                 </form>

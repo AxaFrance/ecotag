@@ -1,0 +1,41 @@
+{
+  "group": {
+    "title": "Équipes",
+    "subtitle": "Gestion des équipes d'annotateurs",
+    "creation_title": "Création",
+    "new": {
+      "name_input": {
+        "label": "Nom : ",
+        "help_message": "Ex : annotateurs de RIB"
+      },
+      "validation": "Valider"
+    },
+    "count_teams": {
+      "first_part": "Il y a (",
+      "second_part": ") équipe(s)"
+    },
+    "empty_list": "Aucun élément",
+    "list": {
+      "header": {
+        "name": "Nom",
+        "users": "Utilisateurs",
+        "actions": "Actions"
+      },
+      "edit": "Modifier",
+      "edit_popup": {
+        "header": "Ajouter/Supprimer des utilisateurs de cette équipe",
+        "add_user_placeholder": "Ajouter un utilisateur",
+        "footer": {
+          "cancel": "Annuler",
+          "validation": "Valider"
+        }
+      }
+    },
+    "paging": {
+      "display": "Afficher",
+      "elements": "éléments",
+      "previous": "« Précédent",
+      "next": "Suivant »"
+    }
+  }
+}

@@ -1,9 +1,11 @@
 import {resilienceStatus} from "../../shared/Resilience";
 import React from "react";
 
-import "./AnnotationStatus.scss"
+import "./AnnotationStatus.scss";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 export const AnnotationStatus = ({status}) => {
+    const {translate} = useProjectTranslation('toolkit');
     const {ERROR, SUCCESS, LOADING, POST} = resilienceStatus;
     if (SUCCESS === status) {
         return null;
@@ -12,9 +14,9 @@ export const AnnotationStatus = ({status}) => {
         <div className="annotation-status" style={{"backgroundColor": status === LOADING ? "green" : "red"}}>
             {
                 {
-                    [LOADING]: <span>Chargement élément suivant en cours</span>,
-                    [POST]: <span>Sauvegarde en cours</span>,
-                    [ERROR]: <span>Erreur lors de la sauvegarde</span>,
+                    [LOADING]: <span>{translate('annotation_status.loading')}</span>,
+                    [POST]: <span>{translate('annotation_status.post')}</span>,
+                    [ERROR]: <span>{translate('annotation_status.error')}</span>,
                     [SUCCESS]: null
                 }[status]
             }

@@ -6,6 +6,7 @@ import './Home.scss';
 import '../../shared/Modal/modal.scss';
 import EmptyArrayManager from "../../../EmptyArrayManager";
 import ItemsTable from "./ItemsTable";
+import useProjectTranslation from "../../../useProjectTranslation";
 
 const Home = ({
                   items,
@@ -19,11 +20,13 @@ const Home = ({
                   onSubmitCreateGroup,
                   onUpdateUser,
               }) => {
+    const {translate} = useProjectTranslation();
+
     return (
         <>
-            <Title subtitle="Gestion des équipes d'annotateurs" title="Equipes"/>
+            <Title subtitle={translate('group.subtitle')} title={translate('group.title')}/>
             <div className="af-home container">
-                <h1 className="af-title--content">Création</h1>
+                <h1 className="af-title--content">{translate('group.creation_title')}</h1>
                 <New
                     disabled={isSubmitable}
                     fields={fields}
@@ -32,9 +35,9 @@ const Home = ({
                     onSubmitCreateGroup={onSubmitCreateGroup}
                 />
                 <h1 className="af-title--content">
-                    {`Il y a (${numberItemsTotal}) équipes`}
+                    {`${translate('group.count_teams.first_part')}${numberItemsTotal}${translate('group.count_teams.second_part')}`}
                 </h1>
-                <EmptyArrayManager items={items} emptyArrayMessage="Aucun élément">
+                <EmptyArrayManager items={items} emptyArrayMessage={translate('group.empty_list')}>
                     <ItemsTable
                         items={items}
                         filters={filters}

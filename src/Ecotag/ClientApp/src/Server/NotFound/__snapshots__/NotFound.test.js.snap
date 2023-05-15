@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NotFound 1. Renders NotFound page component without crashing 1`] = `
+exports[`NotFound Renders NotFound page component with correct english translation 1`] = `
 <DocumentFragment>
   <div
     class="af-title-bar af-title-bar--backhome"
@@ -54,7 +54,67 @@ exports[`NotFound 1. Renders NotFound page component without crashing 1`] = `
     <p
       class="af-notfound__message"
     >
-      The page you are looking for is not here!
+      The page you are looking for is not here !
+    </p>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`NotFound Renders NotFound page component with correct french translation 1`] = `
+<DocumentFragment>
+  <div
+    class="af-title-bar af-title-bar--backhome"
+  >
+    <div
+      class="container-fluid container af-title-bar__wrapper"
+    >
+      <a
+        class="btn af-btn--circle"
+        href="/"
+        title="Home page"
+      >
+        <i
+          class="glyphicon glyphicon-home"
+        />
+      </a>
+      <h1
+        class="af-title-bar__title"
+      >
+        404 Page Introuvable
+      </h1>
+    </div>
+  </div>
+  <div
+    class="container af-container--notfound"
+  >
+    <h1
+      class="af-notfound__title"
+    >
+      <div
+        class="af-notfound__title-covernumber"
+      >
+        <span
+          class="af-notfound__title-number"
+        >
+          404
+        </span>
+      </div>
+      <div
+        class="af-notfound__title-covernot"
+      >
+        <span
+          class="af-notfound__title-not"
+        >
+          non
+          <br />
+          trouvée
+        </span>
+      </div>
+    </h1>
+    <p
+      class="af-notfound__message"
+    >
+      La page que vous recherchez est introuvable !
     </p>
   </div>
 </DocumentFragment>

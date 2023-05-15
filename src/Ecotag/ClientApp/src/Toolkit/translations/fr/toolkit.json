@@ -1,0 +1,219 @@
+{
+  "page_annotation": {
+    "subtitle": "Projet de type"
+  },
+  "annotation_status": {
+    "loading": "Chargement de l'élément suivant en cours",
+    "post": "Sauvegarde en cours",
+    "error": "Erreur lors de la sauvegarde"
+  },
+  "reservation_status": {
+    "loading": "Réservation de l'élément suivant en cours",
+    "post": "Réservation de l'élément suivant en cours",
+    "error": "Erreur lors du chargement"
+  },
+  "content": {
+    "end": {
+      "title": "Annotation",
+      "text": "Vous avez annoté tout ce que vous pouviez sur ce dataset. Merci beaucoup !"
+    },
+    "start": "Réservation d'éléments d'annotation en cours",
+    "toolbar": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "text": {
+        "error": "sauvegarde erreur à",
+        "saved": "sauvegardé à",
+        "saved_previous_session": "sauvegardé lors d'une session précédente"
+      }
+    }
+  },
+  "cropping": {
+    "toolbar": {
+      "keep_annotation": "Garder l'annotation",
+      "delete": {
+        "title": "Raccourci : Supprimer",
+        "label": "Supprimer"
+      },
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      },
+      "select_all": {
+        "title": "Raccourci : A",
+        "label": "Tout sélectionner"
+      },
+      "move": "Déplacer",
+      "submit": {
+        "title": "Raccourci : Ctrl + Barre espace",
+        "label": "Envoyer"
+      },
+      "reset": {
+        "title": "Raccourci : Ctrl + Alt + Barre espace",
+        "label": "Réinitialiser"
+      }
+    },
+    "labels": {
+      "title": "Labels",
+      "button": {
+        "has_shortcut": "Raccourci : alt + ",
+        "no_shortcut": "Pas de raccourci"
+      }
+    }
+  },
+  "ocr": {
+    "alt_image": "Image à annoter",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "inline_mode_label": "Mode une ligne",
+      "rotation_left": {
+        "title": "Raccourci : L",
+        "label": "Rotation Gauche"
+      },
+      "rotation_right": {
+        "title": "Raccourci : R",
+        "label": "Rotation Droite"
+      }
+    }
+  },
+  "image_classifier": {
+    "image_alt": "Image de classification",
+    "shortcut": "Raccourci :",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "inline_mode_label": "Mode une ligne",
+      "rotate_left": {
+        "title": "Raccourci : L",
+        "label": "Rotation Gauche"
+      },
+      "rotate_right": {
+        "title": "Raccourci : R",
+        "label": "Rotation Droite"
+      }
+    }
+  },
+  "rotation": {
+    "image_alt": "Image à tourner",
+    "toolbar": {
+      "progress_label": "Taille de l'image",
+      "opacity_label": "Opacité",
+      "dark_mode_label": "Mode sombre",
+      "anomaly_label": "Anomalie",
+      "angle_label": "Angle"
+    }
+  },
+  "named_entity": {
+    "label": {
+      "shortcut": "Raccourci :"
+    },
+    "toolbar": {
+      "keep_annotation_label": "Garder les labels",
+      "zoom_in": {
+        "title": "Raccourci: Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci: 0",
+        "label": "Dézoomer"
+      }
+    }
+  },
+  "tag_over_text": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "Pas de raccourci",
+      "groups": {
+        "block": "Bloc"
+      }
+    },
+    "toolbar": {
+      "enable_creation": {
+        "label": "Activer création"
+      },
+      "delete": {
+        "title": "Raccourci : Suppr",
+        "label": "Supprimer"
+      },
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      }
+    }
+  },
+  "tag_over_text_label": {
+    "labels": {
+      "title": "Labels",
+      "no_shortcut": "Pas de raccourci"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      },
+      "fit_image": {
+        "title": "Raccourci : F",
+        "label": "Remplir l'image"
+      }
+    }
+  },
+  "eml_classifier": {
+    "title": "Démo de parsing d'email par front-end",
+    "fallback_file_name": "pièce jointe",
+    "loading": "Votre navigateur est en train d'extraire les données",
+    "mail": {
+      "title": "Mail principal",
+      "from": "De :",
+      "to": "À :",
+      "cc": "Cc :",
+      "bcc": "Bcc :",
+      "subject": "Sujet :"
+    },
+    "attachments": {
+      "title": "Pièce jointe :",
+      "pdf_attachment": {
+        "loading": "Votre navigateur est en train d'extraire le pdf en images png"
+      },
+      "txt_attachment": {
+        "loading": "Votre navigateur est en train d'extraire le texte"
+      }
+    },
+    "mail_summary": {
+      "main_title": "Mail",
+      "main_title_document": "Document",
+      "title": "Mail principal",
+      "annotation": "Annotation",
+      "attachments": "Pièces jointes",
+      "side_attachments": "(chargement)"
+    },
+    "toolbar": {
+      "zoom_in": {
+        "title": "Raccourci : Z",
+        "label": "Zoomer"
+      },
+      "zoom_out": {
+        "title": "Raccourci : 0",
+        "label": "Dézoomer"
+      }
+    }
+  }
+}

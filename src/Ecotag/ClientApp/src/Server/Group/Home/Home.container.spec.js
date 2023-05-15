@@ -1,17 +1,18 @@
 import React from 'react';
-import {createMemoryHistory} from "history";
+import {createMemoryHistory} from 'history';
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, waitFor} from '@testing-library/react';
 import {HomeContainer} from './Home.container';
-import sleep from "../../../sleep";
-import {fireEvent} from "@testing-library/dom";
+import sleep from '../../../sleep';
+import {fireEvent} from '@testing-library/dom';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('Home.container for groups', () => {
 
     const history = createMemoryHistory({initialEntries: ['/']});
     const givenGroups = [{
         id: "0001",
-        name: "developpeurs",
+        name: "developers",
         userIds: ["0001", "0002"]
     }];
     const givenFetch = async (url) => {
@@ -30,21 +31,43 @@ describe('Home.container for groups', () => {
     };
 
     it('HomeContainer render correctly the groups', async () => {
+        changeProjectTranslationLanguage('en');
         const {container, asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer
             fetch={givenFetch}/></BrowserRouter>);
-        const messageEl = await waitFor(() => getByText('developpeurs'));
+        const messageEl = await waitFor(() => getByText('developers'));
         expect(messageEl).toHaveTextContent(
-            'developpeurs'
+            'developers'
         );
         expect(asFragment()).toMatchSnapshot();
 
         const updateButton = container.querySelector('.glyphicon-pencil');
         fireEvent.click(updateButton);
-        await waitFor(() => expect(getByText(/Supprimer/i)).not.toBeNull());
+        await waitFor(() => expect(getByText(/Remove/i)).not.toBeNull());
 
         const submitUpdateButton = screen.getByLabelText(/SubmitUpdate/i);
         fireEvent.click(submitUpdateButton);
-        await waitFor(() => expect(screen.queryByText(/Supprimer/i)).toBeNull());
+        await waitFor(() => expect(screen.queryByText(/Remove/i)).toBeNull());
+    });
+    describe('Home.container translation', () => {
+        it('should render groups correctly with english translation', async () => {
+            changeProjectTranslationLanguage('en');
+            const {asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer
+                fetch={givenFetch}/></BrowserRouter>);
+            const messageEl = await waitFor(() => getByText('developers'));
+            expect(messageEl).toHaveTextContent(
+                'developers'
+            );
+            expect(asFragment()).toMatchSnapshot();
+        });
+    });
+    it('should render groups correctly with french translation', async () => {
+        changeProjectTranslationLanguage('fr');
+        const {asFragment, getByText} = render(<BrowserRouter history={history}><HomeContainer
+            fetch={givenFetch}/></BrowserRouter>);
+        const messageEl = await waitFor(() => getByText('developers'));
+        expect(messageEl).toHaveTextContent(
+            'developers'
+        );
+        expect(asFragment()).toMatchSnapshot();
     });
 });
-

@@ -1,0 +1,41 @@
+{
+  "group": {
+    "title": "Teams",
+    "subtitle": "Annotation teams governance",
+    "creation_title": "Creation",
+    "new": {
+      "name_input": {
+        "label": "Name : ",
+        "help_message": "Ex : bank account details annotators"
+      },
+      "validation": "Validate"
+    },
+    "count_teams": {
+      "first_part": "There is/are (",
+      "second_part": ") team(s)"
+    },
+    "empty_list": "No element",
+    "list": {
+      "header": {
+        "name": "Name",
+        "users": "Users",
+        "actions": "Actions"
+      },
+      "edit": "Edit",
+      "edit_popup": {
+        "header": "Add/Remove users from this team",
+        "add_user_placeholder": "Add user",
+        "footer": {
+          "cancel": "Cancel",
+          "validation": "Validate"
+        }
+      }
+    },
+    "paging": {
+      "display": "Display",
+      "elements": "elements",
+      "previous": "« Previous",
+      "next": "Next »"
+    }
+  }
+}

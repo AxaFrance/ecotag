@@ -4,11 +4,12 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {MemoryRouter, Route} from "react-router-dom";
 import {AnnotationContainer} from "./Annotation.container";
 import {expectedOutputJsonOcr, fetch} from './mock';
+import {changeProjectTranslationLanguage} from '../../../useProjectTranslation';
 
 describe('Annotation.container', () => {
 
     it('should annotate from start until end', async () => {
-
+        changeProjectTranslationLanguage('fr');
         const environment = {apiUrl: "/server/{path}"}
         const {getByText} = render(<MemoryRouter initialEntries={["/projects/0005/start"]}>
             <Route path="/:projectId/0005/:documentId">
@@ -23,7 +24,7 @@ describe('Annotation.container', () => {
         fireEvent.change(annotation1, {target: {value: 'toto'}});
 
         const fireSumbit = () => {
-            const item = screen.queryByText("Submit");
+            const item = screen.queryByText("Envoyer");
             fireEvent.click(item);
         };
 
