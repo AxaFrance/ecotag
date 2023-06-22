@@ -1,5 +1,5 @@
 ﻿import {OidcProvider, OidcSecure, useOidcAccessToken} from "@axa-fr/react-oidc";
-import React, {useEffect} from "react";
+import React from "react";
 import {withEnvironment} from "./EnvironmentProvider";
 import Loading from "./shared/Oidc/Loading.component";
 import AuthenticatingError from "./shared/Oidc/AuthenticateError.component";
@@ -15,14 +15,6 @@ const AccessTokenWithProvider = withEnvironment(({environment}) => {
 
     let history = useHistory();
 
-    useEffect(() => {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-            for (let registration of registrations) {
-                registration.unregister();
-            }
-        })
-    }, []);
-
     const withCustomHistory = () => {
         return {
             replaceState: (url, stateHistory) => {
@@ -37,8 +29,6 @@ const AccessTokenWithProvider = withEnvironment(({environment}) => {
     const configuration = {
         ...config,
         scope: config.scope.replace("offline_access", ""),
-        service_worker_relative_url: null,
-        service_worker_only: false,
         redirect_uri: window.location.origin + '/access-token/authentication/callback'
     };
 
