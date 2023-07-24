@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/react-oidc": "6.24.1",
+    "@axa-fr/react-oidc": "7.3.4",
     "@axa-fr/react-toolkit-all": "1.4.1",
     "@microsoft/applicationinsights-web": "2.8.6",
     "@monaco-editor/react": "4.2.1",
@@ -47,7 +47,7 @@
     "build:server": "env-cmd -f .env.server react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "npm rebuild canvas --update-binary",
+    "postinstall": "npm rebuild canvas --update-binary && node ./node_modules/@axa-fr/react-oidc/bin/copy-service-worker-files.mjs public",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -93,5 +93,9 @@
         }
       }
     ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
