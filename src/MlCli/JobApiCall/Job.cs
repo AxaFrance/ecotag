@@ -241,7 +241,7 @@ public class TaskApiCall
                             }
                             else
                             {
-                                _logger.LogWarning($"Task Id: {inputTask.Id} - Error : file {settingFile} not found");
+                                _logger.LogWarning("Task Id: {InputTaskId} - Error : file {SettingFile} not found", inputTask.Id, settingFile);
                             }
                         }
                     }
@@ -254,7 +254,7 @@ public class TaskApiCall
         else
         {
             var streamContent = new StreamContent(_fileLoader.OpenRead(file));
-            requestContent.Add(streamContent, "file", $"filename{Path.GetExtension(file)}");
+            requestContent.Add(streamContent, "file", WebUtility.UrlEncode(fileName));
         }
 
         request.Content = requestContent;

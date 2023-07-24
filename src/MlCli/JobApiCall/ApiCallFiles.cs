@@ -64,14 +64,14 @@ public class ApiCallFiles
     {
         var httpClient = _httpClientFactory.CreateClient(inputTask.Id);
 
-        _logger.LogInformation($"Task Id : {inputTask.Id} - Processing {fileName}.json");
+        _logger.LogInformation("Task Id : {InputTaskId} - Processing {FileName}.json", inputTask.Id, fileName);
 
         var httpResult = JsonConvert.DeserializeObject<Program.HttpResult>(json);
 
         var correctStatusCode = 200;
         if (httpResult.StatusCode != correctStatusCode)
         {
-            _logger.LogError($"Task Id: {inputTask.Id} - Error: server didn't return 200 status code");
+            _logger.LogError("Task Id: {InputTaskId} - Error: server didn\'t return 200 status code", inputTask.Id);
             return;
         }
 
@@ -149,10 +149,7 @@ public class ApiCallFiles
 
             _fileLoader.CreateDirectory(outputPath);
 
-            await _fileLoader.WriteAllBytesOfFileAsync(filePath
-                ,
-                imageBytes
-            );
+            await _fileLoader.WriteAllBytesOfFileAsync(filePath, imageBytes);
         }
     }
 
