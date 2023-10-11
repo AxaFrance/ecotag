@@ -165,6 +165,22 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           
       - uses: actions/setup-dotnet@v1
+      - run: dotnet publish ./src/MlCli/MlCli.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/ml-cli 
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.0
+        with:
+          filename: ml-cli-osx-x64.zip
+          path: .
+          directory: ./drop/osx-x64/ml-cli
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./drop/osx-x64/ml-cli/ml-cli-osx-x64.zip
+          asset_name: ml-cli-osx-x64.zip
+          asset_content_type: application/zip4
       - run: dotnet publish ./src/MlCli/MlCli.csproj -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/linux-x64/ml-cli 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
