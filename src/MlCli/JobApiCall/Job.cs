@@ -219,6 +219,7 @@ public class TaskApiCall
         if (_fileLoader.FileExists(settingsPath))
         {
             var settingsContent = await _fileLoader.ReadAllTextInFileAsync(settingsPath);
+            _logger.LogInformation(settingsContent);
             try
             {
                 var callApiSettings = JsonSerializer.Deserialize<CallApiSettings>(settingsContent,
