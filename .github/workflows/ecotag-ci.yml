@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
           
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v3
       - run: dotnet test 
 
   build-linux:
@@ -45,7 +45,7 @@ jobs:
         run: npm run build-storybook
         working-directory: src/Ecotag/ClientApp
 
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v3
       
       #- name: Sonarqube Begin
        # if: ${{ github.actor != 'dependabot[bot]' }}
@@ -164,7 +164,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v3
       - run: dotnet publish ./src/MlCli/MlCli.csproj -c Release -r osx-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishReadyToRun=true /p:AssemblyVersion=${{ needs.tags.outputs.new_version }} --output ./drop/osx-x64/ml-cli 
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.0
