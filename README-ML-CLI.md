@@ -206,7 +206,7 @@ export CURRENT_VERSION=<INSERT_CURRENT_VERSION_TAG_HERE>  # Example: export CURR
 curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output ml-cli.zip
 unzip ml-cli.zip -d ./ecotag
 # Download demo-api
-curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/ecotag-osx-x64.zip --output demo-api.zip
+curl -L https://github.com/AxaGuilDEv/ecotag/releases/download/${CURRENT_VERSION}/demo-api-osx-x64.zip --output demo-api.zip
 unzip demo-api.zip -d ./demo-api
 
 # Download demo directory
