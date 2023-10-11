@@ -139,7 +139,7 @@ Ml.Cli.DemoApi.exe
 Then, in another command line :
 ```sh
 # run ml-cli
-cd ml-cli
+cd ecotag
 Ecotag.exe --tasks-path ..\demo\tasks-licenses.json  --base-path ..\demo --compares-paths licenses\compares --datasets-paths licenses\datasets
 # then navigate to: http://localhost:5000/ 
 ```
@@ -185,7 +185,7 @@ chmod +x MlCli.DemoApi
 Then, in another command line :
 ```sh
 # run ml-cli
-cd ml-cli
+cd ecotag
 chmod +x Ecotag
 ./Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: https://your-jupyterlab/proxy/5000/ (the last / is mandatory)
@@ -226,7 +226,7 @@ chmod +x MlCli.DemoApi
 Then, in another command line :
 ```sh
 # run ml-cli
-cd ml-cli
+cd ecotag
 chmod +x Ecotag
 ./Ecotag --tasks-path ../demo/tasks-licenses.json  --base-path ../demo --compares-paths licenses/compares --datasets-paths licenses/datasets
 # then navigate to: http://localhost:5000/ 
