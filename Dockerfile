@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 ENV NODE_VERSION 18.2.0
 ENV NODE_DOWNLOAD_SHA 73d3f98e96e098587c2154dcaa82a6469a510e89a4881663dc4c86985acf245e
@@ -21,7 +21,7 @@ COPY ./src/Ecotag/ClientApp/public/environment.docker.json ./src/Ecotag/ClientAp
 COPY ./src/Ecotag/ClientApp/public/OidcTrustedDomains.docker.js ./src/Ecotag/ClientApp/public/OidcTrustedDomains.js
 RUN dotnet publish "./src/Ecotag/Ecotag.csproj" -c Release -r linux-x64 --self-contained=true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true -o /publish
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS final
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0 AS final
 
 RUN apt update \
 	&& apt-get install -y libreoffice
