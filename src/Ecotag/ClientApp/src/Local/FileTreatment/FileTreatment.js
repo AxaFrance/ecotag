@@ -33,8 +33,80 @@ const timeSideVariables = [
     {value: 'Right', label: 'Right'}
 ];
 
-const FileTreatment = ({state, setState, MonacoEditor, fetch}) => {
+const checkboxOptions = [
+    {
+        key: "checkbox_isAnnotationOpen",
+        id: "is_annotation_open_checkbox",
+        value: "test",
+        label: "Is annotation open ? ",
+        disabled: false
+    }
+];
 
+export const mapItems = data => {
+    const mappedItems = data.map(item => {
+        if (!item || !item.Left || !item.Right) {
+            if(item){
+                console.log("File " + item.FileName + " does not contain the required data, and will be ignored. Please investigate on this file.");
+                console.log(item);
+            }
+            return;
+        }
+        return {
+            fileName: item.FileName,
+            left: {
+                Url: item.Left.Url,
+                FileName: item.Left.FileName,
+                FileDirectory: item.Left.FileDirectory,
+                ImageDirectory: item.Left.ImageDirectory,
+                FrontDefaultStringsMatcher: item.Left.FrontDefaultStringsMatcher,
+                StatusCode: item.Left.StatusCode,
+                Body: item.Left.Body,
+                Headers: item.Left.Headers,
+                TimeMs: item.Left.TimeMs,
+                TicksAt: item.Left.TicksAt
+            },
+            right: {
+                Url: item.Right.Url,
+                FileName: item.Right.FileName,
+                FileDirectory: item.Right.FileDirectory,
+                ImageDirectory: item.Right.ImageDirectory,
+                FrontDefaultStringsMatcher: item.Right.FrontDefaultStringsMatcher,
+                StatusCode: item.Right.StatusCode,
+                Body: item.Right.Body,
+                Headers: item.Right.Headers,
+                TimeMs: item.Right.TimeMs,
+                TicksAt: item.Right.TicksAt
+            },
+            id: cuid(),
+            parse: false,
+            collapse: true,
+        };
+    });
+    return mappedItems.filter(item => item !== undefined && item !== null);
+};
+
+export const compareStatusCode = (status, result) => {
+    const strStatus = status.toString();
+    const index = result.findIndex(element => element.value === strStatus);
+    if (index !== -1) {
+        return;
+    }
+    const newItem = {value: strStatus, label: strStatus};
+    result.push(newItem);
+};
+
+export const setStatusFilterItems = newItems => {
+    const allCodes = {value: "All", label: "All"};
+    const result = [allCodes];
+    newItems.forEach(item => {
+        compareStatusCode(item.left.StatusCode, result);
+        compareStatusCode(item.right.StatusCode, result);
+    });
+    return result;
+};
+
+const FileTreatment = ({state, setState, MonacoEditor, fetch}) => {
     const [filterState, setFilterState] = useState({
         filterName: "KO",
         extensionName: "All",
@@ -70,79 +142,6 @@ try {
     rawBodyOutput = rawBodyInput;
 }`
     });
-
-    const checkboxOptions = [
-        {
-            key: "checkbox_isAnnotationOpen",
-            id: "is_annotation_open_checkbox",
-            value: "test",
-            label: "Is annotation open ? ",
-            disabled: false
-        }
-    ];
-
-    const mapItems = data => {
-        const mappedItems = data.map(item => {
-            if (!item || !item.Left || !item.Right) {
-                if(item){
-                    console.log("File " + item.FileName + " does not contain the required data, and will be ignored. Please investigate on this file.");
-                    console.log(item);
-                }
-                return;
-            }
-            return {
-                fileName: item.FileName,
-                left: {
-                    Url: item.Left.Url,
-                    FileName: item.Left.FileName,
-                    FileDirectory: item.Left.FileDirectory,
-                    ImageDirectory: item.Left.ImageDirectory,
-                    FrontDefaultStringsMatcher: item.Left.FrontDefaultStringsMatcher,
-                    StatusCode: item.Left.StatusCode,
-                    Body: item.Left.Body,
-                    Headers: item.Left.Headers,
-                    TimeMs: item.Left.TimeMs,
-                    TicksAt: item.Left.TicksAt
-                },
-                right: {
-                    Url: item.Right.Url,
-                    FileName: item.Right.FileName,
-                    FileDirectory: item.Right.FileDirectory,
-                    ImageDirectory: item.Right.ImageDirectory,
-                    FrontDefaultStringsMatcher: item.Right.FrontDefaultStringsMatcher,
-                    StatusCode: item.Right.StatusCode,
-                    Body: item.Right.Body,
-                    Headers: item.Right.Headers,
-                    TimeMs: item.Right.TimeMs,
-                    TicksAt: item.Right.TicksAt
-                },
-                id: cuid(),
-                parse: false,
-                collapse: true,
-            };
-        });
-        return mappedItems.filter(item => item !== undefined && item !== null);
-    }
-
-    const compareStatusCode = (status, result) => {
-        const strStatus = status.toString();
-        const index = result.findIndex(element => element.value === strStatus);
-        if (index !== -1) {
-            return;
-        }
-        const newItem = {value: strStatus, label: strStatus};
-        result.push(newItem);
-    };
-
-    const setStatusFilterItems = newItems => {
-        const allCodes = {value: "All", label: "All"};
-        const result = [allCodes];
-        newItems.forEach(item => {
-            compareStatusCode(item.left.StatusCode, result);
-            compareStatusCode(item.right.StatusCode, result);
-        });
-        return result;
-    };
 
     const onLoad = (result, fileName) => {
         if(!result || !Array.isArray(result.Content) || !result.CompareLocation){
