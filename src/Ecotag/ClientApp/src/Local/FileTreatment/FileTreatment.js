@@ -81,41 +81,48 @@ try {
         }
     ];
 
-    const mapItems = data => (data.map(item => {
-        if (item.Left == null || item.Right == null) {
-            return;
-        }
-        return {
-            fileName: item.FileName,
-            left: {
-                Url: item.Left.Url,
-                FileName: item.Left.FileName,
-                FileDirectory: item.Left.FileDirectory,
-                ImageDirectory: item.Left.ImageDirectory,
-                FrontDefaultStringsMatcher: item.Left.FrontDefaultStringsMatcher,
-                StatusCode: item.Left.StatusCode,
-                Body: item.Left.Body,
-                Headers: item.Left.Headers,
-                TimeMs: item.Left.TimeMs,
-                TicksAt: item.Left.TicksAt
-            },
-            right: {
-                Url: item.Right.Url,
-                FileName: item.Right.FileName,
-                FileDirectory: item.Right.FileDirectory,
-                ImageDirectory: item.Right.ImageDirectory,
-                FrontDefaultStringsMatcher: item.Right.FrontDefaultStringsMatcher,
-                StatusCode: item.Right.StatusCode,
-                Body: item.Right.Body,
-                Headers: item.Right.Headers,
-                TimeMs: item.Right.TimeMs,
-                TicksAt: item.Right.TicksAt
-            },
-            id: cuid(),
-            parse: false,
-            collapse: true,
-        };
-    }));
+    const mapItems = data => {
+        const mappedItems = data.map(item => {
+            if (!item || !item.Left || !item.Right) {
+                if(item){
+                    console.log("File " + item.FileName + " does not contain the required data, and will be ignored. Please investigate on this file.");
+                    console.log(item);
+                }
+                return;
+            }
+            return {
+                fileName: item.FileName,
+                left: {
+                    Url: item.Left.Url,
+                    FileName: item.Left.FileName,
+                    FileDirectory: item.Left.FileDirectory,
+                    ImageDirectory: item.Left.ImageDirectory,
+                    FrontDefaultStringsMatcher: item.Left.FrontDefaultStringsMatcher,
+                    StatusCode: item.Left.StatusCode,
+                    Body: item.Left.Body,
+                    Headers: item.Left.Headers,
+                    TimeMs: item.Left.TimeMs,
+                    TicksAt: item.Left.TicksAt
+                },
+                right: {
+                    Url: item.Right.Url,
+                    FileName: item.Right.FileName,
+                    FileDirectory: item.Right.FileDirectory,
+                    ImageDirectory: item.Right.ImageDirectory,
+                    FrontDefaultStringsMatcher: item.Right.FrontDefaultStringsMatcher,
+                    StatusCode: item.Right.StatusCode,
+                    Body: item.Right.Body,
+                    Headers: item.Right.Headers,
+                    TimeMs: item.Right.TimeMs,
+                    TicksAt: item.Right.TicksAt
+                },
+                id: cuid(),
+                parse: false,
+                collapse: true,
+            };
+        });
+        return mappedItems.filter(item => item !== undefined && item !== null);
+    }
 
     const compareStatusCode = (status, result) => {
         const strStatus = status.toString();
@@ -138,23 +145,21 @@ try {
     };
 
     const onLoad = (result, fileName) => {
-        const isVersion0 = Array.isArray(result);
-        if (!result.hasOwnProperty('CompareLocation')) {
+        if(!result || !Array.isArray(result.Content) || !result.CompareLocation){
             onLoadFailure(fileName);
-        } else {
-            const location = isVersion0 ? "" : result.CompareLocation;
-            const mappedItems = mapItems(isVersion0 ? result : result.Content);
-            const statusCodeItems = setStatusFilterItems(mappedItems);
-            setState
-            ({
-                ...state,
-                fileName: fileName,
-                compareLocation: location,
-                items: mappedItems,
-                statusCodes: statusCodeItems
-            });
-            setFilterState({...filterState, loadFileError: false});
         }
+        const location = result.CompareLocation;
+        const mappedItems = mapItems(result.Content);
+        const statusCodeItems = setStatusFilterItems(mappedItems);
+        setState
+        ({
+            ...state,
+            fileName: fileName,
+            compareLocation: location,
+            items: mappedItems,
+            statusCodes: statusCodeItems
+        });
+        setFilterState({...filterState, loadFileError: false});
     };
 
     const onLoadFailure = fileName => {
