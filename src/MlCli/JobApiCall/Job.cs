@@ -108,10 +108,10 @@ public class TaskApiCall
                             numberKo += 1;
                             _logger.LogWarning("number KO: " + numberKo + "/" + (indexFile + 1));
                         }
-                        else if (task.Result == "Exception")
+                        else if (task.IsFaulted)
                         {
                             numberExceptions += 1;
-                            _logger.LogWarning("number exceptions: " + numberExceptions + "/" + (indexFile + 1));
+                            _logger.LogWarning($"number exceptions: {numberExceptions}/{indexFile + 1}");
                         }
 
                         tasksToRemove.Add(task);
