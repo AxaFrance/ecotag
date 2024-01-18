@@ -70,10 +70,10 @@ public class TaskApiCall
             var numberChunk = inputTask.ChunkByNumberPart.Value;
             var chunkIndex = inputTask.ChunkIndex.Value;
             var d = files.Count / (decimal)numberChunk;
-            var numberfilesbychunck = d > files.Count / numberChunk
+            var numberFilesByChunk = d > files.Count / numberChunk
                 ? files.Count / numberChunk + 1
                 : files.Count / numberChunk;
-            var listsOfFiles = ChunkBy(files.ToList(), numberfilesbychunck);
+            var listsOfFiles = ChunkBy(files.ToList(), numberFilesByChunk);
             files = listsOfFiles[chunkIndex];
         }
 
@@ -87,6 +87,7 @@ public class TaskApiCall
             var indexFile = 0;
             var indexFileFetched = 0;
             var numberKo = 0;
+            var numberExceptions = 0;
             while (indexFile < numberFiles)
             {
                 while (tasks.Count < inputTask.NumberParallel && indexFile < numberFiles)
@@ -107,6 +108,11 @@ public class TaskApiCall
                             numberKo += 1;
                             _logger.LogWarning("number KO: " + numberKo + "/" + (indexFile + 1));
                         }
+                        else if (task.IsFaulted)
+                        {
+                            numberExceptions += 1;
+                            _logger.LogWarning($"number exceptions: {numberExceptions}/{indexFile + 1}");
+                        }
 
                         tasksToRemove.Add(task);
                     }
@@ -126,13 +132,12 @@ public class TaskApiCall
         string extension, string outputDirectory)
     {
         if (Path.GetExtension(currentFilePath) == ".json") return string.Empty;
-
         
         var jsonFileName = GetTargetFileName(inputTask.IsDefaultTargetFileMode, currentFilePath, extension);
         var targetFileName = Path.Combine(outputDirectory, jsonFileName);
+        var fileName = Path.GetFileName(currentFilePath);
         try
         {
-            var fileName = Path.GetFileName(currentFilePath);
             if (_fileLoader.FileExists(targetFileName))
             {
                 _logger.LogWarning($"Task Id: {inputTask.Id} - Already processed file {fileName}");
@@ -148,7 +153,25 @@ public class TaskApiCall
                 try
                 {
                     httpResult = await CallHttpAsync(httpClient, inputTask, currentFilePath, jsonFileName, i);
-                    if (httpResult.StatusCode < 500) break;
+                    if (httpResult == null)
+                    {
+                        httpResult = new Program.HttpResult
+                        {
+                            FileName = fileName,
+                            FileDirectory = Path.Combine(inputTask.OutputDirectoryJsons, targetFileName),
+                            ImageDirectory = inputTask.OutputDirectoryImages,
+                            FrontDefaultStringsMatcher = inputTask.FrontDefaultStringsMatcher,
+                            StatusCode = 600,
+                            Body = $"Task Id: {inputTask.Id} - Error : http result is null",
+                            Headers = new List<KeyValuePair<string, IEnumerable<string>>>(),
+                            TimeMs = 0,
+                            Url = inputTask.Url,
+                            TicksAt = DateTime.UtcNow.Ticks,
+                            TryNumber = i
+                        };
+                        _logger.LogError($"Task Id: {inputTask.Id} - Error : http result is null");
+                    }
+                    else if (httpResult.StatusCode < 500) break;
                 }
                 catch (Exception e)
                 {
@@ -171,9 +194,6 @@ public class TaskApiCall
 
                 if (i < inputTask.NumberRetryOnHttp500 + 1) await Task.Delay(inputTask.DelayOn500);
             }
-
-            if (httpResult == null)
-                throw new ApplicationException("httpResult is null");
 
             if (httpResult.StatusCode >= 500 && (!inputTask.IsSaveResultOnError || httpResult.StatusCode < 500))
                 return httpResult.StatusCode < 500 ? "OK" : "KO";
