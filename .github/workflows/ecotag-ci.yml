@@ -59,7 +59,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"AxaFrance_ml-cli" /o:"axaguildev" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.exclusions="**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*Sould.cs,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build-local/**,**/ClientApp/build-server/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts,**/ClientApp/public/**" /d:sonar.javascript.lcov.reportPaths="**/ClientApp/coverage/lcov.info"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"AxaGuilDEv_ml-cli" /o:"axaguildev" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.exclusions="**/*.spec.js,**/*.stories.js,**/ClientApp/src/Toolkit/**,**/ClientApp/coverage/**,Scripts/**,**/*.scss,**/__snapshots__/**,**/*Sould.cs,**/*[Tt]ests.cs,**/node_modules/**,**/ClientApp/build-local/**,**/ClientApp/build-server/**,**/ClientApp/.storybook/**,**/ClientApp/storybook-static/**,**/obj/**,**/__mocks__/**,**/ClientApp/src/serviceWorker.ts,**/ClientApp/public/**" /d:sonar.javascript.lcov.reportPaths="**/ClientApp/coverage/lcov.info"
           dotnet tool install --global dotnet-coverage
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
