@@ -28,7 +28,7 @@ public class ErrorLoggingMiddleware
         }
         catch (Exception e)
         {
-            logger.LogError(e, $"The following error happened: {e.Message}");
+            logger.LogError(e, "The following error happened: {EMessage}", e.Message);
             if (!context.Response.HasStarted)
             {
                 context.Response.StatusCode = 500;

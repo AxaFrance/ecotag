@@ -13,7 +13,6 @@ using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace AxaGuilDEv.Ecotag;
 
@@ -121,7 +120,6 @@ public static class Program
                 var keyVaultConfig = keyVaultConfigBuilder.Build();
                 config.AddConfiguration(keyVaultConfig);
             })
-            .UseSerilog((context, logger) => { logger.ReadFrom.Configuration(context.Configuration); })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
