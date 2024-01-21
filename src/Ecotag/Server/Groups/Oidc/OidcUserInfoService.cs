@@ -26,18 +26,12 @@ public class OidcUserInfoService : IOidcUserInfoService
     {
         var oidcConfiguration = await GetOidcConfigurationAsync();
         var request = new HttpRequestMessage(HttpMethod.Get,
-            oidcConfiguration.UserinfoEndpoint);
+            oidcConfiguration.userinfo_endpoint);
         request.Headers.Add("authorization", $"Bearer {accessToken}");
         var client = _clientFactory.CreateClient(NamedHttpClients.ProxiedClient);
         var response = await client.SendAsync(request);
         await using var responseStream = await response.Content.ReadAsStreamAsync();
-        var serializeOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
-        };
-        var userInfo = await JsonSerializer.DeserializeAsync
-            <OidcUserInfo>(responseStream, serializeOptions);
+        var userInfo = await JsonSerializer.DeserializeAsync(responseStream, OidcUserInfoSerializerContext.Default.OidcUserInfo);
         return userInfo;
     }
 
@@ -48,8 +42,7 @@ public class OidcUserInfoService : IOidcUserInfoService
         var client = _clientFactory.CreateClient(NamedHttpClients.ProxiedClient);
         var response = await client.SendAsync(request);
         await using var responseStream = await response.Content.ReadAsStreamAsync();
-        var userInfo = await JsonSerializer.DeserializeAsync
-            <OidcConfiguration>(responseStream);
+        var userInfo = await JsonSerializer.DeserializeAsync(responseStream, OidcConfigurationSerializerContext.Default.OidcConfiguration);
         return userInfo;
     }
 }

@@ -13,12 +13,12 @@ public class Subscriber
 
 public class Queue : IQueue
 {
-    private readonly IList<Subscriber> subscribers = new List<Subscriber>();
+    private readonly IList<Subscriber> _subscribers = new List<Subscriber>();
 
     public async Task PublishAsync(string type, object message)
     {
         var messageJson = JsonSerializer.Serialize(message);
-        foreach (var subscriber in subscribers)
+        foreach (var subscriber in _subscribers)
             if (subscriber.Type == type)
                 await subscriber.CallbackAsync(type, messageJson);
     }
@@ -30,6 +30,6 @@ public class Queue : IQueue
             Type = type,
             CallbackAsync = func
         };
-        subscribers.Add(subscriber);
+        _subscribers.Add(subscriber);
     }
 }

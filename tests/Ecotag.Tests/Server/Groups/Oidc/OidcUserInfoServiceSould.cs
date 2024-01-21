@@ -21,10 +21,10 @@ public class OidcUserInfoServiceSould
         var httpMessageHandler = new Mock<HttpMessageHandler>();
         var httpsDemoIdentityserverIoApiUserInfo = "https://demo.identityserver.io/api/user_info";
 
-        var resultConfiguration = new OidcConfiguration { UserinfoEndpoint = httpsDemoIdentityserverIoApiUserInfo };
+        var resultConfiguration = new OidcConfiguration(httpsDemoIdentityserverIoApiUserInfo);
         var responseConfiguration = new HttpResponseMessage(HttpStatusCode.OK)
         {
-            Content = new StringContent(JsonSerializer.Serialize(resultConfiguration))
+            Content = new StringContent(JsonSerializer.Serialize(resultConfiguration, OidcConfigurationSerializerContext.Default.OidcConfiguration))
         };
         httpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync",
@@ -35,7 +35,7 @@ public class OidcUserInfoServiceSould
                 ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(responseConfiguration);
 
-        var resultObject = new OidcUserInfo { Email = "toto@gmail.fr" };
+        var resultObject = new OidcUserInfo( "toto@gmail.fr");
         var serializeOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace AxaGuilDEv.Ecotag.Server.Groups.Oidc;
 
 [ExcludeFromCodeCoverage]
-public class OidcUserInfo
-{
-    public string Email { get; set; }
-}
+public record OidcUserInfo(string Email);
+
+[JsonSerializable(typeof(OidcUserInfo))]
+[JsonSourceGenerationOptions(WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
+public partial class OidcUserInfoSerializerContext : JsonSerializerContext;
