@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AxaGuilDEv.Ecotag.Server.Datasets.Database;
 using AxaGuilDEv.Ecotag.Server.Datasets.Database.Annotations;

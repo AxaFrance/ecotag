@@ -77,31 +77,39 @@ public class Initializer
             ? (int)jObject.Property("waitTimeMsBetweenRequest")
             : 0;
 
-        if (!jObject.ContainsKey("Authorization"))
+        try
         {
-            services.AddHttpClient(taskId).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            if (!jObject.ContainsKey("Authorization"))
             {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
-                ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) => true,
-                DefaultProxyCredentials = CredentialCache.DefaultCredentials
-            });
-        }
-        else
-        {
-            var Authorization = jObject.Property("Authorization").Value;
-            var oAuth2ClientCredentialsOptions =
-                JsonConvert.DeserializeObject<OAuth2ClientCredentialsOptions>(Authorization.ToString());
-            services.AddHttpClient(taskId)
-                .AddOAuth2ClientCredentialsMessageHandler(oAuth2ClientCredentialsOptions)
-                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                services.AddHttpClient(taskId).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                 {
                     ClientCertificateOptions = ClientCertificateOption.Manual,
                     ServerCertificateCustomValidationCallback =
                         (httpRequestMessage, cert, cetChain, policyErrors) => true,
                     DefaultProxyCredentials = CredentialCache.DefaultCredentials
                 });
+            }
+            else
+            {
+                var Authorization = jObject.Property("Authorization").Value;
+                var oAuth2ClientCredentialsOptions =
+                    JsonConvert.DeserializeObject<OAuth2ClientCredentialsOptions>(Authorization.ToString());
+                services.AddHttpClient(taskId)
+                    .AddOAuth2ClientCredentialsMessageHandler(oAuth2ClientCredentialsOptions)
+                    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                    {
+                        ClientCertificateOptions = ClientCertificateOption.Manual,
+                        ServerCertificateCustomValidationCallback =
+                            (httpRequestMessage, cert, cetChain, policyErrors) => true,
+                        DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                    });
+            }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+       
 
         return new Callapi(
             type,

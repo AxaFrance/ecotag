@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace AxaGuilDEv.Ecotag.Server.Groups.Oidc;
 
-[ExcludeFromCodeCoverage]
-public class OidcConfiguration
-{
-    [JsonPropertyName("userinfo_endpoint")]
-    public string UserinfoEndpoint { get; set; }
-}
+[method: JsonConstructorAttribute]
+public record OidcConfiguration(string userinfo_endpoint);
+
+[JsonSerializable(typeof(OidcConfiguration))]
+[JsonSourceGenerationOptions(WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
+public partial class OidcConfigurationSerializerContext : JsonSerializerContext;

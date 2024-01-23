@@ -15,7 +15,6 @@ using AxaGuilDEv.Ecotag.Server.Datasets;
 using AxaGuilDEv.Ecotag.Server.Datasets.Database;
 using AxaGuilDEv.Ecotag.Server.Groups;
 using AxaGuilDEv.Ecotag.Server.Groups.Database;
-using AxaGuilDEv.Ecotag.Server.Groups.Database.Users;
 using AxaGuilDEv.Ecotag.Server.Groups.Oidc;
 using AxaGuilDEv.Ecotag.Server.Oidc;
 using AxaGuilDEv.Ecotag.Server.Projects;
@@ -31,7 +30,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using AnnotationsController = AxaGuilDEv.Ecotag.Local.AnnotationsController;
 using DatasetsController = AxaGuilDEv.Ecotag.Local.DatasetsController;
 
@@ -148,9 +146,9 @@ public class StartupServer
                         }
                         else
                         {
-                            var usersRepository =
-                                context.HttpContext.RequestServices.GetRequiredService<UsersRepository>();
-                            var nameIdentifier = context.Principal.Identity.GetNameIdentifier();
+                            //var usersRepository =
+                            //    context.HttpContext.RequestServices.GetRequiredService<UsersRepository>();
+                            //var nameIdentifier = context.Principal.Identity.GetNameIdentifier();
                             //var userTask = usersRepository.GetUserByNameIdentifierAsync(nameIdentifier);
                             //userTask.Wait();
                             var role = ""; //userTask.Result.Role;
@@ -246,11 +244,9 @@ public class StartupServer
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
     {
-        app.UseSerilogRequestLogging();
         app.UseErrorLogging();
         AuditsService.ConfigureAudits(serviceProvider);
-
-
+        
         var databaseSettings = Configuration.GetSection(DatabaseSettings.Database).Get<DatabaseSettings>();
         if (databaseSettings.Mode == DatabaseMode.Sqlite)
         {
@@ -268,9 +264,9 @@ public class StartupServer
 
         app.Use(async (context, next) =>
         {
-            context.Response.Headers.Add("X-Frame-Options", "sameorigin");
-            context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("X-Frame-Options", "sameorigin");
+            context.Response.Headers.Append("X-Xss-Protection", "1; mode=block");
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
             await next();
         });
         if (!env.IsDevelopment())

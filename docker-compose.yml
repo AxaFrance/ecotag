@@ -18,7 +18,7 @@ services:
     image: "axaguildev/ecotag:latest"
     #build:
     #  context: .
-    #  dockerfile: ./Dockerfile
+     #  dockerfile: ./Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
     ports:

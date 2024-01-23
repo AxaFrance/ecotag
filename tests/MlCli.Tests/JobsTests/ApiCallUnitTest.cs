@@ -247,8 +247,7 @@ public class ApiCallUnitTest
         var serviceCollection = new Mock<IServiceCollection>();
         var pathValidatorHelper = new Mock<IPathValidatorHelper>();
 
-        var callapiResult = Initializer.CreateTask(jObject, "callapi", false, true, "baseDirectory", "1",
-            serviceCollection.Object, pathValidatorHelper.Object);
+        var callapiResult = Initializer.CreateTask(jObject, "callapi", false, true, "baseDirectory", "1", serviceCollection.Object, pathValidatorHelper.Object);
         var expectedCallapiResult = new Callapi(
             "callapi",
             "1",
@@ -267,6 +266,8 @@ public class ApiCallUnitTest
             true,
             1,
             1);
+        
+        
         Assert.Equal(JsonConvert.SerializeObject(expectedCallapiResult), JsonConvert.SerializeObject(callapiResult));
                                                                   }
                                                               

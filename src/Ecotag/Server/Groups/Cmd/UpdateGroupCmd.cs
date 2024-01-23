@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AxaGuilDEv.Ecotag.Server.Audits;
 using AxaGuilDEv.Ecotag.Server.Groups.Database.Group;
@@ -72,7 +73,7 @@ public class UpdateGroupCmd
                 Id = updateGroupInput.Id,
                 UpdateDate = updateDate,
                 UserIds = updateGroupInput.UserIds
-            })
+            }, GroupUpdateAuditSerializerContext.Default.GroupUpdateAudit)
         });
 
         return commandResult;
@@ -85,3 +86,7 @@ public record GroupUpdateAudit
     public List<string> UserIds { get; set; }
     public long UpdateDate { get; set; }
 }
+
+[JsonSerializable(typeof(GroupUpdateAudit))]
+[JsonSourceGenerationOptions(WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
+public partial class GroupUpdateAuditSerializerContext : JsonSerializerContext;

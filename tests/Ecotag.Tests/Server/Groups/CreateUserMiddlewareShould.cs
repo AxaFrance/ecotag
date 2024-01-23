@@ -75,7 +75,7 @@ public class CreateUserMiddlewareShould
             var createUserMidleware = new CreateUserMiddleware(nextMiddleware);
             var httpContext = DefaultHttpContext(path, subject, authorization);
             var oidcUserInfoServiceMock = new Mock<IOidcUserInfoService>();
-            var oidcUserInfo = new OidcUserInfo() { Email = "guillaume.chervet@toto.fr" };
+            var oidcUserInfo = new OidcUserInfo("guillaume.chervet@toto.fr");
             oidcUserInfoServiceMock.Setup(it => it.GetUserEmailAsync(It.IsAny<string>())).ReturnsAsync(oidcUserInfo);
             
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

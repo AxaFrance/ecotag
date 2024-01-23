@@ -227,7 +227,7 @@ public class AnnotationsRepository
     }
 
     public async Task<List<ExportAnnotation>> GetAnnotationsByProjectIdAndDatasetIdAsync(string projectId,
-        string datasetId)
+        string datasetId, JsonSerializerOptions? options = null)
     {
         var result = new List<ExportAnnotation>();
         var fileDataModels = await _datasetsContext.Files.AsNoTracking()
@@ -242,7 +242,7 @@ public class AnnotationsRepository
                     FileName = fileDataModel.Name,
                     NameIdentifier = annotation.CreatorNameIdentifier,
                     CreateDate = annotation.TimeStamp,
-                    Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput)
+                    Annotation = JsonSerializer.Deserialize<object>(annotation.ExpectedOutput, options)
                 });
             result.AddRange(fileAnnotations);
         }
