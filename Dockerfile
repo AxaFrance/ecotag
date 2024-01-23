@@ -23,9 +23,7 @@ RUN dotnet publish "./src/Ecotag/Ecotag.csproj" -c Release -r linux-x64 --self-c
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0 AS final
 
-RUN apt update \
-	&& apt-get install -y libreoffice
-
+RUN apt update && apt-get install -y libreoffice
 RUN libreoffice --version
 RUN sed -i 's/UserInstallation/#UserInstallation/' /usr/lib/libreoffice/program/bootstraprc
 

@@ -34,16 +34,11 @@ public class OidcUserInfoServiceSould
                                                          "https://demo.identityserver.io/.well-known/openid-configuration")),
                 ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(responseConfiguration);
-
         var resultObject = new OidcUserInfo( "toto@gmail.fr");
-        var serializeOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
-        };
+        
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
-            Content = new StringContent(JsonSerializer.Serialize(resultObject, serializeOptions))
+            Content = new StringContent(JsonSerializer.Serialize(resultObject, OidcUserInfoSerializerContext.Default.OidcUserInfo))
         };
         httpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync",
@@ -61,6 +56,7 @@ public class OidcUserInfoServiceSould
         var someOptions = Options.Create(new OidcSettings { Authority = "https://demo.identityserver.io" });
 
         var service = new OidcUserInfoService(mockFactory.Object, someOptions);
+        
         var result = await service.GetUserEmailAsync("access_token");
 
         Assert.Equal(resultObject.Email, result.Email);

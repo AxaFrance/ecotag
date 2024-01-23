@@ -15,7 +15,7 @@ services:
       - 10000:10000
       - 10010:10001
   ecotag:
-    #image: "axaguildev/ecotag:latest"
+    image: "axaguildev/ecotag:pr-299"
     build:
       context: .
       dockerfile: ./Dockerfile
