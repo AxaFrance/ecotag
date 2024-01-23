@@ -29,7 +29,7 @@ public static class Converter
 
     private static List<LabelDataModel> ToListLabelDataModel(this string labelsJson)
     {
-        return JsonSerializer.Deserialize<List<LabelDataModel>>(labelsJson,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return JsonSerializer.Deserialize(labelsJson, ListLabelDataModelSerializerContext.Default.ListLabelDataModel);
     }
+    
 }
