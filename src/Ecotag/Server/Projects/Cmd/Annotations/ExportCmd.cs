@@ -20,10 +20,6 @@ public record GetExportCmdResult
     public List<ExportAnnotation> Annotations { get; set; }
 }
 
-[JsonSerializable(typeof(GetExportCmdResult))]
-[JsonSourceGenerationOptions(WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
-public partial class GetExportCmdResultSerializerContext : JsonSerializerContext;
-
 public record ExportAnnotation
 {
     public string NameIdentifier { get; set; }

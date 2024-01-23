@@ -96,7 +96,7 @@ public class ExportThenDeleteProjectCmd
     {
         if (_datasetsSettings.Value.IsBlobTransferActive)
         {
-            var bytes = JsonSerializer.SerializeToUtf8Bytes(exportCmdResult, GetExportCmdResultSerializerContext.Default.GetExportCmdResult);
+            var bytes = JsonSerializer.SerializeToUtf8Bytes(exportCmdResult);
             const string containerName = "output";
             var fileName =
                 $"{exportCmdResult.ProjectName}_{DateTime.Now.Ticks}/{exportCmdResult.ProjectName}-annotations.json";
