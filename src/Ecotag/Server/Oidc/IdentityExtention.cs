@@ -22,7 +22,13 @@ public static class IdentityExtensions
         var sub = claimsIdentity
             .Claims.FirstOrDefault(c => c.Type == EcotagClaimTypes.NameIdentifier);
 
-        return sub?.Value;
+        var nameIdentifier = sub?.Value;
+        if (string.IsNullOrEmpty(nameIdentifier))
+        {
+            nameIdentifier = "computer";
+        }
+        
+        return nameIdentifier;
     }
 
     public static ICollection<string> GetProfiles(this IIdentity identity)

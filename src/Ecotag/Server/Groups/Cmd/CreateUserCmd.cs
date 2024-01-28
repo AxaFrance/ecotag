@@ -43,7 +43,15 @@ public class CreateUserCmd
         var accessToken = createUserInput.AccessToken;
         var userDataModel = await _userRepository.GetUserByNameIdentifierAsync(nameIdentifier);
         if (userDataModel != null) return commandResult;
-        var userEMail = await _userInfoService.GetUserEmailAsync(accessToken);
+        OidcUserInfo userEMail;
+        if (nameIdentifier == "computer")
+        {
+            userEMail = new OidcUserInfo("computer@ecotag.com");
+        }
+        else
+        {
+            userEMail = await _userInfoService.GetUserEmailAsync(accessToken);
+        }
         var result = await _userRepository.CreateUserAsync(userEMail.Email, nameIdentifier);
         if (!result.IsSuccess)
         {

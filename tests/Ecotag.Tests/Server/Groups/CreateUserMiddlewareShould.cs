@@ -54,7 +54,7 @@ public class CreateUserMiddlewareShould
         [InlineData("/api/toto", "S66666", "[]", 1, 200, "Bearer access_token")]
         [InlineData("/api/toto", "S123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjido", "[]", 0, 200, "Bearer access_token")]
         [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"NameIdentifier\":\"s66666\"}]", 1, 200, "Bearer access_token")]
-        [InlineData("/api/toto","", "[]", 0, 403, "Bearer access_token")]
+        [InlineData("/api/toto","", "[{\"Email\":\"computer@ecotag.com\",\"NameIdentifier\":\"computer\"}]", 1, 200, "Bearer access_token")]
         [InlineData("/notapi","s66666", "[]", 0, 200, "Bearer access_token")]
         [InlineData("/api/toto","s66666", "[]", 0, 401, "")]
         public async Task CreateUser(string path, string subject, string usersInDatabase, int expectedNumberUsersInDatabase, int expectedStatusCode, string authorization)
@@ -83,7 +83,7 @@ public class CreateUserMiddlewareShould
                 new CreateUserCmd(new UsersRepository(groupContext,memoryCache), oidcUserInfoServiceMock.Object));
             
             Assert.Equal(expectedStatusCode, httpContext.Response.StatusCode);
-            Assert.Equal(groupContext.Users.Count(), expectedNumberUsersInDatabase);
+            Assert.Equal(expectedNumberUsersInDatabase, groupContext.Users.Count());
         }
         
     }
