@@ -37,30 +37,37 @@ public static class IdentityExtensions
 
         if (!(identity is ClaimsIdentity claimsIdentity)) return new string[0];
 
-        const int profileGroupIndex = 1;
         var result = new List<string>();
         foreach (var profile in claimsIdentity
                      .Claims
                      .Where(c => c.Type == EcotagClaimTypes.MemberOf))
         {
-            var matches = ProfileMatcher.Matches(profile.Value);
-            result.AddRange(from Match match in matches select match.Groups[profileGroupIndex].Value.Trim());
+            result.AddRole(profile.Value.Trim());
         }
 
         if (result.Contains(Roles.DataScientist))
         {
-            result.Add(Roles.DataAnnoteur);
+            result.AddRole(Roles.DataAnnoteur);
         }
         else if (result.Contains(Roles.DataAdministateur))
         {
-            result.Add(Roles.DataScientist);
-            result.Add(Roles.DataAnnoteur);
+            result.AddRole(Roles.DataScientist);
+            result.AddRole(Roles.DataAnnoteur);
         }
 
-        const string iamEcotag = "IAM_ECOTAG";
-        if (result.Contains(iamEcotag)) result.Remove(iamEcotag);
-
         return result;
+    }
+
+    private static void AddRole(this List<string> roles, string role)
+    {
+        if (roles.Contains(role))
+        {
+            return;
+        }
+        if(role is Roles.DataScientist or Roles.DataAnnoteur or Roles.DataAdministateur )
+        {
+            roles.Add(role);
+        }
     }
 
     public class EcotagClaimTypes

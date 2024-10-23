@@ -20,25 +20,25 @@ export const DataScientist = "ECOTAG_DATA_SCIENTIST";
 export const Annotateur = "ECOTAG_ANNOTATEUR";
 export const Administateur = "ECOTAG_ADMINISTRATEUR";
 
-export const extractRoles = (oidcUser, oidcMode) => {
+const addRole = (roles, role) => {
+    if (roles.includes(role)) {
+        return;
+    }
+    if (role === DataScientist || role === Annotateur || role === Administateur) {
+        roles.push(role);
+    }
+}
+
+export const extractRoles = (accessTokenPayload, oidcMode) => {
     const roles = [];
     if (oidcMode === "AXA_FRANCE") {
-        if (oidcUser && oidcUser.member_of && oidcUser.member_of.length > 0) {
-            oidcUser.member_of.forEach(member => {
-                member.split(",").forEach(subMember => {
-                    if (subMember.startsWith('CN=')) {
-                        const role = subMember.replace('CN=', '');
-                        if (role.includes("ECOTAG_")) {
-                            roles.push(role);
-                        }
-                    }
-                });
-            });
+        if (accessTokenPayload && accessTokenPayload.member_of && accessTokenPayload.member_of.length > 0) {
+              accessTokenPayload.forEach((item) => addRole(roles, item));
             if (roles.includes(DataScientist)) {
-                roles.push(Annotateur);
+                addRole(roles, Annotateur);
             } else if (roles.includes(Administateur)) {
-                roles.push(DataScientist);
-                roles.push(Annotateur);
+                addRole(roles, DataScientist)
+                addRole(roles, Annotateur)
             }
         }
     } else {
@@ -52,7 +52,7 @@ export const extractRoles = (oidcUser, oidcMode) => {
 const extractDataFromOAuthToken = (idTokenPayload, accessTokenPayload, oidcUser, environment) => ({
     name: getAuthName([idTokenPayload, accessTokenPayload]),
     email: getAuthName([oidcUser, accessTokenPayload], 'email', ''),
-    roles: extractRoles(oidcUser, environment.oidc.mode)
+    roles: extractRoles(accessTokenPayload, environment.oidc.mode)
 });
 
 const withAuthentication = () => Component => props => {

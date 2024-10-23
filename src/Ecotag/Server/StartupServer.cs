@@ -146,11 +146,6 @@ public class StartupServer
                         }
                         else
                         {
-                            //var usersRepository =
-                            //    context.HttpContext.RequestServices.GetRequiredService<UsersRepository>();
-                            //var nameIdentifier = context.Principal.Identity.GetNameIdentifier();
-                            //var userTask = usersRepository.GetUserByNameIdentifierAsync(nameIdentifier);
-                            //userTask.Wait();
                             var role = ""; //userTask.Result.Role;
                             var roles = new List<string>();
                             if (role == Roles.DataScientist)

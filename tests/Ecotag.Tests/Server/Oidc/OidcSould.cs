@@ -10,10 +10,10 @@ namespace AxaGuilDEv.Ecotag.Tests.Server.Oidc
     public class OidcSould
     {
         [Theory]
-        [InlineData("CN=ECOTAG_DATA_SCIENTIST,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
-        [InlineData("CN=ECOTAG_ANNOTATEUR,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_ANNOTATEUR")]
-        [InlineData("CN=ECOTAG_ADMINISTRATEUR,CN=IAM_ECOTAG,OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "ECOTAG_ADMINISTRATEUR,ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
-        [InlineData("OU=applis,O=organisation,DC=ADC,DC=demo-fr,DC=int", "")]
+        [InlineData("ECOTAG_DATA_SCIENTIST", "ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
+        [InlineData("ECOTAG_ANNOTATEUR", "ECOTAG_ANNOTATEUR")]
+        [InlineData("ECOTAG_ADMINISTRATEUR", "ECOTAG_ADMINISTRATEUR,ECOTAG_DATA_SCIENTIST,ECOTAG_ANNOTATEUR")]
+        [InlineData("int", "")]
         public void ReturnProfiles(string memberOf, string expectedRoles)
         {
             IList<Claim> claims = new List<Claim>();
