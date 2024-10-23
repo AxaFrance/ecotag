@@ -33,7 +33,7 @@ export const extractRoles = (accessTokenPayload, oidcMode) => {
     const roles = [];
     if (oidcMode === "AXA_FRANCE") {
         if (accessTokenPayload && accessTokenPayload.member_of && accessTokenPayload.member_of.length > 0) {
-              accessTokenPayload.forEach((item) => addRole(roles, item));
+              accessTokenPayload.member_of.forEach((item) => addRole(roles, item));
             if (roles.includes(DataScientist)) {
                 addRole(roles, Annotateur);
             } else if (roles.includes(Administateur)) {
