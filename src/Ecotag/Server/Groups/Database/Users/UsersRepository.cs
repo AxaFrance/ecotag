@@ -52,6 +52,15 @@ public class UsersRepository
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
         var nameIdentifierLowerCase = nameIdentifier.ToLower();
+        var emailToLower = email.ToLower();
+        var existingUser = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == emailToLower);
+        if (existingUser != null)
+        {
+            existingUser.NameIdentifier = nameIdentifier;
+            await _groupsContext.SaveChangesAsync();
+            return new ResultWithError<string, ErrorResult>() { Data = existingUser.Id.ToString() };
+        }
+        
         var userModel = new UserModel
         {
             Email = email.ToLower(),
