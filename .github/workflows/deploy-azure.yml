@@ -33,7 +33,7 @@ jobs:
           mv LibreOffice drop/win-x64/ecotag
           mkdir drop/win-x64/ecotag/ClientApp
           mkdir drop/win-x64/ecotag/ClientApp/build-server
-          mv src/Ecotag/ClientApp/build-server drop/win-x64/ecotag/ClientApp/build-server
+          mv src/Ecotag/ClientApp/build-server drop/win-x64/ecotag/ClientApp
           cd drop/win-x64/ecotag
           rm appsettings-server.Production.json
           cp appsettings-server.Azure.json appsettings-server.Production.json 
