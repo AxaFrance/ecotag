@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -68,7 +70,8 @@ public class GroupsControllerShould
         var mockedService = DatasetMock.GetMockedServiceProvider(groupContextFunc);
         var groupsRepository = new GroupsRepository(groupContext, mockedService.ServiceScopeFactory.Object);
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var usersRepository = new UsersRepository(groupContext, memoryCache);
+        var loggerMock = new Mock<ILogger<UsersRepository>>();
+        var usersRepository = new UsersRepository(groupContext, memoryCache, loggerMock.Object);
         var context = new DefaultHttpContext()
         {
             User = new ClaimsPrincipal(new ClaimsIdentity(new[]

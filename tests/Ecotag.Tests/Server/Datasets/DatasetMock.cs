@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -254,7 +255,8 @@ internal static class DatasetMock
         var fileId2 = fileModel2.Id;
 
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var usersRepository = new UsersRepository(groupContext, memoryCache);
+        var loggerMock = new Mock<ILogger<UsersRepository>>();
+        var usersRepository = new UsersRepository(groupContext, memoryCache, loggerMock.Object);
         var groupRepository = new GroupsRepository(groupContext, null);
         
         var datasetsRepository = new DatasetsRepository(datasetContext, fileService, memoryCache, importDatasetFilesService);

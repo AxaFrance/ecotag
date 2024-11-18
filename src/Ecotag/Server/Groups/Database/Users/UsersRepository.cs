@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace AxaGuilDEv.Ecotag.Server.Groups.Database.Users;
 
@@ -11,12 +12,14 @@ public class UsersRepository
 {
     public const string NameIdentifierAlreadyExists = "NameIdentifierAlreadyExists";
     private readonly IMemoryCache _cache;
+    private readonly ILogger<UsersRepository> _logger;
     private readonly GroupContext _groupsContext;
 
-    public UsersRepository(GroupContext groupsContext, IMemoryCache cache)
+    public UsersRepository(GroupContext groupsContext, IMemoryCache cache, ILogger<UsersRepository> logger)
     {
         _groupsContext = groupsContext;
         _cache = cache;
+        _logger = logger;
     }
 
     public async Task<List<UserDataModel>> GetAllUsersAsync()
@@ -53,17 +56,18 @@ public class UsersRepository
         var commandResult = new ResultWithError<string, ErrorResult>();
         var nameIdentifierLowerCase = nameIdentifier.ToLower();
         var emailToLower = email.ToLower();
-        var existingUser = await _groupsContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == emailToLower);
+        var existingUser = await _groupsContext.Users.FirstOrDefaultAsync(u => u.Email == emailToLower);
         if (existingUser != null)
         {
+            _logger.LogInformation("User already exists: " + emailToLower + " " + nameIdentifierLowerCase);
             existingUser.NameIdentifier = nameIdentifier;
             await _groupsContext.SaveChangesAsync();
             return new ResultWithError<string, ErrorResult>() { Data = existingUser.Id.ToString() };
         }
-        
+        _logger.LogInformation("Create user: " + emailToLower + " " + nameIdentifierLowerCase);
         var userModel = new UserModel
         {
-            Email = email.ToLower(),
+            Email = emailToLower,
             NameIdentifier = nameIdentifierLowerCase
         };
         _groupsContext.Users.Add(userModel);

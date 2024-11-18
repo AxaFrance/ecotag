@@ -22,21 +22,15 @@ public static class UserMiddlewareExtensions
     }
 }
 
-public class CreateUserMiddleware
+public class CreateUserMiddleware(RequestDelegate next)
 {
     public const string Authorization = "Authorization";
-    private readonly RequestDelegate _next;
-
-    public CreateUserMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
 
     public async Task InvokeAsync(HttpContext context, CreateUserCmd createUserCmd)
     {
         if (!context.Request.Path.ToString().StartsWith("/api"))
         {
-            await _next.Invoke(context);
+            await next.Invoke(context);
             return;
         }
 
@@ -50,7 +44,7 @@ public class CreateUserMiddleware
         {
             await createUserCmd.ExecuteAsync(new CreateUserInput
                 { NameIdentifier = nameIdentifier, AccessToken = accessToken });
-            await _next.Invoke(context);
+            await next.Invoke(context);
             return;
         }
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading;
 using System.Threading.Tasks;
 using AxaGuilDEv.Ecotag.Server.Groups.Database.Users;
 using AxaGuilDEv.Ecotag.Server.Groups.Oidc;
@@ -24,6 +26,8 @@ public class CreateUserCmd
         _userInfoService = userInfoService;
     }
 
+    private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1,1);
+
     public async Task<ResultWithError<string, ErrorResult>> ExecuteAsync(CreateUserInput createUserInput)
     {
         var commandResult = new ResultWithError<string, ErrorResult>();
@@ -43,23 +47,35 @@ public class CreateUserCmd
         var accessToken = createUserInput.AccessToken;
         var userDataModel = await _userRepository.GetUserByNameIdentifierAsync(nameIdentifier);
         if (userDataModel != null) return commandResult;
-        OidcUserInfo userEMail;
-        if (nameIdentifier == "computer")
-        {
-            userEMail = new OidcUserInfo("computer@ecotag.com");
-        }
-        else
-        {
-            userEMail = await _userInfoService.GetUserEmailAsync(accessToken);
-        }
-        var result = await _userRepository.CreateUserAsync(userEMail.Email, nameIdentifier);
-        if (!result.IsSuccess)
-        {
-            commandResult.Error = result.Error;
-            return commandResult;
-        }
 
-        commandResult.Data = result.Data;
+
+        try
+        {
+            await SemaphoreSlim.WaitAsync();
+            OidcUserInfo userEMail;
+            if (nameIdentifier == "computer")
+            {
+                userEMail = new OidcUserInfo("computer@ecotag.com");
+            }
+            else
+            {
+                userEMail = await _userInfoService.GetUserEmailAsync(accessToken);
+            }
+
+            var result = await _userRepository.CreateUserAsync(userEMail.Email, nameIdentifier);
+
+            if (!result.IsSuccess)
+            {
+                commandResult.Error = result.Error;
+                return commandResult;
+            }
+
+            commandResult.Data = result.Data;
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
 
         return commandResult;
     }

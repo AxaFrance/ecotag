@@ -17,7 +17,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using Xunit;
 
 namespace AxaGuilDEv.Ecotag.Tests.Server.Projects;
@@ -147,7 +149,8 @@ public class CreateProjectShould
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             var projectsRepository = new ProjectsRepository(projectContext, memoryCache);
             var groupsRepository = new GroupsRepository(groupContext, null);
-            var usersRepository = new UsersRepository(groupContext, memoryCache);
+            var loggerMock = new Mock<ILogger<UsersRepository>>();
+            var usersRepository = new UsersRepository(groupContext, memoryCache, loggerMock.Object);
             var projectsController = new ProjectsController();
             
             var context = new DefaultHttpContext()

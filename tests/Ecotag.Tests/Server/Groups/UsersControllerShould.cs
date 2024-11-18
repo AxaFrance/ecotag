@@ -6,7 +6,9 @@ using AxaGuilDEv.Ecotag.Server.Groups.Cmd;
 using AxaGuilDEv.Ecotag.Server.Groups.Database.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -32,7 +34,8 @@ public class UsersControllerShould
 
         await groupContext.SaveChangesAsync();
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        var usersRepository = new UsersRepository(groupContext, memoryCache);
+        var loggerMock = new Mock<ILogger<UsersRepository>>();
+        var usersRepository = new UsersRepository(groupContext, memoryCache, loggerMock.Object);
         var usersController = new UsersController();
         var getAllUsersCmd = new GetAllUsersCmd(usersRepository);
 

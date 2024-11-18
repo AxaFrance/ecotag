@@ -12,6 +12,7 @@ using AxaGuilDEv.Ecotag.Server.Oidc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json;
@@ -54,6 +55,7 @@ public class CreateUserMiddlewareShould
         [InlineData("/api/toto", "S66666", "[]", 1, 200, "Bearer access_token")]
         [InlineData("/api/toto", "S123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjidoS123456789abcdefghijklidzadkzodkazjido", "[]", 0, 200, "Bearer access_token")]
         [InlineData("/api/toto","s66666", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"NameIdentifier\":\"s66666\"}]", 1, 200, "Bearer access_token")]
+        [InlineData("/api/toto","s66667", "[{\"Email\":\"guillaume.chervet@toto.fr\",\"NameIdentifier\":\"s66666\"}]", 1, 200, "Bearer access_token")]
         [InlineData("/api/toto","", "[{\"Email\":\"computer@ecotag.com\",\"NameIdentifier\":\"computer\"}]", 1, 200, "Bearer access_token")]
         [InlineData("/notapi","s66666", "[]", 0, 200, "Bearer access_token")]
         [InlineData("/api/toto","s66666", "[]", 0, 401, "")]
@@ -78,9 +80,9 @@ public class CreateUserMiddlewareShould
             var oidcUserInfo = new OidcUserInfo("guillaume.chervet@toto.fr");
             oidcUserInfoServiceMock.Setup(it => it.GetUserEmailAsync(It.IsAny<string>())).ReturnsAsync(oidcUserInfo);
             
+            var loggerMock = new Mock<ILogger<UsersRepository>>();
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-            await createUserMidleware.InvokeAsync(httpContext,
-                new CreateUserCmd(new UsersRepository(groupContext,memoryCache), oidcUserInfoServiceMock.Object));
+            await createUserMidleware.InvokeAsync(httpContext, new CreateUserCmd(new UsersRepository(groupContext,memoryCache,loggerMock.Object), oidcUserInfoServiceMock.Object));
             
             Assert.Equal(expectedStatusCode, httpContext.Response.StatusCode);
             Assert.Equal(expectedNumberUsersInDatabase, groupContext.Users.Count());
