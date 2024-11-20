@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@axa-fr/react-oidc": "7.15.5",
-    "@axa-fr/react-toolkit-all": "1.4.1",
+    "@axa-fr/react-toolkit-all": "2.2.0",
     "@microsoft/applicationinsights-web": "2.8.6",
     "@monaco-editor/react": "4.2.1",
     "acorn": "^8.8.0",
