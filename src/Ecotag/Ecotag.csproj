@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.10.4" />
+        <PackageReference Include="Azure.Identity" Version="1.11.0" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
