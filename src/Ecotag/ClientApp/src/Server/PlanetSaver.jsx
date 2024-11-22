@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import BaseUrlContext from './BaseUrlContext';
 import SlimFaasPlanetSaver from "./SlimFaasPlanetSaver.js";
 
 const PlanetSaver = ({ children, baseUrl }) => {
