@@ -42,7 +42,7 @@ const AppWithOidcProvider = withEnvironment(({environment}) => {
     >
         <TelemetryProvider {...environment.telemetry} >
             <OidcSecure>
-              <SlimFaasSwitch />
+              <SlimFaasSwitch environment={environment} />
             </OidcSecure>
         </TelemetryProvider>
     </OidcProvider>
