@@ -16,6 +16,7 @@ import {CallBackSuccess} from "./shared/Oidc/Callback.component";
 import AccessToken from "./AccessToken";
 import {useHistory} from "react-router";
 import {OidcProvider, OidcSecure} from "@axa-fr/react-oidc";
+import PlanetSaver from "./PlanetSaver";
 
 const AppWithOidcProvider = withEnvironment(({environment}) => {
 
@@ -41,13 +42,29 @@ const AppWithOidcProvider = withEnvironment(({environment}) => {
     >
         <TelemetryProvider {...environment.telemetry} >
             <OidcSecure>
-                <Header/>
-                <Routes/>
-                <Footer/>
+              <SlimFaasSwitch />
             </OidcSecure>
         </TelemetryProvider>
     </OidcProvider>
 });
+
+const Page = () => (
+    <>
+        <Header/>
+        <Routes/>
+        <Footer/>
+    </>
+);
+
+const SlimFaasSwitch = ({environment}) => {
+    const slimfaasBaseUrl= environment.slimfaasBaseUrl
+    if(slimfaasBaseUrl) {
+        return <PlanetSaver baseUrl={slimfaasBaseUrl}>
+            <Page/>
+        </PlanetSaver>
+    }
+    return <Page/>
+}
 
 
 const Authentification = ({environment}) => (
@@ -62,6 +79,9 @@ const Authentification = ({environment}) => (
         </Switch>
     </Router>
 );
+
+
+
 
 const AuthentificationWithEnvironment = withEnvironment(Authentification);
 

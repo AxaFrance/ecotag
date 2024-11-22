@@ -1,6 +1,7 @@
 ﻿{
   "apiUrl": "https://localhost:5001/api/server/{path}",
   "baseUrl": "",
+  "slimfaasBaseUrl": "",
   "oidc": {
     "mode": "Default",
     "configuration": {

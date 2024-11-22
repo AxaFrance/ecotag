@@ -1,6 +1,7 @@
 {
   "apiUrl": "#{Spa:ApiUrl}#",
   "baseUrl": "#{Spa:BaseUrl}#",
+  "slimfaasBaseUrl": "#{Spa:SlimfaasUrl}#",
   "oidc": {
     "mode": "#{Spa:Oidc:Mode}#",
     "configuration": {
